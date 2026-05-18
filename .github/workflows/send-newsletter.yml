@@ -1,0 +1,39 @@
+name: Send Newsletter
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/briefs/**.mdx'
+      - 'content/briefs/**.md'
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get new brief file
+        id: brief
+        run: |
+          NEW_FILE=$(git diff --name-only HEAD~1 HEAD -- 'content/briefs/*.mdx' 'content/briefs/*.md' | head -1)
+          echo "file=$NEW_FILE" >> $GITHUB_OUTPUT
+          echo "Found new brief: $NEW_FILE"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Send newsletter via Brevo
+        if: steps.brief.outputs.file != ''
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          BRIEF_FILE:    ${{ steps.brief.outputs.file }}
+        run: node scripts/send-newsletter.js

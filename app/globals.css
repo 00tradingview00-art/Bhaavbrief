@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink:        #18180F;
+  --ink2:       #48483A;
+  --ink3:       #8A8A7A;
+  --paper:      #FAFAF6;
+  --paper2:     #F3F2EC;
+  --rule:       #DDDDD0;
+  --rule2:      #C8C8B8;
+  --saffron:    #C8720A;
+  --up:         #1E6630;
+  --dn:         #991818;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Double rule utility */
+.border-double-rule {
+  border-top: 3px double var(--rule2);
+}
+.border-double-rule-bot {
+  border-bottom: 3px double var(--rule2);
+}
+
+/* Brief prose styles */
+.brief-prose h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--ink);
+}
+.brief-prose p {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--ink2);
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+.brief-prose strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.brief-prose ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+.brief-prose ul li {
+  font-size: 0.9375rem;
+  color: var(--ink2);
+  font-weight: 300;
+  padding: 4px 0;
+  border-bottom: 0.5px solid var(--rule);
+}
+.brief-prose ul li::before {
+  content: '— ';
+  color: var(--saffron);
+}
+.brief-prose blockquote {
+  border-left: 3px solid var(--saffron);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--ink2);
+  margin: 1rem 0;
+}

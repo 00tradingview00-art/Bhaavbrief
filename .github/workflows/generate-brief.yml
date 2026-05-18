@@ -1,0 +1,59 @@
+name: Generate Daily Brief
+
+on:
+  schedule:
+    # 1:00 AM UTC = 6:30 AM IST (Mon-Fri only)
+    - cron: '0 1 * * 1-5'
+  workflow_dispatch: # allow manual trigger
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --no-save node-fetch
+
+      - name: Generate brief
+        id: generate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-brief.js
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "brief: add edition ${{ steps.generate.outputs.edition }}"
+          branch: "brief/edition-${{ steps.generate.outputs.edition }}"
+          delete-branch: true
+          title: "📰 Edition ${{ steps.generate.outputs.edition }} — ${{ steps.generate.outputs.title }}"
+          body: |
+            ## BhaavBrief — Automated Edition
+
+            **Edition:** ${{ steps.generate.outputs.edition }}
+            **Title:** ${{ steps.generate.outputs.title }}
+            **Slug:** `${{ steps.generate.outputs.slug }}`
+
+            ### Review checklist
+            - [ ] Prices look accurate
+            - [ ] Thesis is sound and directional
+            - [ ] No factual errors
+            - [ ] Tone is sharp and confident
+            - [ ] Levels and ranges are specific
+
+            **Merge this PR to publish the brief and send the newsletter email.**
+          labels: brief,automated
+          assignees: ${{ github.repository_owner }}

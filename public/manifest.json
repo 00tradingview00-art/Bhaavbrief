@@ -1,0 +1,20 @@
+{
+  "name":             "BhaavBrief — India's Commodity Intelligence",
+  "short_name":       "BhaavBrief",
+  "description":      "Free daily MCX & NCDEX commodity intelligence for Indian traders. Every weekday at 7 AM.",
+  "start_url":        "/",
+  "display":          "standalone",
+  "background_color": "#FAFAF6",
+  "theme_color":      "#C8720A",
+  "orientation":      "portrait",
+  "lang":             "en-IN",
+  "scope":            "/",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["finance", "news", "business"],
+  "screenshots": [
+    { "src": "/og-default.png", "sizes": "1200x630", "type": "image/png" }
+  ]
+}
