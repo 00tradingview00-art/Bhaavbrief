@@ -109,34 +109,37 @@ USDINR: ₹${prices.usdinr?.rate ?? '83.50'}
     ? news.map((h, i) => `${i + 1}. ${h}`).join('\n')
     : 'No major commodity headlines today.'
 
-  const prompt = `You are the editor of BhaavBrief, India's premier daily commodity intelligence publication for MCX traders and merchants. Write Edition ${edition} of the morning brief for ${dateStr}.
-
-LIVE PRICES (15-min delay, Yahoo Finance converted to approximate MCX INR):
-${priceContext}
-
-LATEST HEADLINES:
-${newsContext}
-
-Write a sharp, institutional-quality commodity brief in MDX format. Structure:
-
-1. Open with the most important macro signal today (geopolitical, weather, demand shift)
-2. Cover crude oil with a clear directional bias and key levels
-3. Cover gold/metals briefly
-4. Cover agri/mandi if relevant news exists
-5. Close with "What to watch" — 3 bullet points for the week ahead
-
-RULES:
-- Write in English. Confident, direct, no hedging language.
-- Give actual levels and ranges, not vague statements.
-- 400-600 words total. Tight and punchy.
-- Use ## for section headers (Crude, Metals, Agri, What to Watch)
-- Use **bold** for prices and key levels
-- Begin each section with a one-word signal in brackets: [WATCH], [BULLISH], [BEARISH], [NEUTRAL]
-- Do NOT add a title or frontmatter — that is added separately
-- Do NOT add disclaimers in the body — those are in the footer
-- End with a data row: "**Data:** MCX Crude ₹X · MCX Gold ₹X · USDINR ₹X"`
-
-Write the brief now:`
+  const prompt = [
+    "You are the editor of BhaavBrief, India's premier daily commodity intelligence publication for MCX traders and merchants.",
+    "Write Edition " + edition + " of the morning brief for " + dateStr + ".",
+    "",
+    "LIVE PRICES (15-min delay, Yahoo Finance converted to approximate MCX INR):",
+    priceContext,
+    "",
+    "LATEST HEADLINES:",
+    newsContext,
+    "",
+    "Write a sharp, institutional-quality commodity brief in MDX format. Structure:",
+    "",
+    "1. Open with the most important macro signal today (geopolitical, weather, demand shift)",
+    "2. Cover crude oil with a clear directional bias and key levels",
+    "3. Cover gold/metals briefly",
+    "4. Cover agri/mandi if relevant news exists",
+    "5. Close with What to watch — 3 bullet points for the week ahead",
+    "",
+    "RULES:",
+    "- Write in English. Confident, direct, no hedging language.",
+    "- Give actual levels and ranges, not vague statements.",
+    "- 400-600 words total. Tight and punchy.",
+    "- Use ## for section headers (Crude, Metals, Agri, What to Watch)",
+    "- Use bold for prices and key levels",
+    "- Begin each section with a one-word signal in brackets: [WATCH], [BULLISH], [BEARISH], [NEUTRAL]",
+    "- Do NOT add a title or frontmatter — that is added separately",
+    "- Do NOT add disclaimers in the body — those are in the footer",
+    "- End with a data row: Data: MCX Crude RsX / MCX Gold RsX / USDINR RsX",
+    "",
+    "Write the brief now:",
+  ].join("\n")
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
