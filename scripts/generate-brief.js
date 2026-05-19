@@ -198,7 +198,7 @@ Brief: ${content.slice(0, 700)}`,
 }
 
 // Save MDX with full SEO frontmatter
-function saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content }) {
+function saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content, prices }) {
   if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
 
   const keywords = [
@@ -273,7 +273,7 @@ async function main() {
 
   const image = getImage(tags)
 
-  saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content })
+  saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content, prices })
 
   console.log(`Title: ${title}`)
   console.log(`Meta: ${metaDesc}`)
