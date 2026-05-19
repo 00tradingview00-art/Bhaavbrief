@@ -61,6 +61,11 @@ function toSlug(title) {
     .replace(/-+$/, '')
 }
 
+function stripSourceSuffix(title) {
+  // Remove trailing " - Source Name" or " | Source Name" added by Google News aggregation
+  return title.replace(/\s+[-–—|]\s+[^-–—|]+$/, '').trim()
+}
+
 function getISTNow() {
   const now = new Date()
   return new Date(now.getTime() + 5.5 * 60 * 60 * 1000)
@@ -83,7 +88,7 @@ async function fetchFeed(feed) {
 
       if (!titleM || !linkM) continue
       items.push({
-        title:       titleM[1].trim(),
+        title:       stripSourceSuffix(titleM[1].trim()),
         url:         linkM[1].trim(),
         description: descM ? descM[1].replace(/<[^>]+>/g, '').trim().slice(0, 400) : '',
         source:      feed.source,

@@ -51,35 +51,6 @@ export default function HomePage() {
         </a>
       )}
 
-      {/* Compact tagline + CTAs */}
-      <section style={{ borderBottom: '0.5px solid #DDDDD0' }}>
-        <div className="layout-hero" style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem' }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '0.75rem' }}>
-              Morning Intelligence · MCX &amp; NCDEX
-            </div>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', fontWeight: 700, color: '#18180F', lineHeight: 1.3, marginBottom: '1rem', maxWidth: 560 }}>
-              India's daily MCX commodity intelligence. Free, every weekday by 7 AM IST.
-            </p>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <a href="#subscribe" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#C8720A', color: '#FAFAF6', fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.04em', padding: '10px 20px', textDecoration: 'none' }}>
-                ✉ Subscribe free
-              </a>
-              {isLive && latest && (
-                <a href={`/briefs/${latest.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: '#18180F', fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.04em', padding: '10px 20px', border: '1px solid #C8C8B8', textDecoration: 'none' }}>
-                  📰 Today's edition
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Subscribe sidebar — desktop only */}
-          <aside className="desktop-only" id="subscribe-sidebar" style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', alignSelf: 'start' }}>
-            <SubscribeForm />
-          </aside>
-        </div>
-      </section>
-
       {/* Main content */}
       <div className="layout-main" style={{ maxWidth: 980, margin: '0 auto', padding: '2rem 1.25rem' }}>
 
@@ -155,6 +126,9 @@ export default function HomePage() {
 
         {/* Sidebar — flows below on mobile */}
         <aside className="sidebar-panel" id="about">
+          <div id="subscribe-sidebar" style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
+            <SubscribeForm />
+          </div>
           <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
             <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Why we built this</div>
             <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '1rem' }}>
