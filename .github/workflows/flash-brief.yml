@@ -1,0 +1,44 @@
+name: Flash Intelligence
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  flash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch flash articles
+        id: flash
+        run: node scripts/fetch-flash.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Commit and push new articles
+        run: |
+          git config user.name "BhaavBrief Bot"
+          git config user.email "bot@bhaavbrief.in"
+          git add content/flash/ scripts/seen-articles.json
+          if git diff --staged --quiet; then
+            echo "No new flash articles"
+            exit 0
+          fi
+          COUNT=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
+          git commit -m "flash: ${COUNT} new intelligence $(date -u '+%H:%M UTC')"
+          git push

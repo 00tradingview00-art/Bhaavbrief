@@ -2,15 +2,18 @@ import Masthead from '@/components/Masthead'
 import PriceTicker from '@/components/PriceTicker'
 import SubscribeForm from '@/components/SubscribeForm'
 import BriefCard from '@/components/BriefCard'
+import FlashFeed from '@/components/FlashFeed'
 import { getAllBriefs } from '@/lib/briefs'
+import { getAllFlash } from '@/lib/flash'
 
 export const revalidate = 900 // revalidate every 15 mins
 
 export default function HomePage() {
-  const briefs  = getAllBriefs()
-  const latest  = briefs[0]
-  const others  = briefs.slice(1, 4)
-  const isLive  = briefs.length > 0
+  const briefs     = getAllBriefs()
+  const latest     = briefs[0]
+  const others     = briefs.slice(1, 4)
+  const isLive     = briefs.length > 0
+  const flashItems = getAllFlash().slice(0, 10)
 
   const sectionHed = (label: string, sub?: string) => (
     <div style={{
@@ -145,6 +148,19 @@ export default function HomePage() {
                 </div>
               ))}
             </>
+          )}
+
+          {/* Latest Intelligence flash feed */}
+          {flashItems.length > 0 && (
+            <div style={{ marginTop: '2.5rem' }}>
+              {sectionHed('Latest Intelligence', 'Live · Updated every 15 min')}
+              <FlashFeed items={flashItems} />
+              <div style={{ textAlign: 'center', paddingTop: '1.25rem' }}>
+                <a href="/flash" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+                  View all intelligence →
+                </a>
+              </div>
+            </div>
           )}
 
           {/* Features */}
