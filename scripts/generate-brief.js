@@ -222,7 +222,10 @@ published: true
 ---
 
 `
-  fs.writeFileSync(path.join(BRIEFS_DIR, `${slug}.mdx`), frontmatter + content, 'utf8')
+  const priceBar = `**MCX Prices** — Gold ₹${prices.gold?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.gold?.comex ?? '—'}/oz) · Silver ₹${prices.silver?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.silver?.comex ?? '—'}/oz) · Crude ₹${prices.crude?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.crude?.comex ?? '—'}) · Nat Gas ₹${prices.natgas?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.natgas?.comex ?? '—'}) · USD/INR ₹${prices.usdinr?.rate ?? '—'}
+
+`
+fs.writeFileSync(path.join(BRIEFS_DIR, `${slug}.mdx`), frontmatter + priceBar + content, 'utf8')
   console.log(`Saved: content/briefs/${slug}.mdx`)
 }
 
