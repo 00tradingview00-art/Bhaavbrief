@@ -31,21 +31,16 @@ export default function HomePage() {
 
       {/* Mobile-only: today's brief teaser — shown immediately after ticker */}
       {isLive && latest && (
-        <div className="mobile-only" style={{ borderBottom: '0.5px solid #DDDDD0', background: '#F3F2EC' }}>
-          <div style={{ maxWidth: 980, margin: '0 auto', padding: '0.875rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.35rem' }}>
-                Today's Brief
-              </div>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, lineHeight: 1.3, color: '#18180F', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
-                {latest.title}
-              </div>
+        <a className="mobile-only" href={`/briefs/${latest.slug}`} style={{ display: 'block', borderBottom: '0.5px solid #DDDDD0', background: '#F3F2EC', textDecoration: 'none' }}>
+          <div style={{ maxWidth: 980, margin: '0 auto', padding: '0.875rem 1.25rem' }}>
+            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.35rem' }}>
+              Today's Brief
             </div>
-            <a href={`/briefs/${latest.slug}`} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#FAFAF6', background: '#18180F', padding: '8px 14px', textDecoration: 'none', flexShrink: 0, whiteSpace: 'nowrap', alignSelf: 'center' }}>
-              Read →
-            </a>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, lineHeight: 1.3, color: '#18180F' }}>
+              {latest.title}
+            </div>
           </div>
-        </div>
+        </a>
       )}
 
       {/* Hero */}
@@ -56,17 +51,16 @@ export default function HomePage() {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '1rem' }}>
               Morning Intelligence · MCX &amp; NCDEX
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 5vw, 3.1rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', color: '#18180F', marginBottom: '1rem' }}>
+            <h1 className="hero-h1" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', color: '#18180F', marginBottom: '1rem' }}>
               The commodity brief<br />
               that tells you <em style={{ fontStyle: 'italic', color: '#C8720A' }}>why</em>,<br />
               not just what.
             </h1>
             <p style={{ fontSize: '0.9rem', color: '#48483A', lineHeight: 1.75, fontWeight: 300, maxWidth: 520, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', marginBottom: '1.25rem' }}>
-              Every weekday morning, BhaavBrief distils geopolitical signals, supply-demand shifts and options data into one sharp read — delivered before the MCX bell rings at 9 AM. Free, forever.
+              India's daily MCX commodity intelligence. Free, every weekday by 7 AM IST.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem', paddingBottom: '1.25rem', borderBottom: '0.5px solid #DDDDD0' }}>
               {[
-                { icon: '🚀', text: 'Just launched — be among the first' },
                 { icon: '⏰', text: 'Every weekday at 7 AM IST' },
                 { icon: '📲', text: 'WhatsApp alerts included' },
                 { icon: '✅', text: 'Always free to start' },
@@ -135,7 +129,7 @@ export default function HomePage() {
               {sectionHed("What every edition covers", "Free · 7 AM daily")}
               {[
                 { tag: 'Energy', color: '#996600', bg: '#FFF7E0', bd: '#D4A830', title: 'Crude Oil Intelligence', desc: 'Hormuz signals, OPEC updates, India import dynamics, and a clear MCX price range for the session. Direction and levels, not just price.' },
-                { tag: 'Metals', color: '#1E6630', bg: '#EAF5EE', bd: '#5AAA70', title: 'Gold, Silver & Copper', desc: 'DXY, FOMC signals, COMEX positioning and MCX parity — translated into a weekly range and a clear bias. Pro subscribers get IV scanner and Black-76 fair value.' },
+                { tag: 'Metals', color: '#1E6630', bg: '#EAF5EE', bd: '#5AAA70', title: 'Gold, Silver & Copper', desc: 'DXY, FOMC signals, COMEX positioning and MCX parity — translated into a weekly range with supply-demand and macro context.' },
                 { tag: 'Agri',   color: '#991818', bg: '#FDF0F0', bd: '#D07070', title: 'Mandi & NCDEX Intelligence', desc: 'Monsoon progress, crop estimates, warehouse stocks and MSP updates — synthesised into a weekly agri view for traders and merchants.' },
               ].map(item => (
                 <div key={item.tag} style={{ padding: '1.25rem 0', borderBottom: '0.5px solid #DDDDD0' }}>
@@ -158,7 +152,7 @@ export default function HomePage() {
             {sectionHed('What you get', 'Always free to start')}
             {[
               { n: '01', title: 'Geopolitical signal engine',     desc: 'Iran, Russia, La Niña — every global event translated into a direct commodity price impact in plain Hindi-English. Know what it means before you open Kite.' },
-              { n: '02', title: 'MCX options intelligence',        desc: 'Implied volatility percentiles, Black-76 fair value, and a four-asset opportunity matrix across crude, gold, silver and copper — refreshed every session.' },
+              { n: '02', title: 'Supply & demand context',          desc: 'OPEC, COMEX positioning, India import data — every structural shift distilled into what it means for MCX prices today.' },
               { n: '03', title: 'Agri & mandi supply-demand view', desc: 'Monsoon progress, crop outlook, warehouse stocks and MSP updates synthesised weekly. Built for traders and merchants timing physical purchases.' },
               { n: '04', title: 'WhatsApp price alerts',           desc: 'Real-time spike alerts straight to your WhatsApp. No app, no login. Your commodity intelligence layer exactly where you already are.' },
               { n: '05', title: 'Sunday deep analysis',            desc: 'Every Sunday: one commodity, a full macro thesis, a concrete trade setup, and what to watch in the week ahead.' },
@@ -232,7 +226,7 @@ export default function HomePage() {
             Start your trading day with an edge.
           </h2>
           <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>
-            BhaavBrief is India's first daily commodity intelligence brief — covering MCX crude, gold, silver and NCDEX agri markets with geopolitical signals, supply-demand analysis and options intelligence. Free, every weekday at 7 AM.
+            BhaavBrief is India's first daily commodity intelligence brief — covering MCX crude, gold, silver and NCDEX agri markets with geopolitical signals and supply-demand analysis. Free, every weekday at 7 AM.
           </p>
         </div>
         <div>

@@ -141,3 +141,7 @@ body {
 /* Brief page sidebar: hidden on mobile, shown on desktop */
 .brief-sidebar { display: none; }
 @media (min-width: 768px) { .brief-sidebar { display: block; } }
+
+/* Hero h1: hard cap at 2rem on mobile */
+.hero-h1 { font-size: 2rem !important; }
+@media (min-width: 768px) { .hero-h1 { font-size: clamp(2rem, 4vw, 3.1rem) !important; } }
