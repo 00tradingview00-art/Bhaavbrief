@@ -51,10 +51,6 @@ export default function FlashFeed({ items }: { items: FlashMeta[] }) {
               <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                 {timeAgo(item.date)}
               </span>
-              <span style={{ color: '#C8C8B8', fontSize: 9 }}>·</span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
-                {item.source}
-              </span>
             </div>
             <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', fontWeight: 600, lineHeight: 1.35, color: '#18180F' }}>
               {item.title}
