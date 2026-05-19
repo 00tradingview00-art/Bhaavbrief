@@ -13,38 +13,12 @@ const path = require('path')
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const BRIEFS_DIR        = path.join(__dirname, '../content/briefs')
-
+const { fetchMCXPrices } = require('./fetch-prices');
 // ─── 1. Fetch Prices ─────────────────────────────────────────────────────────
 
-async function fetchPrice(symbol) {
-  try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=2d`
-    const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } })
-    if (!res.ok) return null
-    const json = await res.json()
-    const meta = json?.chart?.result?.[0]?.meta
-    if (!meta) return null
-    return {
-      price:  meta.regularMarketPrice ?? 0,
-      prev:   meta.previousClose      ?? meta.regularMarketPrice ?? 0,
-      symbol,
-    }
-  } catch (e) {
-    console.warn(`Price fetch failed for ${symbol}:`, e.message)
-    return null
-  }
-}
-
 async function getPrices() {
-  const [crude, gold, silver, copper, natgas, fx] = await Promise.all([
-    fetchPrice('CL=F'),
-    fetchPrice('GC=F'),
-    fetchPrice('SI=F'),
-    fetchPrice('HG=F'),
-    fetchPrice('NG=F'),
-    fetchPrice('INR=X'),
-  ])
-
+  return await fetchMCXPrices();
+}
   const inr = fx?.price ?? 83.5
   const pct = (d, p) => p ? `${d >= 0 ? '▲' : '▼'} ${Math.abs((d / p) * 100).toFixed(1)}%` : '—'
   const chg = (d) => `${d >= 0 ? '+' : ''}${Math.round(d)}`
