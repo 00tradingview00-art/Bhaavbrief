@@ -120,10 +120,9 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           <a href="/" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             ← Back to home
           </a>
-          <a href={url} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#8A8A7A', textDecoration: 'none' }}
-            onClick={e => { e.preventDefault(); navigator.clipboard?.writeText(url) }}>
-            Copy link
-          </a>
+          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#8A8A7A' }}>
+            {url}
+          </span>
         </div>
       </div>
     </div>

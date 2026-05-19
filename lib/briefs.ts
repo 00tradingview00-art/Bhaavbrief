@@ -4,6 +4,14 @@ import matter from 'gray-matter'
 
 const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
 
+// Strip internal edition/date markers used as summaries in older briefs
+function cleanSummary(raw: string): string {
+  if (!raw) return ''
+  const stripped = raw.replace(/^\*|\*$/g, '').trim()
+  if (/^(edition\s+\d+|monday|tuesday|wednesday|thursday|friday|saturday|sunday|\d{1,2}\s+\w+\s+\d{4})/i.test(stripped)) return ''
+  return raw
+}
+
 export interface BriefMeta {
   slug: string
   title: string
@@ -34,7 +42,7 @@ export function getAllBriefs(): BriefMeta[] {
       title:       data.title       || 'Untitled',
       date:        data.date        || '',
       edition:     data.edition     || 0,
-      summary:     data.summary     || data.metaDescription || '',
+      summary:     cleanSummary(data.summary) || data.metaDescription || '',
       tags:        data.tags        || [],
       commodities: data.commodities || [],
       published:   data.published   !== false,
@@ -58,7 +66,7 @@ export function getBrief(slug: string): Brief | null {
     title:       data.title       || 'Untitled',
     date:        data.date        || '',
     edition:     data.edition     || 0,
-    summary:     data.summary     || data.metaDescription || '',
+    summary:     cleanSummary(data.summary) || data.metaDescription || '',
     tags:        data.tags        || [],
     commodities: data.commodities || [],
     published:   data.published   !== false,
