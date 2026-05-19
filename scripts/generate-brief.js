@@ -149,7 +149,7 @@ USDINR: ₹${prices.usdinr?.rate ?? '83.50'}
       'Content-Type':      'application/json',
     },
     body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
+      model:      'claude-sonnet-4-20250514',
       max_tokens: 1024,
       messages: [{ role: 'user', content: prompt }],
     }),
@@ -175,7 +175,7 @@ async function generateTitle(briefContent, dateStr) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model: 'claude-sonnet-4-20250514',
       max_tokens: 60,
       messages: [{
         role: 'user',
