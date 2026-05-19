@@ -1,9 +1,41 @@
 const fetch = require('node-fetch');
-function getPrevTradingDay(daysBack=1){const now=new Date();const ist=new Date(now.getTime()+5.5*60*60*1000);const d=new Date(ist);let s=0;while(s<daysBack){d.setDate(d.getDate()-1);if(d.getDay()!==0&&d.getDay()!==6)s++;}return d;}
-function pad(n){return String(n).padStart(2,'0');}
-function dateStr(d){return `${pad(d.getDate())}${pad(d.getMonth()+1)}${d.getFullYear()}`;}
-async function fetchBhavCopy(date){const url=`https://www.mcxindia.com/sites/default/files/marketdata/bhav-copy/MCX_BhavCopy_${dateStr(date)}.csv`;console.log('Fetching:',url);const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0','Referer':'https://www.mcxindia.com/'}});if(!res.ok)throw new Error('HTTP '+res.status);const csv=await res.text();if(!csv||csv.length<200)throw new Error('Empty CSV');return parseBhavCopy(csv);}
-function parseBhavCopy(csv){const lines=csv.trim().split('\n');const headers=lines[0].split(',').map(h=>h.trim().toLowerCase());const si=headers.findIndex(h=>h.includes('symbol')||h.includes('instrument')||h.includes('name'));const ci=headers.findIndex(h=>h.includes('close')||h.includes('settle')||h.includes('last'));if(si===-1||ci===-1)throw new Error('Columns not found: '+headers.join('|'));const targets={GOLD:'gold',SILVER:'silver',CRUDEOIL:'crude',COPPER:'copper',NATURALGAS:'natgas'};const prices={};for(let i=1;i<lines.length;i++){const cols=lines[i].split(',');if(cols.length<=Math.max(si,ci))continue;const sym=(cols[si]||'').trim().toUpperCase();const price=parseFloat(cols[ci]);if(!sym||isNaN(price)||price<=0)continue;for(const[prefix,label]of Object.entries(targets)){if(sym.startsWith(prefix)&&!prices[label])prices[label]=price;}if(Object.keys(prices).length===5)break;}const missing=['gold','silver','crude','copper','natgas'].filter(l=>!prices[l]);if(missing.length>0)throw new Error('Missing: '+missing.join(', '));return prices;}
-function buildPrices(today,prev,usdInr,source){const pct=(d,p)=>p?`${d>=0?'▲':'▼'} ${Math.abs((d/p)*100).toFixed(1)}%`:'-';const chg=(d)=>`${d>=0?'+':''}${Math.round(d)}`;const fmt=(label)=>{const inr=Math.round(today[label]);const diff=prev?.[label]?today[label]-prev[label]:null;return{inr,pct:diff!==null?pct(diff,prev[label]):'-',chg:diff!==null?chg(diff):'-'};};return{crude:fmt('crude'),gold:fmt('gold'),silver:fmt('silver'),copper:fmt('copper'),natgas:fmt('natgas'),usdinr:{rate:usdInr?usdInr.toFixed(2):'83.50'},source};}
-async function fetchMCXPrices(){console.log('Fetching MCX prices...');try{const t=getPrevTradingDay(1);const p=getPrevTradingDay(2);const[today,prev]=await Promise.allSettled([fetchBhavCopy(t),fetchBhavCopy(p)]);if(today.status==='rejected')throw today.reason;let usdInr=null;try{const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');const d=await r.json();usdInr=d.rates.INR;console.log('USD/INR:',usdInr);}catch(e){console.warn('INR fetch failed');}const prices=buildPrices(today.value,prev.status==='fulfilled'?prev.value:null,usdInr,'MCX Bhav Copy');console.log('Prices:',prices);return prices;}catch(err){console.warn('Bhav Copy failed:',err.message);const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');const d=await r.json();const usdInr=d.rates.INR;const y=await fetch('https://query1.finance.yahoo.com/v7/finance/quote?symbols=GC%3DF%2CSI%3DF%2CCL%3DF%2CHG%3DF%2CNG%3DF',{headers:{'User-Agent':'Mozilla/5.0'}});const q={};for(const item of(await y.json()).quoteResponse.result)q[item.symbol]=item;const today={gold:(q['GC=F'].regularMarketPrice/31.1035)*10*usdInr,silver:(q['SI=F'].regularMarketPrice/31.1035)*1000*usdInr,crude:q['CL=F'].regularMarketPrice*usdInr,copper:q['HG=F'].regularMarketPrice*2.20462*usdInr,natgas:q['NG=F'].regularMarketPrice*usdInr};const prev={gold:(q['GC=F'].regularMarketPreviousClose/31.1035)*10*usdInr,silver:(q['SI=F'].regularMarketPreviousClose/31.1035)*1000*usdInr,crude:q['CL=F'].regularMarketPreviousClose*usdInr,copper:q['HG=F'].regularMarketPreviousClose*2.20462*usdInr,natgas:q['NG=F'].regularMarketPreviousClose*usdInr};return buildPrices(today,prev,usdInr,'COMEX fallback');}}
-module.exports={fetchMCXPrices};
+
+async function fetchMCXPrices() {
+  const inrRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+  const inr = (await inrRes.json()).rates.INR;
+
+  const symbols = ['GC=F','SI=F','CL=F','HG=F','NG=F','BZ=F'];
+  const q = {};
+  await Promise.all(symbols.map(async s => {
+    const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/' + s + '?interval=1d&range=2d', {headers:{'User-Agent':'Mozilla/5.0'}});
+    const meta = (await res.json())?.chart?.result?.[0]?.meta;
+    if (meta) q[s] = {usd: meta.regularMarketPrice, prev: meta.previousClose};
+  }));
+
+  const pct = (c,p) => (!c||!p) ? '-' : (c>=p?'+':'')+((c-p)/p*100).toFixed(1)+'%';
+  const chg = (c,p) => (!c||!p) ? '-' : (c>=p?'+':'')+Math.round(c-p);
+
+  const gold   = q['GC=F'] ? Math.round((q['GC=F'].usd/31.1035)*10*inr*1.132) : null;
+  const silver = q['SI=F'] ? Math.round((q['SI=F'].usd/31.1035)*1000*inr*1.157) : null;
+  const crude  = q['CL=F'] ? Math.round(q['CL=F'].usd*inr) : null;
+  const copper = q['HG=F'] ? Math.round(q['HG=F'].usd*2.20462*inr) : null;
+  const natgas = q['NG=F'] ? Math.round(q['NG=F'].usd*inr) : null;
+
+  const pg = q['GC=F'] ? Math.round((q['GC=F'].prev/31.1035)*10*inr*1.132) : null;
+  const ps = q['SI=F'] ? Math.round((q['SI=F'].prev/31.1035)*1000*inr*1.157) : null;
+  const pc = q['CL=F'] ? Math.round(q['CL=F'].prev*inr) : null;
+  const ph = q['HG=F'] ? Math.round(q['HG=F'].prev*2.20462*inr) : null;
+  const pn = q['NG=F'] ? Math.round(q['NG=F'].prev*inr) : null;
+
+  return {
+    gold:   {inr:gold,   comex:q['GC=F']?.usd, pct:pct(gold,pg),   chg:chg(gold,pg)},
+    silver: {inr:silver, comex:q['SI=F']?.usd, pct:pct(silver,ps), chg:chg(silver,ps)},
+    crude:  {inr:crude,  comex:q['CL=F']?.usd, pct:pct(crude,pc),  chg:chg(crude,pc)},
+    copper: {inr:copper, comex:q['HG=F']?.usd, pct:pct(copper,ph), chg:chg(copper,ph)},
+    natgas: {inr:natgas, comex:q['NG=F']?.usd, pct:pct(natgas,pn), chg:chg(natgas,pn)},
+    brent:  {usd:q['BZ=F']?.usd},
+    usdinr: {rate:inr.toFixed(2)},
+  };
+}
+
+module.exports = {fetchMCXPrices};
