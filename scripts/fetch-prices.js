@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 async function fetchMCXPrices() {
   const inrRes = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
   const inr = (await inrRes.json()).rates.INR;
