@@ -2,21 +2,21 @@ name: Generate Daily Brief
 
 on:
   schedule:
-    # 1:00 AM UTC = 6:30 AM IST (Mon-Fri only)
     - cron: '0 1 * * 1-5'
-  workflow_dispatch: # allow manual trigger
-
-permissions:
-  contents: write
-  pull-requests: write
+  workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,15 +45,11 @@ jobs:
 
             **Edition:** ${{ steps.generate.outputs.edition }}
             **Title:** ${{ steps.generate.outputs.title }}
-            **Slug:** `${{ steps.generate.outputs.slug }}`
 
             ### Review checklist
             - [ ] Prices look accurate
             - [ ] Thesis is sound and directional
-            - [ ] No factual errors
             - [ ] Tone is sharp and confident
-            - [ ] Levels and ranges are specific
 
-            **Merge this PR to publish the brief and send the newsletter email.**
+            **Merge to publish and send newsletter.**
           labels: brief,automated
-          assignees: ${{ github.repository_owner }}
