@@ -113,7 +113,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
       <Masthead />
       <PriceTicker />
 
-      <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.5rem', display: 'flex', gap: 6, alignItems: 'center' }}>
+      <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Home',   href: '/' },
           { label: 'Briefs', href: '/briefs' },
@@ -130,7 +130,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
         ))}
       </nav>
 
-      <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.5rem 3rem', display: 'grid', gridTemplateColumns: '1fr 280px', gap: '3rem' }}>
+      <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <main>
           <article itemScope itemType="https://schema.org/NewsArticle">
             <header style={{ paddingBottom: '1.5rem', marginBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
@@ -181,7 +181,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
           </article>
         </main>
 
-        <aside style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem', alignSelf: 'start' }}>
+        <aside className="brief-sidebar" style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem', alignSelf: 'start' }}>
           <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
             <SubscribeForm />
           </div>

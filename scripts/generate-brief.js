@@ -105,14 +105,15 @@ USE EXACTLY THESE ## HEADERS IN ORDER:
 ## What to Watch This Week
 
 RULES — NON NEGOTIABLE:
-- "The Big Picture": One sharp paragraph. The single macro theme connecting all commodities today — currency move, geopolitical event, demand/supply structural shift. Make a clear call on market direction.
-- Each commodity section: Lead with [BULLISH] / [BEARISH] / [NEUTRAL] / [WATCH] in brackets. State the MCX price. Give specific support and resistance levels. Give a directional call with the reason. Example: "**₹9,800** is the floor. A close below brings **₹9,620** into play rapidly."
+- "The Big Picture": One sharp paragraph. The single macro theme connecting all commodities today — currency move, geopolitical event, demand/supply structural shift. State the context clearly and concisely.
+- Each commodity section: State the MCX price. Give the key price levels (support, resistance, recent highs/lows) derived from the data. Explain the supply/demand or macro context driving price action. Example: "**₹9,800** is the key level to watch. The context here is [factual reason from prices/news]."
 - "What to Watch": Exactly 3 bullet points. Forward-looking only. Specific events, data releases, or price triggers for the next 3-5 days.
-- Tone: Bloomberg Terminal meets Dalal Street. Confident. Sharp. Opinionated. Write like you have skin in the game.
+- Tone: Bloomberg Terminal meets Dalal Street. Confident. Factual. Write from data and context, not speculation.
 - Length: 500-650 words. Every sentence earns its place.
 - Bold ALL price levels and key numbers: **₹9,940**, **$4,556**, **96.38**
 - Reference both MCX and COMEX prices where relevant — your readers track both
 - No hedging language: no "may", "might", "could possibly", "it remains to be seen"
+- No investment advice language, no directional calls, no "buy"/"sell" recommendations
 - No disclaimers in the body
 - No title or frontmatter — added separately
 - End with exactly this line on its own: *Prices reflect previous MCX session close. COMEX prices for reference.*

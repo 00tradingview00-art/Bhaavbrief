@@ -29,23 +29,42 @@ export default function HomePage() {
       <Masthead />
       <PriceTicker />
 
+      {/* Mobile-only: today's brief teaser — shown immediately after ticker */}
+      {isLive && latest && (
+        <div className="mobile-only" style={{ borderBottom: '0.5px solid #DDDDD0', background: '#F3F2EC' }}>
+          <div style={{ maxWidth: 980, margin: '0 auto', padding: '0.875rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.35rem' }}>
+                Today's Brief
+              </div>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, lineHeight: 1.3, color: '#18180F', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                {latest.title}
+              </div>
+            </div>
+            <a href={`/briefs/${latest.slug}`} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#FAFAF6', background: '#18180F', padding: '8px 14px', textDecoration: 'none', flexShrink: 0, whiteSpace: 'nowrap', alignSelf: 'center' }}>
+              Read →
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
-      <section style={{ maxWidth: 980, margin: '0 auto', padding: '3rem 1.5rem 2rem', borderBottom: '0.5px solid #DDDDD0' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '3rem' }}>
+      <section style={{ maxWidth: 980, margin: '0 auto', padding: '2rem 1.25rem 1.75rem', borderBottom: '0.5px solid #DDDDD0' }}>
+        <div className="layout-hero">
 
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '1.1rem' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '1rem' }}>
               Morning Intelligence · MCX &amp; NCDEX
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2.1rem, 4vw, 3.1rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', color: '#18180F', marginBottom: '1.1rem' }}>
+            <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 5vw, 3.1rem)', fontWeight: 800, lineHeight: 1.08, letterSpacing: '-0.025em', color: '#18180F', marginBottom: '1rem' }}>
               The commodity brief<br />
               that tells you <em style={{ fontStyle: 'italic', color: '#C8720A' }}>why</em>,<br />
               not just what.
             </h1>
-            <p style={{ fontSize: '0.975rem', color: '#48483A', lineHeight: 1.75, fontWeight: 300, maxWidth: 520, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', marginBottom: '1.5rem' }}>
+            <p style={{ fontSize: '0.9rem', color: '#48483A', lineHeight: 1.75, fontWeight: 300, maxWidth: 520, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', marginBottom: '1.25rem' }}>
               Every weekday morning, BhaavBrief distils geopolitical signals, supply-demand shifts and options data into one sharp read — delivered before the MCX bell rings at 9 AM. Free, forever.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', marginBottom: '1.75rem', paddingBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem', paddingBottom: '1.25rem', borderBottom: '0.5px solid #DDDDD0' }}>
               {[
                 { icon: '🚀', text: 'Just launched — be among the first' },
                 { icon: '⏰', text: 'Every weekday at 7 AM IST' },
@@ -58,26 +77,26 @@ export default function HomePage() {
               ))}
             </div>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <a href="#subscribe" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#C8720A', color: '#FAFAF6', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '0.04em', padding: '12px 24px', textDecoration: 'none' }}>
+              <a href="#subscribe" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#C8720A', color: '#FAFAF6', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '0.04em', padding: '11px 22px', textDecoration: 'none' }}>
                 ✉ Get tomorrow's brief free
               </a>
               {isLive && latest && (
-                <a href={`/briefs/${latest.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: '#18180F', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '0.04em', padding: '12px 24px', border: '1px solid #C8C8B8', textDecoration: 'none' }}>
+                <a href={`/briefs/${latest.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'transparent', color: '#18180F', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '0.04em', padding: '11px 22px', border: '1px solid #C8C8B8', textDecoration: 'none' }}>
                   📰 Read today's edition
                 </a>
               )}
             </div>
           </div>
 
-          {/* Subscribe sidebar */}
-          <aside id="subscribe" style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', alignSelf: 'start' }}>
+          {/* Subscribe sidebar — desktop only */}
+          <aside className="desktop-only" id="subscribe-sidebar" style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', alignSelf: 'start' }}>
             <SubscribeForm />
           </aside>
         </div>
       </section>
 
       {/* Main content */}
-      <div style={{ maxWidth: 980, margin: '0 auto', padding: '2.5rem 1.5rem', display: 'grid', gridTemplateColumns: '1fr 300px', gap: '3rem' }}>
+      <div className="layout-main" style={{ maxWidth: 980, margin: '0 auto', padding: '2rem 1.25rem' }}>
 
         <main>
           {isLive ? (
@@ -113,7 +132,6 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* What each edition covers */}
               {sectionHed("What every edition covers", "Free · 7 AM daily")}
               {[
                 { tag: 'Energy', color: '#996600', bg: '#FFF7E0', bd: '#D4A830', title: 'Crude Oil Intelligence', desc: 'Hormuz signals, OPEC updates, India import dynamics, and a clear MCX price range for the session. Direction and levels, not just price.' },
@@ -156,10 +174,10 @@ export default function HomePage() {
           </div>
         </main>
 
-        {/* Sidebar */}
-        <aside style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem' }}>
+        {/* Sidebar — flows below main on mobile */}
+        <aside className="sidebar-panel" id="about">
 
-          <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }} id="about">
+          <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
             <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Why we built this</div>
             <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '1rem' }}>
               Indian commodity traders pay ₹5L+ a year for Bloomberg or spend 2 hours piecing together intelligence from 10 sources. BhaavBrief does that work for you — free, every weekday, before the MCX bell.
@@ -187,8 +205,8 @@ export default function HomePage() {
       </div>
 
       {/* Value strip */}
-      <div style={{ background: '#18180F', color: '#FAFAF6', padding: '2.5rem 1.5rem' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+      <div style={{ background: '#18180F', color: '#FAFAF6', padding: '2rem 1.25rem' }}>
+        <div className="layout-value-strip" style={{ maxWidth: 980, margin: '0 auto' }}>
           {[
             { val: '₹0',   sup: '',    lbl: 'Free forever. No credit card. No catch. Just subscribe and read.' },
             { val: '7',    sup: 'AM',  lbl: 'Delivered before market open — every Monday to Friday, without fail.' },
@@ -205,12 +223,12 @@ export default function HomePage() {
       </div>
 
       {/* Bottom subscribe */}
-      <section style={{ maxWidth: 980, margin: '0 auto', padding: '3rem 1.5rem', display: 'grid', gridTemplateColumns: '1fr 360px', gap: '3rem', alignItems: 'center', borderTop: '0.5px solid #DDDDD0' }}>
+      <section id="subscribe" style={{ maxWidth: 980, margin: '0 auto', padding: '2.5rem 1.25rem', borderTop: '0.5px solid #DDDDD0' }} className="layout-subscribe-bottom">
         <div>
           <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '1rem' }}>
             ✉ Join free · No credit card
           </div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.8rem', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
             Start your trading day with an edge.
           </h2>
           <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>
@@ -224,7 +242,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer style={{ borderTop: '3px double #C8C8B8', background: '#F3F2EC' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
           <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: '1.1rem' }}>BhaavBrief</span>
           <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
             {['About', 'Archive', 'Privacy', 'Contact'].map(l => (
@@ -232,7 +250,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.03em', color: '#8A8A7A', maxWidth: 980, margin: '0 auto', padding: '0 1.5rem 1rem' }}>
+        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.03em', color: '#8A8A7A', maxWidth: 980, margin: '0 auto', padding: '0 1.25rem 1rem' }}>
           © 2026 BhaavBrief · bhaavbrief.in · Not registered with SEBI · Content is for informational and educational purposes only and does not constitute investment advice.
         </p>
       </footer>
