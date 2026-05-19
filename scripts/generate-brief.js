@@ -19,19 +19,6 @@ const { fetchMCXPrices } = require('./fetch-prices');
 async function getPrices() {
   return await fetchMCXPrices();
 }
-  const inr = fx?.price ?? 83.5
-  const pct = (d, p) => p ? `${d >= 0 ? '▲' : '▼'} ${Math.abs((d / p) * 100).toFixed(1)}%` : '—'
-  const chg = (d) => `${d >= 0 ? '+' : ''}${Math.round(d)}`
-
-  return {
-    crude:  crude  ? { inr: Math.round(crude.price * inr),              chg: chg((crude.price - crude.prev) * inr),               pct: pct(crude.price - crude.prev, crude.prev) } : null,
-    gold:   gold   ? { inr: Math.round((gold.price / 31.1035) * 10 * inr), chg: chg(((gold.price - gold.prev) / 31.1035) * 10 * inr), pct: pct(gold.price - gold.prev, gold.prev) }  : null,
-    silver: silver ? { inr: Math.round((silver.price / 31.1035) * 1000 * inr), chg: chg(((silver.price - silver.prev) / 31.1035) * 1000 * inr), pct: pct(silver.price - silver.prev, silver.prev) } : null,
-    copper: copper ? { inr: ((copper.price / 0.453592) * inr).toFixed(1),      chg: chg(((copper.price - copper.prev) / 0.453592) * inr),         pct: pct(copper.price - copper.prev, copper.prev) } : null,
-    natgas: natgas ? { inr: Math.round(natgas.price * inr),             chg: chg((natgas.price - natgas.prev) * inr),              pct: pct(natgas.price - natgas.prev, natgas.prev) } : null,
-    usdinr: fx     ? { rate: fx.price.toFixed(2) } : { rate: '83.50' },
-  }
-}
 
 // ─── 2. Fetch News ────────────────────────────────────────────────────────────
 
