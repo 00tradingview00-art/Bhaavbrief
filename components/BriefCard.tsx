@@ -29,7 +29,7 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
             {brief.tags?.[0] ?? 'Brief'}
           </span>
           <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.05em', color: '#8A8A7A' }}>
-            Edition {brief.edition} &nbsp;·&nbsp; {formatDate(brief.date)}
+            {formatDate(brief.date)}
           </span>
         </div>
 

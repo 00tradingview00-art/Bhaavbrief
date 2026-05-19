@@ -24,7 +24,6 @@ export function getAllBriefs(): BriefMeta[] {
 
   const files = fs.readdirSync(BRIEFS_DIR)
     .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
-    .sort((a, b) => b.localeCompare(a)) // newest first
 
   return files.map(filename => {
     const slug = filename.replace(/\.(mdx|md)$/, '')
@@ -40,7 +39,9 @@ export function getAllBriefs(): BriefMeta[] {
       commodities: data.commodities || [],
       published:   data.published   !== false,
     }
-  }).filter(b => b.published)
+  })
+    .filter(b => b.published)
+    .sort((a, b) => b.date.localeCompare(a.date)) // sort by frontmatter date, newest first
 }
 
 export function getBrief(slug: string): Brief | null {
@@ -70,5 +71,6 @@ export function formatDate(dateStr: string): string {
   const d = new Date(dateStr)
   return d.toLocaleDateString('en-IN', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    timeZone: 'Asia/Kolkata',
   })
 }

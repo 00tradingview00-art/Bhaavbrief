@@ -14,7 +14,7 @@ export default function BriefsPage() {
       <PriceTicker />
       <div style={{ maxWidth: 980, margin: '0 auto', padding: '2.5rem 1.5rem' }}>
         <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, fontWeight: 500, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8A8A7A', borderTop: '2px solid #18180F', paddingTop: 8, marginBottom: '1.5rem' }}>
-          All Editions · BhaavBrief Archive
+          All Briefs · BhaavBrief Archive
         </div>
         {briefs.length === 0 ? (
           <p style={{ fontSize: 14, color: '#48483A', fontWeight: 300 }}>First edition coming soon. Subscribe to get it at 7 AM.</p>

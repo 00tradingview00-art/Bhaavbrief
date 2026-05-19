@@ -17,8 +17,8 @@ export async function generateMetadata(
   const brief = getBrief(slug)
   if (!brief) return { title: 'Brief not found' }
 
-  const title       = `${brief.title} | BhaavBrief Edition ${brief.edition}`
-  const description = brief.summary || `MCX commodity intelligence brief — Edition ${brief.edition}. ${brief.commodities?.join(', ')} analysis for Indian traders.`
+  const title       = `${brief.title} | BhaavBrief`
+  const description = brief.summary || `MCX commodity intelligence brief. ${brief.commodities?.join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.slug}`
   const image       = `${BASE_URL}/og/briefs/${brief.slug}.png`
 
@@ -117,7 +117,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
         {[
           { label: 'Home',   href: '/' },
           { label: 'Briefs', href: '/briefs' },
-          { label: `Edition ${brief.edition}`, href: null },
+          { label: formatDate(brief.date), href: null },
         ].map((crumb, i, arr) => (
           <span key={crumb.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {crumb.href ? (
@@ -139,7 +139,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                   {brief.tags?.[0] ?? 'Brief'}
                 </span>
                 <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
-                  Edition {brief.edition} &nbsp;·&nbsp; {formatDate(brief.date)}
+                  {formatDate(brief.date)}
                 </time>
               </div>
               <h1 itemProp="headline" style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>

@@ -82,18 +82,18 @@ export default function HomePage() {
         <main>
           {isLive ? (
             <>
-              {sectionHed('Latest edition', 'Free · Every weekday 7 AM')}
+              {sectionHed('Latest brief', 'Free · Every weekday 7 AM')}
               {latest && <BriefCard brief={latest} featured />}
               {others.length > 0 && (
                 <>
-                  {sectionHed('Previous editions')}
+                  {sectionHed('Previous briefs')}
                   {others.map(b => <BriefCard key={b.slug} brief={b} />)}
                 </>
               )}
               {briefs.length > 4 && (
                 <div style={{ textAlign: 'center', paddingTop: '1.5rem' }}>
                   <a href="/briefs" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
-                    View all editions →
+                    View all briefs →
                   </a>
                 </div>
               )}
@@ -103,13 +103,13 @@ export default function HomePage() {
               {sectionHed('Coming this week')}
               <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', marginBottom: '1.5rem' }}>
                 <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
-                  ⚡ We just launched · Edition 1 dropping soon
+                  ⚡ We just launched · First brief dropping soon
                 </div>
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem', lineHeight: 1.3 }}>
                   BhaavBrief is India's first daily commodity intelligence brief.
                 </p>
                 <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>
-                  Edition 1 drops this week — subscribe free and be among our first 100 readers.
+                  Our first brief drops this week — subscribe free and be among our first 100 readers.
                 </p>
               </div>
 
