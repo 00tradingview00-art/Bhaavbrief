@@ -23,9 +23,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm install --no-save node-fetch
-
       - name: Generate brief
         id: generate
         env:
@@ -33,9 +30,12 @@ jobs:
         run: node scripts/generate-brief.js
 
       - name: Commit and push to main
+        env:
+          BRIEF_EDITION: ${{ steps.generate.outputs.edition }}
+          BRIEF_TITLE: ${{ steps.generate.outputs.title }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add content/briefs/
-          git commit -m "brief: add edition ${{ steps.generate.outputs.edition }} -- ${{ steps.generate.outputs.title }}"
+          git commit -m "brief: add edition ${BRIEF_EDITION} -- ${BRIEF_TITLE}"
           git push origin main

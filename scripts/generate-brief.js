@@ -218,9 +218,10 @@ async function main() {
   console.log(`  Edition: ${edition}`)
   console.log(`  File:    content/briefs/${slug}.mdx`)
 
-  // Set GitHub Actions output
+  // Set GitHub Actions output (sanitize title to a single line)
   if (process.env.GITHUB_OUTPUT) {
-    const output = `slug=${slug}\ntitle=${title}\nedition=${edition}\n`
+    const safeTitle = title.replace(/[\r\n]+/g, ' ').trim()
+    const output = `slug=${slug}\ntitle=${safeTitle}\nedition=${edition}\n`
     fs.appendFileSync(process.env.GITHUB_OUTPUT, output)
   }
 }
