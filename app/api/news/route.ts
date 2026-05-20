@@ -9,6 +9,8 @@ const FEEDS = [
   { url: 'https://www.moneycontrol.com/rss/MCtopnews.xml',                                 fallback: 'Moneycontrol' },
 ]
 
+const FALLBACK_FEED = { url: 'https://news.google.com/rss/search?q=MCX+commodity+India+today&hl=en-IN&gl=IN&ceid=IN:en', fallback: '' }
+
 const DOMAIN_SOURCE: [string, string][] = [
   ['economictimes.indiatimes.com', 'Economic Times'],
   ['business-standard.com',        'Business Standard'],
@@ -133,16 +135,32 @@ function deduplicate(items: NewsItem[]): NewsItem[] {
   return out
 }
 
-const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
+
+function sortAndSlice(items: NewsItem[]): NewsItem[] {
+  return items
+    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+    .slice(0, 40)
+}
 
 export async function GET() {
-  const batches  = await Promise.all(FEEDS.map(f => fetchFeed(f.url, f.fallback)))
-  const cutoff   = Date.now() - SEVEN_DAYS_MS
-  const all      = batches.flat().filter(item => new Date(item.pubDate).getTime() >= cutoff)
-  const deduped  = deduplicate(all)
-  deduped.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+  const batches = await Promise.all(FEEDS.map(f => fetchFeed(f.url, f.fallback)))
+  let all = batches.flat()
 
-  return NextResponse.json(deduped.slice(0, 40), {
+  // If all primary feeds returned nothing, try the fallback feed
+  if (all.length === 0) {
+    all = await fetchFeed(FALLBACK_FEED.url, FALLBACK_FEED.fallback)
+  }
+
+  // Apply 30-day cutoff
+  const cutoff   = Date.now() - THIRTY_DAYS_MS
+  const filtered = all.filter(item => new Date(item.pubDate).getTime() >= cutoff)
+
+  // If the date filter removes everything, return unfiltered (stale feeds)
+  const source  = filtered.length > 0 ? filtered : all
+  const deduped = deduplicate(source)
+
+  return NextResponse.json(sortAndSlice(deduped), {
     headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800' },
   })
 }

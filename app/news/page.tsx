@@ -1,5 +1,4 @@
 import NewsFeed from '@/components/news/NewsFeed'
-import SentimentPanel from '@/components/news/SentimentPanel'
 
 export const metadata = {
   title: 'Intelligence Feed — BhaavBrief',
@@ -12,18 +11,12 @@ export default function NewsPage() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: 0 }}>
-            Intelligence Feed
-          </h1>
-        </div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: 0 }}>
+          Intelligence Feed
+        </h1>
         <span className="live-dot" style={{ fontSize: 12, color: 'var(--up)', fontWeight: 500 }}>Live</span>
       </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 28, alignItems: 'start' }}>
-        <NewsFeed />
-        <SentimentPanel />
-      </div>
+      <NewsFeed />
     </div>
   )
 }
