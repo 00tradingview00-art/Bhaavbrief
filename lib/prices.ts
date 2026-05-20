@@ -1,106 +1,228 @@
-interface YQuote {
-  price: number
-  pct:   number
+/**
+ * lib/prices.ts
+ * Server-side price fetcher used by API routes and server components.
+ * 
+ * Priority:
+ *   1. Kite Connect (real MCX prices, live)    ← if KITE_ACCESS_TOKEN set
+ *   2. Yahoo Finance (COMEX derived, 15-min delay) ← always fetched for global reference
+ * 
+ * Returns unified shape used by all components.
+ */
+
+import { KiteClient, loadCachedTokens, type KiteQuote } from './kite'
+
+// ── Yahoo Finance ─────────────────────────────────────────────────────────────
+
+async function fetchYahoo() {
+  const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}`
+
+  const res = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+    signal: AbortSignal.timeout(10000),
+    next: { revalidate: 300 }, // 5-min server cache
+  })
+  if (!res.ok) throw new Error(`Yahoo Finance: ${res.status}`)
+
+  const data = await res.json()
+  const map: Record<string, any> = {}
+  for (const r of (data?.quoteResponse?.result ?? [])) map[r.symbol] = r
+  return map
 }
 
-async function fetchSymbol(symbol: string): Promise<YQuote | null> {
+// ── MCX derivation from COMEX ─────────────────────────────────────────────────
+
+function deriveFromYahoo(yahoo: Record<string, any>) {
+  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? 96.0
+  const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
+  const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
+  const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0
+  const brent     = yahoo['BZ=F']?.regularMarketPrice     ?? 0
+  const comexCu   = yahoo['HG=F']?.regularMarketPrice     ?? 0
+  const henryHub  = yahoo['NG=F']?.regularMarketPrice     ?? 0
+
+  return {
+    usdinr, brent, comexGold, comexSilver: comexSilv,
+    wti, comexCopper: comexCu, henryHub,
+    // MCX derived prices
+    mcxGold:   comexGold > 0 ? (comexGold / 31.1035) * 10   * usdinr * 1.15 : 0,
+    mcxSilver: comexSilv > 0 ? (comexSilv / 31.1035) * 1000 * usdinr * 1.10 : 0,
+    mcxCrude:  wti       > 0 ? wti        * usdinr   * 1.02 : 0,
+    mcxCopper: comexCu   > 0 ? comexCu    * 2.20462  * usdinr * 1.05 : 0,
+    mcxNatGas: henryHub  > 0 ? henryHub   * usdinr            : 0,
+    // Change %
+    goldPct:    yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
+    silverPct:  yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
+    crudePct:   yahoo['CL=F']?.regularMarketChangePercent    ?? 0,
+    brentPct:   yahoo['BZ=F']?.regularMarketChangePercent    ?? 0,
+    copperPct:  yahoo['HG=F']?.regularMarketChangePercent    ?? 0,
+    gasPct:     yahoo['NG=F']?.regularMarketChangePercent    ?? 0,
+    usdinrPct:  yahoo['USDINR=X']?.regularMarketChangePercent ?? 0,
+  }
+}
+
+// ── Kite quotes ───────────────────────────────────────────────────────────────
+
+async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
+  const apiKey      = process.env.KITE_API_KEY
+  const accessToken = process.env.KITE_ACCESS_TOKEN
+
+  if (!apiKey || !accessToken) return null
+
+  // Load cached instrument tokens (discovered at morning auth)
+  let tokens = loadCachedTokens()
+
+  if (!tokens) {
+    // Try to discover tokens live if cache is missing
+    try {
+      const client = new KiteClient(apiKey, accessToken)
+      tokens = await client.discoverAndCacheTokens()
+    } catch (err) {
+      console.warn('Kite instrument discovery failed:', (err as Error).message)
+      return null
+    }
+  }
+
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      next: { revalidate: 60 },
-    })
-    if (!res.ok) return null
-    const data = await res.json()
-    const meta = data?.chart?.result?.[0]?.meta
-    if (!meta) return null
-    const price = meta.regularMarketPrice ?? 0
-    const prev  = meta.previousClose ?? meta.chartPreviousClose ?? price
-    const pct   = prev ? ((price - prev) / prev) * 100 : 0
-    return { price, pct }
-  } catch {
+    const client = new KiteClient(apiKey, accessToken)
+    const instrumentList = [
+      tokens.gold, tokens.silver, tokens.crude, tokens.copper, tokens.natgas,
+    ]
+    return await client.getQuotes(instrumentList)
+  } catch (err) {
+    console.warn('Kite quote fetch failed:', (err as Error).message)
     return null
   }
 }
 
-const SYMBOLS = [
-  'GC=F', 'SI=F', 'CL=F', 'BZ=F', 'HG=F', 'NG=F',
-  'USDINR=X', 'DX-Y.NYB', '^TNX', '^BSESN', '^NSEI',
-]
+// ── Unified price shape ───────────────────────────────────────────────────────
 
-export async function getPrices(): Promise<Record<string, unknown>> {
-  const results = await Promise.all(SYMBOLS.map(s => fetchSymbol(s)))
-  const q: Record<string, YQuote> = {}
-  SYMBOLS.forEach((s, i) => { if (results[i]) q[s] = results[i]! })
+export interface PriceData {
+  source: 'kite+yahoo' | 'yahoo'
+  updatedAt: string
+  marketOpen: boolean
 
-  if (Object.keys(q).length === 0) return {}
+  // Forex
+  usdinr:        number
+  usdinrChangePct: number
 
-  const usdinr    = q['USDINR=X']?.price  || 84
-  const usdinrPct = q['USDINR=X']?.pct    || 0
+  // Global reference
+  comexGold:     number
+  comexSilver:   number
+  wti:           number
+  brent:         number
+  comexCopper:   number
+  henryHub:      number
+  goldComexPct:  number
+  silverComexPct:number
+  crudePct:      number
+  brentPct:      number
+  copperComexPct:number
+  gasPct:        number
 
-  const comexGold = q['GC=F']?.price || 0
-  const goldPct   = q['GC=F']?.pct   || 0
+  // MCX commodities
+  gold:    { mcx: number; mcxChangePct: number; mcxChange: number; comex: number; comexChangePct: number }
+  silver:  { mcx: number; mcxChangePct: number; mcxChange: number; comex: number; comexChangePct: number }
+  crude:   { mcx: number; mcxChangePct: number; mcxChange: number; wti: number; wtiChangePct: number; brent: number; brentChangePct: number }
+  copper:  { mcx: number; mcxChangePct: number; mcxChange: number }
+  natgas:  { mcx: number; mcxChangePct: number; mcxChange: number }
+  aluminium: { lme: number; lmeChangePct: number }
+}
 
-  const comexSilver = q['SI=F']?.price || 0
-  const silverPct   = q['SI=F']?.pct   || 0
+// ── Main ──────────────────────────────────────────────────────────────────────
 
-  const wti      = q['CL=F']?.price || 0
-  const crudePct = q['CL=F']?.pct   || 0
+export async function getPrices(): Promise<PriceData | null> {
+  try {
+    const [yahoo, kiteQuotes] = await Promise.all([
+      fetchYahoo(),
+      fetchKiteQuotes(),
+    ])
 
-  const brent    = q['BZ=F']?.price || 0
-  const brentPct = q['BZ=F']?.pct   || 0
+    const y = deriveFromYahoo(yahoo)
 
-  const comexCopper = q['HG=F']?.price || 0  // USD/lb
-  const copperPct   = q['HG=F']?.pct   || 0
+    // Is MCX currently open? 9:00 AM – 11:30 PM IST = 03:30–18:00 UTC
+    const nowUTC  = new Date()
+    const utcH    = nowUTC.getUTCHours()
+    const utcM    = nowUTC.getUTCMinutes()
+    const utcMins = utcH * 60 + utcM
+    const marketOpen = utcMins >= 210 && utcMins <= 1080 // 3:30 AM–6:00 PM UTC
 
-  const henryHub = q['NG=F']?.price || 0
-  const gasPct   = q['NG=F']?.pct   || 0
+    // Helper to extract Kite quote by token
+    function kiteByToken(token: number): KiteQuote | null {
+      if (!kiteQuotes) return null
+      return Object.values(kiteQuotes).find(
+        (q: KiteQuote) => q.instrument_token === token
+      ) ?? null
+    }
 
+    const tokens = loadCachedTokens()
 
-  const dxy    = q['DX-Y.NYB']?.price || 0
-  const dxyPct = q['DX-Y.NYB']?.pct  || 0
+    const goldQ   = tokens ? kiteByToken(tokens.gold)   : null
+    const silverQ = tokens ? kiteByToken(tokens.silver) : null
+    const crudeQ  = tokens ? kiteByToken(tokens.crude)  : null
+    const copperQ = tokens ? kiteByToken(tokens.copper) : null
+    const natgasQ = tokens ? kiteByToken(tokens.natgas) : null
 
-  const treasury10y = q['^TNX']?.price || 0
+    const usingKite = !!(kiteQuotes && goldQ)
 
-  const sensex    = q['^BSESN']?.price || 0
-  const sensexPct = q['^BSESN']?.pct  || 0
+    return {
+      source:    usingKite ? 'kite+yahoo' : 'yahoo',
+      updatedAt: new Date().toISOString(),
+      marketOpen,
 
-  const nifty    = q['^NSEI']?.price || 0
-  const niftyPct = q['^NSEI']?.pct   || 0
+      usdinr:         y.usdinr,
+      usdinrChangePct:y.usdinrPct,
 
-  // MCX derived
-  const mcxGold   = comexGold   > 0 ? (comexGold   / 31.1035) * 10   * usdinr * 1.132 : 0
-  const mcxSilver = comexSilver > 0 ? (comexSilver / 31.1035) * 1000 * usdinr * 1.157 : 0
-  const mcxCrude  = wti         > 0 ? wti          * usdinr   * 1.02               : 0
-  const mcxCopper = comexCopper > 0 ? comexCopper  * 2.20462  * usdinr * 1.05      : 0
-  const mcxNatGas = henryHub    > 0 ? henryHub     * usdinr                        : 0
+      comexGold:      y.comexGold,
+      comexSilver:    y.comexSilver,
+      wti:            y.wti,
+      brent:          y.brent,
+      comexCopper:    y.comexCopper,
+      henryHub:       y.henryHub,
+      goldComexPct:   y.goldPct,
+      silverComexPct: y.silverPct,
+      crudePct:       y.crudePct,
+      brentPct:       y.brentPct,
+      copperComexPct: y.copperPct,
+      gasPct:         y.gasPct,
 
-  // LME Copper approximation (COMEX USD/lb → USD/MT)
-  const lmeCopper = comexCopper > 0 ? comexCopper * 2204.62 : 0
-
-  return {
-    // Nested commodity objects — used by PriceCards and PricesTable
-    gold:      { mcx: mcxGold,   mcxChangePct: goldPct,   comex: comexGold,   comexChangePct: goldPct   },
-    silver:    { mcx: mcxSilver, mcxChangePct: silverPct, comex: comexSilver, comexChangePct: silverPct },
-    crude:     { mcx: mcxCrude,  mcxChangePct: crudePct,  wti, wtiChangePct: crudePct, brent, brentChangePct: brentPct },
-    copper:    { mcx: mcxCopper, mcxChangePct: copperPct, lme: lmeCopper, lmeChangePct: copperPct },
-    natgas:    { mcx: mcxNatGas, mcxChangePct: gasPct },
-    aluminium: { lme: 0,          lmeChangePct: 0 },
-    usdinr:    { spot: usdinr,   spotChangePct: usdinrPct },
-
-    // Flat reference values — used by TickerStrip and RefPanel
-    comexGold,    goldComexPct:   goldPct,
-    comexSilver,  silverComexPct: silverPct,
-    wti,          crudePct,
-    brent,        brentPct,
-    comexCopper,  copperComexPct: copperPct,
-    henryHub,     gasPct,
-    dxy,          dxyPct,
-    treasury10y,
-    sensex,       sensexPct,
-    nifty,        niftyPct,
-
-    updatedAt: new Date().toISOString(),
-    source: 'Yahoo Finance',
+      gold: {
+        mcx:           goldQ   ? goldQ.last_price               : y.mcxGold,
+        mcxChangePct:  goldQ   ? KiteClient.changePct(goldQ)    : y.goldPct,
+        mcxChange:     goldQ   ? goldQ.net_change               : 0,
+        comex:         y.comexGold,
+        comexChangePct:y.goldPct,
+      },
+      silver: {
+        mcx:           silverQ ? silverQ.last_price             : y.mcxSilver,
+        mcxChangePct:  silverQ ? KiteClient.changePct(silverQ)  : y.silverPct,
+        mcxChange:     silverQ ? silverQ.net_change             : 0,
+        comex:         y.comexSilver,
+        comexChangePct:y.silverPct,
+      },
+      crude: {
+        mcx:           crudeQ  ? crudeQ.last_price              : y.mcxCrude,
+        mcxChangePct:  crudeQ  ? KiteClient.changePct(crudeQ)   : y.crudePct,
+        mcxChange:     crudeQ  ? crudeQ.net_change              : 0,
+        wti:           y.wti,
+        wtiChangePct:  y.crudePct,
+        brent:         y.brent,
+        brentChangePct:y.brentPct,
+      },
+      copper: {
+        mcx:           copperQ ? copperQ.last_price             : y.mcxCopper,
+        mcxChangePct:  copperQ ? KiteClient.changePct(copperQ)  : y.copperPct,
+        mcxChange:     copperQ ? copperQ.net_change             : 0,
+      },
+      natgas: {
+        mcx:           natgasQ ? natgasQ.last_price             : y.mcxNatGas,
+        mcxChangePct:  natgasQ ? KiteClient.changePct(natgasQ)  : y.gasPct,
+        mcxChange:     natgasQ ? natgasQ.net_change             : 0,
+      },
+      aluminium: { lme: 0, lmeChangePct: 0 },
+    }
+  } catch (err) {
+    console.error('getPrices error:', err)
+    return null
   }
 }

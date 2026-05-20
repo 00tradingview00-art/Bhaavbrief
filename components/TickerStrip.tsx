@@ -1,89 +1,94 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import type { PriceData } from '@/lib/prices'
 
-interface TickerItem {
-  label: string
-  price: string
-  pct:   string
-  up:    boolean
+// IST market hours: 9:00 AM – 11:30 PM = 03:30–18:00 UTC
+function isMCXOpen(): boolean {
+  const now  = new Date()
+  const mins = now.getUTCHours() * 60 + now.getUTCMinutes()
+  return mins >= 210 && mins <= 1080
 }
 
-const FALLBACK: TickerItem[] = [
-  { label: 'MCX GOLD',    price: '—', pct: '—', up: true },
-  { label: 'MCX SILVER',  price: '—', pct: '—', up: true },
-  { label: 'MCX CRUDE',   price: '—', pct: '—', up: true },
-  { label: 'MCX COPPER',  price: '—', pct: '—', up: true },
-  { label: 'MCX NAT GAS', price: '—', pct: '—', up: true },
-  { label: 'USD/INR',     price: '—', pct: '—', up: true },
-  { label: 'COMEX GOLD',  price: '—', pct: '—', up: true },
-  { label: 'WTI CRUDE',   price: '—', pct: '—', up: true },
+function fmtINR(v: number): string {
+  if (!v) return '—'
+  if (v >= 10000) return `₹${Math.round(v).toLocaleString('en-IN')}`
+  if (v >= 100)   return `₹${v.toFixed(2)}`
+  return `₹${v.toFixed(2)}`
+}
+
+function fmtUSD(v: number): string {
+  if (!v) return '—'
+  if (v >= 1000) return `$${Math.round(v).toLocaleString('en-US')}`
+  if (v >= 10)   return `$${v.toFixed(2)}`
+  return `$${v.toFixed(3)}`
+}
+
+function fmtPct(p: number): string {
+  const s = p >= 0 ? '+' : ''
+  return `${s}${p.toFixed(2)}%`
+}
+
+interface Item {
+  label: string
+  price: string
+  pct:   number
+}
+
+const FALLBACK: Item[] = [
+  { label: 'MCX GOLD',    price: '₹1,58,197', pct: 0 },
+  { label: 'MCX SILVER',  price: '₹2,76,023', pct: 0 },
+  { label: 'MCX CRUDE',   price: '₹9,640',    pct: 0 },
+  { label: 'MCX COPPER',  price: '₹1,348',    pct: 0 },
+  { label: 'MCX NAT GAS', price: '₹294',      pct: 0 },
+  { label: 'USD / INR',   price: '₹96.34',    pct: 0 },
+  { label: 'COMEX GOLD',  price: '$4,542',     pct: 0 },
+  { label: 'WTI CRUDE',   price: '$104.00',    pct: 0 },
 ]
 
-function fmt(p: number): { pct: string; up: boolean } {
-  const up  = p >= 0
-  const abs = Math.abs(p)
-  return {
-    pct: abs < 0.001 ? '0.00%' : `${up ? '+' : '-'}${abs.toFixed(2)}%`,
-    up,
-  }
+function mapToItems(d: PriceData): Item[] {
+  return [
+    { label: 'MCX GOLD',    price: fmtINR(d.gold.mcx),    pct: d.gold.mcxChangePct    },
+    { label: 'MCX SILVER',  price: fmtINR(d.silver.mcx),  pct: d.silver.mcxChangePct  },
+    { label: 'MCX CRUDE',   price: fmtINR(d.crude.mcx),   pct: d.crude.mcxChangePct   },
+    { label: 'MCX COPPER',  price: fmtINR(d.copper.mcx),  pct: d.copper.mcxChangePct  },
+    { label: 'MCX NAT GAS', price: fmtINR(d.natgas.mcx),  pct: d.natgas.mcxChangePct  },
+    { label: 'USD / INR',   price: fmtINR(d.usdinr),      pct: d.usdinrChangePct      },
+    { label: 'COMEX GOLD',  price: fmtUSD(d.comexGold),   pct: d.goldComexPct         },
+    { label: 'WTI CRUDE',   price: fmtUSD(d.wti),         pct: d.crudePct             },
+  ]
 }
 
 export default function TickerStrip() {
-  const [items, setItems] = useState<TickerItem[]>(FALLBACK)
+  const [items, setItems]         = useState<Item[]>(FALLBACK)
+  const [source, setSource]       = useState<string>('')
+  const intervalRef               = useRef<NodeJS.Timeout>()
+
+  async function load() {
+    try {
+      const res = await fetch('/api/prices', { cache: 'no-store' })
+      if (!res.ok) return
+      const d: PriceData = await res.json()
+      setItems(mapToItems(d))
+      setSource(d.source)
+    } catch {
+      // Keep current values
+    }
+  }
 
   useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch('/api/prices')
-        if (!res.ok) return
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const d: Record<string, any> = await res.json()
-        if (!d || !d.gold?.mcx) return
+    load()
 
-        const next: TickerItem[] = []
-
-        if (d.gold?.mcx) {
-          const { pct, up } = fmt(d.gold.mcxChangePct ?? 0)
-          next.push({ label: 'MCX GOLD', price: `₹${Math.round(d.gold.mcx).toLocaleString('en-IN')}`, pct, up })
-        }
-        if (d.silver?.mcx) {
-          const { pct, up } = fmt(d.silver.mcxChangePct ?? 0)
-          next.push({ label: 'MCX SILVER', price: `₹${Math.round(d.silver.mcx).toLocaleString('en-IN')}`, pct, up })
-        }
-        if (d.crude?.mcx) {
-          const { pct, up } = fmt(d.crude.mcxChangePct ?? 0)
-          next.push({ label: 'MCX CRUDE', price: `₹${Math.round(d.crude.mcx).toLocaleString('en-IN')}`, pct, up })
-        }
-        if (d.copper?.mcx) {
-          const { pct, up } = fmt(d.copper.mcxChangePct ?? 0)
-          next.push({ label: 'MCX COPPER', price: `₹${d.copper.mcx.toFixed(2)}`, pct, up })
-        }
-        if (d.natgas?.mcx) {
-          const { pct, up } = fmt(d.natgas.mcxChangePct ?? 0)
-          next.push({ label: 'MCX NAT GAS', price: `₹${d.natgas.mcx.toFixed(2)}`, pct, up })
-        }
-        if (d.usdinr?.spot) {
-          const { pct, up } = fmt(d.usdinr.spotChangePct ?? 0)
-          next.push({ label: 'USD/INR', price: `₹${d.usdinr.spot.toFixed(2)}`, pct, up })
-        }
-        if (d.comexGold) {
-          const { pct, up } = fmt(d.goldComexPct ?? 0)
-          next.push({ label: 'COMEX GOLD', price: `$${Math.round(d.comexGold).toLocaleString('en-US')}`, pct, up })
-        }
-        if (d.wti) {
-          const { pct, up } = fmt(d.crudePct ?? 0)
-          next.push({ label: 'WTI CRUDE', price: `$${d.wti.toFixed(2)}`, pct, up })
-        }
-
-        if (next.length > 0) setItems(next)
-      } catch {
-        // keep fallback
-      }
+    // During market hours refresh every 30 sec, outside every 5 min
+    function scheduleNext() {
+      const delay = isMCXOpen() ? 30_000 : 300_000
+      intervalRef.current = setTimeout(async () => {
+        await load()
+        scheduleNext()
+      }, delay)
     }
 
-    load()
-    const id = setInterval(load, 5 * 60 * 1000)
-    return () => clearInterval(id)
+    scheduleNext()
+    return () => clearTimeout(intervalRef.current)
   }, [])
 
   const doubled = [...items, ...items]
@@ -95,10 +100,10 @@ export default function TickerStrip() {
       padding: '7px 0',
       borderBottom: '1px solid rgba(255,255,255,0.06)',
     }}>
-      <div className="ticker-track">
+      <div className="ticker-track" style={{ display: 'flex', gap: 36, whiteSpace: 'nowrap' }}>
         {doubled.map((item, i) => (
           <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
-            <span style={{ color: 'rgba(255,255,255,0.45)', fontWeight: 400, letterSpacing: '0.3px' }}>
+            <span style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '0.3px' }}>
               {item.label}
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', color: '#fff', fontWeight: 500 }}>
@@ -106,9 +111,11 @@ export default function TickerStrip() {
             </span>
             <span style={{
               fontFamily: 'var(--font-mono)', fontWeight: 500,
-              color: item.pct === '—' ? 'rgba(255,255,255,0.4)' : item.up ? '#4ADE80' : '#F87171',
+              color: item.pct > 0  ? '#4ADE80'
+                   : item.pct < 0  ? '#F87171'
+                   : 'rgba(255,255,255,0.35)',
             }}>
-              {item.pct}
+              {fmtPct(item.pct)}
             </span>
           </span>
         ))}

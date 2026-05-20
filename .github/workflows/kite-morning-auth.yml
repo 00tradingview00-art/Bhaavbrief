@@ -1,0 +1,61 @@
+name: Kite Morning Auth
+
+on:
+  schedule:
+    - cron: '0 3 * * 1-5'   # 3:00 AM UTC = 8:30 AM IST, Mon–Fri
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  secrets: write
+
+jobs:
+  kite-auth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Kite login cannot be fully automated from CI (requires browser OAuth)
+      # This job instead:
+      # 1. Checks if existing token is still valid
+      # 2. If valid, re-discovers instrument tokens (they may have rolled to new expiry)
+      # 3. Commits updated kite-instruments.json if tokens changed
+
+      - name: Discover MCX instrument tokens
+        env:
+          KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: |
+          node -e "
+          import('@/lib/kite.js').then(async ({ KiteClient }) => {
+            const apiKey = process.env.KITE_API_KEY;
+            const token  = process.env.KITE_ACCESS_TOKEN;
+            if (!apiKey || !token) { console.log('No Kite credentials — skip'); process.exit(0); }
+            const client = new KiteClient(apiKey, token);
+            try {
+              await client.discoverAndCacheTokens();
+              console.log('Instruments updated');
+            } catch(e) {
+              console.warn('Token may be expired:', e.message);
+              // Not a fatal error — Yahoo Finance fallback will be used
+            }
+          })
+          " || echo "Instrument discovery skipped"
+
+      - name: Commit updated instruments if changed
+        run: |
+          git config user.name "BhaavBrief Bot"
+          git config user.email "engine@bhaavbrief.in"
+          git add data/kite-instruments.json
+          git diff --staged --quiet && exit 0
+          git commit -m "🔑 Update MCX instrument tokens $(date +'%d %b %Y')"
+          git push origin main

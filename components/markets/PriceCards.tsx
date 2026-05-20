@@ -1,4 +1,4 @@
-import { getPrices } from '@/lib/prices'
+import { getPrices, type PriceData } from '@/lib/prices'
 
 const CARDS = [
   { key: 'gold',    label: 'MCX Gold',    unit: 'per 10g',    format: (v: number) => `₹${Math.round(v).toLocaleString('en-IN')}` },
@@ -9,16 +9,20 @@ const CARDS = [
   { key: 'usdinr',  label: 'USD / INR',   unit: 'spot rate',  format: (v: number) => `₹${v.toFixed(2)}` },
 ]
 
+function getCardValue(prices: PriceData, key: string): { value: number; pct: number } {
+  if (key === 'usdinr') return { value: prices.usdinr, pct: prices.usdinrChangePct }
+  const item = (prices as unknown as Record<string, { mcx?: number; mcxChangePct?: number }>)[key]
+  return { value: item?.mcx ?? 0, pct: item?.mcxChangePct ?? 0 }
+}
+
 export default async function PriceCards() {
-  const prices = await getPrices() as Record<string, Record<string, number>>
+  const prices = await getPrices()
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))', gap: 12 }}>
       {CARDS.map(({ key, label, unit, format }) => {
-        const item  = prices[key]
-        const value = item?.mcx ?? item?.spot ?? 0
-        const pct   = item?.mcxChangePct ?? item?.spotChangePct ?? 0
-        const isUp  = pct >= 0
+        const { value, pct } = prices ? getCardValue(prices, key) : { value: 0, pct: 0 }
+        const isUp = pct >= 0
 
         return (
           <div

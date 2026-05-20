@@ -41,7 +41,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): number {
 }
 
 export default async function PricesTable() {
-  const prices = await getPrices() as Record<string, unknown>
+  const prices = await getPrices() as unknown as Record<string, unknown>
 
   return (
     <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
