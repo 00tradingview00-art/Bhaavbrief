@@ -3,10 +3,12 @@ import { NextResponse } from 'next/server'
 export const revalidate = 900
 
 const FEEDS = [
+  { url: 'https://news.google.com/rss/search?q=MCX+gold+silver+crude+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',       fallback: '' },
+  { url: 'https://news.google.com/rss/search?q=MCX+crude+oil+OPEC+India+commodity&hl=en-IN&gl=IN&ceid=IN:en',          fallback: '' },
+  { url: 'https://news.google.com/rss/search?q=MCX+gold+silver+bullion+India+today&hl=en-IN&gl=IN&ceid=IN:en',         fallback: '' },
+  { url: 'https://news.google.com/rss/search?q=India+commodity+RBI+rupee+NCDEX+market&hl=en-IN&gl=IN&ceid=IN:en',      fallback: '' },
   { url: 'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1368177.cms', fallback: 'Economic Times' },
   { url: 'https://www.business-standard.com/rss/markets/commodities-3.rss',               fallback: 'Business Standard' },
-  { url: 'https://news.google.com/rss/search?q=MCX+gold+silver+crude+commodity+India&hl=en-IN&gl=IN&ceid=IN:en', fallback: '' },
-  { url: 'https://www.moneycontrol.com/rss/MCtopnews.xml',                                 fallback: 'Moneycontrol' },
 ]
 
 const FALLBACK_FEED = { url: 'https://news.google.com/rss/search?q=MCX+commodity+India+today&hl=en-IN&gl=IN&ceid=IN:en', fallback: '' }
@@ -172,8 +174,8 @@ export async function GET() {
   const cutoff   = Date.now() - THIRTY_DAYS_MS
   const filtered = all.filter(item => new Date(item.pubDate).getTime() >= cutoff)
 
-  // If the date filter removes everything, return unfiltered (stale feeds)
-  const source  = filtered.length > 0 ? filtered : all
+  // If the date filter leaves fewer than 5 results, return unfiltered (stale feeds)
+  const source  = filtered.length >= 5 ? filtered : all
   const deduped = deduplicate(source)
 
   return NextResponse.json(sortAndSlice(deduped), {
