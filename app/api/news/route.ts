@@ -42,12 +42,16 @@ function detectCategory(text: string): { category: string; tagType: string } {
   return { category: 'Macro', tagType: 'macro' }
 }
 
-function stripTags(s: string): string {
-  return s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim()
-}
-
-function stripCdata(s: string): string {
-  return stripTags(s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1'))
+function stripHtml(s: string): string {
+  return (s ?? '')
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g,  '&')
+    .replace(/&lt;/g,   '<')
+    .replace(/&gt;/g,   '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g,  "'")
+    .trim()
 }
 
 function stripSourceSuffix(title: string): string {
@@ -88,12 +92,12 @@ async function fetchFeed(feedUrl: string, fallback: string): Promise<NewsItem[]>
 
       if (!titleM || !linkM) continue
 
-      const rawTitle = stripSourceSuffix(stripCdata(titleM[1].trim()))
+      const rawTitle = stripSourceSuffix(stripHtml(titleM[1].trim()))
       if (rawTitle.length < 10) continue
 
       const link    = linkM[1].trim()
       const source  = detectSource(link, fallback)
-      const desc    = descM ? stripCdata(descM[1]).slice(0, 280) : ''
+      const desc    = descM ? stripHtml(descM[1]).slice(0, 280) : ''
       const pubDate = dateM ? new Date(dateM[1].trim()).toISOString() : new Date().toISOString()
       const { category, tagType } = detectCategory(`${rawTitle} ${desc}`)
 
@@ -129,10 +133,13 @@ function deduplicate(items: NewsItem[]): NewsItem[] {
   return out
 }
 
+const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000
+
 export async function GET() {
-  const batches = await Promise.all(FEEDS.map(f => fetchFeed(f.url, f.fallback)))
-  const all     = batches.flat()
-  const deduped = deduplicate(all)
+  const batches  = await Promise.all(FEEDS.map(f => fetchFeed(f.url, f.fallback)))
+  const cutoff   = Date.now() - SEVEN_DAYS_MS
+  const all      = batches.flat().filter(item => new Date(item.pubDate).getTime() >= cutoff)
+  const deduped  = deduplicate(all)
   deduped.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
 
   return NextResponse.json(deduped.slice(0, 40), {

@@ -13,12 +13,9 @@ export default function NewsPage() {
     <div>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: 0 }}>
             Intelligence Feed
           </h1>
-          <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
-            Curated from MCX, RBI, Reuters, ET Markets · Every 15 min
-          </p>
         </div>
         <span className="live-dot" style={{ fontSize: 12, color: 'var(--up)', fontWeight: 500 }}>Live</span>
       </div>
