@@ -1,8 +1,6 @@
 import { notFound }    from 'next/navigation'
 import { Metadata }    from 'next'
 import { MDXRemote }   from 'next-mdx-remote/rsc'
-import Masthead        from '@/components/Masthead'
-import PriceTicker     from '@/components/PriceTicker'
 import SubscribeForm   from '@/components/SubscribeForm'
 import { getBrief, getAllBriefs, formatDate } from '@/lib/briefs'
 
@@ -110,9 +108,6 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      <Masthead />
-      <PriceTicker />
-
       <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Home',   href: '/' },
@@ -147,7 +142,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               </h1>
               {brief.summary && (
                 <p itemProp="description" style={{ fontSize: '1rem', color: '#48483A', lineHeight: 1.7, fontWeight: 300, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', margin: 0 }}>
-                  {brief.summary}
+                  {/[.!?]$/.test(brief.summary.trim()) ? brief.summary : `${brief.summary}…`}
                 </p>
               )}
               {brief.commodities?.length > 0 && (
