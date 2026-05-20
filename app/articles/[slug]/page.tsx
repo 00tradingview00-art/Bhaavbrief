@@ -98,12 +98,6 @@ export default async function ArticlePage({ params }: Props) {
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
             <span style={{
-              fontSize: 10, fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase',
-              padding: '3px 8px', borderRadius: 4, background: '#FFF3E0', color: '#B45309',
-            }}>
-              ⚡ Flash Intelligence
-            </span>
-            <span style={{
               fontSize: 10, fontWeight: 600, letterSpacing: '0.4px', textTransform: 'uppercase',
               padding: '3px 8px', borderRadius: 4,
               background: `${color}15`, color,
@@ -133,12 +127,6 @@ export default async function ArticlePage({ params }: Props) {
             <span>·</span>
             <span>{meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
             {meta.time && <><span>·</span><span>{meta.time} IST</span></>}
-            {meta.priceAtPublish > 0 && (
-              <><span>·</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>
-                ₹{meta.priceAtPublish.toLocaleString('en-IN')} at publish
-              </span></>
-            )}
           </div>
         </div>
 
