@@ -13,7 +13,8 @@ export default function HomePage() {
   const latest     = briefs[0]
   const others     = briefs.slice(1, 4)
   const isLive     = briefs.length > 0
-  const flashItems = getAllFlash().slice(0, 10)
+  const cutoff    = Date.now() - 48 * 60 * 60 * 1000
+  const flashItems = getAllFlash().filter(f => new Date(f.date).getTime() > cutoff).slice(0, 10)
 
   const sectionHed = (label: string, sub?: string) => (
     <div style={{
