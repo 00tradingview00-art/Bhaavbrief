@@ -1,294 +1,140 @@
-#!/usr/bin/env node
-/**
- * BhaavBrief — Automated Brief Generator v2
- * Runs via GitHub Actions at 6:30 AM IST (1:00 AM UTC) daily
- */
+import Anthropic from '@anthropic-ai/sdk'
+import * as fs from 'fs'
+import * as path from 'path'
 
-const fs   = require('fs')
-const path = require('path')
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+const EDITION = parseInt(process.env.EDITION ?? '1', 10)
+const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
-const BRIEFS_DIR        = path.join(__dirname, '../content/briefs')
-const { fetchMCXPrices } = require('./fetch-prices')
-
-// IST date — cron runs at 1AM UTC = 6:30AM IST, always use IST
-function getISTDate() {
-  const now = new Date()
-  const ist = new Date(now.getTime() + 5.5 * 60 * 60 * 1000)
-  const iso = ist.toISOString().split('T')[0]
-  const display = ist.toLocaleDateString('en-IN', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-  })
-  return { iso, display, slug: iso }
+async function fetchPrices() {
+  const tickers = ['GC=F','SI=F','CL=F','HG=F','NG=F','USDINR=X']
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+      signal: AbortSignal.timeout(10000),
+    })
+    const data = await res.json()
+    const q = {}
+    for (const r of (data?.quoteResponse?.result ?? [])) {
+      q[r.symbol] = { price: r.regularMarketPrice, pct: r.regularMarketChangePercent }
+    }
+    const usdinr = q['USDINR=X']?.price ?? 96.0
+    const gold = q['GC=F']?.price ?? 0
+    const silver = q['SI=F']?.price ?? 0
+    const wti = q['CL=F']?.price ?? 0
+    const copper = q['HG=F']?.price ?? 0
+    const gas = q['NG=F']?.price ?? 0
+    return {
+      usdinr: usdinr.toFixed(2),
+      comexGold: gold.toFixed(0),
+      mcxGold: gold > 0 ? ((gold/31.1035)*10*usdinr*1.15).toFixed(0) : null,
+      comexSilver: silver.toFixed(2),
+      mcxSilver: silver > 0 ? ((silver/31.1035)*1000*usdinr*1.10).toFixed(0) : null,
+      wti: wti.toFixed(2),
+      mcxCrude: wti > 0 ? (wti*usdinr*1.02).toFixed(0) : null,
+      comexCopper: copper.toFixed(2),
+      mcxCopper: copper > 0 ? (copper*2.20462*usdinr*1.05).toFixed(2) : null,
+      henryHub: gas.toFixed(2),
+      mcxGas: gas > 0 ? (gas*usdinr).toFixed(2) : null,
+      goldPct: (q['GC=F']?.pct ?? 0).toFixed(2),
+      silverPct: (q['SI=F']?.pct ?? 0).toFixed(2),
+      crudePct: (q['CL=F']?.pct ?? 0).toFixed(2),
+      copperPct: (q['HG=F']?.pct ?? 0).toFixed(2),
+      gasPct: (q['NG=F']?.pct ?? 0).toFixed(2),
+    }
+  } catch(e) {
+    console.warn('Price fetch failed:', e.message)
+    return null
+  }
 }
 
-// Edition number — internal only, not shown to readers
-function getEditionNumber() {
-  if (!fs.existsSync(BRIEFS_DIR)) return 1
-  return fs.readdirSync(BRIEFS_DIR).filter(f => f.endsWith('.mdx') || f.endsWith('.md')).length + 1
-}
-
-// News from Google News — reliable from GitHub Actions
 async function fetchNews() {
-  const feeds = [
-    'https://news.google.com/rss/search?q=MCX+crude+gold+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',
-    'https://news.google.com/rss/search?q=OPEC+crude+oil+price+today&hl=en&gl=US&ceid=US:en',
-    'https://news.google.com/rss/search?q=gold+silver+price+India&hl=en-IN&gl=IN&ceid=IN:en',
-    'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil&hl=en&gl=US&ceid=US:en',
+  const sources = [
+    'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1368177.cms',
+    'https://www.business-standard.com/rss/markets/commodities-3.rss',
+    'https://news.google.com/rss/search?q=MCX+gold+silver+crude+India&hl=en-IN&gl=IN&ceid=IN:en',
   ]
-
   const headlines = []
-  for (const url of feeds) {
+  for (const url of sources) {
     try {
-      const res  = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BhaavBrief/2.0)' },
-        signal:  AbortSignal.timeout(8000),
+      const res = await fetch(url, {
+        headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+        signal: AbortSignal.timeout(8000),
       })
-      if (!res.ok) { console.warn(`  RSS HTTP ${res.status}: ${url.split('/')[2]}`); continue }
       const text = await res.text()
-      const cdata  = [...text.matchAll(/<title><!\[CDATA\[(.+?)\]\]><\/title>/g)].map(m => m[1].trim())
-      const plain  = [...text.matchAll(/<title>(?!\s*<!\[)([^<]{15,})<\/title>/g)].map(m => m[1].trim())
-      const items  = [...cdata, ...plain]
-        .filter(h => h.length > 20 && !/rss|feed|subscribe/i.test(h))
-        .slice(1, 5)
-      headlines.push(...items)
-      console.log(`  ${url.split('/')[2]}: ${items.length} headlines`)
+      const m1 = [...text.matchAll(/<title><!\[CDATA\[(.+?)\]\]><\/title>/g)].map(m=>m[1].trim())
+      const m2 = [...text.matchAll(/<title>(.+?)<\/title>/g)].map(m=>m[1].replace(/<!\[CDATA\[|\]\]>/g,'').trim()).filter(t=>t.length>10&&t.length<200).slice(1,6)
+      headlines.push(...(m1.length ? m1.slice(0,5) : m2))
+      if (headlines.length >= 8) break
     } catch(e) {
-      console.warn(`  RSS failed: ${e.message}`)
+      console.warn('RSS failed:', url, e.message)
     }
   }
-
-  return [...new Set(headlines)].slice(0, 10)
+  return [...new Set(headlines)].slice(0, 8)
 }
 
-// Curated Unsplash images per commodity theme
-function getImage(tags) {
-  const images = {
-    energy: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80',
-    metals: 'https://images.unsplash.com/photo-1610375461246-83df859d849d?w=1200&q=80',
-    agri:   'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1200&q=80',
-    macro:  'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80',
-  }
-  return images[tags[0]] ?? images.macro
-}
+async function generate(prices, news) {
+  const today = new Date()
+  const dateStr = today.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' })
+  const priceBlock = prices ? `
+PRICES:
+- USD/INR: ₹${prices.usdinr}
+- COMEX Gold: $${prices.comexGold}/oz (${prices.goldPct}%) → MCX: ₹${prices.mcxGold ?? 'N/A'}/10g
+- COMEX Silver: $${prices.comexSilver}/oz (${prices.silverPct}%) → MCX: ₹${prices.mcxSilver ?? 'N/A'}/kg
+- WTI Crude: $${prices.wti}/bbl (${prices.crudePct}%) → MCX: ₹${prices.mcxCrude ?? 'N/A'}/bbl
+- COMEX Copper: $${prices.comexCopper}/lb (${prices.copperPct}%) → MCX: ₹${prices.mcxCopper ?? 'N/A'}/kg
+- Henry Hub Gas: $${prices.henryHub}/mmBtu (${prices.gasPct}%) → MCX: ₹${prices.mcxGas ?? 'N/A'}/mmBtu` : 'PRICES: Unavailable — analyse on recent trends.'
+  const newsBlock = news.length > 0 ? `NEWS:\n${news.map((h,i)=>`${i+1}. ${h}`).join('\n')}` : 'NEWS: None fetched — focus on price action and macro.'
 
-// Generate brief via Claude
-async function generateBrief(prices, news, date) {
-  const priceCtx = `
-MCX Crude Oil : ₹${prices.crude?.inr  ?? '—'}/bbl  | WTI COMEX: $${prices.crude?.comex  ?? '—'} | ${prices.crude?.pct  ?? '—'} (${prices.crude?.chg  ?? '—'})
-MCX Gold      : ₹${prices.gold?.inr   ?? '—'}/10g  | COMEX:     $${prices.gold?.comex   ?? '—'}/oz | ${prices.gold?.pct   ?? '—'} (${prices.gold?.chg   ?? '—'})
-MCX Silver    : ₹${prices.silver?.inr ?? '—'}/kg   | COMEX:     $${prices.silver?.comex ?? '—'}/oz | ${prices.silver?.pct ?? '—'} (${prices.silver?.chg ?? '—'})
-MCX Copper    : ₹${prices.copper?.inr ?? '—'}/kg   | COMEX:     $${prices.copper?.comex ?? '—'}/lb | ${prices.copper?.pct ?? '—'} (${prices.copper?.chg ?? '—'})
-MCX Nat Gas   : ₹${prices.natgas?.inr ?? '—'}/mmBtu | Henry Hub: $${prices.natgas?.comex ?? '—'} | ${prices.natgas?.pct ?? '—'} (${prices.natgas?.chg ?? '—'})
-Brent Crude   : $${prices.brent?.usd  ?? '—'}/bbl
-USD/INR       : ₹${prices.usdinr?.rate ?? '96.38'}
-`.trim()
+  const prompt = `You are BhaavBrief's lead analyst. Write Edition #${EDITION} for ${dateStr}.
 
-  const newsCtx = news.length > 0
-    ? news.map((h, i) => `${i + 1}. ${h}`).join('\n')
-    : 'No live headlines — analyse from price action and global macro context.'
+${priceBlock}
 
-  const prompt = `You are the editor of BhaavBrief, India's sharpest daily commodity intelligence brief. Your readers are MCX traders, institutional analysts, and commodity desk professionals. They trade real money based on what you write. They have zero tolerance for vague analysis.
+${newsBlock}
 
-TODAY: ${date.display}
+RULES:
+- Sharp, confident, specific. Every sentence adds value.
+- Give exact MCX support/resistance levels to watch.
+- Explain the WHY behind each move.
+- 400-600 words. No fluff.
+- End with "Edge of the Day:" — one line, the single most important thing.
 
-PREVIOUS SESSION CLOSE — MCX PRICES:
-${priceCtx}
+Return ONLY valid MDX with frontmatter, nothing else:
 
-MARKET HEADLINES:
-${newsCtx}
-
-Write today's BhaavBrief morning edition.
-
-USE EXACTLY THESE ## HEADERS IN ORDER:
-## The Big Picture
-## Crude Oil
-## Gold & Silver
-## Base Metals & Energy
-## What to Watch This Week
-
-RULES — NON NEGOTIABLE:
-- "The Big Picture": One sharp paragraph. The single macro theme connecting all commodities today — currency move, geopolitical event, demand/supply structural shift. State the context clearly and concisely.
-- Each commodity section: State the MCX price. Give the key price levels (support, resistance, recent highs/lows) derived from the data. Explain the supply/demand or macro context driving price action. Example: "**₹9,800** is the key level to watch. The context here is [factual reason from prices/news]."
-- "What to Watch": Exactly 3 bullet points. Forward-looking only. Specific events, data releases, or price triggers for the next 3-5 days.
-- Tone: Bloomberg Terminal meets Dalal Street. Confident. Factual. Write from data and context, not speculation.
-- Length: 500-650 words. Every sentence earns its place.
-- Bold ALL price levels and key numbers: **₹9,940**, **$4,556**, **96.38**
-- Reference both MCX and COMEX prices where relevant — your readers track both
-- No hedging language: no "may", "might", "could possibly", "it remains to be seen"
-- No investment advice language, no directional calls, no "buy"/"sell" recommendations
-- No disclaimers in the body
-- No title or frontmatter — added separately
-- End with exactly this line on its own: *Prices reflect previous MCX session close. COMEX prices for reference.*
-
-Write the brief now:`
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key':         ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'Content-Type':      'application/json',
-    },
-    body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
-      max_tokens: 1500,
-      messages:   [{ role: 'user', content: prompt }],
-    }),
-  })
-
-  if (!res.ok) throw new Error(`Claude API: ${JSON.stringify(await res.json())}`)
-  return (await res.json()).content?.[0]?.text ?? ''
-}
-
-// SEO title
-async function generateTitle(content, date) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
-      max_tokens: 80,
-      messages: [{
-        role: 'user',
-        content: `Write an SEO headline for this commodity market brief.
-Requirements:
-- Max 60 characters
-- Must include a specific price move, % change, or macro event from the brief
-- Must include "MCX" and at least one commodity name
-- Factual, specific — like a Financial Times headline
-- No questions, no colons, no clickbait
-- Return ONLY the headline, nothing else
-
-Brief: ${content.slice(0, 600)}`,
-      }],
-    }),
-  })
-  const data = await res.json()
-  return data.content?.[0]?.text?.trim().replace(/^["']|["']$/g, '') ?? `MCX Commodity Morning Brief — ${date.display}`
-}
-
-// SEO meta description
-async function generateMeta(content) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
-      max_tokens: 80,
-      messages: [{
-        role: 'user',
-        content: `Write a Google meta description for this commodity trading brief.
-- 150-160 characters exactly
-- Include specific price levels or % moves from the brief
-- Written for MCX traders — make them want to click
-- No clickbait, factual and specific
-- Return ONLY the description, nothing else
-
-Brief: ${content.slice(0, 700)}`,
-      }],
-    }),
-  })
-  const data = await res.json()
-  return data.content?.[0]?.text?.trim().replace(/^["']|["']$/g, '') ?? ''
-}
-
-// Save MDX with full SEO frontmatter
-function saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content, prices }) {
-  if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
-
-  const keywords = [
-    'MCX commodity prices today', 'MCX gold price', 'MCX crude oil', 'MCX silver price',
-    'commodity trading India', 'MCX morning brief', ...commodities,
-  ].join(', ')
-
-  const safeTitle = title.replace(/"/g, "'").replace(/[\r\n]+/g, ' ').trim()
-  const safeMeta  = metaDesc.replace(/"/g, "'").replace(/[\r\n]+/g, ' ').trim().slice(0, 160)
-
-  const frontmatter = `---
-title: "${safeTitle}"
-date: "${date.iso}"
-edition: ${edition}
-metaDescription: "${safeMeta}"
-keywords: "${keywords}"
-image: "${image}"
-tags: [${tags.map(t => `"${t}"`).join(', ')}]
-commodities: [${commodities.map(c => `"${c}"`).join(', ')}]
-published: true
+---
+title: "[Sharp headline under 12 words]"
+description: "[One sentence summary under 25 words]"
+date: "${today.toISOString().split('T')[0]}"
+edition: ${EDITION}
+tags: ["MCX Gold", "MCX Silver", "MCX Crude"]
 ---
 
-`
-  const priceBar = `**MCX Prices** — Gold ₹${prices.gold?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.gold?.comex ?? '—'}/oz) · Silver ₹${prices.silver?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.silver?.comex ?? '—'}/oz) · Crude ₹${prices.crude?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.crude?.comex ?? '—'}) · Nat Gas ₹${prices.natgas?.inr?.toLocaleString('en-IN') ?? '—'} ($${prices.natgas?.comex ?? '—'}) · USD/INR ₹${prices.usdinr?.rate ?? '—'}
+[Brief content here]`
 
-`
-fs.writeFileSync(path.join(BRIEFS_DIR, `${slug}.mdx`), frontmatter + priceBar + content, 'utf8')
-  console.log(`Saved: content/briefs/${slug}.mdx`)
+  const r = await client.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1500,
+    messages: [{ role: 'user', content: prompt }],
+  })
+  return r.content[0].type === 'text' ? r.content[0].text : null
 }
 
-// Main
 async function main() {
-  if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
-
-  const date    = getISTDate()
-  const edition = getEditionNumber()
-  const slug    = date.iso // e.g. 2026-05-19 — SEO-friendly, date-based URL
-
-  console.log(`BhaavBrief for ${date.display} (Edition ${edition})`)
-
-  console.log('Fetching prices...')
-  const prices = await fetchMCXPrices()
-  console.log('Prices:', JSON.stringify(prices))
-
-  console.log('Fetching news...')
-  const news = await fetchNews()
-  console.log(`Headlines (${news.length}):`, news)
-
-  console.log('Generating brief...')
-  const content = await generateBrief(prices, news, date)
-
-  console.log('Generating SEO title and meta...')
-  const [title, metaDesc] = await Promise.all([
-    generateTitle(content, date),
-    generateMeta(content),
-  ])
-
-  // Detect tags and commodities
-  const tags = []
-  if (/crude|oil|energy|opec/i.test(content.slice(0, 400)))        tags.push('energy')
-  else if (/gold|silver|metals/i.test(content.slice(0, 400)))       tags.push('metals')
-  else if (/agri|soya|monsoon|kharif/i.test(content.slice(0, 400))) tags.push('agri')
-  else                                                                tags.push('macro')
-
-  const commodities = []
-  if (/crude|oil/i.test(content))         commodities.push('MCX Crude')
-  if (/gold/i.test(content))              commodities.push('MCX Gold')
-  if (/silver/i.test(content))            commodities.push('MCX Silver')
-  if (/copper/i.test(content))            commodities.push('MCX Copper')
-  if (/natural.gas|natgas/i.test(content)) commodities.push('MCX Natural Gas')
-  if (/agri|soya|chana/i.test(content))   commodities.push('NCDEX Agri')
-
-  const image = getImage(tags)
-
-  saveBrief({ slug, title, metaDesc, date, edition, image, tags, commodities, content, prices })
-
-  console.log(`Title: ${title}`)
-  console.log(`Meta: ${metaDesc}`)
-
-  if (process.env.GITHUB_OUTPUT) {
-    const safe = title.replace(/[\r\n]+/g, ' ').trim()
-    fs.appendFileSync(process.env.GITHUB_OUTPUT, `slug=${slug}\ntitle=${safe}\nedition=${edition}\n`)
+  console.log(`\nBhaavBrief generator — Edition #${EDITION}\n`)
+  const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
+  console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
+  console.log(`News: ${news.length} headlines`)
+  const mdx = await generate(prices, news)
+  if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
+    console.error('Invalid MDX generated')
+    process.exit(1)
   }
+  if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
+  const file = path.join(BRIEFS_DIR, `edition-${String(EDITION).padStart(3,'0')}.mdx`)
+  if (fs.existsSync(file)) { console.warn('Already exists, skipping'); process.exit(0) }
+  fs.writeFileSync(file, mdx.trim(), 'utf8')
+  console.log(`Saved: ${file}`)
 }
 
-main().catch(err => {
-  console.error('Failed:', err.message)
-  process.exit(1)
-})
+main().catch(e => { console.error('Fatal:', e); process.exit(1) })

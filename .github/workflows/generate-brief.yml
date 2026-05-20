@@ -1,4 +1,4 @@
-name: Generate BhaavBrief
+name: Generate Daily Brief
 
 on:
   schedule:
@@ -11,11 +11,13 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-      - name: Checkout
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
@@ -27,19 +29,36 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Generate brief
-        id: generate
+      - name: Get next edition number
+        id: edition
+        run: |
+          LAST=$(ls content/briefs/ | grep -oP '\d+' | sort -n | tail -1)
+          NEXT=$((${LAST:-0} + 1))
+          echo "number=$NEXT" >> $GITHUB_OUTPUT
+
+      - name: Generate brief MDX
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          EDITION: ${{ steps.edition.outputs.number }}
         run: node scripts/generate-brief.js
 
-      - name: Commit and push to main
+      - name: Commit directly to main
         env:
-          BRIEF_EDITION: ${{ steps.generate.outputs.edition }}
-          BRIEF_TITLE: ${{ steps.generate.outputs.title }}
+          EDITION: ${{ steps.edition.outputs.number }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "BhaavBrief Bot"
+          git config user.email "brief@bhaavbrief.in"
           git add content/briefs/
-          git commit -m "brief: add edition ${BRIEF_EDITION} -- ${BRIEF_TITLE}"
+          git diff --staged --quiet && echo "Nothing to commit" && exit 0
+          git commit -m "Brief #${EDITION} — $(date +'%d %b %Y')"
           git push origin main
+
+      - name: Wait for deploy then send newsletter
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: |
+          sleep 180
+          node scripts/send-newsletter.js
