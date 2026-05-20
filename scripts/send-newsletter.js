@@ -1,20 +1,39 @@
 #!/usr/bin/env node
 /**
- * Reads the newly merged MDX brief and sends it as an email
+ * Reads the newly generated MDX brief and sends it as an email
  * campaign via Brevo to all subscribers.
+ *
+ * Env vars:
+ *   BREVO_API_KEY  — required
+ *   BREVO_LIST_ID  — defaults to 2
+ *   SENDER_EMAIL   — defaults to brief@bhaavbrief.in
+ *   EDITION        — used to locate the file when BRIEF_FILE is not set
+ *   BRIEF_FILE     — explicit path override (optional)
  */
 
-const fs   = require('fs')
-const path = require('path')
+import fs   from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const BREVO_API  = 'https://api.brevo.com/v3'
 const API_KEY    = process.env.BREVO_API_KEY
 const LIST_ID    = Number(process.env.BREVO_LIST_ID ?? 2)
 const FROM_EMAIL = process.env.SENDER_EMAIL ?? 'brief@bhaavbrief.in'
+const EDITION    = process.env.EDITION
 const BRIEF_FILE = process.env.BRIEF_FILE
 
-if (!API_KEY)    { console.error('BREVO_API_KEY not set'); process.exit(1) }
-if (!BRIEF_FILE) { console.error('BRIEF_FILE not set');    process.exit(1) }
+if (!API_KEY) { console.error('BREVO_API_KEY not set'); process.exit(1) }
+
+function resolveBriefPath() {
+  if (BRIEF_FILE) return path.join(process.cwd(), BRIEF_FILE)
+  if (EDITION) {
+    const padded = String(EDITION).padStart(3, '0')
+    return path.join(__dirname, `../content/briefs/edition-${padded}.mdx`)
+  }
+  console.error('Either BRIEF_FILE or EDITION must be set'); process.exit(1)
+}
 
 // ─── Parse MDX frontmatter (simple regex, no extra deps) ─────────────────────
 
@@ -52,6 +71,8 @@ function mdxToHtml(content, title, edition, date) {
     .replace(/^- (.+)$/gm, '<p style="margin:4px 0;color:#48483A;font-size:14px;font-weight:300">— $1</p>')
     .replace(/\n\n/g, '</p><p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 12px">')
 
+  const slug = `edition-${String(edition).padStart(3, '0')}`
+
   return `<!DOCTYPE html>
 <html lang="en-IN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head>
@@ -65,7 +86,7 @@ function mdxToHtml(content, title, edition, date) {
   <div>
     <p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 12px">${body}</p>
   </div>
-  <a href="https://bhaavbrief.in/briefs/edition-${String(edition).padStart(3,'0')}" style="display:block;background:#C8720A;color:#FAFAF6;text-decoration:none;padding:12px 24px;text-align:center;font-family:monospace;font-size:12px;letter-spacing:0.04em;margin:24px 0">
+  <a href="https://bhaavbrief.in/briefs/${slug}" style="display:block;background:#C8720A;color:#FAFAF6;text-decoration:none;padding:12px 24px;text-align:center;font-family:monospace;font-size:12px;letter-spacing:0.04em;margin:24px 0">
     Read full edition on BhaavBrief →
   </a>
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
@@ -100,9 +121,8 @@ async function sendCampaign(subject, htmlContent, previewText) {
   }
 
   const { id } = await createRes.json()
-  console.log(`✅ Campaign created: ID ${id}`)
+  console.log(`Campaign created: ID ${id}`)
 
-  // Send immediately
   const sendRes = await fetch(`${BREVO_API}/emailCampaigns/${id}/sendNow`, {
     method: 'POST',
     headers: { 'api-key': API_KEY },
@@ -113,31 +133,31 @@ async function sendCampaign(subject, htmlContent, previewText) {
     throw new Error(`Send failed: ${JSON.stringify(e)}`)
   }
 
-  console.log(`🚀 Newsletter sent! Campaign ID: ${id}`)
+  console.log(`Newsletter sent — Campaign ID: ${id}`)
   return id
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const filePath = path.join(process.cwd(), BRIEF_FILE)
+  const filePath = resolveBriefPath()
   if (!fs.existsSync(filePath)) throw new Error(`File not found: ${filePath}`)
 
-  const raw              = fs.readFileSync(filePath, 'utf8')
+  const raw               = fs.readFileSync(filePath, 'utf8')
   const { meta, content } = parseFrontmatter(raw)
 
   const title   = meta.title   || 'BhaavBrief Morning Edition'
-  const edition = meta.edition || 1
+  const edition = meta.edition ?? 1
   const date    = meta.date    || new Date().toISOString().split('T')[0]
-  const summary = meta.summary || 'Your daily commodity intelligence brief.'
+  const summary = meta.summary || meta.description || 'Your daily commodity intelligence brief.'
 
-  console.log(`📧 Sending Edition ${edition}: "${title}"`)
+  console.log(`Sending Edition ${edition}: "${title}"`)
 
   const html = mdxToHtml(content, title, edition, date)
   await sendCampaign(title, html, summary)
 }
 
 main().catch(err => {
-  console.error('❌ Newsletter send failed:', err.message)
+  console.error('Newsletter send failed:', err.message)
   process.exit(1)
 })
