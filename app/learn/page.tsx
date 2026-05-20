@@ -29,15 +29,21 @@ const ARTICLES: Article[] = [
         <ArticleTable
           headers={['Commodity', 'Lot Size', 'Approx Margin', 'Expiry']}
           rows={[
-            ['Gold', '1 kg', '₹1.5–2L', 'Last day of month'],
-            ['Gold Mini', '100 g', '₹15–20K', 'Last day of month'],
-            ['Silver', '30 kg', '₹2.8–3.5L', 'Last day of month'],
-            ['Crude Oil', '100 bbl', '₹45–60K', '19th of month'],
-            ['Crude Mini', '10 bbl', '₹4.5–6K', '19th of month'],
-            ['Copper', '2.5 MT', '₹25–35K', 'Last day of month'],
-            ['Nat Gas', '1250 mmBtu', '₹15–22K', '25th of month'],
+            ['Gold', '1 kg', '₹7.5–9L', 'Last day of month'],
+            ['Gold Mini', '100 g', '₹75K–90K', 'Last day of month'],
+            ['Silver', '30 kg', '₹4–5L', 'Last day of month'],
+            ['Crude Oil', '100 bbl', '₹45–55K', '19th of month'],
+            ['Crude Mini', '10 bbl', '₹5–6K', '19th of month'],
+            ['Copper', '2.5 MT', '₹1.6–2L', 'Last day of month'],
+            ['Nat Gas', '1250 mmBtu', '₹18–22K', '25th of month'],
           ]}
         />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.6 }}>
+          Margins change daily. Verify exact figures at{' '}
+          <a href="https://zerodha.com/margin-calculator/SPAN" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
+            zerodha.com/margin-calculator/SPAN
+          </a>
+        </p>
       </>
     ),
   },

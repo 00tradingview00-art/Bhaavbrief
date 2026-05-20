@@ -142,7 +142,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               </h1>
               {brief.summary && (
                 <p itemProp="description" style={{ fontSize: '1rem', color: '#48483A', lineHeight: 1.7, fontWeight: 300, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', margin: 0 }}>
-                  {/[.!?]$/.test(brief.summary.trim()) ? brief.summary : `${brief.summary}…`}
+                  {brief.summary}
                 </p>
               )}
               {brief.commodities?.length > 0 && (

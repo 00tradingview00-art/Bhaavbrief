@@ -41,7 +41,8 @@ export async function getAllBriefs(): Promise<BriefMeta[]> {
       const { data } = matter(raw)
 
       const isoDate  = data.date || ''
-      const desc     = cleanSummary(data.summary) || data.metaDescription || data.description || data.excerpt || ''
+      const rawDesc  = cleanSummary(data.summary) || data.metaDescription || data.description || data.excerpt || ''
+      const desc     = rawDesc && !/[.!?]$/.test(rawDesc.trim()) ? `${rawDesc}…` : rawDesc
 
       return {
         slug,
@@ -55,7 +56,7 @@ export async function getAllBriefs(): Promise<BriefMeta[]> {
           : '',
         description: desc,
         summary:     desc,
-        edition:     data.edition     || 0,
+        edition:     data.edition     ?? 0,
         tags:        data.tags        || [],
         commodities: data.commodities || [],
         published:   data.published   !== false,
@@ -75,7 +76,8 @@ export function getBrief(slug: string): Brief | null {
   const { data, content } = matter(raw)
 
   const isoDate = data.date || ''
-  const desc    = cleanSummary(data.summary) || data.metaDescription || data.description || data.excerpt || ''
+  const rawDesc  = cleanSummary(data.summary) || data.metaDescription || data.description || data.excerpt || ''
+  const desc     = rawDesc && !/[.!?]$/.test(rawDesc.trim()) ? `${rawDesc}…` : rawDesc
 
   return {
     slug,
@@ -89,7 +91,7 @@ export function getBrief(slug: string): Brief | null {
       : '',
     description: desc,
     summary:     desc,
-    edition:     data.edition     || 0,
+    edition:     data.edition     ?? 0,
     tags:        data.tags        || [],
     commodities: data.commodities || [],
     published:   data.published   !== false,
