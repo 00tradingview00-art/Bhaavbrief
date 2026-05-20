@@ -1,22 +1,41 @@
-// Static reference panel — update values manually or wire to API
-export default function RefPanel() {
+import { getPrices } from '@/lib/prices'
+
+function fmtUsd(v: number, decimals = 2): string {
+  if (!v) return '—'
+  return `$${v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`
+}
+
+function fmtInr(v: number): string {
+  if (!v) return '—'
+  return `₹${v.toFixed(2)}`
+}
+
+function fmtNum(v: number, decimals = 2): string {
+  if (!v) return '—'
+  return v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+}
+
+export default async function RefPanel() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const p: Record<string, any> = await getPrices()
+
   const globalRef = [
-    { name: 'COMEX Gold',      value: '—' },
-    { name: 'COMEX Silver',    value: '—' },
-    { name: 'WTI Crude',       value: '—' },
-    { name: 'Brent Crude',     value: '—' },
-    { name: 'Henry Hub Gas',   value: '—' },
-    { name: 'LME Copper',      value: '—' },
-    { name: 'LME Aluminium',   value: '—' },
+    { name: 'COMEX Gold',      value: fmtUsd(p.comexGold, 0) },
+    { name: 'COMEX Silver',    value: fmtUsd(p.comexSilver) },
+    { name: 'WTI Crude',       value: fmtUsd(p.wti) },
+    { name: 'Brent Crude',     value: fmtUsd(p.brent) },
+    { name: 'Henry Hub Gas',   value: fmtUsd(p.henryHub) },
+    { name: 'LME Copper',      value: p.copper?.lme > 0 ? `$${Math.round(p.copper.lme).toLocaleString('en-US')}` : '—' },
+    { name: 'LME Aluminium',   value: p.aluminium?.lme > 0 ? `$${Math.round(p.aluminium.lme).toLocaleString('en-US')}` : '—' },
   ]
 
   const macroRates = [
-    { name: 'USD / INR',       value: '—' },
-    { name: 'DXY Index',       value: '—' },
-    { name: '10Y US Treasury', value: '—' },
+    { name: 'USD / INR',       value: fmtInr(p.usdinr?.spot) },
+    { name: 'DXY Index',       value: fmtNum(p.dxy) },
+    { name: '10Y US Treasury', value: p.treasury10y > 0 ? `${p.treasury10y.toFixed(2)}%` : '—' },
     { name: 'RBI Repo Rate',   value: '6.00%' },
-    { name: 'Sensex',          value: '—' },
-    { name: 'Nifty 50',        value: '—' },
+    { name: 'Sensex',          value: p.sensex > 0 ? Math.round(p.sensex).toLocaleString('en-IN') : '—' },
+    { name: 'Nifty 50',        value: p.nifty > 0 ? Math.round(p.nifty).toLocaleString('en-IN') : '—' },
   ]
 
   return (

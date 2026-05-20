@@ -416,6 +416,26 @@ async function main() {
   // Load state
   const state = loadState()
 
+  // First run: seed prices without triggering any articles
+  if (!state.lastChecked) {
+    console.log('🆕 First run detected — seeding prices, no articles triggered')
+    const prices = await fetchPrices()
+    if (prices) {
+      state.lastPrices = {
+        gold:   prices.mcxGold,
+        silver: prices.mcxSilver,
+        crude:  prices.mcxCrude,
+        copper: prices.mcxCopper,
+        natgas: prices.mcxNatGas,
+        usdinr: prices.usdinr,
+      }
+      state.lastChecked = new Date().toISOString()
+      saveState(state)
+      console.log('✅ Prices seeded. Engine will trigger articles on next run.')
+    }
+    return
+  }
+
   // Check daily cap first
   if (!canPublish(state)) {
     saveState(state)

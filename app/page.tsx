@@ -251,9 +251,9 @@ function SubscribeForm() {
 function getTagType(tag?: string): string {
   if (!tag) return 'default'
   const t = tag.toLowerCase()
-  if (t.includes('crude') || t.includes('energy') || t.includes('gas')) return 'energy'
-  if (t.includes('gold') || t.includes('silver') || t.includes('copper') || t.includes('metal') || t.includes('zinc')) return 'metals'
-  if (t.includes('macro') || t.includes('rbi') || t.includes('sebi') || t.includes('fed') || t.includes('dollar')) return 'macro'
+  if (t.includes('crude') || t.includes('energy') || t.includes('gas') || t.includes('oil') || t.includes('petroleum')) return 'energy'
+  if (t.includes('gold') || t.includes('silver') || t.includes('copper') || t.includes('metal') || t.includes('zinc') || t.includes('bullion')) return 'metals'
+  if (t.includes('macro') || t.includes('rbi') || t.includes('sebi') || t.includes('fed') || t.includes('dollar') || t.includes('rupee') || t.includes('rate')) return 'macro'
   if (t.includes('agri') || t.includes('ncdex') || t.includes('pepper') || t.includes('soy')) return 'agri'
   return 'default'
 }

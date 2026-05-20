@@ -8,7 +8,7 @@ export const metadata = {
   description: 'Live MCX, COMEX, NYMEX and LME commodity prices with USD/INR and key macro rates.',
 }
 
-export const revalidate = 900 // 15 min ISR
+export const revalidate = 0
 
 export default function MarketsPage() {
   return (
