@@ -1,115 +1,90 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Tag from '@/components/Tag'
 
 const FILTERS = ['All', 'Gold', 'Silver', 'Crude', 'Copper', 'Nat Gas', 'Macro', 'Agri', 'Geopolitics']
 
+const FILTER_KEYWORDS: Record<string, string[]> = {
+  Gold:        ['gold'],
+  Silver:      ['silver'],
+  Crude:       ['crude', 'oil', 'opec', 'brent'],
+  Copper:      ['copper'],
+  'Nat Gas':   ['natural gas', 'nat gas', 'lng', 'lpg'],
+  Macro:       ['macro', 'rbi', 'fed ', 'rate', 'rupee', 'forex', 'inflation', 'gdp'],
+  Agri:        ['agri', 'wheat', 'soybean', 'cotton', 'ncdex', 'monsoon', 'crop', 'cardamom', 'pepper'],
+  Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'war', 'geopolit'],
+}
+
 interface NewsItem {
-  id: number
-  category: string
-  time: string
-  source: string
-  headline: string
+  id:          string
+  title:       string
   description: string
-  sentiment: 'bull' | 'bear' | 'neut'
-  sentimentLabel: string
-  tagType: string
+  link:        string
+  pubDate:     string
+  source:      string
+  category:    string
+  tagType:     string
 }
 
-// In production this data comes from your RSS / news API
-// Replace with: const news = await fetchNews() in a server component
-const SAMPLE_NEWS: NewsItem[] = [
-  {
-    id: 1,
-    category: 'Metals',
-    time: '6h ago',
-    source: 'Economic Times',
-    headline: 'MCX Opens Doors to Local Silver Refiners After India Tightens Imports',
-    description: 'MCX expands domestic silver refinery tie-ups as government curbs silver imports to protect local industry. Impact on delivery mechanism and spot premium analyzed.',
-    sentiment: 'bull',
-    sentimentLabel: 'Bullish Silver',
-    tagType: 'metals',
-  },
-  {
-    id: 2,
-    category: 'Macro',
-    time: '6h ago',
-    source: 'Bloomberg',
-    headline: 'MCX Rallies Nearly 50% Since the Start of 2026: What\'s Driving the Surge?',
-    description: 'India\'s largest commodity exchange hits record volumes. FII participation, retail growth, and global volatility all contributing. Structural shift or cyclical peak?',
-    sentiment: 'bull',
-    sentimentLabel: 'Bullish MCX',
-    tagType: 'macro',
-  },
-  {
-    id: 3,
-    category: 'Energy',
-    time: '8h ago',
-    source: 'Reuters',
-    headline: 'OPEC+ Considers Additional Output Cuts Ahead of June Meeting',
-    description: 'Saudi Arabia and Russia signal willingness to extend supply curbs through Q3. WTI finds support at $74 on the news. MCX Crude watching ₹6,300 level closely.',
-    sentiment: 'bull',
-    sentimentLabel: 'Bullish Crude',
-    tagType: 'energy',
-  },
-  {
-    id: 4,
-    category: 'Macro',
-    time: '10h ago',
-    source: 'RBI',
-    headline: 'RBI Keeps Repo Rate Unchanged at 6%; Rupee Reaction Muted',
-    description: 'MPC votes 4-2 to hold rates. INR holds at 84.38 post-policy. Gold and silver see limited moves but longer-term rate trajectory now clearer for commodity traders.',
-    sentiment: 'neut',
-    sentimentLabel: 'Neutral',
-    tagType: 'macro',
-  },
-  {
-    id: 5,
-    category: 'Geopolitics',
-    time: '12h ago',
-    source: 'WSJ',
-    headline: 'US-Iran Nuclear Talks Collapse; Strait of Hormuz Risk Premium Returns',
-    description: 'Negotiations fail on enrichment caps. Crude oil risk premium re-prices. Gold surges on safe haven demand. Dollar holds steady. Full MCX impact assessment inside.',
-    sentiment: 'bull',
-    sentimentLabel: 'Bullish Gold · Crude',
-    tagType: 'energy',
-  },
-  {
-    id: 6,
-    category: 'Metals',
-    time: '14h ago',
-    source: 'LME',
-    headline: 'Copper Falls 2% on Weak China Manufacturing PMI; MCX Copper Follows',
-    description: 'Caixin Manufacturing PMI misses expectations at 49.1. Copper slides below $9,800/t on LME. MCX Copper breaks ₹870 support. Next level watched: ₹855.',
-    sentiment: 'bear',
-    sentimentLabel: 'Bearish Copper',
-    tagType: 'metals',
-  },
-]
-
-const SENTIMENT_STYLES = {
-  bull: { bg: '#EDFAF3', color: '#166534' },
-  bear: { bg: '#FEF2F2', color: '#991B1B' },
-  neut: { bg: 'var(--surface-3)', color: 'var(--ink-3)' },
+function relativeTime(iso: string): string {
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
+  if (mins <  1)  return 'just now'
+  if (mins < 60)  return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs  < 24)  return `${hrs}h ago`
+  return `${Math.floor(hrs / 24)}d ago`
 }
 
-const SENTIMENT_ICONS = { bull: '●', bear: '●', neut: '○' }
+function matchesFilter(item: NewsItem, filter: string): boolean {
+  if (filter === 'All') return true
+  const text = `${item.title} ${item.description} ${item.category}`.toLowerCase()
+  return (FILTER_KEYWORDS[filter] ?? [filter.toLowerCase()]).some(k => text.includes(k))
+}
 
-const FILTER_TAG_MAP: Record<string, string> = {
-  Gold: 'metals', Silver: 'metals', Crude: 'energy',
-  Copper: 'metals', 'Nat Gas': 'energy', Macro: 'macro',
-  Agri: 'agri', Geopolitics: 'energy',
+function Skeleton() {
+  const bar = (w: string, h = 14) => (
+    <div style={{ height: h, borderRadius: 4, background: '#E8E4D8', width: w, marginBottom: 8 }} />
+  )
+  return (
+    <div style={{ padding: '20px 0', borderBottom: '1px solid #E8E4D8' }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 9 }}>
+        {bar('56px', 20)}
+        {bar('36px', 20)}
+      </div>
+      {bar('100%', 18)}
+      {bar('72%',  18)}
+      {bar('90%',  13)}
+      {bar('60%',  13)}
+    </div>
+  )
 }
 
 export default function NewsFeed() {
+  const [news,         setNews]         = useState<NewsItem[]>([])
+  const [loading,      setLoading]      = useState(true)
+  const [error,        setError]        = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
 
-  const filtered = activeFilter === 'All'
-    ? SAMPLE_NEWS
-    : SAMPLE_NEWS.filter(n =>
-        n.category.toLowerCase().includes(activeFilter.toLowerCase()) ||
-        n.headline.toLowerCase().includes(activeFilter.toLowerCase())
-      )
+  const fetchNews = useCallback(async () => {
+    try {
+      const res = await fetch('/api/news')
+      if (!res.ok) throw new Error('bad response')
+      setNews(await res.json())
+      setError(false)
+    } catch {
+      setError(true)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchNews()
+    const id = setInterval(fetchNews, 15 * 60 * 1000)
+    return () => clearInterval(id)
+  }, [fetchNews])
+
+  const filtered = news.filter(item => matchesFilter(item, activeFilter))
 
   return (
     <div>
@@ -137,45 +112,59 @@ export default function NewsFeed() {
         ))}
       </div>
 
+      {/* Loading skeleton */}
+      {loading && [0, 1, 2, 3, 4].map(i => <Skeleton key={i} />)}
+
+      {/* Error state */}
+      {!loading && error && (
+        <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '24px 0' }}>
+          Unable to load headlines — retrying in 15 min
+        </p>
+      )}
+
+      {/* Empty state */}
+      {!loading && !error && filtered.length === 0 && (
+        <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '32px 0' }}>
+          No headlines in this category right now.
+        </p>
+      )}
+
       {/* News items */}
-      {filtered.length === 0 ? (
-        <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '32px 0' }}>No headlines in this category right now.</p>
-      ) : (
-        filtered.map(item => {
-          const sentStyle = SENTIMENT_STYLES[item.sentiment]
-          return (
-            <div key={item.id} style={{ padding: '20px 0', borderBottom: '1px solid var(--border)', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 9 }}>
-                <Tag type={item.tagType}>{item.category}</Tag>
-                <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{item.time}</span>
+      {!loading && !error && filtered.map(item => (
+        <a
+          key={item.id}
+          href={item.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: 'block', padding: '20px 0', borderBottom: '1px solid var(--border)', textDecoration: 'none' }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 9 }}>
+            <Tag type={item.tagType}>{item.category}</Tag>
+            <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{relativeTime(item.pubDate)}</span>
+            {item.source && (
+              <>
                 <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>·</span>
                 <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{item.source}</span>
-              </div>
-              <h2 style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 17,
-                fontWeight: 500,
-                lineHeight: 1.4,
-                color: 'var(--ink)',
-                margin: '0 0 7px',
-              }}>
-                {item.headline}
-              </h2>
-              <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
-                {item.description}
-              </p>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 5,
-                padding: '3px 10px', borderRadius: 12, marginTop: 12,
-                fontSize: 11, fontWeight: 600, letterSpacing: '0.2px',
-                background: sentStyle.bg, color: sentStyle.color,
-              }}>
-                {SENTIMENT_ICONS[item.sentiment]} {item.sentimentLabel}
-              </span>
-            </div>
-          )
-        })
-      )}
+              </>
+            )}
+          </div>
+          <h2 style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 17,
+            fontWeight: 500,
+            lineHeight: 1.4,
+            color: 'var(--ink)',
+            margin: '0 0 7px',
+          }}>
+            {item.title}
+          </h2>
+          {item.description && (
+            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
+              {item.description}
+            </p>
+          )}
+        </a>
+      ))}
     </div>
   )
 }
