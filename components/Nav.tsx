@@ -6,8 +6,9 @@ const NAV_LINKS = [
   { href: '/',        label: 'Home'    },
   { href: '/briefs',  label: 'Briefs'  },
   { href: '/markets', label: 'Markets' },
-  { href: '/news',    label: 'News'    },
-  { href: '/invest',  label: 'Invest'  },
+  { href: '/news',     label: 'News'     },
+  { href: '/articles', label: 'Articles' },
+  { href: '/invest',   label: 'Invest'   },
   { href: '/learn',   label: 'Learn'   },
 ]
 
