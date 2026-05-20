@@ -4,10 +4,9 @@ export const revalidate = 900
 
 const RSS_SOURCES = [
   { url: 'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1368177.cms', name: 'Economic Times' },
-  { url: 'https://www.business-standard.com/rss/markets/commodities-3.rss',               name: 'Business Standard' },
-  { url: 'https://www.moneycontrol.com/rss/MCtopnews.xml',                                 name: 'Moneycontrol' },
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',           name: 'Economic Times' },
   { url: 'https://www.livemint.com/rss/markets',                                           name: 'Mint' },
-  { url: 'https://hindi.business-standard.com/rss/markets/commodities-3.rss',             name: 'Business Standard' },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                 name: 'NDTV Profit' },
 ]
 
 const COMMODITY_KEYWORDS = /gold|silver|crude|copper|\bgas\b|mcx|commodity|bullion|metal|oil\b|ncdex|rupee|dollar/i
