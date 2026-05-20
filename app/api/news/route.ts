@@ -47,13 +47,30 @@ function detectCategory(text: string): { category: string; tagType: string } {
 function stripHtml(s: string): string {
   return (s ?? '')
     .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
-    .replace(/<[^>]*>/g, '')
+    .replace(/<[^>]*>/g, ' ')
     .replace(/&amp;/g,  '&')
     .replace(/&lt;/g,   '<')
     .replace(/&gt;/g,   '>')
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g,  "'")
+    .replace(/\s+/g,    ' ')
     .trim()
+}
+
+function cleanDescription(raw: string): string {
+  if (!raw) return ''
+  const cdata  = raw.match(/<!\[CDATA\[([\s\S]*?)\]\]>/)?.[1] ?? raw
+  const noTags = cdata.replace(/<[^>]+>/g, ' ')
+  const decoded = noTags
+    .replace(/&amp;/g,  '&')
+    .replace(/&lt;/g,   '<')
+    .replace(/&gt;/g,   '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g,  "'")
+    .replace(/&nbsp;/g, ' ')
+  const clean = decoded.replace(/\s+/g, ' ').trim()
+  if (!clean || clean.startsWith('http') || clean.startsWith('<')) return ''
+  return clean
 }
 
 function stripSourceSuffix(title: string): string {
@@ -88,8 +105,7 @@ async function fetchFeed(feedUrl: string, fallback: string): Promise<NewsItem[]>
       const linkM  = block.match(/<link>(https?:[^<]+)<\/link>/)
                   || block.match(/<guid[^>]*isPermaLink="true"[^>]*>(https?:[^<]+)<\/guid>/)
                   || block.match(/<guid[^>]*>(https?:[^<]+)<\/guid>/)
-      const descM  = block.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/)
-                  || block.match(/<description>([^<]{10,})<\/description>/)
+      const descRaw = block.match(/<description>([\s\S]*?)<\/description>/)?.[1] ?? ''
       const dateM  = block.match(/<pubDate>([^<]+)<\/pubDate>/)
 
       if (!titleM || !linkM) continue
@@ -99,7 +115,7 @@ async function fetchFeed(feedUrl: string, fallback: string): Promise<NewsItem[]>
 
       const link    = linkM[1].trim()
       const source  = detectSource(link, fallback)
-      const desc    = descM ? stripHtml(descM[1]).slice(0, 280) : ''
+      const desc    = cleanDescription(descRaw).slice(0, 280)
       const pubDate = dateM ? new Date(dateM[1].trim()).toISOString() : new Date().toISOString()
       const { category, tagType } = detectCategory(`${rawTitle} ${desc}`)
 
