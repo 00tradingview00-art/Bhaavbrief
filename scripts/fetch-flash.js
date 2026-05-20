@@ -12,14 +12,17 @@ const FLASH_DIR         = path.join(__dirname, '../content/flash')
 const SEEN_FILE         = path.join(__dirname, 'seen-articles.json')
 
 const FEEDS = [
-  { url: 'https://feeds.reuters.com/reuters/businessNews',                                                   source: 'Reuters' },
-  { url: 'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1808478787.cms',                source: 'Economic Times' },
-  { url: 'https://news.google.com/rss/search?q=MCX+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',              source: 'Google News' },
-  { url: 'https://www.iea.org/rss/news.xml',                                                                 source: 'IEA' },
-  { url: 'https://www.eia.gov/rss/news_international.xml',                                                   source: 'EIA' },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                   source: 'NDTV Profit' },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil&hl=en&gl=US&ceid=US:en',                     source: 'Reuters' },
-  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+India&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Reuters' },
+  // Google News queries — reliable from GitHub Actions, broad coverage
+  { url: 'https://news.google.com/rss/search?q=MCX+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',                       source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+price&hl=en&gl=US&ceid=US:en',                         source: 'Reuters' },
+  { url: 'https://news.google.com/rss/search?q=gold+silver+price+India+MCX&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=crude+oil+India+import+refinery&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+India&hl=en-IN&gl=IN&ceid=IN:en',                     source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=India+commodity+monsoon+agri+NCDEX&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',          source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',        source: 'Google News' },
+  // NDTV Profit — verified working
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                            source: 'NDTV Profit' },
 ]
 
 const KEYWORDS = [
@@ -75,8 +78,12 @@ async function fetchFeed(feed) {
   try {
     const res  = await fetch(feed.url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BhaavBrief/2.0)' },
-      signal:  AbortSignal.timeout(8000),
+      signal:  AbortSignal.timeout(10000),
     })
+    if (!res.ok) {
+      console.warn(`  Feed HTTP ${res.status} (${new URL(feed.url).hostname})`)
+      return []
+    }
     const text = await res.text()
     const items = []
 

@@ -28,12 +28,13 @@ function getEditionNumber() {
   return fs.readdirSync(BRIEFS_DIR).filter(f => f.endsWith('.mdx') || f.endsWith('.md')).length + 1
 }
 
-// News from reliable sources — ET Markets, Google News, Reuters
+// News from Google News — reliable from GitHub Actions
 async function fetchNews() {
   const feeds = [
-    'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1808478787.cms',
     'https://news.google.com/rss/search?q=MCX+crude+gold+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',
-    'https://feeds.reuters.com/reuters/businessNews',
+    'https://news.google.com/rss/search?q=OPEC+crude+oil+price+today&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=gold+silver+price+India&hl=en-IN&gl=IN&ceid=IN:en',
+    'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil&hl=en&gl=US&ceid=US:en',
   ]
 
   const headlines = []
@@ -41,7 +42,9 @@ async function fetchNews() {
     try {
       const res  = await fetch(url, {
         headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BhaavBrief/2.0)' },
+        signal:  AbortSignal.timeout(8000),
       })
+      if (!res.ok) { console.warn(`  RSS HTTP ${res.status}: ${url.split('/')[2]}`); continue }
       const text = await res.text()
       const cdata  = [...text.matchAll(/<title><!\[CDATA\[(.+?)\]\]><\/title>/g)].map(m => m[1].trim())
       const plain  = [...text.matchAll(/<title>(?!\s*<!\[)([^<]{15,})<\/title>/g)].map(m => m[1].trim())
