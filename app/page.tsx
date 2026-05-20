@@ -1,211 +1,259 @@
-import Masthead from '@/components/Masthead'
-import PriceTicker from '@/components/PriceTicker'
-import SubscribeForm from '@/components/SubscribeForm'
-import BriefCard from '@/components/BriefCard'
-import FlashFeed from '@/components/FlashFeed'
 import { getAllBriefs } from '@/lib/briefs'
-import { getAllFlash } from '@/lib/flash'
+import Tag from '@/components/Tag'
+import Link from 'next/link'
 
-export const revalidate = 300
-
-export default function HomePage() {
-  const briefs     = getAllBriefs()
-  const latest     = briefs[0]
-  const others     = briefs.slice(1, 4)
-  const isLive     = briefs.length > 0
-  const cutoff    = Date.now() - 48 * 60 * 60 * 1000
-  const flashItems = getAllFlash().filter(f => new Date(f.date).getTime() > cutoff).slice(0, 10)
-
-  const sectionHed = (label: string, sub?: string) => (
-    <div style={{
-      fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, fontWeight: 500,
-      letterSpacing: '0.12em', textTransform: 'uppercase', color: '#8A8A7A',
-      borderTop: '2px solid #18180F', paddingTop: 8, marginBottom: '1.25rem',
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    }}>
-      <span>{label}</span>
-      {sub && <span style={{ fontSize: 9, color: '#8A8A7A', letterSpacing: '0.06em' }}>{sub}</span>}
-    </div>
-  )
+export default async function HomePage() {
+  const briefs = await getAllBriefs()
+  const [latest, ...previous] = briefs
 
   return (
-    <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <Masthead />
-      <PriceTicker />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 40, alignItems: 'start' }}>
 
-      {/* Mobile-only: today's brief teaser — full-width clickable card */}
-      {isLive && latest && (
-        <a className="mobile-only" href={`/briefs/${latest.slug}`} style={{ display: 'block', textDecoration: 'none', background: '#18180F', color: '#FAFAF6' }}>
-          <div style={{ maxWidth: 980, margin: '0 auto', padding: '1rem 1.25rem' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.4rem' }}>
-              Today's Brief →
+      {/* LEFT — Main content */}
+      <div>
+        {/* Hero brief */}
+        {latest && (
+          <div style={{ marginBottom: 48 }}>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontSize: 11, fontWeight: 500, letterSpacing: '0.8px',
+              textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 14,
+            }}>
+              <span style={{ width: 20, height: 1, background: 'var(--gold)', display: 'inline-block' }} />
+              {latest.displayDate} · Edition #{latest.edition}
             </div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 700, lineHeight: 1.3, color: '#FAFAF6' }}>
+
+            <h1 style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 38,
+              fontWeight: 500,
+              lineHeight: 1.2,
+              letterSpacing: '-0.5px',
+              color: 'var(--ink)',
+              margin: '0 0 14px',
+            }}>
               {latest.title}
-            </div>
-            {latest.summary && (
-              <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: 'rgba(250,250,246,0.55)', marginTop: '0.35rem', lineHeight: 1.5 }}>
-                {latest.summary.slice(0, 100)}
-              </div>
-            )}
-          </div>
-        </a>
-      )}
+            </h1>
 
-      {/* Main content */}
-      <div className="layout-main" style={{ maxWidth: 980, margin: '0 auto', padding: '2rem 1.25rem' }}>
-
-        <main>
-          {/* Today's Brief */}
-          {isLive && latest && (
-            <>
-              {sectionHed('Today\'s Brief', 'Free · Every weekday 7 AM')}
-              <BriefCard brief={latest} featured />
-            </>
-          )}
-
-          {/* Latest Intelligence — immediately after today's brief */}
-          {flashItems.length > 0 && (
-            <div style={{ marginTop: '2rem' }}>
-              {sectionHed('Latest Intelligence', 'Live · Every 15 min')}
-              <FlashFeed items={flashItems} />
-            </div>
-          )}
-
-          {/* Previous briefs */}
-          {others.length > 0 && (
-            <div style={{ marginTop: '2rem' }}>
-              {sectionHed('Previous Briefs')}
-              {others.map(b => <BriefCard key={b.slug} brief={b} />)}
-              {briefs.length > 4 && (
-                <div style={{ textAlign: 'center', paddingTop: '1.25rem' }}>
-                  <a href="/briefs" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
-                    View all briefs →
-                  </a>
-                </div>
-              )}
-            </div>
-          )}
-
-          {!isLive && (
-            <>
-              {sectionHed('Coming this week')}
-              <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', marginBottom: '1.5rem' }}>
-                <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
-                  ⚡ First brief dropping soon
-                </div>
-                <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', lineHeight: 1.3 }}>
-                  BhaavBrief is India's first daily commodity intelligence brief.
-                </p>
-                <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
-                  Subscribe free and be among our first 100 readers.
-                </p>
-              </div>
-            </>
-          )}
-
-          {/* What you get */}
-          <div style={{ marginTop: '2rem' }}>
-            {sectionHed('What you get', 'Always free')}
-            {[
-              { n: '01', title: 'Geopolitical signal engine',     desc: 'Iran, Russia, La Niña — every global event translated into a direct commodity price impact. Know what it means before you open Kite.' },
-              { n: '02', title: 'Supply & demand context',        desc: 'OPEC, COMEX positioning, India import data — every structural shift distilled into what it means for MCX prices today.' },
-              { n: '03', title: 'Agri & mandi supply-demand view',desc: 'Monsoon progress, crop outlook, warehouse stocks and MSP updates synthesised weekly. Built for traders and merchants timing physical purchases.' },
-              { n: '04', title: 'WhatsApp price alerts',          desc: 'Real-time spike alerts straight to your WhatsApp. No app, no login. Your commodity intelligence layer exactly where you already are.' },
-              { n: '05', title: 'Sunday deep analysis',           desc: 'Every Sunday: one commodity, a full macro thesis, a concrete trade setup, and what to watch in the week ahead.' },
-            ].map(f => (
-              <div key={f.n} style={{ display: 'flex', gap: '1.1rem', padding: '1.1rem 0', borderBottom: '0.5px solid #DDDDD0' }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, color: '#ECEAE2', flexShrink: 0, lineHeight: 1, width: 30 }}>{f.n}</div>
-                <div>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', fontWeight: 700, marginBottom: 4 }}>{f.title}</div>
-                  <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>{f.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </main>
-
-        {/* Sidebar — flows below on mobile */}
-        <aside className="sidebar-panel" id="about">
-          <div id="subscribe-sidebar" style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
-            <SubscribeForm />
-          </div>
-          <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Why we built this</div>
-            <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '1rem' }}>
-              Indian commodity traders pay ₹5L+ a year for Bloomberg or spend 2 hours piecing together intelligence from 10 sources. BhaavBrief does that work for you — free, every weekday, before the MCX bell.
+            <p style={{
+              fontSize: 15,
+              color: 'var(--ink-2)',
+              lineHeight: 1.75,
+              margin: '0 0 20px',
+              maxWidth: 560,
+            }}>
+              {latest.description}
             </p>
-            <div style={{ display: 'flex', gap: '0.75rem', borderTop: '0.5px solid #DDDDD0', paddingTop: '1rem', flexWrap: 'wrap' }}>
-              {[{ val: '₹0', lbl: 'Forever free' }, { val: '5 min', lbl: 'Daily read' }, { val: '7 AM', lbl: 'Every day' }].map(s => (
-                <div key={s.lbl} style={{ textAlign: 'center', flex: 1 }}>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 800 }}>{s.val}</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.06em', marginTop: 2 }}>{s.lbl.toUpperCase()}</div>
-                </div>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
+              {latest.tags?.map((tag: string) => (
+                <Tag key={tag} type={getTagType(tag)}>{tag}</Tag>
               ))}
             </div>
-          </div>
-          <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.5rem' }}>About BhaavBrief</div>
-            <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.7, fontWeight: 300, margin: '0 0 0.75rem' }}>
-              Independent commodity intelligence for Indian traders and merchants. MCX energy, metals, and NCDEX agri — through a geopolitical and supply-demand lens.
-            </p>
-            <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
-              Published every weekday at 7 AM IST. No corporate backing. No conflicts of interest.
-            </p>
-          </div>
-        </aside>
-      </div>
 
-      {/* Value strip */}
-      <div style={{ background: '#18180F', color: '#FAFAF6', padding: '2rem 1.25rem' }}>
-        <div className="layout-value-strip" style={{ maxWidth: 980, margin: '0 auto' }}>
-          {[
-            { val: '₹0',  sup: '',    lbl: 'Free forever. No credit card. No catch.' },
-            { val: '7',   sup: 'AM',  lbl: 'Delivered before market open, every Monday to Friday.' },
-            { val: '5',   sup: 'min', lbl: 'Everything you need for the trading day. Nothing you don\'t.' },
-          ].map(v => (
-            <div key={v.val}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 4 }}>
-                {v.val}<span style={{ color: '#C8720A' }}>{v.sup}</span>
+            <Link
+              href={`/briefs/${latest.slug}`}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'var(--gold)', color: '#fff',
+                padding: '10px 22px', borderRadius: 6,
+                fontSize: 13, fontWeight: 500, textDecoration: 'none',
+              }}
+            >
+              Read today&apos;s brief →
+            </Link>
+          </div>
+        )}
+
+        {/* Previous briefs */}
+        <div>
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            marginBottom: 16, paddingBottom: 12,
+            borderBottom: '1px solid var(--border)',
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+              Previous Briefs
+            </span>
+            <Link href="/briefs" style={{ fontSize: 12, color: 'var(--gold)', textDecoration: 'none' }}>
+              View all →
+            </Link>
+          </div>
+
+          {previous.slice(0, 5).map((brief) => (
+            <Link
+              key={brief.slug}
+              href={`/briefs/${brief.slug}`}
+              style={{ display: 'block', textDecoration: 'none', padding: '18px 0', borderBottom: '1px solid var(--border)' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7 }}>
+                <Tag type={getTagType(brief.tags?.[0])}>{brief.tags?.[0] ?? 'Brief'}</Tag>
+                <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{brief.displayDate}</span>
               </div>
-              <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.55)', fontWeight: 300, lineHeight: 1.5, margin: 0 }}>{v.lbl}</p>
-            </div>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 18,
+                fontWeight: 500,
+                lineHeight: 1.3,
+                color: 'var(--ink)',
+                margin: '0 0 6px',
+              }}>
+                {brief.title}
+              </h2>
+              <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
+                {brief.description}
+              </p>
+              {brief.tags && brief.tags.length > 1 && (
+                <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+                  {brief.tags.slice(0, 5).map((tag: string) => (
+                    <Tag key={tag} type={getTagType(tag)}>{tag}</Tag>
+                  ))}
+                </div>
+              )}
+            </Link>
           ))}
         </div>
       </div>
 
-      {/* Bottom subscribe */}
-      <section id="subscribe" style={{ maxWidth: 980, margin: '0 auto', padding: '2.5rem 1.25rem', borderTop: '0.5px solid #DDDDD0' }} className="layout-subscribe-bottom">
-        <div>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', borderLeft: '3px solid #C8720A', paddingLeft: 10, marginBottom: '1rem' }}>
-            ✉ Join free · No credit card
-          </div>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.3rem, 3vw, 1.8rem)', fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
-            Start your trading day with an edge.
-          </h2>
-          <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>
-            India's first daily commodity intelligence brief — covering MCX crude, gold, silver and NCDEX agri with geopolitical signals and supply-demand analysis. Free, every weekday at 7 AM.
+      {/* RIGHT — Sidebar */}
+      <div style={{ position: 'sticky', top: 80 }}>
+        {/* Subscribe card */}
+        <div id="subscribe" style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 10,
+          padding: 22,
+          marginBottom: 16,
+        }}>
+          <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+            Start your morning with an edge
           </p>
+          <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, marginBottom: 18 }}>
+            Join India&apos;s sharpest commodity traders. MCX intelligence every weekday at 7 AM. Free forever.
+          </p>
+          <SubscribeForm />
         </div>
-        <div>
-          <SubscribeForm compact />
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer style={{ borderTop: '3px double #C8C8B8', background: '#F3F2EC' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: '1.1rem' }}>BhaavBrief</span>
-          <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
-            {['About', 'Archive', 'Privacy', 'Contact'].map(l => (
-              <a key={l} href="#" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#8A8A7A', textDecoration: 'none' }}>{l}</a>
+        {/* Why we built this */}
+        <div style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 10,
+          padding: 22,
+          marginBottom: 16,
+        }}>
+          <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 12 }}>
+            Why we built this
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.75, marginBottom: 20 }}>
+            Indian commodity traders pay ₹5L+ a year for Bloomberg or spend 2 hours piecing together intelligence from 10 sources. BhaavBrief does that work for you — free, every weekday, before the MCX bell.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, textAlign: 'center' }}>
+            {[
+              { val: '₹0', label: 'Forever Free' },
+              { val: '5 min', label: 'Daily Read' },
+              { val: '7 AM', label: 'Every Day' },
+            ].map(({ val, label }) => (
+              <div key={label}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: 'var(--ink)' }}>{val}</div>
+                <div style={{ fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.5px', textTransform: 'uppercase', marginTop: 3 }}>{label}</div>
+              </div>
             ))}
           </div>
         </div>
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.03em', color: '#8A8A7A', maxWidth: 980, margin: '0 auto', padding: '0 1.25rem 1rem' }}>
-          © 2026 BhaavBrief · bhaavbrief.in · Not registered with SEBI · Content is for informational and educational purposes only and does not constitute investment advice.
-        </p>
-      </footer>
+
+        {/* About card */}
+        <div style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 10,
+          padding: 22,
+        }}>
+          <p style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+            About BhaavBrief
+          </p>
+          <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
+            Independent commodity intelligence for Indian traders and merchants. MCX energy, metals, and NCDEX agri — through a geopolitical and supply-demand lens. Published at 7 AM IST every weekday.
+          </p>
+        </div>
+      </div>
     </div>
   )
+}
+
+function SubscribeForm() {
+  return (
+    <form action="https://app.brevo.com/..." method="POST" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email address"
+        required
+        style={{
+          width: '100%',
+          border: '1px solid var(--border-2)',
+          borderRadius: 6,
+          padding: '8px 12px',
+          fontSize: 13,
+          fontFamily: 'var(--font-sans)',
+          background: 'var(--surface-2)',
+          color: 'var(--ink)',
+          boxSizing: 'border-box',
+        }}
+      />
+      <button
+        type="submit"
+        style={{
+          width: '100%',
+          background: 'var(--ink)',
+          color: '#fff',
+          border: 'none',
+          padding: '10px',
+          borderRadius: 6,
+          fontSize: 13,
+          fontWeight: 500,
+          cursor: 'pointer',
+          fontFamily: 'var(--font-sans)',
+        }}
+      >
+        Subscribe free →
+      </button>
+      <a
+        href="https://wa.me/..."
+        style={{
+          width: '100%',
+          background: '#25D366',
+          color: '#fff',
+          border: 'none',
+          padding: '10px',
+          borderRadius: 6,
+          fontSize: 13,
+          fontWeight: 500,
+          cursor: 'pointer',
+          fontFamily: 'var(--font-sans)',
+          textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          boxSizing: 'border-box',
+        }}
+      >
+        📱 Get alerts on WhatsApp
+      </a>
+      <p style={{ fontSize: 11, color: 'var(--ink-4)', textAlign: 'center', margin: 0 }}>
+        No spam · Unsubscribe anytime
+      </p>
+    </form>
+  )
+}
+
+function getTagType(tag?: string): string {
+  if (!tag) return 'default'
+  const t = tag.toLowerCase()
+  if (t.includes('crude') || t.includes('energy') || t.includes('gas')) return 'energy'
+  if (t.includes('gold') || t.includes('silver') || t.includes('copper') || t.includes('metal') || t.includes('zinc')) return 'metals'
+  if (t.includes('macro') || t.includes('rbi') || t.includes('sebi') || t.includes('fed') || t.includes('dollar')) return 'macro'
+  if (t.includes('agri') || t.includes('ncdex') || t.includes('pepper') || t.includes('soy')) return 'agri'
+  return 'default'
 }

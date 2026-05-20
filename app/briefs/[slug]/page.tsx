@@ -51,7 +51,7 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  return getAllBriefs().map(b => ({ slug: b.slug }))
+  return (await getAllBriefs()).map(b => ({ slug: b.slug }))
 }
 
 const TAG_STYLES: Record<string, React.CSSProperties> = {

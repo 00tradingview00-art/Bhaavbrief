@@ -82,3 +82,8 @@ export async function fetchPrices(): Promise<PriceItem[]> {
 
   return results
 }
+
+// Phase 2: replace with real nested price data (gold.mcx, gold.comex, etc.)
+export async function getPrices(): Promise<Record<string, unknown>> {
+  return {}
+}

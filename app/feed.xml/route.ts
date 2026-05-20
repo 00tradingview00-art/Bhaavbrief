@@ -4,7 +4,7 @@ const BASE_URL  = 'https://bhaavbrief.in'
 const SITE_NAME = 'BhaavBrief'
 
 export async function GET() {
-  const briefs = getAllBriefs().slice(0, 20)
+  const briefs = (await getAllBriefs()).slice(0, 20)
 
   const items = briefs.map(brief => `
     <item>

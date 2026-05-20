@@ -1,0 +1,65 @@
+/* BhaavBrief Design System — append to globals.css */
+
+:root {
+  --gold: #B5862A;
+  --gold-light: #D4A853;
+  --gold-pale: #F9F4EC;
+  --gold-dark: #8B6520;
+
+  --ink: #0E0D0A;
+  --ink-2: #3A3830;
+  --ink-3: #7A7668;
+  --ink-4: #B8B4A8;
+
+  --surface: #FFFFFF;
+  --surface-2: #FAFAF7;
+  --surface-3: #F3F0E8;
+
+  --border: #E8E4D8;
+  --border-2: #D4CFC0;
+
+  --up: #1B7A4A;
+  --up-bg: #EBF5EF;
+  --down: #B53A2A;
+  --down-bg: #FAF0EE;
+
+  --font-serif: var(--font-playfair), 'Georgia', serif;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), 'Courier New', monospace;
+}
+
+/* Tag colours */
+.tag-energy  { background: #FFF3E0; color: #B45309; }
+.tag-metals  { background: #F0F4FF; color: #2B4FC7; }
+.tag-macro   { background: #F3F0FF; color: #6B21A8; }
+.tag-agri    { background: #EFFAF4; color: #166534; }
+
+/* Live dot animation */
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+.live-dot::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--up);
+  margin-right: 5px;
+  animation: livePulse 2s infinite;
+  vertical-align: middle;
+}
+
+/* Ticker strip scroll */
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: flex;
+  gap: 36px;
+  animation: tickerScroll 35s linear infinite;
+  white-space: nowrap;
+}
+.ticker-track:hover { animation-play-state: paused; }
