@@ -59,11 +59,14 @@ function Skeleton() {
   )
 }
 
+const ITEMS_PER_PAGE = 20
+
 export default function NewsFeed() {
   const [news,         setNews]         = useState<NewsItem[]>([])
   const [loading,      setLoading]      = useState(true)
   const [error,        setError]        = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
+  const [page,         setPage]         = useState(1)
 
   const fetchNews = useCallback(async () => {
     try {
@@ -84,7 +87,9 @@ export default function NewsFeed() {
     return () => clearInterval(id)
   }, [fetchNews])
 
-  const filtered = news.filter(item => matchesFilter(item, activeFilter))
+  const filtered   = news.filter(item => matchesFilter(item, activeFilter))
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
+  const paginated  = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
 
   return (
     <div>
@@ -93,7 +98,7 @@ export default function NewsFeed() {
         {FILTERS.map(f => (
           <button
             key={f}
-            onClick={() => setActiveFilter(f)}
+            onClick={() => { setActiveFilter(f); setPage(1) }}
             style={{
               padding: '6px 14px',
               borderRadius: 20,
@@ -130,7 +135,7 @@ export default function NewsFeed() {
       )}
 
       {/* News items */}
-      {!loading && !error && filtered.map(item => (
+      {!loading && !error && paginated.map(item => (
         <a
           key={item.id}
           href={item.link}
@@ -165,6 +170,62 @@ export default function NewsFeed() {
           )}
         </a>
       ))}
+
+      {/* Pagination */}
+      {!loading && !error && totalPages > 1 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 24, marginTop: 8 }}>
+          <button
+            onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            disabled={page === 1}
+            style={{
+              fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
+              padding: '8px 16px', border: '0.5px solid var(--border-2)',
+              background: page === 1 ? 'transparent' : 'var(--ink)', color: page === 1 ? 'var(--ink-4)' : '#fff',
+              cursor: page === 1 ? 'not-allowed' : 'pointer',
+            }}
+          >
+            ← Prev
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+              <button
+                key={p}
+                onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                style={{
+                  fontFamily: 'IBM Plex Mono, monospace', fontSize: 11,
+                  width: 32, height: 32, border: '0.5px solid var(--border-2)',
+                  background: page === p ? 'var(--ink)' : 'transparent',
+                  color: page === p ? '#fff' : 'var(--ink-3)',
+                  cursor: 'pointer',
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+            disabled={page === totalPages}
+            style={{
+              fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
+              padding: '8px 16px', border: '0.5px solid var(--border-2)',
+              background: page === totalPages ? 'transparent' : 'var(--ink)', color: page === totalPages ? 'var(--ink-4)' : '#fff',
+              cursor: page === totalPages ? 'not-allowed' : 'pointer',
+            }}
+          >
+            Next →
+          </button>
+        </div>
+      )}
+
+      {/* Item count */}
+      {!loading && !error && filtered.length > 0 && (
+        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.04em', textAlign: 'center', marginTop: 12 }}>
+          {`Showing ${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} items`}
+        </div>
+      )}
     </div>
   )
 }
