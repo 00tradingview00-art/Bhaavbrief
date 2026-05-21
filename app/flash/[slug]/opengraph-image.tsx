@@ -59,7 +59,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
             </div>
             {formattedDate && (
               <div style={{ fontSize: 12, color: C.ink4, fontFamily: 'sans-serif' }}>
-                {formattedDate} IST
+                {`${formattedDate} IST`}
               </div>
             )}
           </div>

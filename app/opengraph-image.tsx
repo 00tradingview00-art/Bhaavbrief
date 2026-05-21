@@ -30,8 +30,9 @@ export default async function OGImage() {
 
           {/* Headline */}
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <div style={{ fontSize: 58, fontWeight: 700, color: C.ink, lineHeight: 1.08, letterSpacing: -1.5, fontFamily: serif, marginBottom: 28 }}>
-              MCX Markets{'\n'}Intelligence
+            <div style={{ display: 'flex', flexDirection: 'column', fontSize: 58, fontWeight: 700, color: C.ink, lineHeight: 1.08, letterSpacing: -1.5, fontFamily: serif, marginBottom: 28 }}>
+              <span>MCX Markets</span>
+              <span>Intelligence</span>
             </div>
             <div style={{ fontSize: 22, color: C.ink3, fontFamily: 'sans-serif', letterSpacing: 0.5 }}>
               Gold · Silver · Crude Oil · Copper · Natural Gas
