@@ -63,7 +63,11 @@ export async function getAllBriefs(): Promise<BriefMeta[]> {
       }
     })
     .filter(b => b.published)
-    .sort((a, b) => b.date.localeCompare(a.date))
+    .sort((a, b) => {
+      const dateDiff = b.date.localeCompare(a.date)
+      if (dateDiff !== 0) return dateDiff
+      return b.edition - a.edition  // tiebreak: higher edition first on same date
+    })
 }
 
 export function getBrief(slug: string): Brief | null {
