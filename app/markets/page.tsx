@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import PricesTable from '@/components/markets/PricesTable'
 import PriceCards from '@/components/markets/PriceCards'
 import RefPanel from '@/components/markets/RefPanel'
+import { getPrices } from '@/lib/prices'
 
 export const metadata = {
   title: 'Markets — BhaavBrief',
@@ -10,7 +11,20 @@ export const metadata = {
 
 export const revalidate = 0
 
-export default function MarketsPage() {
+export default async function MarketsPage() {
+  try {
+    await getPrices()
+  } catch {
+    return (
+      <div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 8px' }}>
+          Markets
+        </h1>
+        <p style={{ fontSize: 13, color: 'var(--ink-3)' }}>Price data temporarily unavailable. Please try again shortly.</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       {/* Header */}

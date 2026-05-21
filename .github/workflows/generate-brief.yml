@@ -48,6 +48,10 @@ jobs:
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "brief@bhaavbrief.in"
+          git add -A
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
           git add content/briefs/
           git diff --staged --quiet && echo "Nothing to commit" && exit 0
           git commit -m "Brief #${EDITION} — $(date +'%d %b %Y')"

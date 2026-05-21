@@ -5,13 +5,9 @@
  */
 
 import crypto from 'crypto'
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
 const KITE_BASE   = 'https://api.kite.trade'
 const KITE_V      = '3'
-const INSTRUMENTS_CACHE = path.join(process.cwd(), 'data/kite-instruments.json')
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -212,30 +208,12 @@ export class KiteClient {
       updatedAt: new Date().toISOString(),
     }
 
-    // Cache to disk
-    const dir = path.dirname(INSTRUMENTS_CACHE)
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(INSTRUMENTS_CACHE, JSON.stringify(tokenMap, null, 2), 'utf8')
-
     return tokenMap
   }
 }
 
 // ── Load cached instrument tokens ─────────────────────────────────────────────
-export function loadCachedTokens(): MCXTokenMap | null {
-  try {
-    if (!fs.existsSync(INSTRUMENTS_CACHE)) return null
-    const data = JSON.parse(fs.readFileSync(INSTRUMENTS_CACHE, 'utf8')) as MCXTokenMap
-
-    // Refresh if older than 25 hours (contracts expire monthly, but check daily)
-    const age = Date.now() - new Date(data.updatedAt).getTime()
-    if (age > 25 * 60 * 60 * 1000) return null
-
-    return data
-  } catch {
-    return null
-  }
-}
+export function loadCachedTokens() { return null }
 
 // ── Kite login URL helper ─────────────────────────────────────────────────────
 export function getLoginUrl(apiKey: string): string {

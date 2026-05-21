@@ -43,12 +43,14 @@ jobs:
 
       - name: Commit & push if article published
         run: |
-          git config user.name  "BhaavBrief Intelligence"
+          git config user.name "BhaavBrief Intelligence"
           git config user.email "engine@bhaavbrief.in"
+          git add -A
+          git stash
           git pull --rebase origin main
-          git add content/articles/ data/engine-state.json
-          git diff --staged --quiet && echo "⏭  No trigger — exiting" && exit 0
+          git stash pop || true
+          git add content/articles/ data/engine-state.json data/last-article-title.txt
+          git diff --staged --quiet && echo "No new articles" && exit 0
           TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
           git commit -m "⚡ Flash: ${TITLE}"
           git push origin main
-          echo "✅ Article published and deployed"

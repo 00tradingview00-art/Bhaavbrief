@@ -9,7 +9,9 @@
  * Returns unified shape used by all components.
  */
 
-import { KiteClient, loadCachedTokens, type KiteQuote } from './kite'
+import { KiteClient, type KiteQuote } from './kite'
+
+const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, copper: 52728327, natgas: 57960199 }
 
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
@@ -69,8 +71,8 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
 
   if (!apiKey || !accessToken) return null
 
-  // Load cached instrument tokens (discovered at morning auth)
-  let tokens = loadCachedTokens()
+  // Use hardcoded fallback tokens for front-month MCX contracts
+  let tokens: typeof FALLBACK_TOKENS | null = FALLBACK_TOKENS
 
   if (!tokens) {
     // Try to discover tokens live if cache is missing
@@ -155,7 +157,7 @@ export async function getPrices(): Promise<PriceData | null> {
       ) ?? null
     }
 
-    const tokens = loadCachedTokens()
+    const tokens = FALLBACK_TOKENS
 
     const goldQ   = tokens ? kiteByToken(tokens.gold)   : null
     const silverQ = tokens ? kiteByToken(tokens.silver) : null
