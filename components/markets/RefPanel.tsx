@@ -30,7 +30,7 @@ export default async function RefPanel() {
   ]
 
   const macroRates = [
-    { name: 'USD / INR',       value: fmtInr(p.usdinr?.spot) },
+    { name: 'USD / INR',       value: fmtInr(p.usdinr) },
     { name: 'DXY Index',       value: fmtNum(p.dxy) },
     { name: '10Y US Treasury', value: p.treasury10y > 0 ? `${p.treasury10y.toFixed(2)}%` : '—' },
     { name: 'RBI Repo Rate',   value: '6.00%' },
