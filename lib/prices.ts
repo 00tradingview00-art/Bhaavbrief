@@ -13,6 +13,7 @@
  *   2. Derived from COMEX prices via formula — fallback
  */
 
+import { unstable_cache } from 'next/cache'
 import { KiteClient, type KiteQuote } from './kite'
 
 const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, copper: 52728327, natgas: 57960199 }
@@ -128,13 +129,17 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
   return map
 }
 
+// Cache wrappers — respected even in force-dynamic routes unlike per-fetch `next.revalidate`
+const fetchTwelveDataCached = unstable_cache(fetchTwelveData,  ['td-prices'],  { revalidate: 900   })
+const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices'], { revalidate: 21600 })
+
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
 async function fetchYahoo(): Promise<Record<string, any>> {
   // 1. Twelve Data: Gold + USD/INR (free tier)
   // 2. Alpha Vantage: WTI, Brent, NatGas, Silver (free tier, daily EIA/ICE data)
   // TD takes precedence where both sources cover the same symbol.
-  const [td, av] = await Promise.allSettled([fetchTwelveData(), fetchAlphaVantage()])
+  const [td, av] = await Promise.allSettled([fetchTwelveDataCached(), fetchAlphaVantageCached()])
   const tdMap = td.status === 'fulfilled' && td.value ? td.value : {}
   const avMap = av.status === 'fulfilled' ? av.value : {}
   if (td.status === 'rejected') console.warn('Twelve Data failed:', td.reason?.message)
