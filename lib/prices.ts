@@ -64,47 +64,67 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
 }
 
 // ── Alpha Vantage ─────────────────────────────────────────────────────────────
-// Free tier: 25 API calls/day. Physical commodity data updates once per day anyway,
-// so 6-hour cache gives 4 refreshes/day × 4 symbols = 16 calls/day — under the limit.
+// Free tier: 25 API calls/day, 5 calls/minute.
+// We call sequentially (not parallel) to stay within the per-minute limit.
+// 6-hour cache: 4 symbols × 4 refreshes/day = 16 calls/day — under the 25/day limit.
 //
-// Silver is only available at monthly interval on the free tier (no daily).
-// WTI, Brent, NatGas have daily interval and report yesterday's EIA/ICE settlement.
-
-const AV_COMMODITIES = [
-  { yahooSym: 'CL=F', fn: 'WTI',         interval: 'daily'   },  // WTI crude ($/bbl)
-  { yahooSym: 'BZ=F', fn: 'BRENT',       interval: 'daily'   },  // Brent crude ($/bbl)
-  { yahooSym: 'NG=F', fn: 'NATURAL_GAS', interval: 'daily'   },  // Henry Hub ($/mmBtu)
-  { yahooSym: 'SI=F', fn: 'SILVER',      interval: 'monthly' },  // Silver ($/oz, monthly)
-] as const
+// WTI, Brent, NatGas: physical commodity endpoints (daily EIA/ICE settlement).
+// Silver: no SILVER function on AV — use FX_DAILY with XAG/USD instead (daily LBMA).
 
 async function fetchAlphaVantage(): Promise<Record<string, any>> {
   const apiKey = process.env.ALPHA_VANTAGE_KEY
   if (!apiKey) return {}
 
-  const settled = await Promise.allSettled(
-    AV_COMMODITIES.map(async ({ yahooSym, fn, interval }) => {
+  const map: Record<string, any> = {}
+
+  // Commodity series — fetched sequentially to respect 5 calls/min rate limit
+  const commodities = [
+    { yahooSym: 'CL=F', fn: 'WTI',         interval: 'daily' },
+    { yahooSym: 'BZ=F', fn: 'BRENT',       interval: 'daily' },
+    { yahooSym: 'NG=F', fn: 'NATURAL_GAS', interval: 'daily' },
+  ]
+
+  for (const { yahooSym, fn, interval } of commodities) {
+    try {
       const url = `https://www.alphavantage.co/query?function=${fn}&interval=${interval}&apikey=${apiKey}`
-      const r = await fetch(url, {
-        signal: AbortSignal.timeout(10000),
-        next: { revalidate: 21600 }, // 6-hour cache: 4 × 4 = 16 calls/day on free tier
-      })
+      const r = await fetch(url, { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } })
       if (!r.ok) throw new Error(`AV ${fn}: ${r.status}`)
       const d = await r.json()
       if (d['Information'] || d['Note']) throw new Error(`AV ${fn}: rate limited`)
       const series: Array<{ date: string; value: string }> = d?.data ?? []
-      if (series.length < 2) throw new Error(`AV ${fn}: insufficient data`)
+      if (series.length < 2) throw new Error(`AV ${fn}: no data`)
       const latest = parseFloat(series[0].value)
       const prev   = parseFloat(series[1].value)
-      const pct    = prev > 0 ? ((latest - prev) / prev) * 100 : 0
-      return { yahooSym, regularMarketPrice: latest, regularMarketChangePercent: pct }
-    })
-  )
-
-  const map: Record<string, any> = {}
-  for (const r of settled) {
-    if (r.status === 'fulfilled') map[r.value.yahooSym] = r.value
-    else console.warn('fetchAlphaVantage:', (r as PromiseRejectedResult).reason?.message)
+      map[yahooSym] = {
+        regularMarketPrice:         latest,
+        regularMarketChangePercent: prev > 0 ? ((latest - prev) / prev) * 100 : 0,
+      }
+    } catch (e) {
+      console.warn('fetchAlphaVantage:', (e as Error).message)
+    }
   }
+
+  // Silver via FX_DAILY (XAG/USD) — AV has no SILVER commodity function
+  try {
+    const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=XAG&to_symbol=USD&outputsize=compact&apikey=${apiKey}`
+    const r = await fetch(url, { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } })
+    if (!r.ok) throw new Error(`AV FX_DAILY XAG: ${r.status}`)
+    const d = await r.json()
+    if (d['Information'] || d['Note']) throw new Error('AV FX_DAILY XAG: rate limited')
+    const series = d?.['Time Series FX (Daily)'] as Record<string, Record<string, string>> | undefined
+    if (!series) throw new Error('AV FX_DAILY XAG: no data')
+    const dates = Object.keys(series).sort().reverse()
+    if (dates.length < 2) throw new Error('AV FX_DAILY XAG: insufficient data')
+    const latest = parseFloat(series[dates[0]]['4. close'])
+    const prev   = parseFloat(series[dates[1]]['4. close'])
+    map['SI=F'] = {
+      regularMarketPrice:         latest,
+      regularMarketChangePercent: prev > 0 ? ((latest - prev) / prev) * 100 : 0,
+    }
+  } catch (e) {
+    console.warn('fetchAlphaVantage:', (e as Error).message)
+  }
+
   return map
 }
 
