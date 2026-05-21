@@ -4,6 +4,7 @@ import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
+import { getPrices, type PriceData } from '@/lib/prices'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -39,12 +40,15 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let initialPrices: PriceData | null = null
+  try { initialPrices = await getPrices() } catch { /* render with fallback */ }
+
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <Nav />
-        <TickerStrip />
+        <TickerStrip initialPrices={initialPrices} />
         <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           {children}
         </main>

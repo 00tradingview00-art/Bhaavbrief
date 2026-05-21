@@ -58,9 +58,9 @@ function mapToItems(d: PriceData): Item[] {
   ]
 }
 
-export default function TickerStrip() {
-  const [items, setItems]         = useState<Item[]>(FALLBACK)
-  const [source, setSource]       = useState<string>('')
+export default function TickerStrip({ initialPrices }: { initialPrices?: PriceData | null }) {
+  const [items, setItems]         = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : FALLBACK)
+  const [source, setSource]       = useState<string>(initialPrices?.source ?? '')
   const intervalRef               = useRef<NodeJS.Timeout>()
 
   async function load() {
