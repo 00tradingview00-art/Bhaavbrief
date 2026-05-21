@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans, DM_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
@@ -117,6 +118,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Commodity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor before making any financial decisions.
           </p>
         </footer>
+        <Analytics />
       </body>
     </html>
   )
