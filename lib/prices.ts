@@ -3,9 +3,10 @@
  * Server-side price fetcher used by API routes and server components.
  *
  * Priority for COMEX reference prices:
- *   1. Twelve Data (TWELVE_DATA_API_KEY set) — free tier, works from Vercel IPs
- *   2. Yahoo Finance chart API               — fallback, blocked on Vercel shared IPs
- *   3. Frankfurter ECB API                   — USD/INR only, always works
+ *   1. Twelve Data  (TWELVE_DATA_API_KEY)  — Gold + USD/INR, free tier
+ *   2. Alpha Vantage (ALPHA_VANTAGE_KEY)   — WTI, Brent, NatGas, Silver, free tier
+ *   3. Yahoo Finance chart API             — full set, blocked on Vercel shared IPs
+ *   4. Frankfurter ECB API                 — USD/INR floor, always works
  *
  * Priority for MCX prices:
  *   1. Kite Connect (KITE_ACCESS_TOKEN set)  — live MCX quotes
@@ -62,18 +63,67 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
   return Object.keys(map).length > 0 ? map : null
 }
 
+// ── Alpha Vantage ─────────────────────────────────────────────────────────────
+// Free tier: 25 API calls/day. Physical commodity data updates once per day anyway,
+// so 6-hour cache gives 4 refreshes/day × 4 symbols = 16 calls/day — under the limit.
+//
+// Silver is only available at monthly interval on the free tier (no daily).
+// WTI, Brent, NatGas have daily interval and report yesterday's EIA/ICE settlement.
+
+const AV_COMMODITIES = [
+  { yahooSym: 'CL=F', fn: 'WTI',         interval: 'daily'   },  // WTI crude ($/bbl)
+  { yahooSym: 'BZ=F', fn: 'BRENT',       interval: 'daily'   },  // Brent crude ($/bbl)
+  { yahooSym: 'NG=F', fn: 'NATURAL_GAS', interval: 'daily'   },  // Henry Hub ($/mmBtu)
+  { yahooSym: 'SI=F', fn: 'SILVER',      interval: 'monthly' },  // Silver ($/oz, monthly)
+] as const
+
+async function fetchAlphaVantage(): Promise<Record<string, any>> {
+  const apiKey = process.env.ALPHA_VANTAGE_KEY
+  if (!apiKey) return {}
+
+  const settled = await Promise.allSettled(
+    AV_COMMODITIES.map(async ({ yahooSym, fn, interval }) => {
+      const url = `https://www.alphavantage.co/query?function=${fn}&interval=${interval}&apikey=${apiKey}`
+      const r = await fetch(url, {
+        signal: AbortSignal.timeout(10000),
+        next: { revalidate: 21600 }, // 6-hour cache: 4 × 4 = 16 calls/day on free tier
+      })
+      if (!r.ok) throw new Error(`AV ${fn}: ${r.status}`)
+      const d = await r.json()
+      if (d['Information'] || d['Note']) throw new Error(`AV ${fn}: rate limited`)
+      const series: Array<{ date: string; value: string }> = d?.data ?? []
+      if (series.length < 2) throw new Error(`AV ${fn}: insufficient data`)
+      const latest = parseFloat(series[0].value)
+      const prev   = parseFloat(series[1].value)
+      const pct    = prev > 0 ? ((latest - prev) / prev) * 100 : 0
+      return { yahooSym, regularMarketPrice: latest, regularMarketChangePercent: pct }
+    })
+  )
+
+  const map: Record<string, any> = {}
+  for (const r of settled) {
+    if (r.status === 'fulfilled') map[r.value.yahooSym] = r.value
+    else console.warn('fetchAlphaVantage:', (r as PromiseRejectedResult).reason?.message)
+  }
+  return map
+}
+
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
 async function fetchYahoo(): Promise<Record<string, any>> {
-  // 1. Try Twelve Data (requires TWELVE_DATA_API_KEY — works from Vercel IPs)
-  try {
-    const td = await fetchTwelveData()
-    if (td) return td
-  } catch (e) {
-    console.warn('Twelve Data failed:', (e as Error).message)
-  }
+  // 1. Twelve Data: Gold + USD/INR (free tier)
+  // 2. Alpha Vantage: WTI, Brent, NatGas, Silver (free tier, daily EIA/ICE data)
+  // TD takes precedence where both sources cover the same symbol.
+  const [td, av] = await Promise.allSettled([fetchTwelveData(), fetchAlphaVantage()])
+  const tdMap = td.status === 'fulfilled' && td.value ? td.value : {}
+  const avMap = av.status === 'fulfilled' ? av.value : {}
+  if (td.status === 'rejected') console.warn('Twelve Data failed:', td.reason?.message)
+  if (av.status === 'rejected') console.warn('Alpha Vantage failed:', av.reason?.message)
 
-  // 2. Fall back to Yahoo Finance chart API (blocked on Vercel shared IPs, but try anyway)
+  const combined = { ...avMap, ...tdMap }  // TD wins on overlap
+  if (Object.keys(combined).length > 0) return combined
+
+  // 3. Fall back to Yahoo Finance chart API (blocked on Vercel shared IPs, but try anyway)
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
   const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
