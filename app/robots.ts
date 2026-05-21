@@ -9,7 +9,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow:  ['/api/'],
       },
     ],
-    sitemap:  'https://bhaavbrief.in/sitemap.xml',
-    host:     'https://bhaavbrief.in',
+    sitemap: [
+      'https://bhaavbrief.in/sitemap.xml',
+      'https://bhaavbrief.in/news-sitemap.xml',
+    ],
+    host: 'https://bhaavbrief.in',
   }
 }
