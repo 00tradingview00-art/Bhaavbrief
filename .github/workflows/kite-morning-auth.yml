@@ -38,7 +38,7 @@ jobs:
       - name: Commit updated instruments if changed
         run: |
           git config user.name "BhaavBrief Bot"
-          git config user.email "engine@bhaavbrief.in"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/kite-instruments.json
           git diff --staged --quiet && exit 0
           git commit -m "🔑 Update MCX instrument tokens $(date +'%d %b %Y')"
