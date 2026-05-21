@@ -16,7 +16,7 @@
 import { unstable_cache } from 'next/cache'
 import { KiteClient, type KiteQuote } from './kite'
 
-const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, copper: 52728327, natgas: 57960199 }
+const FALLBACK_TOKENS = { gold: 117574919, goldMini: 125882119, silver: 118822407, crude: 127768327, copper: 130682887, natgas: 125057287 }
 
 // ── Twelve Data ───────────────────────────────────────────────────────────────
 // Free tier: 800 credits/day, 8/min. Each symbol in a batch = 1 credit.
