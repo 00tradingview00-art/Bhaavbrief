@@ -92,8 +92,13 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
       if (!r.ok) throw new Error(`AV ${fn}: ${r.status}`)
       const d = await r.json()
       if (d['Information'] || d['Note']) throw new Error(`AV ${fn}: rate limited`)
-      const series: Array<{ date: string; value: string }> = d?.data ?? []
-      if (series.length < 2) throw new Error(`AV ${fn}: no data`)
+      const rawSeries: Array<{ date: string; value: string }> = d?.data ?? []
+      if (rawSeries.length < 2) throw new Error(`AV ${fn}: no data`)
+      // AV may return ascending or descending order — sort explicitly newest-first
+      const series = [...rawSeries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      const daysDiff = (Date.now() - new Date(series[0].date).getTime()) / 86400000
+      if (daysDiff > 14) throw new Error(`AV ${fn}: data too stale (${series[0].date})`)
+      console.log(`AV ${fn}: ${series[0].date} = ${series[0].value}`)
       const latest = parseFloat(series[0].value)
       const prev   = parseFloat(series[1].value)
       map[yahooSym] = {
@@ -130,8 +135,8 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
 }
 
 // Cache wrappers — respected even in force-dynamic routes unlike per-fetch `next.revalidate`
-const fetchTwelveDataCached = unstable_cache(fetchTwelveData,  ['td-prices'],  { revalidate: 900   })
-const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices'], { revalidate: 21600 })
+const fetchTwelveDataCached = unstable_cache(fetchTwelveData,  ['td-prices'],    { revalidate: 900   })
+const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices-v2'], { revalidate: 21600 })
 
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
