@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/news',    label: 'News'    },
   { href: '/invest',  label: 'Invest'  },
   { href: '/learn',   label: 'Learn'   },
+  { href: '/about',   label: 'About'   },
 ]
 
 export default function Nav() {

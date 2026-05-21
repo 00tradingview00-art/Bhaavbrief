@@ -18,6 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/articles`,  changeFrequency: 'weekly',  priority: 0.7, lastModified: new Date() },
     { url: `${BASE}/learn`,     changeFrequency: 'monthly', priority: 0.5, lastModified: new Date() },
     { url: `${BASE}/invest`,    changeFrequency: 'monthly', priority: 0.5, lastModified: new Date() },
+    { url: `${BASE}/about`,     changeFrequency: 'monthly', priority: 0.4, lastModified: new Date() },
+    { url: `${BASE}/privacy`,   changeFrequency: 'yearly',  priority: 0.2, lastModified: new Date() },
   ]
 
   const briefRoutes: MetadataRoute.Sitemap = briefs.map(b => ({

@@ -127,3 +127,7 @@
 /* Hide subscribe CTA on mobile to save space */
 .nav-subscribe { display: none; }
 @media (min-width: 768px) { .nav-subscribe { display: flex; } }
+
+/* About page two-column layout */
+.about-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 768px) { .about-grid { grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; } }
