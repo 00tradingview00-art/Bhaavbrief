@@ -18,7 +18,6 @@ export async function generateMetadata(
   const title       = `${brief.title} | BhaavBrief`
   const description = brief.summary || `MCX commodity intelligence brief. ${brief.commodities?.join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.slug}`
-  const image       = `${BASE_URL}/og/briefs/${brief.slug}.png`
 
   return {
     title,
@@ -33,18 +32,17 @@ export async function generateMetadata(
     ].join(', '),
     alternates: { canonical: url },
     openGraph: {
-      type:        'article',
+      type:          'article',
       url,
       title,
       description,
-      siteName:    'BhaavBrief',
-      locale:      'en_IN',
+      siteName:      'BhaavBrief',
+      locale:        'en_IN',
       publishedTime: brief.date,
-      authors:     ['BhaavBrief'],
-      tags:        [...(brief.tags ?? []), ...(brief.commodities ?? [])],
-      images: [{ url: image, width: 1200, height: 630, alt: title }],
+      authors:       ['BhaavBrief'],
+      tags:          [...(brief.tags ?? []), ...(brief.commodities ?? [])],
     },
-    twitter: { card: 'summary_large_image', title, description, images: [image], site: '@bhaavbrief' },
+    twitter: { card: 'summary_large_image' as const, title, description, site: '@bhaavbrief' },
   }
 }
 
