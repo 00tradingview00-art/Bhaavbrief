@@ -16,10 +16,14 @@ export interface KiteQuote {
   timestamp:         string
   last_price:        number
   last_quantity:     number
+  average_price:     number
   net_change:        number
   volume:            number
   buy_quantity:      number
   sell_quantity:     number
+  oi:                number
+  oi_day_high:       number
+  oi_day_low:        number
   ohlc: {
     open:  number
     high:  number
@@ -27,6 +31,12 @@ export interface KiteQuote {
     close: number
   }
   change: number  // % change from previous close
+}
+
+export interface InstrumentInfo {
+  token:  number
+  symbol: string
+  expiry: string  // ISO date string, e.g. "2026-06-05" — empty string if unknown
 }
 
 export interface MCXInstrument {
@@ -44,12 +54,12 @@ export interface MCXInstrument {
 }
 
 export interface MCXTokenMap {
-  gold:    number
-  silver:  number
-  crude:   number
-  copper:  number
-  natgas:  number
-  goldMini:number
+  gold:     InstrumentInfo
+  goldMini: InstrumentInfo
+  silver:   InstrumentInfo
+  crude:    InstrumentInfo
+  copper:   InstrumentInfo
+  natgas:   InstrumentInfo
   updatedAt: string
 }
 
@@ -199,12 +209,12 @@ export class KiteClient {
     console.log(`   NatGas (${natgas.tradingsymbol}):  ${natgas.instrument_token}`)
 
     const tokenMap: MCXTokenMap = {
-      gold:     gold.instrument_token,
-      goldMini: goldM?.instrument_token ?? gold.instrument_token,
-      silver:   silver.instrument_token,
-      crude:    crude.instrument_token,
-      copper:   copper.instrument_token,
-      natgas:   natgas.instrument_token,
+      gold:     { token: gold.instrument_token,                           symbol: gold.tradingsymbol,    expiry: gold.expiry    },
+      goldMini: { token: goldM?.instrument_token ?? gold.instrument_token, symbol: goldM?.tradingsymbol ?? gold.tradingsymbol, expiry: goldM?.expiry ?? gold.expiry },
+      silver:   { token: silver.instrument_token,                         symbol: silver.tradingsymbol,  expiry: silver.expiry  },
+      crude:    { token: crude.instrument_token,                           symbol: crude.tradingsymbol,   expiry: crude.expiry   },
+      copper:   { token: copper.instrument_token,                          symbol: copper.tradingsymbol,  expiry: copper.expiry  },
+      natgas:   { token: natgas.instrument_token,                          symbol: natgas.tradingsymbol,  expiry: natgas.expiry  },
       updatedAt: new Date().toISOString(),
     }
 

@@ -1,52 +1,64 @@
 /**
- * lib/prices.ts
- * Server-side price fetcher used by API routes and server components.
+ * lib/prices.ts — server-side price fetcher for API routes and server components.
  *
- * Priority for COMEX reference prices:
- *   1. Twelve Data  (TWELVE_DATA_API_KEY)  — Gold + USD/INR, free tier
- *   2. Alpha Vantage (ALPHA_VANTAGE_KEY)   — WTI, Brent, NatGas, Silver, free tier
- *   3. Yahoo Finance chart API             — full set, blocked on Vercel shared IPs
- *   4. Frankfurter ECB API                 — USD/INR floor, always works
+ * COMEX/reference price priority:
+ *   1. Twelve Data  (XAU/USD, USD/INR) — free tier, 15-min cache
+ *   2. Alpha Vantage (WTI, Brent, NatGas, Silver) — free tier, 6-hr cache, 25 calls/day
+ *   3. Yahoo Finance — blocked on Vercel shared IPs, last resort
+ *   4. Frankfurter ECB — USD/INR floor, always works
  *
- * Priority for MCX prices:
- *   1. Kite Connect (KITE_ACCESS_TOKEN set)  — live MCX quotes
- *   2. Derived from COMEX prices via formula — fallback
+ * MCX price priority:
+ *   1. Kite Connect live quotes (OHLC, Volume, OI included)
+ *   2. Derived from COMEX via formula (no OHLC/Volume/OI available)
  */
 
 import { unstable_cache } from 'next/cache'
-import { KiteClient, type KiteQuote } from './kite'
+import { KiteClient, type KiteQuote, type InstrumentInfo } from './kite'
 import fs from 'fs'
 import path from 'path'
 
-const FALLBACK_TOKENS = { gold: 117574919, goldMini: 125882119, silver: 118822407, crude: 127768327, copper: 130682887, natgas: 125057287 }
+// ── Instrument token management ───────────────────────────────────────────────
 
-function loadInstrumentTokens() {
+const FALLBACK_INSTRUMENTS: Record<string, InstrumentInfo> = {
+  gold:     { token: 117574919, symbol: 'GOLD',        expiry: '' },
+  goldMini: { token: 125882119, symbol: 'GOLDM',       expiry: '' },
+  silver:   { token: 118822407, symbol: 'SILVER',      expiry: '' },
+  crude:    { token: 127768327, symbol: 'CRUDEOIL',    expiry: '' },
+  copper:   { token: 130682887, symbol: 'COPPER',      expiry: '' },
+  natgas:   { token: 125057287, symbol: 'NATURALGAS',  expiry: '' },
+}
+
+function loadInstrumentTokens(): Record<string, InstrumentInfo> {
   try {
     const file = path.join(process.cwd(), 'data/kite-instruments.json')
-    if (!fs.existsSync(file)) return FALLBACK_TOKENS
+    if (!fs.existsSync(file)) return FALLBACK_INSTRUMENTS
     const data = JSON.parse(fs.readFileSync(file, 'utf8'))
-    if (data.gold > 0 && data.silver > 0 && data.crude > 0) return data
-    return FALLBACK_TOKENS
+
+    // New format: { gold: { token, symbol, expiry }, ... }
+    if (data.gold && typeof data.gold === 'object' && data.gold.token > 0) return data
+
+    // Old format: { gold: 12345, ... } — migrate on the fly
+    if (typeof data.gold === 'number' && data.gold > 0) {
+      return {
+        gold:     { token: data.gold,     symbol: 'GOLD',       expiry: '' },
+        goldMini: { token: data.goldMini, symbol: 'GOLDM',      expiry: '' },
+        silver:   { token: data.silver,   symbol: 'SILVER',     expiry: '' },
+        crude:    { token: data.crude,    symbol: 'CRUDEOIL',   expiry: '' },
+        copper:   { token: data.copper,   symbol: 'COPPER',     expiry: '' },
+        natgas:   { token: data.natgas,   symbol: 'NATURALGAS', expiry: '' },
+      }
+    }
+    return FALLBACK_INSTRUMENTS
   } catch {
-    return FALLBACK_TOKENS
+    return FALLBACK_INSTRUMENTS
   }
 }
 
 // ── Twelve Data ───────────────────────────────────────────────────────────────
-// Free tier: 800 credits/day, 8/min. Each symbol in a batch = 1 credit.
-// With 7 symbols and 15-min cache: 4 calls/hr × 7 = 28 credits/hr = 672/day — under limit.
 
-// Free plan covers: XAU/USD (Gold) and forex pairs (USD/INR).
-// Silver (XAG/USD), WTI/USD, BRENT, NG/USD all return "not available with your plan".
-// Copper has no valid Twelve Data symbol on any plan tested.
-// → Upgrade to Twelve Data paid plan to unlock Silver, Crude, Brent, NatGas.
 const TD_SYMBOL_MAP: Record<string, string> = {
-  'GC=F':     'XAU/USD',    // COMEX Gold      ✓ free
-  'USDINR=X': 'USD/INR',    // USD/INR spot    ✓ free
-  // 'SI=F':  'XAG/USD',    // Silver          ✗ paid plan only
-  // 'CL=F':  'WTI/USD',    // WTI Crude       ✗ paid plan only
-  // 'BZ=F':  'BRENT/USD',  // Brent Crude     ✗ paid plan only
-  // 'NG=F':  'NG/USD',     // Natural Gas     ✗ paid plan only
+  'GC=F':     'XAU/USD',
+  'USDINR=X': 'USD/INR',
 }
 
 async function fetchTwelveData(): Promise<Record<string, any> | null> {
@@ -54,18 +66,13 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
   if (!apiKey) return null
 
   const tdSymbols = Object.values(TD_SYMBOL_MAP).join(',')
-  const url = `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(tdSymbols)}&apikey=${apiKey}`
-
-  const res = await fetch(url, {
-    signal: AbortSignal.timeout(10000),
-    next: { revalidate: 900 }, // 15-min cache to stay within 800 credits/day free tier
-  })
+  const res = await fetch(
+    `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(tdSymbols)}&apikey=${apiKey}`,
+    { signal: AbortSignal.timeout(10000), next: { revalidate: 900 } }
+  )
   if (!res.ok) throw new Error(`Twelve Data: ${res.status}`)
-
   const data = await res.json()
 
-  // When multiple symbols are requested the response is keyed by TD symbol.
-  // Map back to Yahoo-style keys so deriveFromYahoo works unchanged.
   const map: Record<string, any> = {}
   for (const [yahooSym, tdSym] of Object.entries(TD_SYMBOL_MAP)) {
     const q = data[tdSym]
@@ -79,12 +86,7 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
 }
 
 // ── Alpha Vantage ─────────────────────────────────────────────────────────────
-// Free tier: 25 API calls/day, 5 calls/minute.
-// We call sequentially (not parallel) to stay within the per-minute limit.
-// 6-hour cache: 4 symbols × 4 refreshes/day = 16 calls/day — under the 25/day limit.
-//
-// WTI, Brent, NatGas: physical commodity endpoints (daily EIA/ICE settlement).
-// Silver: no SILVER function on AV — use FX_DAILY with XAG/USD instead (daily LBMA).
+// Free: 25 calls/day, 5/min. Sequential fetch + 6-hr cache = ~16 calls/day.
 
 async function fetchAlphaVantage(): Promise<Record<string, any>> {
   const apiKey = process.env.ALPHA_VANTAGE_KEY
@@ -92,123 +94,104 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
 
   const map: Record<string, any> = {}
 
-  // Commodity series — fetched sequentially to respect 5 calls/min rate limit
-  const commodities = [
+  for (const { yahooSym, fn, interval } of [
     { yahooSym: 'CL=F', fn: 'WTI',         interval: 'daily' },
     { yahooSym: 'BZ=F', fn: 'BRENT',       interval: 'daily' },
     { yahooSym: 'NG=F', fn: 'NATURAL_GAS', interval: 'daily' },
-  ]
-
-  for (const { yahooSym, fn, interval } of commodities) {
+  ]) {
     try {
-      const url = `https://www.alphavantage.co/query?function=${fn}&interval=${interval}&apikey=${apiKey}`
-      const r = await fetch(url, { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } })
+      const r = await fetch(
+        `https://www.alphavantage.co/query?function=${fn}&interval=${interval}&apikey=${apiKey}`,
+        { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } }
+      )
       if (!r.ok) throw new Error(`AV ${fn}: ${r.status}`)
       const d = await r.json()
       if (d['Information'] || d['Note']) throw new Error(`AV ${fn}: rate limited`)
       const rawSeries: Array<{ date: string; value: string }> = d?.data ?? []
       if (rawSeries.length < 2) throw new Error(`AV ${fn}: no data`)
-      // AV may return ascending or descending order — sort explicitly newest-first
       const series = [...rawSeries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      const daysDiff = (Date.now() - new Date(series[0].date).getTime()) / 86400000
-      if (daysDiff > 14) throw new Error(`AV ${fn}: data too stale (${series[0].date})`)
-      console.log(`AV ${fn}: ${series[0].date} = ${series[0].value}`)
+      if ((Date.now() - new Date(series[0].date).getTime()) / 86400000 > 14)
+        throw new Error(`AV ${fn}: stale`)
       const latest = parseFloat(series[0].value)
       const prev   = parseFloat(series[1].value)
       map[yahooSym] = {
         regularMarketPrice:         latest,
         regularMarketChangePercent: prev > 0 ? ((latest - prev) / prev) * 100 : 0,
       }
-    } catch (e) {
-      console.warn('fetchAlphaVantage:', (e as Error).message)
-    }
+    } catch (e) { console.warn('AV:', (e as Error).message) }
   }
 
-  // Silver via FX_DAILY (XAG/USD) — AV has no SILVER commodity function
+  // Silver via FX_DAILY XAG/USD
   try {
-    const url = `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=XAG&to_symbol=USD&outputsize=compact&apikey=${apiKey}`
-    const r = await fetch(url, { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } })
-    if (!r.ok) throw new Error(`AV FX_DAILY XAG: ${r.status}`)
+    const r = await fetch(
+      `https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=XAG&to_symbol=USD&outputsize=compact&apikey=${apiKey}`,
+      { signal: AbortSignal.timeout(10000), next: { revalidate: 21600 } }
+    )
+    if (!r.ok) throw new Error(`AV XAG: ${r.status}`)
     const d = await r.json()
-    if (d['Information'] || d['Note']) throw new Error('AV FX_DAILY XAG: rate limited')
+    if (d['Information'] || d['Note']) throw new Error('AV XAG: rate limited')
     const series = d?.['Time Series FX (Daily)'] as Record<string, Record<string, string>> | undefined
-    if (!series) throw new Error('AV FX_DAILY XAG: no data')
+    if (!series) throw new Error('AV XAG: no data')
     const dates = Object.keys(series).sort().reverse()
-    if (dates.length < 2) throw new Error('AV FX_DAILY XAG: insufficient data')
+    if (dates.length < 2) throw new Error('AV XAG: insufficient data')
     const latest = parseFloat(series[dates[0]]['4. close'])
     const prev   = parseFloat(series[dates[1]]['4. close'])
     map['SI=F'] = {
       regularMarketPrice:         latest,
       regularMarketChangePercent: prev > 0 ? ((latest - prev) / prev) * 100 : 0,
     }
-  } catch (e) {
-    console.warn('fetchAlphaVantage:', (e as Error).message)
-  }
+  } catch (e) { console.warn('AV:', (e as Error).message) }
 
   return map
 }
 
-// Cache wrappers — respected even in force-dynamic routes unlike per-fetch `next.revalidate`
-const fetchTwelveDataCached = unstable_cache(fetchTwelveData,  ['td-prices'],    { revalidate: 900   })
+const fetchTwelveDataCached   = unstable_cache(fetchTwelveData,   ['td-prices'],    { revalidate: 900   })
 const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices-v2'], { revalidate: 21600 })
 
-// ── Yahoo Finance ─────────────────────────────────────────────────────────────
+// ── Yahoo Finance (last resort) ───────────────────────────────────────────────
 
 async function fetchYahoo(): Promise<Record<string, any>> {
-  // 1. Twelve Data: Gold + USD/INR (free tier)
-  // 2. Alpha Vantage: WTI, Brent, NatGas, Silver (free tier, daily EIA/ICE data)
-  // TD takes precedence where both sources cover the same symbol.
   const [td, av] = await Promise.allSettled([fetchTwelveDataCached(), fetchAlphaVantageCached()])
   const tdMap = td.status === 'fulfilled' && td.value ? td.value : {}
   const avMap = av.status === 'fulfilled' ? av.value : {}
-  if (td.status === 'rejected') console.warn('Twelve Data failed:', td.reason?.message)
-  if (av.status === 'rejected') console.warn('Alpha Vantage failed:', av.reason?.message)
 
   const combined = { ...avMap, ...tdMap }  // TD wins on overlap
   if (Object.keys(combined).length > 0) return combined
 
-  // 3. Fall back to Yahoo Finance chart API (blocked on Vercel shared IPs, but try anyway)
+  // Fallback: Yahoo Finance chart API
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
-  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
-
+  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
   const settled = await Promise.allSettled(
     symbols.map(async (sym) => {
       const r = await fetch(
-        `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d&includePrePost=false`,
+        `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`,
         { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(8000), next: { revalidate: 300 } }
       )
-      if (!r.ok) throw new Error(`Yahoo chart ${sym}: ${r.status}`)
+      if (!r.ok) throw new Error(`Yahoo ${sym}: ${r.status}`)
       const d = await r.json()
       const meta = d?.chart?.result?.[0]?.meta
-      if (!meta) throw new Error(`Yahoo chart ${sym}: no result`)
+      if (!meta) throw new Error(`Yahoo ${sym}: no result`)
       const price     = meta.regularMarketPrice ?? 0
       const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price
-      const pct       = prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0
-      return { symbol: sym, regularMarketPrice: price, regularMarketChangePercent: pct }
+      return { symbol: sym, regularMarketPrice: price, regularMarketChangePercent: prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0 }
     })
   )
-
   const map: Record<string, any> = {}
   for (const r of settled) {
     if (r.status === 'fulfilled') map[r.value.symbol] = r.value
-    else console.warn('fetchYahoo:', r.reason?.message)
   }
-  return map  // may be empty — Frankfurter covers USD/INR as a floor
+  return map
 }
 
-// Frankfurter is a free, open-source ECB rates API — no key, no rate-limit, works from any cloud IP
 async function fetchUsdInr(): Promise<number> {
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
-      signal: AbortSignal.timeout(5000),
-      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(5000), next: { revalidate: 300 },
     })
     if (!r.ok) return 0
     const d = await r.json()
     return d?.rates?.INR ?? 0
-  } catch {
-    return 0
-  }
+  } catch { return 0 }
 }
 
 // ── MCX derivation from COMEX ─────────────────────────────────────────────────
@@ -221,24 +204,21 @@ function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
   const brent     = yahoo['BZ=F']?.regularMarketPrice     ?? 0
   const comexCu   = yahoo['HG=F']?.regularMarketPrice     ?? 0
   const henryHub  = yahoo['NG=F']?.regularMarketPrice     ?? 0
-
   return {
     usdinr, brent, comexGold, comexSilver: comexSilv,
     wti, comexCopper: comexCu, henryHub,
-    // MCX derived prices
     mcxGold:   comexGold > 0 ? (comexGold / 31.1035) * 10   * usdinr * 1.15 : 0,
     mcxSilver: comexSilv > 0 ? (comexSilv / 31.1035) * 1000 * usdinr * 1.10 : 0,
-    mcxCrude:  wti       > 0 ? wti        * usdinr   * 1.02 : 0,
-    mcxCopper: comexCu   > 0 ? comexCu    * 2.20462  * usdinr * 1.05 : 0,
-    mcxNatGas: henryHub  > 0 ? henryHub   * usdinr            : 0,
-    // Change %
-    goldPct:    yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
-    silverPct:  yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
-    crudePct:   yahoo['CL=F']?.regularMarketChangePercent    ?? 0,
-    brentPct:   yahoo['BZ=F']?.regularMarketChangePercent    ?? 0,
-    copperPct:  yahoo['HG=F']?.regularMarketChangePercent    ?? 0,
-    gasPct:     yahoo['NG=F']?.regularMarketChangePercent    ?? 0,
-    usdinrPct:  yahoo['USDINR=X']?.regularMarketChangePercent ?? 0,
+    mcxCrude:  wti       > 0 ? wti * usdinr * 1.02 : 0,
+    mcxCopper: comexCu   > 0 ? comexCu * 2.20462 * usdinr * 1.05 : 0,
+    mcxNatGas: henryHub  > 0 ? henryHub * usdinr : 0,
+    goldPct:   yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
+    silverPct: yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
+    crudePct:  yahoo['CL=F']?.regularMarketChangePercent    ?? 0,
+    brentPct:  yahoo['BZ=F']?.regularMarketChangePercent    ?? 0,
+    copperPct: yahoo['HG=F']?.regularMarketChangePercent    ?? 0,
+    gasPct:    yahoo['NG=F']?.regularMarketChangePercent    ?? 0,
+    usdinrPct: yahoo['USDINR=X']?.regularMarketChangePercent ?? 0,
   }
 }
 
@@ -247,15 +227,13 @@ function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
 async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
   const apiKey      = process.env.KITE_API_KEY
   const accessToken = process.env.KITE_ACCESS_TOKEN
-
   if (!apiKey || !accessToken) return null
 
-  const tokens = loadInstrumentTokens()
-
+  const instruments = loadInstrumentTokens()
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const instrumentList = [tokens.gold, tokens.silver, tokens.crude, tokens.copper, tokens.natgas]
-    return await client.getQuotes(instrumentList)
+    const tokenList = ['gold', 'silver', 'crude', 'copper', 'natgas'].map(k => instruments[k].token)
+    return await client.getQuotes(tokenList)
   } catch (err) {
     console.warn('Kite quote fetch failed:', (err as Error).message)
     return null
@@ -264,39 +242,66 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
 
 // ── Unified price shape ───────────────────────────────────────────────────────
 
+export interface MCXData {
+  mcx:          number   // last traded price
+  mcxChangePct: number   // % change from prev close
+  mcxChange:    number   // absolute change from prev close
+  mcxOpen:      number   // today's open (0 if Kite unavailable)
+  mcxHigh:      number   // today's high (0 if Kite unavailable)
+  mcxLow:       number   // today's low  (0 if Kite unavailable)
+  mcxPrevClose: number   // previous close / settlement
+  mcxVolume:    number   // lots traded today (0 if Kite unavailable)
+  mcxOI:        number   // open interest in lots (0 if Kite unavailable)
+  mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
+  mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
+}
+
 export interface PriceData {
-  source: 'kite+twelvedata' | 'twelvedata' | 'kite+yahoo' | 'yahoo'
-  updatedAt: string
+  source:     'kite+twelvedata' | 'twelvedata' | 'kite+yahoo' | 'yahoo'
+  updatedAt:  string
   marketOpen: boolean
 
-  // Forex
-  usdinr:        number
-  usdinrChangePct: number
+  usdinr:         number
+  usdinrChangePct:number
 
-  // Global reference
-  comexGold:     number
-  comexSilver:   number
-  wti:           number
-  brent:         number
-  comexCopper:   number
-  henryHub:      number
-  goldComexPct:  number
-  silverComexPct:number
-  crudePct:      number
-  brentPct:      number
-  copperComexPct:number
-  gasPct:        number
+  comexGold:      number
+  comexSilver:    number
+  wti:            number
+  brent:          number
+  comexCopper:    number
+  henryHub:       number
+  goldComexPct:   number
+  silverComexPct: number
+  crudePct:       number
+  brentPct:       number
+  copperComexPct: number
+  gasPct:         number
 
-  // MCX commodities
-  gold:    { mcx: number; mcxChangePct: number; mcxChange: number; comex: number; comexChangePct: number }
-  silver:  { mcx: number; mcxChangePct: number; mcxChange: number; comex: number; comexChangePct: number }
-  crude:   { mcx: number; mcxChangePct: number; mcxChange: number; wti: number; wtiChangePct: number; brent: number; brentChangePct: number }
-  copper:  { mcx: number; mcxChangePct: number; mcxChange: number }
-  natgas:  { mcx: number; mcxChangePct: number; mcxChange: number }
+  gold:   MCXData & { comex: number; comexChangePct: number }
+  silver: MCXData & { comex: number; comexChangePct: number }
+  crude:  MCXData & { wti: number; wtiChangePct: number; brent: number; brentChangePct: number }
+  copper: MCXData
+  natgas: MCXData
   aluminium: { lme: number; lmeChangePct: number }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
+
+function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: number, info: InstrumentInfo): MCXData {
+  return {
+    mcx:          q ? q.last_price               : fallbackPrice,
+    mcxChangePct: q ? KiteClient.changePct(q)    : fallbackPct,
+    mcxChange:    q ? q.net_change               : 0,
+    mcxOpen:      q ? (q.ohlc?.open      ?? 0)  : 0,
+    mcxHigh:      q ? (q.ohlc?.high      ?? 0)  : 0,
+    mcxLow:       q ? (q.ohlc?.low       ?? 0)  : 0,
+    mcxPrevClose: q ? (q.ohlc?.close     ?? 0)  : 0,
+    mcxVolume:    q ? (q.volume           ?? 0)  : 0,
+    mcxOI:        q ? (q.oi               ?? 0)  : 0,
+    mcxSymbol:    info.symbol,
+    mcxExpiry:    info.expiry,
+  }
+}
 
 export async function getPrices(): Promise<PriceData | null> {
   try {
@@ -308,37 +313,30 @@ export async function getPrices(): Promise<PriceData | null> {
 
     const y = deriveFromYahoo(yahoo, usdinrFallback)
 
-    // Is MCX currently open? 9:00 AM – 11:30 PM IST = 03:30–18:00 UTC
-    const nowUTC  = new Date()
-    const utcH    = nowUTC.getUTCHours()
-    const utcM    = nowUTC.getUTCMinutes()
-    const utcMins = utcH * 60 + utcM
-    const marketOpen = utcMins >= 210 && utcMins <= 1080 // 3:30 AM–6:00 PM UTC
+    const utcMins = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
+    const marketOpen = utcMins >= 210 && utcMins <= 1080  // 9 AM–11:30 PM IST
 
-    // Helper to extract Kite quote by token
+    const instruments = loadInstrumentTokens()
+
     function kiteByToken(token: number): KiteQuote | null {
       if (!kiteQuotes) return null
-      return Object.values(kiteQuotes).find(
-        (q: KiteQuote) => q.instrument_token === token
-      ) ?? null
+      return Object.values(kiteQuotes).find(q => q.instrument_token === token) ?? null
     }
 
-    const tokens = loadInstrumentTokens()
+    const goldQ   = kiteByToken(instruments.gold.token)
+    const silverQ = kiteByToken(instruments.silver.token)
+    const crudeQ  = kiteByToken(instruments.crude.token)
+    const copperQ = kiteByToken(instruments.copper.token)
+    const natgasQ = kiteByToken(instruments.natgas.token)
 
-    const goldQ   = kiteByToken(tokens.gold)
-    const silverQ = kiteByToken(tokens.silver)
-    const crudeQ  = kiteByToken(tokens.crude)
-    const copperQ = kiteByToken(tokens.copper)
-    const natgasQ = kiteByToken(tokens.natgas)
-
-    const usingKite    = !!(kiteQuotes && goldQ)
-    const usingTwelve  = !!process.env.TWELVE_DATA_API_KEY
+    const usingKite   = !!(kiteQuotes && goldQ)
+    const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
 
     return {
       source: usingKite
         ? (usingTwelve ? 'kite+twelvedata' : 'kite+yahoo')
         : (usingTwelve ? 'twelvedata'      : 'yahoo'),
-      updatedAt: new Date().toISOString(),
+      updatedAt:  new Date().toISOString(),
       marketOpen,
 
       usdinr:         y.usdinr,
@@ -358,38 +356,24 @@ export async function getPrices(): Promise<PriceData | null> {
       gasPct:         y.gasPct,
 
       gold: {
-        mcx:           goldQ   ? goldQ.last_price               : y.mcxGold,
-        mcxChangePct:  goldQ   ? KiteClient.changePct(goldQ)    : y.goldPct,
-        mcxChange:     goldQ   ? goldQ.net_change               : 0,
-        comex:         y.comexGold,
-        comexChangePct:y.goldPct,
+        ...buildMCXData(goldQ, y.mcxGold, y.goldPct, instruments.gold),
+        comex:          y.comexGold,
+        comexChangePct: y.goldPct,
       },
       silver: {
-        mcx:           silverQ ? silverQ.last_price             : y.mcxSilver,
-        mcxChangePct:  silverQ ? KiteClient.changePct(silverQ)  : y.silverPct,
-        mcxChange:     silverQ ? silverQ.net_change             : 0,
-        comex:         y.comexSilver,
-        comexChangePct:y.silverPct,
+        ...buildMCXData(silverQ, y.mcxSilver, y.silverPct, instruments.silver),
+        comex:          y.comexSilver,
+        comexChangePct: y.silverPct,
       },
       crude: {
-        mcx:           crudeQ  ? crudeQ.last_price              : y.mcxCrude,
-        mcxChangePct:  crudeQ  ? KiteClient.changePct(crudeQ)   : y.crudePct,
-        mcxChange:     crudeQ  ? crudeQ.net_change              : 0,
-        wti:           y.wti,
-        wtiChangePct:  y.crudePct,
-        brent:         y.brent,
-        brentChangePct:y.brentPct,
+        ...buildMCXData(crudeQ, y.mcxCrude, y.crudePct, instruments.crude),
+        wti:            y.wti,
+        wtiChangePct:   y.crudePct,
+        brent:          y.brent,
+        brentChangePct: y.brentPct,
       },
-      copper: {
-        mcx:           copperQ ? copperQ.last_price             : y.mcxCopper,
-        mcxChangePct:  copperQ ? KiteClient.changePct(copperQ)  : y.copperPct,
-        mcxChange:     copperQ ? copperQ.net_change             : 0,
-      },
-      natgas: {
-        mcx:           natgasQ ? natgasQ.last_price             : y.mcxNatGas,
-        mcxChangePct:  natgasQ ? KiteClient.changePct(natgasQ)  : y.gasPct,
-        mcxChange:     natgasQ ? natgasQ.net_change             : 0,
-      },
+      copper: buildMCXData(copperQ, y.mcxCopper, y.copperPct, instruments.copper),
+      natgas: buildMCXData(natgasQ, y.mcxNatGas, y.gasPct,    instruments.natgas),
       aluminium: { lme: 0, lmeChangePct: 0 },
     }
   } catch (err) {

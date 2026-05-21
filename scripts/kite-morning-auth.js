@@ -307,12 +307,13 @@ async function discoverInstruments(accessToken) {
     if (!gold || !silver || !crude || !copper || !natgas) return false
 
     const tokenMap = {
-      gold:     gold.token,
-      goldMini: goldM?.token ?? gold.token,
-      silver:   silver.token,
-      crude:    crude.token,
-      copper:   copper.token,
-      natgas:   natgas.token,
+      _note: 'Auto-updated by morning auth. Do not edit manually.',
+      gold:     { token: gold.token,               symbol: gold.symbol,    expiry: gold.expiry    },
+      goldMini: { token: goldM?.token ?? gold.token, symbol: goldM?.symbol ?? gold.symbol, expiry: goldM?.expiry ?? gold.expiry },
+      silver:   { token: silver.token,             symbol: silver.symbol,  expiry: silver.expiry  },
+      crude:    { token: crude.token,               symbol: crude.symbol,   expiry: crude.expiry   },
+      copper:   { token: copper.token,              symbol: copper.symbol,  expiry: copper.expiry  },
+      natgas:   { token: natgas.token,              symbol: natgas.symbol,  expiry: natgas.expiry  },
       updatedAt: new Date().toISOString(),
     }
 

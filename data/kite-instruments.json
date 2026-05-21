@@ -1,10 +1,10 @@
 {
-  "_note": "Auto-updated daily by scripts/kite-morning-auth.js. Do not edit manually.",
-  "gold":     0,
-  "goldMini": 0,
-  "silver":   0,
-  "crude":    0,
-  "copper":   0,
-  "natgas":   0,
+  "_note": "Auto-updated by morning auth. Do not edit manually.",
+  "gold":     { "token": 0, "symbol": "", "expiry": "" },
+  "goldMini": { "token": 0, "symbol": "", "expiry": "" },
+  "silver":   { "token": 0, "symbol": "", "expiry": "" },
+  "crude":    { "token": 0, "symbol": "", "expiry": "" },
+  "copper":   { "token": 0, "symbol": "", "expiry": "" },
+  "natgas":   { "token": 0, "symbol": "", "expiry": "" },
   "updatedAt": null
 }

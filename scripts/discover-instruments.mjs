@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const API_KEY    = process.env.KITE_API_KEY
-const API_TOKEN  = process.env.KITE_ACCESS_TOKEN
+const API_KEY   = process.env.KITE_API_KEY
+const API_TOKEN = process.env.KITE_ACCESS_TOKEN
 
 if (!API_KEY || !API_TOKEN) {
   console.log('No Kite credentials — skipping instrument discovery')
@@ -58,19 +58,20 @@ if (!gold || !silver || !crude || !copper || !natgas) {
   process.exit(1)
 }
 
-console.log(`Gold:   ${gold.symbol} (${gold.token})`)
-console.log(`Silver: ${silver.symbol} (${silver.token})`)
-console.log(`Crude:  ${crude.symbol} (${crude.token})`)
-console.log(`Copper: ${copper.symbol} (${copper.token})`)
-console.log(`NatGas: ${natgas.symbol} (${natgas.token})`)
+console.log(`Gold:   ${gold.symbol} (${gold.token}) expiry ${gold.expiry}`)
+console.log(`Silver: ${silver.symbol} (${silver.token}) expiry ${silver.expiry}`)
+console.log(`Crude:  ${crude.symbol} (${crude.token}) expiry ${crude.expiry}`)
+console.log(`Copper: ${copper.symbol} (${copper.token}) expiry ${copper.expiry}`)
+console.log(`NatGas: ${natgas.symbol} (${natgas.token}) expiry ${natgas.expiry}`)
 
 const tokenMap = {
-  gold:     gold.token,
-  goldMini: goldM?.token ?? gold.token,
-  silver:   silver.token,
-  crude:    crude.token,
-  copper:   copper.token,
-  natgas:   natgas.token,
+  _note: 'Auto-updated by morning auth. Do not edit manually.',
+  gold:     { token: gold.token,               symbol: gold.symbol,    expiry: gold.expiry    },
+  goldMini: { token: goldM?.token ?? gold.token, symbol: goldM?.symbol ?? gold.symbol, expiry: goldM?.expiry ?? gold.expiry },
+  silver:   { token: silver.token,             symbol: silver.symbol,  expiry: silver.expiry  },
+  crude:    { token: crude.token,               symbol: crude.symbol,   expiry: crude.expiry   },
+  copper:   { token: copper.token,              symbol: copper.symbol,  expiry: copper.expiry  },
+  natgas:   { token: natgas.token,              symbol: natgas.symbol,  expiry: natgas.expiry  },
   updatedAt: new Date().toISOString(),
 }
 
