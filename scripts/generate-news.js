@@ -194,16 +194,19 @@ Market signal: ${signal.title}. ${signal.desc}`
   })
 
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
-  const text     = (await res.json()).content?.[0]?.text?.trim() ?? ''
-  const headlineM = text.match(/HEADLINE:\s*(.+?)(?:\n|$)/)
-  const bodyM     = text.match(/BODY:\s*([\s\S]+)/)
+  const text      = (await res.json()).content?.[0]?.text?.trim() ?? ''
+  const headlineM = text.match(/HEADLINE:\s*\*{0,2}\s*(.+?)\s*\*{0,2}(?:\n|$)/)
+  const bodyM     = text.match(/BODY:\s*\*{0,2}\s*([\s\S]+)/)
 
-  if (!headlineM || !bodyM) throw new Error('Unexpected Claude response format')
+  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${text.slice(0, 80)}`)
 
-  return {
-    title:   headlineM[1].trim(),
-    summary: bodyM[1].trim(),
-  }
+  const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
+  const summary = bodyM[1].replace(/^\*+\s*/, '').trim()
+
+  if (title.length < 10 || title === '**' || summary.length < 40)
+    throw new Error(`Malformed response — title: "${title.slice(0, 40)}"`)
+
+  return { title, summary }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
