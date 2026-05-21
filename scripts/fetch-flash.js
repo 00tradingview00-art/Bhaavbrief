@@ -15,7 +15,6 @@ const FLASH_DIR         = path.join(__dirname, '../content/flash')
 const SEEN_FILE         = path.join(__dirname, 'seen-articles.json')
 
 const FEEDS = [
-  // Google News queries — reliable from GitHub Actions, broad coverage
   { url: 'https://news.google.com/rss/search?q=MCX+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',                       source: 'Google News' },
   { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+price&hl=en&gl=US&ceid=US:en',                         source: 'Reuters' },
   { url: 'https://news.google.com/rss/search?q=gold+silver+price+India+MCX&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
@@ -24,7 +23,6 @@ const FEEDS = [
   { url: 'https://news.google.com/rss/search?q=India+commodity+monsoon+agri+NCDEX&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News' },
   { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',          source: 'Google News' },
   { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',        source: 'Google News' },
-  // NDTV Profit — verified working
   { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                            source: 'NDTV Profit' },
 ]
 
@@ -32,7 +30,8 @@ const KEYWORDS = [
   'opec', 'rbi', 'sanctions', 'hormuz', 'suez', 'eia inventory', 'import duty',
   'monsoon forecast', 'supply disruption', 'port strike', 'fed rate', 'crude',
   'gold price', 'silver price', 'commodity', 'mcx', 'rupee', 'usdinr',
-  'inflation', 'iran', 'russia', 'ukraine', 'china demand',
+  'inflation', 'iran', 'russia', 'ukraine', 'china demand', 'brent', 'opec+',
+  'federal reserve', 'rate cut', 'rate hike', 'refinery', 'inventory',
 ]
 
 function loadSeen() {
@@ -68,13 +67,54 @@ function toSlug(title) {
 }
 
 function stripSourceSuffix(title) {
-  // Remove trailing " - Source Name" or " | Source Name" added by Google News aggregation
   return title.replace(/\s+[-–—|]\s+[^-–—|]+$/, '').trim()
 }
 
 function getISTNow() {
   const now = new Date()
   return new Date(now.getTime() + 5.5 * 60 * 60 * 1000)
+}
+
+// ── Live price fetch: Stooq (COMEX/NYMEX futures) + Frankfurter (USD/INR) ─────
+async function fetchLivePrices() {
+  const prices = { usdInr: 85.0 }
+
+  try {
+    const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
+      signal: AbortSignal.timeout(5000),
+    })
+    if (r.ok) prices.usdInr = (await r.json()).rates?.INR ?? prices.usdInr
+  } catch {}
+
+  // Stooq free CSV API — no key required
+  const symbols = { gold: 'gc.f', silver: 'si.f', crude: 'cl.f', copper: 'hg.f' }
+  await Promise.all(Object.entries(symbols).map(async ([name, sym]) => {
+    try {
+      const r = await fetch(
+        `https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`,
+        { signal: AbortSignal.timeout(5000) }
+      )
+      if (!r.ok) return
+      const lines = (await r.text()).trim().split('\n')
+      if (lines.length < 2) return
+      let close = parseFloat(lines[1].split(',')[6])
+      // SI (silver) is ¢/troy oz; HG (copper) is ¢/lb on CME/Stooq — normalize to $/unit
+      if ((name === 'silver' || name === 'copper') && close > 0) close /= 100
+      if (!isNaN(close) && close > 0) prices[name] = close
+    } catch {}
+  }))
+
+  return prices
+}
+
+function formatPriceContext(p) {
+  const fx = p.usdInr?.toFixed(2) ?? 'N/A'
+  const parts = [`USD/INR: ₹${fx}`]
+  if (p.gold)   parts.push(`Gold (COMEX): $${p.gold.toFixed(0)}/oz  (~₹${((p.gold / 31.1035) * 10 * p.usdInr * 1.15).toFixed(0)}/10g MCX)`)
+  if (p.silver) parts.push(`Silver (COMEX): $${p.silver.toFixed(2)}/oz  (~₹${((p.silver / 31.1035) * 1000 * p.usdInr * 1.10).toFixed(0)}/kg MCX)`)
+  if (p.crude)  parts.push(`WTI Crude: $${p.crude.toFixed(2)}/bbl  (~₹${(p.crude * p.usdInr * 1.02).toFixed(0)}/bbl MCX)`)
+  if (p.copper) parts.push(`Copper (COMEX): $${p.copper.toFixed(4)}/lb`)
+  return parts.join('\n')
 }
 
 async function fetchFeed(feed) {
@@ -87,11 +127,11 @@ async function fetchFeed(feed) {
       console.warn(`  Feed HTTP ${res.status} (${new URL(feed.url).hostname})`)
       return []
     }
-    const text = await res.text()
+    const text  = await res.text()
     const items = []
 
     for (const m of text.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
-      const block = m[1]
+      const block  = m[1]
       const titleM = block.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/) || block.match(/<title>([^<]{5,})<\/title>/)
       const linkM  = block.match(/<link>(https?:[^<]+)<\/link>/)           || block.match(/<guid[^>]*>(https?:[^<]+)<\/guid>/)
       const descM  = block.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/) || block.match(/<description>([^<]{10,})<\/description>/)
@@ -113,8 +153,24 @@ async function fetchFeed(feed) {
   }
 }
 
-async function generateFlashContent(article) {
-  const prompt = `You write for BhaavBrief, India's commodity intelligence service. Write an 80-120 word flash intelligence note about this news. Format: first sentence states the fact clearly with numbers. Second paragraph explains the MCX market impact — which commodity, which direction, why. No opinions, no calls, no hedging. Just clean facts and market context. No title. End with: Source: ${article.source}
+async function generateFlashContent(article, priceContext) {
+  const prompt = `You write for BhaavBrief — India's MCX commodity intelligence service read by professional traders.
+
+Live market context:
+${priceContext}
+
+Write a 200-250 word intelligence flash on the article below. Use this exact structure (include the bold headers):
+
+**WHAT HAPPENED**
+One sentence. State the specific fact with the key number or figure.
+
+**MCX IMPACT**
+3-4 sentences. Name the specific MCX contract(s) affected. State the likely direction and why. Reference a key price level from the live context above. Explain what it means for Indian traders specifically — customs duty, import cost, spread vs COMEX.
+
+**WATCH**
+1-2 sentences. Name the next data release, event, or price level that will either confirm or negate this move.
+
+Rules: No opinions. No buy/sell calls. No "may", "could", "might". Only facts and market mechanics. No title. No byline. End with: Source: ${article.source}
 
 Article: ${article.title}. ${article.description}`
 
@@ -127,7 +183,7 @@ Article: ${article.title}. ${article.description}`
     },
     body: JSON.stringify({
       model:      'claude-sonnet-4-6',
-      max_tokens: 220,
+      max_tokens: 400,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })
@@ -156,6 +212,11 @@ ${content}
 async function main() {
   if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
 
+  console.log('Fetching live prices...')
+  const prices       = await fetchLivePrices()
+  const priceContext = formatPriceContext(prices)
+  console.log(`Prices: ${priceContext.split('\n').join(' | ')}`)
+
   const seen = loadSeen()
   console.log(`BhaavBrief Flash — seen: ${seen.length} URLs`)
 
@@ -172,10 +233,10 @@ async function main() {
   const titles   = []
 
   for (const article of candidates) {
-    if (processed >= 3) break
+    if (processed >= 6) break
     try {
       console.log(`Processing: ${article.title.slice(0, 70)}`)
-      const content  = await generateFlashContent(article)
+      const content  = await generateFlashContent(article, priceContext)
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
       const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${p(ist.getHours())}-${p(ist.getMinutes())}-${toSlug(article.title)}`

@@ -1,14 +1,17 @@
 import { NextResponse } from 'next/server'
 
-export const revalidate = 900
+export const revalidate = 300
 
 const RSS_SOURCES = [
-  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms', name: 'Economic Times'   },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                       name: 'NDTV Profit'      },
-  { url: 'https://www.business-standard.com/rss/markets-106.rss',               name: 'Business Standard' },
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                                    name: 'Economic Times'    },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                          name: 'NDTV Profit'       },
+  { url: 'https://www.business-standard.com/rss/markets-106.rss',                                                   name: 'Business Standard' },
+  { url: 'https://news.google.com/rss/search?q=MCX+gold+silver+crude+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',   name: 'Google News'       },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+brent+price&hl=en&gl=US&ceid=US:en',          name: 'Google News'       },
+  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+rate+inflation+India&hl=en-IN&gl=IN&ceid=IN:en',    name: 'Google News'       },
 ]
 
-const COMMODITY_KEYWORDS = /gold|silver|crude|copper|\bgas\b|mcx|commodity|bullion|metal|oil\b|ncdex|rupee|dollar/i
+const COMMODITY_KEYWORDS = /gold|silver|crude|copper|\bgas\b|mcx|commodity|bullion|metal|oil\b|ncdex|rupee|dollar|opec|brent|forex|inflation|rbi/i
 
 function detectCategory(text: string): { category: string; tagType: string } {
   const t = text.toLowerCase()
@@ -48,26 +51,33 @@ export interface NewsItem {
   tagType:     string
 }
 
-async function fetchViaProxy(rssUrl: string, name: string): Promise<NewsItem[]> {
+async function fetchDirect(rssUrl: string, name: string): Promise<NewsItem[]> {
   try {
-    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`
-    const res = await fetch(proxyUrl, {
-      next:   { revalidate: 900 },
-      signal: AbortSignal.timeout(10000),
+    const res = await fetch(rssUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; BhaavBrief/2.0; +https://bhaavbrief.in)' },
+      signal:  AbortSignal.timeout(10000),
+      next:    { revalidate: 300 },
     })
     if (!res.ok) return []
-    const data = await res.json()
-    if (data.status !== 'ok' || !Array.isArray(data.items)) return []
-
+    const text = await res.text()
     const items: NewsItem[] = []
-    for (const item of data.items) {
-      const rawTitle = stripSourceSuffix(stripHtml(item.title ?? ''))
-      if (rawTitle.length < 10) continue
-      if (!COMMODITY_KEYWORDS.test(rawTitle)) continue
 
-      const desc    = stripHtml(item.description ?? item.content ?? '').slice(0, 280)
-      const pubDate = item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString()
-      const link    = item.link ?? item.guid ?? ''
+    for (const m of text.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+      const block  = m[1]
+      const titleM = block.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)  || block.match(/<title>([^<]{5,})<\/title>/)
+      const linkM  = block.match(/<link>(https?:[^<]+)<\/link>/)            || block.match(/<guid[^>]*>(https?:[^<]+)<\/guid>/)
+      const descM  = block.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/) || block.match(/<description>([^<]{10,})<\/description>/)
+      const dateM  = block.match(/<pubDate>([^<]+)<\/pubDate>/)
+
+      if (!titleM || !linkM) continue
+
+      const rawTitle = stripSourceSuffix(stripHtml(titleM[1].trim()))
+      if (rawTitle.length < 10) continue
+      if (!COMMODITY_KEYWORDS.test(`${rawTitle} ${descM ? descM[1] : ''}`)) continue
+
+      const desc    = stripHtml(descM ? descM[1] : '').slice(0, 280)
+      const pubDate = dateM ? new Date(dateM[1].trim()).toISOString() : new Date().toISOString()
+      const link    = linkM[1].trim()
       const { category, tagType } = detectCategory(`${rawTitle} ${desc}`)
 
       items.push({ id: link, title: rawTitle, description: desc, link, pubDate, source: name, category, tagType })
@@ -104,7 +114,7 @@ function deduplicate(items: NewsItem[]): NewsItem[] {
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
 
 export async function GET() {
-  const batches = await Promise.all(RSS_SOURCES.map(s => fetchViaProxy(s.url, s.name)))
+  const batches = await Promise.all(RSS_SOURCES.map(s => fetchDirect(s.url, s.name)))
   const all     = batches.flat()
 
   const cutoff   = Date.now() - THIRTY_DAYS_MS
@@ -114,9 +124,9 @@ export async function GET() {
   const deduped = deduplicate(source)
   const sorted  = deduped
     .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-    .slice(0, 40)
+    .slice(0, 60)
 
   return NextResponse.json(sorted, {
-    headers: { 'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=1800' },
+    headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600' },
   })
 }

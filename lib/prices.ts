@@ -4,7 +4,7 @@
  * COMEX/reference price priority:
  *   1. Twelve Data  (XAU/USD, USD/INR) — free tier, 15-min cache
  *   2. Alpha Vantage (WTI, Brent, NatGas, Silver) — free tier, 6-hr cache, 25 calls/day
- *   3. Yahoo Finance — blocked on Vercel shared IPs, last resort
+ *   3. Stooq CSV — free, no API key, COMEX/NYMEX futures
  *   4. Frankfurter ECB — USD/INR floor, always works
  *
  * MCX price priority:
@@ -148,9 +148,47 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
 const fetchTwelveDataCached   = unstable_cache(fetchTwelveData,   ['td-prices'],    { revalidate: 900   })
 const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices-v2'], { revalidate: 21600 })
 
-// ── Yahoo Finance (last resort) ───────────────────────────────────────────────
+// ── Stooq (fallback — free CSV, no key, COMEX/NYMEX futures) ─────────────────
 
-async function fetchYahoo(): Promise<Record<string, any>> {
+async function fetchStooq(): Promise<Record<string, any>> {
+  // Symbol,Date,Time,Open,High,Low,Close,Volume — Close at index 6
+  const stooqMap: Record<string, string> = {
+    'GC=F': 'gc.f',    // COMEX Gold $/troy oz
+    'SI=F': 'si.f',    // COMEX Silver $/troy oz
+    'CL=F': 'cl.f',    // NYMEX WTI Crude $/bbl
+    'HG=F': 'hg.f',    // COMEX Copper ¢/lb
+    'NG=F': 'ng.f',    // Henry Hub Nat Gas $/mmBtu
+  }
+  const map: Record<string, any> = {}
+  await Promise.all(
+    Object.entries(stooqMap).map(async ([yfKey, sym]) => {
+      try {
+        const r = await fetch(
+          `https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`,
+          { signal: AbortSignal.timeout(8000), next: { revalidate: 300 } }
+        )
+        if (!r.ok) return
+        const lines = (await r.text()).trim().split('\n')
+        if (lines.length < 2) return
+        const cols  = lines[1].split(',')
+        const close = parseFloat(cols[6])
+        const open  = parseFloat(cols[3])
+        if (!isNaN(close) && close > 0) {
+          // SI (silver) is quoted in ¢/troy oz on CME/Stooq; HG (copper) in ¢/lb
+          // Normalize both to $/unit so deriveFromYahoo formulas stay consistent
+          const divisor = (yfKey === 'SI=F' || yfKey === 'HG=F') ? 100 : 1
+          map[yfKey] = {
+            regularMarketPrice:         close / divisor,
+            regularMarketChangePercent: open  > 0 ? ((close - open) / open) * 100 : 0,
+          }
+        }
+      } catch {}
+    })
+  )
+  return map
+}
+
+async function fetchComexPrices(): Promise<Record<string, any>> {
   const [td, av] = await Promise.allSettled([fetchTwelveDataCached(), fetchAlphaVantageCached()])
   const tdMap = td.status === 'fulfilled' && td.value ? td.value : {}
   const avMap = av.status === 'fulfilled' ? av.value : {}
@@ -158,29 +196,8 @@ async function fetchYahoo(): Promise<Record<string, any>> {
   const combined = { ...avMap, ...tdMap }  // TD wins on overlap
   if (Object.keys(combined).length > 0) return combined
 
-  // Fallback: Yahoo Finance chart API
-  const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
-  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-  const settled = await Promise.allSettled(
-    symbols.map(async (sym) => {
-      const r = await fetch(
-        `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d`,
-        { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(8000), next: { revalidate: 300 } }
-      )
-      if (!r.ok) throw new Error(`Yahoo ${sym}: ${r.status}`)
-      const d = await r.json()
-      const meta = d?.chart?.result?.[0]?.meta
-      if (!meta) throw new Error(`Yahoo ${sym}: no result`)
-      const price     = meta.regularMarketPrice ?? 0
-      const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price
-      return { symbol: sym, regularMarketPrice: price, regularMarketChangePercent: prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0 }
-    })
-  )
-  const map: Record<string, any> = {}
-  for (const r of settled) {
-    if (r.status === 'fulfilled') map[r.value.symbol] = r.value
-  }
-  return map
+  // Fallback: Stooq free CSV API
+  return fetchStooq()
 }
 
 async function fetchUsdInr(): Promise<number> {
@@ -257,7 +274,7 @@ export interface MCXData {
 }
 
 export interface PriceData {
-  source:     'kite+twelvedata' | 'twelvedata' | 'kite+yahoo' | 'yahoo'
+  source:     'kite+twelvedata' | 'twelvedata' | 'kite+stooq' | 'stooq'
   updatedAt:  string
   marketOpen: boolean
 
@@ -305,13 +322,13 @@ function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: n
 
 export async function getPrices(): Promise<PriceData | null> {
   try {
-    const [yahoo, kiteQuotes, usdinrFallback] = await Promise.all([
-      fetchYahoo(),
+    const [comex, kiteQuotes, usdinrFallback] = await Promise.all([
+      fetchComexPrices(),
       fetchKiteQuotes(),
       fetchUsdInr(),
     ])
 
-    const y = deriveFromYahoo(yahoo, usdinrFallback)
+    const y = deriveFromYahoo(comex, usdinrFallback)
 
     const utcMins = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
     const marketOpen = utcMins >= 210 && utcMins <= 1080  // 9 AM–11:30 PM IST
@@ -334,8 +351,8 @@ export async function getPrices(): Promise<PriceData | null> {
 
     return {
       source: usingKite
-        ? (usingTwelve ? 'kite+twelvedata' : 'kite+yahoo')
-        : (usingTwelve ? 'twelvedata'      : 'yahoo'),
+        ? (usingTwelve ? 'kite+twelvedata' : 'kite+stooq')
+        : (usingTwelve ? 'twelvedata'      : 'stooq'),
       updatedAt:  new Date().toISOString(),
       marketOpen,
 

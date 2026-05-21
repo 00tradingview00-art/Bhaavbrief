@@ -9,7 +9,7 @@
  * 
  * FLOW:
  *   1. Load state (last prices, last circulars seen)
- *   2. Fetch current prices (Yahoo Finance → MCX derived)
+ *   2. Fetch current prices (Stooq COMEX/NYMEX futures + Frankfurter → MCX derived)
  *   3. Detect moves vs last 15 min state
  *   4. Scrape govt agencies for new circulars
  *   5. Check EIA data (Wednesdays)
@@ -58,54 +58,83 @@ function saveState(state) {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8')
 }
 
-// ── 2. Price Fetching (Yahoo Finance → MCX derived) ───────────────────────────
+// ── 2. Price Fetching (Stooq COMEX/NYMEX futures + Frankfurter USD/INR) ────────
 async function fetchPrices() {
-  const tickers = ['GC=F', 'SI=F', 'CL=F', 'HG=F', 'NG=F', 'USDINR=X', 'BZ=F']
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`
-
+  // USD/INR via Frankfurter (free, no key)
+  let usdinr = 85.0
   try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
-      signal: AbortSignal.timeout(10000),
+    const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
+      signal: AbortSignal.timeout(6000),
     })
-    const data = await res.json()
-    const q = {}
-    for (const r of (data?.quoteResponse?.result ?? [])) {
-      q[r.symbol] = {
-        price: r.regularMarketPrice,
-        pct:   r.regularMarketChangePercent,
-        prev:  r.regularMarketPreviousClose,
-      }
-    }
+    if (r.ok) usdinr = (await r.json()).rates?.INR ?? usdinr
+  } catch {}
 
-    const usdinr    = q['USDINR=X']?.price ?? 96.0
-    const comexGold = q['GC=F']?.price ?? 0
-    const comexSilv = q['SI=F']?.price ?? 0
-    const wti       = q['CL=F']?.price ?? 0
-    const brent     = q['BZ=F']?.price ?? 0
-    const comexCu   = q['HG=F']?.price ?? 0
-    const henryHub  = q['NG=F']?.price ?? 0
+  // COMEX / NYMEX futures via Stooq CSV (free, no key)
+  // Format: Symbol,Date,Time,Open,High,Low,Close,Volume — Close is index 6
+  const stooqMap = {
+    'GC=F': 'gc.f',  // COMEX Gold $/troy oz
+    'SI=F': 'si.f',  // COMEX Silver $/troy oz
+    'CL=F': 'cl.f',  // NYMEX WTI Crude $/bbl
+    'HG=F': 'hg.f',  // COMEX Copper ¢/lb
+    'NG=F': 'ng.f',  // Henry Hub Nat Gas $/mmBtu
+    'BZ=F': 'lcod.uk', // Brent (ICE London)
+  }
 
-    return {
-      usdinr,
-      comexGold, comexSilver: comexSilv, wti, brent, comexCopper: comexCu, henryHub,
-      // MCX derived prices
-      mcxGold:   comexGold  > 0 ? (comexGold  / 31.1035) * 10   * usdinr * 1.15 : 0,
-      mcxSilver: comexSilv  > 0 ? (comexSilv  / 31.1035) * 1000 * usdinr * 1.10 : 0,
-      mcxCrude:  wti        > 0 ? wti         * usdinr  * 1.02 : 0,
-      mcxCopper: comexCu    > 0 ? comexCu     * 2.20462 * usdinr * 1.05 : 0,
-      mcxNatGas: henryHub   > 0 ? henryHub    * usdinr : 0,
-      // Change %
-      goldPct:   q['GC=F']?.pct  ?? 0,
-      silverPct: q['SI=F']?.pct  ?? 0,
-      crudePct:  q['CL=F']?.pct  ?? 0,
-      copperPct: q['HG=F']?.pct  ?? 0,
-      gasPct:    q['NG=F']?.pct  ?? 0,
-      usdPct:    q['USDINR=X']?.pct ?? 0,
-    }
-  } catch (err) {
-    console.error('❌ Price fetch failed:', err.message)
+  const q = {}
+  await Promise.all(
+    Object.entries(stooqMap).map(async ([yfKey, stooqSym]) => {
+      try {
+        const r = await fetch(
+          `https://stooq.com/q/l/?s=${stooqSym}&f=sd2t2ohlcv&h&e=csv`,
+          { signal: AbortSignal.timeout(6000) }
+        )
+        if (!r.ok) return
+        const lines = (await r.text()).trim().split('\n')
+        if (lines.length < 2) return
+        const cols  = lines[1].split(',')
+        const close = parseFloat(cols[6])
+        const open  = parseFloat(cols[3])
+        if (!isNaN(close) && close > 0) {
+          // SI (silver) is ¢/troy oz; HG (copper) is ¢/lb — normalize to $/unit
+          const div = (yfKey === 'SI=F' || yfKey === 'HG=F') ? 100 : 1
+          q[yfKey] = {
+            price: close / div,
+            pct:   open > 0 ? ((close - open) / open) * 100 : 0,
+            prev:  open / div,
+          }
+        }
+      } catch {}
+    })
+  )
+
+  if (Object.keys(q).length === 0) {
+    console.error('❌ Price fetch failed: no Stooq data returned')
     return null
+  }
+
+  const comexGold = q['GC=F']?.price ?? 0
+  const comexSilv = q['SI=F']?.price ?? 0
+  const wti       = q['CL=F']?.price ?? 0
+  const brent     = q['BZ=F']?.price ?? wti   // fallback to WTI if Brent unavailable
+  const comexCu   = q['HG=F']?.price ?? 0
+  const henryHub  = q['NG=F']?.price ?? 0
+
+  return {
+    usdinr,
+    comexGold, comexSilver: comexSilv, wti, brent, comexCopper: comexCu, henryHub,
+    // MCX derived prices
+    mcxGold:   comexGold  > 0 ? (comexGold  / 31.1035) * 10   * usdinr * 1.15 : 0,
+    mcxSilver: comexSilv  > 0 ? (comexSilv  / 31.1035) * 1000 * usdinr * 1.10 : 0,
+    mcxCrude:  wti        > 0 ? wti         * usdinr  * 1.02 : 0,
+    mcxCopper: comexCu    > 0 ? comexCu     * 2.20462 * usdinr * 1.05 : 0,
+    mcxNatGas: henryHub   > 0 ? henryHub    * usdinr : 0,
+    // Intraday % change (open → close for current session)
+    goldPct:   q['GC=F']?.pct  ?? 0,
+    silverPct: q['SI=F']?.pct  ?? 0,
+    crudePct:  q['CL=F']?.pct  ?? 0,
+    copperPct: q['HG=F']?.pct  ?? 0,
+    gasPct:    q['NG=F']?.pct  ?? 0,
+    usdPct:    0,
   }
 }
 
