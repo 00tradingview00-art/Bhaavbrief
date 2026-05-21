@@ -2,6 +2,7 @@ import { notFound }    from 'next/navigation'
 import { Metadata }    from 'next'
 import { MDXRemote }   from 'next-mdx-remote/rsc'
 import SubscribeForm   from '@/components/SubscribeForm'
+import CopyLinkButton  from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, formatDate } from '@/lib/briefs'
 
 export const revalidate = 3600
@@ -162,10 +163,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
             <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
               <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(brief.title)}&url=${encodeURIComponent(url)}&via=bhaavbrief`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#FAFAF6', background: '#18180F', padding: '6px 14px', textDecoration: 'none' }}>Share on X</a>
-                <a href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${brief.title} — ${url}`)}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#fff', background: '#25D366', padding: '6px 14px', textDecoration: 'none' }}>Share on WhatsApp</a>
-              </div>
+              <CopyLinkButton url={url} />
             </div>
 
             <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
