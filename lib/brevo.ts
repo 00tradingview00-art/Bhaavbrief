@@ -78,6 +78,7 @@ export function briefToHtml(brief: {
   date:     string
   content:  string
   edition:  number
+  slug:     string
 }): string {
   return `
 <!DOCTYPE html>
@@ -115,7 +116,7 @@ export function briefToHtml(brief: {
     .replace(/\n\n/g, '</p><p>')
     .replace(/^(?!<[hp])/gm, '<p>')
   }
-  <a class="cta" href="https://bhaavbrief.in/briefs/${brief.edition}">Read full edition on BhaavBrief →</a>
+  <a class="cta" href="https://bhaavbrief.in/briefs/${brief.slug}">Read full edition on BhaavBrief →</a>
   <div class="footer">
     © 2026 BhaavBrief · bhaavbrief.in · Not SEBI registered · For informational purposes only<br>
     <a href="{{{ unsubscribeUrl }}}" style="color:#8A8A7A">Unsubscribe</a>
