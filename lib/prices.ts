@@ -17,12 +17,33 @@ const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, cop
 
 async function fetchYahoo() {
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols.join(',')}`
+  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+  // Yahoo Finance requires a session cookie + crumb since 2023
+  const homeRes = await fetch('https://finance.yahoo.com/', {
+    headers: { 'User-Agent': UA, 'Accept': 'text/html' },
+    redirect: 'follow',
     signal: AbortSignal.timeout(10000),
-    next: { revalidate: 300 }, // 5-min server cache
+  })
+  // getSetCookie() (Node 18.14+) returns proper array; fall back to splitting the joined header
+  const rawCookies: string[] =
+    typeof (homeRes.headers as any).getSetCookie === 'function'
+      ? (homeRes.headers as any).getSetCookie()
+      : (homeRes.headers.get('set-cookie') ?? '').split(/,\s*(?=[A-Za-z_])/)
+  const cookieStr = rawCookies.map(c => c.split(';')[0]).join('; ')
+
+  const crumbRes = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', {
+    headers: { 'User-Agent': UA, 'Cookie': cookieStr },
+    signal: AbortSignal.timeout(10000),
+  })
+  if (!crumbRes.ok) throw new Error(`Yahoo crumb: ${crumbRes.status}`)
+  const crumb = (await crumbRes.text()).trim()
+
+  const url = `https://query1.finance.yahoo.com/v8/finance/quote?symbols=${symbols.join(',')}&crumb=${encodeURIComponent(crumb)}`
+  const res = await fetch(url, {
+    headers: { 'User-Agent': UA, 'Cookie': cookieStr },
+    signal: AbortSignal.timeout(10000),
+    next: { revalidate: 300 },
   })
   if (!res.ok) throw new Error(`Yahoo Finance: ${res.status}`)
 

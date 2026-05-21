@@ -17,7 +17,7 @@ function fmtNum(v: number, decimals = 2): string {
 
 export default async function RefPanel() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const p: Record<string, any> = await getPrices() as unknown as Record<string, any>
+  const p: Record<string, any> = (await getPrices() ?? {}) as Record<string, any>
 
   const globalRef = [
     { name: 'COMEX Gold',      value: fmtUsd(p.comexGold, 0) },
