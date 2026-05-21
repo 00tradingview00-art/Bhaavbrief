@@ -27,16 +27,30 @@ const dmMono = DM_Mono({
   display: 'swap',
 })
 
+const BASE = 'https://bhaavbrief.in'
+
 export const metadata: Metadata = {
-  title: 'BhaavBrief — Indian Commodity Intelligence',
-  description: 'MCX intelligence every weekday at 7 AM. Free forever. Gold, Silver, Crude, Copper, Natural Gas — all in 5 minutes.',
+  title: {
+    default:  'BhaavBrief — Indian Commodity Intelligence',
+    template: '%s | BhaavBrief',
+  },
+  description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
+  metadataBase: new URL(BASE),
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
+  alternates: { canonical: BASE },
   openGraph: {
-    title: 'BhaavBrief',
-    description: 'MCX intelligence every weekday at 7 AM. Free forever.',
-    url: 'https://bhaavbrief.in',
+    title: 'BhaavBrief — Indian Commodity Intelligence',
+    description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
+    url: BASE,
     siteName: 'BhaavBrief',
     locale: 'en_IN',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BhaavBrief — Indian Commodity Intelligence',
+    description: 'Free daily MCX intelligence — Gold, Silver, Crude Oil, Copper, Natural Gas. Every weekday.',
+    site: '@bhaavbrief',
   },
 }
 
@@ -44,9 +58,33 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let initialPrices: PriceData | null = null
   try { initialPrices = await getPrices() } catch { /* render with fallback */ }
 
+  const orgSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${BASE}/#organization`,
+        name: 'BhaavBrief',
+        url: BASE,
+        description: 'Independent commodity intelligence for Indian traders and merchants.',
+        contactPoint: { '@type': 'ContactPoint', email: 'brief@bhaavbrief.in', contactType: 'Customer Support' },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${BASE}/#website`,
+        url: BASE,
+        name: 'BhaavBrief',
+        description: 'Free daily MCX commodity intelligence for Indian traders.',
+        publisher: { '@id': `${BASE}/#organization` },
+        potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/briefs?q={search_term_string}` }, 'query-input': 'required name=search_term_string' },
+      },
+    ],
+  }
+
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Nav />
         <TickerStrip initialPrices={initialPrices} />
         <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>

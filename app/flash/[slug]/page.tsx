@@ -37,7 +37,7 @@ export async function generateMetadata(
       publishedTime: flash.date,
       authors: ['BhaavBrief'],
     },
-    twitter: { card: 'summary', title, description, site: '@bhaavbrief' },
+    twitter: { card: 'summary_large_image', title, description, site: '@bhaavbrief' },
   }
 }
 
@@ -62,18 +62,29 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
   const catStyle = CAT_STYLES[flash.category] ?? CAT_STYLES.macro
   const url      = `${BASE_URL}/flash/${flash.slug}`
 
-  const schema = {
-    '@context':    'https://schema.org',
-    '@type':       'NewsArticle',
-    headline:      flash.title,
-    datePublished: flash.date,
-    url,
-    author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL }],
-    publisher: {
-      '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL,
-      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` },
+  const schema = [
+    {
+      '@context':    'https://schema.org',
+      '@type':       'NewsArticle',
+      headline:      flash.title,
+      datePublished: flash.date,
+      url,
+      author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL }],
+      publisher: {
+        '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL,
+        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` },
+      },
     },
-  }
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',             item: BASE_URL },
+        { '@type': 'ListItem', position: 2, name: 'Intelligence Feed', item: `${BASE_URL}/news` },
+        { '@type': 'ListItem', position: 3, name: flash.title,         item: url },
+      ],
+    },
+  ]
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>

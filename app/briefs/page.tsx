@@ -3,8 +3,18 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'All Briefs — BhaavBrief',
-  description: 'Archive of all BhaavBrief commodity intelligence editions.',
+  title: 'All Briefs — MCX Daily Commodity Intelligence',
+  description: 'Browse all BhaavBrief daily MCX commodity intelligence editions. Weekday analysis of Gold, Silver, Crude Oil, Copper and Natural Gas — geopolitical lens, supply-demand, price outlook.',
+  alternates: { canonical: 'https://bhaavbrief.in/briefs' },
+  openGraph: {
+    title: 'All Briefs — MCX Daily Commodity Intelligence | BhaavBrief',
+    description: 'Browse all BhaavBrief daily MCX commodity intelligence editions. Weekday analysis covering Gold, Silver, Crude Oil, Copper and Natural Gas.',
+    url: 'https://bhaavbrief.in/briefs',
+    siteName: 'BhaavBrief',
+    type: 'website' as const,
+    locale: 'en_IN',
+  },
+  twitter: { card: 'summary' as const, title: 'All Briefs | BhaavBrief', description: 'Daily MCX commodity intelligence — Gold, Silver, Crude Oil, Copper, Natural Gas.', site: '@bhaavbrief' },
 }
 
 function getTagType(tag?: string): string {
@@ -27,7 +37,7 @@ export default async function BriefsPage() {
           All Briefs
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
-          {briefs.length} editions published · Every weekday at 7 AM IST
+          {briefs.length} editions published · Every weekday at 11 AM IST
         </p>
       </div>
 

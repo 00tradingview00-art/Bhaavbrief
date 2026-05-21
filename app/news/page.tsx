@@ -1,11 +1,21 @@
 import NewsFeed from '@/components/news/NewsFeed'
 
 export const metadata = {
-  title: 'Intelligence Feed — BhaavBrief',
-  description: 'Live commodity news curated from MCX, Reuters, Bloomberg, ET Markets. Updated every 15 minutes.',
+  title: 'MCX Intelligence Feed — Live Commodity News',
+  description: 'Real-time MCX commodity market intelligence curated from top financial sources. Gold, Silver, Crude Oil, Copper and Natural Gas news — updated every 15 minutes during market hours.',
+  alternates: { canonical: 'https://bhaavbrief.in/news' },
+  openGraph: {
+    title: 'MCX Intelligence Feed — Live Commodity News | BhaavBrief',
+    description: 'Real-time MCX commodity market intelligence. Gold, Silver, Crude Oil, Copper and Natural Gas news updated every 15 minutes.',
+    url: 'https://bhaavbrief.in/news',
+    siteName: 'BhaavBrief',
+    type: 'website' as const,
+    locale: 'en_IN',
+  },
+  twitter: { card: 'summary' as const, title: 'MCX Intelligence Feed | BhaavBrief', description: 'Real-time MCX commodity news — updated every 15 minutes.', site: '@bhaavbrief' },
 }
 
-export const revalidate = 900
+export const revalidate = 300
 
 export default function NewsPage() {
   return (
