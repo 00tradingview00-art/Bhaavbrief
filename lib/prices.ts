@@ -16,40 +16,34 @@ const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, cop
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
 async function fetchYahoo() {
+  // Use the chart endpoint — different path from the quote API, no crumb/cookie needed,
+  // and not subject to the same Vercel-IP rate-limits as query1/.../quote.
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
   const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
-  // Yahoo Finance requires a session cookie + crumb since 2023
-  const homeRes = await fetch('https://finance.yahoo.com/', {
-    headers: { 'User-Agent': UA, 'Accept': 'text/html' },
-    redirect: 'follow',
-    signal: AbortSignal.timeout(10000),
-  })
-  // getSetCookie() (Node 18.14+) returns proper array; fall back to splitting the joined header
-  const rawCookies: string[] =
-    typeof (homeRes.headers as any).getSetCookie === 'function'
-      ? (homeRes.headers as any).getSetCookie()
-      : (homeRes.headers.get('set-cookie') ?? '').split(/,\s*(?=[A-Za-z_])/)
-  const cookieStr = rawCookies.map(c => c.split(';')[0]).join('; ')
+  const settled = await Promise.allSettled(
+    symbols.map(async (sym) => {
+      const r = await fetch(
+        `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1d&range=2d&includePrePost=false`,
+        { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(8000), next: { revalidate: 300 } }
+      )
+      if (!r.ok) throw new Error(`Yahoo chart ${sym}: ${r.status}`)
+      const d = await r.json()
+      const meta = d?.chart?.result?.[0]?.meta
+      if (!meta) throw new Error(`Yahoo chart ${sym}: no result`)
+      const price    = meta.regularMarketPrice ?? 0
+      const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price
+      const pct      = prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0
+      return { symbol: sym, regularMarketPrice: price, regularMarketChangePercent: pct }
+    })
+  )
 
-  const crumbRes = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', {
-    headers: { 'User-Agent': UA, 'Cookie': cookieStr },
-    signal: AbortSignal.timeout(10000),
-  })
-  if (!crumbRes.ok) throw new Error(`Yahoo crumb: ${crumbRes.status}`)
-  const crumb = (await crumbRes.text()).trim()
-
-  const url = `https://query1.finance.yahoo.com/v8/finance/quote?symbols=${symbols.join(',')}&crumb=${encodeURIComponent(crumb)}`
-  const res = await fetch(url, {
-    headers: { 'User-Agent': UA, 'Cookie': cookieStr },
-    signal: AbortSignal.timeout(10000),
-    next: { revalidate: 300 },
-  })
-  if (!res.ok) throw new Error(`Yahoo Finance: ${res.status}`)
-
-  const data = await res.json()
   const map: Record<string, any> = {}
-  for (const r of (data?.quoteResponse?.result ?? [])) map[r.symbol] = r
+  for (const r of settled) {
+    if (r.status === 'fulfilled') map[r.value.symbol] = r.value
+    else console.warn(r.reason?.message)
+  }
+  if (Object.keys(map).length === 0) throw new Error('Yahoo Finance: all chart requests failed')
   return map
 }
 
