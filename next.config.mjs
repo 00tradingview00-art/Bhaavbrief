@@ -4,6 +4,12 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
+  async redirects() {
+    return [
+      { source: '/articles',       destination: '/news', permanent: true },
+      { source: '/articles/:slug', destination: '/news', permanent: true },
+    ]
+  },
 }
 
 export default nextConfig
