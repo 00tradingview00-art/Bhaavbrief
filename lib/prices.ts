@@ -20,14 +20,17 @@ const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, cop
 // Free tier: 800 credits/day, 8/min. Each symbol in a batch = 1 credit.
 // With 7 symbols and 15-min cache: 4 calls/hr × 7 = 28 credits/hr = 672/day — under limit.
 
+// Free plan covers: XAU/USD (Gold) and forex pairs (USD/INR).
+// Silver (XAG/USD), WTI/USD, BRENT, NG/USD all return "not available with your plan".
+// Copper has no valid Twelve Data symbol on any plan tested.
+// → Upgrade to Twelve Data paid plan to unlock Silver, Crude, Brent, NatGas.
 const TD_SYMBOL_MAP: Record<string, string> = {
-  'GC=F':     'XAU/USD',    // COMEX Gold
-  'SI=F':     'XAG/USD',    // COMEX Silver
-  'CL=F':     'WTI/USD',    // WTI Crude
-  'BZ=F':     'BRENT/USD',  // Brent Crude
-  'HG=F':     'COPPER/USD', // COMEX Copper
-  'NG=F':     'NG/USD',     // Henry Hub Natural Gas
-  'USDINR=X': 'USD/INR',    // USD/INR spot
+  'GC=F':     'XAU/USD',    // COMEX Gold      ✓ free
+  'USDINR=X': 'USD/INR',    // USD/INR spot    ✓ free
+  // 'SI=F':  'XAG/USD',    // Silver          ✗ paid plan only
+  // 'CL=F':  'WTI/USD',    // WTI Crude       ✗ paid plan only
+  // 'BZ=F':  'BRENT/USD',  // Brent Crude     ✗ paid plan only
+  // 'NG=F':  'NG/USD',     // Natural Gas     ✗ paid plan only
 }
 
 async function fetchTwelveData(): Promise<Record<string, any> | null> {
