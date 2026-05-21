@@ -21,7 +21,6 @@ const ROWS: PriceRow[] = [
   { commodity: 'WTI Crude',   exchange: 'NYMEX', priceKey: 'crude.wti',      pctKey: 'crude.wtiChangePct',   formatPrice: v => `$${v.toFixed(2)}` },
   { commodity: 'Brent Crude', exchange: 'NYMEX', priceKey: 'crude.brent',    pctKey: 'crude.brentChangePct', formatPrice: v => `$${v.toFixed(2)}` },
   { commodity: 'Copper',      exchange: 'MCX',   priceKey: 'copper.mcx',     pctKey: 'copper.mcxChangePct',  formatPrice: v => `₹${v.toFixed(2)}` },
-  { commodity: 'Copper',      exchange: 'LME',   priceKey: 'copper.lme',     pctKey: 'copper.lmeChangePct',  formatPrice: v => `$${v.toLocaleString('en-US')}` },
   { commodity: 'Nat Gas',     exchange: 'MCX',   priceKey: 'natgas.mcx',     pctKey: 'natgas.mcxChangePct',  formatPrice: v => `₹${v.toFixed(2)}` },
   { commodity: 'Aluminium',   exchange: 'LME',   priceKey: 'aluminium.lme',  pctKey: 'aluminium.lmeChangePct',formatPrice: v => `$${v.toLocaleString('en-US')}` },
 ]

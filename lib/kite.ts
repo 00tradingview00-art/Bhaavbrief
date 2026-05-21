@@ -212,9 +212,6 @@ export class KiteClient {
   }
 }
 
-// ── Load cached instrument tokens ─────────────────────────────────────────────
-export function loadCachedTokens() { return null }
-
 // ── Kite login URL helper ─────────────────────────────────────────────────────
 export function getLoginUrl(apiKey: string): string {
   return `https://kite.trade/connect/login?api_key=${apiKey}&v=3`

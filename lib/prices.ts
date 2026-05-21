@@ -15,8 +15,22 @@
 
 import { unstable_cache } from 'next/cache'
 import { KiteClient, type KiteQuote } from './kite'
+import fs from 'fs'
+import path from 'path'
 
 const FALLBACK_TOKENS = { gold: 117574919, goldMini: 125882119, silver: 118822407, crude: 127768327, copper: 130682887, natgas: 125057287 }
+
+function loadInstrumentTokens() {
+  try {
+    const file = path.join(process.cwd(), 'data/kite-instruments.json')
+    if (!fs.existsSync(file)) return FALLBACK_TOKENS
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'))
+    if (data.gold > 0 && data.silver > 0 && data.crude > 0) return data
+    return FALLBACK_TOKENS
+  } catch {
+    return FALLBACK_TOKENS
+  }
+}
 
 // ── Twelve Data ───────────────────────────────────────────────────────────────
 // Free tier: 800 credits/day, 8/min. Each symbol in a batch = 1 credit.
@@ -236,25 +250,11 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
 
   if (!apiKey || !accessToken) return null
 
-  // Use hardcoded fallback tokens for front-month MCX contracts
-  let tokens: typeof FALLBACK_TOKENS | null = FALLBACK_TOKENS
-
-  if (!tokens) {
-    // Try to discover tokens live if cache is missing
-    try {
-      const client = new KiteClient(apiKey, accessToken)
-      tokens = await client.discoverAndCacheTokens()
-    } catch (err) {
-      console.warn('Kite instrument discovery failed:', (err as Error).message)
-      return null
-    }
-  }
+  const tokens = loadInstrumentTokens()
 
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const instrumentList = [
-      tokens.gold, tokens.silver, tokens.crude, tokens.copper, tokens.natgas,
-    ]
+    const instrumentList = [tokens.gold, tokens.silver, tokens.crude, tokens.copper, tokens.natgas]
     return await client.getQuotes(instrumentList)
   } catch (err) {
     console.warn('Kite quote fetch failed:', (err as Error).message)
@@ -323,13 +323,13 @@ export async function getPrices(): Promise<PriceData | null> {
       ) ?? null
     }
 
-    const tokens = FALLBACK_TOKENS
+    const tokens = loadInstrumentTokens()
 
-    const goldQ   = tokens ? kiteByToken(tokens.gold)   : null
-    const silverQ = tokens ? kiteByToken(tokens.silver) : null
-    const crudeQ  = tokens ? kiteByToken(tokens.crude)  : null
-    const copperQ = tokens ? kiteByToken(tokens.copper) : null
-    const natgasQ = tokens ? kiteByToken(tokens.natgas) : null
+    const goldQ   = kiteByToken(tokens.gold)
+    const silverQ = kiteByToken(tokens.silver)
+    const crudeQ  = kiteByToken(tokens.crude)
+    const copperQ = kiteByToken(tokens.copper)
+    const natgasQ = kiteByToken(tokens.natgas)
 
     const usingKite    = !!(kiteQuotes && goldQ)
     const usingTwelve  = !!process.env.TWELVE_DATA_API_KEY

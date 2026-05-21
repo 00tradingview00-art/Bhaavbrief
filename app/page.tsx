@@ -1,6 +1,7 @@
 import { getAllBriefs } from '@/lib/briefs'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
+import SubscribeForm from '@/components/SubscribeForm'
 
 export default async function HomePage() {
   const briefs = await getAllBriefs()
@@ -178,73 +179,6 @@ export default async function HomePage() {
         </div>
       </div>
     </div>
-  )
-}
-
-function SubscribeForm() {
-  return (
-    <form action="https://app.brevo.com/..." method="POST" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter your email address"
-        required
-        style={{
-          width: '100%',
-          border: '1px solid var(--border-2)',
-          borderRadius: 6,
-          padding: '8px 12px',
-          fontSize: 13,
-          fontFamily: 'var(--font-sans)',
-          background: 'var(--surface-2)',
-          color: 'var(--ink)',
-          boxSizing: 'border-box',
-        }}
-      />
-      <button
-        type="submit"
-        style={{
-          width: '100%',
-          background: 'var(--ink)',
-          color: '#fff',
-          border: 'none',
-          padding: '10px',
-          borderRadius: 6,
-          fontSize: 13,
-          fontWeight: 500,
-          cursor: 'pointer',
-          fontFamily: 'var(--font-sans)',
-        }}
-      >
-        Subscribe free →
-      </button>
-      <a
-        href="https://wa.me/..."
-        style={{
-          width: '100%',
-          background: '#25D366',
-          color: '#fff',
-          border: 'none',
-          padding: '10px',
-          borderRadius: 6,
-          fontSize: 13,
-          fontWeight: 500,
-          cursor: 'pointer',
-          fontFamily: 'var(--font-sans)',
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 8,
-          boxSizing: 'border-box',
-        }}
-      >
-        📱 Get alerts on WhatsApp
-      </a>
-      <p style={{ fontSize: 11, color: 'var(--ink-4)', textAlign: 'center', margin: 0 }}>
-        No spam · Unsubscribe anytime
-      </p>
-    </form>
   )
 }
 

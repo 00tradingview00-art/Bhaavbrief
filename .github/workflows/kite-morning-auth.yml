@@ -34,22 +34,7 @@ jobs:
         env:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: |
-          node -e "
-          import('@/lib/kite.js').then(async ({ KiteClient }) => {
-            const apiKey = process.env.KITE_API_KEY;
-            const token  = process.env.KITE_ACCESS_TOKEN;
-            if (!apiKey || !token) { console.log('No Kite credentials — skip'); process.exit(0); }
-            const client = new KiteClient(apiKey, token);
-            try {
-              await client.discoverAndCacheTokens();
-              console.log('Instruments updated');
-            } catch(e) {
-              console.warn('Token may be expired:', e.message);
-              // Not a fatal error — Yahoo Finance fallback will be used
-            }
-          })
-          " || echo "Instrument discovery skipped"
+        run: node scripts/discover-instruments.mjs || echo "Instrument discovery skipped"
 
       - name: Commit updated instruments if changed
         run: |

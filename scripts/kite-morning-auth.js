@@ -188,7 +188,7 @@ setTimeout(() => {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-async function updateGitHubSecret(token: string): Promise<boolean> {
+async function updateGitHubSecret(token) {
   if (!GITHUB_PAT) return false
   try {
     const pkRes = await fetch(
@@ -226,7 +226,7 @@ async function updateGitHubSecret(token: string): Promise<boolean> {
   }
 }
 
-async function updateVercelEnv(token: string): Promise<boolean> {
+async function updateVercelEnv(token) {
   if (!VERCEL_TOKEN || !VERCEL_PROJECT_ID) return false
   try {
     const listRes = await fetch(
@@ -234,7 +234,7 @@ async function updateVercelEnv(token: string): Promise<boolean> {
       { headers: { Authorization: `Bearer ${VERCEL_TOKEN}` } }
     )
     const { envs } = await listRes.json()
-    const existing = envs?.find((e: any) => e.key === 'KITE_ACCESS_TOKEN')
+    const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN')
 
     if (existing) {
       await fetch(
@@ -262,7 +262,7 @@ async function updateVercelEnv(token: string): Promise<boolean> {
   }
 }
 
-async function discoverInstruments(accessToken: string): Promise<boolean> {
+async function discoverInstruments(accessToken) {
   try {
     const res = await fetch(`https://api.kite.trade/instruments/MCX`, {
       headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${accessToken}` },
@@ -273,7 +273,7 @@ async function discoverInstruments(accessToken: string): Promise<boolean> {
     const csv   = await res.text()
     const lines = csv.split('\n').filter(Boolean)
     const header= lines[0].split(',')
-    const idx   = (col: string) => header.indexOf(col)
+    const idx   = col => header.indexOf(col)
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -289,7 +289,7 @@ async function discoverInstruments(accessToken: string): Promise<boolean> {
       }
     }).filter(i => i.token > 0 && i.type === 'FUT' && i.expiry)
 
-    function frontMonth(name: string) {
+    function frontMonth(name) {
       const futures = instruments.filter(i =>
         i.name.toUpperCase() === name.toUpperCase() &&
         new Date(i.expiry) >= today
