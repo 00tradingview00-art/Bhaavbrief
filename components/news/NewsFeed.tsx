@@ -16,14 +16,12 @@ const FILTER_KEYWORDS: Record<string, string[]> = {
 }
 
 interface NewsItem {
-  id:          string
-  title:       string
-  description: string
-  link:        string
-  pubDate:     string
-  source:      string
-  category:    string
-  tagType:     string
+  id:       string
+  title:    string
+  summary:  string
+  category: string
+  tagType:  string
+  pubDate:  string
 }
 
 function relativeTime(iso: string): string {
@@ -37,7 +35,7 @@ function relativeTime(iso: string): string {
 
 function matchesFilter(item: NewsItem, filter: string): boolean {
   if (filter === 'All') return true
-  const text = `${item.title} ${item.description} ${item.category}`.toLowerCase()
+  const text = `${item.title} ${item.summary} ${item.category}`.toLowerCase()
   return (FILTER_KEYWORDS[filter] ?? [filter.toLowerCase()]).some(k => text.includes(k))
 }
 
@@ -83,7 +81,7 @@ export default function NewsFeed() {
 
   useEffect(() => {
     fetchNews()
-    const id = setInterval(fetchNews, 15 * 60 * 1000)
+    const id = setInterval(fetchNews, 5 * 60 * 1000)
     return () => clearInterval(id)
   }, [fetchNews])
 
@@ -123,35 +121,30 @@ export default function NewsFeed() {
       {/* Error state */}
       {!loading && error && (
         <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '24px 0' }}>
-          Unable to load headlines — retrying in 15 min
+          Unable to load intelligence feed — retrying in 5 min
         </p>
       )}
 
       {/* Empty state */}
       {!loading && !error && filtered.length === 0 && (
         <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '32px 0' }}>
-          No headlines in this category right now.
+          No intelligence in this category right now. Check back shortly.
         </p>
       )}
 
       {/* News items */}
       {!loading && !error && paginated.map(item => (
-        <a
+        <div
           key={item.id}
-          href={item.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: 'block', padding: '20px 0', borderBottom: '1px solid var(--border)', textDecoration: 'none' }}
+          style={{ padding: '20px 0', borderBottom: '1px solid var(--border)' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 9 }}>
             <Tag type={item.tagType}>{item.category}</Tag>
             <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{relativeTime(item.pubDate)}</span>
-            {item.source && (
-              <>
-                <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>·</span>
-                <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{item.source}</span>
-              </>
-            )}
+            <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>·</span>
+            <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-mono)', letterSpacing: '0.03em' }}>
+              BhaavBrief Intelligence
+            </span>
           </div>
           <h2 style={{
             fontFamily: 'var(--font-serif)',
@@ -159,16 +152,16 @@ export default function NewsFeed() {
             fontWeight: 500,
             lineHeight: 1.4,
             color: 'var(--ink)',
-            margin: '0 0 7px',
+            margin: '0 0 9px',
           }}>
             {item.title}
           </h2>
-          {item.description && (
-            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
-              {item.description}
+          {item.summary && (
+            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.7, margin: 0 }}>
+              {item.summary}
             </p>
           )}
-        </a>
+        </div>
       ))}
 
       {/* Pagination */}

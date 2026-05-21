@@ -30,15 +30,22 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
-      - name: Commit and push new articles
+      - name: Generate AI news feed
+        id: news
+        run: node scripts/generate-news.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Commit and push
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "bot@bhaavbrief.in"
-          git add content/flash/ scripts/seen-articles.json
+          git add content/flash/ scripts/seen-articles.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
-            echo "No new flash articles"
+            echo "Nothing new to commit"
             exit 0
           fi
-          COUNT=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
-          git commit -m "flash: ${COUNT} new intelligence $(date -u '+%H:%M UTC')"
+          FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
+          NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
+          git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           git push
