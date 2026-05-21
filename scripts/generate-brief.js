@@ -1,6 +1,17 @@
 import Anthropic from '@anthropic-ai/sdk'
 import * as fs from 'fs'
 import * as path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const envFile = path.join(__dirname, '../.env.local')
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
+    const [k, ...v] = line.split('=')
+    if (k && !k.startsWith('#') && v.length && !process.env[k.trim()])
+      process.env[k.trim()] = v.join('=').trim()
+  }
+}
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const EDITION = parseInt(process.env.EDITION ?? '1', 10)
