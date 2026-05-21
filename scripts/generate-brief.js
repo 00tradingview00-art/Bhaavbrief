@@ -7,41 +7,35 @@ const EDITION = parseInt(process.env.EDITION ?? '1', 10)
 const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
 
 async function fetchPrices() {
-  const tickers = ['GC=F','SI=F','CL=F','HG=F','NG=F','USDINR=X']
-  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${tickers.join(',')}`
   try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
-      signal: AbortSignal.timeout(10000),
+    const res = await fetch('https://www.bhaavbrief.in/api/prices', {
+      signal: AbortSignal.timeout(15000),
     })
-    const data = await res.json()
-    const q = {}
-    for (const r of (data?.quoteResponse?.result ?? [])) {
-      q[r.symbol] = { price: r.regularMarketPrice, pct: r.regularMarketChangePercent }
-    }
-    const usdinr = q['USDINR=X']?.price ?? 96.0
-    const gold = q['GC=F']?.price ?? 0
-    const silver = q['SI=F']?.price ?? 0
-    const wti = q['CL=F']?.price ?? 0
-    const copper = q['HG=F']?.price ?? 0
-    const gas = q['NG=F']?.price ?? 0
+    if (!res.ok) throw new Error(`API ${res.status}`)
+    const d = await res.json()
+    if (!d || d.error) throw new Error(d?.error ?? 'empty response')
+
+    const fmt = (n, dec=0) => n > 0 ? n.toFixed(dec) : null
+    const pct  = (n) => n != null ? n.toFixed(2) : '0.00'
+
     return {
-      usdinr: usdinr.toFixed(2),
-      comexGold: gold.toFixed(0),
-      mcxGold: gold > 0 ? ((gold/31.1035)*10*usdinr*1.15).toFixed(0) : null,
-      comexSilver: silver.toFixed(2),
-      mcxSilver: silver > 0 ? ((silver/31.1035)*1000*usdinr*1.10).toFixed(0) : null,
-      wti: wti.toFixed(2),
-      mcxCrude: wti > 0 ? (wti*usdinr*1.02).toFixed(0) : null,
-      comexCopper: copper.toFixed(2),
-      mcxCopper: copper > 0 ? (copper*2.20462*usdinr*1.05).toFixed(2) : null,
-      henryHub: gas.toFixed(2),
-      mcxGas: gas > 0 ? (gas*usdinr).toFixed(2) : null,
-      goldPct: (q['GC=F']?.pct ?? 0).toFixed(2),
-      silverPct: (q['SI=F']?.pct ?? 0).toFixed(2),
-      crudePct: (q['CL=F']?.pct ?? 0).toFixed(2),
-      copperPct: (q['HG=F']?.pct ?? 0).toFixed(2),
-      gasPct: (q['NG=F']?.pct ?? 0).toFixed(2),
+      usdinr:      d.usdinr?.toFixed(2) ?? '96.00',
+      comexGold:   fmt(d.comexGold),
+      mcxGold:     fmt(d.gold?.mcx),
+      comexSilver: fmt(d.comexSilver, 2),
+      mcxSilver:   fmt(d.silver?.mcx),
+      wti:         fmt(d.wti, 2),
+      brent:       fmt(d.brent, 2),
+      mcxCrude:    fmt(d.crude?.mcx),
+      comexCopper: fmt(d.comexCopper, 2),
+      mcxCopper:   fmt(d.copper?.mcx, 2),
+      henryHub:    fmt(d.henryHub, 2),
+      mcxGas:      fmt(d.natgas?.mcx, 2),
+      goldPct:     pct(d.goldComexPct),
+      silverPct:   pct(d.silverComexPct),
+      crudePct:    pct(d.crudePct),
+      copperPct:   pct(d.copperComexPct),
+      gasPct:      pct(d.gasPct),
     }
   } catch(e) {
     console.warn('Price fetch failed:', e.message)
@@ -78,13 +72,13 @@ async function generate(prices, news) {
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' })
   const priceBlock = prices ? `
-PRICES:
-- USD/INR: ₹${prices.usdinr}
-- COMEX Gold: $${prices.comexGold}/oz (${prices.goldPct}%) → MCX: ₹${prices.mcxGold ?? 'N/A'}/10g
-- COMEX Silver: $${prices.comexSilver}/oz (${prices.silverPct}%) → MCX: ₹${prices.mcxSilver ?? 'N/A'}/kg
-- WTI Crude: $${prices.wti}/bbl (${prices.crudePct}%) → MCX: ₹${prices.mcxCrude ?? 'N/A'}/bbl
-- COMEX Copper: $${prices.comexCopper}/lb (${prices.copperPct}%) → MCX: ₹${prices.mcxCopper ?? 'N/A'}/kg
-- Henry Hub Gas: $${prices.henryHub}/mmBtu (${prices.gasPct}%) → MCX: ₹${prices.mcxGas ?? 'N/A'}/mmBtu` : 'PRICES: Unavailable — analyse on recent trends.'
+LIVE MCX PRICES (use these exact numbers — do not substitute your own):
+- MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   (COMEX $${prices.comexGold}/oz, ${prices.goldPct}% today)
+- MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  (COMEX $${prices.comexSilver}/oz, ${prices.silverPct}% today)
+- MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  (WTI $${prices.wti}, Brent $${prices.brent ?? 'N/A'}, ${prices.crudePct}% today)
+- MCX Copper: ₹${prices.mcxCopper ?? 'N/A'}/kg  (COMEX $${prices.comexCopper}/lb, ${prices.copperPct}% today)
+- MCX NatGas: ₹${prices.mcxGas ?? 'N/A'}/mmBtu  (Henry Hub $${prices.henryHub}, ${prices.gasPct}% today)
+- USD/INR: ₹${prices.usdinr}` : 'PRICES: Unavailable — use your most recent knowledge but clearly state prices are estimates.'
   const newsBlock = news.length > 0 ? `NEWS:\n${news.map((h,i)=>`${i+1}. ${h}`).join('\n')}` : 'NEWS: None fetched — focus on price action and macro.'
 
   const prompt = `You are BhaavBrief's lead analyst. Write Edition #${EDITION} for ${dateStr}.
@@ -94,8 +88,9 @@ ${priceBlock}
 ${newsBlock}
 
 RULES:
+- Use ONLY the MCX prices provided above. Never substitute or invent price levels.
+- Support/resistance levels must be derived from the actual prices given (e.g. if MCX Gold is ₹1,59,000, supports are near that, not ₹92,000).
 - Sharp, confident, specific. Every sentence adds value.
-- Give exact MCX support/resistance levels to watch.
 - Explain the WHY behind each move.
 - 400-600 words. No fluff.
 - End with "Edge of the Day:" — one line, the single most important thing.
