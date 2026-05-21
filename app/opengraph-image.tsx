@@ -11,13 +11,13 @@ export default async function OGImage() {
 
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', background: C.bg, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      <div style={{ width: '100%', height: '100%', background: C.bg, display: 'flex', flexDirection: 'column' }}>
 
         {/* Gold top bar */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 6, background: C.gold }} />
+        <div style={{ width: '100%', height: 6, background: C.gold, flexShrink: 0 }} />
 
         {/* Main area */}
-        <div style={{ display: 'flex', flexDirection: 'column', padding: '72px 88px 0', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', padding: '66px 88px 0', flex: 1 }}>
 
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'baseline', marginBottom: 64 }}>

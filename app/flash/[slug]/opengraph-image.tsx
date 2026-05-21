@@ -19,10 +19,10 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
   const title = truncate(flash.title, 90)
 
   const CAT: Record<string, { bg: string; color: string; label: string }> = {
-    energy:  { bg: '#2A1F00', color: '#D4A830', label: '⚡ ENERGY'  },
-    metals:  { bg: '#0A2015', color: '#5AAA70', label: '⬡ METALS'  },
-    forex:   { bg: '#1A1528', color: '#9B7FE8', label: '₹ FOREX'   },
-    macro:   { bg: '#1A1A14', color: '#7A7668', label: '◎ MACRO'   },
+    energy:  { bg: '#2A1F00', color: '#D4A830', label: 'ENERGY'  },
+    metals:  { bg: '#0A2015', color: '#5AAA70', label: 'METALS'  },
+    forex:   { bg: '#1A1528', color: '#9B7FE8', label: 'FOREX'   },
+    macro:   { bg: '#1A1A14', color: '#7A7668', label: 'MACRO'   },
   }
   const cat = CAT[flash.category] ?? CAT.macro
 
@@ -35,13 +35,13 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
 
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', background: C.bg, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      <div style={{ width: '100%', height: '100%', background: C.bg, display: 'flex', flexDirection: 'column' }}>
 
         {/* Colour accent bar based on category */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 6, background: cat.color }} />
+        <div style={{ width: '100%', height: 6, background: cat.color, flexShrink: 0 }} />
 
         {/* Main */}
-        <div style={{ display: 'flex', flexDirection: 'column', padding: '64px 88px 0', flex: 1 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', padding: '58px 88px 0', flex: 1 }}>
 
           {/* Category + Flash badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36 }}>
