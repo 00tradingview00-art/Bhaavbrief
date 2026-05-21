@@ -65,7 +65,7 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
             Start your morning with an edge
           </div>
           <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
-            Join India's sharpest commodity traders. MCX intelligence every weekday at 7 AM. Free forever.
+            Join India's sharpest commodity traders. MCX intelligence every weekday at 11 AM. Free forever.
           </p>
         </>
       )}
@@ -86,20 +86,6 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
       <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.04em', color: '#8A8A7A', textAlign: 'center', marginTop: 8 }}>
         No spam · Unsubscribe anytime
       </p>
-      <hr style={{ border: 'none', borderTop: '0.5px solid #DDDDD0', margin: '1rem 0' }} />
-      <a
-        href="https://wa.me/message/YOUR_WHATSAPP_LINK"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-          background: '#25D366', color: '#fff', fontFamily: 'IBM Plex Mono, monospace',
-          fontSize: 11, letterSpacing: '0.04em', padding: 10, textDecoration: 'none',
-          width: '100%',
-        }}
-      >
-        📲 Get alerts on WhatsApp instead
-      </a>
     </form>
   )
 }
