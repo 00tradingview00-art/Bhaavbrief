@@ -59,8 +59,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <p style={{ fontSize: 13, color: 'var(--ink-4)', marginBottom: 4 }}>
             Independent commodity intelligence for Indian traders and merchants.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--ink-4)' }}>
+          <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in
+          </p>
+          <p style={{
+            fontSize: 11,
+            color: 'var(--ink-4)',
+            lineHeight: 1.7,
+            maxWidth: 640,
+            margin: '0 auto',
+            padding: '14px 20px',
+            borderTop: '1px solid var(--border)',
+            borderRadius: 0,
+          }}>
+            <strong style={{ color: 'var(--ink-3)' }}>Disclaimer:</strong> BhaavBrief is for educational and informational purposes only.
+            We are not registered with SEBI or any other regulatory authority.
+            Nothing on this website constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity.
+            Commodity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor before making any financial decisions.
           </p>
         </footer>
       </body>

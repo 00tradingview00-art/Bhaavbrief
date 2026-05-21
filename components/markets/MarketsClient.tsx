@@ -393,8 +393,8 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
 
           {/* Data note */}
           <div style={{ fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, padding: '10px 12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8 }}>
-            <strong style={{ color: 'var(--ink-3)' }}>OHLC · Volume · OI</strong> — live from Kite Connect.<br />
-            <strong style={{ color: 'var(--ink-3)' }}>COMEX · WTI · USD/INR</strong> — Twelve Data + Alpha Vantage.<br />
+            MCX prices: live during market hours, refreshed every 30s.<br />
+            Global reference rates: 15-min delayed.<br />
             MCX hours: 9 AM – 11:30 PM IST.
           </div>
         </div>
