@@ -47,7 +47,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
               fontSize: 11, fontWeight: 700, color: C.gold, background: C.goldPale,
               padding: '5px 12px', borderRadius: 3, fontFamily: 'sans-serif', letterSpacing: 1.5,
             }}>
-              EDITION #{String(brief.edition).padStart(3, '0')}
+              {`EDITION #${String(brief.edition).padStart(3, '0')}`}
             </div>
             {brief.tags?.[0] && (
               <div style={{
