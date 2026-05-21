@@ -98,7 +98,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Independent commodity intelligence for Indian traders and merchants.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
-            © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in
+            © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in ·{' '}
+            <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>
           </p>
           <p style={{
             fontSize: 11,
