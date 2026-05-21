@@ -1,24 +1,76 @@
 /**
  * lib/prices.ts
  * Server-side price fetcher used by API routes and server components.
- * 
- * Priority:
- *   1. Kite Connect (real MCX prices, live)    ← if KITE_ACCESS_TOKEN set
- *   2. Yahoo Finance (COMEX derived, 15-min delay) ← always fetched for global reference
- * 
- * Returns unified shape used by all components.
+ *
+ * Priority for COMEX reference prices:
+ *   1. Twelve Data (TWELVE_DATA_API_KEY set) — free tier, works from Vercel IPs
+ *   2. Yahoo Finance chart API               — fallback, blocked on Vercel shared IPs
+ *   3. Frankfurter ECB API                   — USD/INR only, always works
+ *
+ * Priority for MCX prices:
+ *   1. Kite Connect (KITE_ACCESS_TOKEN set)  — live MCX quotes
+ *   2. Derived from COMEX prices via formula — fallback
  */
 
 import { KiteClient, type KiteQuote } from './kite'
 
 const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, copper: 52728327, natgas: 57960199 }
 
+// ── Twelve Data ───────────────────────────────────────────────────────────────
+// Free tier: 800 credits/day, 8/min. Each symbol in a batch = 1 credit.
+// With 7 symbols and 15-min cache: 4 calls/hr × 7 = 28 credits/hr = 672/day — under limit.
+
+const TD_SYMBOL_MAP: Record<string, string> = {
+  'GC=F':     'XAU/USD',    // COMEX Gold
+  'SI=F':     'XAG/USD',    // COMEX Silver
+  'CL=F':     'WTI/USD',    // WTI Crude
+  'BZ=F':     'BRENT/USD',  // Brent Crude
+  'HG=F':     'COPPER/USD', // COMEX Copper
+  'NG=F':     'NG/USD',     // Henry Hub Natural Gas
+  'USDINR=X': 'USD/INR',    // USD/INR spot
+}
+
+async function fetchTwelveData(): Promise<Record<string, any> | null> {
+  const apiKey = process.env.TWELVE_DATA_API_KEY
+  if (!apiKey) return null
+
+  const tdSymbols = Object.values(TD_SYMBOL_MAP).join(',')
+  const url = `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(tdSymbols)}&apikey=${apiKey}`
+
+  const res = await fetch(url, {
+    signal: AbortSignal.timeout(10000),
+    next: { revalidate: 900 }, // 15-min cache to stay within 800 credits/day free tier
+  })
+  if (!res.ok) throw new Error(`Twelve Data: ${res.status}`)
+
+  const data = await res.json()
+
+  // When multiple symbols are requested the response is keyed by TD symbol.
+  // Map back to Yahoo-style keys so deriveFromYahoo works unchanged.
+  const map: Record<string, any> = {}
+  for (const [yahooSym, tdSym] of Object.entries(TD_SYMBOL_MAP)) {
+    const q = data[tdSym]
+    if (!q || q.status === 'error') continue
+    map[yahooSym] = {
+      regularMarketPrice:         parseFloat(q.close ?? q.price ?? '0'),
+      regularMarketChangePercent: parseFloat(q.percent_change ?? '0'),
+    }
+  }
+  return Object.keys(map).length > 0 ? map : null
+}
+
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
 async function fetchYahoo(): Promise<Record<string, any>> {
-  // Yahoo Finance blocks Vercel's shared IP range on all endpoints (quote + chart).
-  // We attempt the chart API (no crumb/cookie needed) and return whatever succeeds.
-  // An empty map is a valid return — callers must handle missing keys gracefully.
+  // 1. Try Twelve Data (requires TWELVE_DATA_API_KEY — works from Vercel IPs)
+  try {
+    const td = await fetchTwelveData()
+    if (td) return td
+  } catch (e) {
+    console.warn('Twelve Data failed:', (e as Error).message)
+  }
+
+  // 2. Fall back to Yahoo Finance chart API (blocked on Vercel shared IPs, but try anyway)
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
   const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
@@ -44,7 +96,7 @@ async function fetchYahoo(): Promise<Record<string, any>> {
     if (r.status === 'fulfilled') map[r.value.symbol] = r.value
     else console.warn('fetchYahoo:', r.reason?.message)
   }
-  return map  // may be empty — that's OK
+  return map  // may be empty — Frankfurter covers USD/INR as a floor
 }
 
 // Frankfurter is a free, open-source ECB rates API — no key, no rate-limit, works from any cloud IP
@@ -130,7 +182,7 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
 // ── Unified price shape ───────────────────────────────────────────────────────
 
 export interface PriceData {
-  source: 'kite+yahoo' | 'yahoo'
+  source: 'kite+twelvedata' | 'twelvedata' | 'kite+yahoo' | 'yahoo'
   updatedAt: string
   marketOpen: boolean
 
@@ -196,10 +248,13 @@ export async function getPrices(): Promise<PriceData | null> {
     const copperQ = tokens ? kiteByToken(tokens.copper) : null
     const natgasQ = tokens ? kiteByToken(tokens.natgas) : null
 
-    const usingKite = !!(kiteQuotes && goldQ)
+    const usingKite    = !!(kiteQuotes && goldQ)
+    const usingTwelve  = !!process.env.TWELVE_DATA_API_KEY
 
     return {
-      source:    usingKite ? 'kite+yahoo' : 'yahoo',
+      source: usingKite
+        ? (usingTwelve ? 'kite+twelvedata' : 'kite+yahoo')
+        : (usingTwelve ? 'twelvedata'      : 'yahoo'),
       updatedAt: new Date().toISOString(),
       marketOpen,
 
