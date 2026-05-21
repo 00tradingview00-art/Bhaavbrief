@@ -15,9 +15,10 @@ const FALLBACK_TOKENS = { gold: 57359623, silver: 58368263, crude: 59513095, cop
 
 // ── Yahoo Finance ─────────────────────────────────────────────────────────────
 
-async function fetchYahoo() {
-  // Use the chart endpoint — different path from the quote API, no crumb/cookie needed,
-  // and not subject to the same Vercel-IP rate-limits as query1/.../quote.
+async function fetchYahoo(): Promise<Record<string, any>> {
+  // Yahoo Finance blocks Vercel's shared IP range on all endpoints (quote + chart).
+  // We attempt the chart API (no crumb/cookie needed) and return whatever succeeds.
+  // An empty map is a valid return — callers must handle missing keys gracefully.
   const symbols = ['GC=F','SI=F','CL=F','BZ=F','HG=F','NG=F','USDINR=X']
   const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 
@@ -31,9 +32,9 @@ async function fetchYahoo() {
       const d = await r.json()
       const meta = d?.chart?.result?.[0]?.meta
       if (!meta) throw new Error(`Yahoo chart ${sym}: no result`)
-      const price    = meta.regularMarketPrice ?? 0
+      const price     = meta.regularMarketPrice ?? 0
       const prevClose = meta.previousClose ?? meta.chartPreviousClose ?? price
-      const pct      = prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0
+      const pct       = prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0
       return { symbol: sym, regularMarketPrice: price, regularMarketChangePercent: pct }
     })
   )
@@ -41,16 +42,30 @@ async function fetchYahoo() {
   const map: Record<string, any> = {}
   for (const r of settled) {
     if (r.status === 'fulfilled') map[r.value.symbol] = r.value
-    else console.warn(r.reason?.message)
+    else console.warn('fetchYahoo:', r.reason?.message)
   }
-  if (Object.keys(map).length === 0) throw new Error('Yahoo Finance: all chart requests failed')
-  return map
+  return map  // may be empty — that's OK
+}
+
+// Frankfurter is a free, open-source ECB rates API — no key, no rate-limit, works from any cloud IP
+async function fetchUsdInr(): Promise<number> {
+  try {
+    const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
+      signal: AbortSignal.timeout(5000),
+      next: { revalidate: 300 },
+    })
+    if (!r.ok) return 0
+    const d = await r.json()
+    return d?.rates?.INR ?? 0
+  } catch {
+    return 0
+  }
 }
 
 // ── MCX derivation from COMEX ─────────────────────────────────────────────────
 
-function deriveFromYahoo(yahoo: Record<string, any>) {
-  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? 96.0
+function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
+  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? (usdinrFallback || 96.0)
   const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
   const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
   const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0
@@ -150,12 +165,13 @@ export interface PriceData {
 
 export async function getPrices(): Promise<PriceData | null> {
   try {
-    const [yahoo, kiteQuotes] = await Promise.all([
+    const [yahoo, kiteQuotes, usdinrFallback] = await Promise.all([
       fetchYahoo(),
       fetchKiteQuotes(),
+      fetchUsdInr(),
     ])
 
-    const y = deriveFromYahoo(yahoo)
+    const y = deriveFromYahoo(yahoo, usdinrFallback)
 
     // Is MCX currently open? 9:00 AM – 11:30 PM IST = 03:30–18:00 UTC
     const nowUTC  = new Date()
