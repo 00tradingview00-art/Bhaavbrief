@@ -125,9 +125,12 @@ async function main() {
   const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
   console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
   console.log(`News: ${news.length} headlines`)
-  const mdx = await generate(prices, news)
-  if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
-    console.error('Invalid MDX generated')
+  let mdx = await generate(prices, news)
+  if (!mdx) { console.error('No output from model'); process.exit(1) }
+  // Strip markdown code fence wrapper the model sometimes adds
+  mdx = mdx.trim().replace(/^```(?:mdx)?\n?/, '').replace(/\n?```\s*$/, '').trim()
+  if (!mdx.includes('---') || !mdx.includes('title:')) {
+    console.error('Invalid MDX generated:\n', mdx.slice(0, 200))
     process.exit(1)
   }
   if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })

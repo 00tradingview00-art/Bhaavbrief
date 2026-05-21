@@ -62,16 +62,9 @@ export default async function BriefsPage() {
               {brief.title}
             </h2>
             {brief.description && (
-              <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: '0 0 10px' }}>
+              <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
                 {brief.description}
               </p>
-            )}
-            {brief.tags && brief.tags.length > 0 && (
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                {brief.tags.map((tag: string) => (
-                  <Tag key={tag} type={getTagType(tag)}>{tag}</Tag>
-                ))}
-              </div>
             )}
           </Link>
         ))

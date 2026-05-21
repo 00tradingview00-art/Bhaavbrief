@@ -32,7 +32,7 @@ jobs:
       - name: Get next edition number
         id: edition
         run: |
-          LAST=$(ls content/briefs/ | grep -oP '\d+' | sort -n | tail -1)
+          LAST=$(ls content/briefs/ | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
           NEXT=$((${LAST:-0} + 1))
           echo "number=$NEXT" >> $GITHUB_OUTPUT
 
