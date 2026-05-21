@@ -1,27 +1,15 @@
 // Shared helpers for OG image generation
+import { readFile } from 'fs/promises'
+import path from 'path'
 
 export const OG_SIZE = { width: 1200, height: 630 }
 
-// Always resolves — falls back to Inter if Playfair fails
+// Loads Inter Bold TTF from the bundled public/fonts file.
+// Satori requires TTF/OTF — woff/woff2 are not supported.
 export async function loadFont(): Promise<{ data: ArrayBuffer; name: string }> {
-  const CANDIDATES = [
-    { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap', name: 'Playfair' },
-    { url: 'https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap',     name: 'Merriweather' },
-    { url: 'https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap',            name: 'Inter' },
-  ]
-  const URL_RE = /url\(['"]?(https:\/\/fonts\.gstatic\.com[^'")\s]+\.woff2)['"]?\)/
-  const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-
-  for (const { url, name } of CANDIDATES) {
-    try {
-      const css     = await fetch(url, { headers: { 'User-Agent': UA } }).then(r => r.text())
-      const fontUrl = URL_RE.exec(css)?.[1]
-      if (!fontUrl) continue
-      const data = await fetch(fontUrl).then(r => r.arrayBuffer())
-      return { data, name }
-    } catch { continue }
-  }
-  throw new Error('All font sources failed')
+  const ttfPath = path.join(process.cwd(), 'public', 'fonts', 'Inter-Bold.ttf')
+  const data = await readFile(ttfPath)
+  return { data: data.buffer as ArrayBuffer, name: 'Inter' }
 }
 
 // Legacy alias kept for compatibility
