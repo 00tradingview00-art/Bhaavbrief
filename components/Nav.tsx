@@ -44,8 +44,8 @@ export default function Nav() {
           </span>
         </Link>
 
-        {/* Nav links */}
-        <div style={{ display: 'flex', gap: 2, flex: 1 }}>
+        {/* Nav links — scrollable on mobile */}
+        <div className="nav-links">
           {NAV_LINKS.map(({ href, label }) => {
             const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
             return (
@@ -62,6 +62,7 @@ export default function Nav() {
                   textDecoration: 'none',
                   transition: 'all .15s',
                   whiteSpace: 'nowrap',
+                  flexShrink: 0,
                 }}
               >
                 {label}
@@ -70,9 +71,10 @@ export default function Nav() {
           })}
         </div>
 
-        {/* CTA */}
+        {/* CTA — hidden on mobile */}
         <Link
           href="/#subscribe"
+          className="nav-subscribe"
           style={{
             marginLeft: 'auto',
             background: 'var(--ink)',
@@ -84,6 +86,7 @@ export default function Nav() {
             textDecoration: 'none',
             flexShrink: 0,
             whiteSpace: 'nowrap',
+            alignItems: 'center',
           }}
         >
           Subscribe free →

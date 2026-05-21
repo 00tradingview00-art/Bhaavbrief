@@ -41,16 +41,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
   ]
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: 1,
-      background: 'var(--border)',
-      border: '1px solid var(--border)',
-      borderRadius: 8,
-      overflow: 'hidden',
-      marginBottom: 40,
-    }}>
+    <div className="market-snap">
       {items.map((item) => {
         const up = item.pct >= 0
         return (
@@ -128,7 +119,7 @@ export default async function HomePage() {
           background: 'var(--surface)',
           border: '1px solid var(--border)',
           borderRadius: 10,
-          padding: '32px 36px',
+          padding: 'clamp(20px, 4vw, 32px) clamp(18px, 4vw, 36px)',
           marginBottom: 40,
           position: 'relative',
           overflow: 'hidden',
@@ -166,7 +157,7 @@ export default async function HomePage() {
           </div>
 
           {/* Title + description: two-col on desktop */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 40, alignItems: 'start' }}>
+          <div className="home-hero-inner">
             <div>
               <h1 style={{
                 fontFamily: 'var(--font-serif)',
@@ -224,8 +215,8 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Edition watermark */}
-            <div style={{
+            {/* Edition watermark — desktop only */}
+            <div className="home-watermark" style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 80,
               fontWeight: 600,
@@ -242,12 +233,7 @@ export default async function HomePage() {
       )}
 
       {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 320px',
-        gap: 36,
-        alignItems: 'start',
-      }}>
+      <div className="home-body">
 
         {/* LEFT ─ market snap + previous briefs */}
         <div>
@@ -351,7 +337,7 @@ export default async function HomePage() {
         </div>
 
         {/* RIGHT ─ sticky sidebar */}
-        <div style={{ position: 'sticky', top: 80 }}>
+        <div className="home-sidebar">
 
           {/* Subscribe card */}
           <div id="subscribe" style={{
