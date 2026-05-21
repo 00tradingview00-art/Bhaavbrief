@@ -92,7 +92,7 @@ function mdxToHtml(content, title, edition, date) {
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
     © 2026 BhaavBrief · bhaavbrief.in<br>
     Not SEBI registered. For informational and educational purposes only.<br>
-    <a href="{{{ unsubscribeUrl }}}" style="color:#8A8A7A">Unsubscribe</a>
+    <a href="{{ unsubscribeUrl }}" style="color:#8A8A7A">Unsubscribe</a>
   </div>
 </div>
 </body></html>`
