@@ -33,7 +33,7 @@ jobs:
         id: edition
         run: |
           LAST=$(ls content/briefs/ | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
-          NEXT=$((${LAST:-0} + 1))
+          NEXT=$(( 10#${LAST:-0} + 1 ))
           echo "number=$NEXT" >> $GITHUB_OUTPUT
 
       - name: Generate brief MDX
