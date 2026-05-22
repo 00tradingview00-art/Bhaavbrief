@@ -177,7 +177,10 @@ function loadInstruments() {
 async function fetchKitePrices(instruments) {
   const KITE_API_KEY    = process.env.KITE_API_KEY
   const KITE_ACCESS_TOKEN = process.env.KITE_ACCESS_TOKEN
-  if (!KITE_API_KEY || !KITE_ACCESS_TOKEN) return null
+  if (!KITE_API_KEY || !KITE_ACCESS_TOKEN) {
+    console.warn('  Kite: API key or token not set')
+    return null
+  }
 
   const keys = ['gold', 'silver', 'crude', 'copper', 'natgas']
   const qs   = keys
@@ -201,9 +204,8 @@ async function fetchKitePrices(instruments) {
     const p = { source: 'kite' }
     for (const key of keys) {
       const sym = instruments[key]?.symbol
-      if (sym && data[`MCX:${sym}`]?.last_price) {
-        p[key] = data[`MCX:${sym}`].last_price
-      }
+      const ltp = data[`MCX:${sym}`]?.last_price
+      if (sym && ltp != null) p[key] = ltp   // accept 0 (pre-open) — still valid last price
     }
     return p
   } catch (e) {
@@ -242,7 +244,7 @@ async function fetchLivePrices() {
   const instruments = loadInstruments()
   if (instruments) {
     const kite = await fetchKitePrices(instruments)
-    if (kite && (kite.gold || kite.silver || kite.crude)) {
+    if (kite && (kite.gold != null || kite.silver != null || kite.crude != null)) {
       // Attach USD/INR from Frankfurter even when using Kite (Kite is INR already)
       try {
         const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
