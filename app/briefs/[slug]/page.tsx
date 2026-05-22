@@ -115,9 +115,9 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
         ].map((crumb, i, arr) => (
           <span key={crumb.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {crumb.href ? (
-              <a href={crumb.href} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
+              <a href={crumb.href} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
             ) : (
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
             )}
             {i < arr.length - 1 && <span style={{ color: '#C8C8B8', fontSize: 10 }}>›</span>}
           </span>
@@ -129,14 +129,14 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
           <article itemScope itemType="https://schema.org/NewsArticle">
             <header style={{ paddingBottom: '1.5rem', marginBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '3px 8px', border: `0.5px solid ${tagStyle.borderColor}`, background: tagStyle.background as string, color: tagStyle.color as string }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '3px 8px', border: `0.5px solid ${tagStyle.borderColor}`, background: tagStyle.background as string, color: tagStyle.color as string }}>
                   {brief.tags?.[0] ?? 'Brief'}
                 </span>
-                <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
+                <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
                   {formatDate(brief.date)}
                 </time>
               </div>
-              <h1 itemProp="headline" style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
+              <h1 itemProp="headline" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
                 {brief.title}
               </h1>
               {brief.summary && (
@@ -147,7 +147,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               {brief.commodities?.length > 0 && (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: '0.75rem' }}>
                   {brief.commodities.map(c => (
-                    <span key={c} itemProp="keywords" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }}>{c}</span>
+                    <span key={c} itemProp="keywords" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }}>{c}</span>
                   ))}
                 </div>
               )}
@@ -162,12 +162,12 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             </div>
 
             <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
               <CopyLinkButton url={url} />
             </div>
 
             <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
-              <a href="/briefs" style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← All editions</a>
+              <a href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← All editions</a>
             </div>
           </article>
         </main>
@@ -177,7 +177,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             <SubscribeForm />
           </div>
           <div style={{ background: '#18180F', padding: '1.25rem', color: '#FAFAF6' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Not SEBI registered</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Not SEBI registered</div>
             <p style={{ fontSize: 11, color: 'rgba(250,250,246,0.55)', lineHeight: 1.6, fontWeight: 300, margin: 0 }}>BhaavBrief is for informational and educational purposes only. This is not investment advice. Always conduct your own research before making any trading or investment decisions.</p>
           </div>
         </aside>

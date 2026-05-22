@@ -77,13 +77,13 @@ function getCrossAssets(item: NewsItem): string[] {
 
 function ImpactBadge({ impact }: { impact?: string }) {
   if (!impact || impact === 'neutral') return (
-    <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.02em' }}>◆ Neutral</span>
+    <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', letterSpacing: '0.02em' }}>◆ Neutral</span>
   )
   if (impact === 'bullish') return (
-    <span style={{ fontSize: 11, color: '#1E6630', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, letterSpacing: '0.02em' }}>▲ Bullish</span>
+    <span style={{ fontSize: 11, color: '#1E6630', fontFamily: 'var(--font-mono)', fontWeight: 600, letterSpacing: '0.02em' }}>▲ Bullish</span>
   )
   return (
-    <span style={{ fontSize: 11, color: '#991818', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, letterSpacing: '0.02em' }}>▼ Bearish</span>
+    <span style={{ fontSize: 11, color: '#991818', fontFamily: 'var(--font-mono)', fontWeight: 600, letterSpacing: '0.02em' }}>▼ Bearish</span>
   )
 }
 
@@ -155,16 +155,16 @@ export default function NewsFeed() {
           padding: '10px 14px', background: '#F3F2EC', border: '0.5px solid #DDDDD0',
           marginBottom: 20,
         }}>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginRight: 4 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginRight: 4 }}>
             Coverage
           </span>
           {catCounts.map(c => (
-            <span key={c.label} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#48483A' }}>
+            <span key={c.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#48483A' }}>
               {c.label} <strong style={{ color: '#18180F' }}>{c.count}</strong>
             </span>
           ))}
           {lastFetched && (
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', marginLeft: 'auto' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', marginLeft: 'auto' }}>
               updated {relativeTime(lastFetched.toISOString())}
             </span>
           )}
@@ -182,7 +182,7 @@ export default function NewsFeed() {
               borderRadius: 2,
               fontSize: 11,
               fontWeight: 500,
-              fontFamily: 'IBM Plex Mono, monospace',
+              fontFamily: 'var(--font-mono)',
               letterSpacing: '0.04em',
               border: activeFilter === f ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
               background: activeFilter === f ? '#18180F' : '#FAFAF6',
@@ -201,14 +201,14 @@ export default function NewsFeed() {
 
       {/* Error state */}
       {!loading && error && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
           Intelligence feed offline — retrying in 5 min
         </p>
       )}
 
       {/* Empty state */}
       {!loading && !error && filtered.length === 0 && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, color: '#8A8A7A', padding: '32px 0', letterSpacing: '0.04em' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '32px 0', letterSpacing: '0.04em' }}>
           No intelligence in this category right now — check back shortly.
         </p>
       )}
@@ -231,7 +231,7 @@ export default function NewsFeed() {
                   borderBottom: '0.5px solid #DDDDD0',
                 }}>
                   <span style={{
-                    fontFamily: 'IBM Plex Mono, monospace',
+                    fontFamily: 'var(--font-mono)',
                     fontSize: 10,
                     fontWeight: 600,
                     letterSpacing: '0.08em',
@@ -240,7 +240,7 @@ export default function NewsFeed() {
                   }}>
                     {dateDividerLabel(dateKey)}
                   </span>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                     {dateKey}
                   </span>
                 </div>
@@ -255,19 +255,19 @@ export default function NewsFeed() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
               <Tag type={item.tagType}>{item.category}</Tag>
               <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'IBM Plex Mono, monospace' }}>
+              <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
                 {item.pubDateIST
                   ? item.pubDateIST.split(', ')[1]   // show "09:15" (IST time only)
                   : relativeTime(item.pubDate)}
               </span>
-              <span style={{ fontSize: 11, color: '#C8C8B8', fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: 11, color: '#C8C8B8', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 BhaavBrief Intelligence
               </span>
             </div>
 
             {/* Headline */}
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: 'var(--font-serif)',
               fontSize: 18,
               fontWeight: 700,
               lineHeight: 1.35,
@@ -281,9 +281,9 @@ export default function NewsFeed() {
             {/* Body */}
             {item.summary && (
               <p style={{
-                fontSize: 13,
+                fontSize: 14,
                 color: '#48483A',
-                lineHeight: 1.75,
+                lineHeight: 1.8,
                 margin: '0 0 14px',
                 fontWeight: 300,
               }}>
@@ -294,12 +294,12 @@ export default function NewsFeed() {
             {/* Cross-asset tags */}
             {crossAssets.length > 0 && (
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
                   Touches
                 </span>
                 {crossAssets.map(a => (
                   <span key={a} style={{
-                    fontFamily: 'IBM Plex Mono, monospace',
+                    fontFamily: 'var(--font-mono)',
                     fontSize: 9,
                     letterSpacing: '0.06em',
                     padding: '2px 7px',
@@ -325,7 +325,7 @@ export default function NewsFeed() {
             onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             disabled={page === 1}
             style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
+              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
               padding: '8px 16px', border: '0.5px solid #DDDDD0',
               background: page === 1 ? 'transparent' : '#18180F',
               color: page === 1 ? '#C8C8B8' : '#FAFAF6',
@@ -341,7 +341,7 @@ export default function NewsFeed() {
                 key={p}
                 onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                 style={{
-                  fontFamily: 'IBM Plex Mono, monospace', fontSize: 11,
+                  fontFamily: 'var(--font-mono)', fontSize: 11,
                   width: 30, height: 30, border: '0.5px solid #DDDDD0',
                   background: page === p ? '#18180F' : 'transparent',
                   color: page === p ? '#FAFAF6' : '#8A8A7A',
@@ -357,7 +357,7 @@ export default function NewsFeed() {
             onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             disabled={page === totalPages}
             style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
+              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
               padding: '8px 16px', border: '0.5px solid #DDDDD0',
               background: page === totalPages ? 'transparent' : '#18180F',
               color: page === totalPages ? '#C8C8B8' : '#FAFAF6',
@@ -371,7 +371,7 @@ export default function NewsFeed() {
 
       {/* Item count */}
       {!loading && !error && filtered.length > 0 && (
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
           {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} intelligence items`}
         </div>
       )}

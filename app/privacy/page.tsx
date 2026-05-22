@@ -14,7 +14,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   return (
     <section style={{ marginBottom: '2rem' }}>
       <h2 style={{
-        fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', fontWeight: 700,
+        fontFamily: 'var(--font-serif)', fontSize: '1.1rem', fontWeight: 700,
         marginBottom: '0.75rem', paddingBottom: '0.4rem',
         borderBottom: '0.5px solid #DDDDD0', color: '#18180F',
       }}>
@@ -34,18 +34,18 @@ export default function PrivacyPage() {
 
         <div style={{ marginBottom: '2.5rem' }}>
           <span style={{
-            fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em',
+            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
             textTransform: 'uppercase', color: '#C8720A',
           }}>
             Legal
           </span>
           <h1 style={{
-            fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.6rem, 3vw, 2rem)',
+            fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 3vw, 2rem)',
             fontWeight: 800, letterSpacing: '-0.02em', marginTop: '0.4rem', marginBottom: '0.5rem',
           }}>
             Privacy Policy
           </h1>
-          <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
             Last updated: {LAST_UPDATED}
           </p>
         </div>
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
 
         <div style={{
           marginTop: '3rem', padding: '1rem 1.25rem', background: '#F3F2EC',
-          border: '0.5px solid #DDDDD0', fontFamily: 'IBM Plex Mono, monospace',
+          border: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)',
           fontSize: 10, color: '#8A8A7A', lineHeight: 1.7,
         }}>
           BhaavBrief is for informational and educational purposes only. Nothing on this site
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
 
         <div style={{ marginTop: '2rem' }}>
           <a href="/" style={{
-            fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
+            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
             color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1,
           }}>
             ← Back to home

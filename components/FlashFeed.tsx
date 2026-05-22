@@ -40,19 +40,19 @@ export default function FlashFeed({ items }: { items: FlashMeta[] }) {
             style={{ display: 'block', textDecoration: 'none', color: 'inherit', padding: '0.875rem 0', borderBottom: '0.5px solid #DDDDD0' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: '0.35rem', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 7px', border: `0.5px solid ${cat.border}`, background: cat.bg, color: cat.color, flexShrink: 0 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 7px', border: `0.5px solid ${cat.border}`, background: cat.bg, color: cat.color, flexShrink: 0 }}>
                 {item.category}
               </span>
               {live && (
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 7px', background: '#C8720A', color: '#FAFAF6', flexShrink: 0 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 7px', background: '#C8720A', color: '#FAFAF6', flexShrink: 0 }}>
                   LIVE
                 </span>
               )}
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                 {timeAgo(item.date)}
               </span>
             </div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '0.9rem', fontWeight: 600, lineHeight: 1.35, color: '#18180F' }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.9rem', fontWeight: 600, lineHeight: 1.35, color: '#18180F' }}>
               {item.title}
             </div>
           </a>

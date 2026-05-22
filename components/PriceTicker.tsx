@@ -37,7 +37,7 @@ export default function PriceTicker() {
     <div style={{ background: '#18180F', borderBottom: '2.5px solid #C8720A', display: 'flex', overflow: 'hidden' }}>
       <div style={{
         background: '#C8720A', color: '#FAFAF6',
-        fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, fontWeight: 500,
+        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 500,
         letterSpacing: '0.1em', textTransform: 'uppercase',
         padding: '0 14px', display: 'flex', alignItems: 'center', flexShrink: 0,
       }}>
@@ -54,9 +54,9 @@ export default function PriceTicker() {
               padding: '8px 18px', borderRight: '0.5px solid rgba(255,255,255,0.07)',
               flexShrink: 0,
             }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em', color: 'rgba(250,250,246,0.38)' }}>{item.name}</span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, fontWeight: 500, color: 'rgba(250,250,246,0.9)' }}>{item.price}</span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: item.up ? '#72D18A' : '#E88888' }}>{item.pct}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', color: 'rgba(250,250,246,0.38)' }}>{item.name}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: 'rgba(250,250,246,0.9)' }}>{item.price}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: item.up ? '#72D18A' : '#E88888' }}>{item.pct}</span>
             </div>
           ))}
         </div>

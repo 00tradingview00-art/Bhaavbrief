@@ -46,7 +46,7 @@ const BTN: React.CSSProperties = {
   alignItems:     'center',
   justifyContent: 'center',
   gap:            5,
-  fontFamily:     'IBM Plex Mono, monospace',
+  fontFamily:     'var(--font-mono)',
   fontSize:       10,
   letterSpacing:  '0.04em',
   padding:        '6px 12px',
@@ -66,7 +66,7 @@ export default function CopyLinkButton({ url }: { url: string }) {
   }
 
   const feedback = copied ? (
-    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.04em', color: '#5AAA70' }}>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#5AAA70' }}>
       Link copied!
     </span>
   ) : null

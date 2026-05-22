@@ -22,19 +22,19 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
       }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.5rem' }}>
           <span style={{
-            fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em',
+            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em',
             textTransform: 'uppercase', padding: '3px 8px', border: '0.5px solid',
             flexShrink: 0, marginTop: 2, ...tagStyle,
           }}>
             {brief.tags?.[0] ?? 'Brief'}
           </span>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.05em', color: '#8A8A7A' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.05em', color: '#8A8A7A' }}>
             {formatDate(brief.date)}
           </span>
         </div>
 
         <h2 style={{
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: featured ? '1.4rem' : '1rem',
           fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.01em',
           color: '#18180F', marginBottom: '0.4rem',
@@ -51,7 +51,7 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
         <div style={{ marginTop: '0.5rem', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {brief.commodities?.map(c => (
             <span key={c} style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A',
+              fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A',
               background: '#F3F2EC', padding: '2px 8px',
             }}>
               {c}

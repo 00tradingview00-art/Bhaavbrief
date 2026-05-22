@@ -139,7 +139,7 @@ function formatPrice(instrument: Instrument, prices: { nse: Record<string, Price
 
 function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹' | '$' }) {
   if (!data) return (
-    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, color: '#C8C8B8' }}>—</span>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8C8B8' }}>—</span>
   )
   const chg    = data.changePct ?? 0
   const isUp   = chg >= 0
@@ -147,10 +147,10 @@ function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹
   const prefix = chg === 0 ? '' : isUp ? '+' : ''
   return (
     <div style={{ textAlign: 'right' }}>
-      <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 13, fontWeight: 600, color: '#18180F' }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: '#18180F' }}>
         {currency}{data.price.toLocaleString('en-IN', { maximumFractionDigits: currency === '$' ? 2 : 0 })}
       </div>
-      <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color, marginTop: 1 }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color, marginTop: 1 }}>
         {prefix}{chg.toFixed(2)}%
       </div>
     </div>
@@ -176,7 +176,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       {/* Top row: type badge + price */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
         <span style={{
-          fontFamily: 'IBM Plex Mono, monospace',
+          fontFamily: 'var(--font-mono)',
           fontSize: 9, letterSpacing: '0.08em',
           padding: '2px 7px',
           background: typeColor.bg, color: typeColor.color,
@@ -193,18 +193,18 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       </div>
 
       {/* Ticker + exchange */}
-      <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', marginBottom: 10 }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginBottom: 10 }}>
         {item.ticker} · {item.exchange}
       </div>
 
       {/* Underlying */}
-      <div style={{ fontSize: 11, color: '#48483A', lineHeight: 1.5, marginBottom: 10, fontWeight: 300 }}>
+      <div style={{ fontSize: 13, color: '#48483A', lineHeight: 1.6, marginBottom: 10, fontWeight: 300 }}>
         {item.underlying}
       </div>
 
       {/* Note if any */}
       {item.note && (
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#C8720A', marginBottom: 10, letterSpacing: '0.04em' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', marginBottom: 10, letterSpacing: '0.04em' }}>
           ✦ {item.note}
         </div>
       )}
@@ -213,12 +213,12 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       <div style={{ borderTop: '0.5px solid #DDDDD0', paddingTop: 10, marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 6 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {item.expenseRatio && (
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
               TER {item.expenseRatio}
             </span>
           )}
           {item.aum && (
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
               AUM {item.aum}
             </span>
           )}
@@ -228,15 +228,15 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
           <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {item.commodity.slice(0, 3).map(c => (
               <span key={c} style={{
-                fontFamily: 'IBM Plex Mono, monospace', fontSize: 8,
-                padding: '1px 5px', background: '#F3F2EC', color: '#48483A',
+                fontFamily: 'var(--font-mono)', fontSize: 10,
+                padding: '2px 6px', background: '#F3F2EC', color: '#48483A',
                 border: '0.5px solid #DDDDD0',
               }}>
                 {c.toUpperCase()}
               </span>
             ))}
           </div>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', marginTop: 4 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginTop: 4 }}>
             {item.platform}
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function InvestPage() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: 24, paddingBottom: 20, borderBottom: '0.5px solid #DDDDD0' }}>
-        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#18180F', margin: '0 0 8px' }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#18180F', margin: '0 0 8px' }}>
           Invest in Commodities
         </h1>
         <p style={{ fontSize: 13, color: '#48483A', margin: '0 0 14px', fontWeight: 300, lineHeight: 1.6, maxWidth: 560 }}>
@@ -294,17 +294,17 @@ export default function InvestPage() {
         {/* Price status */}
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           {loadingPrices ? (
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A' }}>Loading prices...</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>Loading prices...</span>
           ) : (
             <>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {nseCount > 0 ? `● NSE live (${nseCount})` : '○ NSE offline'}
               </span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {globalCount > 0 ? `● Global live (${globalCount})` : '○ Global offline'}
               </span>
               {priceTime && (
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#C8C8B8' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#C8C8B8' }}>
                   as of {priceTime}
                 </span>
               )}
@@ -316,7 +316,7 @@ export default function InvestPage() {
       {/* RBI LRS note for global */}
       {(activeTab === 'global-etf' || activeTab === 'global-stocks') && (
         <div style={{ background: '#F3F2EC', border: '0.5px solid #DDDDD0', padding: '10px 14px', marginBottom: 20, fontSize: 12, color: '#48483A', lineHeight: 1.6 }}>
-          <strong style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.06em' }}>RBI LRS:</strong> Global instruments accessible via Vested Finance or INDmoney under the Liberalised Remittance Scheme (USD 250,000/year limit). Subject to TCS on remittance above ₹7L/year.
+          <strong style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.06em' }}>RBI LRS:</strong> Global instruments accessible via Vested Finance or INDmoney under the Liberalised Remittance Scheme (USD 250,000/year limit). Subject to TCS on remittance above ₹7L/year.
         </div>
       )}
 
@@ -330,7 +330,7 @@ export default function InvestPage() {
               key={c}
               onClick={() => setCommodityFilter(c)}
               style={{
-                fontFamily: 'IBM Plex Mono, monospace', fontSize: 9,
+                fontFamily: 'var(--font-mono)', fontSize: 9,
                 letterSpacing: '0.06em', textTransform: 'uppercase',
                 padding: '4px 10px',
                 border: commodityFilter === c ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
@@ -352,7 +352,7 @@ export default function InvestPage() {
             key={id}
             onClick={() => { setActiveTab(id); setCommodityFilter('All') }}
             style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: 10,
+              fontFamily: 'var(--font-mono)', fontSize: 10,
               letterSpacing: '0.06em', textTransform: 'uppercase',
               padding: '10px 16px', whiteSpace: 'nowrap',
               border: 'none', background: 'none',
@@ -374,12 +374,12 @@ export default function InvestPage() {
       </div>
 
       {items.length === 0 && (
-        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, color: '#8A8A7A', padding: '32px 0' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '32px 0' }}>
           No instruments in this category with the selected filter.
         </p>
       )}
 
-      <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#C8C8B8', lineHeight: 1.8, letterSpacing: '0.02em' }}>
+      <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)', fontSize: 9, color: '#C8C8B8', lineHeight: 1.8, letterSpacing: '0.02em' }}>
         Not investment advice.
       </div>
     </div>

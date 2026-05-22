@@ -24,7 +24,7 @@ export default function NewsPage() {
       <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '0.5px solid #DDDDD0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
           <span style={{
-            fontFamily: 'IBM Plex Mono, monospace',
+            fontFamily: 'var(--font-mono)',
             fontSize: 9,
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
@@ -38,7 +38,7 @@ export default function NewsPage() {
         </div>
 
         <h1 style={{
-          fontFamily: "'Playfair Display', serif",
+          fontFamily: 'var(--font-serif)',
           fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)',
           fontWeight: 800,
           letterSpacing: '-0.025em',
