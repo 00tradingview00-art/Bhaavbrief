@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/about' },
   openGraph: {
     title: 'About BhaavBrief',
-    description: 'Free daily MCX commodity intelligence for Indian traders — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 11 AM.',
+    description: 'Free daily MCX commodity intelligence for Indian traders — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 9:30 AM.',
     url: 'https://bhaavbrief.in/about',
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -45,7 +45,7 @@ export default function AboutPage() {
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300 }}>
             BhaavBrief is a free weekday newsletter that delivers MCX commodity market intelligence
-            directly to your inbox every morning at 11 AM. No fluff, no calls — just the numbers,
+            directly to your inbox every morning at 9:30 AM. No fluff, no calls — just the numbers,
             context, and analysis that help you trade better.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function AboutPage() {
                   global macro context: COMEX, LME, crude benchmarks, and the USD/INR rate.
                 </p>
                 <p>
-                  The brief is written by 9 AM and lands in your inbox by 11 AM IST, before the MCX
+                  The brief is written by 9 AM and lands in your inbox by 9:30 AM IST, before the MCX
                   morning session heats up.
                 </p>
                 <p>
@@ -138,7 +138,7 @@ export default function AboutPage() {
             {/* Stats */}
             <div style={{ border: '0.5px solid #DDDDD0', marginBottom: '1.5rem' }}>
               {[
-                { label: 'Delivery time', value: '11 AM IST' },
+                { label: 'Delivery time', value: '9:30 AM IST' },
                 { label: 'Frequency',     value: 'Every weekday' },
                 { label: 'Price',         value: 'Free forever' },
                 { label: 'Format',        value: 'Email + Web' },

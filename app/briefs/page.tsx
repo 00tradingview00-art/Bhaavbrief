@@ -37,7 +37,7 @@ export default async function BriefsPage() {
           All Briefs
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
-          {briefs.length} editions published · Every weekday at 11 AM IST
+          {briefs.length} editions published · Every weekday at 9:30 AM IST
         </p>
       </div>
 

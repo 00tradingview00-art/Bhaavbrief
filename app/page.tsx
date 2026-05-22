@@ -377,7 +377,7 @@ export default async function HomePage() {
                 fontSize: 13, color: 'var(--ink-3)',
                 lineHeight: 1.65, marginBottom: 14,
               }}>
-                Join India&apos;s sharpest commodity traders. MCX intelligence every weekday at 11 AM. Free forever.
+                Join India&apos;s sharpest commodity traders. MCX intelligence every weekday at 9:30 AM. Free forever.
               </p>
               <SubscribeForm compact />
             </div>
@@ -398,7 +398,7 @@ export default async function HomePage() {
             {[
               { val: '₹0',   label: 'Forever' },
               { val: '5 min', label: 'Daily read' },
-              { val: '11 AM', label: 'Delivered' },
+              { val: '9:30 AM', label: 'Delivered' },
             ].map(({ val, label }) => (
               <div key={label}>
                 <div style={{

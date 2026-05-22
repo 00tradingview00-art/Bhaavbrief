@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     await addSubscriber(email, name)
 
-    return NextResponse.json({ success: true, message: 'Subscribed! First brief arrives at 11 AM.' })
+    return NextResponse.json({ success: true, message: 'Subscribed! First brief arrives at 9:30 AM.' })
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Subscription failed'
     // If already subscribed, Brevo throws — treat as success
