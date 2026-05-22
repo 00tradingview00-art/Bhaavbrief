@@ -124,27 +124,14 @@ async function updateGitHubSecret(token) {
 }
 
 async function updateVercelEnv(token) {
-  if (!VERCEL_TOKEN || !VERCEL_PROJECT) return false
   try {
-    const list = await fetch(`https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env`,
-      { headers: { Authorization: `Bearer ${VERCEL_TOKEN}` } })
-    const { envs } = await list.json()
-    const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN')
-    if (existing) {
-      await fetch(`https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env/${existing.id}`, {
-        method: 'PATCH',
-        headers: { Authorization: `Bearer ${VERCEL_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value: token }),
-      })
-    } else {
-      await fetch(`https://api.vercel.com/v10/projects/${VERCEL_PROJECT}/env`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${VERCEL_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'KITE_ACCESS_TOKEN', value: token, type: 'encrypted', target: ['production'] }),
-      })
-    }
+    execFileSync('vercel', ['env', 'add', 'KITE_ACCESS_TOKEN', 'production', '--force'],
+      { input: token, stdio: ['pipe', 'pipe', 'pipe'] })
     return true
-  } catch { return false }
+  } catch (err) {
+    console.error('\n   vercel CLI error:', err.stderr?.toString().trim() ?? err.message)
+    return false
+  }
 }
 
 async function discoverInstruments(accessToken) {
