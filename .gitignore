@@ -7,3 +7,4 @@ out/
 .DS_Store
 *.log
 .vercel
+scripts/.kite-session.json
