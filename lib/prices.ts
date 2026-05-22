@@ -305,16 +305,17 @@ export interface PriceData {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: number, info: InstrumentInfo): MCXData {
+  const hasLive = !!(q && q.last_price > 0)
   return {
-    mcx:          q ? q.last_price               : fallbackPrice,
-    mcxChangePct: q ? KiteClient.changePct(q)    : fallbackPct,
-    mcxChange:    q ? q.net_change               : 0,
-    mcxOpen:      q ? (q.ohlc?.open      ?? 0)  : 0,
-    mcxHigh:      q ? (q.ohlc?.high      ?? 0)  : 0,
-    mcxLow:       q ? (q.ohlc?.low       ?? 0)  : 0,
-    mcxPrevClose: q ? (q.ohlc?.close     ?? 0)  : 0,
-    mcxVolume:    q ? (q.volume           ?? 0)  : 0,
-    mcxOI:        q ? (q.oi               ?? 0)  : 0,
+    mcx:          hasLive ? q!.last_price            : fallbackPrice,
+    mcxChangePct: hasLive ? KiteClient.changePct(q!) : fallbackPct,
+    mcxChange:    hasLive ? q!.net_change            : 0,
+    mcxOpen:      hasLive ? (q!.ohlc?.open   ?? 0)  : 0,
+    mcxHigh:      hasLive ? (q!.ohlc?.high   ?? 0)  : 0,
+    mcxLow:       hasLive ? (q!.ohlc?.low    ?? 0)  : 0,
+    mcxPrevClose: hasLive ? (q!.ohlc?.close  ?? 0)  : 0,
+    mcxVolume:    hasLive ? (q!.volume        ?? 0)  : 0,
+    mcxOI:        hasLive ? (q!.oi            ?? 0)  : 0,
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
   }
