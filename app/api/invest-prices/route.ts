@@ -39,7 +39,7 @@ const GLOBAL_SYMBOLS: Record<string, string> = {
   'GLNCY': 'glncy.us',
   'ALB':   'alb.us',
   'AA':    'aa.us',
-  'TECK':  'teck.b.us',
+  'TECK':  'teck.us',
   'AEM':   'aem.us',
 }
 
