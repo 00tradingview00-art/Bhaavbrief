@@ -273,123 +273,138 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         </div>
       </div>
 
-      {/* ── Table + sidebar ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 20, alignItems: 'start' }}>
+      {/* ── MCX + Global two-column cards ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, alignItems: 'start' }}>
 
-        {/* Full table */}
+        {/* MCX column */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
-          <div style={{ padding: '12px 18px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Full Table</span>
-            <span style={{ fontSize: 11, color: p?.source ? 'var(--up)' : 'var(--ink-4)' }}>
-              {p?.source ? `● ${p.source}` : '—'}
-            </span>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>MCX</span>
+            <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>India</span>
+            {p?.source && (
+              <span style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--up)' }}>● {p.source}</span>
+            )}
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 580 }}>
-              <thead>
-                <tr style={{ background: 'var(--surface-2)' }}>
-                  {['Commodity', 'Exchange', 'Price', 'Chg %', 'Open', 'High', 'Low', 'Volume', 'OI', 'Expiry'].map(h => (
-                    <th key={h} style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-4)', padding: '9px 12px', textAlign: 'left', whiteSpace: 'nowrap' }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {p && [
-                  { label: 'Gold',     exch: 'MCX',   d: p.gold,   fmt: (v: number) => fmtINR(v) },
-                  { label: 'Gold',     exch: 'COMEX', d: null, price: p.comexGold,   pct: p.goldComexPct, fmt: fmtUSD },
-                  { label: 'Silver',   exch: 'MCX',   d: p.silver, fmt: (v: number) => fmtINR(v) },
-                  { label: 'Silver',   exch: 'COMEX', d: null, price: p.comexSilver, pct: p.silverComexPct, fmt: (v: number) => fmtUSD(v, 3) },
-                  { label: 'Crude Oil',exch: 'MCX',   d: p.crude,  fmt: (v: number) => fmtINR(v) },
-                  { label: 'WTI',      exch: 'NYMEX', d: null, price: p.wti,         pct: p.crudePct, fmt: fmtUSD },
-                  { label: 'Brent',    exch: 'NYMEX', d: null, price: p.brent,       pct: p.brentPct, fmt: fmtUSD },
-                  { label: 'Copper',   exch: 'MCX',   d: p.copper, fmt: (v: number) => fmtINR(v, 2) },
-                  { label: 'Nat Gas',  exch: 'MCX',   d: p.natgas, fmt: (v: number) => fmtINR(v, 2) },
-                  { label: 'Nat Gas',  exch: 'NYMEX', d: null, price: p.henryHub,   pct: p.gasPct, fmt: fmtUSD },
-                ].map((row, i) => {
-                  const isUp    = (row.d ? row.d.mcxChangePct : (row.pct ?? 0)) >= 0
-                  const price   = row.d ? row.d.mcx : (row.price ?? 0)
-                  const pct     = row.d ? row.d.mcxChangePct : (row.pct ?? 0)
-                  const hasKite = !!(row.d && row.d.mcxHigh > 0)
-                  const EXCH_STYLE: Record<string, { bg: string; color: string }> = {
-                    MCX:   { bg: '#FFF3E0', color: '#B45309' },
-                    COMEX: { bg: '#EEF2FF', color: '#3730A3' },
-                    NYMEX: { bg: '#F5F3FF', color: '#6D28D9' },
-                  }
-                  const exBadge = EXCH_STYLE[row.exch] ?? { bg: 'var(--surface-2)', color: 'var(--ink-3)' }
-
-                  return (
-                    <tr key={i} style={{ borderTop: '1px solid var(--border)' }}>
-                      <td style={{ padding: '10px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ink)', whiteSpace: 'nowrap' }}>{row.label}</td>
-                      <td style={{ padding: '10px 12px' }}>
-                        <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 3, letterSpacing: '0.3px', background: exBadge.bg, color: exBadge.color }}>
-                          {row.exch}
+          {p && ([
+            { label: 'Gold',    d: p.gold,   unit: '/10g',   fmt: (v: number) => fmtINR(v) },
+            { label: 'Silver',  d: p.silver, unit: '/kg',    fmt: (v: number) => fmtINR(v) },
+            { label: 'Crude',   d: p.crude,  unit: '/bbl',   fmt: (v: number) => fmtINR(v) },
+            { label: 'Copper',  d: p.copper, unit: '/kg',    fmt: (v: number) => fmtINR(v, 2) },
+            { label: 'Nat Gas', d: p.natgas, unit: '/mmBtu', fmt: (v: number) => fmtINR(v, 2) },
+          ] as { label: string; d: MCXData | undefined; unit: string; fmt: (v: number) => string }[]).map(({ label, d, unit, fmt }) => {
+            if (!d) return null
+            const isUp    = d.mcxChangePct >= 0
+            const hasKite = d.mcxHigh > 0
+            const color   = isUp ? 'var(--up)' : 'var(--down)'
+            return (
+              <div key={label} style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--ink)' }}>{label}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: isUp ? 'var(--up-bg)' : 'var(--down-bg)', color }}>
+                    {isUp ? '▲' : '▼'} {fmtPct(d.mcxChangePct)}
+                  </span>
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 600, color: 'var(--ink)', marginBottom: 2 }}>
+                  {d.mcx > 0 ? fmt(d.mcx) : '—'}
+                  <span style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 4 }}>{unit}</span>
+                </div>
+                {hasKite && (
+                  <>
+                    <div style={{ display: 'flex', gap: 10, marginTop: 6, flexWrap: 'wrap' }}>
+                      {([['O', d.mcxOpen], ['H', d.mcxHigh], ['L', d.mcxLow], ['C', d.mcxPrevClose]] as [string, number][]).map(([l, v]) => (
+                        <div key={l} style={{ display: 'flex', gap: 3, alignItems: 'baseline' }}>
+                          <span style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 600 }}>{l}</span>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-2)' }}>{fmt(v)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 5, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>
+                        Vol <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--ink-2)' }}>{fmtVol(d.mcxVolume)}</span>
+                      </span>
+                      <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>
+                        OI <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--ink-2)' }}>{fmtVol(d.mcxOI)}</span>
+                      </span>
+                      {d.mcxExpiry && (
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gold-dark)', background: 'var(--gold-pale)', padding: '1px 5px', borderRadius: 3 }}>
+                          {shortExpiry(d.mcxExpiry)} · {daysToExpiry(d.mcxExpiry)}
                         </span>
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink)', whiteSpace: 'nowrap' }}>
-                        {price > 0 ? row.fmt(price) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                        {price > 0 ? (
-                          <span style={{ fontSize: 11, fontWeight: 600, color: isUp ? 'var(--up)' : 'var(--down)' }}>
-                            {isUp ? '▲ ' : '▼ '}{fmtPct(pct)}
-                          </span>
-                        ) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>
-                        {hasKite ? row.fmt(row.d!.mcxOpen) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--up)' }}>
-                        {hasKite ? row.fmt(row.d!.mcxHigh) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--down)' }}>
-                        {hasKite ? row.fmt(row.d!.mcxLow) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>
-                        {hasKite ? fmtVol(row.d!.mcxVolume) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>
-                        {hasKite ? fmtVol(row.d!.mcxOI) : '—'}
-                      </td>
-                      <td style={{ padding: '10px 12px', fontSize: 11, color: 'var(--ink-3)', whiteSpace: 'nowrap' }}>
-                        {hasKite && row.d!.mcxExpiry
-                          ? `${shortExpiry(row.d!.mcxExpiry)} · ${daysToExpiry(row.d!.mcxExpiry)}`
-                          : hasKite && row.d!.mcxSymbol ? row.d!.mcxSymbol : '—'}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            )
+          })}
         </div>
 
-        {/* Sidebar */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        {/* Global column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
-          {/* Global Reference */}
-          <SideCard title="Global Reference">
-            {p && [
-              { name: 'COMEX Gold',   value: fmtUSD(p.comexGold, 0), pct: p.goldComexPct },
-              { name: 'COMEX Silver', value: fmtUSD(p.comexSilver, 3), pct: p.silverComexPct },
-              { name: 'WTI Crude',    value: fmtUSD(p.wti),          pct: p.crudePct },
-              { name: 'Brent Crude',  value: fmtUSD(p.brent),        pct: p.brentPct },
-              { name: 'Henry Hub',    value: fmtUSD(p.henryHub),      pct: p.gasPct },
-            ].map(({ name, value, pct }) => (
-              <SideRow key={name} name={name} value={value} pct={pct} />
-            ))}
-          </SideCard>
+          {/* Global Reference card */}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Global Reference</span>
+            </div>
+            {p && ([
+              { name: 'COMEX Gold',   exch: 'COMEX', price: p.comexGold,   pct: p.goldComexPct,   fmt: (v: number) => fmtUSD(v, 0) },
+              { name: 'COMEX Silver', exch: 'COMEX', price: p.comexSilver, pct: p.silverComexPct, fmt: (v: number) => fmtUSD(v, 3) },
+              { name: 'WTI Crude',    exch: 'NYMEX', price: p.wti,         pct: p.crudePct,       fmt: fmtUSD },
+              { name: 'Brent Crude',  exch: 'NYMEX', price: p.brent,       pct: p.brentPct,       fmt: fmtUSD },
+              { name: 'Henry Hub',    exch: 'NYMEX', price: p.henryHub,    pct: p.gasPct,         fmt: fmtUSD },
+            ] as { name: string; exch: string; price: number | undefined; pct: number | undefined; fmt: (v: number) => string }[]).map(({ name, exch, price, pct, fmt }) => {
+              const isUp = (pct ?? 0) >= 0
+              const EXCH_STYLE: Record<string, { bg: string; color: string }> = {
+                COMEX: { bg: '#EEF2FF', color: '#3730A3' },
+                NYMEX: { bg: '#F5F3FF', color: '#6D28D9' },
+              }
+              const exStyle = EXCH_STYLE[exch] ?? { bg: 'var(--surface-2)', color: 'var(--ink-3)' }
+              return (
+                <div key={name} style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: exStyle.bg, color: exStyle.color, flexShrink: 0 }}>{exch}</span>
+                    <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{name}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {(price ?? 0) > 0 && (
+                      <span style={{ fontSize: 10, color: isUp ? 'var(--up)' : 'var(--down)' }}>
+                        {isUp ? '▲' : '▼'} {Math.abs(pct ?? 0).toFixed(2)}%
+                      </span>
+                    )}
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: (price ?? 0) > 0 ? 'var(--ink)' : 'var(--ink-4)' }}>
+                      {(price ?? 0) > 0 ? fmt(price ?? 0) : '—'}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
-          {/* Key Rates */}
-          <SideCard title="Key Rates">
-            {p && [
-              { name: 'USD / INR',      value: fmtINR(p.usdinr, 2),   pct: p.usdinrChangePct },
-              { name: 'RBI Repo Rate',  value: '5.25%',                pct: null },
-            ].map(({ name, value, pct }) => (
-              <SideRow key={name} name={name} value={value} pct={pct ?? undefined} />
-            ))}
-          </SideCard>
+          {/* Key Rates card */}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
+            <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Key Rates</span>
+            </div>
+            {p && ([
+              { name: 'USD / INR',     value: fmtINR(p.usdinr, 2), pct: p.usdinrChangePct as number | null },
+              { name: 'RBI Repo Rate', value: '5.25%',              pct: null as number | null },
+            ]).map(({ name, value, pct }) => {
+              const isUp = (pct ?? 0) >= 0
+              return (
+                <div key={name} style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {pct !== null && (
+                      <span style={{ fontSize: 10, color: isUp ? 'var(--up)' : 'var(--down)' }}>
+                        {isUp ? '▲' : '▼'} {Math.abs(pct).toFixed(2)}%
+                      </span>
+                    )}
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{value}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
 
           {/* Data note */}
           <div style={{ fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, padding: '10px 12px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8 }}>
@@ -398,36 +413,6 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             MCX hours: 9 AM – 11:30 PM IST.
           </div>
         </div>
-      </div>
-    </div>
-  )
-}
-
-// ── Sidebar helpers ───────────────────────────────────────────────────────────
-
-function SideCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
-      <p style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.6px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>{title}</p>
-      {children}
-    </div>
-  )
-}
-
-function SideRow({ name, value, pct }: { name: string; value: string; pct?: number }) {
-  const isUp = (pct ?? 0) >= 0
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
-      <span style={{ fontSize: 12, color: 'var(--ink-2)' }}>{name}</span>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {pct !== undefined && (
-          <span style={{ fontSize: 10, color: isUp ? 'var(--up)' : 'var(--down)' }}>
-            {isUp ? '▲' : '▼'} {Math.abs(pct).toFixed(2)}%
-          </span>
-        )}
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: value === '—' ? 'var(--ink-4)' : 'var(--ink)' }}>
-          {value}
-        </span>
       </div>
     </div>
   )
