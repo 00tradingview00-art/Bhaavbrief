@@ -3,6 +3,7 @@ import { getPrices, type PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
+import CommodityPulse from '@/components/CommodityPulse'
 
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
@@ -231,6 +232,9 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ── COMMODITY PULSE ──────────────────────────────────────────────────── */}
+      <CommodityPulse />
 
       {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
       <div className="home-body">
