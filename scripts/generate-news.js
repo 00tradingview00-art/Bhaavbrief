@@ -199,7 +199,7 @@ function loadInstruments() {
 }
 
 async function fetchKitePrices(instruments) {
-  const KITE_API_KEY    = process.env.KITE_API_KEY
+  const KITE_API_KEY      = process.env.KITE_API_KEY
   const KITE_ACCESS_TOKEN = process.env.KITE_ACCESS_TOKEN
   if (!KITE_API_KEY || !KITE_ACCESS_TOKEN) {
     console.warn('  Kite: API key or token not set')
@@ -213,7 +213,8 @@ async function fetchKitePrices(instruments) {
     .join('&')
 
   try {
-    const res = await fetch(`https://api.kite.trade/quote/ltp?${qs}`, {
+    // Use full /quote (not /ltp) to get OHLC + prev close for % change calculation
+    const res = await fetch(`https://api.kite.trade/quote?${qs}`, {
       headers: {
         'X-Kite-Version': '3',
         Authorization: `token ${KITE_API_KEY}:${KITE_ACCESS_TOKEN}`,
@@ -221,15 +222,22 @@ async function fetchKitePrices(instruments) {
       signal: AbortSignal.timeout(8000),
     })
     if (!res.ok) {
-      console.warn(`  Kite LTP ${res.status}: ${(await res.text()).slice(0, 120)}`)
+      console.warn(`  Kite quote ${res.status}: ${(await res.text()).slice(0, 120)}`)
       return null
     }
     const { data } = await res.json()
-    const p = { source: 'kite' }
+    const p = { source: 'kite', movers: {} }
     for (const key of keys) {
-      const sym = instruments[key]?.symbol
-      const ltp = data[`MCX:${sym}`]?.last_price
-      if (sym && ltp != null) p[key] = ltp   // accept 0 (pre-open) — still valid last price
+      const sym  = instruments[key]?.symbol
+      const q    = data[`MCX:${sym}`]
+      if (!sym || !q) continue
+      const ltp       = q.last_price
+      const prevClose = q.ohlc?.close ?? 0
+      if (ltp != null) p[key] = ltp
+      // Compute intraday % change for mover scoring
+      if (prevClose > 0 && ltp != null) {
+        p.movers[key] = ((ltp - prevClose) / prevClose) * 100
+      }
     }
     return p
   } catch (e) {
@@ -239,7 +247,7 @@ async function fetchKitePrices(instruments) {
 }
 
 async function fetchStooqFallback() {
-  const p = { usdInr: 0, source: 'stooq' }
+  const p = { usdInr: 0, source: 'stooq', movers: {} }
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
       signal: AbortSignal.timeout(5000),
@@ -340,32 +348,101 @@ async function fetchFeed(feed) {
   }
 }
 
+// ── Adaptive intelligence ─────────────────────────────────────────────────────
+
+/**
+ * Score a signal by how well it matches today's moving commodities.
+ * Signals about the biggest movers get scored higher.
+ */
+function scoreSignal(item, movers) {
+  if (!movers || Object.keys(movers).length === 0) return 0
+  const text = `${item.title} ${item.desc}`.toLowerCase()
+  const MAP = [
+    { keys: ['gold'],              re: /\bgold\b|comex\s+gold|bullion/ },
+    { keys: ['silver'],            re: /\bsilver\b/ },
+    { keys: ['crude'],             re: /crude|brent|wti|petroleum|opec/ },
+    { keys: ['copper'],            re: /\bcopper\b|lme/ },
+    { keys: ['natgas'],            re: /natural.gas|natgas|\blng\b/ },
+  ]
+  let score = 0
+  for (const { keys, re } of MAP) {
+    if (re.test(text)) {
+      for (const k of keys) {
+        const pct = Math.abs(movers[k] ?? 0)
+        score += pct * 3   // bigger move = bigger boost
+      }
+    }
+  }
+  return score
+}
+
+/**
+ * Returns categories that haven't appeared in the last N items of existing feed.
+ * These are "gaps" — we should force at least one item to fill them.
+ */
+function getCategoryGaps(existing, windowSize = 18) {
+  const ALL_CATS  = ['Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
+  const recentWindow = existing.slice(0, windowSize).map(i => i.category)
+  const covered   = new Set(recentWindow)
+  return ALL_CATS.filter(c => !covered.has(c))
+}
+
+/**
+ * Returns current IST market session for context-aware prompting.
+ */
+function getMarketSession() {
+  const istHour = new Date(Date.now() + 5.5 * 3600 * 1000).getUTCHours()
+  if (istHour >= 6  && istHour < 9)  return 'pre-market'   // 6–9 AM: overnight moves
+  if (istHour >= 9  && istHour < 15) return 'morning'      // 9 AM–3 PM: active session
+  if (istHour >= 15 && istHour < 23) return 'afternoon'    // 3–11 PM: evening session
+  return 'global'                                           // 11 PM–6 AM: US/EU session
+}
+
+const SESSION_FOCUS = {
+  'pre-market':  'MCX opens in under 3 hours. Focus on overnight COMEX/LME moves and their implication for today\'s MCX open prices.',
+  'morning':     'MCX morning session is live. Focus on intraday price action and immediate implications for open positions.',
+  'afternoon':   'MCX evening session is active. Focus on current price levels, what\'s driving them, and watch levels into close.',
+  'global':      'MCX is closed. Focus on US/EU session moves and what they signal for tomorrow\'s MCX open.',
+}
+
 // ── Claude generation ─────────────────────────────────────────────────────────
 
 async function generateNewsItem(signal, prices) {
-  const ctx    = priceContext(prices)
+  const ctx     = priceContext(prices)
+  const movers  = prices.movers ?? {}
+  const session = getMarketSession()
   const istDate = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
     .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
+  // Build mover context: show top 3 biggest % moves today
+  const moverLines = Object.entries(movers)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .slice(0, 3)
+    .map(([k, pct]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}% today`)
+    .join(', ')
+
   const prompt = `You are BhaavBrief Intelligence — India's AI commodity intelligence desk. Your job is to connect global market signals to their precise Indian market impact.
 
-Today's date: ${istDate} (IST)
-Live market prices: ${ctx}
+Today: ${istDate} (IST) | Session: ${session.toUpperCase()}
+${SESSION_FOCUS[session]}
 
-Write an institutional-grade intelligence brief for Indian commodity traders, investors, and businesses. This is NOT a news summary — it is cross-asset analysis.
+Live MCX prices: ${ctx}
+${moverLines ? `Today's movers: ${moverLines}` : ''}
+
+Write an institutional-grade intelligence brief for Indian commodity traders. This is NOT a news summary — it is cross-asset analysis that connects the signal to what's happening in the market RIGHT NOW.
 
 Rules:
-- Treat this like a Bloomberg Intelligence note or a commodity desk research flash
-- ALWAYS connect the event to: (a) the specific MCX contract + approximate INR level using live prices above, (b) the rupee-dollar import parity impact, (c) one cross-market linkage (e.g., crude → petrochemical costs, gold → rupee depreciation, copper → EV demand, Fed rate → DXY → MCX premiums)
-- Be precise: name the exact contract, use numbers, show cause-and-effect chains
+- If the signal relates to a commodity that is already moving today (shown in "Today's movers"), explicitly reference that price move and explain the connection
+- ALWAYS connect to: (a) specific MCX contract + INR price level from live data above, (b) rupee-dollar import parity impact, (c) one cross-market linkage
+- Be precise: name exact contracts, use specific numbers, show cause-and-effect chains
 - No opinions, no buy/sell calls, no "investors should"
-- Any date or event you reference must be upcoming — never cite a past meeting or data release
-- Close with ONE specific price level or upcoming event/data release to watch
+- Reference only upcoming events, not past ones
+- Close with ONE specific price level or upcoming data release to watch
 
-Format exactly as plain text (no markdown, no headers, no asterisks, no bullet points):
+Format as plain text only (no markdown, no headers, no asterisks, no bullets):
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
 IMPACT: [bearish / bullish / neutral]
-BODY: [95-120 words]
+BODY: [100-120 words]
 
 Market signal: ${signal.title}. ${signal.desc}`
 
@@ -378,7 +455,7 @@ Market signal: ${signal.title}. ${signal.desc}`
     },
     body: JSON.stringify({
       model:      'claude-haiku-4-5-20251001',
-      max_tokens: 300,
+      max_tokens: 350,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })
@@ -446,25 +523,47 @@ async function main() {
   const deduplicated = clusterAndPick(candidates)
   console.log(`After clustering: ${deduplicated.length} unique signals`)
 
-  // Group by category — keep top 2 candidates per category (ranked by desc length)
+  const movers = prices.movers ?? {}
+  const session = getMarketSession()
+  const gaps    = getCategoryGaps(existing)
+  console.log(`Session: ${session} | Movers: ${JSON.stringify(movers)} | Category gaps: ${gaps.join(', ') || 'none'}`)
+
+  // Score each signal: mover boost + desc length bonus
+  const scored = deduplicated.map(item => ({
+    ...item,
+    _score: scoreSignal(item, movers) + (item.desc?.length ?? 0) / 200,
+  }))
+
+  // Group by category, keeping best-scored candidate per bucket
   const byCategory = new Map()
-  for (const item of deduplicated) {
+  for (const item of scored) {
     const { category } = detectCategory(`${item.title} ${item.desc}`)
     const bucket = byCategory.get(category) ?? []
     bucket.push(item)
     byCategory.set(category, bucket)
   }
 
-  // Rank categories: prefer ones NOT covered recently to ensure diversity
+  // Rank categories:
+  //  1. Categories with active movers go first (their content is most timely)
+  //  2. Gap categories (not seen in last 18 items) go next
+  //  3. Others sorted by recency — not-recently-covered first
   const recentCats = new Set(existing.slice(0, 12).map(i => i.category))
+
+  function categoryPriority(cat) {
+    // Check if any mover is related to this category
+    const moverCat = { Metals: ['gold','silver','copper'], Energy: ['crude','natgas'] }
+    const relatedMovers = moverCat[cat] ?? []
+    const hasBigMover = relatedMovers.some(k => Math.abs(movers[k] ?? 0) > 0.3)
+    if (hasBigMover)         return 0   // highest: category is actively moving today
+    if (gaps.includes(cat))  return 1   // second: gap category not seen recently
+    if (!recentCats.has(cat)) return 2  // third: not in last 12 items
+    return 3                            // lowest: recently covered
+  }
+
   const rankedSignals = [...byCategory.entries()]
-    .sort(([catA], [catB]) => {
-      const aRecent = recentCats.has(catA) ? 1 : 0
-      const bRecent = recentCats.has(catB) ? 1 : 0
-      return aRecent - bRecent   // not-recently-covered categories go first
-    })
+    .sort(([catA], [catB]) => categoryPriority(catA) - categoryPriority(catB))
     .slice(0, MAX_PER_RUN)
-    .map(([, bucket]) => bucket.sort((a, b) => (b.desc?.length ?? 0) - (a.desc?.length ?? 0))[0])
+    .map(([, bucket]) => bucket.sort((a, b) => b._score - a._score)[0])
 
   console.log(`Will generate ${rankedSignals.length} briefing(s): ${rankedSignals.map(s => s.title.slice(0, 50)).join(' | ')}`)
 
