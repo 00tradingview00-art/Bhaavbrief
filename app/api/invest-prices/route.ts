@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+// Cache route for 60s — removes force-dynamic so individual fetch caches work,
+// and avoids firing 29 Stooq requests on every single page load.
+export const revalidate = 60
 
 // ── NSE symbols for Kite ──────────────────────────────────────────────────────
 const NSE_SYMBOLS = [
@@ -13,7 +15,6 @@ const NSE_SYMBOLS = [
 
 // ── Stooq symbols for global ETFs/stocks ─────────────────────────────────────
 const GLOBAL_SYMBOLS: Record<string, string> = {
-  // iShares / SPDR / VanEck ETFs
   'GLD':   'gld.us',
   'IAU':   'iau.us',
   'IAUM':  'iaum.us',
@@ -28,7 +29,6 @@ const GLOBAL_SYMBOLS: Record<string, string> = {
   'PICK':  'pick.us',
   'LIT':   'lit.us',
   'REMX':  'remx.us',
-  // Global stocks
   'GOLD':  'gold.us',
   'NEM':   'nem.us',
   'WPM':   'wpm.us',
@@ -43,8 +43,15 @@ const GLOBAL_SYMBOLS: Record<string, string> = {
   'AEM':   'aem.us',
 }
 
-async function fetchKiteNSE(): Promise<Record<string, { price: number; open: number }>> {
-  const API_KEY    = process.env.KITE_API_KEY
+interface KiteQuoteRaw {
+  last_price: number
+  net_change:  number
+  change:      number
+  ohlc: { open: number; high: number; low: number; close: number }
+}
+
+async function fetchKiteNSE(): Promise<Record<string, { price: number; open: number; change: number; changePct: number }>> {
+  const API_KEY      = process.env.KITE_API_KEY
   const ACCESS_TOKEN = process.env.KITE_ACCESS_TOKEN
   if (!API_KEY || !ACCESS_TOKEN) return {}
 
@@ -53,27 +60,37 @@ async function fetchKiteNSE(): Promise<Record<string, { price: number; open: num
     const res = await fetch(`https://api.kite.trade/quote?${qs}`, {
       headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${ACCESS_TOKEN}` },
       signal: AbortSignal.timeout(8000),
+      // No next.revalidate — revalidate is controlled at route level
     })
-    if (!res.ok) return {}
-    const { data } = await res.json() as { data: Record<string, { last_price: number; ohlc: { open: number }; net_change: number; change: number }> }
+    if (!res.ok) {
+      console.warn('[invest-prices] Kite NSE fetch failed:', res.status)
+      return {}
+    }
+    const { data } = await res.json() as { data: Record<string, KiteQuoteRaw> }
     const out: Record<string, { price: number; open: number; change: number; changePct: number }> = {}
     for (const [key, val] of Object.entries(data ?? {})) {
-      const sym = key.replace('NSE:', '')
+      const sym      = key.replace('NSE:', '')
+      const prevClose = val.ohlc?.close ?? 0
+      const changePct = prevClose > 0 ? ((val.last_price - prevClose) / prevClose) * 100 : 0
       out[sym] = {
         price:     val.last_price,
         open:      val.ohlc?.open ?? val.last_price,
-        change:    val.net_change ?? 0,
-        changePct: val.change ?? 0,
+        change:    val.last_price - prevClose,
+        changePct,
       }
     }
     return out
-  } catch { return {} }
+  } catch (e) {
+    console.warn('[invest-prices] Kite NSE error:', (e as Error).message)
+    return {}
+  }
 }
 
-async function fetchStooqOne(sym: string, ticker: string): Promise<{ price: number; open: number; changePct: number } | null> {
+async function fetchStooqOne(sym: string): Promise<{ price: number; open: number; changePct: number } | null> {
   try {
     const res = await fetch(`https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`, {
-      signal: AbortSignal.timeout(6000),
+      signal: AbortSignal.timeout(10000),
+      next: { revalidate: 300 },  // Cache individual Stooq responses for 5 min
     })
     if (!res.ok) return null
     const lines = (await res.text()).trim().split('\n')
@@ -90,10 +107,10 @@ async function fetchStooqOne(sym: string, ticker: string): Promise<{ price: numb
 export async function GET() {
   const [nse, ...globalResults] = await Promise.all([
     fetchKiteNSE(),
-    ...Object.entries(GLOBAL_SYMBOLS).map(async ([ticker, sym]) => {
-      const data = await fetchStooqOne(sym, ticker)
-      return { ticker, data }
-    }),
+    ...Object.entries(GLOBAL_SYMBOLS).map(async ([ticker, sym]) => ({
+      ticker,
+      data: await fetchStooqOne(sym),
+    })),
   ])
 
   const global: Record<string, { price: number; open: number; changePct: number }> = {}
@@ -101,8 +118,10 @@ export async function GET() {
     if (r.data) global[r.ticker] = r.data
   }
 
+  console.log(`[invest-prices] NSE: ${Object.keys(nse).length}, Global: ${Object.keys(global).length}`)
+
   return NextResponse.json(
     { nse, global, fetchedAt: new Date().toISOString() },
-    { headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60' } }
+    { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' } }
   )
 }
