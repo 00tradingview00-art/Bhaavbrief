@@ -75,25 +75,33 @@ Respond ONLY with valid JSON — no markdown, no explanation:
   "theme": "Dollar softening lifts commodity import costs"
 }`
 
-  try {
-    const client  = new Anthropic({ apiKey })
-    const msg     = await client.messages.create({
-      model:      'claude-sonnet-4-6',
-      max_tokens: 400,
-      messages:   [{ role: 'user', content: prompt }],
-    })
-    const raw  = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
-    if (!raw) return null
-    // Strip markdown code fences if present (```json ... ```)
-    const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
-    const parsed = JSON.parse(text)
-    const { theme, ...drivers } = parsed
-    console.log('[commodity-pulse] Claude Sonnet drivers generated successfully')
-    return { drivers, theme }
-  } catch (err) {
-    console.warn('[commodity-pulse] Claude Sonnet failed:', (err as Error).message)
-    return null
+  const client = new Anthropic({ apiKey })
+
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const msg  = await client.messages.create({
+        model:      'claude-sonnet-4-6',
+        max_tokens: 400,
+        messages:   [{ role: 'user', content: prompt }],
+      })
+      const raw  = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
+      if (!raw) return null
+      const text   = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
+      const parsed = JSON.parse(text)
+      const { theme, ...drivers } = parsed
+      console.log(`[commodity-pulse] Claude Sonnet OK (attempt ${attempt})`)
+      return { drivers, theme }
+    } catch (err) {
+      const msg = (err as Error).message
+      console.warn(`[commodity-pulse] Claude attempt ${attempt} failed:`, msg)
+      if (attempt === 1 && msg.includes('529')) {
+        await new Promise(r => setTimeout(r, 1500))
+        continue
+      }
+      return null
+    }
   }
+  return null
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────
