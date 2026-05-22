@@ -1,7 +1,7 @@
 import NewsFeed from '@/components/news/NewsFeed'
 
 export const metadata = {
-  title: 'Intelligence Feed — AI Commodity Market Intelligence | BhaavBrief',
+  title: 'Intelligence Feed — AI Commodity Market Intelligence',
   description: 'BhaavBrief Intelligence: AI-powered cross-asset commodity briefings connecting commodities, geopolitics, government policy, currencies, and macro events — updated every 15 minutes.',
   alternates: { canonical: 'https://bhaavbrief.in/news' },
   openGraph: {

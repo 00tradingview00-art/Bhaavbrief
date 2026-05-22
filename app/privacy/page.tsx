@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | BhaavBrief',
+  title: 'Privacy Policy',
   description: 'Privacy policy for BhaavBrief — how we collect, use, and protect your personal data.',
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://bhaavbrief.in/privacy' },

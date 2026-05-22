@@ -2,7 +2,7 @@ import MarketsClient from '@/components/markets/MarketsClient'
 import { getPrices } from '@/lib/prices'
 
 export const metadata = {
-  title: 'MCX Live Prices — Gold, Silver, Crude Oil, Copper | BhaavBrief',
+  title: 'MCX Live Prices — Gold, Silver, Crude Oil, Copper',
   description: 'Live MCX commodity prices with OHLC, Volume and Open Interest. Gold, Silver, Crude Oil, Copper and Natural Gas futures — real-time data during MCX market hours (9 AM–11:30 PM IST).',
   alternates: { canonical: 'https://bhaavbrief.in/markets' },
   openGraph: {
