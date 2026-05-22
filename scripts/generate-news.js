@@ -4,6 +4,12 @@
  * Fetches commodity RSS as raw signals, generates original 80-100 word market
  * briefings via Claude, and writes to data/ai-news.json.
  * Runs every 15 minutes via GitHub Actions (appended to flash-brief.yml).
+ *
+ * Quality rules:
+ *  - Only articles published < 6 hours ago
+ *  - Max 1 brief per category per run (no 5x gold articles)
+ *  - Cluster similar headlines, pick the top signal per cluster
+ *  - Max 4 new items per run total
  */
 
 import fs   from 'fs'
@@ -16,19 +22,20 @@ const ROOT      = path.join(__dirname, '..')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
-const MAX_STORED        = 300   // rolling window
-const MAX_PER_RUN       = 8
+const MAX_STORED        = 300
+const MAX_PER_RUN       = 4      // hard cap
+const FRESHNESS_HOURS   = 6      // ignore articles older than this
 
 const FEEDS = [
-  { url: 'https://news.google.com/rss/search?q=MCX+commodity+gold+silver+India&hl=en-IN&gl=IN&ceid=IN:en',    source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+price+barrels&hl=en&gl=US&ceid=US:en',  source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+rate+inflation+India&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=India+commodity+agri+NCDEX+monsoon&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',  source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+gold&hl=en&gl=US&ceid=US:en',    source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=copper+metal+aluminium+LME+price&hl=en&gl=US&ceid=US:en',    source: 'Google News' },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                    source: 'NDTV Profit'  },
-  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                              source: 'ET Markets'   },
+  { url: 'https://news.google.com/rss/search?q=MCX+commodity+gold+silver+India&hl=en-IN&gl=IN&ceid=IN:en',    source: 'Google News', category: 'Metals'      },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+price+barrels&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+rate+inflation+India&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro'    },
+  { url: 'https://news.google.com/rss/search?q=India+commodity+agri+NCDEX+monsoon&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'       },
+  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Geopolitics' },
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+gold&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Macro'       },
+  { url: 'https://news.google.com/rss/search?q=copper+metal+aluminium+LME+price&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Metals'      },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                    source: 'NDTV Profit', category: null          },
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                              source: 'ET Markets',  category: null          },
 ]
 
 const KEYWORDS = [
@@ -65,10 +72,10 @@ function isImportant(text) {
 
 function detectCategory(text) {
   const t = text.toLowerCase()
-  if (/iran|russia|ukraine|hormuz|suez|sanction|war\b|geopolit/.test(t))         return { category: 'Geopolitics', tagType: 'energy' }
-  if (/crude|oil\b|opec|brent|refinery|fuel|natural.gas|lng|lpg/.test(t))        return { category: 'Energy',      tagType: 'energy' }
-  if (/gold|silver|copper|metal|bullion|comex|aluminium|zinc|nickel/.test(t))     return { category: 'Metals',      tagType: 'metals' }
-  if (/agri|wheat|soybean|cotton|pepper|cardamom|ncdex|monsoon|crop|castor/.test(t)) return { category: 'Agri',   tagType: 'agri'   }
+  if (/iran|russia|ukraine|hormuz|suez|sanction|war\b|geopolit/.test(t))             return { category: 'Geopolitics', tagType: 'energy' }
+  if (/crude|oil\b|opec|brent|refinery|fuel|natural.gas|lng|lpg/.test(t))            return { category: 'Energy',      tagType: 'energy' }
+  if (/gold|silver|copper|metal|bullion|comex|aluminium|zinc|nickel/.test(t))         return { category: 'Metals',      tagType: 'metals' }
+  if (/agri|wheat|soybean|cotton|pepper|cardamom|ncdex|monsoon|crop|castor/.test(t)) return { category: 'Agri',        tagType: 'agri'   }
   return { category: 'Macro', tagType: 'macro' }
 }
 
@@ -84,6 +91,44 @@ function toId(title, ts) {
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40).replace(/-+$/, '')
   const t    = ts.toISOString().slice(0, 16).replace(/[T:]/g, '-')
   return `${t}-${slug}`
+}
+
+/** Word-overlap similarity 0-1 between two title strings */
+function similarity(a, b) {
+  const wordsA = new Set(a.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/).filter(w => w.length > 3))
+  const wordsB = new Set(b.toLowerCase().replace(/[^a-z0-9 ]/g, '').split(/\s+/).filter(w => w.length > 3))
+  if (!wordsA.size || !wordsB.size) return 0
+  let shared = 0
+  for (const w of wordsA) if (wordsB.has(w)) shared++
+  return shared / Math.max(wordsA.size, wordsB.size)
+}
+
+/**
+ * Cluster candidates by title similarity (threshold 0.35).
+ * Returns one representative per cluster — the one with the longest desc
+ * (more context = better Claude output).
+ */
+function clusterAndPick(candidates) {
+  const clusters = []
+  const assigned = new Set()
+
+  for (let i = 0; i < candidates.length; i++) {
+    if (assigned.has(i)) continue
+    const cluster = [i]
+    for (let j = i + 1; j < candidates.length; j++) {
+      if (!assigned.has(j) && similarity(candidates[i].title, candidates[j].title) >= 0.35) {
+        cluster.push(j)
+        assigned.add(j)
+      }
+    }
+    assigned.add(i)
+    // Pick member with most descriptive text
+    const best = cluster.reduce((a, b) =>
+      (candidates[a].desc?.length ?? 0) >= (candidates[b].desc?.length ?? 0) ? a : b
+    )
+    clusters.push(candidates[best])
+  }
+  return clusters
 }
 
 // ── Live prices (Stooq + Frankfurter) ────────────────────────────────────────
@@ -142,11 +187,16 @@ async function fetchFeed(feed) {
       const titleM = b.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/)  || b.match(/<title>([^<]{5,})<\/title>/)
       const linkM  = b.match(/<link>(https?:[^<]+)<\/link>/)            || b.match(/<guid[^>]*>(https?:[^<]+)<\/guid>/)
       const descM  = b.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/) || b.match(/<description>([^<]{10,})<\/description>/)
+      const dateM  = b.match(/<pubDate>([^<]+)<\/pubDate>/)
       if (!titleM || !linkM) continue
+
+      const pubDate = dateM ? new Date(dateM[1].trim()) : null
       items.push({
-        title: stripSourceSuffix(titleM[1].trim()),
-        url:   linkM[1].trim(),
-        desc:  descM ? descM[1].replace(/<[^>]+>/g, '').trim().slice(0, 400) : '',
+        title:   stripSourceSuffix(titleM[1].trim()),
+        url:     linkM[1].trim(),
+        desc:    descM ? descM[1].replace(/<[^>]+>/g, '').trim().slice(0, 400) : '',
+        pubDate,
+        feedCategory: feed.category,
       })
     }
     console.log(`  ${new URL(feed.url).hostname}: ${items.length} items`)
@@ -218,23 +268,58 @@ async function main() {
   const prices = await fetchLivePrices()
   console.log(`  ${priceContext(prices)}`)
 
-  const seen = loadSeen()
-  console.log(`Seen: ${seen.length} URLs`)
+  const seen      = loadSeen()
+  const cutoffMs  = Date.now() - FRESHNESS_HOURS * 60 * 60 * 1000
+  console.log(`Seen: ${seen.length} URLs | Freshness cutoff: ${FRESHNESS_HOURS}h`)
 
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
-  const candidates = allItems.filter(item =>
-    isImportant(`${item.title} ${item.desc}`) && !seen.includes(item.url)
-  )
-  console.log(`New important signals: ${candidates.length}`)
+  // Filter: not seen, keyword-relevant, and fresh (or no pubDate — treat as valid)
+  const candidates = allItems.filter(item => {
+    if (seen.includes(item.url)) return false
+    if (!isImportant(`${item.title} ${item.desc}`)) return false
+    if (item.pubDate && !isNaN(item.pubDate.getTime()) && item.pubDate.getTime() < cutoffMs) return false
+    return true
+  })
+  console.log(`Fresh, new, important signals: ${candidates.length}`)
 
-  const existing = loadExisting()
+  // Cluster similar stories, pick best representative per cluster
+  const deduplicated = clusterAndPick(candidates)
+  console.log(`After clustering: ${deduplicated.length} unique signals`)
+
+  // Group by category, pick one signal per category (best = longest desc)
+  const byCategory = new Map()
+  for (const item of deduplicated) {
+    const { category } = detectCategory(`${item.title} ${item.desc}`)
+    if (!byCategory.has(category)) {
+      byCategory.set(category, item)
+    } else {
+      const existing = byCategory.get(category)
+      if ((item.desc?.length ?? 0) > (existing.desc?.length ?? 0)) {
+        byCategory.set(category, item)
+      }
+    }
+  }
+
+  // Rank categories: prefer ones not covered in recent output
+  const existing      = loadExisting()
+  const recentCats    = new Set(existing.slice(0, 10).map(i => i.category))
+  const rankedSignals = [...byCategory.entries()]
+    .sort(([catA], [catB]) => {
+      const aRecent = recentCats.has(catA) ? 1 : 0
+      const bRecent = recentCats.has(catB) ? 1 : 0
+      return aRecent - bRecent   // categories NOT recently covered go first
+    })
+    .slice(0, MAX_PER_RUN)
+    .map(([, signal]) => signal)
+
+  console.log(`Will generate ${rankedSignals.length} briefing(s): ${rankedSignals.map(s => s.title.slice(0, 50)).join(' | ')}`)
+
   const newSeen  = [...seen]
   let processed  = 0
 
-  for (const signal of candidates) {
-    if (processed >= MAX_PER_RUN) break
+  for (const signal of rankedSignals) {
     try {
       console.log(`  Generating: ${signal.title.slice(0, 65)}`)
       const { title, summary } = await generateNewsItem(signal, prices)

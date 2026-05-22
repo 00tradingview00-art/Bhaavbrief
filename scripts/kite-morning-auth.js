@@ -130,7 +130,7 @@ const server = http.createServer(async (req, res) => {
     // Step 1: Update GitHub Secret
     process.stdout.write('\n📦 Updating GitHub Secret KITE_ACCESS_TOKEN...')
     const ghOk = await updateGitHubSecret(accessToken)
-    console.log(ghOk ? ' ✅' : ' ⚠️  GITHUB_PAT not set — update manually')
+    console.log(ghOk ? ' ✅' : ' ⚠️  Failed — run: gh secret set KITE_ACCESS_TOKEN manually')
 
     // Step 2: Update Vercel env
     process.stdout.write('🔺 Updating Vercel env KITE_ACCESS_TOKEN...')
@@ -189,39 +189,17 @@ setTimeout(() => {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 async function updateGitHubSecret(token) {
-  if (!GITHUB_PAT) return false
+  // Use gh CLI — it handles libsodium encryption correctly
   try {
-    const pkRes = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/actions/secrets/public-key`,
-      { headers: { Authorization: `Bearer ${GITHUB_PAT}`, Accept: 'application/vnd.github+json' } }
-    )
-    const { key, key_id } = await pkRes.json()
-
-    const { default: nacl } = await import('tweetnacl')
-    const { encodeBase64, decodeBase64, decodeUTF8 } = await import('tweetnacl-util')
-
-    const keyBytes    = decodeBase64(key)
-    const secretBytes = decodeUTF8(token)
-    const pair        = nacl.box.keyPair()
-    const nonce       = nacl.randomBytes(24)
-    const encrypted   = nacl.box(secretBytes, nonce, keyBytes, pair.secretKey)
-
-    const combined = new Uint8Array(pair.publicKey.length + nonce.length + encrypted.length)
-    combined.set(pair.publicKey)
-    combined.set(nonce,     pair.publicKey.length)
-    combined.set(encrypted, pair.publicKey.length + nonce.length)
-
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB_REPO}/actions/secrets/KITE_ACCESS_TOKEN`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `Bearer ${GITHUB_PAT}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ encrypted_value: encodeBase64(combined), key_id }),
-      }
-    )
-    return res.ok || res.status === 204
+    const { execFileSync } = await import('child_process')
+    execFileSync('gh', [
+      'secret', 'set', 'KITE_ACCESS_TOKEN',
+      '--repo', GITHUB_REPO,
+      '--body', token,
+    ], { stdio: 'pipe' })
+    return true
   } catch (err) {
-    console.error('GitHub update failed:', err)
+    console.error('GitHub secret via gh CLI failed:', err.stderr?.toString() ?? err.message)
     return false
   }
 }
@@ -268,7 +246,11 @@ async function discoverInstruments(accessToken) {
       headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${accessToken}` },
       signal: AbortSignal.timeout(15000),
     })
-    if (!res.ok) return false
+    if (!res.ok) {
+      const body = await res.text()
+      console.error(`\n   Kite instruments API ${res.status}: ${body.slice(0, 200)}`)
+      return false
+    }
 
     const csv   = await res.text()
     const lines = csv.split('\n').filter(Boolean)
@@ -282,10 +264,10 @@ async function discoverInstruments(accessToken) {
       const cols = line.split(',')
       return {
         token:   parseInt(cols[idx('instrument_token')] ?? '0'),
-        symbol:  cols[idx('tradingsymbol')] ?? '',
-        name:    cols[idx('name')] ?? '',
-        expiry:  cols[idx('expiry')] ?? '',
-        type:    cols[idx('instrument_type')] ?? '',
+        symbol:  (cols[idx('tradingsymbol')] ?? '').replace(/^"|"$/g, ''),
+        name:    (cols[idx('name')]           ?? '').replace(/^"|"$/g, ''),
+        expiry:  (cols[idx('expiry')]         ?? '').replace(/^"|"$/g, ''),
+        type:    (cols[idx('instrument_type')]?? '').replace(/^"|"$/g, ''),
       }
     }).filter(i => i.token > 0 && i.type === 'FUT' && i.expiry)
 
