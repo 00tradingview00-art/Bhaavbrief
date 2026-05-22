@@ -47,6 +47,7 @@ export const metadata: Metadata = {
     siteName: 'BhaavBrief',
     locale: 'en_IN',
     type: 'website',
+    images: [{ url: `${BASE}/api/og?title=India+Commodity+Intelligence&tags=MCX+Gold,MCX+Crude,USD%2FINR`, width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',

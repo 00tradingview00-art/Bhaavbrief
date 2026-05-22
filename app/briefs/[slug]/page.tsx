@@ -17,20 +17,20 @@ export async function generateMetadata(
   if (!brief) return { title: 'Brief not found' }
 
   const title       = `${brief.title} | BhaavBrief`
-  const description = brief.summary || `MCX commodity intelligence brief. ${brief.commodities?.join(', ')} analysis for Indian traders.`
+  const description = brief.description || brief.summary || `MCX commodity intelligence — ${(brief.tags ?? []).join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.slug}`
+
+  const ogParams = new URLSearchParams({
+    title:   brief.title,
+    edition: String(brief.edition ?? ''),
+    date:    brief.displayDate ?? brief.date ?? '',
+    tags:    (brief.tags ?? []).slice(0, 3).join(','),
+  })
+  const ogImage = `${BASE_URL}/api/og?${ogParams}`
 
   return {
     title,
     description,
-    keywords: [
-      ...(brief.commodities ?? []).map(c => `${c} analysis India`),
-      ...(brief.commodities ?? []).map(c => `${c} price today`),
-      'MCX commodity analysis',
-      'commodity intelligence India',
-      'BhaavBrief',
-      ...(brief.tags ?? []),
-    ].join(', '),
     alternates: { canonical: url },
     openGraph: {
       type:          'article',
@@ -41,9 +41,16 @@ export async function generateMetadata(
       locale:        'en_IN',
       publishedTime: brief.date,
       authors:       ['BhaavBrief'],
-      tags:          [...(brief.tags ?? []), ...(brief.commodities ?? [])],
+      tags:          brief.tags ?? [],
+      images:        [{ url: ogImage, width: 1200, height: 630, alt: brief.title }],
     },
-    twitter: { card: 'summary_large_image' as const, title, description, site: '@bhaavbrief' },
+    twitter: {
+      card:        'summary_large_image',
+      title,
+      description,
+      site:        '@bhaavbrief',
+      images:      [ogImage],
+    },
   }
 }
 
