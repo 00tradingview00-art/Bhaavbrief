@@ -2,17 +2,15 @@
 import { useState, useEffect, useCallback } from 'react'
 import Tag from '@/components/Tag'
 
-const FILTERS = ['All', 'Gold', 'Silver', 'Crude', 'Copper', 'Nat Gas', 'Macro', 'Agri', 'Geopolitics']
+const FILTERS = ['All', 'Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
 
 const FILTER_KEYWORDS: Record<string, string[]> = {
-  Gold:        ['gold'],
-  Silver:      ['silver'],
-  Crude:       ['crude', 'oil', 'opec', 'brent'],
-  Copper:      ['copper'],
-  'Nat Gas':   ['natural gas', 'nat gas', 'lng', 'lpg'],
-  Macro:       ['macro', 'rbi', 'fed ', 'rate', 'rupee', 'forex', 'inflation', 'gdp'],
-  Agri:        ['agri', 'wheat', 'soybean', 'cotton', 'ncdex', 'monsoon', 'crop', 'cardamom', 'pepper'],
-  Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'war', 'geopolit'],
+  Metals:      ['gold', 'silver', 'copper', 'metal', 'aluminium', 'zinc', 'nickel', 'platinum'],
+  Energy:      ['crude', 'oil', 'opec', 'brent', 'natural gas', 'lng', 'lpg', 'refinery'],
+  Policy:      ['import duty', 'export', 'customs', 'tariff', 'excise', 'sebi', 'rbi', 'repo', 'msp', 'budget', 'finance ministry', 'monetary policy', 'regulation'],
+  Macro:       ['macro', 'inflation', 'cpi', 'wpi', 'gdp', 'pmi', 'iip', 'rupee', 'forex', 'usdinr', 'federal reserve', 'rate cut', 'rate hike', 'trade deficit'],
+  Agri:        ['agri', 'wheat', 'soybean', 'cotton', 'ncdex', 'monsoon', 'crop', 'cardamom', 'pepper', 'kharif', 'rabi', 'castor'],
+  Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'red sea', 'war', 'geopolit'],
 }
 
 interface NewsItem {

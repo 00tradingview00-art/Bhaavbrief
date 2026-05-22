@@ -23,28 +23,61 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
 const MAX_STORED        = 300
-const MAX_PER_RUN       = 4      // hard cap
+const MAX_PER_RUN       = 5      // hard cap — one per major category
 const FRESHNESS_HOURS   = 6      // ignore articles older than this
 
 const FEEDS = [
-  { url: 'https://news.google.com/rss/search?q=MCX+commodity+gold+silver+India&hl=en-IN&gl=IN&ceid=IN:en',    source: 'Google News', category: 'Metals'      },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+price+barrels&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Energy'      },
-  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+rate+inflation+India&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro'    },
-  { url: 'https://news.google.com/rss/search?q=India+commodity+agri+NCDEX+monsoon&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'       },
-  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Geopolitics' },
-  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+gold&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Macro'       },
-  { url: 'https://news.google.com/rss/search?q=copper+metal+aluminium+LME+price&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Metals'      },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                    source: 'NDTV Profit', category: null          },
-  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                              source: 'ET Markets',  category: null          },
+  // ── Commodities ──────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=MCX+commodity+gold+silver+crude+India&hl=en-IN&gl=IN&ceid=IN:en',     source: 'Google News', category: 'Metals'      },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+price+barrels+supply&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=copper+nickel+aluminium+zinc+LME+metal+price&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Metals'    },
+  { url: 'https://news.google.com/rss/search?q=India+commodity+agri+NCDEX+monsoon+kharif+rabi&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri' },
+  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+Europe+Asia+price+demand&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=China+commodity+demand+steel+iron+ore+copper&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Metals'     },
+
+  // ── Government Policy ─────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=India+import+duty+customs+tariff+commodity+2025&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy' },
+  { url: 'https://news.google.com/rss/search?q=SEBI+FMC+commodity+regulation+India&hl=en-IN&gl=IN&ceid=IN:en',       source: 'Google News', category: 'Policy'    },
+  { url: 'https://news.google.com/rss/search?q=India+finance+ministry+budget+commodity+excise&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy' },
+  { url: 'https://news.google.com/rss/search?q=India+MSP+procurement+food+grain+government&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'   },
+  { url: 'https://news.google.com/rss/search?q=RBI+monetary+policy+repo+rate+India+2025&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'      },
+
+  // ── Macro ─────────────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=India+CPI+WPI+inflation+data+2025&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News', category: 'Macro'       },
+  { url: 'https://news.google.com/rss/search?q=India+GDP+PMI+IIP+trade+deficit+current+account&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro' },
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+gold+inflation&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Macro'       },
+  { url: 'https://news.google.com/rss/search?q=rupee+dollar+forex+usdinr+RBI+intervention&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro'     },
+
+  // ── Geopolitics ───────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity+supply&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Geopolitics' },
+  { url: 'https://news.google.com/rss/search?q=Middle+East+Red+Sea+Suez+shipping+commodity&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Geopolitics' },
+
+  // ── Indian financial press ─────────────────────────────────────────────────────
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                           source: 'NDTV Profit', category: null          },
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                                     source: 'ET Markets',  category: null          },
+  { url: 'https://economictimes.indiatimes.com/news/economy/policy/rssfeeds/1052732854.cms',                         source: 'ET Policy',   category: 'Policy'      },
 ]
 
 const KEYWORDS = [
-  'opec', 'rbi', 'sanctions', 'hormuz', 'suez', 'eia inventory', 'import duty',
-  'monsoon', 'supply disruption', 'port strike', 'fed rate', 'crude', 'brent',
-  'gold price', 'silver price', 'commodity', 'mcx', 'rupee', 'usdinr',
-  'inflation', 'iran', 'russia', 'ukraine', 'china demand', 'federal reserve',
-  'rate cut', 'rate hike', 'refinery', 'inventory', 'comex', 'ncdex', 'copper',
-  'natural gas', 'aluminium', 'zinc', 'lead', 'nickel', 'castor', 'soybean',
+  // Commodities
+  'mcx', 'ncdex', 'comex', 'nymex', 'lme', 'cme',
+  'gold', 'silver', 'crude', 'brent', 'copper', 'natural gas', 'aluminium',
+  'zinc', 'lead', 'nickel', 'platinum', 'palladium',
+  'soybean', 'castor', 'pepper', 'cardamom', 'wheat', 'cotton',
+  // Market events
+  'opec', 'eia inventory', 'supply disruption', 'refinery', 'inventory',
+  'port strike', 'hormuz', 'suez', 'red sea', 'sanctions',
+  'china demand', 'iran', 'russia', 'ukraine',
+  // Government policy
+  'import duty', 'export ban', 'export duty', 'customs tariff', 'excise duty',
+  'sebi', 'fmc', 'rbi', 'finance ministry', 'mof', 'budget',
+  'msp', 'minimum support price', 'procurement', 'buffer stock',
+  'repo rate', 'monetary policy', 'policy rate',
+  // Macro
+  'inflation', 'cpi', 'wpi', 'gdp', 'pmi', 'iip', 'trade deficit',
+  'current account', 'rupee', 'usdinr', 'forex', 'dollar',
+  'federal reserve', 'fed rate', 'rate cut', 'rate hike',
+  'monsoon', 'kharif', 'rabi',
 ]
 
 // ── Persistence ───────────────────────────────────────────────────────────────
@@ -72,10 +105,11 @@ function isImportant(text) {
 
 function detectCategory(text) {
   const t = text.toLowerCase()
-  if (/iran|russia|ukraine|hormuz|suez|sanction|war\b|geopolit/.test(t))             return { category: 'Geopolitics', tagType: 'energy' }
-  if (/crude|oil\b|opec|brent|refinery|fuel|natural.gas|lng|lpg/.test(t))            return { category: 'Energy',      tagType: 'energy' }
-  if (/gold|silver|copper|metal|bullion|comex|aluminium|zinc|nickel/.test(t))         return { category: 'Metals',      tagType: 'metals' }
-  if (/agri|wheat|soybean|cotton|pepper|cardamom|ncdex|monsoon|crop|castor/.test(t)) return { category: 'Agri',        tagType: 'agri'   }
+  if (/iran|russia|ukraine|hormuz|suez|red sea|sanction|war\b|geopolit/.test(t))                                          return { category: 'Geopolitics', tagType: 'energy' }
+  if (/import duty|export duty|export ban|customs tariff|excise|sebi|fmc|msp|minimum support|repo rate|monetary policy|budget|finance ministry|rbi policy|procurement/.test(t)) return { category: 'Policy', tagType: 'macro' }
+  if (/crude|oil\b|opec|brent|refinery|fuel|natural.gas|lng|lpg/.test(t))                                                 return { category: 'Energy',      tagType: 'energy' }
+  if (/gold|silver|copper|metal|bullion|comex|aluminium|zinc|nickel|platinum|palladium/.test(t))                           return { category: 'Metals',      tagType: 'metals' }
+  if (/agri|wheat|soybean|cotton|pepper|cardamom|ncdex|monsoon|crop|castor|kharif|rabi/.test(t))                          return { category: 'Agri',        tagType: 'agri'   }
   return { category: 'Macro', tagType: 'macro' }
 }
 

@@ -1,9 +1,11 @@
 const TAG_STYLES: Record<string, { bg: string; color: string }> = {
-  energy:  { bg: '#FFF3E0', color: '#B45309' },
-  metals:  { bg: '#F0F4FF', color: '#2B4FC7' },
-  macro:   { bg: '#F3F0FF', color: '#6B21A8' },
-  agri:    { bg: '#EFFAF4', color: '#166534' },
-  default: { bg: '#F3F0E8', color: '#7A7668' },
+  energy:      { bg: '#FFF3E0', color: '#B45309' },
+  metals:      { bg: '#F0F4FF', color: '#2B4FC7' },
+  macro:       { bg: '#F3F0FF', color: '#6B21A8' },
+  agri:        { bg: '#EFFAF4', color: '#166534' },
+  policy:      { bg: '#FFF0F3', color: '#9B1239' },
+  geopolitics: { bg: '#FEF3C7', color: '#92400E' },
+  default:     { bg: '#F3F0E8', color: '#7A7668' },
 }
 
 interface TagProps {
