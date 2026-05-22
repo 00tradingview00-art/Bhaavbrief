@@ -4,6 +4,9 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
+// Allow slugs not pre-rendered at build time (new articles published by GitHub Actions)
+export const dynamicParams = true
+
 interface Props {
   params: Promise<{ slug: string }>
 }

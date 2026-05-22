@@ -2,6 +2,9 @@ import { getAllArticles } from '@/lib/articles'
 import Link from 'next/link'
 import Tag from '@/components/Tag'
 
+// Re-render every 60 seconds so new articles appear without a full redeploy
+export const revalidate = 60
+
 export const metadata = {
   title: 'Flash Intelligence — BhaavBrief',
   description: 'Real-time MCX commodity market intelligence. Auto-generated when markets move.',

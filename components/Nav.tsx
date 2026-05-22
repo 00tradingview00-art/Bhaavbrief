@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/',        label: 'Home'    },
-  { href: '/briefs',  label: 'Briefs'  },
-  { href: '/markets', label: 'Markets' },
-  { href: '/news',    label: 'News'    },
-  { href: '/invest',  label: 'Invest'  },
-  { href: '/learn',   label: 'Learn'   },
-  { href: '/about',   label: 'About'   },
+  { href: '/',         label: 'Home'         },
+  { href: '/briefs',   label: 'Briefs'       },
+  { href: '/markets',  label: 'Markets'      },
+  { href: '/articles', label: 'Intelligence' },
+  { href: '/news',     label: 'News'         },
+  { href: '/learn',    label: 'Learn'        },
+  { href: '/about',    label: 'About'        },
 ]
 
 export default function Nav() {

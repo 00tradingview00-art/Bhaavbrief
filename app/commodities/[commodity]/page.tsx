@@ -6,6 +6,9 @@ import { getAllArticles }   from '@/lib/articles'
 import fs                   from 'fs'
 import path                 from 'path'
 
+// Revalidate every 5 minutes — live prices + new articles
+export const revalidate = 300
+
 type CommodityInfo = {
   name: string; mcxSymbol: string; unit: string; lotSize: string; tickSize: string
   typicalMargin: string; contractValue: string; importParity: string
