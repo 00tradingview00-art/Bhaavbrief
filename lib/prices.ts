@@ -220,7 +220,7 @@ async function fetchUsdInr(): Promise<number> {
 // ── MCX derivation from COMEX ─────────────────────────────────────────────────
 
 function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
-  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? (usdinrFallback || 96.0)
+  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? usdinrFallback
   const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
   const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
   const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0

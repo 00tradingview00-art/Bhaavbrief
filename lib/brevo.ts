@@ -1,8 +1,14 @@
 const BREVO_API = 'https://api.brevo.com/v3'
-const API_KEY   = process.env.BREVO_API_KEY!
-const LIST_ID   = Number(process.env.BREVO_LIST_ID ?? 2) // default list 2
+const LIST_ID   = Number(process.env.BREVO_LIST_ID ?? 2)
+
+function getApiKey(): string {
+  const key = process.env.BREVO_API_KEY
+  if (!key) throw new Error('BREVO_API_KEY is not configured')
+  return key
+}
 
 export async function addSubscriber(email: string, name?: string) {
+  const API_KEY = getApiKey()
   const res = await fetch(`${BREVO_API}/contacts`, {
     method: 'POST',
     headers: {
@@ -32,6 +38,7 @@ export async function sendNewsletter({
   htmlContent: string
   previewText: string
 }) {
+  const API_KEY = getApiKey()
   // Create campaign
   const campaignRes = await fetch(`${BREVO_API}/emailCampaigns`, {
     method: 'POST',

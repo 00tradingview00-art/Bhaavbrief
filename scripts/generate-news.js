@@ -225,7 +225,7 @@ async function fetchKitePrices(instruments) {
 }
 
 async function fetchStooqFallback() {
-  const p = { usdInr: 85.0, source: 'stooq' }
+  const p = { usdInr: 0, source: 'stooq' }
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
       signal: AbortSignal.timeout(5000),
@@ -258,8 +258,8 @@ async function fetchLivePrices() {
       // Attach USD/INR from Frankfurter even when using Kite (Kite is INR already)
       try {
         const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
-        if (r.ok) kite.usdInr = (await r.json()).rates?.INR ?? 85.0
-      } catch { kite.usdInr = 85.0 }
+        if (r.ok) kite.usdInr = (await r.json()).rates?.INR ?? 0
+      } catch { kite.usdInr = 0 }
       return kite
     }
   }
@@ -271,7 +271,7 @@ function priceContext(p) {
   const parts = []
   if (p.source === 'kite') {
     // Kite prices are already in INR (MCX contracts)
-    parts.push(`USD/INR ₹${p.usdInr?.toFixed(2) ?? '85.00'}`)
+    if (p.usdInr) parts.push(`USD/INR ₹${p.usdInr.toFixed(2)}`)
     if (p.gold)   parts.push(`MCX Gold ₹${p.gold.toFixed(0)}/10g`)
     if (p.silver) parts.push(`MCX Silver ₹${p.silver.toFixed(0)}/kg`)
     if (p.crude)  parts.push(`MCX Crude ₹${p.crude.toFixed(0)}/bbl`)

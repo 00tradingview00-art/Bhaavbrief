@@ -3,16 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --ink:        #18180F;
-  --ink2:       #48483A;
-  --ink3:       #8A8A7A;
-  --paper:      #FAFAF6;
-  --paper2:     #F3F2EC;
-  --rule:       #DDDDD0;
-  --rule2:      #C8C8B8;
-  --saffron:    #C8720A;
-  --up:         #1E6630;
-  --dn:         #991818;
+  /* local aliases used by brief-prose and border utilities */
+  --paper:   #FAFAF6;
+  --paper2:  #F3F2EC;
+  --rule:    #DDDDD0;
+  --rule2:   #C8C8B8;
+  --saffron: #C8720A;
+  --dn:      #991818;
 }
 
 html { scroll-behavior: smooth; }

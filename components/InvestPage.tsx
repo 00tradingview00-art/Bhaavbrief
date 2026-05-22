@@ -270,7 +270,7 @@ export default function InvestPage() {
       finally { setLoadingPrices(false) }
     }
     fetchPrices()
-    const id = setInterval(fetchPrices, 5 * 60 * 1000)
+    const id = setInterval(fetchPrices, 10 * 60 * 1000)
     return () => clearInterval(id)
   }, [])
 

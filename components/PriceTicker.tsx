@@ -5,33 +5,44 @@ interface PriceItem {
   name: string; price: string; pct: string; up: boolean
 }
 
+function fmt(v: number, prefix: string, dec = 0) {
+  if (!v) return '—'
+  return `${prefix}${v.toLocaleString('en-IN', { maximumFractionDigits: dec, minimumFractionDigits: dec })}`
+}
+function pct(v: number) {
+  if (v === 0) return '+0.00%'
+  return `${v >= 0 ? '+' : ''}${v.toFixed(2)}%`
+}
+
 export default function PriceTicker() {
   const [prices, setPrices] = useState<PriceItem[]>([])
 
   useEffect(() => {
     fetch('/api/prices')
       .then(r => r.json())
-      .then(d => { if (d.prices?.length) setPrices(d.prices) })
+      .then(d => {
+        if (!d.gold) return
+        setPrices([
+          { name: 'MCX Gold',   price: fmt(d.gold?.mcx,   '₹'),      pct: pct(d.gold?.mcxChangePct   ?? 0), up: (d.gold?.mcxChangePct   ?? 0) >= 0 },
+          { name: 'MCX Silver', price: fmt(d.silver?.mcx, '₹'),      pct: pct(d.silver?.mcxChangePct ?? 0), up: (d.silver?.mcxChangePct ?? 0) >= 0 },
+          { name: 'MCX Crude',  price: fmt(d.crude?.mcx,  '₹'),      pct: pct(d.crude?.mcxChangePct  ?? 0), up: (d.crude?.mcxChangePct  ?? 0) >= 0 },
+          { name: 'MCX Copper', price: fmt(d.copper?.mcx, '₹', 2),   pct: pct(d.copper?.mcxChangePct ?? 0), up: (d.copper?.mcxChangePct ?? 0) >= 0 },
+          { name: 'Nat Gas',    price: fmt(d.natgas?.mcx, '₹', 2),   pct: pct(d.natgas?.mcxChangePct ?? 0), up: (d.natgas?.mcxChangePct ?? 0) >= 0 },
+          { name: 'USD/INR',    price: fmt(d.usdinr,      '₹', 2),   pct: pct(d.usdinrChangePct      ?? 0), up: (d.usdinrChangePct      ?? 0) >= 0 },
+        ])
+      })
       .catch(() => {})
   }, [])
 
-  const items = prices.length
-    ? [...prices, ...prices] // duplicate for seamless loop
-    : [
-        { name: 'MCX Crude', price: '—', pct: '—', up: true },
-        { name: 'MCX Gold',  price: '—', pct: '—', up: true },
-        { name: 'MCX Silver',price: '—', pct: '—', up: false },
-        { name: 'MCX Copper',price: '—', pct: '—', up: true },
-        { name: 'Nat Gas',   price: '—', pct: '—', up: false },
-        { name: 'USDINR',    price: '—', pct: '—', up: false },
-      ].concat([
-        { name: 'MCX Crude', price: '—', pct: '—', up: true },
-        { name: 'MCX Gold',  price: '—', pct: '—', up: true },
-        { name: 'MCX Silver',price: '—', pct: '—', up: false },
-        { name: 'MCX Copper',price: '—', pct: '—', up: true },
-        { name: 'Nat Gas',   price: '—', pct: '—', up: false },
-        { name: 'USDINR',    price: '—', pct: '—', up: false },
-      ])
+  const base = prices.length ? prices : [
+    { name: 'MCX Gold',   price: '—', pct: '—', up: true  },
+    { name: 'MCX Silver', price: '—', pct: '—', up: true  },
+    { name: 'MCX Crude',  price: '—', pct: '—', up: true  },
+    { name: 'MCX Copper', price: '—', pct: '—', up: true  },
+    { name: 'Nat Gas',    price: '—', pct: '—', up: false },
+    { name: 'USD/INR',    price: '—', pct: '—', up: false },
+  ]
+  const items = [...base, ...base]
 
   return (
     <div style={{ background: '#18180F', borderBottom: '2.5px solid #C8720A', display: 'flex', overflow: 'hidden' }}>
@@ -44,10 +55,7 @@ export default function PriceTicker() {
         LIVE BHAAV
       </div>
       <div style={{ overflow: 'hidden', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <div style={{
-          display: 'flex',
-          animation: 'tickerScroll 28s linear infinite',
-        }}>
+        <div style={{ display: 'flex', animation: 'tickerScroll 28s linear infinite' }}>
           {items.map((item, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 8,
