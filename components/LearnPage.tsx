@@ -18,31 +18,37 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Multi Commodity Exchange of India (MCX) is India&apos;s largest commodity derivatives exchange. Launched in 2003 and regulated by SEBI, it allows traders, hedgers, and investors to trade standardised contracts on commodities ranging from gold and crude oil to pepper and cardamom.
+          Multi Commodity Exchange of India (MCX) is India&apos;s largest commodity derivatives exchange. Founded in 2003 and regulated by SEBI since 2015, it lets traders, hedgers, and investors trade standardised futures contracts on commodities — from gold and crude oil to copper and natural gas.
         </p>
-        <InfoBox title="Key fact">
-          MCX handles over 98% of India&apos;s commodity futures trading volume. It operates from 9 AM to 11:30 PM IST, giving Indian traders access to global commodity movements in near-real time.
+        <InfoBox title="Scale">
+          MCX handles over 98% of India&apos;s commodity futures volume, with daily turnover routinely crossing ₹50,000 crore. It runs from 9 AM to 11:30 PM IST — giving Indian traders access to US and European commodity market moves in real time.
         </InfoBox>
-        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 24 }}>
-          Unlike equity markets where you buy a share of a company, on MCX you trade a <em>contract</em> — an agreement to buy or sell a fixed quantity of a commodity at a set price on a future date. Most retail traders never take physical delivery; they square off their position before expiry.
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Unlike buying shares of a company, on MCX you trade a <em>futures contract</em> — a legally binding agreement to buy or sell a fixed quantity of a commodity at a pre-agreed price on a future date. The quantity per contract is called the <strong>lot size</strong>. Most retail traders never take physical delivery; they square off their position before expiry.
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Below are MCX&apos;s key contracts with approximate contract values and margin requirements. Both change daily based on price volatility — the numbers below are illustrative.
         </p>
         <ArticleTable
-          headers={['Commodity', 'Lot Size', 'Approx Margin', 'Expiry']}
+          headers={['Contract', 'Lot Size', 'Quoted in', 'Contract Value*', 'SPAN Margin*']}
           rows={[
-            ['Gold', '1 kg', '₹7.5–9L', 'Last day of month'],
-            ['Gold Mini', '100 g', '₹75K–90K', 'Last day of month'],
-            ['Silver', '30 kg', '₹4–5L', 'Last day of month'],
-            ['Crude Oil', '100 bbl', '₹45–55K', '19th of month'],
-            ['Crude Mini', '10 bbl', '₹5–6K', '19th of month'],
-            ['Copper', '2.5 MT', '₹1.6–2L', 'Last day of month'],
-            ['Nat Gas', '1250 mmBtu', '₹18–22K', '25th of month'],
+            ['Gold',         '1 kg',       '₹ per 10g',    '~₹1 crore',   '~₹5–7L'],
+            ['Gold Mini',    '100 g',      '₹ per 10g',    '~₹10L',       '~₹55–75K'],
+            ['Silver',       '30 kg',      '₹ per kg',     '~₹30L',       '~₹1.5–2.5L'],
+            ['Silver Mini',  '5 kg',       '₹ per kg',     '~₹5L',        '~₹25–40K'],
+            ['Crude Oil',    '100 barrels','₹ per barrel', '~₹6.5L',      '~₹30–45K'],
+            ['Crude Mini',   '10 barrels', '₹ per barrel', '~₹65K',       '~₹3–5K'],
+            ['Copper',       '2,500 kg',   '₹ per kg',     '~₹24L',       '~₹1.2–1.8L'],
+            ['Nat Gas',      '1,250 mmBtu','₹ per mmBtu',  '~₹4L',        '~₹20–30K'],
           ]}
         />
-        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.6 }}>
-          Margins change daily. Verify exact figures at{' '}
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Illustrative, based on mid-2026 price levels. Actual contract values and margins change daily.
+          Use the{' '}
           <a href="https://zerodha.com/margin-calculator/SPAN" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
-            zerodha.com/margin-calculator/SPAN
-          </a>
+            Zerodha SPAN calculator
+          </a>{' '}
+          for live margin requirements.
         </p>
       </>
     ),
@@ -55,16 +61,27 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          A futures contract is a legally binding agreement to buy or sell a specific quantity of a commodity at a predetermined price on a future date. On MCX, these contracts are standardised — the exchange defines the quantity, quality, and delivery terms.
+          A futures contract is an agreement to buy or sell a commodity at a fixed price on a future date. You pay only a margin — a fraction of the contract value — to control the full contract. This is leverage.
         </p>
-        <InfoBox title="Simple example">
-          You buy 1 lot of MCX Gold (1 kg) at ₹1,59,000. If price rises to ₹1,61,000, you make ₹2,000. If it falls to ₹1,57,000, you lose ₹2,000. You can exit anytime before expiry — no physical gold changes hands.
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          The critical thing to understand: <strong>your profit or loss is calculated on the full contract value, not just the margin you paid</strong>.
+        </p>
+        <InfoBox title="Worked example — MCX Gold">
+          MCX Gold is quoted at ₹1,00,000 per 10 grams. One lot = 1 kg = 100 units of 10g.
+          <br /><br />
+          <strong>Contract value</strong> = 100 × ₹1,00,000 = <strong>₹1,00,00,000 (₹1 crore)</strong><br />
+          <strong>Margin required</strong> (at ~6%) = <strong>₹6,00,000</strong>
+          <br /><br />
+          You buy 1 lot at ₹1,00,000/10g. The price rises to ₹1,01,000/10g — a ₹1,000 move per 10g unit.<br />
+          <strong>Your profit</strong> = ₹1,000 × 100 units = <strong>₹1,00,000</strong><br />
+          <strong>Return on margin</strong> = ₹1,00,000 ÷ ₹6,00,000 = <strong>16.7%</strong> on a 1% price move.<br /><br />
+          The reverse is equally true — a 1% fall means a ₹1,00,000 loss on your ₹6L margin.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          The key mechanics: you pay only a margin (5–8% of contract value) to control the full contract. This leverage amplifies both gains and losses. Mark-to-market (MTM) settlement happens daily — profits credited, losses debited from your account every evening at the end of the trading session.
+          <strong>Mark-to-Market (MTM) settlement</strong> is how MCX manages daily risk. Every evening after the session closes, your position is revalued at the day&apos;s settlement price. Profits are credited to your account and losses debited — immediately. You cannot &quot;ride out&quot; a loss by simply holding; if your account balance drops below the maintenance margin, your broker will call for more funds or square off the position.
         </p>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          Two participants drive every trade: <strong>hedgers</strong> (jewellers, oil companies, farmers protecting against price risk) and <strong>speculators</strong> (traders seeking profit from price movements). This interplay creates liquidity and price discovery.
+          Two types of participants drive every trade: <strong>hedgers</strong> (jewellers buying gold futures to lock in purchase prices; oil companies selling crude futures to protect against price drops) and <strong>speculators</strong> (traders seeking profit from price movements). Hedgers bring genuine supply/demand information to the market; speculators provide liquidity.
         </p>
       </>
     ),
@@ -72,18 +89,33 @@ const ARTICLES: Article[] = [
   {
     id: 2,
     section: 'MCX Basics',
-    title: 'Lot sizes & expiry',
+    title: 'Lot sizes, expiry & tick size',
     label: 'MCX Basics · Article 3 of 3',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Every MCX contract has a fixed lot size — the minimum quantity you must trade. You cannot trade half a lot. Understanding lot sizes is critical for position sizing and risk management.
+          Three numbers define every MCX trade: the lot size (how much you&apos;re trading), the tick size (the minimum price move), and the expiry date (when the contract ceases to exist).
         </p>
-        <InfoBox title="Rollover explained">
-          When a contract nears expiry, traders &quot;roll over&quot; to the next month&apos;s contract — selling the near month and buying the far month simultaneously. Watch for rollover costs (the spread between months) as they affect your effective trade price.
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Tick Size', 'P&L per tick', 'Expiry']}
+          rows={[
+            ['Gold',      '1 kg',       '₹1/10g',      '₹100/lot',  'Month-end'],
+            ['Silver',    '30 kg',      '₹1/kg',        '₹30/lot',   'Month-end'],
+            ['Crude Oil', '100 bbl',    '₹1/bbl',       '₹100/lot',  '~19th of month'],
+            ['Copper',    '2,500 kg',   '₹0.05/kg',     '₹125/lot',  'Month-end'],
+            ['Nat Gas',   '1,250 mmBtu','₹0.10/mmBtu',  '₹125/lot',  '~25th of month'],
+          ]}
+        />
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          The tick size matters for execution. If MCX Crude is at ₹6,500/bbl and moves to ₹6,501, you make or lose exactly ₹100 (1 tick × 100 barrels). For Gold, a ₹500/10g move = ₹500 × 100 units = ₹50,000 per lot.
+        </p>
+        <InfoBox title="Rollover — what happens at expiry">
+          When a contract&apos;s expiry approaches, traders who want to maintain exposure &quot;roll over&quot; — they sell the near-month contract and buy the next month simultaneously. The difference in price between the two months is called the <strong>roll cost</strong> (or roll benefit in backwardation).
+          <br /><br />
+          If MCX Crude June is at ₹6,500 and July is at ₹6,530, rolling costs ₹30/bbl × 100 = <strong>₹3,000 per lot</strong>. Do this 12 times a year and roll costs alone eat ₹36,000.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          Expiry dates vary by commodity. Crude oil expires on the 19th of each month (or the prior trading day). Gold and silver expire on the last trading day of the month. Natural gas expires on the 25th. Always check MCX&apos;s official calendar before holding positions close to expiry — the last 2-3 days see extreme volatility.
+          Always check MCX&apos;s official contract calendar before holding positions close to expiry. Crude oil and natural gas expire mid-month; gold and silver expire near month-end. The last 2–3 days before expiry see sharp volatility and widened spreads as open interest rapidly falls.
         </p>
       </>
     ),
@@ -96,22 +128,29 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Margin is the collateral you deposit with your broker to hold an open futures position. MCX sets initial margin requirements (typically 4–8% of contract value). Your broker may add their own exposure margin on top.
+          Margin is the collateral you deposit to hold an open futures position. MCX (via SEBI) mandates a minimum <strong>SPAN margin</strong> based on statistical worst-case price scenarios. Your broker adds an <strong>exposure margin</strong> on top — typically 2–5% extra — giving a total margin requirement of roughly 5–10% of contract value.
         </p>
-        <InfoBox title="Margin call risk">
-          If your account balance falls below the maintenance margin level, you receive a margin call — you must add funds immediately or your broker will square off your position at a loss. Always keep buffer capital beyond the minimum margin.
+        <InfoBox title="Margin call — how it works">
+          If your account balance falls below the <strong>maintenance margin</strong> (usually 75% of the initial margin), your broker issues a margin call: deposit more funds within hours or they will square off your position at the prevailing market price — which could be at a loss. Always maintain 20–30% buffer above the minimum margin.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Leverage is a double-edged sword. A 5% margin means 20x leverage — a 1% move in commodity price equals a 20% gain or loss on your margin. Professional traders never risk more than 1–2% of capital on a single trade regardless of conviction.
+          Leverage is the ratio of contract value to margin paid. At 6% margin, you control ₹1 crore of gold with ₹6 lakh — that&apos;s ~16x leverage. Every 1% move in the commodity price moves your margin by 16%. This cuts both ways.
         </p>
         <ArticleTable
-          headers={['Contract', 'Contract Value', 'Margin ~5%', 'Impact of 1% move']}
+          headers={['Contract', 'Contract Value*', 'Margin ~6%*', '1% price move']}
           rows={[
-            ['Gold (1 kg)', '₹1,59,000', '₹7,950', '₹1,590 gain/loss'],
-            ['Silver (30 kg)', '₹28,24,500', '₹1,41,225', '₹28,245 gain/loss'],
-            ['Crude (100 bbl)', '₹6,28,400', '₹31,420', '₹6,284 gain/loss'],
+            ['Gold (1 kg)',       '₹1,00,00,000', '₹6,00,000', '₹1,00,000 gain/loss'],
+            ['Silver (30 kg)',    '₹30,00,000',   '₹1,80,000', '₹30,000 gain/loss'],
+            ['Crude (100 bbl)',   '₹6,50,000',    '₹39,000',   '₹6,500 gain/loss'],
+            ['Copper (2,500 kg)', '₹24,00,000',   '₹1,44,000', '₹24,000 gain/loss'],
           ]}
         />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Illustrative based on approximate mid-2026 prices (Gold ₹1,00,000/10g; Silver ₹1,00,000/kg; Crude ₹6,500/bbl; Copper ₹960/kg). Actual values change daily.
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginTop: 16 }}>
+          Professional commodity traders typically risk no more than 1–2% of total capital per trade, regardless of conviction. On a ₹25 lakh trading account, that means a maximum loss of ₹25,000–50,000 per trade before cutting the position.
+        </p>
       </>
     ),
   },
@@ -123,13 +162,30 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          MCX prices are quoted in Indian Rupees per unit — but the unit varies by commodity. Gold is ₹ per 10 grams, silver is ₹ per kilogram, crude is ₹ per barrel, copper is ₹ per kilogram, and natural gas is ₹ per mmBtu.
+          MCX prices are quoted in Indian Rupees, but the unit differs by commodity. Knowing the unit is essential — confusing ₹/10g with ₹/kg is a costly mistake.
         </p>
-        <InfoBox title="The basis — understanding MCX vs COMEX">
-          MCX Gold price ≠ COMEX Gold converted directly. The MCX price includes the COMEX spot price + import duty + GST + local demand premium. Formula: MCX Gold ≈ (COMEX ÷ 31.1035) × 10 × USD/INR × (1 + duty + GST). When the actual MCX price deviates significantly from this theoretical value, it signals strong local buying or selling pressure.
+        <ArticleTable
+          headers={['Commodity', 'MCX Quote Unit', 'Example Price', 'What that means']}
+          rows={[
+            ['Gold',        '₹ per 10 grams', '₹1,00,000/10g', '₹10,00,000 per 100g (₹10L)'],
+            ['Silver',      '₹ per kilogram', '₹1,00,000/kg',  '₹30,00,000 per 30 kg lot'],
+            ['Crude Oil',   '₹ per barrel',   '₹6,500/bbl',    '₹6,50,000 per 100 bbl lot'],
+            ['Copper',      '₹ per kilogram', '₹960/kg',       '₹24,00,000 per 2,500 kg lot'],
+            ['Nat Gas',     '₹ per mmBtu',    '₹350/mmBtu',    '₹4,37,500 per 1,250 mmBtu lot'],
+          ]}
+        />
+        <InfoBox title="Understanding the MCX–COMEX basis">
+          MCX gold is not simply COMEX gold converted to rupees. The Indian price includes import duty, GST, and a local supply/demand premium. The theoretical MCX fair value is:
+          <br /><br />
+          <strong>MCX Gold (₹/10g) = (COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + duty + GST)</strong>
+          <br /><br />
+          Example: COMEX at $3,000/oz, USD/INR at ₹85, effective duty + GST ≈ 15%:<br />
+          = ($3,000 ÷ 31.1035) × 10 × 85 × 1.15 = $964.5 × 85 × 1.15 = <strong>₹94,095/10g</strong>
+          <br /><br />
+          When actual MCX price is significantly <em>above</em> this theoretical level, it signals strong local demand or import tightness. When below, it signals weak local demand or excess supply.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          Similarly for silver: MCX Silver (₹/kg) = (COMEX/31.1035) × 1000 × USD/INR. For crude: MCX Crude ≈ WTI × USD/INR. Natural gas: MCX NatGas ≈ Henry Hub × USD/INR. Tracking these formulas daily helps you spot arbitrage opportunities and understand price drivers.
+          For crude: <strong>MCX Crude ≈ WTI ($/bbl) × USD/INR</strong>. India primarily imports Brent-linked crude, but MCX is settled against an Indian import price reference. For silver: same formula as gold but substitute silver COMEX price. For natural gas: <strong>MCX NatGas ≈ Henry Hub × USD/INR</strong>, though India&apos;s domestic gas pricing introduces a basis differential.
         </p>
       </>
     ),
@@ -142,13 +198,24 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Contango is when future prices are higher than the current spot price — the normal state for most commodities. It reflects storage costs, financing costs, and insurance. When you roll over a contango contract, you typically sell low and buy high, creating a &quot;roll cost.&quot;
+          Every commodity trades multiple contract months simultaneously — June, July, August, etc. The relationship between these prices tells you something important about supply, demand, and the cost of holding inventory.
         </p>
-        <InfoBox title="What it means for your P&L">
-          If MCX Crude June contract is at ₹6,284 and July is at ₹6,310, the market is in contango. Rolling from June to July costs you ₹26 per barrel × 100 = ₹2,600 per lot. Over time, these costs erode long-only commodity returns — which is why commodity ETFs underperform spot prices.
+        <InfoBox title="Contango — the normal state">
+          <strong>Contango</strong>: far-month price &gt; near-month price. This is the default condition for most commodities, because holding physical commodity has a cost — storage, insurance, financing. The futures curve &quot;prices in&quot; these carrying costs.
+          <br /><br />
+          Example: MCX Crude June at ₹6,500, July at ₹6,535, August at ₹6,568.<br />
+          Rolling from June to July <strong>costs</strong> ₹35/bbl × 100 = <strong>₹3,500/lot</strong>.<br />
+          This is why long-only commodity ETFs consistently underperform the spot commodity over time — they pay roll costs every month.
+        </InfoBox>
+        <InfoBox title="Backwardation — the supply alarm">
+          <strong>Backwardation</strong>: near-month price &gt; far-month price. This signals that <em>immediate physical supply is tight</em> — buyers are paying a premium to get the commodity now.
+          <br /><br />
+          Example: MCX Crude June at ₹6,800, July at ₹6,760.<br />
+          Rolling from June to July <strong>earns</strong> ₹40/bbl × 100 = <strong>₹4,000/lot</strong>.<br />
+          Crude frequently enters backwardation during OPEC production cuts or Middle East supply shocks. Gold almost never enters backwardation — being a monetary asset, it has very low storage costs and high above-ground supply.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          Backwardation — where near-month prices exceed far-month prices — signals immediate supply tightness or high present demand. It benefits long futures holders during rollover. Crude oil often slips into backwardation during geopolitical supply shocks (OPEC cuts, Middle East tensions). Gold rarely enters backwardation except in extreme crisis.
+          For Indian traders, the practical takeaway: before entering a long position you plan to hold for several weeks, check whether the market is in contango or backwardation. In deep contango, you are paying a hidden cost with every rollover. In backwardation, roll positions actually add to your return.
         </p>
       </>
     ),
@@ -161,23 +228,29 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Both instruments track gold prices but serve very different purposes. MCX gold futures are for trading — leveraged, time-bound, requiring active management. Gold ETFs are for investing — unleveraged, long-term, as easy as buying a stock.
+          Both instruments give you exposure to gold price moves in India — but they serve completely different purposes and suit different types of participants.
         </p>
         <ArticleTable
-          headers={['Factor', 'MCX Gold Futures', 'Gold ETF (GOLDBEES)']}
+          headers={['Factor', 'MCX Gold Futures', 'Gold ETF (e.g. GOLDBEES)']}
           rows={[
-            ['Purpose', 'Trading / Hedging', 'Long-term investing'],
-            ['Leverage', 'Yes (15–20x)', 'No (1x)'],
-            ['Expiry', 'Monthly', 'None'],
-            ['Min investment', '~₹1.5L (1 lot)', '~₹63 (1 unit)'],
-            ['Demat needed', 'Trading account', 'Demat account'],
-            ['Tax (STCG)', 'Slab rate', '20% if <3 years'],
-            ['Tax (LTCG)', 'N/A', '20% with indexation'],
-            ['SIP possible', 'No', 'Yes (via MF FoF)'],
+            ['Purpose',           'Active trading / hedging',  'Long-term wealth accumulation'],
+            ['Leverage',          'Yes — ~16x at 6% margin',   'No (1x)'],
+            ['Expiry',            'Monthly — must manage',     'None — hold indefinitely'],
+            ['Min capital',       '₹5–8L (SPAN + exposure)',   '~₹50–100 per unit (any amount)'],
+            ['Account needed',    'Commodity trading account', 'Demat account'],
+            ['LTCG tax',          'N/A (business income)',     '12.5% after 12 months holding'],
+            ['STCG tax',          'Slab rate (business)',      'Slab rate under 12 months'],
+            ['SIP possible',      'No',                        'Yes, via Gold FoF (no demat)'],
+            ['Physical delivery', 'Yes, at expiry (rare)',     'No (paper gold)'],
           ]}
         />
-        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginTop: 16 }}>
-          For most retail investors without active trading bandwidth, the <strong>Gold ETF FoF route</strong> (e.g. HDFC Gold Fund) is most practical — no demat account needed, SIP possible from ₹500/month, fully liquid. For active traders with risk capital, MCX offers superior price discovery and leverage.
+        <InfoBox title="Gold ETF taxation — Budget 2024 change">
+          Before July 23, 2024: Gold ETFs were taxed at 20% with indexation after 3 years (LTCG), slab rate before that.
+          <br /><br />
+          After Budget 2024: Gold ETFs held for <strong>12 months or more</strong> now attract <strong>12.5% LTCG without indexation</strong>. Under 12 months is taxed at your income slab rate (STCG). The shorter holding period for LTCG makes Gold ETFs more tax-efficient for medium-term investors.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginTop: 4 }}>
+          For most retail investors without active trading bandwidth, <strong>Gold ETF FoF</strong> (e.g. Nippon India Gold Savings Fund, HDFC Gold Fund) is the most accessible route — no demat account needed, SIP from ₹500/month, fully liquid. For active traders with dedicated risk capital and daily monitoring capability, MCX Gold offers superior leverage and price discovery.
         </p>
       </>
     ),
@@ -190,20 +263,25 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          India-based investors have multiple pathways to commodity exposure depending on their risk appetite, capital, and time horizon.
+          Indian investors have multiple pathways to commodity exposure depending on risk appetite, capital, and how actively they want to manage positions.
         </p>
         <ArticleTable
-          headers={['Platform', 'What you can buy', 'Best for']}
+          headers={['Platform', 'What you can access', 'Best for']}
           rows={[
-            ['Zerodha / Groww', 'Indian ETFs, MFs, MCX futures', 'Everything Indian'],
-            ['Vested Finance', 'US ETFs (GLD, GDX, COPX), US stocks', 'Global exposure'],
-            ['INDmoney', 'US ETFs, US stocks', 'Global exposure'],
-            ['Kuvera / MF Central', 'Commodity MFs (no demat needed)', 'SIP in commodity MFs'],
-            ['Angel One / ICICI Direct', 'MCX, Indian ETFs, MFs', 'Full-service'],
+            ['Zerodha / Angel One', 'MCX futures, Indian ETFs, Gold ETFs, MFs', 'All-in-one — trading + investing'],
+            ['ICICI Direct / HDFC Sky', 'MCX futures, equity, ETFs, MFs', 'Full-service with advisory'],
+            ['Vested Finance', 'US ETFs (GLD, GDX, COPX, USO), US stocks', 'Global commodity ETF exposure'],
+            ['INDmoney', 'US ETFs, US stocks', 'US market exposure via LRS'],
+            ['Kuvera / MF Central', 'Commodity MFs, Gold FoF — no demat required', 'SIP in gold/commodity funds'],
           ]}
         />
-        <InfoBox title="RBI LRS for global investments">
-          Investing in US-listed ETFs or stocks via Vested or INDmoney uses the RBI&apos;s Liberalised Remittance Scheme (LRS) — up to $250,000 per year per individual. Tax is payable in India on foreign asset gains per your income slab. TCS of 20% is collected upfront on remittances above ₹7L and adjusted at year-end filing.
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, marginBottom: 20, lineHeight: 1.6 }}>
+          Note: Groww, Upstox (basic plan), and most newer discount brokers support equity and MFs but <strong>do not offer MCX commodity futures</strong>. Verify MCX access before opening an account specifically for commodity trading.
+        </p>
+        <InfoBox title="Investing abroad via RBI LRS">
+          US-listed commodity ETFs (GLD for gold, USO for crude, COPX for copper miners) are accessible via the RBI&apos;s Liberalised Remittance Scheme — up to $250,000 per individual per financial year.
+          <br /><br />
+          Key costs: TCS of 20% is collected upfront on LRS remittances above ₹7 lakh (adjusted at ITR filing). Foreign asset gains are taxed in India per your applicable income slab for STCG, or at 12.5% for LTCG held over 24 months. PFIC rules don&apos;t apply to Indian tax residents — but do consult a CA for accurate filing.
         </InfoBox>
       </>
     ),
@@ -216,16 +294,20 @@ const ARTICLES: Article[] = [
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Commodity futures trading gains are treated as <strong>non-speculative business income</strong> in India — taxed at your income tax slab rate, regardless of holding period. There is no LTCG benefit for futures trading unlike equity.
+          Commodity futures trading gains are classified as <strong>non-speculative business income</strong> under Indian tax law — taxed at your applicable income slab rate, regardless of how long you held the position. There is no LTCG benefit or short-term/long-term distinction for futures, unlike equity.
         </p>
-        <InfoBox title="Business income treatment">
-          MCX trading P&amp;L must be reported under &quot;profits and gains from business or profession&quot; in your ITR. Losses can be carried forward for 8 years and set off against other business income — but NOT against salary income.
+        <InfoBox title="Business income treatment — what this means practically">
+          MCX trading profits and losses go into &quot;Profits and Gains from Business or Profession&quot; in your ITR-3.
+          <br /><br />
+          <strong>The upside</strong>: losses can be <strong>carried forward for 8 years</strong> and set off against other non-speculative business income in future years. Brokerage, CTT, internet/data charges, and a proportionate share of your trading setup costs are deductible.
+          <br /><br />
+          <strong>The catch</strong>: losses cannot be set off against salary income. And you must file ITR-3 (not ITR-1 or ITR-2), which requires more detail.
         </InfoBox>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Keep detailed records of every trade — entry, exit, P&amp;L, brokerage, and STT/CTT paid. Most brokers provide an annual P&amp;L statement and tax P&amp;L report. Consider a CA familiar with derivative taxation for filing, as errors attract ITD scrutiny.
+          <strong>Turnover calculation</strong> matters for tax audit applicability. For commodity futures, turnover = the absolute sum of all profits and losses (not gross receipts). A trader who made ₹5L and lost ₹3L on different trades has a turnover of ₹8L, not ₹5L net.
         </p>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
-          If your turnover (absolute sum of all profits + losses) exceeds ₹10 crore, a tax audit under Section 44AB is mandatory. For turnover below ₹10 crore with declared profit above 6%, no audit is required.
+          If turnover exceeds ₹10 crore, a tax audit under Section 44AB is mandatory. Below ₹10 crore, no audit is required <em>if</em> you declare net profit ≥ 6% of turnover. If you declare a loss (or profit below 6%), an audit is needed even at lower turnover. Most active commodity traders should work with a CA familiar with F&O/commodity taxation.
         </p>
       </>
     ),
@@ -233,26 +315,32 @@ const ARTICLES: Article[] = [
   {
     id: 9,
     section: 'Taxation',
-    title: 'STT, CTT explained',
+    title: 'STT, CTT & transaction costs',
     label: 'Taxation · Article 2 of 2',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
-          Securities Transaction Tax (STT) applies to equity. For commodity futures, the government levies Commodity Transaction Tax (CTT) — introduced in Budget 2013. CTT is charged only on the sell side of non-agricultural commodity futures.
+          Every MCX trade incurs several statutory and exchange charges on top of brokerage. Understanding these is important — they compound significantly on high-turnover trading.
         </p>
         <ArticleTable
-          headers={['Levy', 'Rate', 'Applies to', 'Deductible?']}
+          headers={['Charge', 'Rate', 'Levied on', 'Deductible?']}
           rows={[
-            ['CTT', '0.01% on sell side', 'Gold, Silver, Crude, Copper, NatGas', 'Yes, as business expense'],
-            ['STT', 'Not applicable', 'Commodity futures', 'N/A'],
-            ['GST on brokerage', '18%', 'Brokerage charges', 'Yes, as business expense'],
-            ['Exchange levy', '~0.0026%', 'Both buy and sell sides', 'Yes'],
-            ['SEBI turnover fee', '0.0001%', 'Both sides', 'Yes'],
+            ['CTT (Commodity Transaction Tax)', '0.01%', 'Sell side only — non-agri futures (Gold, Silver, Crude, Copper, NatGas)', 'Yes — as business expense'],
+            ['MCX Exchange Transaction Charge', '~0.0026%', 'Both sides (buy + sell)', 'Yes — as business expense'],
+            ['SEBI Turnover Fee', '0.0001%', 'Both sides', 'Yes'],
+            ['GST on brokerage', '18%', 'On brokerage and exchange charges', 'Yes'],
+            ['Stamp Duty', '0.002% on buy side', 'Buy side only (MCX futures)', 'Yes'],
+            ['STT', 'Nil', 'Does not apply to commodity futures', 'N/A'],
           ]}
         />
-        <InfoBox title="Good news on CTT">
-          CTT paid is deductible as a business expense when computing taxable income from commodity trading. Unlike STT (which is not deductible for non-business investors), CTT reduces your effective tax cost. Always confirm with your CA that CTT is claimed correctly in ITR-3.
+        <InfoBox title="CTT — how it adds up">
+          CTT is 0.01% on the sell value. On a ₹1 crore gold contract sold: CTT = ₹100. That sounds trivial — but a day trader who turns over ₹10 crore in gold contracts in a month pays ₹10,000 in CTT alone, every month.
+          <br /><br />
+          The good news: <strong>CTT is deductible as a business expense</strong> against commodity trading income. Keep your contract notes — brokers provide annual CTT summaries for ITR filing. Always confirm with your CA that CTT is correctly claimed under &quot;expenses&quot; in ITR-3.
         </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          Agricultural commodities traded on NCDEX (e.g. turmeric, chana, soybean) are exempt from CTT — one reason agri commodity trading remains more active on NCDEX than MCX. Non-agricultural commodities on MCX (gold, silver, crude, copper, natgas) are subject to CTT on every sell trade.
+        </p>
       </>
     ),
   },
@@ -387,7 +475,7 @@ export default function LearnPage() {
             {active.label}
           </div>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, lineHeight: 1.3, color: 'var(--ink)', margin: '0 0 24px' }}>
-            {active.title} — {ARTICLES[activeId].section}
+            {active.title}
           </h2>
 
           {active.content}
