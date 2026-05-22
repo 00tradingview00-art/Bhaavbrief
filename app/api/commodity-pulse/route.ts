@@ -77,27 +77,31 @@ Respond ONLY with valid JSON — no markdown, no explanation:
 
   const client = new Anthropic({ apiKey })
 
-  for (let attempt = 1; attempt <= 2; attempt++) {
+  const models = [
+    { id: 'claude-sonnet-4-6',        label: 'Sonnet' },
+    { id: 'claude-haiku-4-5-20251001', label: 'Haiku'  },
+  ]
+
+  for (const { id, label } of models) {
     try {
       const msg  = await client.messages.create({
-        model:      'claude-sonnet-4-6',
+        model:      id,
         max_tokens: 400,
         messages:   [{ role: 'user', content: prompt }],
       })
       const raw  = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
-      if (!raw) return null
+      if (!raw) continue
       const text   = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
       const parsed = JSON.parse(text)
       const { theme, ...drivers } = parsed
-      console.log(`[commodity-pulse] Claude Sonnet OK (attempt ${attempt})`)
+      console.log(`[commodity-pulse] Claude ${label} OK`)
       return { drivers, theme }
     } catch (err) {
-      const msg = (err as Error).message
-      console.warn(`[commodity-pulse] Claude attempt ${attempt} failed:`, msg)
-      if (attempt === 1 && msg.includes('529')) {
-        await new Promise(r => setTimeout(r, 1500))
-        continue
-      }
+      const errMsg = (err as Error).message
+      console.warn(`[commodity-pulse] Claude ${label} failed:`, errMsg)
+      // On 529 overload, immediately try next model (Haiku)
+      if (errMsg.includes('529')) continue
+      // On other errors, bail out
       return null
     }
   }
