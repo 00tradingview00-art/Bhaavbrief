@@ -12,11 +12,11 @@ export async function POST(req: NextRequest) {
 
     await addSubscriber(email, name)
 
-    // Send welcome email with latest brief — non-blocking, don't fail subscribe on error
+    // Send welcome email — awaited so it completes before serverless fn exits
     try {
       const briefs = await getAllBriefs()
       const latest = briefs[0]
-      sendWelcomeEmail(email, latest ? {
+      await sendWelcomeEmail(email, latest ? {
         title:   latest.title,
         slug:    latest.slug,
         edition: latest.edition,
