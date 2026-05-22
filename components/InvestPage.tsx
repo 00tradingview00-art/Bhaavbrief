@@ -222,9 +222,6 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
               AUM {item.aum}
             </span>
           )}
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#C8C8B8', letterSpacing: '0.04em' }}>
-            {item.source}
-          </span>
         </div>
         <div style={{ textAlign: 'right' }}>
           {/* Commodity tags */}
@@ -292,7 +289,7 @@ export default function InvestPage() {
           Invest in Commodities
         </h1>
         <p style={{ fontSize: 13, color: '#48483A', margin: '0 0 14px', fontWeight: 300, lineHeight: 1.6, maxWidth: 560 }}>
-          Every way to access commodity markets from India — ETFs, Mutual Funds, listed stocks, and global instruments. Data sourced from NSE, Kite, iShares, SPDR, and VanEck.
+          Every way to access commodity markets from India — ETFs, Mutual Funds, listed stocks, and global instruments.
         </p>
         {/* Price status */}
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -382,9 +379,8 @@ export default function InvestPage() {
         </p>
       )}
 
-      {/* Data disclaimer */}
       <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#C8C8B8', lineHeight: 1.8, letterSpacing: '0.02em' }}>
-        Prices: NSE instruments via Kite Connect · Global instruments via Stooq (COMEX/NYSE close) · Expense ratios and AUM from iShares, SPDR, VanEck, AMFI India — verified from official AMC/product pages · Not investment advice.
+        Not investment advice.
       </div>
     </div>
   )
