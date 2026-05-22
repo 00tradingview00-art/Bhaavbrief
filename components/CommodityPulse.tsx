@@ -7,9 +7,9 @@ import type { PulseData, PulseRow } from '@/app/api/commodity-pulse/route'
 function rowColors(pct: number) {
   const abs = Math.abs(pct)
   const intensity = Math.min(abs / 2.5, 1)        // 2.5% = max intensity
-  if (pct > 0.05)  return { bg: `rgba(27,122,74,${0.06 + intensity * 0.14})`,  bar: '#1B7A4A', text: '#1B7A4A', arrow: '▲' }
-  if (pct < -0.05) return { bg: `rgba(181,58,42,${0.06 + intensity * 0.14})`,  bar: '#B53A2A', text: '#B53A2A', arrow: '▼' }
-  return { bg: 'rgba(138,138,122,0.05)', bar: '#8A8A7A', text: '#8A8A7A', arrow: '─' }
+  if (pct > 0.05)  return { bg: `rgba(200,114,10,${0.05 + intensity * 0.10})`,  bar: '#C8720A', text: '#D4882A', arrow: '▲' }
+  if (pct < -0.05) return { bg: `rgba(181,58,42,${0.05 + intensity * 0.10})`,   bar: '#B53A2A', text: '#C84432', arrow: '▼' }
+  return { bg: 'rgba(138,138,122,0.04)', bar: '#6A6A5A', text: '#8A8A7A', arrow: '─' }
 }
 
 function barWidth(pct: number): number {
@@ -100,7 +100,7 @@ function PulseRowItem({ row, maxAbs }: { row: PulseRow; maxAbs: number }) {
 
 function PulseSkeleton() {
   return (
-    <div style={{ background: '#18180F', borderRadius: 6, overflow: 'hidden' }}>
+    <div style={{ background: '#1C1B10', borderRadius: 6, overflow: 'hidden' }}>
       {[...Array(6)].map((_, i) => (
         <div key={i} style={{
           display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px',
@@ -157,7 +157,7 @@ export default function CommodityPulse() {
             fontFamily: 'var(--font-mono)', fontSize: 8,
             color: '#8A8A7A', letterSpacing: '0.06em',
           }}>
-            MCX live · AI-driven
+            MCX live
           </span>
         </div>
         {data?.generatedAt && (
@@ -170,10 +170,10 @@ export default function CommodityPulse() {
       {/* Body */}
       {loading ? <PulseSkeleton /> : !data ? null : (
         <div style={{
-          background: '#18180F',
+          background: '#1C1B10',
           borderRadius: 6,
           overflow: 'hidden',
-          border: '0.5px solid rgba(200,114,10,0.2)',
+          border: '1px solid rgba(200,114,10,0.18)',
         }}>
 
           {/* Column headers */}

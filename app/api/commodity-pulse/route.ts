@@ -47,7 +47,10 @@ async function generateDrivers(
   headlines: string[],
 ): Promise<{ drivers: Record<string, string>; theme: string } | null> {
   const apiKey = process.env.ANTHROPIC_API_KEY
-  if (!apiKey) return null
+  if (!apiKey) {
+    console.warn('[commodity-pulse] ANTHROPIC_API_KEY not set — using fallback drivers')
+    return null
+  }
 
   const priceLines = rows.map(r =>
     `${r.name}: ${r.price} (${r.pct >= 0 ? '+' : ''}${r.pct.toFixed(2)}%)`
@@ -75,17 +78,20 @@ Respond ONLY with valid JSON — no markdown, no explanation:
   try {
     const client  = new Anthropic({ apiKey })
     const msg     = await client.messages.create({
-      model:      'claude-haiku-4-5-20251001',
-      max_tokens: 300,
+      model:      'claude-sonnet-4-6',
+      max_tokens: 400,
       messages:   [{ role: 'user', content: prompt }],
     })
-    const text = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
-    if (!text) return null
+    const raw  = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
+    if (!raw) return null
+    // Strip markdown code fences if present (```json ... ```)
+    const text = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
     const parsed = JSON.parse(text)
     const { theme, ...drivers } = parsed
+    console.log('[commodity-pulse] Claude Sonnet drivers generated successfully')
     return { drivers, theme }
   } catch (err) {
-    console.warn('[commodity-pulse] Claude failed:', (err as Error).message)
+    console.warn('[commodity-pulse] Claude Sonnet failed:', (err as Error).message)
     return null
   }
 }
