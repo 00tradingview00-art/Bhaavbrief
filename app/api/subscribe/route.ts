@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { addSubscriber } from '@/lib/brevo'
+import { addSubscriber, sendWelcomeEmail } from '@/lib/brevo'
+import { getAllBriefs } from '@/lib/briefs'
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,10 +12,20 @@ export async function POST(req: NextRequest) {
 
     await addSubscriber(email, name)
 
-    return NextResponse.json({ success: true, message: 'Subscribed! First brief arrives at 9:30 AM.' })
+    // Send welcome email with latest brief — non-blocking, don't fail subscribe on error
+    try {
+      const briefs = await getAllBriefs()
+      const latest = briefs[0]
+      sendWelcomeEmail(email, latest ? {
+        title:   latest.title,
+        slug:    latest.slug,
+        edition: latest.edition,
+      } : undefined)
+    } catch {}
+
+    return NextResponse.json({ success: true, message: 'Subscribed! Welcome email on its way.' })
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Subscription failed'
-    // If already subscribed, Brevo throws — treat as success
     if (msg.includes('Contact already exist')) {
       return NextResponse.json({ success: true, message: 'You\'re already subscribed!' })
     }

@@ -80,6 +80,90 @@ export async function sendNewsletter({
   return { campaignId: id }
 }
 
+export async function sendWelcomeEmail(email: string, latestBrief?: { title: string; slug: string; edition: number }) {
+  const API_KEY = getApiKey()
+  const FROM    = process.env.SENDER_EMAIL ?? 'brief@bhaavbrief.in'
+
+  const briefSection = latestBrief ? `
+  <div style="background:#F3F2EC;border-left:3px solid #C8720A;padding:16px 20px;margin:24px 0;border-radius:0 4px 4px 0">
+    <div style="font-family:monospace;font-size:9px;color:#C8720A;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px">Latest Edition #${latestBrief.edition}</div>
+    <div style="font-family:Georgia,serif;font-size:15px;font-weight:600;color:#18180F;margin-bottom:12px;line-height:1.35">${latestBrief.title}</div>
+    <a href="https://bhaavbrief.in/briefs/${latestBrief.slug}" style="display:inline-block;background:#18180F;color:#FAFAF6;text-decoration:none;padding:8px 18px;font-family:monospace;font-size:11px;letter-spacing:0.04em">Read now →</a>
+  </div>` : ''
+
+  const html = `<!DOCTYPE html>
+<html lang="en-IN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:Georgia,serif;background:#FAFAF6;color:#18180F;margin:0;padding:0">
+<div style="max-width:580px;margin:0 auto;padding:40px 24px">
+
+  <div style="border-bottom:3px double #C8C8B8;padding-bottom:16px;margin-bottom:28px">
+    <div style="font-size:26px;font-weight:800;letter-spacing:-0.02em">
+      Bhaav<span style="color:#C8720A">Brief</span>
+    </div>
+    <div style="font-size:10px;color:#8A8A7A;font-family:monospace;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px">
+      India's Commodity Intelligence
+    </div>
+  </div>
+
+  <h1 style="font-size:20px;font-weight:700;line-height:1.3;margin:0 0 16px;font-family:Georgia,serif">
+    You're in. Here's what to expect.
+  </h1>
+
+  <p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 16px">
+    Every weekday at <strong style="color:#18180F">9:30 AM IST</strong>, you'll receive one sharp brief on what's
+    driving Indian commodity markets — Gold, Silver, Crude, Copper, Natural Gas.
+  </p>
+
+  <p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 16px">
+    Not a price dump. A <strong style="color:#18180F">narrative</strong> — the dominant macro story,
+    whether it's strengthening or reversing, and what it means for your positions that day.
+  </p>
+
+  ${briefSection}
+
+  <div style="background:#FAFAF6;border:0.5px solid #DDDDD0;padding:16px 20px;margin:24px 0;border-radius:4px">
+    <div style="display:flex;gap:24px">
+      ${[['₹0', 'Free forever'], ['5 min', 'Daily read'], ['9:30 AM', 'Delivered']].map(([v, l]) =>
+        `<div style="text-align:center;flex:1">
+          <div style="font-family:Georgia,serif;font-size:18px;font-weight:600;color:#18180F">${v}</div>
+          <div style="font-family:monospace;font-size:9px;color:#8A8A7A;letter-spacing:0.07em;text-transform:uppercase;margin-top:3px">${l}</div>
+        </div>`
+      ).join('')}
+    </div>
+  </div>
+
+  <p style="font-size:13px;line-height:1.7;color:#8A8A7A;margin:24px 0 0">
+    Questions? Reply to this email — we read everything.
+  </p>
+
+  <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
+    © 2026 BhaavBrief · bhaavbrief.in<br>
+    Not SEBI registered. For informational and educational purposes only.<br>
+    <a href="{{ unsubscribeUrl }}" style="color:#8A8A7A">Unsubscribe</a>
+  </div>
+
+</div>
+</body>
+</html>`
+
+  const res = await fetch(`${BREVO_API}/smtp/email`, {
+    method: 'POST',
+    headers: { 'api-key': API_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      sender:  { name: 'BhaavBrief', email: FROM },
+      to:      [{ email }],
+      subject: 'Welcome to BhaavBrief — your first brief arrives at 9:30 AM',
+      htmlContent: html,
+    }),
+  })
+
+  if (!res.ok) {
+    const err = await res.json()
+    console.warn('[brevo] Welcome email failed:', err?.message)
+  }
+}
+
 export function briefToHtml(brief: {
   title:    string
   date:     string
