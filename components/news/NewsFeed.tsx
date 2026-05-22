@@ -139,61 +139,60 @@ export default function NewsFeed() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const paginated  = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
 
-  // Category distribution for the coverage bar
-  const catCounts = FILTERS.slice(1).map(f => ({
-    label: f,
-    count: news.filter(item => matchesFilter(item, f)).length,
-  })).filter(c => c.count > 0)
-
   return (
     <div>
 
-      {/* Coverage bar */}
-      {!loading && !error && catCounts.length > 0 && (
-        <div style={{
-          display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap',
-          padding: '10px 14px', background: '#F3F2EC', border: '0.5px solid #DDDDD0',
-          marginBottom: 20,
-        }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginRight: 4 }}>
-            Coverage
+      {/* Last updated indicator */}
+      {!loading && lastFetched && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+            ● updated {relativeTime(lastFetched.toISOString())}
           </span>
-          {catCounts.map(c => (
-            <span key={c.label} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#48483A' }}>
-              {c.label} <strong style={{ color: '#18180F' }}>{c.count}</strong>
-            </span>
-          ))}
-          {lastFetched && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', marginLeft: 'auto' }}>
-              updated {relativeTime(lastFetched.toISOString())}
-            </span>
-          )}
         </div>
       )}
 
-      {/* Filter pills */}
+      {/* Filter pills with counts */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
-        {FILTERS.map(f => (
-          <button
-            key={f}
-            onClick={() => { setActiveFilter(f); setPage(1) }}
-            style={{
-              padding: '5px 14px',
-              borderRadius: 2,
-              fontSize: 11,
-              fontWeight: 500,
-              fontFamily: 'var(--font-mono)',
-              letterSpacing: '0.04em',
-              border: activeFilter === f ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
-              background: activeFilter === f ? '#18180F' : '#FAFAF6',
-              color: activeFilter === f ? '#FAFAF6' : '#8A8A7A',
-              cursor: 'pointer',
-              transition: 'all .12s',
-            }}
-          >
-            {f.toUpperCase()}
-          </button>
-        ))}
+        {FILTERS.map(f => {
+          const count = f === 'All' ? news.length : news.filter(item => matchesFilter(item, f)).length
+          const active = activeFilter === f
+          return (
+            <button
+              key={f}
+              onClick={() => { setActiveFilter(f); setPage(1) }}
+              style={{
+                padding: '5px 14px',
+                borderRadius: 2,
+                fontSize: 11,
+                fontWeight: 500,
+                fontFamily: 'var(--font-mono)',
+                letterSpacing: '0.04em',
+                border: active ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
+                background: active ? '#18180F' : '#FAFAF6',
+                color: active ? '#FAFAF6' : count > 0 ? '#48483A' : '#C8C8B8',
+                cursor: 'pointer',
+                transition: 'all .12s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+              }}
+            >
+              {f.toUpperCase()}
+              {!loading && count > 0 && (
+                <span style={{
+                  fontSize: 9,
+                  background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8',
+                  color: active ? '#FAFAF6' : '#8A8A7A',
+                  padding: '1px 5px',
+                  borderRadius: 10,
+                  lineHeight: 1.4,
+                }}>
+                  {count}
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
 
       {/* Loading skeleton */}
@@ -208,9 +207,19 @@ export default function NewsFeed() {
 
       {/* Empty state */}
       {!loading && !error && filtered.length === 0 && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '32px 0', letterSpacing: '0.04em' }}>
-          No intelligence in this category right now — check back shortly.
-        </p>
+        <div style={{ padding: '32px 0', borderTop: '0.5px solid #DDDDD0' }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
+            No {activeFilter === 'All' ? '' : activeFilter.toLowerCase() + ' '}intelligence right now.
+          </p>
+          {activeFilter !== 'All' && news.length > 0 && (
+            <button
+              onClick={() => { setActiveFilter('All'); setPage(1) }}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+            >
+              Show all {news.length} items →
+            </button>
+          )}
+        </div>
       )}
 
       {/* Intelligence items — grouped by IST date */}

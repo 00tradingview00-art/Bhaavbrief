@@ -15,15 +15,16 @@ const FLASH_DIR         = path.join(__dirname, '../content/flash')
 const SEEN_FILE         = path.join(__dirname, 'seen-articles.json')
 
 const FEEDS = [
-  { url: 'https://news.google.com/rss/search?q=MCX+commodity+India&hl=en-IN&gl=IN&ceid=IN:en',                       source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+price&hl=en&gl=US&ceid=US:en',                         source: 'Reuters' },
-  { url: 'https://news.google.com/rss/search?q=gold+silver+price+India+MCX&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=crude+oil+India+import+refinery&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+India&hl=en-IN&gl=IN&ceid=IN:en',                     source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=India+commodity+monsoon+agri+NCDEX&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity&hl=en&gl=US&ceid=US:en',          source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',        source: 'Google News' },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                            source: 'NDTV Profit' },
+  { url: 'https://news.google.com/rss/search?q=gold+silver+price+india+mcx+comex+today&hl=en-IN&gl=IN&ceid=IN:en',  source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=crude+oil+price+india+brent+wti+today&hl=en-IN&gl=IN&ceid=IN:en',    source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=copper+nickel+aluminium+LME+metal+price&hl=en&gl=US&ceid=US:en',     source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+supply+production+cut&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+India+rate&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=india+agri+monsoon+ncdex+crop&hl=en-IN&gl=IN&ceid=IN:en',            source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=iran+russia+sanctions+oil+supply+commodity&hl=en&gl=US&ceid=US:en',  source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',       source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+price+india+demand&hl=en-IN&gl=IN&ceid=IN:en',       source: 'Google News' },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                           source: 'NDTV Profit' },
 ]
 
 const KEYWORDS = [
@@ -46,6 +47,11 @@ function saveSeen(urls) {
 function isImportant(text) {
   const lower = text.toLowerCase()
   return KEYWORDS.some(k => lower.includes(k))
+}
+
+function isMCXStockArticle(text) {
+  const t = text.toLowerCase()
+  return /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week)|mcx\s+(split|bonus|dividend)/.test(t)
 }
 
 function detectCategory(text) {
@@ -223,9 +229,10 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
-  const candidates = allItems.filter(item =>
-    isImportant(`${item.title} ${item.description}`) && !seen.includes(item.url)
-  )
+  const candidates = allItems.filter(item => {
+    const text = `${item.title} ${item.description}`
+    return !seen.includes(item.url) && isImportant(text) && !isMCXStockArticle(text)
+  })
   console.log(`New important articles: ${candidates.length}`)
 
   const newSeen  = [...seen]

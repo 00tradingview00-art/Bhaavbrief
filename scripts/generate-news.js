@@ -23,39 +23,44 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
 const MAX_STORED        = 300
-const MAX_PER_RUN       = 5      // hard cap — one per major category
-const FRESHNESS_HOURS   = 48     // skip articles with pubDate older than this
+const MAX_PER_RUN       = 6      // one per major category (Metals, Energy, Policy, Macro, Agri, Geopolitics)
+const FRESHNESS_HOURS   = 8      // skip articles older than 8h — commodity news stales fast
 
 const FEEDS = [
-  // ── Commodities ──────────────────────────────────────────────────────────────
-  { url: 'https://news.google.com/rss/search?q=MCX+commodity+gold+silver+crude+India&hl=en-IN&gl=IN&ceid=IN:en',     source: 'Google News', category: 'Metals'      },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+energy+price+barrels+supply&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Energy'      },
-  { url: 'https://news.google.com/rss/search?q=copper+nickel+aluminium+zinc+LME+metal+price&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Metals'    },
-  { url: 'https://news.google.com/rss/search?q=India+commodity+agri+NCDEX+monsoon+kharif+rabi&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri' },
-  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+Europe+Asia+price+demand&hl=en&gl=US&ceid=US:en',    source: 'Google News', category: 'Energy'      },
-  { url: 'https://news.google.com/rss/search?q=China+commodity+demand+steel+iron+ore+copper&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Metals'     },
+  // ── Metals — specific price queries (NOT "MCX commodity" which returns MCX stock articles) ───
+  { url: 'https://news.google.com/rss/search?q=gold+price+india+mcx+comex+today&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Google News', category: 'Metals'      },
+  { url: 'https://news.google.com/rss/search?q=silver+price+mcx+india+today&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News', category: 'Metals'      },
+  { url: 'https://news.google.com/rss/search?q=copper+nickel+aluminium+zinc+LME+metal+price&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Metals'      },
+  { url: 'https://news.google.com/rss/search?q=China+commodity+demand+steel+copper+aluminium&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Metals'      },
 
-  // ── Government Policy ─────────────────────────────────────────────────────────
-  { url: 'https://news.google.com/rss/search?q=India+import+duty+customs+tariff+commodity+2025&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy' },
-  { url: 'https://news.google.com/rss/search?q=SEBI+FMC+commodity+regulation+India&hl=en-IN&gl=IN&ceid=IN:en',       source: 'Google News', category: 'Policy'    },
-  { url: 'https://news.google.com/rss/search?q=India+finance+ministry+budget+commodity+excise&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy' },
-  { url: 'https://news.google.com/rss/search?q=India+MSP+procurement+food+grain+government&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'   },
-  { url: 'https://news.google.com/rss/search?q=RBI+monetary+policy+repo+rate+India+2025&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'      },
+  // ── Energy ────────────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=crude+oil+price+india+brent+wti+today&hl=en-IN&gl=IN&ceid=IN:en',      source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+supply+production+cut&hl=en&gl=US&ceid=US:en',           source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+price+india+demand&hl=en-IN&gl=IN&ceid=IN:en',         source: 'Google News', category: 'Energy'      },
+
+  // ── Agri ─────────────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=india+agri+ncdex+monsoon+crop+wheat+soybean&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'       },
+  { url: 'https://news.google.com/rss/search?q=india+monsoon+forecast+kharif+rabi+agriculture&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'   },
+
+  // ── Policy ────────────────────────────────────────────────────────────────────
+  { url: 'https://news.google.com/rss/search?q=india+import+duty+customs+tariff+commodity&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'     },
+  { url: 'https://news.google.com/rss/search?q=RBI+repo+rate+monetary+policy+india&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News', category: 'Policy'      },
+  { url: 'https://news.google.com/rss/search?q=india+MSP+minimum+support+price+grain&hl=en-IN&gl=IN&ceid=IN:en',      source: 'Google News', category: 'Policy'      },
+  { url: 'https://economictimes.indiatimes.com/news/economy/policy/rssfeeds/1052732854.cms',                           source: 'ET Policy',   category: 'Policy'      },
 
   // ── Macro ─────────────────────────────────────────────────────────────────────
-  { url: 'https://news.google.com/rss/search?q=India+CPI+WPI+inflation+data+2025&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News', category: 'Macro'       },
-  { url: 'https://news.google.com/rss/search?q=India+GDP+PMI+IIP+trade+deficit+current+account&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro' },
-  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+gold+inflation&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Macro'       },
-  { url: 'https://news.google.com/rss/search?q=rupee+dollar+forex+usdinr+RBI+intervention&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Macro'     },
+  { url: 'https://news.google.com/rss/search?q=india+cpi+wpi+inflation+gdp+pmi&hl=en-IN&gl=IN&ceid=IN:en',            source: 'Google News', category: 'Macro'       },
+  { url: 'https://news.google.com/rss/search?q=rupee+dollar+usdinr+forex+india+rbi&hl=en-IN&gl=IN&ceid=IN:en',        source: 'Google News', category: 'Macro'       },
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+interest+rate+dollar+commodity&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Macro'      },
 
   // ── Geopolitics ───────────────────────────────────────────────────────────────
-  { url: 'https://news.google.com/rss/search?q=Iran+Russia+sanctions+oil+commodity+supply&hl=en&gl=US&ceid=US:en',  source: 'Google News', category: 'Geopolitics' },
-  { url: 'https://news.google.com/rss/search?q=Middle+East+Red+Sea+Suez+shipping+commodity&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Geopolitics' },
+  { url: 'https://news.google.com/rss/search?q=iran+russia+ukraine+oil+sanctions+commodity&hl=en&gl=US&ceid=US:en',   source: 'Google News', category: 'Geopolitics' },
+  { url: 'https://news.google.com/rss/search?q=red+sea+suez+shipping+commodity+supply+disruption&hl=en&gl=US&ceid=US:en', source: 'Google News', category: 'Geopolitics' },
+  { url: 'https://news.google.com/rss/search?q=middle+east+israel+oil+commodity+supply&hl=en&gl=US&ceid=US:en',       source: 'Google News', category: 'Geopolitics' },
 
   // ── Indian financial press ─────────────────────────────────────────────────────
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                           source: 'NDTV Profit', category: null          },
-  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                                     source: 'ET Markets',  category: null          },
-  { url: 'https://economictimes.indiatimes.com/news/economy/policy/rssfeeds/1052732854.cms',                         source: 'ET Policy',   category: 'Policy'      },
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                             source: 'NDTV Profit', category: null          },
+  { url: 'https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms',                                       source: 'ET Markets',  category: null          },
 ]
 
 const KEYWORDS = [
@@ -111,6 +116,15 @@ function loadExisting() {
 function isImportant(text) {
   const t = text.toLowerCase()
   return KEYWORDS.some(k => t.includes(k))
+}
+
+/**
+ * Returns true for articles about MCX Ltd shares/stock — NOT commodity prices.
+ * These flood Google News when searching "MCX commodity" and pollute the feed.
+ */
+function isMCXStockArticle(text) {
+  const t = text.toLowerCase()
+  return /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat|fy)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop|crash|rally|gain|hit|ipo)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week|record\s+high)|mcx\s+(split|bonus|dividend)|mcx\s+ipo/.test(t)
 }
 
 function detectCategory(text) {
@@ -409,46 +423,48 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
-  // Filter: not seen and keyword-relevant
-  // pubDate freshness: skip only if pubDate is present AND clearly old (> 48h)
-  // Many RSS feeds have missing/stale pubDates — don't discard those
+  const existing = loadExisting()
+
+  // Cross-run dedup: titles of last 40 stored items — reject signals too similar to recent output
+  const recentTitles = existing.slice(0, 40).map(i => i.title)
+
+  // Filter: not seen, not MCX-stock, keyword-relevant, fresh, not a duplicate of recent output
   const candidates = allItems.filter(item => {
     if (seen.includes(item.url)) return false
-    if (!isImportant(`${item.title} ${item.desc}`)) return false
+    const text = `${item.title} ${item.desc}`
+    if (isMCXStockArticle(text)) return false
+    if (!isImportant(text)) return false
+    // pubDate freshness: skip if pubDate is present AND clearly stale (> FRESHNESS_HOURS)
     if (item.pubDate && !isNaN(item.pubDate.getTime()) && item.pubDate.getTime() < cutoffMs) return false
+    // Cross-run semantic dedup: skip if too similar to recently generated items
+    if (recentTitles.some(rt => similarity(item.title, rt) > 0.38)) return false
     return true
   })
-  console.log(`Fresh, new, important signals: ${candidates.length}`)
+  console.log(`Fresh, new, important, non-duplicate signals: ${candidates.length}`)
 
-  // Cluster similar stories, pick best representative per cluster
+  // Cluster similar stories within this batch, pick best per cluster
   const deduplicated = clusterAndPick(candidates)
   console.log(`After clustering: ${deduplicated.length} unique signals`)
 
-  // Group by category, pick one signal per category (best = longest desc)
+  // Group by category — keep top 2 candidates per category (ranked by desc length)
   const byCategory = new Map()
   for (const item of deduplicated) {
     const { category } = detectCategory(`${item.title} ${item.desc}`)
-    if (!byCategory.has(category)) {
-      byCategory.set(category, item)
-    } else {
-      const existing = byCategory.get(category)
-      if ((item.desc?.length ?? 0) > (existing.desc?.length ?? 0)) {
-        byCategory.set(category, item)
-      }
-    }
+    const bucket = byCategory.get(category) ?? []
+    bucket.push(item)
+    byCategory.set(category, bucket)
   }
 
-  // Rank categories: prefer ones not covered in recent output
-  const existing      = loadExisting()
-  const recentCats    = new Set(existing.slice(0, 10).map(i => i.category))
+  // Rank categories: prefer ones NOT covered recently to ensure diversity
+  const recentCats = new Set(existing.slice(0, 12).map(i => i.category))
   const rankedSignals = [...byCategory.entries()]
     .sort(([catA], [catB]) => {
       const aRecent = recentCats.has(catA) ? 1 : 0
       const bRecent = recentCats.has(catB) ? 1 : 0
-      return aRecent - bRecent   // categories NOT recently covered go first
+      return aRecent - bRecent   // not-recently-covered categories go first
     })
     .slice(0, MAX_PER_RUN)
-    .map(([, signal]) => signal)
+    .map(([, bucket]) => bucket.sort((a, b) => (b.desc?.length ?? 0) - (a.desc?.length ?? 0))[0])
 
   console.log(`Will generate ${rankedSignals.length} briefing(s): ${rankedSignals.map(s => s.title.slice(0, 50)).join(' | ')}`)
 
