@@ -194,10 +194,16 @@ async function fetchComexPrices(): Promise<Record<string, any>> {
   const avMap = av.status === 'fulfilled' ? av.value : {}
 
   const combined = { ...avMap, ...tdMap }  // TD wins on overlap
-  if (Object.keys(combined).length > 0) return combined
 
-  // Fallback: Stooq free CSV API
-  return fetchStooq()
+  // Always fill gaps with Stooq — AV rate-limits (25 calls/day) may leave Silver/Copper/NatGas empty
+  const missing = (['SI=F', 'CL=F', 'HG=F', 'NG=F', 'BZ=F'] as const).filter(k => !combined[k] || !combined[k].regularMarketPrice)
+  if (missing.length > 0 || Object.keys(combined).length === 0) {
+    const stooq = await fetchStooq()
+    for (const k of missing) { if (stooq[k]) combined[k] = stooq[k] }
+    if (Object.keys(combined).length === 0) return stooq
+  }
+
+  return combined
 }
 
 async function fetchUsdInr(): Promise<number> {
