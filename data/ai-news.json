@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-05-22-22-58-assocham-rate-hold-advice-keeps-inr-pres",
+    "title": "ASSOCHAM Rate Hold Advice Keeps INR Pressure Intact as Gold Holds ₹158742",
+    "summary": "ASSOCHAM's advisory to RBI to hold rates lands while the commodity complex is already under pressure from NatGas leading declines at -4.65%. The rate hold signal is the critical link here: a status quo RBI posture removes any near-term INR strengthening catalyst, keeping USD/INR anchored at ₹95.70. That elevated rupee level mechanically supports MCX Gold at ₹158742 per 10g and MCX Silver at ₹272253 per kg against their global spot weakness, cushioning the -0.54% and -0.96% session declines respectively. Import parity chain: COMEX Gold softness transmits to MCX, but at ₹95.70 per dollar, every dollar of global price decline is amplified by the weak rupee conversion, partially offsetting the bearish global signal. MCX Copper at ₹1345.40 is the cross-market anchor to watch — any industrial demand read from China tonight moves copper, which in turn signals whether this session's commodity weakness is demand-driven or energy-specific. Confirmation level: RBI's next policy statement language on inflation tolerance. A dovish hold language reading shifts INR weaker, placing a hard floor under MCX Gold at ₹158000.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-05-22T17:28:48.310Z",
+    "pubDateIST": "22 May 2026, 22:58"
+  },
+  {
+    "id": "2026-05-22-22-58-mcx-silver-drops-0-96-to-272253-kg-as-do",
+    "title": "MCX Silver Drops 0.96% to ₹272253/kg as Dollar Strength Crushes Precious Metals Complex",
+    "summary": "The mechanism is straightforward: a stronger dollar raises the real cost of dollar-denominated metals for non-US buyers, compressing demand and triggering systematic selling across precious metals. Comex silver's $5/oz decline transmits directly into MCX pricing.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T17:28:38.898Z",
+    "pubDateIST": "22 May 2026, 22:58"
+  },
+  {
+    "id": "2026-05-22-22-58-mcx-crude-slides-1-57-to-9195-as-energy",
+    "title": "MCX Crude Slides 1.57% to ₹9195 as Energy Complex Buckles Under NatGas Rout",
+    "summary": "The mechanism is risk-off energy repricing. NatGas collapsing 4.65% to ₹276.60/mmBtu signals broad energy demand pessimism, pulling crude lower through correlated fund positioning — energy baskets unwind across the complex simultaneously.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T17:28:31.503Z",
+    "pubDateIST": "22 May 2026, 22:58"
+  },
+  {
+    "id": "2026-05-22-22-58-mcx-natural-gas-collapses-4-65-to-276-60",
+    "title": "MCX Natural Gas Collapses 4.65% to ₹276.60 as Supply Glut Mechanics Dominate Session",
+    "summary": "The driving mechanism is inventory-driven spot pressure in Henry Hub cascading into MCX via import parity repricing. At ₹276.60/mmBtu, the import parity calculation runs: Henry Hub approximately $2.10/mmBtu × ₹95.70 × 1.40 duty-and-logistics factor = theoretical parity near ₹281/mmBtu. MCX is trading at a discount of approximately ₹4.40 to parity, signalling physical sellers are aggressive and the discount widens on volume spikes.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T17:28:24.334Z",
+    "pubDateIST": "22 May 2026, 22:58"
+  },
+  {
     "id": "2026-05-22-15-55-rbi-5bn-swap-auction-signals-rupee-stabi",
     "title": "RBI $5bn swap auction signals rupee stability defense, supports INR/USD below 96.50",
     "summary": "RBI's $5 billion USD/INR swap auction targets structural liquidity tightness in onshore rupee markets, aiming to anchor USD/INR near current 96.21 levels and prevent sustained depreciation pressure. This eases funding costs for Indian banks and non-bank intermediaries, reducing their need to liquidate dollar inventory or bid aggressively for forex. Cross-asset consequence: lower rupee volatility compresses import parity costs for crude (MCX ₹9425/bbl translates ~$98/bbl at current spot), limiting upside in downstream energy and petrochemical pricing. Gold (MCX ₹159093/10g) receives countercyclical support if swap provision calms capital outflows, while copper demand linkage (EV/infrastructure) remains anchored to global growth, not rupee intervention. Watch RBI's next forward guidance on rates (June policy meet) for sustainability signal.",
