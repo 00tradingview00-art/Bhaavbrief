@@ -24,7 +24,7 @@ const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
 const MAX_STORED        = 300
 const MAX_PER_RUN       = 5      // hard cap — one per major category
-const FRESHNESS_HOURS   = 24     // ignore articles older than this
+const FRESHNESS_HOURS   = 48     // skip articles with pubDate older than this
 
 const FEEDS = [
   // ── Commodities ──────────────────────────────────────────────────────────────
@@ -392,7 +392,9 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
-  // Filter: not seen, keyword-relevant, and fresh (or no pubDate — treat as valid)
+  // Filter: not seen and keyword-relevant
+  // pubDate freshness: skip only if pubDate is present AND clearly old (> 48h)
+  // Many RSS feeds have missing/stale pubDates — don't discard those
   const candidates = allItems.filter(item => {
     if (seen.includes(item.url)) return false
     if (!isImportant(`${item.title} ${item.desc}`)) return false
