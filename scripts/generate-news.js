@@ -405,44 +405,91 @@ const SESSION_FOCUS = {
   'global':      'MCX is closed. Focus on US/EU session moves and what they signal for tomorrow\'s MCX open.',
 }
 
+/**
+ * Synthesise the dominant cross-asset market narrative from live mover data.
+ * This is injected into the Claude prompt so every news brief explicitly
+ * connects the signal to what's actually happening in the broader market.
+ */
+function buildMarketNarrative(movers) {
+  const g  = movers.gold   ?? 0
+  const s  = movers.silver ?? 0
+  const c  = movers.crude  ?? 0
+  const cu = movers.copper ?? 0
+  const ng = movers.natgas ?? 0
+  const themes = []
+
+  if (g > 0.5 && c < -0.5)
+    themes.push(`Risk-off bid: gold +${g.toFixed(1)}% as crude falls ${c.toFixed(1)}% — safe-haven demand dominating this session`)
+  if (g > 0.4 && s > 0.4 && cu > 0.4)
+    themes.push(`Broad commodity rally: gold, silver and copper all advancing — dollar weakness or reflation trade`)
+  if (c > 1.0 && ng > 1.0)
+    themes.push(`Energy complex surging: crude +${c.toFixed(1)}% and nat gas +${ng.toFixed(1)}% together — supply concern driving energy sector`)
+  if (g < -0.5 && c < -0.5 && cu < -0.5)
+    themes.push(`Broad selloff: gold, crude and copper all falling — dollar strength or demand outlook deteriorating`)
+  if (g > 0.4 && c > 0.4 && !themes.length)
+    themes.push(`Inflationary signal: gold +${g.toFixed(1)}% and crude +${c.toFixed(1)}% rising together — India import cost rising across energy and metals`)
+  if (cu > 0.8 && c > 0.3 && !themes.length)
+    themes.push(`Risk-on/China demand signal: copper +${cu.toFixed(1)}% and crude +${c.toFixed(1)}% advancing — industrial activity indicator positive`)
+  if (g > 0.5 && cu < -0.5 && !themes.length)
+    themes.push(`Divergence: safe-haven gold +${g.toFixed(1)}% while industrial copper falls ${cu.toFixed(1)}% — risk-off tone with demand concern`)
+
+  if (themes.length === 0) {
+    const all = [
+      { name: 'Gold', pct: g }, { name: 'Silver', pct: s }, { name: 'Crude', pct: c },
+      { name: 'Copper', pct: cu }, { name: 'NatGas', pct: ng },
+    ].filter(x => Math.abs(x.pct) > 0.2).sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct))
+    if (all.length > 0)
+      themes.push(`${all[0].name} leading this session at ${all[0].pct >= 0 ? '+' : ''}${all[0].pct.toFixed(1)}% — other commodities subdued`)
+    else
+      themes.push('Mixed session — no dominant cross-asset theme; sub-0.2% moves across the commodity complex')
+  }
+
+  return themes.slice(0, 2).join('. ')
+}
+
 // ── Claude generation ─────────────────────────────────────────────────────────
 
 async function generateNewsItem(signal, prices) {
-  const ctx     = priceContext(prices)
-  const movers  = prices.movers ?? {}
-  const session = getMarketSession()
-  const istDate = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+  const ctx       = priceContext(prices)
+  const movers    = prices.movers ?? {}
+  const session   = getMarketSession()
+  const narrative = buildMarketNarrative(movers)
+  const istDate   = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
     .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
-  // Build mover context: show top 3 biggest % moves today
+  // Top movers with direction labels
   const moverLines = Object.entries(movers)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
-    .slice(0, 3)
-    .map(([k, pct]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}% today`)
-    .join(', ')
+    .slice(0, 4)
+    .map(([k, pct]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`)
+    .join(' | ')
 
-  const prompt = `You are BhaavBrief Intelligence — India's AI commodity intelligence desk. Your job is to connect global market signals to their precise Indian market impact.
+  const prompt = `You are BhaavBrief Intelligence — India's real-time commodity intelligence desk for professional MCX traders.
 
 Today: ${istDate} (IST) | Session: ${session.toUpperCase()}
 ${SESSION_FOCUS[session]}
 
-Live MCX prices: ${ctx}
-${moverLines ? `Today's movers: ${moverLines}` : ''}
+CROSS-ASSET MARKET NARRATIVE (the dominant theme driving the commodity complex right now):
+${narrative}
 
-Write an institutional-grade intelligence brief for Indian commodity traders. This is NOT a news summary — it is cross-asset analysis that connects the signal to what's happening in the market RIGHT NOW.
+Live prices: ${ctx}
+${moverLines ? `Session movers: ${moverLines}` : 'No significant moves this session'}
 
-Rules:
-- If the signal relates to a commodity that is already moving today (shown in "Today's movers"), explicitly reference that price move and explain the connection
-- ALWAYS connect to: (a) specific MCX contract + INR price level from live data above, (b) rupee-dollar import parity impact, (c) one cross-market linkage
-- Be precise: name exact contracts, use specific numbers, show cause-and-effect chains
-- No opinions, no buy/sell calls, no "investors should"
-- Reference only upcoming events, not past ones
-- Close with ONE specific price level or upcoming data release to watch
+Write an institutional-grade intelligence brief. This is NOT a news summary — it is cross-asset analysis that connects the incoming signal to what is ACTUALLY HAPPENING in the market right now.
+
+MANDATORY STRUCTURE:
+1. OPEN by explicitly linking this signal to the MARKET NARRATIVE above. Show the connection — why does this signal matter given the current cross-asset picture?
+2. Name the SPECIFIC MCX contract(s) affected and cite the EXACT current price from live data above.
+3. Show the IMPORT PARITY CHAIN: global price → USD/INR rate → customs/premium → MCX impact in ₹.
+4. Name ONE cross-market correlation: what else is moving alongside this, and why does it matter for Indian traders?
+5. Close with ONE specific price level or data release that will confirm or negate this move.
+
+Rules: No opinions. No buy/sell calls. No "could", "may", "might". Only facts, mechanics, and levels.
 
 Format as plain text only (no markdown, no headers, no asterisks, no bullets):
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
 IMPACT: [bearish / bullish / neutral]
-BODY: [100-120 words]
+BODY: [110-130 words]
 
 Market signal: ${signal.title}. ${signal.desc}`
 
@@ -454,8 +501,8 @@ Market signal: ${signal.title}. ${signal.desc}`
       'Content-Type':      'application/json',
     },
     body: JSON.stringify({
-      model:      'claude-haiku-4-5-20251001',
-      max_tokens: 350,
+      model:      'claude-sonnet-4-6',
+      max_tokens: 450,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })
@@ -484,6 +531,137 @@ Market signal: ${signal.title}. ${signal.desc}`
   return { title, summary, impact }
 }
 
+// ── Price-action first: signals driven by what IS moving, not what RSS published ──
+
+/**
+ * For commodities moving > threshold, create a brief signal regardless of whether
+ * there's a matching RSS article. RSS is optional supporting context, not the trigger.
+ */
+function buildPriceActionSignals(prices, allItems, recentTitles) {
+  const movers = prices.movers ?? {}
+  const THRESHOLD = 0.2  // % — minimum move to warrant a price-action brief
+
+  const COMMODITY_MAP = [
+    { key: 'gold',   label: 'MCX Gold',    category: 'Metals', tagType: 'metals', unit: '₹/10g',   kws: ['gold', 'comex gold', 'bullion', 'xau']         },
+    { key: 'silver', label: 'MCX Silver',  category: 'Metals', tagType: 'metals', unit: '₹/kg',    kws: ['silver', 'comex silver', 'xag']                 },
+    { key: 'crude',  label: 'MCX Crude',   category: 'Energy', tagType: 'energy', unit: '₹/bbl',   kws: ['crude', 'brent', 'wti', 'oil price', 'opec']    },
+    { key: 'copper', label: 'MCX Copper',  category: 'Metals', tagType: 'metals', unit: '₹/kg',    kws: ['copper', 'lme copper', 'base metal']            },
+    { key: 'natgas', label: 'MCX Nat Gas', category: 'Energy', tagType: 'energy', unit: '₹/mmBtu', kws: ['natural gas', 'natgas', 'lng', 'henry hub']     },
+  ]
+
+  const signals = []
+
+  for (const { key, label, category, tagType, unit, kws } of COMMODITY_MAP) {
+    const pct = movers[key] ?? 0
+    if (Math.abs(pct) < THRESHOLD) continue
+
+    const price = prices[key]  // Kite live price (INR) or Stooq COMEX price
+
+    // Find the most informative RSS context article (longest description = most context for Claude)
+    const context = allItems
+      .filter(item => {
+        const text = `${item.title} ${item.desc}`.toLowerCase()
+        return kws.some(kw => text.includes(kw)) && !isMCXStockArticle(text)
+      })
+      .sort((a, b) => (b.desc?.length ?? 0) - (a.desc?.length ?? 0))[0]
+
+    // Skip if we recently generated a brief that's too similar to the context headline
+    const contextTitle = context?.title ?? ''
+    if (contextTitle && recentTitles.some(rt => similarity(contextTitle, rt) > 0.45)) continue
+
+    signals.push({
+      type: 'price-action',
+      key, label, category, tagType, unit, pct, price,
+      contextTitle,
+      contextDesc:  context?.desc ?? '',
+      url:          context?.url  ?? `pa:${key}:${Date.now()}`,
+    })
+  }
+
+  // Sort: biggest absolute move first
+  return signals.sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct))
+}
+
+/**
+ * Generate a brief that STARTS with the price move, not a news article.
+ * RSS context is optional supporting evidence; price action is the anchor.
+ */
+async function generatePriceActionBrief(signal, prices) {
+  const ctx       = priceContext(prices)
+  const movers    = prices.movers ?? {}
+  const session   = getMarketSession()
+  const narrative = buildMarketNarrative(movers)
+  const istDate   = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+    .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
+  const direction = signal.pct > 0 ? 'up' : 'down'
+  const absPct    = Math.abs(signal.pct).toFixed(2)
+  const priceStr  = signal.price != null ? `₹${Math.round(signal.price)}${signal.unit.replace('₹', '')}` : 'price N/A'
+
+  const moverContext = Object.entries(movers)
+    .filter(([, p]) => Math.abs(p) > 0.15)
+    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+    .slice(0, 4)
+    .map(([k, p]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${p >= 0 ? '+' : ''}${p.toFixed(2)}%`)
+    .join(' | ')
+
+  const prompt = `You are BhaavBrief Intelligence — India's real-time MCX commodity intelligence desk for professional traders.
+
+Today: ${istDate} (IST) | Session: ${session.toUpperCase()}
+${SESSION_FOCUS[session]}
+
+CROSS-ASSET NARRATIVE (what's driving the ENTIRE commodity complex this session):
+${narrative}
+
+PRICE ACTION (the anchor of this brief):
+${signal.label} is ${direction} ${absPct}% at ${priceStr} this session.
+${signal.contextTitle ? `\nSupporting context from market: ${signal.contextTitle}. ${signal.contextDesc}` : '\n(No specific news catalyst identified — this is a pure price move. Explain based on the cross-asset context above.)'}
+
+All live prices: ${ctx}
+Session movers: ${moverContext || 'no significant moves'}
+
+Write a 115-130 word intelligence brief. Price action is the anchor — you are explaining WHY the market is moving and what it means for MCX traders. NOT summarising news.
+
+MANDATORY:
+1. Lead with the CAUSE: given the cross-asset narrative, what mechanism is driving this move?
+2. Name the EXACT MCX price (from the price data above) and two key levels: one support, one resistance.
+3. Show the IMPORT PARITY ARITHMETIC: for metals/energy — global price × USD/INR × duty factor = MCX theoretical parity. Identify whether MCX is at premium or discount to parity.
+4. Name ONE cross-commodity correlation: what else is moving in the same direction, and why does that confirm or challenge this move?
+5. End with one specific price level or scheduled data release to watch.
+
+No opinions. No buy/sell calls. No "could", "may", "might". Facts and mechanics only.
+
+Format (plain text, no markdown):
+HEADLINE: [12-16 words — include exact % move and MCX price level]
+IMPACT: [bearish / bullish / neutral]
+BODY: [115-130 words]`
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 450, messages: [{ role: 'user', content: prompt }] }),
+  })
+
+  if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
+  const raw  = (await res.json()).content?.[0]?.text?.trim() ?? ''
+  const text = raw.replace(/^#+\s+[^\n]*\n+/gm, '').replace(/^\*{1,2}(HEADLINE|IMPACT|BODY):\*{0,2}/gim, '$1:').trim()
+
+  const headlineM = text.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
+  const impactM   = text.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
+  const bodyM     = text.match(/BODY:\s*([\s\S]+)/i)
+
+  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
+
+  const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
+  const summary = bodyM[1].replace(/^\*+\s*/, '').replace(/\n\n[\s\S]*/, '').trim()
+  const impact  = (impactM?.[1] ?? 'neutral').toLowerCase()
+
+  if (title.length < 10 || summary.length < 40)
+    throw new Error(`Malformed response — title: "${title.slice(0, 40)}"`)
+
+  return { title, summary, impact }
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -493,115 +671,114 @@ async function main() {
   const prices = await fetchLivePrices()
   console.log(`  ${priceContext(prices)}`)
 
-  const seen      = loadSeen()
-  const cutoffMs  = Date.now() - FRESHNESS_HOURS * 60 * 60 * 1000
-  console.log(`Seen: ${seen.length} URLs | Freshness cutoff: ${FRESHNESS_HOURS}h`)
+  const movers   = prices.movers ?? {}
+  const session  = getMarketSession()
+  const narrative = buildMarketNarrative(movers)
+  console.log(`  Session: ${session} | Narrative: ${narrative}`)
 
-  const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
-  console.log(`Total fetched: ${allItems.length}`)
-
+  const seen     = loadSeen()
+  const cutoffMs = Date.now() - FRESHNESS_HOURS * 60 * 60 * 1000
   const existing = loadExisting()
-
-  // Cross-run dedup: titles of last 40 stored items — reject signals too similar to recent output
   const recentTitles = existing.slice(0, 40).map(i => i.title)
 
-  // Filter: not seen, not MCX-stock, keyword-relevant, fresh, not a duplicate of recent output
-  const candidates = allItems.filter(item => {
+  // Fetch RSS feeds (still needed as context even for price-action briefs)
+  console.log(`Fetching ${FEEDS.length} RSS feeds...`)
+  const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
+  console.log(`Total RSS items: ${allItems.length}`)
+
+  // ── PART 1: Price-action signals ─────────────────────────────────────────────
+  // These are always generated when commodities are moving — no RSS article required.
+  // Metals & Energy: price-action first.
+  const priceSignals = buildPriceActionSignals(prices, allItems, recentTitles)
+  console.log(`Price-action signals: ${priceSignals.length} (${priceSignals.map(s => `${s.label} ${s.pct >= 0 ? '+' : ''}${s.pct.toFixed(1)}%`).join(', ') || 'none moving'})`)
+
+  // ── PART 2: RSS signals for non-price categories ─────────────────────────────
+  // Policy / Geopolitics / Agri / Macro — RSS still drives these (no live price for these).
+  const RSS_ONLY_CATS = new Set(['Policy', 'Geopolitics', 'Agri', 'Macro'])
+  const gaps = getCategoryGaps(existing)
+  const recentCats = new Set(existing.slice(0, 12).map(i => i.category))
+
+  const rssItems = allItems.filter(item => {
     if (seen.includes(item.url)) return false
     const text = `${item.title} ${item.desc}`
     if (isMCXStockArticle(text)) return false
     if (!isImportant(text)) return false
-    // pubDate freshness: skip if pubDate is present AND clearly stale (> FRESHNESS_HOURS)
     if (item.pubDate && !isNaN(item.pubDate.getTime()) && item.pubDate.getTime() < cutoffMs) return false
-    // Cross-run semantic dedup: skip if too similar to recently generated items
     if (recentTitles.some(rt => similarity(item.title, rt) > 0.38)) return false
-    return true
+    const { category } = detectCategory(text)
+    return RSS_ONLY_CATS.has(category)  // only non-price categories for RSS path
   })
-  console.log(`Fresh, new, important, non-duplicate signals: ${candidates.length}`)
 
-  // Cluster similar stories within this batch, pick best per cluster
-  const deduplicated = clusterAndPick(candidates)
-  console.log(`After clustering: ${deduplicated.length} unique signals`)
-
-  const movers = prices.movers ?? {}
-  const session = getMarketSession()
-  const gaps    = getCategoryGaps(existing)
-  console.log(`Session: ${session} | Movers: ${JSON.stringify(movers)} | Category gaps: ${gaps.join(', ') || 'none'}`)
-
-  // Score each signal: mover boost + desc length bonus
-  const scored = deduplicated.map(item => ({
+  const rssDeduped = clusterAndPick(rssItems)
+  const rssScored  = rssDeduped.map(item => ({
     ...item,
     _score: scoreSignal(item, movers) + (item.desc?.length ?? 0) / 200,
   }))
 
-  // Group by category, keeping best-scored candidate per bucket
-  const byCategory = new Map()
-  for (const item of scored) {
+  const rssByCategory = new Map()
+  for (const item of rssScored) {
     const { category } = detectCategory(`${item.title} ${item.desc}`)
-    const bucket = byCategory.get(category) ?? []
+    if (!RSS_ONLY_CATS.has(category)) continue
+    const bucket = rssByCategory.get(category) ?? []
     bucket.push(item)
-    byCategory.set(category, bucket)
+    rssByCategory.set(category, bucket)
   }
 
-  // Rank categories:
-  //  1. Categories with active movers go first (their content is most timely)
-  //  2. Gap categories (not seen in last 18 items) go next
-  //  3. Others sorted by recency — not-recently-covered first
-  const recentCats = new Set(existing.slice(0, 12).map(i => i.category))
-
-  function categoryPriority(cat) {
-    // Check if any mover is related to this category
-    const moverCat = { Metals: ['gold','silver','copper'], Energy: ['crude','natgas'] }
-    const relatedMovers = moverCat[cat] ?? []
-    const hasBigMover = relatedMovers.some(k => Math.abs(movers[k] ?? 0) > 0.3)
-    if (hasBigMover)         return 0   // highest: category is actively moving today
-    if (gaps.includes(cat))  return 1   // second: gap category not seen recently
-    if (!recentCats.has(cat)) return 2  // third: not in last 12 items
-    return 3                            // lowest: recently covered
-  }
-
-  const rankedSignals = [...byCategory.entries()]
-    .sort(([catA], [catB]) => categoryPriority(catA) - categoryPriority(catB))
-    .slice(0, MAX_PER_RUN)
+  const rssSlots = Math.max(0, MAX_PER_RUN - Math.min(priceSignals.length, 3))
+  const rssSignals = [...rssByCategory.entries()]
+    .sort(([a], [b]) => {
+      const pa = gaps.includes(a) ? 0 : !recentCats.has(a) ? 1 : 2
+      const pb = gaps.includes(b) ? 0 : !recentCats.has(b) ? 1 : 2
+      return pa - pb
+    })
+    .slice(0, rssSlots)
     .map(([, bucket]) => bucket.sort((a, b) => b._score - a._score)[0])
 
-  console.log(`Will generate ${rankedSignals.length} briefing(s): ${rankedSignals.map(s => s.title.slice(0, 50)).join(' | ')}`)
+  console.log(`RSS signals: ${rssSignals.length} (${rssSignals.map(s => s.title.slice(0, 40)).join(' | ')})`)
 
-  const newSeen  = [...seen]
-  let processed  = 0
+  // ── PART 3: Generate all items ───────────────────────────────────────────────
+  const newSeen = [...seen]
+  let processed = 0
 
-  for (const signal of rankedSignals) {
+  function makeEntry(title, summary, category, tagType, impact) {
+    const ist    = getISTNow()
+    const now    = new Date()
+    const istStr = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata',
+      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
+    return { id: toId(title, ist), title, summary, category, tagType, impact, pubDate: now.toISOString(), pubDateIST: istStr }
+  }
+
+  // Price-action items first (up to 3, max 1 per commodity)
+  for (const signal of priceSignals.slice(0, 3)) {
+    if (processed >= MAX_PER_RUN) break
     try {
-      console.log(`  Generating: ${signal.title.slice(0, 65)}`)
+      console.log(`  [price-action] ${signal.label} ${signal.pct >= 0 ? '+' : ''}${signal.pct.toFixed(2)}%`)
+      const { title, summary, impact } = await generatePriceActionBrief(signal, prices)
+      existing.unshift(makeEntry(title, summary, signal.category, signal.tagType, impact))
+      if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
+      processed++
+    } catch (e) {
+      console.warn(`  Skipped price-action [${signal.key}]: ${e.message}`)
+    }
+  }
+
+  // RSS-triggered items for policy/geo/agri/macro
+  for (const signal of rssSignals) {
+    if (processed >= MAX_PER_RUN) break
+    try {
+      console.log(`  [rss] ${signal.title.slice(0, 65)}`)
       const { title, summary, impact } = await generateNewsItem(signal, prices)
-      const ist = getISTNow()
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
-
-      const now = new Date()
-      const istStr = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata',
-        day: '2-digit', month: 'short', year: 'numeric',
-        hour: '2-digit', minute: '2-digit', hour12: false })
-
-      existing.unshift({
-        id:         toId(title, ist),
-        title,
-        summary,
-        category,
-        tagType,
-        impact,
-        pubDate:    now.toISOString(),        // UTC ISO — used for relative time
-        pubDateIST: istStr,                   // e.g. "22 May 2026, 09:15" — for display
-      })
-
+      existing.unshift(makeEntry(title, summary, category, tagType, impact))
       newSeen.push(signal.url)
       processed++
     } catch (e) {
-      console.warn(`  Skipped: ${e.message}`)
+      console.warn(`  Skipped RSS: ${e.message}`)
       newSeen.push(signal.url)
     }
   }
 
-  // Keep rolling window — drop items older than 7 days
+  // Trim rolling window to 7 days
   const expiryCutoff = Date.now() - 7 * 86400 * 1000
   const trimmed = existing
     .filter(item => new Date(item.pubDate).getTime() > expiryCutoff)
@@ -611,7 +788,7 @@ async function main() {
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(trimmed, null, 2), 'utf8')
   saveSeen(newSeen)
 
-  console.log(`Done — ${processed} new items. Total stored: ${trimmed.length}`)
+  console.log(`Done — ${processed} new items (${Math.min(priceSignals.length, 3)} price-action + ${rssSignals.length} RSS). Stored: ${trimmed.length}`)
 }
 
 main().catch(err => {
