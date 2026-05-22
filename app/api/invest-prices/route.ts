@@ -6,8 +6,8 @@ export const revalidate = 60
 
 // ── NSE symbols for Kite ──────────────────────────────────────────────────────
 const NSE_SYMBOLS = [
-  'GOLDBEES', 'SBIGETS', 'HDFCMFGETF', 'AXISGOLD',
-  'SILVERBEES', 'ICICISILVER',
+  'GOLDBEES', 'SETFGOLD', 'HDFCGOLD', 'AXISGOLD',
+  'SILVERBEES', 'SILVERIETF',
   'HINDALCO', 'VEDL', 'HINDCOPPER', 'HINDZINC',
   'NMDC', 'COALINDIA', 'SAIL', 'JSWSTEEL', 'MOIL',
   'ONGC', 'GAIL',

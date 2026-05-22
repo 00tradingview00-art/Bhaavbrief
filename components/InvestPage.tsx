@@ -28,12 +28,12 @@ const INSTRUMENTS: Record<TabId, Instrument[]> = {
   'indian-etf': [
     // Gold ETFs — source: NSE India ETF list + AMC fact sheets
     { name: 'Nippon India Gold ETF (GoldBEES)', ticker: 'GOLDBEES',     priceKey: 'GOLDBEES',    exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.79%', aum: '₹10,200 Cr', platform: 'Zerodha · Groww · Angel', source: 'NSE / Nippon AMC',     underlying: 'Physical Gold (LBMA)' },
-    { name: 'SBI Gold ETF',                     ticker: 'SBIGETS',      priceKey: 'SBIGETS',     exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.61%', aum: '₹2,800 Cr',  platform: 'All platforms',           source: 'NSE / SBI MF',         underlying: 'Physical Gold (LBMA)' },
-    { name: 'HDFC Gold ETF',                    ticker: 'HDFCMFGETF',   priceKey: 'HDFCMFGETF',  exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.59%', aum: '₹3,400 Cr',  platform: 'All platforms',           source: 'NSE / HDFC MF',        underlying: 'Physical Gold (LBMA)' },
+    { name: 'SBI Gold ETF',                     ticker: 'SETFGOLD',     priceKey: 'SETFGOLD',    exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.61%', aum: '₹2,800 Cr',  platform: 'All platforms',           source: 'NSE / SBI MF',         underlying: 'Physical Gold (LBMA)' },
+    { name: 'HDFC Gold ETF',                    ticker: 'HDFCGOLD',     priceKey: 'HDFCGOLD',    exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.59%', aum: '₹3,400 Cr',  platform: 'All platforms',           source: 'NSE / HDFC MF',        underlying: 'Physical Gold (LBMA)' },
     { name: 'Axis Gold ETF',                    ticker: 'AXISGOLD',     priceKey: 'AXISGOLD',    exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Gold'],             expenseRatio: '0.49%', aum: '₹680 Cr',    platform: 'All platforms',           source: 'NSE / Axis MF',        underlying: 'Physical Gold (LBMA)' },
     // Silver ETFs — launched 2022 onwards
     { name: 'Nippon India Silver ETF',          ticker: 'SILVERBEES',   priceKey: 'SILVERBEES',  exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Silver'],           expenseRatio: '0.56%', aum: '₹2,100 Cr',  platform: 'Zerodha · Groww',         source: 'NSE / Nippon AMC',     underlying: 'Physical Silver (LBMA)' },
-    { name: 'ICICI Pru Silver ETF',             ticker: 'ICICISILVER',  priceKey: 'ICICISILVER', exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Silver'],           expenseRatio: '0.40%', aum: '₹1,450 Cr',  platform: 'All platforms',           source: 'NSE / ICICI Pru MF',   underlying: 'Physical Silver (LBMA)' },
+    { name: 'ICICI Pru Silver ETF',             ticker: 'SILVERIETF',   priceKey: 'SILVERIETF',  exchange: 'NSE', type: 'ETF', isGlobal: false, commodity: ['Silver'],           expenseRatio: '0.40%', aum: '₹1,450 Cr',  platform: 'All platforms',           source: 'NSE / ICICI Pru MF',   underlying: 'Physical Silver (LBMA)' },
   ],
 
   'indian-mf': [
