@@ -124,7 +124,7 @@ export async function sendWelcomeEmail(email: string, latestBrief?: { title: str
 
   <div style="background:#FAFAF6;border:0.5px solid #DDDDD0;padding:16px 20px;margin:24px 0;border-radius:4px">
     <div style="display:flex;gap:24px">
-      ${[['₹0', 'Free forever'], ['5 min', 'Daily read'], ['9:30 AM', 'Delivered']].map(([v, l]) =>
+      ${[['5 min', 'Daily read'], ['9:30 AM', 'Delivered']].map(([v, l]) =>
         `<div style="text-align:center;flex:1">
           <div style="font-family:Georgia,serif;font-size:18px;font-weight:600;color:#18180F">${v}</div>
           <div style="font-family:monospace;font-size:9px;color:#8A8A7A;letter-spacing:0.07em;text-transform:uppercase;margin-top:3px">${l}</div>
