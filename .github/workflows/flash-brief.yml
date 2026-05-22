@@ -35,6 +35,8 @@ jobs:
         run: node scripts/generate-news.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
 
       - name: Commit and push
         run: |

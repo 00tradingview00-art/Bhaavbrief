@@ -165,10 +165,55 @@ function clusterAndPick(candidates) {
   return clusters
 }
 
-// ── Live prices (Stooq + Frankfurter) ────────────────────────────────────────
+// ── Live prices: Kite (actual MCX) → Stooq fallback ─────────────────────────
 
-async function fetchLivePrices() {
-  const p = { usdInr: 85.0 }
+function loadInstruments() {
+  try {
+    const f = path.join(ROOT, 'data/kite-instruments.json')
+    return JSON.parse(fs.readFileSync(f, 'utf8'))
+  } catch { return null }
+}
+
+async function fetchKitePrices(instruments) {
+  const KITE_API_KEY    = process.env.KITE_API_KEY
+  const KITE_ACCESS_TOKEN = process.env.KITE_ACCESS_TOKEN
+  if (!KITE_API_KEY || !KITE_ACCESS_TOKEN) return null
+
+  const keys = ['gold', 'silver', 'crude', 'copper', 'natgas']
+  const qs   = keys
+    .filter(k => instruments[k]?.token)
+    .map(k => `i=MCX:${instruments[k].symbol}`)
+    .join('&')
+
+  try {
+    const res = await fetch(`https://api.kite.trade/quote/ltp?${qs}`, {
+      headers: {
+        'X-Kite-Version': '3',
+        Authorization: `token ${KITE_API_KEY}:${KITE_ACCESS_TOKEN}`,
+      },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) {
+      console.warn(`  Kite LTP ${res.status}: ${(await res.text()).slice(0, 120)}`)
+      return null
+    }
+    const { data } = await res.json()
+    const p = { source: 'kite' }
+    for (const key of keys) {
+      const sym = instruments[key]?.symbol
+      if (sym && data[`MCX:${sym}`]?.last_price) {
+        p[key] = data[`MCX:${sym}`].last_price
+      }
+    }
+    return p
+  } catch (e) {
+    console.warn(`  Kite fetch failed: ${e.message}`)
+    return null
+  }
+}
+
+async function fetchStooqFallback() {
+  const p = { usdInr: 85.0, source: 'stooq' }
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
       signal: AbortSignal.timeout(5000),
@@ -176,13 +221,12 @@ async function fetchLivePrices() {
     if (r.ok) p.usdInr = (await r.json()).rates?.INR ?? p.usdInr
   } catch {}
 
-  const symbols = { gold: 'gc.f', silver: 'si.f', crude: 'cl.f', copper: 'hg.f' }
+  const symbols = { gold: 'gc.f', silver: 'si.f', crude: 'cl.f', copper: 'hg.f', natgas: 'ng.f' }
   await Promise.all(Object.entries(symbols).map(async ([name, sym]) => {
     try {
-      const r = await fetch(
-        `https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`,
-        { signal: AbortSignal.timeout(5000) }
-      )
+      const r = await fetch(`https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`, {
+        signal: AbortSignal.timeout(5000),
+      })
       if (!r.ok) return
       const lines = (await r.text()).trim().split('\n')
       if (lines.length < 2) return
@@ -191,16 +235,45 @@ async function fetchLivePrices() {
       if (!isNaN(close) && close > 0) p[name] = close
     } catch {}
   }))
-
   return p
 }
 
+async function fetchLivePrices() {
+  const instruments = loadInstruments()
+  if (instruments) {
+    const kite = await fetchKitePrices(instruments)
+    if (kite && (kite.gold || kite.silver || kite.crude)) {
+      // Attach USD/INR from Frankfurter even when using Kite (Kite is INR already)
+      try {
+        const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
+        if (r.ok) kite.usdInr = (await r.json()).rates?.INR ?? 85.0
+      } catch { kite.usdInr = 85.0 }
+      return kite
+    }
+  }
+  console.log('  Kite unavailable — falling back to Stooq')
+  return fetchStooqFallback()
+}
+
 function priceContext(p) {
-  const parts = [`USD/INR ₹${p.usdInr?.toFixed(2)}`]
-  if (p.gold)   parts.push(`Gold $${p.gold.toFixed(0)}/oz (~₹${((p.gold / 31.1035) * 10 * p.usdInr * 1.15).toFixed(0)}/10g MCX)`)
-  if (p.silver) parts.push(`Silver $${p.silver.toFixed(2)}/oz (~₹${((p.silver / 31.1035) * 1000 * p.usdInr * 1.10).toFixed(0)}/kg MCX)`)
-  if (p.crude)  parts.push(`WTI $${p.crude.toFixed(2)}/bbl (~₹${(p.crude * p.usdInr * 1.02).toFixed(0)}/bbl MCX)`)
-  if (p.copper) parts.push(`Copper $${p.copper.toFixed(4)}/lb`)
+  const parts = []
+  if (p.source === 'kite') {
+    // Kite prices are already in INR (MCX contracts)
+    parts.push(`USD/INR ₹${p.usdInr?.toFixed(2) ?? '85.00'}`)
+    if (p.gold)   parts.push(`MCX Gold ₹${p.gold.toFixed(0)}/10g`)
+    if (p.silver) parts.push(`MCX Silver ₹${p.silver.toFixed(0)}/kg`)
+    if (p.crude)  parts.push(`MCX Crude ₹${p.crude.toFixed(0)}/bbl`)
+    if (p.copper) parts.push(`MCX Copper ₹${p.copper.toFixed(2)}/kg`)
+    if (p.natgas) parts.push(`MCX NatGas ₹${p.natgas.toFixed(2)}/mmBtu`)
+  } else {
+    // Stooq prices are USD — convert to approximate MCX INR
+    parts.push(`USD/INR ₹${p.usdInr?.toFixed(2)}`)
+    if (p.gold)   parts.push(`COMEX Gold $${p.gold.toFixed(0)}/oz (~₹${((p.gold / 31.1035) * 10 * p.usdInr * 1.15).toFixed(0)}/10g MCX est.)`)
+    if (p.silver) parts.push(`COMEX Silver $${p.silver.toFixed(2)}/oz (~₹${((p.silver / 31.1035) * 1000 * p.usdInr * 1.10).toFixed(0)}/kg MCX est.)`)
+    if (p.crude)  parts.push(`WTI $${p.crude.toFixed(2)}/bbl (~₹${(p.crude * p.usdInr * 1.02).toFixed(0)}/bbl MCX est.)`)
+    if (p.copper) parts.push(`COMEX Copper $${p.copper.toFixed(4)}/lb`)
+    if (p.natgas) parts.push(`Henry Hub NatGas $${p.natgas.toFixed(3)}/mmBtu`)
+  }
   return parts.join(' | ')
 }
 
