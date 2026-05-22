@@ -24,7 +24,7 @@ const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
 const MAX_STORED        = 300
 const MAX_PER_RUN       = 5      // hard cap — one per major category
-const FRESHNESS_HOURS   = 6      // ignore articles older than this
+const FRESHNESS_HOURS   = 24     // ignore articles older than this
 
 const FEEDS = [
   // ── Commodities ──────────────────────────────────────────────────────────────
@@ -331,7 +331,7 @@ Rules:
 - No opinions, no buy/sell calls, no "investors should"
 - Close with ONE specific price level or upcoming event/data release to watch
 
-Format exactly as:
+Format exactly as plain text (no markdown, no headers, no asterisks, no bullet points):
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
 IMPACT: [bearish / bullish / neutral]
 BODY: [95-120 words]
@@ -353,12 +353,18 @@ Market signal: ${signal.title}. ${signal.desc}`
   })
 
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
-  const text      = (await res.json()).content?.[0]?.text?.trim() ?? ''
-  const headlineM = text.match(/HEADLINE:\s*\*{0,2}\s*(.+?)\s*\*{0,2}(?:\n|$)/i)
-  const impactM   = text.match(/IMPACT:\s*\*{0,2}\s*(bearish|bullish|neutral)\s*\*{0,2}(?:\n|$)/i)
-  const bodyM     = text.match(/BODY:\s*\*{0,2}\s*([\s\S]+)/i)
+  // Strip markdown headers and leading asterisks Claude sometimes adds
+  const raw  = (await res.json()).content?.[0]?.text?.trim() ?? ''
+  const text = raw
+    .replace(/^#+\s+[^\n]*\n+/gm, '')   // remove # Heading lines
+    .replace(/^\*{1,2}(HEADLINE|IMPACT|BODY):\*{0,2}/gim, '$1:')  // **HEADLINE:** → HEADLINE:
+    .trim()
 
-  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${text.slice(0, 80)}`)
+  const headlineM = text.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
+  const impactM   = text.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
+  const bodyM     = text.match(/BODY:\s*([\s\S]+)/i)
+
+  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
 
   const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
   const summary = bodyM[1].replace(/^\*+\s*/, '').replace(/\n\n[\s\S]*/,'').trim()
