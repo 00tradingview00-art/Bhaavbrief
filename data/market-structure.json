@@ -1,0 +1,151 @@
+{
+  "gold": {
+    "name": "Gold",
+    "mcxSymbol": "GOLD",
+    "unit": "₹ per 10g",
+    "lotSize": "1 kg (100 units of 10g)",
+    "tickSize": "₹1 per 10g = ₹100/lot",
+    "typicalMargin": "₹5–7 lakh",
+    "contractValue": "~₹1 crore at ₹1,00,000/10g",
+    "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
+    "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
+    "keyBodies": ["World Gold Council", "London Bullion Market Association (LBMA)", "CME Group (COMEX)", "Reserve Bank of India"],
+    "demandDrivers": [
+      "Central bank reserve accumulation (China, Russia, India RBI buying since 2022)",
+      "Indian jewellery (25% of global demand — wedding season Oct–Feb peaks)",
+      "Gold ETFs (institutional investment flow)",
+      "Electronics and semiconductors (industrial)",
+      "Safe-haven demand during geopolitical or financial stress"
+    ],
+    "priceDrivers": [
+      "USD strength — gold and dollar move inversely",
+      "US real yields (10Y TIPS) — higher real rates raise opportunity cost of holding gold",
+      "Central bank buying — especially EM central banks diversifying away from USD",
+      "Geopolitical risk — war, sanctions, banking crises lift gold",
+      "India import duty — government can change duty; each 1% duty change shifts MCX price ~₹1,000/10g",
+      "Indian rupee — a weaker INR amplifies MCX gold price even when COMEX is flat"
+    ],
+    "keyRisk": "MCX-COMEX spread can widen when Indian import duty changes or USD/INR moves sharply — watch basis risk.",
+    "taxNote": "Gold ETF LTCG: 12.5% after 12 months (Budget 2024). Physical gold LTCG: 12.5% without indexation after 2 years. MCX futures gains: taxed as business income or STCG at slab rate. CTT 0.01% on sell side.",
+    "macroLinks": ["USD/INR", "US 10Y real yield", "COMEX Gold", "India CPI", "Central bank demand data (WGC quarterly)"]
+  },
+  "silver": {
+    "name": "Silver",
+    "mcxSymbol": "SILVER",
+    "unit": "₹ per kg",
+    "lotSize": "30 kg",
+    "tickSize": "₹1 per kg = ₹30/lot",
+    "typicalMargin": "₹1.5–2.5 lakh",
+    "contractValue": "~₹30 lakh at ₹1,00,000/kg",
+    "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
+    "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
+    "keyBodies": ["Silver Institute", "CME Group (COMEX)", "London Metal Exchange"],
+    "demandDrivers": [
+      "Industrial use (60% of demand) — solar panels, EVs, electronics, 5G",
+      "Jewellery and silverware (India is world's largest silver importer for this)",
+      "Investment demand — silver ETFs, bars and coins",
+      "Green energy transition — each solar panel uses ~20g of silver; global solar buildout is a structural demand tailwind"
+    ],
+    "priceDrivers": [
+      "Gold-silver ratio — historically 60–80x; when ratio spikes above 80, silver is cheap relative to gold",
+      "Industrial cycle — silver tracks copper in risk-on/risk-off regimes more than gold does",
+      "Solar capacity additions — China solar policy directly affects silver industrial demand",
+      "USD strength (inverse)",
+      "India import duty and monsoon (agri income → silver buying in rural India)"
+    ],
+    "keyRisk": "Silver is far more volatile than gold — easily swings 3–5% in a session. High lot value (₹30L per lot) amplifies P&L. Silver Mini (5 kg) is available for smaller capital.",
+    "taxNote": "Same as gold futures — gains taxed as business income. CTT 0.01% on sell side.",
+    "macroLinks": ["Gold price", "COMEX Silver", "Gold-silver ratio", "China solar installations (quarterly)", "USD/INR"]
+  },
+  "crude": {
+    "name": "Crude Oil",
+    "mcxSymbol": "CRUDEOIL",
+    "unit": "₹ per barrel",
+    "lotSize": "100 barrels",
+    "tickSize": "₹1 per barrel = ₹100/lot",
+    "typicalMargin": "₹30–45K",
+    "contractValue": "~₹6.5 lakh at ₹6,500/bbl",
+    "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
+    "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
+    "keyBodies": ["OPEC+ (Vienna Group)", "International Energy Agency (IEA)", "US EIA", "Indian Ministry of Petroleum"],
+    "demandDrivers": [
+      "Transportation — aviation, shipping, road fuel (60% of global oil demand)",
+      "Petrochemicals — plastics, fertilisers",
+      "Chinese industrial activity — China alone is 15% of global demand",
+      "Indian fuel demand — India is world's 3rd largest oil consumer",
+      "Seasonal driving demand (US summer, India winter)"
+    ],
+    "priceDrivers": [
+      "OPEC+ production decisions — each 1 mbpd cut historically lifts WTI $5–10/bbl",
+      "US EIA weekly inventory data (Wednesday 8 PM IST) — draw = bullish, build = bearish",
+      "US shale rig count (Baker Hughes, Friday) — higher rigs = more future supply = price cap",
+      "China PMI and import data — weak China demand is the biggest bearish driver",
+      "Middle East geopolitics — Strait of Hormuz tension (20% of global oil transits through it)",
+      "USD strength — oil is priced in dollars; strong USD = lower oil for non-US buyers",
+      "Seasonal: US driving season (Memorial Day–Labor Day) lifts gasoline/crude"
+    ],
+    "keyRisk": "Crude is the most geopolitically sensitive commodity. Weekend OPEC+ surprises and Middle East flare-ups cause gap opens on Monday. Retail traders should avoid holding large overnight positions before OPEC+ meetings.",
+    "taxNote": "MCX crude futures gains: business income or STCG. CTT 0.01% on sell. Petrol/diesel prices in India are state-controlled and do not move with MCX crude in real time.",
+    "macroLinks": ["WTI Crude", "Brent Crude", "USD/INR", "China PMI", "EIA Weekly Inventory", "OPEC+ meeting calendar"]
+  },
+  "copper": {
+    "name": "Copper",
+    "mcxSymbol": "COPPER",
+    "unit": "₹ per kg",
+    "lotSize": "2,500 kg",
+    "tickSize": "₹0.05 per kg = ₹125/lot",
+    "typicalMargin": "₹1.2–1.8 lakh",
+    "contractValue": "~₹24 lakh at ₹960/kg",
+    "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
+    "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
+    "keyBodies": ["London Metal Exchange (LME)", "CME Group (COMEX)", "International Copper Study Group (ICSG)", "Chilean state miner Codelco"],
+    "demandDrivers": [
+      "China construction and infrastructure (accounts for ~55% of global copper demand)",
+      "Electric vehicles — each EV uses 83kg of copper vs 22kg in ICE cars",
+      "Power grid buildout — renewable energy and grid upgrades are copper-intensive",
+      "AI data centres — each hyperscale data centre uses thousands of tonnes of copper wiring",
+      "Indian infrastructure (roads, rail, power) — growing demand centre"
+    ],
+    "priceDrivers": [
+      "China economic data — PMI, property sector health, stimulus announcements",
+      "LME warehouse stock levels — low inventory signals supply tightness",
+      "Mine supply disruptions — strikes in Chile/Peru (frequent), floods, political instability",
+      "AI and energy transition narrative — long-term structural demand story",
+      "USD strength (inverse — copper priced in dollars on LME/COMEX)",
+      "COMEX-LME basis — arbitrage between US and London markets creates price signals"
+    ],
+    "keyRisk": "Copper's large lot size (2,500 kg, ~₹24L contract value) makes it high-capital. LME price is the global benchmark; COMEX is the US proxy. MCX follows COMEX with import duty overlay. Copper is called 'Dr. Copper' because it has the best track record of predicting global economic direction.",
+    "taxNote": "MCX copper futures: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["LME Copper 3M", "COMEX Copper", "China Caixin PMI", "LME warehouse stocks", "USD/INR", "China property data"]
+  },
+  "natgas": {
+    "name": "Natural Gas",
+    "mcxSymbol": "NATURALGAS",
+    "unit": "₹ per mmBtu",
+    "lotSize": "1,250 mmBtu",
+    "tickSize": "₹0.10 per mmBtu = ₹125/lot",
+    "typicalMargin": "₹20–30K",
+    "contractValue": "~₹4 lakh at ₹320/mmBtu",
+    "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
+    "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
+    "keyBodies": ["EIA (US Energy Information Administration)", "International Gas Union (IGU)", "Gazprom (Russia)", "QatarEnergy"],
+    "demandDrivers": [
+      "Power generation — natural gas is the marginal fuel for electricity in the US and increasingly India",
+      "Winter heating demand (Northern Hemisphere — Nov–Feb is the peak demand season)",
+      "Industrial feedstock — fertiliser production (gas is the key input for urea)",
+      "LNG exports from US — high US export demand tightens domestic supply",
+      "AI data centre power — gas-fired power plants are being restarted in the US to power AI data centres"
+    ],
+    "priceDrivers": [
+      "US weather forecasts (3–7 day) — cold snaps drive heating demand and spike prices overnight",
+      "EIA Weekly Storage Report (Thursday, 8 PM IST) — draw vs injection vs 5-year average",
+      "Hurricane season (June–November) — Gulf of Mexico production disruptions",
+      "European LNG import demand — post-Russia sanctions, Europe competes with Asia for LNG cargoes",
+      "Henry Hub (US benchmark) — MCX NatGas follows Henry Hub via import parity",
+      "AI data centre electricity demand — structural new demand source from 2024 onward"
+    ],
+    "keyRisk": "Natural gas is the most volatile commodity on MCX — daily moves of 5–10% are common. Prices swing on a single weather forecast update. Low margin (₹20–30K) amplifies leverage massively relative to capital. MCX NatGas tracks Henry Hub, not Indian city gas prices.",
+    "taxNote": "MCX NatGas futures: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["Henry Hub NatGas", "US EIA Weekly Storage", "EU TTF Gas", "USD/INR", "US weather (NOAA 6-10 day)", "LNG freight rates"]
+  }
+}

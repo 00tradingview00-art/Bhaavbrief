@@ -1,24 +1,14 @@
-import { getAllFlash } from '@/lib/flash'
+import { getAllFlash }    from '@/lib/flash'
+import { getAllArticles } from '@/lib/articles'
 
 const BASE = 'https://bhaavbrief.in'
 
 // Google News sitemaps must only include articles published in the last 48 hours.
 const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000
 
-export async function GET() {
-  const flash = await getAllFlash()
-  const cutoff = Date.now() - FORTY_EIGHT_HOURS
-
-  const recent = flash.filter(f => {
-    const ts = new Date(f.date).getTime()
-    return !isNaN(ts) && ts >= cutoff
-  })
-
-  const urls = recent.map(f => {
-    const pubDate = new Date(f.date).toISOString()
-    const title   = escapeXml(f.title)
-    return `  <url>
-    <loc>${BASE}/flash/${f.slug}</loc>
+function newsEntry(loc: string, pubDate: string, title: string): string {
+  return `  <url>
+    <loc>${loc}</loc>
     <news:news>
       <news:publication>
         <news:name>BhaavBrief</news:name>
@@ -28,18 +18,30 @@ export async function GET() {
       <news:title>${title}</news:title>
     </news:news>
   </url>`
-  }).join('\n')
+}
+
+export async function GET() {
+  const [flash, articles] = await Promise.all([getAllFlash(), getAllArticles()])
+  const cutoff = Date.now() - FORTY_EIGHT_HOURS
+
+  const flashEntries = flash
+    .filter(f => { const ts = new Date(f.date).getTime(); return !isNaN(ts) && ts >= cutoff })
+    .map(f => newsEntry(`${BASE}/flash/${f.slug}`, new Date(f.date).toISOString(), escapeXml(f.title)))
+
+  const articleEntries = articles
+    .filter(a => { const ts = new Date(a.date).getTime(); return !isNaN(ts) && ts >= cutoff })
+    .map(a => newsEntry(`${BASE}/articles/${a.slug}`, new Date(a.date).toISOString(), escapeXml(a.title)))
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-${urls}
+${[...articleEntries, ...flashEntries].join('\n')}
 </urlset>`
 
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=1800',
+      'Cache-Control': 'public, max-age=1800, stale-while-revalidate=900',
     },
   })
 }

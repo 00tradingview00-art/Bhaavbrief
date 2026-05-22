@@ -1,0 +1,52 @@
+name: BhaavBrief Evening MCX Close Brief
+
+on:
+  schedule:
+    # 11:00 PM IST = 5:30 PM UTC, Mon–Fri (30 min before MCX close)
+    - cron: '30 17 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  close-brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Evening Close Brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/evening-close-brief.js
+
+      - name: Commit & push
+        run: |
+          git config user.name "BhaavBrief Intelligence"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
+          git add content/articles/ data/evening-brief-state.json
+          git diff --staged --quiet && echo "No new brief" && exit 0
+          DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
+          git commit -m "🌙 MCX Close Brief — ${DATE_IST}"
+          git push origin main
