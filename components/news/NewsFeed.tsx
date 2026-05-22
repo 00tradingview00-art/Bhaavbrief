@@ -13,12 +13,29 @@ const FILTER_KEYWORDS: Record<string, string[]> = {
   Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'red sea', 'war', 'geopolit'],
 }
 
+// Cross-asset tags detected from item text
+const ASSET_DETECTORS: { label: string; re: RegExp }[] = [
+  { label: 'Gold',      re: /\bgold\b/i },
+  { label: 'Silver',    re: /\bsilver\b/i },
+  { label: 'Crude',     re: /\bcrude|brent\b/i },
+  { label: 'Copper',    re: /\bcopper\b/i },
+  { label: 'Nat Gas',   re: /natural.gas|nat.gas|\blng\b/i },
+  { label: 'Rupee',     re: /\brupee\b|usdinr/i },
+  { label: 'DXY',       re: /\bdollar.index\b|\bdxy\b/i },
+  { label: 'Fed',       re: /federal.reserve|fomc|\bfed\b/i },
+  { label: 'RBI',       re: /\brbi\b|repo.rate/i },
+  { label: 'OPEC',      re: /\bopec\b/i },
+  { label: 'China',     re: /\bchina\b/i },
+  { label: 'MCX',       re: /\bmcx\b/i },
+]
+
 interface NewsItem {
   id:       string
   title:    string
   summary:  string
   category: string
   tagType:  string
+  impact?:  string
   pubDate:  string
 }
 
@@ -37,20 +54,37 @@ function matchesFilter(item: NewsItem, filter: string): boolean {
   return (FILTER_KEYWORDS[filter] ?? [filter.toLowerCase()]).some(k => text.includes(k))
 }
 
-function Skeleton() {
-  const bar = (w: string, h = 14) => (
-    <div style={{ height: h, borderRadius: 4, background: '#E8E4D8', width: w, marginBottom: 8 }} />
+function getCrossAssets(item: NewsItem): string[] {
+  const text = `${item.title} ${item.summary}`
+  return ASSET_DETECTORS.filter(a => a.re.test(text)).map(a => a.label).slice(0, 4)
+}
+
+function ImpactBadge({ impact }: { impact?: string }) {
+  if (!impact || impact === 'neutral') return (
+    <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.02em' }}>◆ Neutral</span>
+  )
+  if (impact === 'bullish') return (
+    <span style={{ fontSize: 11, color: '#1E6630', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, letterSpacing: '0.02em' }}>▲ Bullish</span>
   )
   return (
-    <div style={{ padding: '20px 0', borderBottom: '1px solid #E8E4D8' }}>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 9 }}>
-        {bar('56px', 20)}
-        {bar('36px', 20)}
+    <span style={{ fontSize: 11, color: '#991818', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 600, letterSpacing: '0.02em' }}>▼ Bearish</span>
+  )
+}
+
+function Skeleton() {
+  const bar = (w: string, h = 14) => (
+    <div style={{ height: h, borderRadius: 2, background: '#E8E4D8', width: w, marginBottom: 8 }} />
+  )
+  return (
+    <div style={{ padding: '22px 0', borderBottom: '1px solid #E8E4D8' }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+        {bar('60px', 20)} {bar('64px', 16)} {bar('40px', 16)}
       </div>
-      {bar('100%', 18)}
-      {bar('72%',  18)}
-      {bar('90%',  13)}
-      {bar('60%',  13)}
+      {bar('95%', 17)} {bar('75%', 17)}
+      {bar('88%', 13)} {bar('65%', 13)}
+      <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+        {bar('44px', 18)} {bar('44px', 18)} {bar('44px', 18)}
+      </div>
     </div>
   )
 }
@@ -63,12 +97,14 @@ export default function NewsFeed() {
   const [error,        setError]        = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
   const [page,         setPage]         = useState(1)
+  const [lastFetched,  setLastFetched]  = useState<Date | null>(null)
 
   const fetchNews = useCallback(async () => {
     try {
       const res = await fetch('/api/news')
       if (!res.ok) throw new Error('bad response')
       setNews(await res.json())
+      setLastFetched(new Date())
       setError(false)
     } catch {
       setError(true)
@@ -87,28 +123,59 @@ export default function NewsFeed() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const paginated  = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
 
+  // Category distribution for the coverage bar
+  const catCounts = FILTERS.slice(1).map(f => ({
+    label: f,
+    count: news.filter(item => matchesFilter(item, f)).length,
+  })).filter(c => c.count > 0)
+
   return (
     <div>
+
+      {/* Coverage bar */}
+      {!loading && !error && catCounts.length > 0 && (
+        <div style={{
+          display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap',
+          padding: '10px 14px', background: '#F3F2EC', border: '0.5px solid #DDDDD0',
+          marginBottom: 20,
+        }}>
+          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginRight: 4 }}>
+            Coverage
+          </span>
+          {catCounts.map(c => (
+            <span key={c.label} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#48483A' }}>
+              {c.label} <strong style={{ color: '#18180F' }}>{c.count}</strong>
+            </span>
+          ))}
+          {lastFetched && (
+            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', marginLeft: 'auto' }}>
+              updated {relativeTime(lastFetched.toISOString())}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Filter pills */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {FILTERS.map(f => (
           <button
             key={f}
             onClick={() => { setActiveFilter(f); setPage(1) }}
             style={{
-              padding: '6px 14px',
-              borderRadius: 20,
-              fontSize: 12,
+              padding: '5px 14px',
+              borderRadius: 2,
+              fontSize: 11,
               fontWeight: 500,
-              border: '1px solid var(--border-2)',
-              background: activeFilter === f ? 'var(--ink)' : 'var(--surface)',
-              color: activeFilter === f ? '#fff' : 'var(--ink-3)',
+              fontFamily: 'IBM Plex Mono, monospace',
+              letterSpacing: '0.04em',
+              border: activeFilter === f ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
+              background: activeFilter === f ? '#18180F' : '#FAFAF6',
+              color: activeFilter === f ? '#FAFAF6' : '#8A8A7A',
               cursor: 'pointer',
-              transition: 'all .15s',
-              fontFamily: 'var(--font-sans)',
+              transition: 'all .12s',
             }}
           >
-            {f}
+            {f.toUpperCase()}
           </button>
         ))}
       </div>
@@ -118,49 +185,93 @@ export default function NewsFeed() {
 
       {/* Error state */}
       {!loading && error && (
-        <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '24px 0' }}>
-          Unable to load intelligence feed — retrying in 5 min
+        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
+          Intelligence feed offline — retrying in 5 min
         </p>
       )}
 
       {/* Empty state */}
       {!loading && !error && filtered.length === 0 && (
-        <p style={{ fontSize: 13, color: 'var(--ink-4)', padding: '32px 0' }}>
-          No intelligence in this category right now. Check back shortly.
+        <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, color: '#8A8A7A', padding: '32px 0', letterSpacing: '0.04em' }}>
+          No intelligence in this category right now — check back shortly.
         </p>
       )}
 
-      {/* News items */}
-      {!loading && !error && paginated.map(item => (
-        <div
-          key={item.id}
-          style={{ padding: '20px 0', borderBottom: '1px solid var(--border)' }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 9 }}>
-            <Tag type={item.tagType}>{item.category}</Tag>
-            <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{relativeTime(item.pubDate)}</span>
-            <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>·</span>
-            <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-mono)', letterSpacing: '0.03em' }}>
-              BhaavBrief Intelligence
-            </span>
+      {/* Intelligence items */}
+      {!loading && !error && paginated.map((item, idx) => {
+        const crossAssets = getCrossAssets(item)
+        return (
+          <div
+            key={item.id}
+            style={{
+              padding: '22px 0',
+              borderBottom: '0.5px solid #DDDDD0',
+              borderTop: idx === 0 ? '0.5px solid #DDDDD0' : 'none',
+            }}
+          >
+            {/* Meta row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+              <Tag type={item.tagType}>{item.category}</Tag>
+              <ImpactBadge impact={item.impact} />
+              <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
+              <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'IBM Plex Mono, monospace' }}>
+                {relativeTime(item.pubDate)}
+              </span>
+              <span style={{ fontSize: 11, color: '#C8C8B8', fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                BhaavBrief Intelligence
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h2 style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: 18,
+              fontWeight: 700,
+              lineHeight: 1.35,
+              color: '#18180F',
+              margin: '0 0 10px',
+              letterSpacing: '-0.01em',
+            }}>
+              {item.title}
+            </h2>
+
+            {/* Body */}
+            {item.summary && (
+              <p style={{
+                fontSize: 13,
+                color: '#48483A',
+                lineHeight: 1.75,
+                margin: '0 0 14px',
+                fontWeight: 300,
+              }}>
+                {item.summary}
+              </p>
+            )}
+
+            {/* Cross-asset tags */}
+            {crossAssets.length > 0 && (
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                  Touches
+                </span>
+                {crossAssets.map(a => (
+                  <span key={a} style={{
+                    fontFamily: 'IBM Plex Mono, monospace',
+                    fontSize: 9,
+                    letterSpacing: '0.06em',
+                    padding: '2px 7px',
+                    background: '#F3F2EC',
+                    color: '#48483A',
+                    border: '0.5px solid #DDDDD0',
+                  }}>
+                    {a.toUpperCase()}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
-          <h2 style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 17,
-            fontWeight: 500,
-            lineHeight: 1.4,
-            color: 'var(--ink)',
-            margin: '0 0 9px',
-          }}>
-            {item.title}
-          </h2>
-          {item.summary && (
-            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.7, margin: 0 }}>
-              {item.summary}
-            </p>
-          )}
-        </div>
-      ))}
+        )
+      })}
 
       {/* Pagination */}
       {!loading && !error && totalPages > 1 && (
@@ -170,24 +281,25 @@ export default function NewsFeed() {
             disabled={page === 1}
             style={{
               fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
-              padding: '8px 16px', border: '0.5px solid var(--border-2)',
-              background: page === 1 ? 'transparent' : 'var(--ink)', color: page === 1 ? 'var(--ink-4)' : '#fff',
+              padding: '8px 16px', border: '0.5px solid #DDDDD0',
+              background: page === 1 ? 'transparent' : '#18180F',
+              color: page === 1 ? '#C8C8B8' : '#FAFAF6',
               cursor: page === 1 ? 'not-allowed' : 'pointer',
             }}
           >
             ← Prev
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
               <button
                 key={p}
                 onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                 style={{
                   fontFamily: 'IBM Plex Mono, monospace', fontSize: 11,
-                  width: 32, height: 32, border: '0.5px solid var(--border-2)',
-                  background: page === p ? 'var(--ink)' : 'transparent',
-                  color: page === p ? '#fff' : 'var(--ink-3)',
+                  width: 30, height: 30, border: '0.5px solid #DDDDD0',
+                  background: page === p ? '#18180F' : 'transparent',
+                  color: page === p ? '#FAFAF6' : '#8A8A7A',
                   cursor: 'pointer',
                 }}
               >
@@ -201,8 +313,9 @@ export default function NewsFeed() {
             disabled={page === totalPages}
             style={{
               fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, letterSpacing: '0.05em',
-              padding: '8px 16px', border: '0.5px solid var(--border-2)',
-              background: page === totalPages ? 'transparent' : 'var(--ink)', color: page === totalPages ? 'var(--ink-4)' : '#fff',
+              padding: '8px 16px', border: '0.5px solid #DDDDD0',
+              background: page === totalPages ? 'transparent' : '#18180F',
+              color: page === totalPages ? '#C8C8B8' : '#FAFAF6',
               cursor: page === totalPages ? 'not-allowed' : 'pointer',
             }}
           >
@@ -213,8 +326,8 @@ export default function NewsFeed() {
 
       {/* Item count */}
       {!loading && !error && filtered.length > 0 && (
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.04em', textAlign: 'center', marginTop: 12 }}>
-          {`Showing ${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} items`}
+        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
+          {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} intelligence items`}
         </div>
       )}
     </div>

@@ -245,21 +245,23 @@ async function fetchFeed(feed) {
 
 async function generateNewsItem(signal, prices) {
   const ctx    = priceContext(prices)
-  const prompt = `You are BhaavBrief's commodity intelligence desk. Write an original 80-100 word market briefing for Indian commodity traders.
+  const prompt = `You are BhaavBrief Intelligence — India's AI commodity intelligence desk. Your job is to connect global market signals to their precise Indian market impact.
 
-Live prices: ${ctx}
+Live market prices: ${ctx}
 
-Instructions:
-1. Write a HEADLINE: (10-14 words, specific, include a number or price level, no attribution)
-2. Write a BODY: (80-100 words total)
-   - First sentence: the key market fact with a specific number
-   - Next 3-4 sentences: MCX market implications — which contract, direction, approximate INR price level from context above, why it matters for Indian traders (import cost, duty, spread)
-   - Final sentence: what to watch next (data release, price level, event)
-   - No opinions, no buy/sell calls, write as BhaavBrief Intelligence
+Write an institutional-grade intelligence brief for Indian commodity traders, investors, and businesses. This is NOT a news summary — it is cross-asset analysis.
 
-Format your response as:
-HEADLINE: <headline here>
-BODY: <body here>
+Rules:
+- Treat this like a Bloomberg Intelligence note or a commodity desk research flash
+- ALWAYS connect the event to: (a) the specific MCX contract + approximate INR level using live prices above, (b) the rupee-dollar import parity impact, (c) one cross-market linkage (e.g., crude → petrochemical costs, gold → rupee depreciation, copper → EV demand, Fed rate → DXY → MCX premiums)
+- Be precise: name the exact contract, use numbers, show cause-and-effect chains
+- No opinions, no buy/sell calls, no "investors should"
+- Close with ONE specific price level or upcoming event/data release to watch
+
+Format exactly as:
+HEADLINE: [12-16 words — include a specific price or % and the primary market]
+IMPACT: [bearish / bullish / neutral]
+BODY: [95-120 words]
 
 Market signal: ${signal.title}. ${signal.desc}`
 
@@ -279,18 +281,20 @@ Market signal: ${signal.title}. ${signal.desc}`
 
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
   const text      = (await res.json()).content?.[0]?.text?.trim() ?? ''
-  const headlineM = text.match(/HEADLINE:\s*\*{0,2}\s*(.+?)\s*\*{0,2}(?:\n|$)/)
-  const bodyM     = text.match(/BODY:\s*\*{0,2}\s*([\s\S]+)/)
+  const headlineM = text.match(/HEADLINE:\s*\*{0,2}\s*(.+?)\s*\*{0,2}(?:\n|$)/i)
+  const impactM   = text.match(/IMPACT:\s*\*{0,2}\s*(bearish|bullish|neutral)\s*\*{0,2}(?:\n|$)/i)
+  const bodyM     = text.match(/BODY:\s*\*{0,2}\s*([\s\S]+)/i)
 
   if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${text.slice(0, 80)}`)
 
   const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
-  const summary = bodyM[1].replace(/^\*+\s*/, '').trim()
+  const summary = bodyM[1].replace(/^\*+\s*/, '').replace(/\n\n[\s\S]*/,'').trim()
+  const impact  = (impactM?.[1] ?? 'neutral').toLowerCase()
 
   if (title.length < 10 || title === '**' || summary.length < 40)
     throw new Error(`Malformed response — title: "${title.slice(0, 40)}"`)
 
-  return { title, summary }
+  return { title, summary, impact }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -356,7 +360,7 @@ async function main() {
   for (const signal of rankedSignals) {
     try {
       console.log(`  Generating: ${signal.title.slice(0, 65)}`)
-      const { title, summary } = await generateNewsItem(signal, prices)
+      const { title, summary, impact } = await generateNewsItem(signal, prices)
       const ist = getISTNow()
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
 
@@ -366,6 +370,7 @@ async function main() {
         summary,
         category,
         tagType,
+        impact,
         pubDate:  new Date().toISOString(),
       })
 
