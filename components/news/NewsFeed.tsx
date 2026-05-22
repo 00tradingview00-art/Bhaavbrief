@@ -30,13 +30,14 @@ const ASSET_DETECTORS: { label: string; re: RegExp }[] = [
 ]
 
 interface NewsItem {
-  id:       string
-  title:    string
-  summary:  string
-  category: string
-  tagType:  string
-  impact?:  string
-  pubDate:  string
+  id:          string
+  title:       string
+  summary:     string
+  category:    string
+  tagType:     string
+  impact?:     string
+  pubDate:     string   // UTC ISO
+  pubDateIST?: string   // "22 May 2026, 09:15"
 }
 
 function relativeTime(iso: string): string {
@@ -46,6 +47,21 @@ function relativeTime(iso: string): string {
   const hrs = Math.floor(mins / 60)
   if (hrs  < 24)  return `${hrs}h ago`
   return `${Math.floor(hrs / 24)}d ago`
+}
+
+/** Returns IST date string "2026-05-22" for grouping */
+function toISTDateKey(iso: string): string {
+  return new Date(new Date(iso).getTime() + 5.5 * 60 * 60 * 1000)
+    .toISOString().slice(0, 10)
+}
+
+/** Human label for a date key relative to IST today */
+function dateDividerLabel(dateKey: string): string {
+  const todayIST = toISTDateKey(new Date().toISOString())
+  const yestIST  = toISTDateKey(new Date(Date.now() - 86400000).toISOString())
+  if (dateKey === todayIST) return 'Today'
+  if (dateKey === yestIST)  return 'Yesterday'
+  return new Date(dateKey).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
 function matchesFilter(item: NewsItem, filter: string): boolean {
@@ -197,16 +213,42 @@ export default function NewsFeed() {
         </p>
       )}
 
-      {/* Intelligence items */}
-      {!loading && !error && paginated.map((item, idx) => {
-        const crossAssets = getCrossAssets(item)
-        return (
+      {/* Intelligence items — grouped by IST date */}
+      {!loading && !error && (() => {
+        let lastDateKey = ''
+        return paginated.map((item, idx) => {
+          const dateKey   = toISTDateKey(item.pubDate)
+          const showDivider = dateKey !== lastDateKey
+          lastDateKey = dateKey
+          const crossAssets = getCrossAssets(item)
+          return (
+            <div key={item.id}>
+              {showDivider && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  margin: `${idx === 0 ? 0 : 24}px 0 0`,
+                  paddingBottom: 10,
+                  borderBottom: '0.5px solid #DDDDD0',
+                }}>
+                  <span style={{
+                    fontFamily: 'IBM Plex Mono, monospace',
+                    fontSize: 10,
+                    fontWeight: 600,
+                    letterSpacing: '0.08em',
+                    textTransform: 'uppercase',
+                    color: '#18180F',
+                  }}>
+                    {dateDividerLabel(dateKey)}
+                  </span>
+                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+                    {dateKey}
+                  </span>
+                </div>
+              )}
           <div
-            key={item.id}
             style={{
               padding: '22px 0',
               borderBottom: '0.5px solid #DDDDD0',
-              borderTop: idx === 0 ? '0.5px solid #DDDDD0' : 'none',
             }}
           >
             {/* Meta row */}
@@ -214,7 +256,9 @@ export default function NewsFeed() {
               <Tag type={item.tagType}>{item.category}</Tag>
               <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
               <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'IBM Plex Mono, monospace' }}>
-                {relativeTime(item.pubDate)}
+                {item.pubDateIST
+                  ? item.pubDateIST.split(', ')[1]   // show "09:15" (IST time only)
+                  : relativeTime(item.pubDate)}
               </span>
               <span style={{ fontSize: 11, color: '#C8C8B8', fontFamily: 'IBM Plex Mono, monospace', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 BhaavBrief Intelligence
@@ -269,8 +313,10 @@ export default function NewsFeed() {
               </div>
             )}
           </div>
-        )
-      })}
+        </div>
+          )
+        })
+      })()}
 
       {/* Pagination */}
       {!loading && !error && totalPages > 1 && (

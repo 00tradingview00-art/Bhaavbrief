@@ -80,15 +80,25 @@ const KEYWORDS = [
   'monsoon', 'kharif', 'rabi',
 ]
 
+const SEEN_TTL_DAYS = 7   // expire seen URLs after this many days
+
 // ── Persistence ───────────────────────────────────────────────────────────────
 
 function loadSeen() {
-  try { return JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8')) }
-  catch { return [] }
+  try {
+    const raw = JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8'))
+    // Support both legacy (array of strings) and new (array of {url, seenAt})
+    if (!raw.length || typeof raw[0] === 'string') return raw   // legacy — no TTL yet
+    const cutoff = Date.now() - SEEN_TTL_DAYS * 86400 * 1000
+    return raw.filter(e => new Date(e.seenAt).getTime() > cutoff).map(e => e.url)
+  } catch { return [] }
 }
 
 function saveSeen(urls) {
-  fs.writeFileSync(SEEN_FILE, JSON.stringify(urls.slice(-3000), null, 2), 'utf8')
+  // Store as objects with timestamp so we can expire them
+  const now = new Date().toISOString()
+  const entries = urls.slice(-3000).map(u => typeof u === 'string' ? { url: u, seenAt: now } : u)
+  fs.writeFileSync(SEEN_FILE, JSON.stringify(entries, null, 2), 'utf8')
 }
 
 function loadExisting() {
@@ -452,14 +462,20 @@ async function main() {
       const ist = getISTNow()
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
 
+      const now = new Date()
+      const istStr = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata',
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: false })
+
       existing.unshift({
-        id:       toId(title, ist),
+        id:         toId(title, ist),
         title,
         summary,
         category,
         tagType,
         impact,
-        pubDate:  new Date().toISOString(),
+        pubDate:    now.toISOString(),        // UTC ISO — used for relative time
+        pubDateIST: istStr,                   // e.g. "22 May 2026, 09:15" — for display
       })
 
       newSeen.push(signal.url)
@@ -470,8 +486,11 @@ async function main() {
     }
   }
 
-  // Keep rolling window
-  const trimmed = existing.slice(0, MAX_STORED)
+  // Keep rolling window — drop items older than 7 days
+  const expiryCutoff = Date.now() - 7 * 86400 * 1000
+  const trimmed = existing
+    .filter(item => new Date(item.pubDate).getTime() > expiryCutoff)
+    .slice(0, MAX_STORED)
 
   if (!fs.existsSync(path.join(ROOT, 'data'))) fs.mkdirSync(path.join(ROOT, 'data'))
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(trimmed, null, 2), 'utf8')

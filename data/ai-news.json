@@ -2,7 +2,7 @@
   {
     "id": "2026-05-22-08-15-indian-rupee-strength-tests-mcx-gold-pre",
     "title": "Indian rupee strength tests MCX gold premium compression as USD/INR weakens below 96.50",
-    "summary": "Rupee appreciation pressuring MCX Gold future (Feb contract ~₹160955/10g) despite flat COMEX gold. At USD/INR 96.21, import parity favours domestic supply over hedged overseas purchases. Rupee strength typically compresses gold premiums within 48-72 hours as arbitrage unwinds long rupee-short gold positions. Cross-asset signal: stronger INR simultaneously weakens crude import economics (WTI $97.52 to ₹9570/bbl MCX), reducing upstream petrochemical input costs but narrowing refiner margins. RBI fx intervention or capital flow reversal remains key risk to rupee momentum.",
+    "summary": "Rupee appreciation pressuring MCX Gold future (Feb contract ~\u20b9160955/10g) despite flat COMEX gold. At USD/INR 96.21, import parity favours domestic supply over hedged overseas purchases. Rupee strength typically compresses gold premiums within 48-72 hours as arbitrage unwinds long rupee-short gold positions. Cross-asset signal: stronger INR simultaneously weakens crude import economics (WTI $97.52 to \u20b99570/bbl MCX), reducing upstream petrochemical input costs but narrowing refiner margins. RBI fx intervention or capital flow reversal remains key risk to rupee momentum.",
     "category": "Macro",
     "tagType": "macro",
     "impact": "bearish",
@@ -11,7 +11,7 @@
   {
     "id": "2026-05-22-08-14-rupee-strength-and-crude-correction-narr",
     "title": "Rupee strength and crude correction narrow MCX crude premium; watch RBI dollar supply sustainability",
-    "summary": "INR appreciation to 96.21 (RBI intervention evident) combined with WTI decline to 97.52/bbl creates a double headwind for MCX Crude Oil February contract, now estimated near 9,570/bbl. The rupee bounce directly compresses import parity — each paisa of INR strength reduces crude landed costs by approximately 100 rupees per barrel. Simultaneously, crude's 3-4 percent correction this week reflects demand concerns offsetting geopolitical premiums. Cross-asset signal: rupee strength typically precedes foreign fund outflows from EM fixed income; if DXY stabilizes above 107, RBI's intervention ceiling will tighten, reversing the rupee bounce and invalidating this crude relief within 5-7 trading days. Track RBI's daily forward guidance and US jobless claims Thursday.",
+    "summary": "INR appreciation to 96.21 (RBI intervention evident) combined with WTI decline to 97.52/bbl creates a double headwind for MCX Crude Oil February contract, now estimated near 9,570/bbl. The rupee bounce directly compresses import parity \u2014 each paisa of INR strength reduces crude landed costs by approximately 100 rupees per barrel. Simultaneously, crude's 3-4 percent correction this week reflects demand concerns offsetting geopolitical premiums. Cross-asset signal: rupee strength typically precedes foreign fund outflows from EM fixed income; if DXY stabilizes above 107, RBI's intervention ceiling will tighten, reversing the rupee bounce and invalidating this crude relief within 5-7 trading days. Track RBI's daily forward guidance and US jobless claims Thursday.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "bearish",
@@ -20,28 +20,10 @@
   {
     "id": "2026-05-22-08-14-rbi-5bn-swap-injects-rupee-liquidity-usd",
     "title": "RBI $5bn swap injects rupee liquidity; USD/INR support near 96.15 level ahead of auction",
-    "summary": "RBI's $5 billion swap auction signals active rupee defence, injecting domestic liquidity without direct intervention. At current 96.21 USD/INR, the operation targets stabilising near-term currency volatility that amplifies MCX import parity for crude (₹9570/bbl) and gold (₹160955/10g). Swap proceeds reduce banks' dollar scarcity premium, lowering offshore hedging costs and easing rupee depreciation pressure. Cross-asset: stronger rupee liquidity weakens DXY tailwinds, reducing MCX crude contango and gold's rupee-denominated carry cost. Copper (₹426/kg equivalent) benefits from improved EM funding conditions. Swap mechanics do not alter fundamental external deficits but improve short-term dollar supply elasticity.",
+    "summary": "RBI's $5 billion swap auction signals active rupee defence, injecting domestic liquidity without direct intervention. At current 96.21 USD/INR, the operation targets stabilising near-term currency volatility that amplifies MCX import parity for crude (\u20b99570/bbl) and gold (\u20b9160955/10g). Swap proceeds reduce banks' dollar scarcity premium, lowering offshore hedging costs and easing rupee depreciation pressure. Cross-asset: stronger rupee liquidity weakens DXY tailwinds, reducing MCX crude contango and gold's rupee-denominated carry cost. Copper (\u20b9426/kg equivalent) benefits from improved EM funding conditions. Swap mechanics do not alter fundamental external deficits but improve short-term dollar supply elasticity.",
     "category": "Policy",
     "tagType": "macro",
     "impact": "neutral",
     "pubDate": "2026-05-22T02:44:52.701Z"
-  },
-  {
-    "id": "2026-05-22-08-14-global-bond-yield-surge-to-4-8-signals-r",
-    "title": "Global bond yield surge to 4.8% signals RBI tightening cycle; rupee weakness threatens import parity across MCX",
-    "summary": "Rising US Treasury yields (driven by geopolitical risk premium and inflation expectations) are widening the USD-INR carry spread, pressuring rupee toward 97-98 per dollar from current 96.21. RBI faces dual mandate conflict: defending rupee (requires rate hikes) versus supporting growth. A 50bp rate hike cycle would lift INR repo costs, flowing directly into MCX futures carry costs and forward premiums. For crude oil MCX Jan contract currently ₹9570/bbl, yield-driven USD strength creates structural bid; for gold MCX Feb at ₹160955/10g, higher real rates compress durable-asset hedging demand. Import-parity breakeven shifts: if rupee weakens 2% to 98.15, all dollar-denominated commodity landed costs rise 2% before any commodity price movement. Watch RBI's February 7 monetary policy decision for forward guidance on rate path.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-05-22T02:44:48.793Z"
-  },
-  {
-    "id": "2026-05-22-08-02-rupee-strength-at-96-21-usd-inr-signals",
-    "title": "Rupee strength at 96.21 USD/INR signals RBI intervention; watch crude import parity",
-    "summary": "INR appreciation to 96.21 reflects RBI's active FX management amid Fed rate expectations and sustained FDI inflows. This rupee strength compresses import parity costs for crude and precious metals. MCX Crude Oil December contract trades near 9585/bbl; stronger rupee reduces landed costs by approximately 30-40 paise per barrel relative to 97.50 WTI levels. However, this benefit is offset by gold and silver import competitiveness loss—MCX Gold front month faces selling pressure as INR strength reduces domestic price incentives versus global arbitrage. The cross-asset signal: if rupee stabilizes 95.80-96.50, crude import costs normalize while bullion export demand weakens, creating sectoral divergence. Watch RBI's next FX intervention data and Fed rate decision (December 18) for rupee trajectory confirmation.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-05-22T02:32:48.301Z"
   }
 ]
