@@ -385,7 +385,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           <SideCard title="Key Rates">
             {p && [
               { name: 'USD / INR',      value: fmtINR(p.usdinr, 2),   pct: p.usdinrChangePct },
-              { name: 'RBI Repo Rate',  value: '6.00%',                pct: null },
+              { name: 'RBI Repo Rate',  value: '5.25%',                pct: null },
             ].map(({ name, value, pct }) => (
               <SideRow key={name} name={name} value={value} pct={pct ?? undefined} />
             ))}
