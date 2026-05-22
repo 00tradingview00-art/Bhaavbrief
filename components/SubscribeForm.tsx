@@ -1,15 +1,18 @@
 'use client'
 import { useState } from 'react'
+import { usePostHog } from 'posthog-js/react'
 
 export default function SubscribeForm({ compact = false }: { compact?: boolean }) {
   const [email,   setEmail]   = useState('')
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
+  const ph = usePostHog()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) return
     setStatus('loading')
+    ph?.capture('subscribe_attempted', { location: compact ? 'sidebar' : 'page' })
     try {
       const res  = await fetch('/api/subscribe', {
         method: 'POST',
@@ -19,11 +22,14 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
       const data = await res.json()
       if (data.success) {
         setStatus('success')
-        setMessage(data.message ?? 'You\'re in! First brief at 7 AM.')
+        setMessage(data.message ?? 'You\'re in! First brief at 9:30 AM.')
         setEmail('')
+        ph?.capture('subscribe_success', { location: compact ? 'sidebar' : 'page' })
+        ph?.identify(email.trim())
       } else {
         setStatus('error')
         setMessage(data.error ?? 'Something went wrong. Try again.')
+        ph?.capture('subscribe_error', { error: data.error })
       }
     } catch {
       setStatus('error')

@@ -5,6 +5,7 @@ import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
+import PostHogProvider from '@/components/PostHogProvider'
 import { getPrices, type PriceData } from '@/lib/prices'
 
 const playfair = Playfair_Display({
@@ -85,6 +86,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${dmMono.variable}`}>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
+        <PostHogProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Nav />
         <TickerStrip initialPrices={initialPrices} />
@@ -119,6 +121,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <Analytics />
+        </PostHogProvider>
       </body>
     </html>
   )

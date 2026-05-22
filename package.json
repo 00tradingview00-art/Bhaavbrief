@@ -16,6 +16,7 @@
     "gray-matter": "^4.0.3",
     "next": "^15.5.18",
     "next-mdx-remote": "^6.0.0",
+    "posthog-js": "^1.375.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "rss-parser": "^3.13.0",
