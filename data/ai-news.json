@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-05-22-14-35-rupee-at-96-90-signals-import-parity-shi",
+    "title": "Rupee at 96.90 signals import parity shift; RBI $5bn swap to anchor USD/INR near 96.50",
+    "summary": "RBI's announced $5 billion swap auction targets rupee stabilization, but the 96.90 level reflects structural dollar demand outpacing supply. For MCX crude oil, the 96+ rupee translates to effective landed cost at ₹9,600+/bbl versus ₹9,507 spot, compressing refinery margins on forward contracts. Gold imports face a 150 bps tailwind (₹159,043 near resistance), but copper—sensitive to China reopening demand—risks repricing if rupee weakness signals broader EM capital outflows. RBI's swap injection temporarily caps USD/INR but doesn't reverse the underlying current account deterioration. Watch June gold expiry for safe-haven accumulation signals tied to rupee depreciation expectations.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T09:05:47.806Z",
+    "pubDateIST": "22 May 2026, 14:35"
+  },
+  {
+    "id": "2026-05-22-14-35-rupee-strength-at-96-21-pressures-crude",
+    "title": "Rupee strength at 96.21 pressures crude import parity; MCX crude dips below 9550 support level.",
+    "summary": "RBI's recent liquidity tightening and crude's decline below USD 82/bbl create a dual compression on MCX crude oil futures (June contract currently ₹9507/bbl). Each 1% rupee appreciation versus the USD 96 level reduces import parity by approximately 40-50 basis points on crude, shifting the cost advantage away from hedged buying. However, the rupee strength simultaneously supports margins for domestic refiners (IOCL, BPCL downstream). Cross-asset signal: weaker crude feeds into lower petrochemical feedstock costs (naphtha forward curve flattening), pressuring margin profiles for polymer producers. Watch USD/INR breach below 96.00—this would trigger sustained MCX crude selling below 9450/bbl support.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T09:05:43.804Z",
+    "pubDateIST": "22 May 2026, 14:35"
+  },
+  {
+    "id": "2026-05-22-14-35-us-yield-surge-pressures-mcx-gold-159043",
+    "title": "US yield surge pressures MCX Gold ₹159043 lower; DXY strength narrows rupee hedging benefit",
+    "summary": "Rising US Treasury yields (now pricing terminal Fed rates higher through 2026) have weakened gold's non-yielding asset appeal, dragging spot gold down circa 1.2% week-on-week. MCX Gold June contract ₹159043/10g faces resistance as USD/INR ₹96.21 strengthens—limiting import parity support for Indian jewellers and ETF holders. Elevated real yields compress gold's inflation hedge narrative. Cross-asset signal: stronger dollar simultaneously raises crude import costs (MCX crude ₹9507/bbl), offsetting oil's typical inflation-hedge role. Watch US CPI release 10 June 2026 for yield trajectory confirmation; breach below ₹158500 would signal fresh selling.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-05-22T09:05:39.955Z",
+    "pubDateIST": "22 May 2026, 14:35"
+  },
+  {
     "id": "2026-05-22-09-04-rbi-5bn-rupee-swap-auction-may-26-to-anc",
     "title": "RBI $5bn rupee swap auction May 26 to anchor INR near 96.20, supporting import parity across energy and metals",
     "summary": "RBI's dollar rupee swap auction on May 26 injects $5 billion liquidity into the domestic forex market, directly defending the rupee against depreciation pressures. At current USD/INR 96.21, this intervention caps upside volatility in the rupee, stabilizing import parity costs across crude oil, copper, and thermal coal contracts. MCX Crude Oil June contract at 9404/bbl reflects rupee stability; sustained weakness below 96.50 locks in lower INR-denominated landed costs for refiners and petrochemical producers. Copper import parity (MCX at 1349.80/kg) benefits similarly—a 50 paise rupee appreciation saves importers approximately 0.37% on landed costs. Cross-asset linkage: RBI liquidity injection weakens the dollar index DXY indirectly, which typically compresses global crude and precious metals premiums, offsetting upside pressure on MCX Gold and Silver from safe-haven demand.",
