@@ -2,7 +2,7 @@ name: Kite Morning Auth
 
 on:
   schedule:
-    - cron: '0 3 * * 1-5'   # 3:00 AM UTC = 8:30 AM IST, Mon–Fri
+    - cron: '15 3 * * 1-5'   # 3:15 AM UTC = 8:45 AM IST, Mon–Fri (before 9:30 AM brief)
   workflow_dispatch:
 
 permissions:
@@ -11,7 +11,7 @@ permissions:
 jobs:
   kite-auth:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -23,23 +23,47 @@ jobs:
 
       - run: npm ci
 
-      # Kite login cannot be fully automated from CI (requires browser OAuth)
-      # This job instead:
-      # 1. Checks if existing token is still valid
-      # 2. If valid, re-discovers instrument tokens (they may have rolled to new expiry)
-      # 3. Commits updated kite-instruments.json if tokens changed
+      # Step 1: Refresh Kite access token via automated TOTP login
+      - name: Refresh Kite access token
+        env:
+          KITE_API_KEY:         ${{ secrets.KITE_API_KEY }}
+          KITE_API_SECRET:      ${{ secrets.KITE_API_SECRET }}
+          ZERODHA_USER_ID:      ${{ secrets.ZERODHA_USER_ID }}
+          ZERODHA_PASSWORD:     ${{ secrets.ZERODHA_PASSWORD }}
+          ZERODHA_TOTP_SECRET:  ${{ secrets.ZERODHA_TOTP_SECRET }}
+          GITHUB_REPO:          ${{ github.repository }}
+          GH_TOKEN:             ${{ secrets.GH_PAT }}
+          VERCEL_ORG_ID:        ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID:    ${{ secrets.VERCEL_PROJECT_ID }}
+        run: node scripts/kite-auto-token.mjs
 
+      # Step 2: Rediscover MCX instrument tokens (front-month contracts roll monthly)
       - name: Discover MCX instrument tokens
         env:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
         run: node scripts/discover-instruments.mjs || echo "Instrument discovery skipped"
 
-      - name: Commit updated instruments if changed
+      # Step 3: Commit updated instruments if changed
+      - name: Commit updated instruments
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/kite-instruments.json
-          git diff --staged --quiet && exit 0
-          git commit -m "🔑 Update MCX instrument tokens $(date +'%d %b %Y')"
+          git diff --staged --quiet && echo "No instrument changes" && exit 0
+          git commit -m "chore: update MCX instrument tokens $(date +'%d %b %Y')"
           git push origin main
+
+      # Step 4: Redeploy Vercel so the new KITE_ACCESS_TOKEN is live before the brief
+      - name: Trigger Vercel redeploy
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "VERCEL_TOKEN not set — skipping redeploy trigger"
+            exit 0
+          fi
+          curl -s -X POST "https://api.vercel.com/v1/integrations/deploy/${{ secrets.VERCEL_DEPLOY_HOOK }}" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -o /dev/null -w "Vercel deploy triggered: HTTP %{http_code}\n" || \
+          echo "Redeploy via deploy hook not configured — token will apply on next deploy"
