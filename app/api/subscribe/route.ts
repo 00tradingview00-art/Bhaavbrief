@@ -21,7 +21,10 @@ export async function POST(req: NextRequest) {
         slug:    latest.slug,
         edition: latest.edition,
       } : undefined)
-    } catch {}
+      console.log('[subscribe] Welcome email sent to', email)
+    } catch (e) {
+      console.error('[subscribe] Welcome email failed:', (e as Error).message)
+    }
 
     return NextResponse.json({ success: true, message: 'Subscribed! Welcome email on its way.' })
   } catch (err: unknown) {
