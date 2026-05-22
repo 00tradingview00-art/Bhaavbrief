@@ -6,7 +6,6 @@ import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
 import PostHogProvider from '@/components/PostHogProvider'
-import { getPrices, type PriceData } from '@/lib/prices'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -58,8 +57,8 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let initialPrices: PriceData | null = null
-  try { initialPrices = await getPrices() } catch { /* render with fallback */ }
+  // TickerStrip fetches prices client-side every 30s and has a static fallback
+  const initialPrices = null
 
   const orgSchema = {
     '@context': 'https://schema.org',
