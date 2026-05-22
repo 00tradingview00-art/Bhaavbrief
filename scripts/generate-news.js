@@ -320,8 +320,12 @@ async function fetchFeed(feed) {
 
 async function generateNewsItem(signal, prices) {
   const ctx    = priceContext(prices)
+  const istDate = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+    .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+
   const prompt = `You are BhaavBrief Intelligence — India's AI commodity intelligence desk. Your job is to connect global market signals to their precise Indian market impact.
 
+Today's date: ${istDate} (IST)
 Live market prices: ${ctx}
 
 Write an institutional-grade intelligence brief for Indian commodity traders, investors, and businesses. This is NOT a news summary — it is cross-asset analysis.
@@ -331,6 +335,7 @@ Rules:
 - ALWAYS connect the event to: (a) the specific MCX contract + approximate INR level using live prices above, (b) the rupee-dollar import parity impact, (c) one cross-market linkage (e.g., crude → petrochemical costs, gold → rupee depreciation, copper → EV demand, Fed rate → DXY → MCX premiums)
 - Be precise: name the exact contract, use numbers, show cause-and-effect chains
 - No opinions, no buy/sell calls, no "investors should"
+- Any date or event you reference must be upcoming — never cite a past meeting or data release
 - Close with ONE specific price level or upcoming event/data release to watch
 
 Format exactly as plain text (no markdown, no headers, no asterisks, no bullet points):
