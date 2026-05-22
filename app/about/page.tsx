@@ -140,7 +140,7 @@ export default function AboutPage() {
               {[
                 { label: 'Delivery time', value: '9:30 AM IST' },
                 { label: 'Frequency',     value: 'Every weekday' },
-                { label: 'Price',         value: 'Free forever' },
+                { label: 'Price',         value: 'No charge' },
                 { label: 'Format',        value: 'Email + Web' },
               ].map((s, i, arr) => (
                 <div key={s.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: i < arr.length - 1 ? '0.5px solid #DDDDD0' : 'none' }}>

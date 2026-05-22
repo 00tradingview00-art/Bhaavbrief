@@ -71,7 +71,7 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
             Start your morning with an edge
           </div>
           <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
-            Join India's sharpest commodity traders. MCX intelligence every weekday at 11 AM. Free forever.
+            Join India's sharpest commodity traders. MCX intelligence every weekday at 9:30 AM.
           </p>
         </>
       )}
