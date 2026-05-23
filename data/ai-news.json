@@ -1,5 +1,15 @@
 [
   {
+    "id": "2026-05-23-17-16-assocham-rate-hold-call-leaves-usd-inr-a",
+    "title": "ASSOCHAM Rate-Hold Call Leaves USD/INR at 95.70, Capping MCX Gold at ₹160047",
+    "summary": "In a session already defined by sub-0.2% moves across the entire commodity complex, ASSOCHAM's rate-hold recommendation to the RBI adds no new directional catalyst — it reinforces the status quo. A stable repo rate means INR carry dynamics remain unchanged, anchoring USD/INR at 95.70. This rate directly sets the import parity floor for MCX Gold June at approximately ₹160047 per 10g and MCX Silver at approximately ₹257896 per kg. The import parity chain holds: COMEX Gold at $4523/oz converted at 95.70, plus 15% customs duty and standard refinery premium, produces current MCX levels with no compression or expansion pressure from this signal. The cross-market correlation to watch is USD/INR itself — rupee stability limits MCX premium volatility even when COMEX moves. Confirmation that this neutral read holds: Monday RBI policy communication showing no deviation from the prevailing 6.50% repo rate.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-05-23T11:46:01.406Z",
+    "pubDateIST": "23 May 2026, 17:16"
+  },
+  {
     "id": "2026-05-23-03-17-assocham-rate-hold-signal-hits-gold-at-1",
     "title": "ASSOCHAM Rate-Hold Signal Hits Gold at ₹158588 as Crude Drags Commodity Complex Down",
     "summary": "This signal lands directly into a session where crude is already leading the commodity complex lower at -1.33%, amplifying the dovish monetary read for Indian markets. ASSOCHAM's explicit rate-hold call to RBI removes the currency-defense premium baked into INR assets — USD/INR holding at ₹95.70 means the rupee softens marginally on rate-hold expectations, partially offsetting the bearish pressure on MCX Gold at ₹158588/10g and MCX Silver at ₹271600/kg. The import parity chain: COMEX gold softness plus a stable-to-soft rupee at 95.70 translates to no fresh cost-push support for domestic gold pricing. A rate-hold posture reduces real yield anxiety — historically the primary driver of institutional gold allocation in India. MCX Copper at ₹1344.30 remains insulated given industrial demand independence from RBI policy. The cross-market correlation to watch: MCX Crude at ₹9218 falling alongside gold signals risk-off positioning, not inflation hedging — confirming the ASSOCHAM inflation-comfort narrative. Confirmation level: RBI MPC June meeting outcome or WPI print below 3.2% validates the full dovish repricing in gold.",
