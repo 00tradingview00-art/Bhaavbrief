@@ -9,6 +9,10 @@ export async function GET(req: NextRequest) {
   const edition = searchParams.get('edition') ?? ''
   const date    = searchParams.get('date')    ?? ''
   const tags    = searchParams.get('tags')    ?? ''
+  const type    = searchParams.get('type')    ?? 'brief'
+
+  const isFlash = type === 'flash'
+  const badge   = isFlash ? 'Flash' : (edition ? `Edition #${edition}` : 'Daily Brief')
 
   return new ImageResponse(
     (
@@ -49,7 +53,7 @@ export async function GET(req: NextRequest) {
               padding: '3px 10px', borderRadius: 3,
               letterSpacing: '0.1em', textTransform: 'uppercase',
             }}>
-              {edition ? `Edition #${edition}` : 'Daily Brief'}
+              {badge}
             </span>
           </div>
           {date && (

@@ -25,8 +25,17 @@ export async function generateMetadata(
   if (!flash) return { title: 'Flash not found' }
 
   const title       = `${flash.title} | BhaavBrief`
-  const description = `MCX commodity intelligence: ${flash.title}`
+  const firstPara   = flash.content.split('\n\n')[0].trim().replace(/\n/g, ' ')
+  const description = firstPara.slice(0, 160) || `MCX ${flash.category} intelligence: ${flash.title}.`
   const url         = `${BASE_URL}/flash/${flash.slug}`
+
+  const ogParams = new URLSearchParams({
+    title:    flash.title,
+    date:     flash.date ?? '',
+    tags:     flash.category ?? '',
+    type:     'flash',
+  })
+  const ogImage = `${BASE_URL}/api/og?${ogParams}`
 
   return {
     title,
@@ -37,8 +46,9 @@ export async function generateMetadata(
       siteName: 'BhaavBrief', locale: 'en_IN',
       publishedTime: flash.date,
       authors: ['BhaavBrief'],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: flash.title }],
     },
-    twitter: { card: 'summary_large_image', title, description, site: '@bhaavbrief' },
+    twitter: { card: 'summary_large_image', title, description, site: '@bhaavbrief', images: [ogImage] },
   }
 }
 
