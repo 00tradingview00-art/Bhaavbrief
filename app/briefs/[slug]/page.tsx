@@ -1,9 +1,18 @@
 import { notFound }    from 'next/navigation'
 import { Metadata }    from 'next'
+import Link            from 'next/link'
 import { MDXRemote }   from 'next-mdx-remote/rsc'
 import SubscribeForm   from '@/components/SubscribeForm'
 import CopyLinkButton  from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, formatDate } from '@/lib/briefs'
+
+const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
+  'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
+  'MCX Silver':      { slug: 'silver',      label: 'MCX Silver' },
+  'MCX Crude':       { slug: 'crude-oil',   label: 'MCX Crude Oil' },
+  'MCX Copper':      { slug: 'copper',      label: 'MCX Copper' },
+  'MCX Natural Gas': { slug: 'natural-gas', label: 'MCX Natural Gas' },
+}
 
 export const revalidate = 3600
 
@@ -153,9 +162,15 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               )}
               {brief.commodities?.length > 0 && (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: '0.75rem' }}>
-                  {brief.commodities.map(c => (
-                    <span key={c} itemProp="keywords" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }}>{c}</span>
-                  ))}
+                  {brief.commodities.map(c => {
+                    const page = COMMODITY_PAGE_MAP[c]
+                    const style: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }
+                    return page ? (
+                      <Link key={c} href={`/commodities/${page.slug}`} itemProp="keywords" style={{ ...style, color: '#C8720A', textDecoration: 'none' }}>{c}</Link>
+                    ) : (
+                      <span key={c} itemProp="keywords" style={style}>{c}</span>
+                    )
+                  })}
                 </div>
               )}
               <span itemProp="publisher" itemScope itemType="https://schema.org/Organization" style={{ display: 'none' }}>
@@ -183,6 +198,35 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
           <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
             <SubscribeForm />
           </div>
+
+          {/* Commodity page links for commodities covered in this brief */}
+          {(() => {
+            const pages = (brief.commodities ?? [])
+              .map(c => COMMODITY_PAGE_MAP[c])
+              .filter(Boolean) as { slug: string; label: string }[]
+            if (pages.length === 0) return null
+            return (
+              <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+                  Commodity Pages
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {pages.map(p => (
+                    <Link key={p.slug} href={`/commodities/${p.slug}`} style={{
+                      fontFamily: 'var(--font-mono)', fontSize: 11,
+                      color: '#C8720A', textDecoration: 'none',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
+                    }}>
+                      <span>{p.label}</span>
+                      <span style={{ fontSize: 10, color: '#C8C8B8' }}>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
+
           <div style={{ background: '#18180F', padding: '1.25rem', color: '#FAFAF6' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Not SEBI registered</div>
             <p style={{ fontSize: 11, color: 'rgba(250,250,246,0.55)', lineHeight: 1.6, fontWeight: 300, margin: 0 }}>BhaavBrief is for informational and educational purposes only. This is not investment advice. Always conduct your own research before making any trading or investment decisions.</p>
