@@ -116,24 +116,90 @@ export default async function CommodityPage({ params }: Props) {
     .filter(a => a.commodity === entry.priceKey || a.commodity === entry.key)
     .slice(0, 6)
 
-  // JSON-LD BreadcrumbList + FinancialProduct
+  const pageDescription = `Live MCX ${info.name} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
+  const pageUrl         = `${BASE}/commodities/${commodity}`
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+          { '@type': 'ListItem', position: 1, name: 'Home',        item: BASE },
           { '@type': 'ListItem', position: 2, name: 'Commodities', item: `${BASE}/commodities` },
-          { '@type': 'ListItem', position: 3, name: info.name, item: `${BASE}/commodities/${commodity}` },
+          { '@type': 'ListItem', position: 3, name: info.name,     item: pageUrl },
         ],
       },
       {
-        '@type':       'FinancialProduct',
-        name:          `MCX ${info.name} Futures`,
-        description:   info.importParity,
-        url:           `${BASE}/commodities/${commodity}`,
-        provider: { '@type': 'Organization', name: 'Multi Commodity Exchange of India (MCX)' },
+        '@type':        'FinancialProduct',
+        name:           `MCX ${info.name} Futures`,
+        description:    pageDescription,
+        url:            pageUrl,
+        tickerSymbol:   info.mcxSymbol,
+        category:       'Commodity Futures',
+        provider: {
+          '@type': 'Organization',
+          name:    'Multi Commodity Exchange of India (MCX)',
+          url:     'https://www.mcxindia.com',
+        },
+        ...(ltp > 0 ? {
+          offers: {
+            '@type':         'Offer',
+            price:           ltp,
+            priceCurrency:   'INR',
+            priceSpecification: {
+              '@type':           'UnitPriceSpecification',
+              price:             ltp,
+              priceCurrency:     'INR',
+              unitText:          info.unit,
+            },
+          },
+        } : {}),
+      },
+      {
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name:    `What moves MCX ${info.name} price?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text:    info.priceDrivers.join(' '),
+            },
+          },
+          {
+            '@type': 'Question',
+            name:    `Who are the main buyers of ${info.name} in India?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text:    info.demandDrivers.join(' '),
+            },
+          },
+          {
+            '@type': 'Question',
+            name:    `Who controls ${info.name} supply globally?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text:    info.supplyControl,
+            },
+          },
+          {
+            '@type': 'Question',
+            name:    `How is MCX ${info.name} price calculated from international prices?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text:    `The MCX ${info.name} price is derived using the import parity formula: ${info.importParity}`,
+            },
+          },
+          {
+            '@type': 'Question',
+            name:    `What are the key risks in MCX ${info.name} trading?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text:    info.keyRisk,
+            },
+          },
+        ],
       },
     ],
   }
