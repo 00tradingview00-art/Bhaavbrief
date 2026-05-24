@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next'
-import { getAllBriefs }   from '@/lib/briefs'
-import { getAllFlash }    from '@/lib/flash'
-import { getAllArticles } from '@/lib/articles'
+import { getAllBriefs } from '@/lib/briefs'
+import { getAllFlash }  from '@/lib/flash'
 
 const BASE = 'https://bhaavbrief.in'
 
@@ -11,7 +10,6 @@ export function generateSitemaps() {
   return [
     { id: 'static' },
     { id: 'briefs' },
-    { id: 'articles' },
     { id: 'flash' },
   ]
 }
@@ -26,8 +24,7 @@ export default async function sitemap(
         { url: `${BASE}/briefs`,          changeFrequency: 'daily',   priority: 0.9, lastModified: new Date() },
         { url: `${BASE}/markets`,         changeFrequency: 'hourly',  priority: 0.8, lastModified: new Date() },
         { url: `${BASE}/news`,            changeFrequency: 'hourly',  priority: 0.8, lastModified: new Date() },
-        { url: `${BASE}/articles`,        changeFrequency: 'hourly',  priority: 0.8, lastModified: new Date() },
-        { url: `${BASE}/learn`,           changeFrequency: 'monthly', priority: 0.6, lastModified: new Date() },
+{ url: `${BASE}/learn`,           changeFrequency: 'monthly', priority: 0.6, lastModified: new Date() },
         { url: `${BASE}/invest`,          changeFrequency: 'monthly', priority: 0.5, lastModified: new Date() },
         { url: `${BASE}/about`,           changeFrequency: 'monthly', priority: 0.4, lastModified: new Date() },
         { url: `${BASE}/privacy`,         changeFrequency: 'yearly',  priority: 0.2, lastModified: new Date() },
@@ -46,16 +43,6 @@ export default async function sitemap(
         lastModified:    new Date(b.date || Date.now()),
         changeFrequency: 'never' as const,
         priority:        0.8,
-      }))
-    }
-
-    case 'articles': {
-      const articles = await getAllArticles()
-      return articles.map(a => ({
-        url:             `${BASE}/articles/${a.slug}`,
-        lastModified:    new Date(a.date || Date.now()),
-        changeFrequency: 'never' as const,
-        priority:        0.85,
       }))
     }
 
