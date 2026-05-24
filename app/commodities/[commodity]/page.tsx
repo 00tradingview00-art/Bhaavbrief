@@ -3,6 +3,7 @@ import Link                 from 'next/link'
 import type { Metadata }    from 'next'
 import { getPrices }        from '@/lib/prices'
 import { getAllArticles }   from '@/lib/articles'
+import { getAllBriefs }     from '@/lib/briefs'
 import fs                   from 'fs'
 import path                 from 'path'
 
@@ -99,9 +100,10 @@ export default async function CommodityPage({ params }: Props) {
   const info   = marketStructure[entry.key]
   const color  = entry.color
 
-  const [prices, articles] = await Promise.all([
+  const [prices, articles, allBriefs] = await Promise.all([
     getPrices().catch(() => null),
     getAllArticles().catch(() => []),
+    getAllBriefs(),
   ])
 
   const priceData = prices ? (prices as Record<string, any>)[entry.priceKey] : null
@@ -115,6 +117,19 @@ export default async function CommodityPage({ params }: Props) {
   const commodityArticles = articles
     .filter(a => a.commodity === entry.priceKey || a.commodity === entry.key)
     .slice(0, 6)
+
+  // Map commodity slug to the label used in brief frontmatter
+  const BRIEF_COMMODITY_MAP: Record<string, string> = {
+    gold:   'MCX Gold',
+    silver: 'MCX Silver',
+    crude:  'MCX Crude',
+    copper: 'MCX Copper',
+    natgas: 'MCX Natural Gas',
+  }
+  const briefCommodityLabel = BRIEF_COMMODITY_MAP[entry.key]
+  const recentBriefs = allBriefs
+    .filter(b => b.commodities.includes(briefCommodityLabel))
+    .slice(0, 5)
 
   const pageDescription = `Live MCX ${info.name} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
   const pageUrl         = `${BASE}/commodities/${commodity}`
@@ -328,6 +343,43 @@ export default async function CommodityPage({ params }: Props) {
                 </Link>
               ))}
             </div>
+          )}
+
+          {/* Recent briefs covering this commodity */}
+          {recentBriefs.length > 0 && (
+            <>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', margin: '0 0 16px' }}>
+                Recent {info.name} Briefs
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
+                {recentBriefs.map(b => (
+                  <Link key={b.slug} href={`/briefs/${b.slug}`} style={{ textDecoration: 'none' }}>
+                    <div style={{
+                      background: 'var(--surface-1)', border: '1px solid var(--border)',
+                      borderRadius: 8, padding: '14px 20px',
+                    }}>
+                      <div style={{ fontSize: 11, color: 'var(--ink-4)', marginBottom: 5, display: 'flex', gap: 8 }}>
+                        <span style={{ color, fontWeight: 600 }}>Edition #{b.edition}</span>
+                        <span>·</span>
+                        <span>{b.displayDate}</span>
+                      </div>
+                      <div style={{
+                        fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500,
+                        color: 'var(--ink)', lineHeight: 1.3,
+                      }}>
+                        {b.title}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+                <Link href="/briefs" style={{
+                  fontSize: 12, color, fontWeight: 500, textDecoration: 'none',
+                  display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4,
+                }}>
+                  View all briefs →
+                </Link>
+              </div>
+            </>
           )}
 
           {/* What moves the price */}
