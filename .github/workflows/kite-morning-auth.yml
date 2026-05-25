@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  secrets: write
 
 jobs:
   kite-auth:
@@ -22,6 +23,21 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
+
+      # Refresh Kite access token via headless TOTP login
+      - name: Refresh Kite access token
+        env:
+          KITE_API_KEY:         ${{ secrets.KITE_API_KEY }}
+          KITE_API_SECRET:      ${{ secrets.KITE_API_SECRET }}
+          ZERODHA_USER_ID:      ${{ secrets.ZERODHA_USER_ID }}
+          ZERODHA_PASSWORD:     ${{ secrets.ZERODHA_PASSWORD }}
+          ZERODHA_TOTP_SECRET:  ${{ secrets.ZERODHA_TOTP_SECRET }}
+          GITHUB_TOKEN:         ${{ secrets.GH_PAT }}
+          GITHUB_REPO:          ${{ github.repository }}
+          VERCEL_TOKEN:         ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID:        ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID:    ${{ secrets.VERCEL_PROJECT_ID }}
+        run: node scripts/kite-auto-token.mjs
 
       # Rediscover MCX instrument tokens — front-month contracts roll monthly
       - name: Discover MCX instrument tokens
