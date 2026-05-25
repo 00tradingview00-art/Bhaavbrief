@@ -266,13 +266,21 @@ function detectMoves(current, lastPrices) {
 
   for (const { key, curr, label, pct, unit, per } of pairs) {
     if (!curr || curr === 0) continue
-    const absPct = Math.abs(pct)
+
+    // Use 15-min delta vs last state when available; fall back to session %
+    const stateKey  = key === 'natgas' ? 'natgas' : key
+    const lastPrice = lastPrices?.[stateKey]
+    const deltaPct  = (lastPrice && lastPrice > 0)
+      ? ((curr - lastPrice) / lastPrice) * 100
+      : pct
+
+    const absPct = Math.abs(deltaPct)
     if (absPct >= MOVE_THRESHOLD) {
       moves.push({
-        key, label, price: curr, pct, absPct, unit, per,
+        key, label, price: curr, pct: deltaPct, absPct, unit, per,
         isHard: absPct >= MOVE_THRESHOLD_HARD,
-        direction: pct > 0 ? 'surged' : 'fell',
-        directionShort: pct > 0 ? '▲' : '▼',
+        direction: deltaPct > 0 ? 'surged' : 'fell',
+        directionShort: deltaPct > 0 ? '▲' : '▼',
       })
     }
   }
@@ -471,7 +479,7 @@ description: "[Under 155 chars — include current ₹ price and key reason]"
 date: "${today.toISOString().split('T')[0]}"
 time: "${timeStr}"
 edition: "flash"
-commodity: "${primaryMove?.key ?? 'macro'}"
+commodity: "${primaryMove?.label ?? 'macro'}"
 tags: ["${tags}"]
 priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
 slug: "[url-slug-max-8-words-hyphens-only]"
@@ -566,6 +574,16 @@ async function main() {
   }
 
   if (!canPublish(state)) {
+    // Still fetch + track prices during throttle so 15-min deltas stay accurate
+    const throttledPrices = await fetchPrices()
+    if (throttledPrices) {
+      state.lastPrices = {
+        gold: throttledPrices.mcxGold, silver: throttledPrices.mcxSilver,
+        crude: throttledPrices.mcxCrude, copper: throttledPrices.mcxCopper,
+        natgas: throttledPrices.mcxNatGas, usdinr: throttledPrices.usdinr,
+      }
+      state.lastChecked = new Date().toISOString()
+    }
     saveState(state)
     return
   }
