@@ -26,6 +26,7 @@ export async function getAllArticles(): Promise<ArticleMeta[]> {
 
   return files.map(file => {
     const raw = fs.readFileSync(path.join(ARTICLES_DIR, file), 'utf8')
+      .replace(/^```(?:mdx|md)?\n/, '').replace(/\n```\s*$/, '\n')
     const { data } = matter(raw)
     const slug = file.replace(/\.(mdx|md)$/, '')
 
@@ -53,6 +54,7 @@ export async function getArticleBySlug(slug: string) {
   if (!fs.existsSync(filepath)) return null
 
   const raw = fs.readFileSync(filepath, 'utf8')
+    .replace(/^```(?:mdx|md)?\n/, '').replace(/\n```\s*$/, '\n')
   const { data, content } = matter(raw)
 
   return {

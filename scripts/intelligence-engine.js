@@ -505,7 +505,11 @@ function saveArticle(mdx) {
     return null
   }
 
-  const cleanMdx = mdx.replace(/^slug:.*$/m, '').trim()
+  const cleanMdx = mdx
+    .replace(/^```(?:mdx|md)?\n/, '')   // strip any leading code fence Claude adds
+    .replace(/\n```\s*$/, '')           // strip trailing code fence
+    .replace(/^slug:.*$/m, '')
+    .trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
 
   const title = titleMatch?.[1] ?? 'Market Update'
