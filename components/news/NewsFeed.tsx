@@ -1,5 +1,6 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import Link from 'next/link'
 import Tag from '@/components/Tag'
 
 const FILTERS = ['All', 'Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
@@ -13,7 +14,6 @@ const FILTER_KEYWORDS: Record<string, string[]> = {
   Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'red sea', 'war', 'geopolit'],
 }
 
-// Cross-asset tags detected from item text
 const ASSET_DETECTORS: { label: string; re: RegExp }[] = [
   { label: 'Gold',      re: /\bgold\b/i },
   { label: 'Silver',    re: /\bsilver\b/i },
@@ -29,15 +29,17 @@ const ASSET_DETECTORS: { label: string; re: RegExp }[] = [
   { label: 'MCX',       re: /\bmcx\b/i },
 ]
 
-interface NewsItem {
+export interface NewsItem {
   id:          string
   title:       string
   summary:     string
   category:    string
   tagType:     string
   impact?:     string
-  pubDate:     string   // UTC ISO
-  pubDateIST?: string   // "22 May 2026, 09:15"
+  pubDate:     string
+  pubDateIST?: string
+  href?:       string
+  itemType?:   'news' | 'flash' | 'alert'
 }
 
 function relativeTime(iso: string): string {
@@ -49,13 +51,11 @@ function relativeTime(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`
 }
 
-/** Returns IST date string "2026-05-22" for grouping */
 function toISTDateKey(iso: string): string {
   return new Date(new Date(iso).getTime() + 5.5 * 60 * 60 * 1000)
     .toISOString().slice(0, 10)
 }
 
-/** Human label for a date key relative to IST today */
 function dateDividerLabel(dateKey: string): string {
   const todayIST = toISTDateKey(new Date().toISOString())
   const yestIST  = toISTDateKey(new Date(Date.now() - 86400000).toISOString())
@@ -87,6 +87,20 @@ function ImpactBadge({ impact }: { impact?: string }) {
   )
 }
 
+function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
+  if (itemType === 'flash') return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#FFF7E0', color: '#996600', border: '0.5px solid #D4A830' }}>
+      Flash
+    </span>
+  )
+  if (itemType === 'alert') return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#EAF5EE', color: '#1E6630', border: '0.5px solid #5AAA70' }}>
+      Analysis
+    </span>
+  )
+  return null
+}
+
 function Skeleton() {
   const bar = (w: string, h = 14) => (
     <div style={{ height: h, borderRadius: 2, background: '#E8E4D8', width: w, marginBottom: 8 }} />
@@ -107,7 +121,11 @@ function Skeleton() {
 
 const ITEMS_PER_PAGE = 20
 
-export default function NewsFeed() {
+interface Props {
+  serverItems?: NewsItem[]
+}
+
+export default function NewsFeed({ serverItems = [] }: Props) {
   const [news,         setNews]         = useState<NewsItem[]>([])
   const [loading,      setLoading]      = useState(true)
   const [error,        setError]        = useState(false)
@@ -135,7 +153,15 @@ export default function NewsFeed() {
     return () => clearInterval(id)
   }, [fetchNews])
 
-  const filtered   = news.filter(item => matchesFilter(item, activeFilter))
+  // Merge server items (flash + articles) with live API items, dedup by id, sort newest first
+  const allItems = useMemo(() => {
+    const seen = new Set<string>()
+    return [...serverItems, ...news]
+      .filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
+      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+  }, [serverItems, news])
+
+  const filtered   = allItems.filter(item => matchesFilter(item, activeFilter))
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
   const paginated  = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
 
@@ -154,7 +180,7 @@ export default function NewsFeed() {
       {/* Filter pills with counts */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {FILTERS.map(f => {
-          const count = f === 'All' ? news.length : news.filter(item => matchesFilter(item, f)).length
+          const count = f === 'All' ? allItems.length : allItems.filter(item => matchesFilter(item, f)).length
           const active = activeFilter === f
           return (
             <button
@@ -178,7 +204,7 @@ export default function NewsFeed() {
               }}
             >
               {f.toUpperCase()}
-              {!loading && count > 0 && (
+              {count > 0 && (
                 <span style={{
                   fontSize: 9,
                   background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8',
@@ -195,11 +221,11 @@ export default function NewsFeed() {
         })}
       </div>
 
-      {/* Loading skeleton */}
-      {loading && [0, 1, 2, 3, 4].map(i => <Skeleton key={i} />)}
+      {/* Loading skeleton — only while live API is loading */}
+      {loading && news.length === 0 && serverItems.length === 0 && [0, 1, 2, 3, 4].map(i => <Skeleton key={i} />)}
 
       {/* Error state */}
-      {!loading && error && (
+      {!loading && error && allItems.length === 0 && (
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
           Intelligence feed offline — retrying in 5 min
         </p>
@@ -211,25 +237,39 @@ export default function NewsFeed() {
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
             No {activeFilter === 'All' ? '' : activeFilter.toLowerCase() + ' '}intelligence right now.
           </p>
-          {activeFilter !== 'All' && news.length > 0 && (
+          {activeFilter !== 'All' && allItems.length > 0 && (
             <button
               onClick={() => { setActiveFilter('All'); setPage(1) }}
               style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
             >
-              Show all {news.length} items →
+              Show all {allItems.length} items →
             </button>
           )}
         </div>
       )}
 
       {/* Intelligence items — grouped by IST date */}
-      {!loading && !error && (() => {
+      {(() => {
         let lastDateKey = ''
         return paginated.map((item, idx) => {
-          const dateKey   = toISTDateKey(item.pubDate)
+          const dateKey     = toISTDateKey(item.pubDate)
           const showDivider = dateKey !== lastDateKey
           lastDateKey = dateKey
           const crossAssets = getCrossAssets(item)
+          const titleEl = (
+            <h2 style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 18,
+              fontWeight: 700,
+              lineHeight: 1.35,
+              color: '#18180F',
+              margin: '0 0 10px',
+              letterSpacing: '-0.01em',
+            }}>
+              {item.title}
+              {item.href && <span style={{ fontSize: 13, color: '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>}
+            </h2>
+          )
           return (
             <div key={item.id}>
               {showDivider && (
@@ -254,75 +294,64 @@ export default function NewsFeed() {
                   </span>
                 </div>
               )}
-          <div
-            style={{
-              padding: '22px 0',
-              borderBottom: '0.5px solid #DDDDD0',
-            }}
-          >
-            {/* Meta row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-              <Tag type={item.tagType}>{item.category}</Tag>
-              <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
-              <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
-                {item.pubDateIST
-                  ? item.pubDateIST.split(', ')[1]   // show "09:15" (IST time only)
-                  : relativeTime(item.pubDate)}
-              </span>
-              <span style={{ fontSize: 11, color: '#C8C8B8', fontFamily: 'var(--font-mono)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                BhaavBrief Intelligence
-              </span>
-            </div>
+              <div style={{ padding: '22px 0', borderBottom: '0.5px solid #DDDDD0' }}>
 
-            {/* Headline */}
-            <h2 style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 18,
-              fontWeight: 700,
-              lineHeight: 1.35,
-              color: '#18180F',
-              margin: '0 0 10px',
-              letterSpacing: '-0.01em',
-            }}>
-              {item.title}
-            </h2>
-
-            {/* Body */}
-            {item.summary && (
-              <p style={{
-                fontSize: 14,
-                color: '#48483A',
-                lineHeight: 1.8,
-                margin: '0 0 14px',
-                fontWeight: 300,
-              }}>
-                {item.summary}
-              </p>
-            )}
-
-            {/* Cross-asset tags */}
-            {crossAssets.length > 0 && (
-              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
-                  Touches
-                </span>
-                {crossAssets.map(a => (
-                  <span key={a} style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 9,
-                    letterSpacing: '0.06em',
-                    padding: '2px 7px',
-                    background: '#F3F2EC',
-                    color: '#48483A',
-                    border: '0.5px solid #DDDDD0',
-                  }}>
-                    {a.toUpperCase()}
+                {/* Meta row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+                  <Tag type={item.tagType}>{item.category}</Tag>
+                  <TypeBadge itemType={item.itemType} />
+                  <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
+                  <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
+                    {item.pubDateIST
+                      ? item.pubDateIST.split(', ')[1]
+                      : relativeTime(item.pubDate)}
                   </span>
-                ))}
+                  {item.impact && <ImpactBadge impact={item.impact} />}
+                </div>
+
+                {/* Headline — linked for flash/alert items */}
+                {item.href ? (
+                  <Link href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
+                    {titleEl}
+                  </Link>
+                ) : titleEl}
+
+                {/* Body */}
+                {item.summary && (
+                  <p style={{
+                    fontSize: 14,
+                    color: '#48483A',
+                    lineHeight: 1.8,
+                    margin: '0 0 14px',
+                    fontWeight: 300,
+                  }}>
+                    {item.summary}
+                  </p>
+                )}
+
+                {/* Cross-asset tags */}
+                {crossAssets.length > 0 && (
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                      Touches
+                    </span>
+                    {crossAssets.map(a => (
+                      <span key={a} style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 9,
+                        letterSpacing: '0.06em',
+                        padding: '2px 7px',
+                        background: '#F3F2EC',
+                        color: '#48483A',
+                        border: '0.5px solid #DDDDD0',
+                      }}>
+                        {a.toUpperCase()}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
           )
         })
       })()}

@@ -1,4 +1,6 @@
-import NewsFeed from '@/components/news/NewsFeed'
+import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
+import { getAllFlash }    from '@/lib/flash'
+import { getAllArticles } from '@/lib/articles'
 
 export const metadata = {
   title: 'Intelligence Feed — AI Commodity Market Intelligence',
@@ -17,7 +19,47 @@ export const metadata = {
 
 export const revalidate = 300
 
-export default function NewsPage() {
+function commodityTagType(commodity: string): string {
+  const c = commodity.toLowerCase()
+  if (c.includes('gold') || c.includes('silver') || c.includes('copper')) return 'metals'
+  if (c.includes('crude') || c.includes('natural gas') || c.includes('gas')) return 'energy'
+  return 'macro'
+}
+
+function commodityCategory(commodity: string): string {
+  if (commodity === 'multi') return 'MCX Brief'
+  return commodity.replace(/^MCX\s+/i, '')
+}
+
+export default async function NewsPage() {
+  const [flashItems, articles] = await Promise.all([
+    Promise.resolve(getAllFlash()),
+    getAllArticles(),
+  ])
+
+  const serverItems: NewsItem[] = [
+    ...flashItems.map(f => ({
+      id:       f.slug,
+      title:    f.title,
+      summary:  '',
+      category: f.category,
+      tagType:  f.category === 'forex' ? 'macro' : f.category,
+      pubDate:  f.date,
+      href:     `/flash/${f.slug}`,
+      itemType: 'flash' as const,
+    })),
+    ...articles.map(a => ({
+      id:       a.slug,
+      title:    a.title,
+      summary:  a.description,
+      category: commodityCategory(a.commodity),
+      tagType:  commodityTagType(a.commodity),
+      pubDate:  a.date || new Date().toISOString(),
+      href:     `/articles/${a.slug}`,
+      itemType: 'alert' as const,
+    })),
+  ]
+
   return (
     <div>
       {/* Page header */}
@@ -61,7 +103,7 @@ export default function NewsPage() {
         </p>
       </div>
 
-      <NewsFeed />
+      <NewsFeed serverItems={serverItems} />
     </div>
   )
 }
