@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 159040,
-    "silver": 276075,
-    "crude": 8779,
-    "copper": 1346.45,
-    "natgas": 273.9,
-    "usdinr": 95.7
+    "gold": 159188,
+    "silver": 276333,
+    "crude": 8723,
+    "copper": 1349.05,
+    "natgas": 280.3,
+    "usdinr": 95.24
   },
-  "lastChecked": "2026-05-25T09:28:14.736Z",
+  "lastChecked": "2026-05-25T14:18:53.035Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,9 +15,11 @@
     "ppac": null
   },
   "lastEia": {
-    "period": null,
-    "value": null
+    "period": "2026-05-15",
+    "value": "312"
   },
-  "articlesToday": [],
-  "lastArticleAt": null
+  "articlesToday": [
+    "2026-05-25/2026-05-25-mcx-nat-gas-surges-280-crude-rout-decoupling"
+  ],
+  "lastArticleAt": "2026-05-25T14:19:08.600Z"
 }
