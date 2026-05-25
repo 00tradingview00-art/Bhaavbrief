@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import Script from 'next/script'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
@@ -121,6 +122,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <Analytics />
+        {/* Google Analytics 4 */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="afterInteractive" />
+        <Script id="ga4" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JG993LN554');
+        `}</Script>
         </PostHogProvider>
       </body>
     </html>
