@@ -49,7 +49,8 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/articles/ data/engine-state.json data/last-article-title.txt
+          git add content/articles/ data/engine-state.json
+          git add data/last-article-title.txt 2>/dev/null || true
           git diff --staged --quiet && echo "No new articles" && exit 0
           TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
           git commit -m "⚡ Flash: ${TITLE}"
