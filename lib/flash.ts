@@ -29,7 +29,12 @@ export function getAllFlash(): FlashMeta[] {
       const slug = filename.replace(/\.(mdx|md)$/, '')
       const raw  = fs.readFileSync(path.join(FLASH_DIR, filename), 'utf8')
       const { data, content } = matter(raw)
-      const plain = content.replace(/^#+\s.*$/gm, '').replace(/\*+/g, '').replace(/\n+/g, ' ').trim()
+      const plain = content
+        .replace(/^#+\s.*$/gm, '')
+        .replace(/\*+/g, '')
+        .replace(/^(WHAT HAPPENED|MCX IMPACT|CONTEXT|WHY IT MATTERS|WATCH)[:\s]*/gim, '')
+        .replace(/\n+/g, ' ')
+        .trim()
       const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
       return {
         slug,
@@ -54,7 +59,12 @@ export function getFlash(slug: string): Flash | null {
 
   const raw = fs.readFileSync(target, 'utf8')
   const { data, content } = matter(raw)
-  const plain = content.replace(/^#+\s.*$/gm, '').replace(/\*+/g, '').replace(/\n+/g, ' ').trim()
+  const plain = content
+    .replace(/^#+\s.*$/gm, '')
+    .replace(/\*+/g, '')
+    .replace(/^(WHAT HAPPENED|MCX IMPACT|CONTEXT|WHY IT MATTERS|WATCH)[:\s]*/gim, '')
+    .replace(/\n+/g, ' ')
+    .trim()
   const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
 
   return {

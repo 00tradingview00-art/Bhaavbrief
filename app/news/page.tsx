@@ -37,17 +37,21 @@ export default async function NewsPage() {
     getAllArticles(),
   ])
 
+  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10)
+
   const serverItems: NewsItem[] = [
-    ...flashItems.map(f => ({
-      id:       f.slug,
-      title:    f.title,
-      summary:  f.excerpt,
-      category: f.category,
-      tagType:  f.category === 'forex' ? 'macro' : f.category,
-      pubDate:  f.date,
-      href:     `/flash/${f.slug}`,
-      itemType: 'flash' as const,
-    })),
+    ...flashItems
+      .filter(f => f.date >= sevenDaysAgo)
+      .map(f => ({
+        id:       f.slug,
+        title:    f.title,
+        summary:  f.excerpt,
+        category: f.category,
+        tagType:  f.category === 'forex' ? 'macro' : f.category,
+        pubDate:  f.date,
+        href:     `/flash/${f.slug}`,
+        itemType: 'flash' as const,
+      })),
     ...articles
       .filter(a => a.title !== 'Market Update' && a.date)
       .map(a => ({
