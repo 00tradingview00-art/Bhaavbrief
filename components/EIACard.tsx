@@ -21,8 +21,8 @@ function fmtPeriod(iso: string): string {
   } catch { return iso }
 }
 
-function isEIAData(r: EIAResponse): r is EIAData {
-  return !('error' in r)
+function isEIAData(r: EIAResponse | null): r is EIAData {
+  return r !== null && !('error' in r)
 }
 
 export default function EIACard() {
@@ -37,8 +37,8 @@ export default function EIACard() {
       .finally(() => setLoading(false))
   }, [])
 
-  const draw    = isEIAData(data!) && data.direction === 'draw'
-  const accentColor = isEIAData(data!) ? (draw ? 'var(--up)' : 'var(--down)') : 'var(--border)'
+  const draw    = isEIAData(data) && data.direction === 'draw'
+  const accentColor = isEIAData(data) ? (draw ? 'var(--up)' : 'var(--down)') : 'var(--border)'
 
   return (
     <div style={{
