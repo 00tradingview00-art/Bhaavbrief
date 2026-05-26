@@ -229,7 +229,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
           <div style={{ background: '#18180F', padding: '1.25rem', color: '#FAFAF6' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Not SEBI registered</div>
-            <p style={{ fontSize: 11, color: 'rgba(250,250,246,0.55)', lineHeight: 1.6, fontWeight: 300, margin: 0 }}>BhaavBrief is for informational and educational purposes only. This is not investment advice. Always conduct your own research before making any trading or investment decisions.</p>
+            <p style={{ fontSize: 11, color: 'rgba(250,250,246,0.55)', lineHeight: 1.6, fontWeight: 300, margin: 0 }}>BhaavBrief is for educational and informational purposes only. We are not registered with SEBI or any other regulatory authority. Nothing on this platform constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity. All data and analysis is sourced from publicly available information. Past patterns are not indicative of future results. Commodity and equity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.</p>
           </div>
         </aside>
       </div>

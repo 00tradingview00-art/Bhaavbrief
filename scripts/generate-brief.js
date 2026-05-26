@@ -164,15 +164,26 @@ Step 4: What would KILL this narrative? (the trigger traders must watch)
 Step 5: What is the 2-3 day outlook if the narrative holds vs breaks?
 
 ═══════════════════════════════════════════
+SEBI COMPLIANCE — NON-NEGOTIABLE
+BhaavBrief is unregistered. Every sentence must pass the educational test.
+- State data, never judge it: "Crude at $87.40, up 2.3%" ✅ | "Crude closed strong" ❌
+- No action verbs directed at reader. BANNED: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
+- No predictive framing: "Goldman Sachs projects crude at $95" ✅ | "Crude headed to $95" ❌
+- Historical context over prediction: "In past dollar-strength episodes, MCX gold fell 2-4%" ✅ | "MCX gold will fall" ❌
+- Macro linkage must be educational not prescriptive: use "has historically" / "in past instances" framing
+- "Edge of the Day" must be an observation or a data point to watch — never a trading call
+═══════════════════════════════════════════
+
+═══════════════════════════════════════════
 WRITING RULES
 ═══════════════════════════════════════════
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
 - Use ONLY the prices given above. Never invent levels.
-- Write like a sharp trader's desk note — confident, specific, no hedging.
+- Sharp, specific, factual — no waffle, no filler, no hedging.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
-- End with "Edge of the Day:" — one sharp, actionable line for an Indian commodity trader.
+- End with "Edge of the Day:" — one specific data point or level for an Indian commodity trader to monitor.
 
 ═══════════════════════════════════════════
 STRUCTURE (follow exactly)
@@ -187,13 +198,13 @@ Gold is doing X because of the narrative. Crude is doing Y because of the narrat
 The divergence between A and B is telling you Z about narrative conviction.
 Include specific price levels from the data above.]
 
-## If This Holds
-[What happens to MCX gold, crude, silver in the next 2-3 sessions if the narrative strengthens further. Be specific — ₹ levels, not vague directions.]
+## Historical Context
+[How have MCX commodities behaved in past episodes of this same narrative — use "historically", "in past instances", "during similar periods". Never a directional call — only documented patterns with attribution.]
 
 ## What Kills It
 [One specific trigger or data point that would reverse the narrative. What should traders have on their radar?]
 
-**Edge of the Day:** [Single most important line for an Indian commodity trader today. Sharp. Specific. No waffle.]
+**Edge of the Day:** [The single most important price level to monitor, or scheduled data release that will either confirm or negate this narrative. An observation — never a buy/sell call.]
 
 ═══════════════════════════════════════════
 TAGS — pick the 1-3 most relevant (not always Gold):

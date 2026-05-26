@@ -118,11 +118,7 @@ export default function AboutPage() {
                 Important — Not SEBI registered
               </div>
               <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
-                BhaavBrief is for informational and educational purposes only. We are not registered
-                with SEBI or any other regulatory authority. Nothing we publish constitutes investment
-                advice, a trading recommendation, or a solicitation to buy or sell any commodity or
-                security. Commodity trading involves substantial risk of loss. Always consult a
-                SEBI-registered advisor before making financial decisions.
+                BhaavBrief is for educational and informational purposes only. We are not registered with SEBI or any other regulatory authority. Nothing on this platform constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity. All data and analysis is sourced from publicly available information. Past patterns are not indicative of future results. Commodity and equity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.
               </p>
             </div>
           </div>

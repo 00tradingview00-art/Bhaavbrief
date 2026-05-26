@@ -484,7 +484,8 @@ MANDATORY STRUCTURE:
 4. Name ONE cross-market correlation: what else is moving alongside this, and why does it matter for Indian traders?
 5. Close with ONE specific price level or data release that will confirm or negate this move.
 
-Rules: No opinions. No buy/sell calls. No "could", "may", "might". Only facts, mechanics, and levels.
+SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. No predictive framing ("will reach X"). State data, never judge it. Historical patterns must use "historically" framing. Technical levels are observations not triggers.
+Rules: No opinions. Only facts, mechanics, and levels.
 
 Format as plain text only (no markdown, no headers, no asterisks, no bullets):
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
@@ -629,7 +630,8 @@ MANDATORY:
 4. Name ONE cross-commodity correlation: what else is moving in the same direction, and why does that confirm or challenge this move?
 5. End with one specific price level or scheduled data release to watch.
 
-No opinions. No buy/sell calls. No "could", "may", "might". Facts and mechanics only.
+SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. No predictive price targets — use "historically" framing for patterns. Technical levels are observations not triggers. State data, never judge it.
+Facts and mechanics only. No opinions.
 
 Format (plain text, no markdown):
 HEADLINE: [12-16 words — include exact % move and MCX price level]

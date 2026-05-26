@@ -492,7 +492,8 @@ WATCH — [One specific price level OR one scheduled data release that will eith
 RULES:
 - Each section header is exactly as shown above (TRIGGER, PRICE, SIGNAL, etc.)
 - Each section is ONE sentence or one line of arithmetic — no more
-- No hedging. No "may". No "could". No "experts say".
+- No "experts say". Facts, data, mechanics only.
+- SEBI COMPLIANCE: No buy/sell/accumulate/avoid/exit/enter directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" framing for patterns.
 - If this is an EIA significant event, IMPORT COST must show the WTI→MCX crude parity math.
 - Total body: 80–130 words. Lean is the mandate.`
 
@@ -557,15 +558,22 @@ ${moveBlock}
 
 ${priceBlock}
 
-${circularBlock ? circularBlock + '\n' : ''}${eiaBlock ? eiaBlock + '\n' : ''}${techBlock}WRITING STANDARDS — NON-NEGOTIABLE:
+${circularBlock ? circularBlock + '\n' : ''}${eiaBlock ? eiaBlock + '\n' : ''}${techBlock}SEBI COMPLIANCE — NON-NEGOTIABLE (BhaavBrief is unregistered, educational content only):
+- State data, never judge it: "Crude at $87.40, up 2.3%" ✅ | "Crude closed strong" ❌
+- No action verbs directed at reader. BANNED: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
+- No predictive framing: "Goldman Sachs projects crude at $95" ✅ | "Crude headed to $95" ❌
+- Historical context over prediction: "In past dollar-strength episodes, MCX gold fell 2-4%" ✅ | "MCX gold will fall" ❌
+- Macro linkage: "Historically, rising crude compresses OMC margins by 3-5%" ✅ | "Rising crude is bad for OMCs, avoid" ❌
+- Technical levels are observations, not triggers: "Price has rejected at ₹74,000 three times" ✅ | "Strong resistance, sell here" ❌
+
+WRITING STANDARDS — NON-NEGOTIABLE:
 1. OPEN by connecting the trigger to the MARKET NARRATIVE above. This move never happens in isolation.
 2. Give the SPECIFIC mechanism: macro driver, geopolitical factor, technical level broken, or regulatory event.
 3. Cite ACTUAL TECHNICAL LEVELS from the OHLC data above — name exact support/resistance numbers, reference 20-SMA and round numbers. Do not invent levels.
 4. Explain the CROSS-ASSET CHAIN: what is the rest of the complex doing? Show cause-and-effect across assets.
 5. Quantify the INDIAN IMPORT PARITY: COMEX price + USD/INR rate + customs duty → exact MCX ₹ parity. Show the arithmetic.
-6. 150–250 words. Sharp. No filler. No hedging. No "experts say". No "may" or "could".
-7. Write with conviction. Facts, levels, mechanics only.
-8. End with exactly one line: "Watch: [specific price level or upcoming data release]"
+6. 150–250 words. Sharp. No filler. No "experts say". Facts, levels, mechanics only.
+7. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
 
 SEO RULES:
 - Title: commodity name + specific action + key reason (under 65 chars, include "MCX")

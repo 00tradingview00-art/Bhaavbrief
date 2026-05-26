@@ -200,7 +200,9 @@ async function generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayA
 
   const prompt = `You are BhaavBrief's senior market analyst. Write the EVENING MCX CLOSE BRIEF for ${dateStr} at ${timeStr} IST.
 
-MCX closes at 11:30 PM IST. This brief publishes 30 minutes before close — traders use it to decide whether to hold positions overnight or square off.
+MCX closes at 11:30 PM IST. This brief publishes 30 minutes before close — an educational summary of the day's session data for Indian commodity traders.
+
+SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/hold/square-off directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" or "in past episodes" framing. State data, never judge it.
 
 DAY'S NARRATIVE:
 ${narrative}
@@ -227,7 +229,7 @@ WRITE A 250-320 WORD EVENING CLOSE BRIEF with these 4 sections:
 
 4. OVERNIGHT WATCH LIST (50-60 words): Name 2-3 specific price levels across the complex that will matter at tomorrow's MCX open. Name any overnight data releases (US crude inventory, Fed speakers, overnight weather forecasts for NatGas) that traders should monitor.
 
-Rules: No hedging. Specific prices only. No "may", "could", "might". End with: "Key risk overnight: [the single biggest risk that could gap MCX tomorrow]"
+Rules: No opinions. No buy/sell/hold calls. Specific prices and data only. End with: "Overnight watch: [the single most important data point or level to monitor before tomorrow's MCX open]"
 
 SEO RULES:
 - Title: "MCX Close [date]: [dominant theme]" — under 65 chars

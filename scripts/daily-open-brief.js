@@ -182,7 +182,9 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
 
   const prompt = `You are BhaavBrief's senior market analyst. Write the DAILY MCX MARKET OPEN BRIEF for ${dateStr}.
 
-This is the most important article of the day — professional Indian MCX traders read this at 9 AM before placing any orders. It must be comprehensive, precise, and immediately actionable.
+This is the most important article of the day — professional Indian MCX traders read this at 9 AM. It must be comprehensive, precise, and data-driven.
+
+SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" or "in past episodes" framing. State data, never judge it.
 
 OVERNIGHT CROSS-ASSET NARRATIVE:
 ${narrative}
@@ -208,7 +210,7 @@ WRITE A 300-380 WORD MARKET OPEN BRIEF covering ALL of the following:
 
 5. WATCH TODAY (40-50 words): Name 2-3 specific price levels across the complex that will determine direction. Name any scheduled data releases today (EIA Wednesday, Fed speakers, India inflation data, etc.) that traders should have on their radar.
 
-Rules: No "may", "could", "might". No opinions. Only facts, levels, and mechanics. End with one line: "Key focus today: [the single most important thing for Indian MCX traders to monitor]"
+Rules: No opinions. No buy/sell/accumulate/avoid/exit calls. Only facts, levels, and mechanics. End with one line: "Key focus today: [the single most important data point or level for Indian MCX traders to monitor]"
 
 SEO RULES:
 - Title: specific, includes "MCX Open" + dominant overnight theme (under 65 chars)

@@ -91,7 +91,7 @@ function mdxToHtml(content, title, edition, date) {
   </a>
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
     © 2026 BhaavBrief · bhaavbrief.in<br>
-    Not SEBI registered. For informational and educational purposes only.<br>
+    For educational and informational purposes only. Not registered with SEBI or any regulatory authority. Nothing here constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity. Past patterns are not indicative of future results. Commodity and equity trading involves substantial risk of loss. Consult a SEBI-registered investment advisor or research analyst before making financial decisions.<br>
     <a href="{{ unsubscribeUrl }}" style="color:#8A8A7A">Unsubscribe</a>
   </div>
 </div>
