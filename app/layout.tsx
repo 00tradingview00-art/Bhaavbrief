@@ -91,8 +91,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <PostHogProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Nav />
-        <TickerStrip initialPrices={initialPrices} />
-        <GeoRiskTicker />
+        {/* Sticky ticker bar — sticks just below the nav (56px) */}
+        <div style={{ position: 'sticky', top: 56, zIndex: 39 }}>
+          <TickerStrip initialPrices={initialPrices} />
+          <GeoRiskTicker />
+        </div>
         <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           {children}
         </main>

@@ -67,11 +67,16 @@
 .geo-ticker-track {
   display: flex;
   align-items: center;
-  gap: 28px;
-  animation: tickerScroll 45s linear infinite;
+  gap: 24px;
+  animation: tickerScroll 50s linear infinite;
   white-space: nowrap;
 }
 .geo-ticker-track:hover { animation-play-state: paused; }
+
+@keyframes geoPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
 
 /* ── Homepage responsive layout ───────────────────────────────────────────── */
 
