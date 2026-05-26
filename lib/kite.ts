@@ -128,6 +128,38 @@ export class KiteClient {
     return ((quote.last_price - quote.ohlc.close) / quote.ohlc.close) * 100
   }
 
+  // ── Historical Data ──────────────────────────────────────────────────────────
+
+  async getHistorical(
+    token:    number,
+    interval: 'day' | '60minute' | '30minute',
+    from:     string,   // YYYY-MM-DD
+    to:       string,   // YYYY-MM-DD
+  ): Promise<Array<{ date: string; open: number; high: number; low: number; price: number; volume: number }>> {
+    const params = new URLSearchParams({ from, to, continuous: '1', oi: '0' })
+    const url = `${KITE_BASE}/instruments/historical/${token}/${interval}?${params}`
+
+    const res = await fetch(url, {
+      headers: this.headers(),
+      signal:  AbortSignal.timeout(10000),
+    })
+    if (res.status === 403) throw new Error('Kite token expired')
+    if (!res.ok)            throw new Error(`Kite historical: ${res.status}`)
+
+    const data = await res.json()
+    if (data.status !== 'success') throw new Error(data.message ?? 'Historical fetch failed')
+
+    // candles: [timestamp, open, high, low, close, volume, oi]
+    return (data.data.candles as [string, number, number, number, number, number][]).map(
+      ([ts, open, high, low, close, volume]) => ({
+        date:   ts.slice(0, 10),
+        open, high, low,
+        price:  close,
+        volume,
+      })
+    )
+  }
+
   // ── Instrument Discovery ─────────────────────────────────────────────────────
 
   async getMCXInstruments(): Promise<MCXInstrument[]> {
