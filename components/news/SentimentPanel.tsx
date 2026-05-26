@@ -1,28 +1,55 @@
-type SentimentLevel = 'bull' | 'bear' | 'neut'
+import { readFileSync } from 'fs'
+import path from 'path'
 
-interface CommoditySentiment {
-  name: string
-  level: SentimentLevel
-  pct: number
-  summary: string
+interface NewsItem {
+  id:      string
+  title:   string
+  category: string
+  tagType: string
+  pubDate: string
 }
 
-// In production: derive from Claude analysis of news headlines
-const SENTIMENT_DATA: CommoditySentiment[] = [
-  { name: 'Gold',     level: 'bull', pct: 78, summary: '78% bullish signals · 12 headlines' },
-  { name: 'Silver',   level: 'bull', pct: 65, summary: '65% bullish signals · 8 headlines'  },
-  { name: 'Crude Oil',level: 'neut', pct: 50, summary: 'Mixed signals · 9 headlines'         },
-  { name: 'Copper',   level: 'bear', pct: 60, summary: 'China demand fears · 6 headlines'    },
-  { name: 'Nat Gas',  level: 'bear', pct: 70, summary: 'Seasonal oversupply · 5 headlines'   },
+interface CommodityCount {
+  name:  string
+  count: number
+  pct:   number
+}
+
+const COMMODITY_PATTERNS: { name: string; re: RegExp }[] = [
+  { name: 'Gold',        re: /\bgold\b/i },
+  { name: 'Silver',      re: /\bsilver\b/i },
+  { name: 'Crude Oil',   re: /\bcrude|brent|wti\b/i },
+  { name: 'Copper',      re: /\bcopper\b/i },
+  { name: 'Natural Gas', re: /natural.gas|nat.gas|\blng\b/i },
 ]
 
-const LEVEL_STYLES: Record<SentimentLevel, { pill: { bg: string; color: string }; bar: string; label: string }> = {
-  bull: { pill: { bg: '#EDFAF3', color: '#166534' }, bar: '#1B7A4A', label: 'Bullish' },
-  bear: { pill: { bg: '#FEF2F2', color: '#991B1B' }, bar: '#B53A2A', label: 'Bearish' },
-  neut: { pill: { bg: 'var(--surface-3)', color: '#7A7668' }, bar: '#B8B4A8', label: 'Neutral' },
+function loadCoverage(): CommodityCount[] {
+  try {
+    const file  = path.join(process.cwd(), 'data/ai-news.json')
+    const items = JSON.parse(readFileSync(file, 'utf8')) as NewsItem[]
+
+    const cutoff = Date.now() - 24 * 60 * 60 * 1000
+    const recent = items.filter(i => new Date(i.pubDate).getTime() > cutoff)
+
+    const counts = COMMODITY_PATTERNS.map(({ name, re }) => ({
+      name,
+      count: recent.filter(i => re.test(`${i.title} ${i.category}`)).length,
+    }))
+
+    const total = counts.reduce((s, c) => s + c.count, 0) || 1
+
+    return counts
+      .filter(c => c.count > 0)
+      .sort((a, b) => b.count - a.count)
+      .map(c => ({ ...c, pct: Math.round((c.count / total) * 100) }))
+  } catch {
+    return []
+  }
 }
 
 export default function SentimentPanel() {
+  const coverage = loadCoverage()
+
   return (
     <div style={{
       background: 'var(--surface)',
@@ -35,34 +62,37 @@ export default function SentimentPanel() {
       <p style={{
         fontSize: 11, fontWeight: 500, letterSpacing: '0.7px',
         textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 20,
+        margin: '0 0 20px',
       }}>
-        Commodity Sentiment
+        Coverage Today
       </p>
 
-      {SENTIMENT_DATA.map(({ name, level, pct, summary }) => {
-        const styles = LEVEL_STYLES[level]
-        return (
-          <div key={name} style={{ marginBottom: 20 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
+      {coverage.length === 0 ? (
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', margin: 0 }}>
+          No signals in the last 24h
+        </p>
+      ) : (
+        coverage.map(({ name, count, pct }) => (
+          <div key={name} style={{ marginBottom: 18 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink)' }}>{name}</span>
               <span style={{
-                fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 3,
-                background: styles.pill.bg, color: styles.pill.color,
+                fontFamily: 'var(--font-mono)', fontSize: 10,
+                color: 'var(--ink-4)', letterSpacing: '0.04em',
               }}>
-                {styles.label}
+                {count} signal{count !== 1 ? 's' : ''}
               </span>
             </div>
-            <div style={{ height: 4, borderRadius: 2, background: 'var(--surface-3)', overflow: 'hidden', marginBottom: 5 }}>
-              <div style={{ height: '100%', width: `${pct}%`, borderRadius: 2, background: styles.bar }} />
+            <div style={{ height: 3, borderRadius: 2, background: 'var(--surface-3)', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${pct}%`, borderRadius: 2, background: 'var(--gold)' }} />
             </div>
-            <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{summary}</span>
           </div>
-        )
-      })}
+        ))
+      )}
 
       <div style={{ borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 4 }}>
         <p style={{ fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6, margin: 0 }}>
-          Sentiment scored automatically from news headlines. Refreshed every 15 min.
+          Signal count from intelligence items in the last 24h.
         </p>
       </div>
     </div>

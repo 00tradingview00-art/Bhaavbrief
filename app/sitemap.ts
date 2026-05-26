@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
-import { getAllBriefs } from '@/lib/briefs'
-import { getAllFlash }  from '@/lib/flash'
+import { getAllBriefs }   from '@/lib/briefs'
+import { getAllFlash }    from '@/lib/flash'
+import { getAllArticles } from '@/lib/articles'
 
 const BASE = 'https://bhaavbrief.in'
 
@@ -9,9 +10,10 @@ const COMMODITIES = ['gold', 'silver', 'crude-oil', 'copper', 'natural-gas']
 export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [briefs, flash] = await Promise.all([
+  const [briefs, flash, articles] = await Promise.all([
     getAllBriefs(),
     Promise.resolve(getAllFlash()),
+    getAllArticles(),
   ])
 
   return [
@@ -47,6 +49,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified:    new Date(f.date || Date.now()),
       changeFrequency: 'never' as const,
       priority:        0.6,
+    })),
+
+    // Market intelligence articles
+    ...articles.map(a => ({
+      url:             `${BASE}/articles/${a.slug}`,
+      lastModified:    new Date(a.date || Date.now()),
+      changeFrequency: 'never' as const,
+      priority:        0.7,
     })),
   ]
 }

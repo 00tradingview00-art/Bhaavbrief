@@ -141,9 +141,9 @@ export default function EIACard() {
               <span style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize:   9,
-                color:      draw ? 'var(--up)' : 'var(--down)',
+                color:      'var(--ink-4)',
               }}>
-                {draw ? 'Bullish crude' : 'Bearish crude'}
+                {draw ? 'Supply draw' : 'Supply build'}
               </span>
             </div>
 
