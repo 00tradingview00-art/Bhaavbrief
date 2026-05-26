@@ -65,8 +65,17 @@ function dateDividerLabel(dateKey: string): string {
 
 function matchesFilter(item: NewsItem, filter: string): boolean {
   if (filter === 'All') return true
-  const text = `${item.title} ${item.summary} ${item.category}`.toLowerCase()
-  return (FILTER_KEYWORDS[filter] ?? [filter.toLowerCase()]).some(k => text.includes(k))
+  const filterKey = filter.toLowerCase()
+
+  // Primary: use pre-computed tagType for the core commodity buckets
+  if (['metals', 'energy', 'macro'].includes(filterKey)) {
+    return item.tagType === filterKey
+  }
+
+  // Secondary filters (Policy, Agri, Geopolitics): keyword search on title only
+  // — never include summary to avoid cross-mentions causing false matches
+  const text = `${item.title} ${item.category}`.toLowerCase()
+  return (FILTER_KEYWORDS[filter] ?? [filterKey]).some(k => text.includes(k))
 }
 
 function getCrossAssets(item: NewsItem): string[] {
