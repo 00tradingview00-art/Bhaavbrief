@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import SubscribeForm from '@/components/SubscribeForm'
+import AboutSearch from '@/components/AboutSearch'
 
 export const metadata: Metadata = {
   title: 'About BhaavBrief — Indian Commodity Intelligence',
@@ -96,6 +97,9 @@ export default function AboutPage() {
                 </p>
               </div>
             </section>
+
+            {/* Universal search */}
+            <AboutSearch />
 
             {/* Principles */}
             <section style={{ marginBottom: '2.5rem' }}>
