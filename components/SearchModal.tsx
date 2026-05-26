@@ -376,7 +376,7 @@ export default function SearchModal({ open, onClose }: Props) {
             Educational only · Not investment advice · Not SEBI registered
           </span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
-            Powered by Claude
+            BhaavBrief Intelligence
           </span>
         </div>
       </div>

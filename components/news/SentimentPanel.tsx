@@ -62,7 +62,7 @@ export default function SentimentPanel() {
 
       <div style={{ borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 4 }}>
         <p style={{ fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6, margin: 0 }}>
-          Sentiment scored automatically from news headlines using Claude. Refreshed every 15 min.
+          Sentiment scored automatically from news headlines. Refreshed every 15 min.
         </p>
       </div>
     </div>
