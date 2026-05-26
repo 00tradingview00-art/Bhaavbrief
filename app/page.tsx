@@ -4,6 +4,7 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import CommodityPulse from '@/components/CommodityPulse'
+import EIACard from '@/components/EIACard'
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
@@ -447,6 +448,9 @@ export default async function HomePage() {
               <span style={{ color: 'var(--gold)', fontSize: 20, flexShrink: 0 }}>→</span>
             </div>
           </Link>
+
+          {/* EIA crude inventory card */}
+          <EIACard />
 
           {/* About */}
           <div id="about" style={{
