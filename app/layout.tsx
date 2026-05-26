@@ -6,6 +6,7 @@ import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
+import GeoRiskTicker from '@/components/GeoRiskTicker'
 import PostHogProvider from '@/components/PostHogProvider'
 
 const playfair = Playfair_Display({
@@ -91,6 +92,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <Nav />
         <TickerStrip initialPrices={initialPrices} />
+        <GeoRiskTicker />
         <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
           {children}
         </main>

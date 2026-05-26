@@ -64,6 +64,15 @@
 }
 .ticker-track:hover { animation-play-state: paused; }
 
+.geo-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  animation: tickerScroll 45s linear infinite;
+  white-space: nowrap;
+}
+.geo-ticker-track:hover { animation-play-state: paused; }
+
 /* ── Homepage responsive layout ───────────────────────────────────────────── */
 
 /* Two-column body: content + sidebar */
