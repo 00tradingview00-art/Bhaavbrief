@@ -134,6 +134,58 @@ function formatPriceContext(p) {
   return parts.join('\n')
 }
 
+// ── Freshness gate ────────────────────────────────────────────────────────────
+function isFresh(pubDate, maxMinutes = 90) {
+  if (!pubDate) return false
+  return (Date.now() - new Date(pubDate).getTime()) <= maxMinutes * 60 * 1000
+}
+
+// ── Google Trends India — what is India searching right now ───────────────────
+async function fetchTrendingTopics() {
+  const FINANCE_TERMS = [
+    'gold', 'silver', 'oil', 'crude', 'petrol', 'rupee', 'dollar',
+    'rbi', 'inflation', 'commodity', 'mcx', 'copper', 'gas', 'market',
+    'sensex', 'nifty', 'sebi', 'fed', 'opec', 'brent', 'comex',
+    'interest rate', 'forex', 'wheat', 'sugar', 'cotton',
+  ]
+  try {
+    const res = await fetch(
+      'https://trends.google.com/trends/trendingsearches/daily/rss?geo=IN',
+      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) }
+    )
+    if (!res.ok) return []
+    const xml    = await res.text()
+    const topics = []
+    for (const m of xml.matchAll(/<title><!\[CDATA\[([^\]]+)\]\]><\/title>/g)) {
+      const t = m[1].trim().toLowerCase()
+      if (FINANCE_TERMS.some(f => t.includes(f))) topics.push(t)
+    }
+    return topics.slice(0, 10)
+  } catch {
+    return []
+  }
+}
+
+// ── Relevance score for candidate ranking ─────────────────────────────────────
+function scoreArticle(article, trendingTopics) {
+  const text   = `${article.title} ${article.description}`.toLowerCase()
+  let score    = 0
+
+  // Recency: max 60 pts for brand-new, decays to 0 at 90 min
+  if (article.pubDate) {
+    const ageMin = (Date.now() - new Date(article.pubDate).getTime()) / 60000
+    score += Math.max(0, 60 - ageMin * (60 / 90))
+  }
+
+  // Trending match: 25 pts each
+  trendingTopics.forEach(t => { if (text.includes(t)) score += 25 })
+
+  // Keyword density: 5 pts each
+  KEYWORDS.forEach(k => { if (text.includes(k)) score += 5 })
+
+  return score
+}
+
 async function fetchFeed(feed) {
   try {
     const res  = await fetch(feed.url, {
@@ -173,11 +225,16 @@ async function fetchFeed(feed) {
   }
 }
 
-async function generateFlashContent(article, priceContext) {
+async function generateFlashContent(article, priceContext, trendingTopics) {
+  const trendingLine = trendingTopics.length > 0
+    ? `Trending searches in India right now: ${trendingTopics.slice(0, 5).join(', ')}. Where natural and accurate, use language that matches these terms — this helps readers find this article.`
+    : ''
+
   const prompt = `You write for BhaavBrief — India's MCX commodity intelligence service read by professional traders.
 
 Live market context:
 ${priceContext}
+${trendingLine ? '\n' + trendingLine : ''}
 
 Write a 200-250 word intelligence flash on the article below. Use this exact structure (include the bold headers):
 
@@ -185,12 +242,12 @@ Write a 200-250 word intelligence flash on the article below. Use this exact str
 One sentence. State the specific fact with the key number or figure.
 
 **MCX IMPACT**
-3-4 sentences. Name the specific MCX contract(s) affected. State the likely direction and why. Reference a key price level from the live context above. Explain what it means for Indian traders specifically — customs duty, import cost, spread vs COMEX.
+3-4 sentences. Name the specific MCX contract(s) affected. Reference a key price level from the live context above. Explain what it means for Indian traders specifically — customs duty, import cost, spread vs COMEX. No buy/sell calls. No "may", "could", "might". Only facts and market mechanics.
 
 **WATCH**
 1-2 sentences. Name the next data release, event, or price level that will either confirm or negate this move.
 
-Rules: No opinions. No buy/sell calls. No "may", "could", "might". Only facts and market mechanics. No title. No byline. End with: Source: ${article.source}
+Rules: No opinions. No action verbs directed at the reader. Historical framing only for patterns. No title. No byline. End with: Source: ${article.source}
 
 Article: ${article.title}. ${article.description}`
 
@@ -232,32 +289,61 @@ ${content}
 async function main() {
   if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
 
-  console.log('Fetching live prices...')
-  const prices       = await fetchLivePrices()
+  // Fetch prices + trending topics in parallel
+  console.log('Fetching prices and trending topics...')
+  const [prices, trendingTopics] = await Promise.all([
+    fetchLivePrices(),
+    fetchTrendingTopics(),
+  ])
   const priceContext = formatPriceContext(prices)
   console.log(`Prices: ${priceContext.split('\n').join(' | ')}`)
+  console.log(`Trending finance topics: ${trendingTopics.length > 0 ? trendingTopics.slice(0, 5).join(', ') : 'none'}`)
 
   const seen = loadSeen()
   console.log(`BhaavBrief Flash — seen: ${seen.length} URLs`)
 
+  // Mark all URLs seen regardless — so stale articles never get retried
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
+  // Filter: unseen + important + not MCX stock + FRESH (< 90 min old)
   const candidates = allItems.filter(item => {
     const text = `${item.title} ${item.description}`
-    return !seen.includes(item.url) && isImportant(text) && !isMCXStockArticle(text)
+    if (seen.includes(item.url))      return false
+    if (!isImportant(text))           return false
+    if (isMCXStockArticle(text))      return false
+    if (!isFresh(item.pubDate, 90))   return false  // skip anything older than 90 min
+    return true
   })
-  console.log(`New important articles: ${candidates.length}`)
 
-  const newSeen  = [...seen]
-  let processed  = 0
-  const titles   = []
+  // Mark all stale unseen items as seen so they never accumulate
+  const staleUnseen = allItems.filter(item =>
+    !seen.includes(item.url) && !isFresh(item.pubDate, 90)
+  )
+  const newSeen = [...seen, ...staleUnseen.map(i => i.url)]
+
+  // Sort by relevance: recency + trending match + keyword density
+  candidates.sort((a, b) => scoreArticle(b, trendingTopics) - scoreArticle(a, trendingTopics))
+
+  console.log(`Fresh important articles: ${candidates.length} (${staleUnseen.length} stale skipped)`)
+  if (candidates.length === 0) {
+    saveSeen(newSeen)
+    console.log('Nothing fresh to publish — exiting cleanly')
+    return
+  }
+
+  let processed = 0
+  const titles  = []
 
   for (const article of candidates) {
-    if (processed >= 6) break
+    if (processed >= 3) break  // max 3 per run — quality over quantity
     try {
-      console.log(`Processing: ${article.title.slice(0, 70)}`)
-      const content  = await generateFlashContent(article, priceContext)
+      const ageMin = article.pubDate
+        ? ((Date.now() - new Date(article.pubDate).getTime()) / 60000).toFixed(0)
+        : '?'
+      console.log(`Processing (${ageMin}min old): ${article.title.slice(0, 70)}`)
+
+      const content  = await generateFlashContent(article, priceContext, trendingTopics)
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
       const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${p(ist.getHours())}-${p(ist.getMinutes())}-${toSlug(article.title)}`
