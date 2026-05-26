@@ -41,6 +41,9 @@ jobs:
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
         run: node scripts/intelligence-engine.js
 
+      - name: Rebuild content search index
+        run: node scripts/build-content-index.js
+
       - name: Commit & push if article published
         run: |
           git config user.name "BhaavBrief Intelligence"
@@ -49,7 +52,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/articles/ data/engine-state.json
+          git add content/articles/ data/engine-state.json data/content-index.json
           git add data/last-article-title.txt 2>/dev/null || true
           git diff --staged --quiet && echo "No new articles" && exit 0
           TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")

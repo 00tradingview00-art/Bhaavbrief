@@ -1,0 +1,476 @@
+[
+  {
+    "type": "brief",
+    "slug": "edition-019",
+    "href": "/briefs/edition-019",
+    "title": "Fed Reality Bites: The Inflation Premium Meets Its Reckoning",
+    "description": "Gold and silver crack as Fed hawkishness reasserts itself, stripping the last engine from the stagflation trade.",
+    "excerpt": "The stagflation trade that built across editions 16, 17, and 18 is now facing its most serious structural challenge. Crude's 12% weekly collapse already amputated the supply-shock leg of the narrative",
+    "date": "2026-05-26",
+    "edition": "19",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Fed",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-25-mcx-close-26-ay2026-silver-leads-comex-confirms",
+    "href": "/articles/2026-05-25-mcx-close-26-ay2026-silver-leads-comex-confirms",
+    "title": "MCX Close 26 May 2026: Silver Leads, COMEX Confirms",
+    "description": "MCX Evening Brief 26 May 2026: Silver surged +1.68% to ₹276400/kg. COMEX Silver extends to +1.84% — overnight tone is bullish.",
+    "excerpt": "title: \"MCX Close 26 May 2026: Silver Leads, COMEX Confirms\" description: \"MCX Evening Brief 26 May 2026: Silver surged +1.68% to ₹276400/kg. COMEX Silver extends to +1.84% — overnight tone is bullish",
+    "date": "2026-05-26",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
+    "slug": "edition-017",
+    "href": "/briefs/edition-017",
+    "title": "Stagflation Trade Snaps Back: Crude and Gold Rise Together Again",
+    "description": "Crude's OPEC fracture and gold's renewed rally signal stagflation fear has reasserted itself as the dominant market narrative.",
+    "excerpt": "The divergence that defined the last three sessions — crude surging while gold bled — has collapsed overnight. Today both are rallying hard, and that convergence is the tell. The market is no longer p",
+    "date": "2026-05-25",
+    "edition": "17",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Macro",
+      "Inflation",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-018",
+    "href": "/briefs/edition-018",
+    "title": "Stagflation Trade Matures: Crude Corrects, Gold Holds the Throne",
+    "description": "Crude's weekly 12% drop tests stagflation conviction, but gold's resilience at ₹159,220 signals the inflation narrative isn't done.",
+    "excerpt": "The full 1970s stagflation trade that dominated editions 16 and 17 is entering its first real stress test. Crude has shed 12% over the week — a violent unwind of the supply-shock premium — while gold ",
+    "date": "2026-05-25",
+    "edition": "18",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-25-mcx-nat-gas-surges-280-crude-rout-decoupling",
+    "href": "/articles/2026-05-25-mcx-nat-gas-surges-280-crude-rout-decoupling",
+    "title": "MCX Nat Gas Surges 2.34% to ₹280 Despite Crude Rout",
+    "description": "MCX Nat Gas hits ₹280.30/mmBtu, up 2.34%, decoupling from crude's -4.85% crash. Key resistance at ₹282 into 11:30 PM close.",
+    "excerpt": "MCX Nat Gas is staging a sharp decoupling move tonight — rising ₹6.40 to ₹280.30/mmBtu even as crude oil bleeds -4.85% to ₹8,723/bbl, dragging the broader commodity complex into defensive territory. T",
+    "date": "2026-05-25",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 280
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-25-mcx-open-25-ay2026-risk-off-gold-silver-surge",
+    "href": "/articles/2026-05-25-mcx-open-25-ay2026-risk-off-gold-silver-surge",
+    "title": "MCX Open 25 May 2026: Risk-Off Lifts Gold, Silver Surges",
+    "description": "MCX Open 25 May 2026: Gold +0.34% at ₹159220, Silver surges +1.59% to ₹276178, Crude crashes -5.14% to ₹8697. Risk-off dominates.",
+    "excerpt": "title: \"MCX Open 25 May 2026: Risk-Off Lifts Gold, Silver Surges\" description: \"MCX Open 25 May 2026: Gold +0.34% at ₹159220, Silver surges +1.59% to ₹276178, Crude crashes -5.14% to ₹8697. Risk-off d",
+    "date": "2026-05-25",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-22-mcx-close-23may2026-broad-metal-energy-selloff",
+    "href": "/articles/2026-05-22-mcx-close-23may2026-broad-metal-energy-selloff",
+    "title": "MCX Close 23 May 2026: Broad Metal & Energy Selloff",
+    "description": "MCX Evening Brief 23 May 2026 — Crude leads losses at -1.33% (₹9218), Silver drops -1.19% as dollar strength hammers the complex.",
+    "excerpt": "Dollar strength ran the show on MCX today, delivering broad-based losses across metals and energy. Crude led the damage, collapsing 1.33% to ₹9218/bbl on demand concern headwinds amplified by a firmin",
+    "date": "2026-05-23",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
+    "slug": "edition-015",
+    "href": "/briefs/edition-015",
+    "title": "Crude Surges 3%, Gold Slips as Risk Appetite Shifts",
+    "description": "MCX Crude rockets past ₹9,400 while gold and silver retreat on easing safe-haven demand amid Iran peace talk signals.",
+    "excerpt": "A sharp crude oil rally is rewriting the commodity narrative this Friday. Energy is the aggressor; metals are on defense. Here's the full picture. --- Gold is bleeding. The ₹1,000 intraday drop report",
+    "date": "2026-05-22",
+    "edition": "15",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-016",
+    "href": "/briefs/edition-016",
+    "title": "Crude Holds the Whip as Gold's Geopolitical Premium Quietly Bleeds Out",
+    "description": "Energy dominates as crude surges 3% and gold's Iran-fear bid continues unwinding — the narrative split is deepening.",
+    "excerpt": "The market's dominant story has shifted its centre of gravity. What began three sessions ago as a simple Iran-tension bid in gold has morphed into something more structurally uncomfortable: crude oil ",
+    "date": "2026-05-22",
+    "edition": "16",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-22-mcx-close-22may2026-natgas-leads-energy-selloff",
+    "href": "/articles/2026-05-22-mcx-close-22may2026-natgas-leads-energy-selloff",
+    "title": "MCX Close 22 May 2026: NatGas Leads Energy Selloff",
+    "description": "MCX Evening Brief 22 May 2026: NatGas crashed -3.0% to ₹281.4, Silver fell -1.55%. COMEX fading — bearish overnight setup.",
+    "excerpt": "NatGas dominated Friday's MCX session with a brutal -3.0% collapse to ₹281.4/mmBtu, extending the overnight selloff that opened the morning at -2.69%. Henry Hub's slide to $2.94 set the tone early — w",
+    "date": "2026-05-22",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-22-mcx-open-22-ay2026-natgas-selloff",
+    "href": "/articles/2026-05-22-mcx-open-22-ay2026-natgas-selloff",
+    "title": "MCX Open 22 May 2026: NatGas Leads Broad Selloff",
+    "description": "MCX Open 22 May 2026: NatGas -2.69%, Crude -1.36%, Gold -0.41%. Broad overnight selling across energy and metals. Key levels inside.",
+    "excerpt": "Energy led overnight losses, with Henry Hub Natural Gas dropping 1.60% to $2.95/mmBtu — the sharpest single-commodity move across the complex. WTI Crude followed at -1.46%, settling at $96.24/bbl. COM",
+    "date": "2026-05-22",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
+    "slug": "edition-010",
+    "href": "/briefs/edition-010",
+    "title": "Metals Slip, Crude Climbs — Key Levels Traders Must Watch",
+    "description": "Gold and silver retreat below critical MCX levels as crude oil gains complicate the inflation and safe-haven calculus.",
+    "excerpt": "Markets are sending a split signal today: safe-haven metals are bleeding out while energy prices claw higher. That combination tells you one thing — traders are not running to cover, they are re-prici",
+    "date": "2026-05-21",
+    "edition": "10",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-011",
+    "href": "/briefs/edition-011",
+    "title": "Gold Slips, Crude Climbs — Iran Tensions Reshape Commodity Plays",
+    "description": "MCX Gold and Silver slide below key levels while crude oil defies pressure, forcing traders to reprice risk across the board.",
+    "excerpt": "Markets are sending a split signal this Thursday: precious metals are bleeding while energy is catching a bid. Here is what is driving it and where the levels are that matter. --- Gold shed nearly ₹1,",
+    "date": "2026-05-21",
+    "edition": "11",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-012",
+    "href": "/briefs/edition-012",
+    "title": "Metals Buckle Under Pressure as Crude Defies the Selloff",
+    "description": "Gold and silver slip below key MCX levels while crude holds firm, splitting commodity traders into two camps.",
+    "excerpt": "Markets are not confused. They are making a clear statement: safe-haven enthusiasm is fading, energy is not. --- Gold shed roughly ₹1,000/10g on MCX in the sessions leading into Thursday, and the sell",
+    "date": "2026-05-21",
+    "edition": "12",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-013",
+    "href": "/briefs/edition-013",
+    "title": "Metals Slide as Iran Tensions Ease, Crude Complicates Inflation Outlook",
+    "description": "Gold and silver slip below key MCX levels as peace talk optimism dents safe-haven demand while crude-led inflation lingers.",
+    "excerpt": "Thursday's session opens with gold and silver on the back foot across Indian markets. The selling is deliberate, not panicked — and understanding the *why* matters more than the headline number. --- G",
+    "date": "2026-05-21",
+    "edition": "13",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-014",
+    "href": "/briefs/edition-014",
+    "title": "Crude Surges 3%, Gold Slips as Iran Tensions Reshape Commodity Bets",
+    "description": "MCX Crude jumps 3% on geopolitical risk while gold and silver retreat from highs amid peace-talk uncertainty.",
+    "excerpt": "The commodity complex is splitting at the seams today. Crude is the aggressor, gold is pulling back under profit-selling pressure, and silver is caught in the crossfire. Here's what's driving each mov",
+    "date": "2026-05-21",
+    "edition": "14",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-007",
+    "href": "/briefs/edition-007",
+    "title": "Gold Slips Below Key Levels as Crude Complicates Inflation Trade",
+    "description": "MCX metals face dual pressure from Iran peace talk optimism and crude-driven inflation fears weighing on sentiment.",
+    "excerpt": "Indian commodity markets are navigating a tense crosscurrent: gold and silver are bleeding lower as Iran war-to-peace talk headlines shift sentiment, while rising crude oil prices are injecting a fres",
+    "date": "2026-05-20",
+    "edition": "7",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-008",
+    "href": "/briefs/edition-008",
+    "title": "MCX Gold Surges on India Duty Hike as UAE Exits OPEC",
+    "description": "",
+    "excerpt": "MCX Prices — Gold ₹1,57,554 ($4479.1/oz) · Silver ₹2,68,671 ($74.73/oz) · Crude ₹10,021 ($103.68) · Nat Gas ₹301 ($3.11) · USD/INR ₹96.65 The UAE's formal exit from OPEC is the dominant macro event re",
+    "date": "2026-05-20",
+    "edition": "8",
+    "tags": [
+      "energy"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Natural Gas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-009",
+    "href": "/briefs/edition-009",
+    "title": "Metals Slide as Iran Tensions, Crude Spike Unsettle MCX",
+    "description": "Gold and silver slip below key MCX levels as crude-led inflation fears and Iran peace uncertainty pressure precious metals.",
+    "excerpt": "Markets walked into Wednesday carrying bruises from the previous session. MCX Gold dropped nearly ₹1,000, silver shed 1.6%, and the broader commodity complex is caught in a tug-of-war between geopolit",
+    "date": "2026-05-20",
+    "edition": "9",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-002",
+    "href": "/briefs/edition-002",
+    "title": "Firm Rupee Squeezes MCX Gains Despite Dollar Weakness",
+    "description": "*Edition 2 — Tuesday, 19 May 2026*",
+    "excerpt": "*Edition 2 — Tuesday, 19 May 2026* --- The dominant macro signal this morning is USD weakness. With USDINR at ₹96.33, the rupee is holding firm — a headwind for INR-denominated commodity bulls. A stro",
+    "date": "2026-05-19",
+    "edition": "2",
+    "tags": [
+      "macro"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "NCDEX Agri"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-003",
+    "href": "/briefs/edition-003",
+    "title": "Weak Dollar Lifts Commodities; Discipline Beats Momentum Today",
+    "description": "*19 May 2026 | Edition 3 | BhaavBrief Morning Intelligence*",
+    "excerpt": "*19 May 2026 | Edition 3 | BhaavBrief Morning Intelligence* --- Macro Signal: Dollar softness continues to anchor commodity prices globally. USDINR at ₹96.38 keeps import costs elevated for energy, wh",
+    "date": "2026-05-19",
+    "edition": "3",
+    "tags": [
+      "energy"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "NCDEX Agri"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-004",
+    "href": "/briefs/edition-004",
+    "title": "Dollar Strength Masks True Commodity Demand Signals Monday",
+    "description": "*Monday, 19 May 2026 | Edition 4*",
+    "excerpt": "*Monday, 19 May 2026 | Edition 4* --- The macro picture this morning is defined by one dominant force: a firming US Dollar. USDINR at ₹96.38 signals rupee softness that will mechanically support INR-d",
+    "date": "2026-05-19",
+    "edition": "4",
+    "tags": [
+      "energy"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "NCDEX Agri"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-005",
+    "href": "/briefs/edition-005",
+    "title": "Rupee Weakness Supercharges MCX Commodity Contracts Despite Dollar Softness",
+    "description": "*Monday, 19 May 2026 | Edition 5*",
+    "excerpt": "*Monday, 19 May 2026 | Edition 5* --- The dominant macro signal this week is dollar fragility. USDINR has crossed ₹96.38, a level that mechanically inflates every rupee-denominated MCX contract. When ",
+    "date": "2026-05-19",
+    "edition": "5",
+    "tags": [
+      "macro"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "NCDEX Agri"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-006",
+    "href": "/briefs/edition-006",
+    "title": "MCX Gold Tops ₹1.59 Lakh as US-Iran Talks Collapse",
+    "description": "",
+    "excerpt": "MCX Prices — Gold ₹1,59,383 ($4543.8/oz) · Silver ₹2,73,460 ($76.275/oz) · Crude ₹9,982 ($103.57) · Nat Gas ₹292 ($3.028) · USD/INR ₹96.38 US-Iran peace talks have collapsed, and the geopolitical risk",
+    "date": "2026-05-19",
+    "edition": "6",
+    "tags": [
+      "energy"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Natural Gas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-001",
+    "href": "/briefs/edition-001",
+    "title": "Rupee Above 96 Leaves Commodity Markets Adrift",
+    "description": "*Monday, 18 May 2026 | Edition 1*",
+    "excerpt": "*Monday, 18 May 2026 | Edition 1* --- [WATCH] Markets open the week in a data vacuum — no major commodity catalysts have crossed the wire overnight, which makes price action today a clean read on posi",
+    "date": "2026-05-18",
+    "edition": "1",
+    "tags": [
+      "energy"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "NCDEX Agri"
+    ],
+    "commodity": ""
+  }
+]
