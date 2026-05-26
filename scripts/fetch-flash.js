@@ -154,11 +154,14 @@ async function fetchFeed(feed) {
       const descM  = block.match(/<description><!\[CDATA\[([\s\S]+?)\]\]><\/description>/) || block.match(/<description>([^<]{10,})<\/description>/)
 
       if (!titleM || !linkM) continue
+      const pubDateM = block.match(/<pubDate>([^<]+)<\/pubDate>/)
+      const pubDate  = pubDateM ? new Date(pubDateM[1].trim()) : null
       items.push({
         title:       stripSourceSuffix(titleM[1].trim()),
         url:         linkM[1].trim(),
         description: descM ? descM[1].replace(/<[^>]+>/g, '').trim().slice(0, 400) : '',
         source:      feed.source,
+        pubDate:     pubDate && !isNaN(pubDate) ? pubDate.toISOString() : null,
       })
     }
 
@@ -263,7 +266,7 @@ async function main() {
       saveFlash({
         slug,
         title:    article.title,
-        date:     new Date().toISOString(),
+        date:     article.pubDate ?? new Date().toISOString(),
         source:   article.source,
         category,
         content,
