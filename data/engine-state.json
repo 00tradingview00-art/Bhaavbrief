@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 159025,
-    "silver": 276400,
-    "crude": 8630,
-    "copper": 1347.7,
-    "natgas": 277.4,
+    "gold": 157972,
+    "silver": 270698,
+    "crude": 8894,
+    "copper": 1338.55,
+    "natgas": 280.9,
     "usdinr": 95.24
   },
-  "lastChecked": "2026-05-25T21:58:03.225Z",
+  "lastChecked": "2026-05-26T12:49:50.238Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "312"
   },
   "articlesToday": [
-    "2026-05-25/2026-05-25-mcx-nat-gas-surges-280-crude-rout-decoupling"
+    "2026-05-26/2026-05-26-hawk-scan-crude-20260526"
   ],
-  "lastArticleAt": "2026-05-25T14:19:08.600Z"
+  "lastArticleAt": "2026-05-26T12:50:02.248Z"
 }
