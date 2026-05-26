@@ -51,7 +51,21 @@ function isImportant(text) {
 
 function isMCXStockArticle(text) {
   const t = text.toLowerCase()
-  return /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week)|mcx\s+(split|bonus|dividend)/.test(t)
+  return (
+    // MCX the company's stock
+    /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week)|mcx\s+(split|bonus|dividend)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop)|block\s+trade.*nse|nse.*block\s+trade/.test(t) ||
+    // Evergreen clickbait that gets recycled with old dates
+    /price.prediction.today|will\s+(gold|silver|crude).*(rise|fall|rally|crash).*(today|tomorrow)/.test(t) ||
+    // Old-date rate roundups (e.g. "rates today august 21", "rates today october 13")
+    /rates?\s+today\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d{1,2}/.test(t) ||
+    // Holiday / trading hours articles
+    /(market|exchange|mcx|nse|bse).*(closed|holiday|shut|off).*(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec|holi|diwali|navami|republic|independence|christmas|gandhi)/.test(t) ||
+    /trading\s+hours?.*(revision|update|change)|revision.*(trading\s+hours?|market\s+hours?)/.test(t) ||
+    // Broker promotions
+    /(groww|zerodha|angel|upstox|5paisa).*(launch|offer|now\s+trade|commodity\s+trading)/.test(t) ||
+    // Best-of / top-N listicles
+    /best\s+trading\s+apps?|top\s+\d+\s+(stocks?|commodity)|multibaggers?|\d+\s+smallcap/.test(t)
+  )
 }
 
 function detectCategory(text) {
