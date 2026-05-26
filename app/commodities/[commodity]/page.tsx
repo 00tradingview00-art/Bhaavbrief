@@ -6,9 +6,7 @@ import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
 import fs                   from 'fs'
 import path                 from 'path'
-import dynamic              from 'next/dynamic'
-
-const CommodityChart = dynamic(() => import('@/components/CommodityChart'), { ssr: false })
+import CommodityChartWrapper from '@/components/CommodityChartWrapper'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -299,7 +297,7 @@ export default async function CommodityPage({ params }: Props) {
       </div>
 
       {/* Historical chart */}
-      <CommodityChart commodity={commodity} color={color} unit={info.unit} />
+      <CommodityChartWrapper commodity={commodity} color={color} unit={info.unit} />
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32, alignItems: 'start' }}>
         {/* Left column */}
