@@ -724,7 +724,7 @@ async function main() {
     rssByCategory.set(category, bucket)
   }
 
-  const rssSlots = Math.max(0, MAX_PER_RUN - Math.min(priceSignals.length, 3))
+  const rssSlots = Math.max(0, MAX_PER_RUN - Math.min(priceSignals.length, 2))
   const rssSignals = [...rssByCategory.entries()]
     .sort(([a], [b]) => {
       const pa = gaps.includes(a) ? 0 : !recentCats.has(a) ? 1 : 2
@@ -748,13 +748,19 @@ async function main() {
     return { id: toId(title, ist), title, summary, category, tagType, impact, pubDate: now.toISOString(), pubDateIST: istStr }
   }
 
-  // Price-action items first (up to 3, max 1 per commodity)
-  for (const signal of priceSignals.slice(0, 3)) {
+  // Price-action items first (up to 2, max 1 per commodity)
+  const currentRunTitles = []
+  for (const signal of priceSignals.slice(0, 2)) {
     if (processed >= MAX_PER_RUN) break
     try {
       console.log(`  [price-action] ${signal.label} ${signal.pct >= 0 ? '+' : ''}${signal.pct.toFixed(2)}%`)
       const { title, summary, impact } = await generatePriceActionBrief(signal, prices)
+      if (currentRunTitles.some(rt => similarity(title, rt) > 0.45)) {
+        console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
+        continue
+      }
       existing.unshift(makeEntry(title, summary, signal.category, signal.tagType, impact))
+      currentRunTitles.push(title)
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
       processed++
     } catch (e) {
@@ -768,8 +774,14 @@ async function main() {
     try {
       console.log(`  [rss] ${signal.title.slice(0, 65)}`)
       const { title, summary, impact } = await generateNewsItem(signal, prices)
+      if (currentRunTitles.some(rt => similarity(title, rt) > 0.45)) {
+        console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
+        newSeen.push(signal.url)
+        continue
+      }
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
       existing.unshift(makeEntry(title, summary, category, tagType, impact))
+      currentRunTitles.push(title)
       newSeen.push(signal.url)
       processed++
     } catch (e) {
@@ -788,7 +800,7 @@ async function main() {
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(trimmed, null, 2), 'utf8')
   saveSeen(newSeen)
 
-  console.log(`Done — ${processed} new items (${Math.min(priceSignals.length, 3)} price-action + ${rssSignals.length} RSS). Stored: ${trimmed.length}`)
+  console.log(`Done — ${processed} new items (${Math.min(priceSignals.length, 2)} price-action + ${rssSignals.length} RSS). Stored: ${trimmed.length}`)
 }
 
 main().catch(err => {
