@@ -48,16 +48,18 @@ export default async function NewsPage() {
       href:     `/flash/${f.slug}`,
       itemType: 'flash' as const,
     })),
-    ...articles.map(a => ({
-      id:       a.slug,
-      title:    a.title,
-      summary:  a.description,
-      category: commodityCategory(a.commodity),
-      tagType:  commodityTagType(a.commodity),
-      pubDate:  a.date || new Date().toISOString(),
-      href:     `/articles/${a.slug}`,
-      itemType: (a.edition === 'hawk-scan' ? 'hawk-scan' : 'alert') as 'hawk-scan' | 'alert',
-    })),
+    ...articles
+      .filter(a => a.title !== 'Market Update' && a.date)
+      .map(a => ({
+        id:       a.slug,
+        title:    a.title,
+        summary:  a.description,
+        category: commodityCategory(a.commodity),
+        tagType:  commodityTagType(a.commodity),
+        pubDate:  a.date,
+        href:     `/articles/${a.slug}`,
+        itemType: (a.edition === 'hawk-scan' ? 'hawk-scan' : 'alert') as 'hawk-scan' | 'alert',
+      })),
   ]
 
   return (

@@ -327,17 +327,19 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 </h2>
 
                 {/* Body — truncate only when there's a destination; show full otherwise */}
-                {item.summary && (
+                {(item.summary || item.href) && (
                   <div style={{ marginBottom: 14 }}>
-                    <p style={{
-                      fontSize: 14,
-                      color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
-                      lineHeight: 1.75,
-                      margin: '0 0 8px',
-                      fontWeight: 300,
-                    }}>
-                      {item.href ? truncate(item.summary) : item.summary}
-                    </p>
+                    {item.summary && (
+                      <p style={{
+                        fontSize: 14,
+                        color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
+                        lineHeight: 1.75,
+                        margin: '0 0 8px',
+                        fontWeight: 300,
+                      }}>
+                        {item.href ? truncate(item.summary) : item.summary}
+                      </p>
+                    )}
                     {item.href && (
                       <Link href={item.href} style={{
                         fontFamily: 'var(--font-mono)',
