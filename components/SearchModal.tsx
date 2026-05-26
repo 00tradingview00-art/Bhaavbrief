@@ -25,10 +25,11 @@ function relDate(iso: string): string {
 }
 
 function TypePill({ type }: { type: ScoredEntry['type'] }) {
-  const s: Record<string, { bg: string; color: string; label: string }> = {
-    brief:      { bg: '#F3F0E8', color: '#7A7668', label: 'Brief'     },
-    article:    { bg: '#F0F4FF', color: '#2B4FC7', label: 'Flash'     },
-    'hawk-scan': { bg: '#1A0A0A', color: '#FF4444', label: '⚡ Hawk'  },
+  const s: Record<string, { bg: string; color: string; label: string; border?: string }> = {
+    brief:       { bg: '#F3F0E8', color: '#7A7668', label: 'Brief'    },
+    article:     { bg: '#F0F4FF', color: '#2B4FC7', label: 'Flash'    },
+    'hawk-scan': { bg: '#1A0A0A', color: '#FF4444', label: '⚡ Hawk', border: '#FF4444' },
+    news:        { bg: '#EFFAF4', color: '#166534', label: 'News'     },
   }
   const st = s[type] ?? s.article
   return (
@@ -36,7 +37,7 @@ function TypePill({ type }: { type: ScoredEntry['type'] }) {
       fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.1em',
       textTransform: 'uppercase', padding: '2px 6px',
       background: st.bg, color: st.color,
-      border: `0.5px solid ${type === 'hawk-scan' ? '#FF4444' : 'transparent'}`,
+      border: `0.5px solid ${st.border ?? 'transparent'}`,
       fontWeight: 600, flexShrink: 0,
     }}>
       {st.label}
