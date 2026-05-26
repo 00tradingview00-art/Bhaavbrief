@@ -35,10 +35,11 @@ const ARTICLES_DIR = path.join(ROOT, 'content/articles')
 const TITLE_FILE   = path.join(ROOT, 'data/last-article-title.txt')
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const MOVE_THRESHOLD      = 1.0   // % — triggers article with supporting signal
-const MOVE_THRESHOLD_HARD = 2.0   // % — triggers article regardless
-const MAX_ARTICLES_PER_DAY = 8
-const MIN_MINUTES_BETWEEN  = 30
+const MOVE_THRESHOLD        = 1.0   // % — triggers article with supporting signal
+const MOVE_THRESHOLD_HARD   = 2.0   // % — triggers article regardless
+const HAWK_SCAN_THRESHOLD   = 3.0   // % — triggers Hawk-Scan (highest urgency)
+const MAX_ARTICLES_PER_DAY  = 8
+const MIN_MINUTES_BETWEEN   = 30
 
 // ── Kite MCX Enrichment (live prices, overrides Stooq-derived estimates) ──────
 function loadInstruments() {
@@ -404,7 +405,107 @@ async function checkEIA(lastEia) {
   }
 }
 
-// ── 6. Article Generator ──────────────────────────────────────────────────────
+// ── 6a. Hawk-Scan Generator ───────────────────────────────────────────────────
+// Sacred format: structured flash intelligence for extreme market events.
+// Fires on: price move >3%, EIA significant draw/build, or multi-hotspot geo escalation.
+// Output is deliberately terse — a trader with 10 seconds can act on it.
+async function generateHawkScan({ moves, eia, prices, technicalLevels }) {
+  const today = new Date()
+  const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
+
+  const primaryMove = moves[0]
+  const dataLabel = prices.priceSource === 'kite-live' ? 'LIVE MCX' : 'COMEX-DERIVED'
+
+  // Build a compact price snapshot (only what the primary move touches)
+  const priceLines = []
+  if (primaryMove?.key === 'crude' || primaryMove?.key === 'natgas') {
+    priceLines.push(`MCX Crude:  ₹${prices.mcxCrude?.toFixed(0)}/bbl  (WTI $${prices.wti?.toFixed(2)}, Brent $${prices.brent?.toFixed(2)}, session ${prices.crudePct?.toFixed(2)}%)`)
+    priceLines.push(`MCX NatGas: ₹${prices.mcxNatGas?.toFixed(2)}/mmBtu (HH $${prices.henryHub?.toFixed(2)}, session ${prices.gasPct?.toFixed(2)}%)`)
+  }
+  if (primaryMove?.key === 'gold' || primaryMove?.key === 'silver') {
+    priceLines.push(`MCX Gold:   ₹${prices.mcxGold?.toFixed(0)}/10g  (COMEX $${prices.comexGold?.toFixed(0)}/oz, session ${prices.goldPct?.toFixed(2)}%)`)
+    priceLines.push(`MCX Silver: ₹${prices.mcxSilver?.toFixed(0)}/kg  (COMEX $${prices.comexSilver?.toFixed(2)}/oz, session ${prices.silverPct?.toFixed(2)}%)`)
+  }
+  if (primaryMove?.key === 'copper') {
+    priceLines.push(`MCX Copper: ₹${prices.mcxCopper?.toFixed(2)}/kg  (COMEX $${prices.comexCopper?.toFixed(2)}/lb, session ${prices.copperPct?.toFixed(2)}%)`)
+  }
+  priceLines.push(`USD/INR: ₹${prices.usdinr?.toFixed(2)}`)
+
+  const eiaBlock = eia ? `\nEIA DATA: ${eia.summary}\nSIGNIFICANT: ${eia.isSignificant ? 'YES (>1M bbls)' : 'no'} | Direction: ${eia.direction.toUpperCase()}` : ''
+  const techBlock = technicalLevels ? `\n${technicalLevels}` : ''
+  const moveBlock = moves.slice(0, 3).map(m => `${m.label}: ${m.directionShort}${m.absPct.toFixed(2)}% → ₹${m.price.toFixed(m.key === 'copper' ? 2 : 0)}${m.per}`).join('\n')
+
+  // Determine hawk trigger type for context
+  const hawkTrigger = moves[0]?.absPct >= HAWK_SCAN_THRESHOLD
+    ? `PRICE MOVE: ${moves[0].label} has moved ${moves[0].absPct.toFixed(2)}% — above the 3% Hawk-Scan threshold`
+    : eia?.isSignificant
+    ? `EIA SIGNIFICANT: US crude ${eia.direction} of ${Math.abs(eia.changeBarrels / 1_000_000).toFixed(1)}M barrels — market-moving inventory data`
+    : `EXTREME EVENT — multiple signals converging`
+
+  const commodity = primaryMove?.label ?? 'commodities'
+  const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
+
+  const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format, read by professional MCX traders who need to act in seconds.
+
+A HAWK-SCAN fires only on extreme market events. This is one of those moments.
+
+TIME: ${timeStr} IST, ${dateStr}
+HAWK TRIGGER: ${hawkTrigger}
+
+PRICE MOVES:
+${moveBlock}
+
+CURRENT PRICES [${dataLabel}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
+${priceLines.join('\n')}
+${eiaBlock}${techBlock}
+
+OUTPUT FORMAT — SACRED. DO NOT DEVIATE. Return exactly this structure, no extra prose:
+
+---
+title: "[HAWK-SCAN] [Commodity]: [Specific action + key level] — under 70 chars"
+description: "Under 155 chars. Include current ₹ price and the extreme trigger. For traders."
+date: "${today.toISOString().split('T')[0]}"
+time: "${timeStr}"
+edition: "hawk-scan"
+commodity: "${primaryMove?.label ?? 'macro'}"
+tags: ["${tags}"]
+priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
+slug: "hawk-scan-[commodity-keyword]-[date-YYYYMMDD]"
+hawkTrigger: "${moves[0]?.absPct >= HAWK_SCAN_THRESHOLD ? 'price' : eia?.isSignificant ? 'eia' : 'extreme'}"
+---
+
+TRIGGER — [One sentence. What exactly fired this scan. No softening.]
+
+PRICE — ₹[exact level] · [exact %] · [direction in one word: SURGING/PLUNGING/SPIKING]
+
+SIGNAL — [One sentence. The SPECIFIC MECHANISM behind this move — geopolitical, macro catalyst, technical break, supply shock. Name the cause explicitly.]
+
+CROSS-ASSET — [One sentence. What is the REST of the complex doing right now. Show the chain.]
+
+IMPORT COST — [Compute: COMEX $X × ₹[usdinr rate] × [duty multiplier for this commodity] = ₹[MCX parity]. Show the arithmetic, one line.]
+
+TECHNICAL — [Key support above/below current price. Use exact numbers from OHLC data above. If no OHLC available, use round numbers — label them as such.]
+
+WATCH — [One specific price level OR one scheduled data release that will either confirm or invalidate this move.]
+
+RULES:
+- Each section header is exactly as shown above (TRIGGER, PRICE, SIGNAL, etc.)
+- Each section is ONE sentence or one line of arithmetic — no more
+- No hedging. No "may". No "could". No "experts say".
+- If this is an EIA significant event, IMPORT COST must show the WTI→MCX crude parity math.
+- Total body: 80–130 words. Lean is the mandate.`
+
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 800,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  return response.content[0].type === 'text' ? response.content[0].text : null
+}
+
+// ── 6b. Article Generator ─────────────────────────────────────────────────────
 async function generateArticle({ moves, circulars, eia, prices, technicalLevels }) {
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
@@ -627,11 +728,15 @@ async function main() {
   console.log(`EIA data: ${eiaData ? eiaData.summary : 'none'}`)
 
   // ── Trigger Logic ──────────────────────────────────────────────────────────
+  const hawkMove  = moves.some(m => m.absPct >= HAWK_SCAN_THRESHOLD)
   const hardMove  = moves.some(m => m.isHard)
   const softMove  = moves.some(m => !m.isHard)
   const hasSignal = newCirculars.length > 0 || eiaData?.isSignificant
 
-  const shouldPublish = hardMove || (softMove && hasSignal)
+  // Hawk-Scan: price >3% OR significant EIA event
+  const isHawkEvent = hawkMove || eiaData?.isSignificant
+
+  const shouldPublish = isHawkEvent || hardMove || (softMove && hasSignal)
 
   if (!shouldPublish) {
     if (moves.length === 0) console.log('No significant price moves')
@@ -640,9 +745,12 @@ async function main() {
     return
   }
 
-  console.log('\nTRIGGER FIRED — generating article...')
-  if (hardMove)              console.log('  Reason: Hard move >2%')
-  if (softMove && hasSignal) console.log('  Reason: Soft move + circular/EIA signal')
+  if (isHawkEvent)           console.log('\nHAWK-SCAN TRIGGERED')
+  else                       console.log('\nTRIGGER FIRED — generating article...')
+  if (hawkMove)              console.log('  Reason: Extreme price move >3%')
+  if (eiaData?.isSignificant) console.log('  Reason: Significant EIA inventory event')
+  if (hardMove && !isHawkEvent) console.log('  Reason: Hard move >2%')
+  if (softMove && hasSignal && !isHawkEvent) console.log('  Reason: Soft move + circular/EIA signal')
 
   // Fetch Kite historical OHLC for the top 2 triggered commodities to get real technical levels
   const instruments = loadInstruments()
@@ -669,7 +777,9 @@ async function main() {
     }
   }
 
-  const mdx = await generateArticle({ moves, circulars: newCirculars, eia: eiaData, prices, technicalLevels })
+  const mdx = isHawkEvent
+    ? await generateHawkScan({ moves, eia: eiaData, prices, technicalLevels })
+    : await generateArticle({ moves, circulars: newCirculars, eia: eiaData, prices, technicalLevels })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')

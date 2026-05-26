@@ -56,7 +56,7 @@ export default async function NewsPage() {
       tagType:  commodityTagType(a.commodity),
       pubDate:  a.date || new Date().toISOString(),
       href:     `/articles/${a.slug}`,
-      itemType: 'alert' as const,
+      itemType: (a.edition === 'hawk-scan' ? 'hawk-scan' : 'alert') as 'hawk-scan' | 'alert',
     })),
   ]
 

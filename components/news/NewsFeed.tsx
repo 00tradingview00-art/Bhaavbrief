@@ -39,7 +39,7 @@ export interface NewsItem {
   pubDate:     string
   pubDateIST?: string
   href?:       string
-  itemType?:   'news' | 'flash' | 'alert'
+  itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan'
 }
 
 function relativeTime(iso: string): string {
@@ -88,6 +88,11 @@ function ImpactBadge({ impact }: { impact?: string }) {
 }
 
 function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
+  if (itemType === 'hawk-scan') return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#1A0A0A', color: '#FF4444', border: '0.5px solid #FF4444', fontWeight: 600 }}>
+      ⚡ HAWK-SCAN
+    </span>
+  )
   if (itemType === 'flash') return (
     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#FFF7E0', color: '#996600', border: '0.5px solid #D4A830' }}>
       Flash
@@ -153,12 +158,18 @@ export default function NewsFeed({ serverItems = [] }: Props) {
     return () => clearInterval(id)
   }, [fetchNews])
 
-  // Merge server items (flash + articles) with live API items, dedup by id, sort newest first
+  // Merge server items (flash + articles) with live API items, dedup by id
+  // Hawk-scan items always float to the top, then sort newest first within each tier
   const allItems = useMemo(() => {
     const seen = new Set<string>()
     return [...serverItems, ...news]
       .filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
-      .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
+      .sort((a, b) => {
+        const aHawk = a.itemType === 'hawk-scan' ? 1 : 0
+        const bHawk = b.itemType === 'hawk-scan' ? 1 : 0
+        if (bHawk !== aHawk) return bHawk - aHawk
+        return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+      })
   }, [serverItems, news])
 
   const filtered   = allItems.filter(item => matchesFilter(item, activeFilter))
@@ -256,20 +267,6 @@ export default function NewsFeed({ serverItems = [] }: Props) {
           const showDivider = dateKey !== lastDateKey
           lastDateKey = dateKey
           const crossAssets = getCrossAssets(item)
-          const titleEl = (
-            <h2 style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 18,
-              fontWeight: 700,
-              lineHeight: 1.35,
-              color: '#18180F',
-              margin: '0 0 10px',
-              letterSpacing: '-0.01em',
-            }}>
-              {item.title}
-              {item.href && <span style={{ fontSize: 13, color: '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>}
-            </h2>
-          )
           return (
             <div key={item.id}>
               {showDivider && (
@@ -294,14 +291,20 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   </span>
                 </div>
               )}
-              <div style={{ padding: '22px 0', borderBottom: '0.5px solid #DDDDD0' }}>
+              <div style={item.itemType === 'hawk-scan' ? {
+                padding: '20px 20px 20px 16px',
+                borderBottom: '0.5px solid #DDDDD0',
+                background: '#0E0806',
+                borderLeft: '3px solid #FF4444',
+                marginLeft: -1,
+              } : { padding: '22px 0', borderBottom: '0.5px solid #DDDDD0' }}>
 
                 {/* Meta row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
                   <Tag type={item.tagType}>{item.category}</Tag>
                   <TypeBadge itemType={item.itemType} />
-                  <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
-                  <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ width: 1, height: 12, background: item.itemType === 'hawk-scan' ? 'rgba(255,68,68,0.3)' : '#DDDDD0', display: 'inline-block' }} />
+                  <span style={{ fontSize: 11, color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.45)' : '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
                     {item.pubDateIST
                       ? item.pubDateIST.split(', ')[1]
                       : relativeTime(item.pubDate)}
@@ -309,18 +312,42 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   {item.impact && <ImpactBadge impact={item.impact} />}
                 </div>
 
-                {/* Headline — linked for flash/alert items */}
+                {/* Headline — linked for flash/alert/hawk-scan items */}
                 {item.href ? (
                   <Link href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
-                    {titleEl}
+                    <h2 style={{
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: item.itemType === 'hawk-scan' ? 20 : 18,
+                      fontWeight: 700,
+                      lineHeight: 1.35,
+                      color: item.itemType === 'hawk-scan' ? '#FFFFFF' : '#18180F',
+                      margin: '0 0 10px',
+                      letterSpacing: '-0.01em',
+                    }}>
+                      {item.title}
+                      <span style={{ fontSize: 13, color: item.itemType === 'hawk-scan' ? '#FF4444' : '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>
+                    </h2>
                   </Link>
-                ) : titleEl}
+                ) : (
+                  <h2 style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 18,
+                    fontWeight: 700,
+                    lineHeight: 1.35,
+                    color: '#18180F',
+                    margin: '0 0 10px',
+                    letterSpacing: '-0.01em',
+                  }}>
+                    {item.title}
+                    {item.href && <span style={{ fontSize: 13, color: '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>}
+                  </h2>
+                )}
 
                 {/* Body */}
                 {item.summary && (
                   <p style={{
                     fontSize: 14,
-                    color: '#48483A',
+                    color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
                     lineHeight: 1.8,
                     margin: '0 0 14px',
                     fontWeight: 300,
@@ -332,7 +359,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Cross-asset tags */}
                 {crossAssets.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.35)' : '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
                       Touches
                     </span>
                     {crossAssets.map(a => (
@@ -341,9 +368,9 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                         fontSize: 9,
                         letterSpacing: '0.06em',
                         padding: '2px 7px',
-                        background: '#F3F2EC',
-                        color: '#48483A',
-                        border: '0.5px solid #DDDDD0',
+                        background: item.itemType === 'hawk-scan' ? 'rgba(255,68,68,0.1)' : '#F3F2EC',
+                        color: item.itemType === 'hawk-scan' ? '#FF8888' : '#48483A',
+                        border: item.itemType === 'hawk-scan' ? '0.5px solid rgba(255,68,68,0.3)' : '0.5px solid #DDDDD0',
                       }}>
                         {a.toUpperCase()}
                       </span>
