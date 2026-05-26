@@ -18,6 +18,25 @@
     "commodity": ""
   },
   {
+    "type": "brief",
+    "slug": "edition-020",
+    "href": "/briefs/edition-020",
+    "title": "Oil Soars Past $93 While Gold Bleeds: A Narrative Fracture",
+    "description": "Crude surges on Middle East supply fears as gold and silver fall ahead of the FOMC verdict — the stagflation trade is splitting at its seams.",
+    "excerpt": "What began as a crack in Edition 19 is now a clean break. The stagflation trade — built across four editions on the twin pillars of surging crude and elevated gold — has lost its internal coherence. T",
+    "date": "2026-05-26",
+    "edition": "20",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Fed",
+      "Geopolitics",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-05-25-mcx-close-26-ay2026-silver-leads-comex-confirms",
     "href": "/articles/2026-05-25-mcx-close-26-ay2026-silver-leads-comex-confirms",
@@ -31,6 +50,28 @@
       "Evening Brief",
       "Day Recap",
       "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-26-mcx-open-26-ay2026-crude-surges",
+    "href": "/articles/2026-05-26-mcx-open-26-ay2026-crude-surges",
+    "title": "MCX Open 26 May 2026: Crude Surges, Metals Slide",
+    "description": "MCX Daily Brief 26 May 2026: WTI crude +3.21%, MCX crude opens ₹9019; gold -0.83%, silver -2.27% as dollar pressure weighs on metals complex.",
+    "excerpt": "title: \"MCX Open 26 May 2026: Crude Surges, Metals Slide\" description: \"MCX Daily Brief 26 May 2026: WTI crude +3.21%, MCX crude opens ₹9019; gold -0.83%, silver -2.27% as dollar pressure weighs on me",
+    "date": "2026-05-26",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
     ],
     "commodity": "multi",
     "commodities": [
