@@ -62,6 +62,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'query too long' }, { status: 400 })
   }
 
+  // Log every search so we can see what people are looking for in Vercel logs
+  console.log(JSON.stringify({ event: 'search', query: q, ts: new Date().toISOString() }))
+
   // Score content against query
   const topEntries = scoreEntries(q, 5)
   const contentCtx = buildContentContext(topEntries)

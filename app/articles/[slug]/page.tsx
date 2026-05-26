@@ -3,6 +3,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import CopyLinkButton from '@/components/CopyLinkButton'
 
 // Allow slugs not pre-rendered at build time (new articles published by GitHub Actions)
 export const dynamicParams = true
@@ -177,9 +178,23 @@ export default async function ArticlePage({ params }: Props) {
           <MDXRemote source={content} />
         </div>
 
+        {/* Share */}
+        <div style={{
+          marginTop: 36, padding: '14px 20px',
+          background: 'var(--surface-3)',
+          border: '0.5px solid var(--border)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: 12,
+        }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
+            Found this useful? Share with your trading circle.
+          </span>
+          <CopyLinkButton url={`https://bhaavbrief.in/articles/${slug}`} title={meta.title} />
+        </div>
+
         {/* Disclaimer */}
         <div style={{
-          marginTop: 40, padding: '16px 20px',
+          marginTop: 16, padding: '16px 20px',
           background: 'var(--surface-3)', borderRadius: 8,
           fontSize: 12, color: 'var(--ink-4)', lineHeight: 1.6,
         }}>
