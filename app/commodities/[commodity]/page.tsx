@@ -256,7 +256,7 @@ export default async function CommodityPage({ params }: Props) {
               MCX {info.name} Price Today
             </h1>
             <p style={{ fontSize: 13, color: 'var(--ink-4)', margin: 0 }}>
-              Live price updated in real time from MCX via Kite Connect
+              Live MCX price · Updated in real time
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -451,10 +451,7 @@ export default async function CommodityPage({ params }: Props) {
               </div>
             ))}
             <p style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.5 }}>
-              Margins are illustrative. Check{' '}
-              <a href="https://zerodha.com/margin-calculator/SPAN" target="_blank" rel="noopener noreferrer" style={{ color }}>
-                Zerodha SPAN calculator
-              </a>{' '}for live requirements.
+              Margins are illustrative. Check your broker's SPAN calculator for live requirements.
             </p>
           </div>
 

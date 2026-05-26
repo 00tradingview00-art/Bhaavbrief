@@ -44,11 +44,7 @@ const ARTICLES: Article[] = [
         />
         <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
           * Illustrative, based on mid-2026 price levels. Actual contract values and margins change daily.
-          Use the{' '}
-          <a href="https://zerodha.com/margin-calculator/SPAN" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold)' }}>
-            Zerodha SPAN calculator
-          </a>{' '}
-          for live margin requirements.
+          Use your broker's SPAN calculator for live margin requirements.
         </p>
       </>
     ),

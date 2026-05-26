@@ -101,16 +101,7 @@ export default function EIACard() {
               color:       'var(--ink-4)',
               lineHeight:  1.6,
             }}>
-              EIA_API_KEY not configured.
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize:   9,
-              color:      'var(--ink-4)',
-              marginTop:  4,
-            }}>
-              Free key at api.eia.gov/opendata
-            </div>
+              Inventory data unavailable
           </div>
         )}
 
