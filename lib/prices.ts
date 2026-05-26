@@ -195,8 +195,11 @@ async function fetchComexPrices(): Promise<Record<string, any>> {
 
   const combined = { ...avMap, ...tdMap }  // TD wins on overlap
 
-  // Always fill gaps with Stooq — AV rate-limits (25 calls/day) may leave Silver/Copper/NatGas empty
-  const missing = (['SI=F', 'CL=F', 'HG=F', 'NG=F', 'BZ=F'] as const).filter(k => !combined[k] || !combined[k].regularMarketPrice)
+  // AV free tier returns daily EOD for crude/gas — always override with Stooq (intraday).
+  // Silver stays from AV (FX_DAILY is more accurate than Stooq's CME cents conversion).
+  const STOOQ_ALWAYS = new Set(['CL=F', 'BZ=F', 'NG=F', 'HG=F'])
+  const missing = (['SI=F', 'CL=F', 'HG=F', 'NG=F', 'BZ=F'] as const)
+    .filter(k => STOOQ_ALWAYS.has(k) || !combined[k] || !combined[k].regularMarketPrice)
   if (missing.length > 0 || Object.keys(combined).length === 0) {
     const stooq = await fetchStooq()
     for (const k of missing) { if (stooq[k]) combined[k] = stooq[k] }
