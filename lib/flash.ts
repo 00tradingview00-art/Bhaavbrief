@@ -11,6 +11,7 @@ export interface FlashMeta {
   source:    string
   category:  'energy' | 'metals' | 'forex' | 'macro'
   published: boolean
+  excerpt:   string
 }
 
 export interface Flash extends FlashMeta {
@@ -27,7 +28,9 @@ export function getAllFlash(): FlashMeta[] {
     .map(filename => {
       const slug = filename.replace(/\.(mdx|md)$/, '')
       const raw  = fs.readFileSync(path.join(FLASH_DIR, filename), 'utf8')
-      const { data } = matter(raw)
+      const { data, content } = matter(raw)
+      const plain = content.replace(/^#+\s.*$/gm, '').replace(/\*+/g, '').replace(/\n+/g, ' ').trim()
+      const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
       return {
         slug,
         title:     data.title     || 'Untitled',
@@ -35,6 +38,7 @@ export function getAllFlash(): FlashMeta[] {
         source:    data.source    || '',
         category:  (data.category as FlashMeta['category']) || 'macro',
         published: data.published !== false,
+        excerpt,
       }
     })
     .filter(f => f.published && f.date)

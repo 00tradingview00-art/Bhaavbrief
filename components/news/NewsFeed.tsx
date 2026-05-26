@@ -74,7 +74,16 @@ function getCrossAssets(item: NewsItem): string[] {
   return ASSET_DETECTORS.filter(a => a.re.test(text)).map(a => a.label).slice(0, 4)
 }
 
-function truncate(text: string, maxLen = 200): string {
+function decodeHtml(text: string): string {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g,  '<')
+    .replace(/&gt;/g,  '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+}
+
+function truncate(text: string, maxLen = 220): string {
   if (text.length <= maxLen) return text
   const cut = text.lastIndexOf(' ', maxLen)
   return text.slice(0, cut > 0 ? cut : maxLen) + '…'
@@ -314,10 +323,10 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   margin: '0 0 10px',
                   letterSpacing: '-0.01em',
                 }}>
-                  {item.title}
+                  {decodeHtml(item.title)}
                 </h2>
 
-                {/* Body — 2 opening lines + read full */}
+                {/* Body — truncate only when there's a destination; show full otherwise */}
                 {item.summary && (
                   <div style={{ marginBottom: 14 }}>
                     <p style={{
@@ -327,7 +336,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                       margin: '0 0 8px',
                       fontWeight: 300,
                     }}>
-                      {truncate(item.summary)}
+                      {item.href ? truncate(item.summary) : item.summary}
                     </p>
                     {item.href && (
                       <Link href={item.href} style={{

@@ -41,7 +41,7 @@ export default async function NewsPage() {
     ...flashItems.map(f => ({
       id:       f.slug,
       title:    f.title,
-      summary:  '',
+      summary:  f.excerpt,
       category: f.category,
       tagType:  f.category === 'forex' ? 'macro' : f.category,
       pubDate:  f.date,
