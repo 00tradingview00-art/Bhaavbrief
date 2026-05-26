@@ -35,7 +35,6 @@ export interface NewsItem {
   summary:     string
   category:    string
   tagType:     string
-  impact?:     string
   pubDate:     string
   pubDateIST?: string
   href?:       string
@@ -75,16 +74,10 @@ function getCrossAssets(item: NewsItem): string[] {
   return ASSET_DETECTORS.filter(a => a.re.test(text)).map(a => a.label).slice(0, 4)
 }
 
-function ImpactBadge({ impact }: { impact?: string }) {
-  if (!impact || impact === 'neutral') return (
-    <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', letterSpacing: '0.02em' }}>◆ Neutral</span>
-  )
-  if (impact === 'bullish') return (
-    <span style={{ fontSize: 11, color: '#1E6630', fontFamily: 'var(--font-mono)', fontWeight: 600, letterSpacing: '0.02em' }}>▲ Bullish</span>
-  )
-  return (
-    <span style={{ fontSize: 11, color: '#991818', fontFamily: 'var(--font-mono)', fontWeight: 600, letterSpacing: '0.02em' }}>▼ Bearish</span>
-  )
+function truncate(text: string, maxLen = 200): string {
+  if (text.length <= maxLen) return text
+  const cut = text.lastIndexOf(' ', maxLen)
+  return text.slice(0, cut > 0 ? cut : maxLen) + '…'
 }
 
 function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
@@ -309,51 +302,45 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                       ? item.pubDateIST.split(', ')[1]
                       : relativeTime(item.pubDate)}
                   </span>
-                  {item.impact && <ImpactBadge impact={item.impact} />}
                 </div>
 
-                {/* Headline — linked for flash/alert/hawk-scan items */}
-                {item.href ? (
-                  <Link href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
-                    <h2 style={{
-                      fontFamily: 'var(--font-serif)',
-                      fontSize: item.itemType === 'hawk-scan' ? 20 : 18,
-                      fontWeight: 700,
-                      lineHeight: 1.35,
-                      color: item.itemType === 'hawk-scan' ? '#FFFFFF' : '#18180F',
-                      margin: '0 0 10px',
-                      letterSpacing: '-0.01em',
-                    }}>
-                      {item.title}
-                      <span style={{ fontSize: 13, color: item.itemType === 'hawk-scan' ? '#FF4444' : '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>
-                    </h2>
-                  </Link>
-                ) : (
-                  <h2 style={{
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: 18,
-                    fontWeight: 700,
-                    lineHeight: 1.35,
-                    color: '#18180F',
-                    margin: '0 0 10px',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {item.title}
-                    {item.href && <span style={{ fontSize: 13, color: '#C8720A', marginLeft: 6, fontFamily: 'var(--font-mono)' }}>→</span>}
-                  </h2>
-                )}
+                {/* Headline */}
+                <h2 style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: item.itemType === 'hawk-scan' ? 20 : 18,
+                  fontWeight: 700,
+                  lineHeight: 1.35,
+                  color: item.itemType === 'hawk-scan' ? '#FFFFFF' : '#18180F',
+                  margin: '0 0 10px',
+                  letterSpacing: '-0.01em',
+                }}>
+                  {item.title}
+                </h2>
 
-                {/* Body */}
+                {/* Body — 2 opening lines + read full */}
                 {item.summary && (
-                  <p style={{
-                    fontSize: 14,
-                    color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
-                    lineHeight: 1.8,
-                    margin: '0 0 14px',
-                    fontWeight: 300,
-                  }}>
-                    {item.summary}
-                  </p>
+                  <div style={{ marginBottom: 14 }}>
+                    <p style={{
+                      fontSize: 14,
+                      color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
+                      lineHeight: 1.75,
+                      margin: '0 0 8px',
+                      fontWeight: 300,
+                    }}>
+                      {truncate(item.summary)}
+                    </p>
+                    {item.href && (
+                      <Link href={item.href} style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 11,
+                        color: item.itemType === 'hawk-scan' ? '#FF6666' : '#C8720A',
+                        textDecoration: 'none',
+                        letterSpacing: '0.03em',
+                      }}>
+                        Read full →
+                      </Link>
+                    )}
+                  </div>
                 )}
 
                 {/* Cross-asset tags */}
