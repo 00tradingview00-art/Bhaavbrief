@@ -94,14 +94,13 @@ export default function EIACard() {
 
         {/* No API key configured */}
         {!loading && data && !isEIAData(data) && data.error === 'no_key' && (
-          <div>
-            <div style={{
-              fontFamily:  'var(--font-mono)',
-              fontSize:    10,
-              color:       'var(--ink-4)',
-              lineHeight:  1.6,
-            }}>
-              Inventory data unavailable
+          <div style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize:   10,
+            color:      'var(--ink-4)',
+            lineHeight: 1.6,
+          }}>
+            Inventory data unavailable
           </div>
         )}
 
