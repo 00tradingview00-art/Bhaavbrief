@@ -54,6 +54,8 @@ export function getFlash(slug: string): Flash | null {
 
   const raw = fs.readFileSync(target, 'utf8')
   const { data, content } = matter(raw)
+  const plain = content.replace(/^#+\s.*$/gm, '').replace(/\*+/g, '').replace(/\n+/g, ' ').trim()
+  const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
 
   return {
     slug,
@@ -62,6 +64,7 @@ export function getFlash(slug: string): Flash | null {
     source:    data.source    || '',
     category:  (data.category as FlashMeta['category']) || 'macro',
     published: data.published !== false,
+    excerpt,
     content,
   }
 }
