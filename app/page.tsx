@@ -344,6 +344,74 @@ export default async function HomePage() {
         {/* RIGHT ─ sticky sidebar */}
         <div className="home-sidebar">
 
+          {/* Live markets CTA */}
+          <Link href="/markets" style={{ textDecoration: 'none', display: 'block' }}>
+            <div style={{
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
+              borderRadius: 10,
+              padding: '16px 20px',
+              marginBottom: 16,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}>
+              <div>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 9, letterSpacing: '0.1em',
+                  textTransform: 'uppercase', color: 'var(--up)',
+                  marginBottom: 5, display: 'flex', alignItems: 'center', gap: 5,
+                }}>
+                  <span className="live-dot" />
+                  Live markets
+                </div>
+                <p style={{ fontSize: 13, color: 'var(--ink-2)', margin: 0, lineHeight: 1.5 }}>
+                  MCX OHLC, Volume &amp; Open Interest
+                </p>
+              </div>
+              <span style={{ color: 'var(--gold)', fontSize: 20, flexShrink: 0 }}>→</span>
+            </div>
+          </Link>
+
+          {/* EIA crude inventory card */}
+          <EIACard />
+
+          {/* Stats strip */}
+          <div style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 10,
+            padding: '16px 20px',
+            marginBottom: 16,
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 12,
+            textAlign: 'center',
+          }}>
+            {[
+              { val: '5 min', label: 'Daily read' },
+              { val: '9:30 AM', label: 'Delivered' },
+            ].map(({ val, label }) => (
+              <div key={label}>
+                <div style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 20, fontWeight: 500, color: 'var(--ink)', lineHeight: 1,
+                }}>
+                  {val}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 9, color: 'var(--ink-4)',
+                  letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 5,
+                }}>
+                  {label}
+                </div>
+              </div>
+            ))}
+          </div>
+
           {/* Subscribe card */}
           <div id="subscribe" style={{
             background: 'var(--surface)',
@@ -383,74 +451,6 @@ export default async function HomePage() {
               <SubscribeForm compact />
             </div>
           </div>
-
-          {/* Stats strip */}
-          <div style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 10,
-            padding: '16px 20px',
-            marginBottom: 16,
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 12,
-            textAlign: 'center',
-          }}>
-            {[
-              { val: '5 min', label: 'Daily read' },
-              { val: '9:30 AM', label: 'Delivered' },
-            ].map(({ val, label }) => (
-              <div key={label}>
-                <div style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 20, fontWeight: 500, color: 'var(--ink)', lineHeight: 1,
-                }}>
-                  {val}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 9, color: 'var(--ink-4)',
-                  letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 5,
-                }}>
-                  {label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Live markets CTA */}
-          <Link href="/markets" style={{ textDecoration: 'none', display: 'block' }}>
-            <div style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 10,
-              padding: '16px 20px',
-              marginBottom: 16,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 12,
-            }}>
-              <div>
-                <div style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 9, letterSpacing: '0.1em',
-                  textTransform: 'uppercase', color: 'var(--up)',
-                  marginBottom: 5, display: 'flex', alignItems: 'center', gap: 5,
-                }}>
-                  <span className="live-dot" />
-                  Live markets
-                </div>
-                <p style={{ fontSize: 13, color: 'var(--ink-2)', margin: 0, lineHeight: 1.5 }}>
-                  MCX OHLC, Volume &amp; Open Interest
-                </p>
-              </div>
-              <span style={{ color: 'var(--gold)', fontSize: 20, flexShrink: 0 }}>→</span>
-            </div>
-          </Link>
-
-          {/* EIA crude inventory card */}
-          <EIACard />
 
           {/* About */}
           <div id="about" style={{
