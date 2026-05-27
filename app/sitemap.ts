@@ -7,7 +7,9 @@ const BASE = 'https://bhaavbrief.in'
 
 const COMMODITIES = ['gold', 'silver', 'crude-oil', 'copper', 'natural-gas']
 
-export const revalidate = 3600
+// force-dynamic: sitemap must always reflect the latest committed content.
+// ISR (revalidate) causes stale sitemaps between Vercel deployments.
+export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [briefs, flash, articles] = await Promise.all([

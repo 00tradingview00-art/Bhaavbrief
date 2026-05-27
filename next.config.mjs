@@ -6,8 +6,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/articles',       destination: '/news', permanent: true },
-      { source: '/articles/:slug', destination: '/news', permanent: true },
+      { source: '/articles', destination: '/news', permanent: true },
     ]
   },
 }

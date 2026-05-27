@@ -48,7 +48,6 @@ export function getAllFlash(): FlashMeta[] {
     })
     .filter(f => f.published && f.date)
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 50)
 }
 
 export function getFlash(slug: string): Flash | null {
