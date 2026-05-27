@@ -218,6 +218,7 @@ title: "[Sharp headline — lead with the narrative, not the commodity. Under 12
 description: "[One crisp sentence under 25 words that captures the narrative shift.]"
 date: "${today.toISOString().split('T')[0]}"
 edition: ${EDITION}
+published: true
 tags: ["tag1", "tag2"]
 ---
 
