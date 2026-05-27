@@ -19,6 +19,25 @@
     "commodity": ""
   },
   {
+    "type": "brief",
+    "slug": "edition-022",
+    "href": "/briefs/edition-022",
+    "title": "Venezuela Shock Breaks Risk Appetite — Oil Soars, Everything Else Bleeds",
+    "description": "A US strike on Venezuela triggers an oil supply panic while cratering risk sentiment across all other commodities simultaneously.",
+    "excerpt": "The dominant narrative today is not the FOMC overhang from Edition 21 — that has been violently displaced by a US military strike on Venezuela. This is a supply shock event layered on top of a deterio",
+    "date": "2026-05-27",
+    "edition": "22",
+    "tags": [
+      "Geopolitics",
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver",
+      "OPEC"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-05-26-mcx-close-27-ay2026-energy-leads-metals-retreat",
     "href": "/articles/2026-05-26-mcx-close-27-ay2026-energy-leads-metals-retreat",
@@ -32,6 +51,28 @@
       "Evening Brief",
       "Day Recap",
       "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-27-mcx-open-27-ay2026-dollar-selloff",
+    "href": "/articles/2026-05-27-mcx-open-27-ay2026-dollar-selloff",
+    "title": "MCX Open 27 May 2026: Dollar Selloff Hammers Gold, Crude",
+    "description": "MCX Open Brief 27 May 2026: Gold -1.47% at ₹155306, Crude -3.52% at ₹8697, Silver -1.83% as dollar strength drives broad commodity selloff.",
+    "excerpt": "Dollar strength delivered a broad commodity selloff overnight. COMEX Gold fell 1.47% to $4,475.51/oz, COMEX Silver dropped 3.18% to $74.91/oz, and WTI Crude shed 3.07% to $90.63/bbl — its sharpest sin",
+    "date": "2026-05-27",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
     ],
     "commodity": "multi",
     "commodities": [
