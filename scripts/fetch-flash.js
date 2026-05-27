@@ -7,6 +7,7 @@
 import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -302,6 +303,13 @@ ${content}
 
 async function main() {
   if (!ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
+
+  const today = todayIST()
+  if (isTradingHoliday(today)) {
+    const name = getHolidayName(today)
+    console.log(`MCX holiday (${today}${name ? ': ' + name : ''}) — flash engine sleeping`)
+    return
+  }
 
   // Fetch prices + trending topics in parallel
   console.log('Fetching prices and trending topics...')

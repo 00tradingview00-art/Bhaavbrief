@@ -23,6 +23,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
+import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -290,50 +291,58 @@ function detectMoves(current, lastPrices) {
 }
 
 // ── 4. Govt Circular Monitor ──────────────────────────────────────────────────
+/**
+ * Checks for new regulatory signals from SEBI, MCX, RBI, and PPAC.
+ *
+ * MCX's own website is blocked by Akamai CDN on server-side requests.
+ * We use Google News RSS as a reliable alternative — it surfaces MCX circulars
+ * and SEBI/RBI notices within minutes of publication.
+ *
+ * SEBI and RBI direct HTML scraping is kept as-is since those sites are accessible.
+ * PPAC direct scraping is also kept since it returns structured HTML.
+ */
 async function checkCirculars(lastCirculars) {
   const newCirculars = []
 
-  // SEBI Circulars
+  // MCX + SEBI circulars via Google News RSS (MCX blocks direct scraping)
   try {
-    const res = await fetch(
-      'https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=2&ssid=3&smid=0',
-      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) }
-    )
-    const html = await res.text()
-    const match = html.match(/class="homeText"[^>]*>\s*<a[^>]*>([^<]+)<\/a>.*?(\d{2}[-\/]\d{2}[-\/]\d{4})/s)
-    if (match) {
-      const title = match[1].trim()
-      const id = title.slice(0, 80)
-      if (id !== lastCirculars.sebi) {
-        newCirculars.push({ source: 'SEBI', title, url: 'https://sebi.gov.in' })
-        lastCirculars.sebi = id
+    const queries = [
+      'MCX+India+circular+notice+commodity',
+      'SEBI+commodity+derivatives+circular',
+    ]
+    for (const q of queries) {
+      const res = await fetch(
+        `https://news.google.com/rss/search?q=${q}&hl=en-IN&gl=IN&ceid=IN:en`,
+        {
+          headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+          signal: AbortSignal.timeout(8000),
+        }
+      )
+      const xml = await res.text()
+      // Extract first item title + pubDate from RSS
+      const titleM = xml.match(/<item[^>]*>[\s\S]*?<title><!\[CDATA\[(.+?)\]\]><\/title>|<item[^>]*>[\s\S]*?<title>([^<]{10,200})<\/title>/)
+      const dateM  = xml.match(/<pubDate>([^<]+)<\/pubDate>/)
+      if (titleM) {
+        const title = (titleM[1] ?? titleM[2] ?? '').trim()
+        const id    = title.slice(0, 80)
+        const source = q.includes('SEBI') ? 'SEBI' : 'MCX'
+        const stateKey = source.toLowerCase()
+        // Only surface if published within last 2 hours to avoid stale signals
+        if (dateM) {
+          const age = Date.now() - new Date(dateM[1]).getTime()
+          if (age > 2 * 3600 * 1000) continue
+        }
+        if (id !== lastCirculars[stateKey]) {
+          newCirculars.push({ source, title, url: source === 'MCX' ? 'https://mcxindia.com' : 'https://sebi.gov.in' })
+          lastCirculars[stateKey] = id
+        }
       }
     }
   } catch (err) {
-    console.warn('SEBI scrape failed:', err.message)
+    console.warn('Circular RSS failed:', err.message)
   }
 
-  // MCX Circulars
-  try {
-    const res = await fetch(
-      'https://www.mcxindia.com/market-data/notices',
-      { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) }
-    )
-    const html = await res.text()
-    const match = html.match(/<td[^>]*>([^<]{20,150})<\/td>\s*<td[^>]*>(\d{2}[-\/]\d{2}[-\/]\d{4})/s)
-    if (match) {
-      const title = match[1].trim()
-      const id = title.slice(0, 80)
-      if (id !== lastCirculars.mcx) {
-        newCirculars.push({ source: 'MCX', title, url: 'https://mcxindia.com' })
-        lastCirculars.mcx = id
-      }
-    }
-  } catch (err) {
-    console.warn('MCX scrape failed:', err.message)
-  }
-
-  // RBI Press Releases
+  // RBI Press Releases (direct HTML — site is accessible)
   try {
     const res = await fetch(
       'https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx',
@@ -353,7 +362,7 @@ async function checkCirculars(lastCirculars) {
     console.warn('RBI scrape failed:', err.message)
   }
 
-  // PPAC Petroleum Prices
+  // PPAC Petroleum Prices (direct HTML — site is accessible)
   try {
     const res = await fetch(
       'https://ppac.gov.in/content/212_1_ImportExport.aspx',
@@ -664,6 +673,13 @@ function canPublish(state) {
 async function main() {
   const startTime = Date.now()
   console.log(`\nBhaavBrief Intelligence Engine — ${new Date().toISOString()}\n`)
+
+  const today = todayIST()
+  if (isTradingHoliday(today)) {
+    const name = getHolidayName(today)
+    console.log(`MCX holiday (${today}${name ? ': ' + name : ''}) — engine sleeping`)
+    return
+  }
 
   const state = loadState()
 

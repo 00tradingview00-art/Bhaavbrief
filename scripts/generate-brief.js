@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
+import { isTradingHoliday, todayIST, getHolidayName } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const envFile = path.join(__dirname, '../.env.local')
@@ -236,6 +237,14 @@ tags: ["tag1", "tag2"]
 
 async function main() {
   console.log(`\nBhaavBrief generator — Edition #${EDITION}\n`)
+
+  const today = todayIST()
+  if (isTradingHoliday(today)) {
+    const name = getHolidayName(today)
+    console.log(`MCX holiday today (${today}${name ? ': ' + name : ''}) — skipping brief generation`)
+    return
+  }
+
   const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
   console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
   console.log(`News: ${news.length} headlines`)

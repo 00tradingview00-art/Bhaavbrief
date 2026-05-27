@@ -1,0 +1,57 @@
+{
+  "gold": {
+    "name": "GOLD",
+    "tradingsymbol": "GOLD26JUNFUT",
+    "expiry": "2026-06-05",
+    "contractSize": 1000,
+    "contractSizeStr": "1 kg",
+    "priceQuote": "per 10 grams",
+    "tickSize": 1,
+    "quotedUnit": "₹/10g",
+    "exchange": "MCX"
+  },
+  "silver": {
+    "name": "SILVER",
+    "tradingsymbol": "SILVER26JULFUT",
+    "expiry": "2026-07-03",
+    "contractSize": 30,
+    "contractSizeStr": "30 kg",
+    "priceQuote": "per kg",
+    "tickSize": 1,
+    "quotedUnit": "₹/kg",
+    "exchange": "MCX"
+  },
+  "crude": {
+    "name": "CRUDEOIL",
+    "tradingsymbol": "CRUDEOIL26JUNFUT",
+    "expiry": "2026-06-18",
+    "contractSize": 100,
+    "contractSizeStr": "100 barrels",
+    "priceQuote": "per barrel",
+    "tickSize": 1,
+    "quotedUnit": "₹/bbl",
+    "exchange": "MCX"
+  },
+  "copper": {
+    "name": "COPPER",
+    "tradingsymbol": "COPPER26MAYFUT",
+    "expiry": "2026-05-29",
+    "contractSize": 2500,
+    "contractSizeStr": "2.5 MT (2500 kg)",
+    "priceQuote": "per kg",
+    "tickSize": 0.05,
+    "quotedUnit": "₹/kg",
+    "exchange": "MCX"
+  },
+  "natgas": {
+    "name": "NATURALGAS",
+    "tradingsymbol": "NATURALGAS26JUNFUT",
+    "expiry": "2026-06-25",
+    "contractSize": 1250,
+    "contractSizeStr": "1250 mmBtu",
+    "priceQuote": "per mmBtu",
+    "tickSize": 0.1,
+    "quotedUnit": "₹/mmBtu",
+    "exchange": "MCX"
+  }
+}

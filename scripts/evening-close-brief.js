@@ -16,6 +16,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels } from './lib/technicals.js'
+import { isTradingHoliday, getHolidayName } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -290,6 +291,12 @@ async function main() {
   const today = todayIST()
   if (state.lastEveningDate === today) {
     console.log(`Evening brief already published for ${today} — skipping`)
+    return
+  }
+
+  if (isTradingHoliday(today)) {
+    const name = getHolidayName(today)
+    console.log(`MCX holiday today (${today}${name ? ': ' + name : ''}) — skipping evening brief`)
     return
   }
 
