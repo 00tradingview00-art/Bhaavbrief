@@ -28,7 +28,7 @@ function PulseRowItem({ row }: { row: PulseRow }) {
   const width  = barWidth(row.pct)
 
   return (
-    <div style={{
+    <div className="pulse-grid" style={{
       display: 'grid',
       gridTemplateColumns: '88px 1fr 60px 90px',
       alignItems: 'center',
@@ -56,8 +56,8 @@ function PulseRowItem({ row }: { row: PulseRow }) {
         </div>
       </div>
 
-      {/* Driver + bar */}
-      <div>
+      {/* Driver + bar — hidden on mobile */}
+      <div className="pulse-driver">
         <div style={{
           fontFamily: 'var(--font-sans)', fontSize: 11,
           color: 'var(--ink-3)', fontWeight: 400,
@@ -107,14 +107,14 @@ function PulseSkeleton() {
       borderRadius: 8, overflow: 'hidden',
     }}>
       {[...Array(6)].map((_, i) => (
-        <div key={i} style={{
-          display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px',
+        <div key={i} className="pulse-grid" style={{
+          display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px', // overridden on mobile via .pulse-grid
           gap: '0 12px', padding: '10px 16px',
           borderBottom: '1px solid var(--border)',
           alignItems: 'center',
         }}>
           <div style={{ height: 10, borderRadius: 2, background: 'rgba(0,0,0,0.06)', width: 48 }} />
-          <div style={{ height: 8,  borderRadius: 2, background: 'rgba(0,0,0,0.06)', width: '60%' }} />
+          <div className="pulse-driver" style={{ height: 8, borderRadius: 2, background: 'rgba(0,0,0,0.06)', width: '60%' }} />
           <div style={{ height: 10, borderRadius: 2, background: 'rgba(0,0,0,0.06)', marginLeft: 'auto', width: 36 }} />
           <div style={{ height: 10, borderRadius: 2, background: 'rgba(0,0,0,0.06)', marginLeft: 'auto', width: 52 }} />
         </div>
@@ -180,14 +180,14 @@ export default function CommodityPulse() {
         }}>
 
           {/* Column headers */}
-          <div style={{
-            display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px',
+          <div className="pulse-grid" style={{
+            display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px', // overridden on mobile via .pulse-grid
             gap: '0 12px', padding: '7px 16px',
             borderBottom: '2px solid var(--border)',
             background: 'var(--paper2)',
           }}>
             {['COMMODITY', 'DRIVER', 'CHG %', 'PRICE'].map((h, i) => (
-              <div key={h} style={{
+              <div key={h} className={h === 'DRIVER' ? 'pulse-driver' : ''} style={{
                 fontFamily: 'var(--font-mono)', fontSize: 7.5,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
                 color: 'var(--ink-4)',
@@ -227,6 +227,13 @@ export default function CommodityPulse() {
           </div>
         </div>
       )}
+
+      <style>{`
+        @media (max-width: 480px) {
+          .pulse-grid { grid-template-columns: 80px 52px 80px !important; }
+          .pulse-driver { display: none !important; }
+        }
+      `}</style>
     </div>
   )
 }

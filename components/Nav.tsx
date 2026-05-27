@@ -43,11 +43,12 @@ export default function Nav() {
         <div style={{
           maxWidth: 1200,
           margin: '0 auto',
-          padding: '0 24px',
+          padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
           height: 56,
           gap: 8,
+          minWidth: 0,
         }}>
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none', marginRight: 16, flexShrink: 0 }}>
@@ -63,7 +64,7 @@ export default function Nav() {
           </Link>
 
           {/* Nav links — scrollable on mobile */}
-          <div className="nav-links">
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {NAV_LINKS.map(({ href, label }) => {
               const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
               return (
@@ -166,6 +167,22 @@ export default function Nav() {
         @media (min-width: 640px) {
           .nav-search-label { display: inline !important; }
           .nav-search-kbd   { display: inline !important; }
+          .nav-subscribe    { display: flex !important; }
+        }
+        .nav-subscribe { display: none; }
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          flex-shrink: 1;
+          min-width: 0;
+        }
+        .nav-links::-webkit-scrollbar { display: none; }
+        @media (max-width: 480px) {
+          .nav-links a { padding: 6px 8px !important; font-size: 12px !important; }
         }
       `}</style>
     </>
