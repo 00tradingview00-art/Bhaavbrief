@@ -36,13 +36,24 @@ const KEYWORDS = [
   'federal reserve', 'rate cut', 'rate hike', 'refinery', 'inventory',
 ]
 
+const SEEN_TTL_HOURS = 36  // expire seen URLs after 36h so stale list never locks out new content
+
 function loadSeen() {
-  try { return JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8')) }
-  catch { return [] }
+  try {
+    const raw = JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8'))
+    if (!raw.length) return []
+    // Legacy format (plain strings) — treat as permanent but still honour the list
+    if (typeof raw[0] === 'string') return raw
+    // New format with TTL
+    const cutoff = Date.now() - SEEN_TTL_HOURS * 3600 * 1000
+    return raw.filter(e => new Date(e.seenAt).getTime() > cutoff).map(e => e.url)
+  } catch { return [] }
 }
 
 function saveSeen(urls) {
-  fs.writeFileSync(SEEN_FILE, JSON.stringify(urls.slice(-2000), null, 2), 'utf8')
+  const now = new Date().toISOString()
+  const entries = urls.slice(-2000).map(u => ({ url: u, seenAt: now }))
+  fs.writeFileSync(SEEN_FILE, JSON.stringify(entries, null, 2), 'utf8')
 }
 
 function isImportant(text) {
@@ -150,7 +161,7 @@ function formatPriceContext(p) {
 }
 
 // ── Freshness gate ────────────────────────────────────────────────────────────
-function isFresh(pubDate, maxMinutes = 90) {
+function isFresh(pubDate, maxMinutes = 300) {
   if (!pubDate) return false
   return (Date.now() - new Date(pubDate).getTime()) <= maxMinutes * 60 * 1000
 }

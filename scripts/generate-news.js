@@ -694,9 +694,14 @@ async function main() {
   const priceSignals = buildPriceActionSignals(prices, allItems, recentTitles)
   console.log(`Price-action signals: ${priceSignals.length} (${priceSignals.map(s => `${s.label} ${s.pct >= 0 ? '+' : ''}${s.pct.toFixed(1)}%`).join(', ') || 'none moving'})`)
 
-  // ── PART 2: RSS signals for non-price categories ─────────────────────────────
-  // Policy / Geopolitics / Agri / Macro — RSS still drives these (no live price for these).
-  const RSS_ONLY_CATS = new Set(['Policy', 'Geopolitics', 'Agri', 'Macro'])
+  // ── PART 2: RSS signals ───────────────────────────────────────────────────────
+  // When Kite is live, price-action handles Metals & Energy; RSS covers the rest.
+  // When Kite is unavailable (Stooq fallback, movers={}), expand RSS to ALL categories
+  // so the feed stays populated throughout the trading day even without live MCX data.
+  const kiteAvailable = prices.source === 'kite'
+  const RSS_CATS = kiteAvailable
+    ? new Set(['Policy', 'Geopolitics', 'Agri', 'Macro'])
+    : new Set(['Policy', 'Geopolitics', 'Agri', 'Macro', 'Metals', 'Energy'])
   const gaps = getCategoryGaps(existing)
   const recentCats = new Set(existing.slice(0, 12).map(i => i.category))
 
@@ -708,7 +713,7 @@ async function main() {
     if (item.pubDate && !isNaN(item.pubDate.getTime()) && item.pubDate.getTime() < cutoffMs) return false
     if (recentTitles.some(rt => similarity(item.title, rt) > 0.38)) return false
     const { category } = detectCategory(text)
-    return RSS_ONLY_CATS.has(category)  // only non-price categories for RSS path
+    return RSS_CATS.has(category)
   })
 
   const rssDeduped = clusterAndPick(rssItems)
@@ -720,7 +725,7 @@ async function main() {
   const rssByCategory = new Map()
   for (const item of rssScored) {
     const { category } = detectCategory(`${item.title} ${item.desc}`)
-    if (!RSS_ONLY_CATS.has(category)) continue
+    if (!RSS_CATS.has(category)) continue
     const bucket = rssByCategory.get(category) ?? []
     bucket.push(item)
     rssByCategory.set(category, bucket)
