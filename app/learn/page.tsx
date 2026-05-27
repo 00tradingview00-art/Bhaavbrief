@@ -1,4 +1,7 @@
+import fs from 'node:fs'
+import path from 'node:path'
 import LearnPage from '@/components/LearnPage'
+import type { ContractSpecs } from '@/components/LearnPage'
 
 export const metadata = {
   title: 'Learn MCX Trading — Futures, Margins, Taxation Explained',
@@ -15,6 +18,16 @@ export const metadata = {
   twitter: { card: 'summary' as const, title: 'Learn MCX Trading | BhaavBrief', description: 'MCX futures, margins, taxation and more — explained for Indian traders.', site: '@bhaavbrief' },
 }
 
+function loadContractSpecs(): ContractSpecs | null {
+  try {
+    const file = path.join(process.cwd(), 'data/contract-specs.json')
+    return JSON.parse(fs.readFileSync(file, 'utf8'))
+  } catch {
+    return null
+  }
+}
+
 export default function Page() {
-  return <LearnPage />
+  const specs = loadContractSpecs()
+  return <LearnPage specs={specs} />
 }

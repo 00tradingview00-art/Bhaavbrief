@@ -1,6 +1,27 @@
 'use client'
 import { useState } from 'react'
 
+export interface ContractSpec {
+  name: string
+  tradingsymbol: string
+  expiry: string
+  contractSize: number
+  contractSizeStr: string
+  priceQuote: string
+  tickSize: number | null
+  tickValuePerLot: number | null
+  quotedUnit: string
+  exchange: string
+}
+
+export interface ContractSpecs {
+  gold?: ContractSpec
+  silver?: ContractSpec
+  crude?: ContractSpec
+  copper?: ContractSpec
+  natgas?: ContractSpec
+}
+
 interface Article {
   id: number
   section: string
@@ -9,7 +30,30 @@ interface Article {
   content: React.ReactNode
 }
 
-const ARTICLES: Article[] = [
+function fmtExpiry(spec?: ContractSpec): string {
+  if (!spec?.expiry) return '—'
+  const d = new Date(spec.expiry + 'T12:00:00Z')
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+function fmtTick(spec?: ContractSpec): string {
+  if (!spec?.tickSize) return '—'
+  const unit = spec.quotedUnit.replace('₹/', '')
+  return `₹${spec.tickSize}/${unit}`
+}
+
+function fmtTickValue(spec?: ContractSpec): string {
+  if (spec?.tickValuePerLot == null) return '—'
+  return `₹${spec.tickValuePerLot}/lot`
+}
+
+function fmtLot(spec?: ContractSpec, fallback = '—'): string {
+  return spec?.contractSizeStr ?? fallback
+}
+
+function buildArticles(specs: ContractSpecs | null): Article[] {
+  const s = specs ?? {}
+  return [
   {
     id: 0,
     section: 'MCX Basics',
@@ -32,19 +76,19 @@ const ARTICLES: Article[] = [
         <ArticleTable
           headers={['Contract', 'Lot Size', 'Quoted in', 'Contract Value*', 'SPAN Margin*']}
           rows={[
-            ['Gold',         '1 kg',       '₹ per 10g',    '~₹1 crore',   '~₹5–7L'],
-            ['Gold Mini',    '100 g',      '₹ per 10g',    '~₹10L',       '~₹55–75K'],
-            ['Silver',       '30 kg',      '₹ per kg',     '~₹30L',       '~₹1.5–2.5L'],
-            ['Silver Mini',  '5 kg',       '₹ per kg',     '~₹5L',        '~₹25–40K'],
-            ['Crude Oil',    '100 barrels','₹ per barrel', '~₹6.5L',      '~₹30–45K'],
-            ['Crude Mini',   '10 barrels', '₹ per barrel', '~₹65K',       '~₹3–5K'],
-            ['Copper',       '2,500 kg',   '₹ per kg',     '~₹24L',       '~₹1.2–1.8L'],
-            ['Nat Gas',      '1,250 mmBtu','₹ per mmBtu',  '~₹4L',        '~₹20–30K'],
+            ['Gold',         fmtLot(s.gold,   '1 kg'),         '₹ per 10g',    '~₹1 crore',   '~₹5–7L'],
+            ['Gold Mini',    '100 g',                           '₹ per 10g',    '~₹10L',       '~₹55–75K'],
+            ['Silver',       fmtLot(s.silver, '30 kg'),        '₹ per kg',     '~₹30L',       '~₹1.5–2.5L'],
+            ['Silver Mini',  '5 kg',                            '₹ per kg',     '~₹5L',        '~₹25–40K'],
+            ['Crude Oil',    fmtLot(s.crude,  '100 barrels'),  '₹ per barrel', '~₹6.5L',      '~₹30–45K'],
+            ['Crude Mini',   '10 barrels',                      '₹ per barrel', '~₹65K',       '~₹3–5K'],
+            ['Copper',       fmtLot(s.copper, '2,500 kg'),     '₹ per kg',     '~₹24L',       '~₹1.2–1.8L'],
+            ['Nat Gas',      fmtLot(s.natgas, '1,250 mmBtu'),  '₹ per mmBtu',  '~₹4L',        '~₹20–30K'],
           ]}
         />
         <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
           * Illustrative, based on mid-2026 price levels. Actual contract values and margins change daily.
-          Use your broker's SPAN calculator for live margin requirements.
+          Use your broker&apos;s SPAN calculator for live margin requirements.
         </p>
       </>
     ),
@@ -93,13 +137,13 @@ const ARTICLES: Article[] = [
           Three numbers define every MCX trade: the lot size (how much you&apos;re trading), the tick size (the minimum price move), and the expiry date (when the contract ceases to exist).
         </p>
         <ArticleTable
-          headers={['Contract', 'Lot Size', 'Tick Size', 'P&L per tick', 'Expiry']}
+          headers={['Contract', 'Lot Size', 'Tick Size', 'P&L per tick', 'Active Expiry']}
           rows={[
-            ['Gold',      '1 kg',       '₹1/10g',      '₹100/lot',  'Month-end'],
-            ['Silver',    '30 kg',      '₹1/kg',        '₹30/lot',   'Month-end'],
-            ['Crude Oil', '100 bbl',    '₹1/bbl',       '₹100/lot',  '~19th of month'],
-            ['Copper',    '2,500 kg',   '₹0.05/kg',     '₹125/lot',  'Month-end'],
-            ['Nat Gas',   '1,250 mmBtu','₹0.10/mmBtu',  '₹125/lot',  '~25th of month'],
+            ['Gold',      fmtLot(s.gold,   '1 kg'),         fmtTick(s.gold),   fmtTickValue(s.gold),   fmtExpiry(s.gold)],
+            ['Silver',    fmtLot(s.silver, '30 kg'),        fmtTick(s.silver), fmtTickValue(s.silver), fmtExpiry(s.silver)],
+            ['Crude Oil', fmtLot(s.crude,  '100 bbl'),      fmtTick(s.crude),  fmtTickValue(s.crude),  fmtExpiry(s.crude)],
+            ['Copper',    fmtLot(s.copper, '2,500 kg'),     fmtTick(s.copper), fmtTickValue(s.copper), fmtExpiry(s.copper)],
+            ['Nat Gas',   fmtLot(s.natgas, '1,250 mmBtu'),  fmtTick(s.natgas), fmtTickValue(s.natgas), fmtExpiry(s.natgas)],
           ]}
         />
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -340,10 +384,8 @@ const ARTICLES: Article[] = [
       </>
     ),
   },
-]
-
-// Group articles by section
-const SECTIONS = Array.from(new Set(ARTICLES.map(a => a.section)))
+  ] // end return
+} // end buildArticles
 
 function InfoBox({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -396,7 +438,9 @@ function ArticleTable({ headers, rows }: { headers: string[]; rows: string[][] }
   )
 }
 
-export default function LearnPage() {
+export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
+  const ARTICLES = buildArticles(specs ?? null)
+  const SECTIONS = Array.from(new Set(ARTICLES.map(a => a.section)))
   const [activeId, setActiveId] = useState(0)
   const active = ARTICLES[activeId]
 

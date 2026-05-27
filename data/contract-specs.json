@@ -7,6 +7,7 @@
     "contractSizeStr": "1 kg",
     "priceQuote": "per 10 grams",
     "tickSize": 1,
+    "tickValuePerLot": 100,
     "quotedUnit": "₹/10g",
     "exchange": "MCX"
   },
@@ -18,6 +19,7 @@
     "contractSizeStr": "30 kg",
     "priceQuote": "per kg",
     "tickSize": 1,
+    "tickValuePerLot": 30,
     "quotedUnit": "₹/kg",
     "exchange": "MCX"
   },
@@ -29,6 +31,7 @@
     "contractSizeStr": "100 barrels",
     "priceQuote": "per barrel",
     "tickSize": 1,
+    "tickValuePerLot": 100,
     "quotedUnit": "₹/bbl",
     "exchange": "MCX"
   },
@@ -40,6 +43,7 @@
     "contractSizeStr": "2.5 MT (2500 kg)",
     "priceQuote": "per kg",
     "tickSize": 0.05,
+    "tickValuePerLot": 125,
     "quotedUnit": "₹/kg",
     "exchange": "MCX"
   },
@@ -51,6 +55,7 @@
     "contractSizeStr": "1250 mmBtu",
     "priceQuote": "per mmBtu",
     "tickSize": 0.1,
+    "tickValuePerLot": 125,
     "quotedUnit": "₹/mmBtu",
     "exchange": "MCX"
   }
