@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-05-28-00-02-mcx-silver-crashes-1-73-to-265-950-kg-as",
+    "title": "MCX Silver Crashes 1.73% to ₹265,950/kg as Precious Metals Face Broad Selling Pressure",
+    "summary": "The mechanism here is risk-off rotation amplified by dollar strength — when USD/INR holds elevated near ₹95.69, import costs for silver rise in rupee terms, yet MCX Silver is still declining, indicating the global spot price correction is outpacing any currency cushion.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-05-27T18:32:51.461Z",
+    "pubDateIST": "28 May 2026, 00:02"
+  },
+  {
+    "id": "2026-05-28-00-02-mcx-natural-gas-surges-3-46-to-302-40-mm",
+    "title": "MCX Natural Gas surges 3.46% to ₹302.40/mmBtu as US session drives energy complex",
+    "summary": "The mechanism here is US spot NatGas pricing feeding directly into MCX import parity. Henry Hub strength, likely driven by storage draw expectations or LNG export demand, transmits to MCX via the USD/INR conversion channel. At ₹95.69, import parity arithmetic on Henry Hub approximately ₹3.15/mmBtu equivalent scales to MCX theoretical parity near ₹295-298/mmBtu, placing current MCX at a modest premium of roughly ₹4-7. Support observed at ₹291; resistance at ₹308. Cross-commodity note: Crude at ₹8604 is subdued at -0 change, which historically decouples from NatGas during storage-driven gas moves, confirming this is gas-specific rather than broad energy buying. Gold and Silver both negative, suggesting dollar firmness is selective pressure. Watch Friday's US EIA Natural Gas Storage report for directional confirmation.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-05-27T18:32:43.490Z",
+    "pubDateIST": "28 May 2026, 00:02"
+  },
+  {
     "id": "2026-05-27-01-01-mcx-silver-crashes-2-33-to-270-270-kg-as",
     "title": "MCX Silver Crashes 2.33% to ₹270,270/kg as Precious Metals Face Broad Selling Pressure",
     "summary": "The mechanism driving silver lower this session is a rotation dynamic — crude oil's +4.5% surge is absorbing risk appetite and capital flows, leaving precious metals without a catalyst while simultaneously signaling reflationary rather than safe-haven conditions. When energy leads aggressively, historically silver underperforms as industrial demand logic competes with monetary demand logic.",
