@@ -2,9 +2,11 @@ name: Flash Intelligence
 
 on:
   schedule:
-    # MCX market hours: 9:00 AM – 11:30 PM IST = 3:30 AM – 6:00 PM UTC, Mon–Sat
-    - cron: '*/15 3-17 * * 1-6'   # 9:00 AM – 11:29 PM IST
-    - cron: '0,15,30 18 * * 1-6'  # 11:30 PM IST final window
+    # MCX market hours: 9:00 AM – 11:30 PM IST = 3:30 AM – 6:00 PM UTC, Mon–Fri
+    # Offset by 7 min from intelligence-engine.yml (fires at :00/:15/:30/:45)
+    # to prevent simultaneous git push collisions on main.
+    - cron: '7,22,37,52 3-17 * * 1-5'   # 9:07 AM – 11:22 PM IST
+    - cron: '7,22,37 18 * * 1-5'         # 11:37 PM IST final window
   workflow_dispatch:
 
 permissions:
@@ -16,6 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
@@ -53,5 +56,10 @@ jobs:
           fi
           FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
           NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
+          git add content/flash/ scripts/seen-articles.json data/ai-news.json scripts/seen-news.json
+          git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
-          git push
+          git push origin main
