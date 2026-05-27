@@ -40,7 +40,10 @@ export const metadata: Metadata = {
   description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
   metadataBase: new URL(BASE),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
-  alternates: { canonical: BASE },
+  alternates: {
+    canonical: BASE,
+    types: { 'application/rss+xml': `${BASE}/feed.xml` },
+  },
   openGraph: {
     title: 'BhaavBrief — Indian Commodity Intelligence',
     description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
