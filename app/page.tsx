@@ -114,6 +114,35 @@ export default async function HomePage() {
 
   return (
     <div>
+      {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{
+          fontFamily: 'var(--font-mono)', fontSize: 9,
+          letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'var(--gold)', marginBottom: 10,
+        }}>
+          BhaavBrief — India's Commodity Intelligence
+        </div>
+        <p style={{
+          fontFamily: 'var(--font-serif)',
+          fontSize: 'clamp(22px, 3vw, 30px)',
+          fontWeight: 500, lineHeight: 1.25,
+          letterSpacing: '-0.3px',
+          color: 'var(--ink)',
+          margin: '0 0 10px',
+        }}>
+          Commodity prices move markets.<br />Know them first.
+        </p>
+        <p style={{
+          fontSize: 14, color: 'var(--ink-3)',
+          lineHeight: 1.75, margin: 0,
+          maxWidth: 560, fontWeight: 300,
+        }}>
+          Daily intelligence for India's traders, investors, merchants and businesses —
+          gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
+        </p>
+      </div>
+
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       {latest && (
         <section style={{
@@ -438,7 +467,7 @@ export default async function HomePage() {
                 fontSize: 16, fontWeight: 500,
                 color: '#fff', margin: 0, lineHeight: 1.35,
               }}>
-                Start your morning with an edge
+                Know your bhaav. Every morning.
               </p>
             </div>
             <div style={{ padding: '18px 20px' }}>

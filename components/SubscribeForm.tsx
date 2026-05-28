@@ -68,7 +68,7 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
             Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
-            Start your morning with an edge
+            Know your bhaav. Every morning.
           </div>
           <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
             Join traders, investors and merchants who track Indian commodity markets. Every weekday at 9:30 AM.
