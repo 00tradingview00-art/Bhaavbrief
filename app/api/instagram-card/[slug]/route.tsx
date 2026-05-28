@@ -64,10 +64,13 @@ export async function GET(
   const [font, prices] = await Promise.all([getPlayfairFont(), fetchPrices()])
 
   const cols = [
-    { label: 'MCX GOLD',   unit: '/10g',  d: prices?.gold   },
-    { label: 'MCX CRUDE',  unit: '/bbl',  d: prices?.crude  },
-    { label: 'MCX SILVER', unit: '/kg',   d: prices?.silver },
+    { label: 'MCX GOLD',   d: prices?.gold   },
+    { label: 'MCX CRUDE',  d: prices?.crude  },
+    { label: 'MCX SILVER', d: prices?.silver },
   ]
+
+  // Render at 2x resolution for crisp display on retina/high-DPI screens
+  const S = 2
 
   return new ImageResponse(
     (
@@ -75,30 +78,30 @@ export async function GET(
         display: 'flex', flexDirection: 'column',
         width: '100%', height: '100%',
         backgroundColor: '#FAFAF6',
-        padding: '72px 88px',
+        padding: `${72*S}px ${88*S}px`,
         position: 'relative',
       }}>
         {/* Gold left accent bar */}
         <div style={{
           position: 'absolute', left: 0, top: 0,
-          width: 10, height: '100%',
+          width: 10*S, height: '100%',
           backgroundColor: '#C8720A', display: 'flex',
         }} />
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <span style={{ color: '#C8720A', fontSize: 21, fontWeight: 700, letterSpacing: 4 }}>BHAAVBRIEF</span>
-          <span style={{ color: '#8A8A7A', fontSize: 17 }}>{dateStr}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18*S }}>
+          <span style={{ color: '#C8720A', fontSize: 21*S, fontWeight: 700, letterSpacing: 4 }}>BHAAVBRIEF</span>
+          <span style={{ color: '#8A8A7A', fontSize: 17*S }}>{dateStr}</span>
         </div>
 
         {/* Header divider */}
-        <div style={{ height: 1, backgroundColor: '#E0DFD5', marginBottom: 44, display: 'flex' }} />
+        <div style={{ height: S, backgroundColor: '#E0DFD5', marginBottom: 44*S, display: 'flex' }} />
 
         {/* Title */}
         <div style={{
-          fontSize: title.length > 65 ? 46 : title.length > 45 ? 52 : 58,
+          fontSize: (title.length > 65 ? 46 : title.length > 45 ? 52 : 58) * S,
           fontWeight: 700, color: '#18180F',
-          lineHeight: 1.22, marginBottom: 28,
+          lineHeight: 1.22, marginBottom: 28*S,
           fontFamily: font ? 'Playfair Display' : 'Georgia, serif',
           flex: '0 0 auto',
         }}>
@@ -107,46 +110,45 @@ export async function GET(
 
         {/* Description */}
         <div style={{
-          fontSize: 25, color: '#48483A',
+          fontSize: 25*S, color: '#48483A',
           lineHeight: 1.6, flex: 1,
         }}>
           {desc}
         </div>
 
         {/* Price strip */}
-        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 28 }}>
-          <div style={{ height: 1, backgroundColor: '#E0DFD5', marginBottom: 28, display: 'flex' }} />
+        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: 28*S }}>
+          <div style={{ height: S, backgroundColor: '#E0DFD5', marginBottom: 28*S, display: 'flex' }} />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             {cols.map(col => (
-              <div key={col.label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ color: '#8A8A7A', fontSize: 15, fontWeight: 700, letterSpacing: 2 }}>
+              <div key={col.label} style={{ display: 'flex', flexDirection: 'column', gap: 6*S }}>
+                <span style={{ color: '#8A8A7A', fontSize: 15*S, fontWeight: 700, letterSpacing: 2 }}>
                   {col.label}
                 </span>
-                <span style={{ color: '#18180F', fontSize: 32, fontWeight: 700, lineHeight: 1 }}>
+                <span style={{ color: '#18180F', fontSize: 32*S, fontWeight: 700, lineHeight: 1 }}>
                   {col.d?.price != null ? `₹${fmt(col.d.price)}` : '—'}
                 </span>
                 <span style={{
                   color: col.d?.pct != null ? (col.d.pct >= 0 ? '#166534' : '#991818') : '#8A8A7A',
-                  fontSize: 20,
+                  fontSize: 20*S,
                 }}>
-                  {col.d?.pct != null ? pctStr(col.d.pct) : ''}
-                  {col.d?.pct == null && '—'}
+                  {col.d?.pct != null ? pctStr(col.d.pct) : '—'}
                 </span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Footer divider + edition/URL */}
-        <div style={{ height: 1, backgroundColor: '#E0DFD5', marginBottom: 24, display: 'flex' }} />
+        {/* Footer */}
+        <div style={{ height: S, backgroundColor: '#E0DFD5', marginBottom: 24*S, display: 'flex' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ color: '#8A8A7A', fontSize: 17 }}>Edition #{String(edition)}</span>
-          <span style={{ color: '#C8720A', fontSize: 19, fontWeight: 700 }}>bhaavbrief.in</span>
+          <span style={{ color: '#8A8A7A', fontSize: 17*S }}>Edition #{String(edition)}</span>
+          <span style={{ color: '#C8720A', fontSize: 19*S, fontWeight: 700 }}>bhaavbrief.in</span>
         </div>
       </div>
     ),
     {
-      width: 1080, height: 1080,
+      width: 1080*S, height: 1080*S,
       fonts: font ? [{ name: 'Playfair Display', data: font, weight: 700, style: 'normal' }] : [],
     }
   )
