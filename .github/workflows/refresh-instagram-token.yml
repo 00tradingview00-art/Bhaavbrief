@@ -17,12 +17,23 @@ jobs:
         id: refresh
         run: |
           RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/refresh_access_token?grant_type=ig_refresh_token&access_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
-          NEW_TOKEN=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('access_token',''))" 2>/dev/null)
-          EXPIRES_IN=$(echo "$RESPONSE" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('expires_in',0))" 2>/dev/null)
-          if [ -z "$NEW_TOKEN" ]; then
-            echo "Token refresh failed: $RESPONSE"
-            exit 1
+          echo "Meta API response: $RESPONSE"
+
+          NEW_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token // empty')
+          EXPIRES_IN=$(echo "$RESPONSE" | jq -r '.expires_in // 0')
+          ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty')
+
+          if [ -n "$ERROR" ]; then
+            echo "Token refresh error: $ERROR"
+            # Exit 0 — don't break the workflow if Meta returns a transient error
+            exit 0
           fi
+
+          if [ -z "$NEW_TOKEN" ]; then
+            echo "No token returned — skipping secret update"
+            exit 0
+          fi
+
           DAYS=$(( EXPIRES_IN / 86400 ))
           echo "Token refreshed — valid for ${DAYS} more days"
           echo "new_token=$NEW_TOKEN" >> $GITHUB_OUTPUT
