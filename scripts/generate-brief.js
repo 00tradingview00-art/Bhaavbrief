@@ -184,7 +184,20 @@ WRITING RULES
 - Sharp, specific, factual — no waffle, no filler, no hedging.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
-- End with "Edge of the Day:" — one specific data point or level for an Indian commodity trader to monitor.
+- End with "Edge of the Day:" — one specific data point or level to monitor.
+
+LANGUAGE — NON-NEGOTIABLE:
+Write for an educated Indian reader — someone who follows Mint or Economic Times, not a Bloomberg terminal analyst. Explain finance terms in plain language.
+- FOMC → "US Federal Reserve's rate committee (FOMC)" on first mention
+- "risk-off" → "fear-driven selling" or "investors pulling back from risky assets"
+- "risk-on" → "markets gaining confidence, investors moving into commodities"
+- "commodity complex" → just "commodities"
+- "safe-haven bid" → "demand for gold as a safe harbour"
+- "supply shock" → "sudden supply disruption" or explain the mechanism
+- "the market is pricing in" → say what's actually happening instead
+- "overhang" → explain the context plainly
+- When any global term (WTI, FOMC, OPEC, EIA) appears, assume the reader knows it OR briefly parenthesize on first use
+- Never stack two pieces of jargon in one sentence
 
 ═══════════════════════════════════════════
 STRUCTURE (follow exactly)

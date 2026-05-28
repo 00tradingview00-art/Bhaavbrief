@@ -553,7 +553,7 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
   const commodity = primaryMove?.label ?? 'commodities'
   const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
 
-  const prompt = `You are BhaavBrief's senior market analyst — India's premier real-time commodity intelligence platform, read by professional MCX traders.
+  const prompt = `You are BhaavBrief's senior market analyst — India's premier real-time commodity intelligence platform, read by traders, investors, merchants and businesses.
 
 Write a flash intelligence article triggered at ${timeStr} IST on ${dateStr}.
 
@@ -583,6 +583,16 @@ WRITING STANDARDS — NON-NEGOTIABLE:
 5. Quantify the INDIAN IMPORT PARITY: COMEX price + USD/INR rate + customs duty → exact MCX ₹ parity. Show the arithmetic.
 6. 150–250 words. Sharp. No filler. No "experts say". Facts, levels, mechanics only.
 7. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
+
+LANGUAGE — NON-NEGOTIABLE:
+Write for an educated Indian reader (Mint/ET level), NOT a Bloomberg terminal analyst. Avoid finance-desk shorthand.
+- "risk-off" → "fear-driven selling" or "investors pulling back from risky assets"
+- "risk-on" → "markets regaining confidence"
+- "commodity complex" → "commodities"
+- "safe-haven bid" → "demand for gold as a safe harbour"
+- "the market is pricing in" → say what's actually happening
+- FOMC, OPEC, EIA are acceptable (widely known) but explain once if central to the article
+- Never stack two jargon terms in one sentence
 
 SEO RULES:
 - Title: commodity name + specific action + key reason (under 65 chars, include "MCX")
