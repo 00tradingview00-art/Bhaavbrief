@@ -64,8 +64,8 @@ async function main() {
   const desc     = data.description ?? ''
   const tags     = (data.tags ?? []).map(t => TAG_HASHTAGS[t]).filter(Boolean).join(' ')
 
-  const imageUrl = `https://www.bhaavbrief.in/api/instagram-card/${slug}`
-  const briefUrl = `https://www.bhaavbrief.in/briefs/${slug}`
+  const imageUrl = `https://bhaavbrief.in/api/instagram-card/${slug}`
+  const briefUrl = `https://bhaavbrief.in/briefs/${slug}`
 
   const caption = [
     title,
