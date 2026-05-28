@@ -38,6 +38,25 @@
     "commodity": ""
   },
   {
+    "type": "hawk-scan",
+    "slug": "2026-05-28-hawk-scan-natgas-20260528",
+    "href": "/articles/2026-05-28-hawk-scan-natgas-20260528",
+    "title": "[HAWK-SCAN] MCX Nat Gas: +12.26% spike — watch ₹316 resistance",
+    "description": "MCX Nat Gas surges 12.26% to ₹314/mmBtu at 03:37 IST. Near 20-day high of ₹316. Crude plunges 5.24% simultaneously. Act with precision.",
+    "excerpt": "TRIGGER — MCX Nat Gas printed a 12.26% single-session surge to ₹314, breaching the 3% Hawk-Scan threshold decisively. PRICE — ₹314.00 · +12.26% · SPIKING SIGNAL — Henry Hub spot divergence from crude ",
+    "date": "2026-05-28",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 314
+  },
+  {
     "type": "brief",
     "slug": "edition-021",
     "href": "/briefs/edition-021",
