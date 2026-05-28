@@ -51,6 +51,31 @@ export default async function BriefsPage() {
         </p>
       </div>
 
+      {/* Learn section */}
+      <div style={{ marginBottom: 32, padding: '18px 20px', border: '1px solid var(--border)', borderRadius: 8, background: 'var(--surface)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)' }}>
+            New to MCX? Start here
+          </span>
+          <Link href="/learn" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.04em' }}>
+            All topics →
+          </Link>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
+          {[
+            { label: 'Why commodity prices move',     desc: 'Rupee, OPEC, Fed — the 5 drivers' },
+            { label: 'MCX lot sizes & margins',        desc: 'Gold, Silver, Crude contract specs' },
+            { label: 'NSE Gold vs MCX Gold',           desc: 'Which exchange, which contract?' },
+            { label: 'How merchants hedge price risk', desc: 'Jewellers, importers, manufacturers' },
+          ].map(item => (
+            <Link key={item.label} href="/learn" style={{ textDecoration: 'none', padding: '10px 14px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--surface-2)', display: 'block' }}>
+              <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--ink)', marginBottom: 3, lineHeight: 1.3 }}>{item.label}</div>
+              <div style={{ fontSize: 11, color: 'var(--ink-4)' }}>{item.desc}</div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       {briefs.length === 0 ? (
         <p style={{ fontSize: 14, color: 'var(--ink-4)', padding: '32px 0' }}>No briefs found. Check your content/briefs directory.</p>
       ) : (
