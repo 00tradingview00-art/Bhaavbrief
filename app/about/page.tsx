@@ -4,11 +4,11 @@ import AboutSearch from '@/components/AboutSearch'
 
 export const metadata: Metadata = {
   title: 'About BhaavBrief — Indian Commodity Intelligence',
-  description: 'BhaavBrief is a daily MCX commodity intelligence newsletter for Indian traders. Learn about our mission, what we cover, and how we work.',
+  description: 'BhaavBrief is a daily commodity intelligence newsletter for Indian traders, investors, merchants and businesses. Learn about our mission, what we cover, and how we work.',
   alternates: { canonical: 'https://bhaavbrief.in/about' },
   openGraph: {
     title: 'About BhaavBrief',
-    description: 'Daily MCX commodity intelligence for Indian traders — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 9:30 AM.',
+    description: 'Daily commodity intelligence for Indian traders, investors and merchants — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 9:30 AM.',
     url: 'https://bhaavbrief.in/about',
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -25,9 +25,9 @@ const COMMODITIES = [
 ]
 
 const PRINCIPLES = [
-  { title: 'Open access', body: 'BhaavBrief has no subscription fee and no paywalled content. Commodity intelligence should be accessible to every trader, not just institutional desks.' },
-  { title: 'Data, not noise', body: 'Every edition leads with price levels, OHLC context, and open interest — the numbers that actually matter to MCX traders.' },
-  { title: 'Plain language', body: 'We write for traders, not economists. No jargon for its own sake. If a concept needs explaining, we explain it.' },
+  { title: 'Open access', body: 'No subscription fee, no paywalled content. Commodity intelligence should be accessible to everyone who needs it — futures traders, portfolio investors, jewellers, fuel dealers, agri merchants. Not just institutional desks.' },
+  { title: 'Data, not noise', body: 'Every edition leads with price levels, OHLC context, and open interest — the numbers that matter whether you are trading, hedging a business, or tracking an investment.' },
+  { title: 'Plain language', body: 'We write for people who need to act on information, not economists. No jargon for its own sake. If a concept needs explaining, we explain it.' },
   { title: 'Transparent about limits', body: 'We are not SEBI registered. We do not give trading calls or buy/sell recommendations. We provide context; you make the decision.' },
 ]
 
@@ -42,12 +42,13 @@ export default function AboutPage() {
             About
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', margin: '0.4rem 0 1.25rem' }}>
-            Commodity intelligence for every Indian trader
+            Commodity intelligence for every Indian
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300 }}>
-            BhaavBrief is a weekday newsletter that delivers MCX commodity market intelligence
-            directly to your inbox every morning at 9:30 AM. No fluff, no calls — just the numbers,
-            context, and analysis that help you trade better.
+            BhaavBrief delivers daily commodity intelligence every weekday at 9:30 AM. Whether you
+            trade MCX futures, run a business that buys or sells commodities, invest in
+            commodity-linked assets, or simply need to understand what price moves mean — this is
+            your morning context. No calls, no noise.
           </p>
         </div>
 

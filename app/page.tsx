@@ -446,7 +446,7 @@ export default async function HomePage() {
                 fontSize: 13, color: 'var(--ink-3)',
                 lineHeight: 1.65, marginBottom: 14,
               }}>
-                Join India&apos;s sharpest commodity traders. MCX intelligence every weekday at 9:30 AM.
+                Daily commodity intelligence for traders, investors and merchants. Every weekday at 9:30 AM.
               </p>
               <SubscribeForm compact />
             </div>
@@ -467,7 +467,7 @@ export default async function HomePage() {
               About BhaavBrief
             </p>
             <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
-              Independent commodity intelligence for Indian traders and merchants.
+              Independent commodity intelligence for India's traders, investors, merchants and businesses.
               MCX energy, metals, and NCDEX agri — through a geopolitical and supply-demand lens.
             </p>
           </div>

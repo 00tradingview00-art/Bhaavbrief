@@ -14,7 +14,7 @@ export const metadata = {
     type: 'website' as const,
     locale: 'en_IN',
   },
-  twitter: { card: 'summary' as const, title: 'Intelligence Feed | BhaavBrief', description: 'AI-powered cross-asset commodity intelligence for Indian traders.', site: '@bhaavbrief' },
+  twitter: { card: 'summary' as const, title: 'Intelligence Feed | BhaavBrief', description: 'AI-powered cross-asset commodity intelligence for India\'s traders, investors and merchants.', site: '@bhaavbrief' },
 }
 
 export const revalidate = 300
@@ -105,7 +105,7 @@ export default async function NewsPage() {
           fontWeight: 300,
           maxWidth: 560,
         }}>
-          Cross-asset commodity intelligence for Indian traders and businesses.
+          Cross-asset commodity intelligence for India's traders, investors and businesses.
         </p>
       </div>
 

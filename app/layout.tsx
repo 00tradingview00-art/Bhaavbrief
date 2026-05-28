@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     default:  'BhaavBrief — Indian Commodity Intelligence',
     template: '%s | BhaavBrief',
   },
-  description: 'Daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
+  description: 'Daily MCX commodity intelligence for Indian traders, investors and merchants. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
   metadataBase: new URL(BASE),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   alternates: {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'BhaavBrief — Indian Commodity Intelligence',
-    description: 'Daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
+    description: 'Daily MCX commodity intelligence for Indian traders, investors and merchants. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
     url: BASE,
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -73,7 +73,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         '@id': `${BASE}/#organization`,
         name: 'BhaavBrief',
         url: BASE,
-        description: 'Independent commodity intelligence for Indian traders and merchants.',
+        description: 'Independent commodity intelligence for Indian traders, investors and merchants.',
         contactPoint: { '@type': 'ContactPoint', email: 'brief@bhaavbrief.in', contactType: 'Customer Support' },
       },
       {
@@ -81,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         '@id': `${BASE}/#website`,
         url: BASE,
         name: 'BhaavBrief',
-        description: 'Daily MCX commodity intelligence for Indian traders.',
+        description: 'Daily MCX commodity intelligence for Indian traders, investors and merchants.',
         publisher: { '@id': `${BASE}/#organization` },
         potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/briefs?q={search_term_string}` }, 'query-input': 'required name=search_term_string' },
       },
@@ -107,7 +107,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Bhaav<span style={{ color: 'var(--gold)' }}>Brief</span>
           </p>
           <p style={{ fontSize: 13, color: 'var(--ink-4)', marginBottom: 4 }}>
-            Independent commodity intelligence for Indian traders and merchants.
+            Independent commodity intelligence for India's traders, investors and merchants.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in ·{' '}
