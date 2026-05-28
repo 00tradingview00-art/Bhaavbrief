@@ -11,7 +11,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout main
@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Noto fonts (for Instagram card generation)
+        run: sudo apt-get install -y --no-install-recommends fonts-noto-core
+
       - name: Get next edition number
         id: edition
         run: |
@@ -45,7 +48,7 @@ jobs:
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
 
-      - name: Commit directly to main
+      - name: Commit brief to main
         id: commit
         env:
           EDITION: ${{ steps.edition.outputs.number }}
@@ -58,13 +61,32 @@ jobs:
           git stash pop || true
           git add content/briefs/ data/content-index.json
           if git diff --staged --quiet; then
-            echo "Nothing to commit — skipping newsletter"
+            echo "Nothing to commit — skipping newsletter and Instagram"
             echo "published=false" >> $GITHUB_OUTPUT
             exit 0
           fi
           git commit -m "Brief #${EDITION} — $(date +'%d %b %Y')"
           git push origin main
           echo "published=true" >> $GITHUB_OUTPUT
+
+      - name: Generate Instagram card
+        if: steps.commit.outputs.published == 'true'
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: node scripts/generate-instagram-card.js
+
+      - name: Commit Instagram card
+        if: steps.commit.outputs.published == 'true'
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: |
+          git add public/instagram/
+          if git diff --staged --quiet; then
+            echo "No card to commit"
+          else
+            git commit -m "Instagram card — Edition #${EDITION}"
+            git push origin main
+          fi
 
       - name: Wait for deploy then send newsletter
         if: steps.commit.outputs.published == 'true'
@@ -76,3 +98,12 @@ jobs:
         run: |
           sleep 180
           node scripts/send-newsletter.js
+
+      - name: Post to Instagram
+        if: steps.commit.outputs.published == 'true'
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/post-instagram.js
