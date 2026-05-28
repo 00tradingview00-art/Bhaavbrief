@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-05-28-22-39-mcx-copper-surges-1-35-to-1336-80-kg-as",
+    "title": "MCX Copper surges 1.35% to ₹1336.80/kg as dollar weakness fuels broad metals bid",
+    "summary": "The primary mechanism is dollar weakness triggering a reflation bid across the entire metals complex — when USD depreciates, dollar-denominated commodities reprice higher globally, amplified further through the USD/INR rate of ₹95.70. Import parity arithmetic: LME Copper approximate $9,850/tonne × ₹95.70 × 0.01 (kg conversion) × ~1.055 duty factor = approximately ₹9,927/100kg or roughly ₹993/kg theoretical floor, suggesting MCX at ₹1336.80 carries a structural premium reflecting domestic demand, logistics, and contract specifications. Support observed near ₹1310; resistance historically tested around ₹1355. Cross-commodity confirmation: MCX Silver advancing 1.20% simultaneously — both metals historically move in tandem during dollar-weakness episodes, confirming the reflation rather than isolated copper-specific demand. Watch ₹1355 resistance into close; US PCE data Friday remains the scheduled macro trigger.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-05-28T17:09:20.739Z",
+    "pubDateIST": "28 May 2026, 22:39"
+  },
+  {
+    "id": "2026-05-28-22-39-mcx-natural-gas-surges-4-25-to-314-10-mm",
+    "title": "MCX Natural Gas Surges 4.25% to ₹314.10/mmBtu as Safe-Haven Demand Reshapes Session",
+    "summary": "The mechanism driving this session is dollar softness feeding a reflation-adjacent bid across energy and metals simultaneously. Natural gas is historically sensitive to currency-driven import cost adjustments — with USD/INR at ₹95.70, the landed cost arithmetic shifts materially. Using a reference Henry Hub proxy near $2.30/mmBtu, applying ₹95.70 and an approximate duty-plus-logistics factor of 1.42, theoretical import parity sits near ₹312-315/mmBtu — placing MCX at rough parity, neither premium nor discount of significance. Support is observed at ₹299, resistance at ₹321. Copper's simultaneous +1.35% move confirms the dollar-weakness mechanism is broad, not commodity-specific, lending structural consistency to the natural gas advance. Watch the ₹321 level into close alongside the US EIA Natural Gas Storage report, due tomorrow.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-05-28T17:09:09.169Z",
+    "pubDateIST": "28 May 2026, 22:39"
+  },
+  {
     "id": "2026-05-28-04-35-wti-crude-holds-89-72-as-mixed-session-o",
     "title": "WTI Crude Holds $89.72 as Mixed Session Offers No Directional Catalyst for MCX",
     "summary": "The incoming signal arrives against a session where the commodity complex has registered sub-0.2% moves with no dominant cross-asset theme — a structural condition that strips forward-looking price forecast narratives of actionable weight. WTI at $89.72 per barrel translates through the USD/INR rate of 95.69 to approximately 8,757 rupees per barrel on an import parity basis before customs duty and refinery premium adjustments are layered in. The primary MCX contract affected is Crude Oil, with the estimated MCX equivalent near 8,757 per barrel at current conversion. The cross-market correlation to watch is COMEX Copper at $6.3348 per pound, which historically tracks global demand sentiment alongside crude in risk-on/risk-off rotations relevant to Indian energy and base metal positioning. The price level that will confirm or negate any directional bias for tomorrow's MCX open is a sustained breach above or hold below the $90.00 per barrel handle on WTI during the Asia open.",
