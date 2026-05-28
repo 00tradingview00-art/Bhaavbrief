@@ -3,18 +3,28 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'All Briefs — MCX Daily Commodity Intelligence',
-  description: 'Browse all BhaavBrief daily MCX commodity intelligence editions. Weekday analysis of Gold, Silver, Crude Oil, Copper and Natural Gas — geopolitical lens, supply-demand, price outlook.',
+  title: 'MCX Daily Commodity Briefs — Market Outlook & Analysis',
+  description: 'Daily MCX commodity briefs for Indian traders. Each edition explains what moved gold, crude oil, silver and copper — and why. Geopolitical lens, supply-demand signals, rupee-dollar impact, price outlook. Every weekday.',
+  keywords: [
+    'MCX commodity daily analysis India',
+    'MCX market outlook today',
+    'MCX gold crude silver daily brief',
+    'commodity market outlook India weekday',
+    'MCX geopolitical impact analysis',
+    'rupee dollar commodity brief India',
+    'MCX supply demand price outlook',
+    'commodity trading analysis India',
+  ],
   alternates: { canonical: 'https://bhaavbrief.in/briefs' },
   openGraph: {
-    title: 'All Briefs — MCX Daily Commodity Intelligence | BhaavBrief',
-    description: 'Browse all BhaavBrief daily MCX commodity intelligence editions. Weekday analysis covering Gold, Silver, Crude Oil, Copper and Natural Gas.',
+    title: 'MCX Daily Commodity Briefs — Market Outlook & Analysis | BhaavBrief',
+    description: 'Daily MCX commodity intelligence — what moved gold, crude, silver and why. Geopolitical lens, supply-demand, rupee-dollar. Every weekday.',
     url: 'https://bhaavbrief.in/briefs',
     siteName: 'BhaavBrief',
     type: 'website' as const,
     locale: 'en_IN',
   },
-  twitter: { card: 'summary' as const, title: 'All Briefs | BhaavBrief', description: 'Daily MCX commodity intelligence — Gold, Silver, Crude Oil, Copper, Natural Gas.', site: '@bhaavbrief' },
+  twitter: { card: 'summary' as const, title: 'MCX Daily Briefs | BhaavBrief', description: 'What moved MCX gold, crude oil and silver — and why. Daily commodity intelligence for Indian traders.', site: '@bhaavbrief' },
 }
 
 function getTagType(tag?: string): string {

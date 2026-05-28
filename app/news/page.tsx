@@ -3,18 +3,30 @@ import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
 export const metadata = {
-  title: 'Intelligence Feed — AI Commodity Market Intelligence',
-  description: 'BhaavBrief Intelligence: AI-powered cross-asset commodity briefings connecting commodities, geopolitics, government policy, currencies, and macro events — updated every 15 minutes.',
+  title: 'MCX Commodity Intelligence Feed — Why Prices Are Moving Today',
+  description: 'Real-time MCX commodity intelligence — explains why gold, crude oil, silver and copper are moving. OPEC decisions, Fed policy, rupee-dollar shifts, geopolitical events — connected to your MCX position. Updated every 15 minutes.',
+  keywords: [
+    'why is MCX gold moving today',
+    'why crude oil price falling India',
+    'OPEC decision MCX crude oil impact',
+    'US Fed rate MCX gold India',
+    'rupee fall impact commodity prices',
+    'MCX commodity market news today',
+    'geopolitics MCX commodity India',
+    'commodity market intelligence India today',
+    'MCX silver why moving',
+    'Iran tensions crude oil MCX',
+  ],
   alternates: { canonical: 'https://bhaavbrief.in/news' },
   openGraph: {
-    title: 'Intelligence Feed | BhaavBrief — India\'s AI Commodity Intelligence Platform',
-    description: 'Cross-asset commodity intelligence: MCX markets, government policy, rupee impact, and global macro — AI-generated and updated every 15 minutes.',
+    title: 'MCX Commodity Intelligence — Why Prices Are Moving | BhaavBrief',
+    description: 'Real-time MCX intelligence: why gold, crude, silver are moving — OPEC, Fed, rupee-dollar, geopolitics. Updated every 15 minutes.',
     url: 'https://bhaavbrief.in/news',
     siteName: 'BhaavBrief',
     type: 'website' as const,
     locale: 'en_IN',
   },
-  twitter: { card: 'summary' as const, title: 'Intelligence Feed | BhaavBrief', description: 'AI-powered cross-asset commodity intelligence for India\'s traders, investors and merchants.', site: '@bhaavbrief' },
+  twitter: { card: 'summary' as const, title: 'MCX Intelligence Feed | BhaavBrief', description: 'Why MCX gold, crude oil and silver are moving today — AI-powered commodity intelligence updated every 15 minutes.', site: '@bhaavbrief' },
 }
 
 export const revalidate = 300

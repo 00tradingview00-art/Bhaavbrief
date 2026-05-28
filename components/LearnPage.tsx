@@ -384,6 +384,176 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
       </>
     ),
   },
+  {
+    id: 10,
+    section: 'Market Drivers',
+    title: 'Why commodity prices move',
+    label: 'Market Drivers · Article 1 of 3',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          MCX commodity prices don&apos;t move randomly. Every significant move has a driver — and most drivers fall into five categories. Understanding them lets you interpret a price chart the same way a professional trader does.
+        </p>
+        <ArticleTable
+          headers={['Driver', 'Affects most', 'How it works']}
+          rows={[
+            ['USD/INR exchange rate',  'Gold, Silver, Crude, Copper', 'MCX prices are INR-denominated. Rupee weakens → MCX price rises even if global price is flat. Rupee strengthens → MCX falls.'],
+            ['Global benchmark price', 'All commodities',            'MCX gold tracks COMEX gold (NY). MCX crude tracks WTI/Brent. A $10/bbl rise in WTI adds ~₹830 to MCX Crude (at USD/INR 83).'],
+            ['Import duty & GST',      'Gold, Silver',               'Government changes to import duty directly set the floor for MCX gold pricing. A 2% duty cut = ~₹2,000/10g fall in MCX gold.'],
+            ['Geopolitical events',    'Crude, Gold',                'Wars, sanctions, and supply disruptions hit crude first, then gold (safe-haven demand). Iran-related events move MCX crude within minutes.'],
+            ['Domestic demand/supply', 'Silver, Copper',             'Festival season, industrial activity, and monsoon affect local demand. Silver surges before Diwali and during solar panel procurement cycles.'],
+          ]}
+        />
+        <InfoBox title="The rupee multiplier — a worked example">
+          COMEX Gold at $3,000/oz. USD/INR at ₹84.<br /><br />
+          MCX theoretical = (3000 ÷ 31.1035) × 10 × 84 × 1.15 = <strong>~₹93,000/10g</strong><br /><br />
+          Now rupee weakens to ₹86 with COMEX unchanged:<br />
+          MCX theoretical = (3000 ÷ 31.1035) × 10 × 86 × 1.15 = <strong>~₹95,200/10g</strong><br /><br />
+          A 2% rupee depreciation alone adds ~₹2,200 to MCX gold — even if international gold didn&apos;t move. This is why MCX gold in India often makes new highs even when COMEX is flat.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          Most retail traders fixate on the commodity price while ignoring the rupee. Professional Indian commodity traders watch both simultaneously — because on some days, the rupee is the entire story.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 11,
+    section: 'Market Drivers',
+    title: 'OPEC, Fed & geopolitics',
+    label: 'Market Drivers · Article 2 of 3',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Three external forces move MCX commodities more than any Indian domestic factor. Knowing when each is in play helps you avoid being caught on the wrong side.
+        </p>
+        <InfoBox title="OPEC — the crude oil throttle">
+          OPEC+ (the 23-nation cartel including Saudi Arabia and Russia) controls roughly 40% of global oil supply. When they announce production cuts, crude prices rise — typically within minutes of the decision. When they raise output, prices fall.<br /><br />
+          For MCX crude traders: OPEC meetings (usually every 2–3 months) are high-risk events. Positions held over a scheduled OPEC meeting should have defined stop-losses. The 2022 surprise cut sent MCX Crude up ₹800/bbl in a single session.<br /><br />
+          Watch for: unofficial signals from Saudi energy ministry statements before formal OPEC meetings — these often move markets before the official announcement.
+        </InfoBox>
+        <InfoBox title="US Federal Reserve — the gold multiplier">
+          Gold and the US dollar have an inverse relationship. When the Fed raises interest rates, the dollar strengthens → gold falls globally → MCX gold falls (amplified if rupee also strengthens). When the Fed cuts rates or signals easy policy → dollar weakens → gold rises globally → MCX gold rises (amplified if rupee weakens).<br /><br />
+          Key Fed events that move MCX gold: FOMC rate decisions (8 per year), Fed Chair press conferences, US CPI data (monthly), US Non-Farm Payrolls (first Friday of each month). These are scheduled — mark your calendar.
+        </InfoBox>
+        <InfoBox title="Geopolitics — crude and gold safe-haven">
+          Middle East conflicts raise crude prices (supply disruption risk) and gold prices (safe-haven demand) simultaneously. The Iran-Strait of Hormuz risk is the most persistent — roughly 20% of global oil passes through the strait.<br /><br />
+          Russia-Ukraine conflict affected both crude (Russian supply) and wheat, which is less relevant for MCX but affects agri-linked commodities. China slowdown signals hit MCX Copper hardest — China consumes ~55% of global copper.
+        </InfoBox>
+        <ArticleTable
+          headers={['Event', 'Primary MCX impact', 'Secondary impact', 'Typical timing']}
+          rows={[
+            ['OPEC production decision', 'Crude ↑↓ sharply', 'NatGas, indirect', 'Within minutes of announcement'],
+            ['US Fed rate decision',     'Gold ↑↓',          'Rupee, Crude',     'FOMC day — 11:30 PM IST'],
+            ['US CPI data release',      'Gold ↑↓',          'Rupee, Crude',     '6:00 PM IST (monthly)'],
+            ['Iran-US escalation',       'Crude ↑, Gold ↑',  'Silver ↑',         'Immediate — any time'],
+            ['China PMI data',           'Copper ↑↓',        'Silver ↑↓',        'Monthly — early morning IST'],
+          ]}
+        />
+      </>
+    ),
+  },
+  {
+    id: 12,
+    section: 'Market Drivers',
+    title: 'NSE Gold Futures vs MCX Gold',
+    label: 'Market Drivers · Article 3 of 3',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          In 2026, NSE launched its own gold futures contract, giving Indian traders a second exchange option for the first time. Here&apos;s how it compares to MCX — and when to use which.
+        </p>
+        <ArticleTable
+          headers={['Factor', 'MCX Gold', 'NSE Gold Futures']}
+          rows={[
+            ['Exchange',          'Multi Commodity Exchange',        'National Stock Exchange'],
+            ['Regulator',         'SEBI',                            'SEBI'],
+            ['Market share',      '~98% of Indian commodity volume', 'New — building liquidity'],
+            ['Lot size',          '1 kg (Gold), 100g (Gold Mini)',   '1 kg (standard)'],
+            ['Trading hours',     '9 AM – 11:30 PM IST',            '9 AM – 5 PM IST (equity hours)'],
+            ['Margin',            'Higher (MCX SPAN framework)',     'Lower — competitive launch pricing'],
+            ['Settlement',        'INR cash or physical delivery',   'INR cash settlement'],
+            ['Existing account',  'Need separate commodity account', 'Works with existing equity demat'],
+            ['Liquidity',         'Deep — decades of volume',        'Early stage — wider bid-ask spreads'],
+          ]}
+        />
+        <InfoBox title="Which should you use?">
+          For most active traders: <strong>MCX Gold</strong> remains the better choice in 2026. Its depth means tighter spreads and easier entry/exit on large positions. The evening session (post 5 PM) captures US market moves — absent on NSE Gold.<br /><br />
+          For existing equity traders who don&apos;t have a commodity account: <strong>NSE Gold Futures</strong> removes the friction of opening a new account. Lower margin requirements may suit smaller capital.<br /><br />
+          Watch the spread: if NSE Gold trades at a significantly different price than MCX Gold during common hours, an arbitrage exists — sophisticated traders are already closing this gap, but retail traders should trade the more liquid MCX unless they have a specific account-convenience reason to use NSE.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          The longer-term question is whether NSE&apos;s lower margins and equity account integration will shift significant volume away from MCX. MCX&apos;s stock price fell 5% on NSE Gold&apos;s launch day — signalling real competitive concern. For traders, more competition between exchanges means tighter margins and lower costs over time.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 13,
+    section: 'Hedging',
+    title: 'How jewellers & merchants hedge',
+    label: 'Hedging · Article 1 of 2',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Commodity futures weren&apos;t designed for speculators — they were designed for merchants and producers who need to lock in prices. This is called <strong>hedging</strong>: using futures to remove price risk from your business.
+        </p>
+        <InfoBox title="The jeweller's problem — and the solution">
+          A jeweller in Mumbai receives a ₹50 lakh order for gold jewellery to be delivered in 45 days. Today&apos;s MCX Gold price is ₹1,00,000/10g. The jeweller hasn&apos;t bought the gold yet.<br /><br />
+          <strong>Risk</strong>: If gold rises to ₹1,05,000/10g by the time they buy it, their cost increases by ₹5L — wiping out the profit margin.<br /><br />
+          <strong>Hedge</strong>: The jeweller buys MCX Gold futures today at ₹1,00,000/10g (locking in the purchase price). When they buy physical gold 30 days later at ₹1,05,000, they simultaneously sell the futures. The ₹5L gain on futures offsets the higher physical purchase cost. Net cost: ₹1,00,000/10g — exactly what they planned.
+        </InfoBox>
+        <ArticleTable
+          headers={['Business type', 'Risk', 'Hedge action', 'MCX contract used']}
+          rows={[
+            ['Jeweller (gold buyer)',       'Gold rises before purchase',   'Buy gold futures today',          'MCX Gold / Gold Mini'],
+            ['Jeweller (gold seller)',      'Gold falls before delivery',   'Sell gold futures today',         'MCX Gold / Gold Mini'],
+            ['Oil importer / transporter',  'Crude rises before import',    'Buy crude futures today',         'MCX Crude Oil'],
+            ['Cable manufacturer',          'Copper rises before purchase', 'Buy copper futures today',        'MCX Copper'],
+            ['Solar panel installer',       'Silver rises before purchase', 'Buy silver futures today',        'MCX Silver Mini'],
+          ]}
+        />
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          <strong>Basis risk</strong> is the one imperfection in hedging: the MCX futures price and the actual physical purchase price may not move in perfect lockstep. Local factors (GST changes, import disruptions, local demand) create a basis — a difference between MCX and physical price. A jeweller hedging with MCX is protected from the global and rupee-driven moves, but not from local basis shifts.
+        </p>
+        <InfoBox title="Practical setup for a small merchant">
+          You don&apos;t need a large capital base to hedge. MCX Gold Mini (100g lot, ~₹60,000–₹80,000 margin) is accessible for small jewellers. Open a commodity account with Zerodha or Angel One, maintain 2–3 lot worth of margin buffer, and hedge only the quantity you&apos;ve committed to customers — not speculative inventory.
+        </InfoBox>
+      </>
+    ),
+  },
+  {
+    id: 14,
+    section: 'Hedging',
+    title: 'Practical hedging for small businesses',
+    label: 'Hedging · Article 2 of 2',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Theory is straightforward — execution is where most small business owners stop. Here&apos;s a practical step-by-step for a jeweller or merchant looking to hedge for the first time.
+        </p>
+        <ArticleTable
+          headers={['Step', 'Action', 'Detail']}
+          rows={[
+            ['1', 'Open a commodity trading account',     'Zerodha Kite, Angel One, or ICICI Direct. Takes 1–2 days. Requires PAN, Aadhaar, bank account, and commodity trading activation.'],
+            ['2', 'Calculate your exposure',              'How many grams of gold are you committed to buying/selling in the next 30–60 days? Convert to MCX lot equivalents (1 lot = 1 kg = 1,000g; Mini = 100g).'],
+            ['3', 'Choose the right contract month',      'Pick the MCX contract month closest to your physical transaction date. If buying gold in 40 days, use the contract expiring nearest to that date.'],
+            ['4', 'Place the hedge trade',                'Buy futures if you fear rising prices (you\'re a buyer). Sell futures if you fear falling prices (you\'re a seller holding inventory).'],
+            ['5', 'Monitor and adjust',                   'If your physical transaction date shifts, roll the futures contract to a later month. Rollover cost is typically ₹1,000–₹3,000 per lot.'],
+            ['6', 'Close the hedge on transaction day',   'When you complete the physical purchase or sale, square off the futures position. The net cost = physical price ± futures P&L.'],
+          ]}
+        />
+        <InfoBox title="Common mistakes in commodity hedging">
+          <strong>Over-hedging</strong>: Hedging more futures than your physical exposure turns your hedge into speculation. Hedge only what you have a real business obligation for.<br /><br />
+          <strong>Ignoring margin calls</strong>: If gold moves against your futures position before you buy physically, your broker may issue a margin call. Maintain a 30% buffer above minimum margin — or your hedge gets squared off at the worst time.<br /><br />
+          <strong>Hedging too early</strong>: Price discovery improves closer to expiry. A 90-day hedge has more basis risk than a 30-day hedge. Match the futures horizon to your physical commitment as closely as possible.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          For most small merchants, even a partial hedge — covering 50–70% of your committed exposure — is far better than no hedge. You don&apos;t need to hedge perfectly; you need to avoid a single catastrophic price move that wipes out a month&apos;s margin.
+        </p>
+      </>
+    ),
+  },
   ] // end return
 } // end buildArticles
 
