@@ -817,7 +817,6 @@ async function main() {
     return
   }
 
-  const today = new Date().toISOString().split('T')[0]
   state.articlesToday = state.articlesToday ?? []
   state.articlesToday.push(`${today}/${result.slug}`)
   state.lastArticleAt = new Date().toISOString()
