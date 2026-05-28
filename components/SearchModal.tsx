@@ -240,12 +240,6 @@ export default function SearchModal({ open, onClose }: Props) {
                     }}>
                       Intelligence
                     </span>
-                    <span style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)',
-                      letterSpacing: '0.04em',
-                    }}>
-                      Educational · Not investment advice
-                    </span>
                   </div>
                   <p style={{
                     fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.75,
@@ -370,15 +364,9 @@ export default function SearchModal({ open, onClose }: Props) {
         <div style={{
           padding: '10px 20px',
           borderTop: '1px solid var(--border)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
           flexWrap: 'wrap', gap: '4px 12px',
         }}>
-          <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)',
-            letterSpacing: '0.04em',
-          }}>
-            Educational only · Not investment advice · Not SEBI registered
-          </span>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
             BhaavBrief Intelligence
           </span>
