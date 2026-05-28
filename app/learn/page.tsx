@@ -9,7 +9,7 @@ export const metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/learn' },
   openGraph: {
     title: 'Learn MCX Trading — Futures, Margins, Taxation | BhaavBrief',
-    description: 'MCX commodity trading explained — futures, lot sizes, leverage, taxation, Gold ETF vs MCX Gold. Free educational resource for Indian traders.',
+    description: 'MCX commodity trading explained — futures, lot sizes, leverage, taxation, Gold ETF vs MCX Gold. Educational resource for Indian traders.',
     url: 'https://bhaavbrief.in/learn',
     siteName: 'BhaavBrief',
     type: 'website' as const,

@@ -52,7 +52,7 @@ export default function PrivacyPage() {
 
         <Section title="1. Who We Are">
           <p>
-            BhaavBrief is a free daily commodity intelligence newsletter for Indian traders, published at{' '}
+            BhaavBrief is a daily commodity intelligence newsletter for Indian traders, published at{' '}
             <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>.
             We are not SEBI registered. This policy explains how we handle personal data collected
             through this website.
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
 
         <Section title="3. Why We Collect It">
           <p>
-            Your email address is used solely to send you the BhaavBrief newsletter — a free weekday
+            Your email address is used solely to send you the BhaavBrief newsletter — a weekday
             digest of MCX commodity market intelligence. We do not use it for advertising, profiling,
             or any other purpose.
           </p>

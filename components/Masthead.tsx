@@ -49,7 +49,7 @@ export default function Masthead() {
             background: '#18180F', color: '#FAFAF6', padding: '7px 18px',
             textDecoration: 'none', whiteSpace: 'nowrap',
           }}>
-            Subscribe Free →
+            Subscribe →
           </Link>
         </nav>
       </div>

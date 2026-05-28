@@ -65,7 +65,7 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
       {!compact && (
         <>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
-            Free daily brief
+            Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
             Start your morning with an edge
@@ -84,7 +84,7 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
         required
       />
       <button style={btnStyle} type="submit" disabled={status === 'loading'}>
-        {status === 'loading' ? 'Subscribing...' : 'Subscribe free →'}
+        {status === 'loading' ? 'Subscribing...' : 'Subscribe →'}
       </button>
       {status === 'error' && (
         <p style={{ fontSize: 11, color: '#991818', marginTop: 6, fontFamily: 'var(--font-mono)' }}>{message}</p>

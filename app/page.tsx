@@ -431,7 +431,7 @@ export default async function HomePage() {
                 color: 'var(--gold)',
                 marginBottom: 4,
               }}>
-                Free daily brief
+                Daily brief
               </div>
               <p style={{
                 fontFamily: 'var(--font-serif)',

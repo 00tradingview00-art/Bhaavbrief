@@ -4,11 +4,11 @@ import AboutSearch from '@/components/AboutSearch'
 
 export const metadata: Metadata = {
   title: 'About BhaavBrief — Indian Commodity Intelligence',
-  description: 'BhaavBrief is a free daily MCX commodity intelligence newsletter for Indian traders. Learn about our mission, what we cover, and how we work.',
+  description: 'BhaavBrief is a daily MCX commodity intelligence newsletter for Indian traders. Learn about our mission, what we cover, and how we work.',
   alternates: { canonical: 'https://bhaavbrief.in/about' },
   openGraph: {
     title: 'About BhaavBrief',
-    description: 'Free daily MCX commodity intelligence for Indian traders — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 9:30 AM.',
+    description: 'Daily MCX commodity intelligence for Indian traders — Gold, Silver, Crude Oil, Copper and Natural Gas every weekday at 9:30 AM.',
     url: 'https://bhaavbrief.in/about',
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -25,7 +25,7 @@ const COMMODITIES = [
 ]
 
 const PRINCIPLES = [
-  { title: 'Free, always', body: 'BhaavBrief has no subscription fee and no paywalled content. Commodity intelligence should be accessible to every trader, not just institutional desks.' },
+  { title: 'Open access', body: 'BhaavBrief has no subscription fee and no paywalled content. Commodity intelligence should be accessible to every trader, not just institutional desks.' },
   { title: 'Data, not noise', body: 'Every edition leads with price levels, OHLC context, and open interest — the numbers that actually matter to MCX traders.' },
   { title: 'Plain language', body: 'We write for traders, not economists. No jargon for its own sake. If a concept needs explaining, we explain it.' },
   { title: 'Transparent about limits', body: 'We are not SEBI registered. We do not give trading calls or buy/sell recommendations. We provide context; you make the decision.' },
@@ -45,7 +45,7 @@ export default function AboutPage() {
             Commodity intelligence for every Indian trader
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300 }}>
-            BhaavBrief is a free weekday newsletter that delivers MCX commodity market intelligence
+            BhaavBrief is a weekday newsletter that delivers MCX commodity market intelligence
             directly to your inbox every morning at 9:30 AM. No fluff, no calls — just the numbers,
             context, and analysis that help you trade better.
           </p>

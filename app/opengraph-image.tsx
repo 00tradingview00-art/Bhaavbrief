@@ -44,7 +44,7 @@ export default async function OGImage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '22px 88px', borderTop: `1px solid ${C.rule}` }}>
           <div style={{ fontSize: 15, color: C.ink4, fontFamily: 'sans-serif' }}>bhaavbrief.in</div>
           <div style={{ fontSize: 12, color: C.gold, background: C.goldPale, padding: '6px 14px', borderRadius: 4, fontFamily: 'sans-serif', letterSpacing: 1.5 }}>
-            FREE · EVERY WEEKDAY
+            EVERY WEEKDAY
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     default:  'BhaavBrief — Indian Commodity Intelligence',
     template: '%s | BhaavBrief',
   },
-  description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
+  description: 'Daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — prices, OHLC analysis and market outlook every weekday. For educational purposes only.',
   metadataBase: new URL(BASE),
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   alternates: {
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'BhaavBrief — Indian Commodity Intelligence',
-    description: 'Free daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
+    description: 'Daily MCX commodity intelligence for Indian traders. Gold, Silver, Crude Oil, Copper, Natural Gas — analysis and market outlook every weekday.',
     url: BASE,
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'BhaavBrief — Indian Commodity Intelligence',
-    description: 'Free daily MCX intelligence — Gold, Silver, Crude Oil, Copper, Natural Gas. Every weekday.',
+    description: 'Daily MCX intelligence — Gold, Silver, Crude Oil, Copper, Natural Gas. Every weekday.',
     site: '@bhaavbrief',
   },
 }
@@ -81,7 +81,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         '@id': `${BASE}/#website`,
         url: BASE,
         name: 'BhaavBrief',
-        description: 'Free daily MCX commodity intelligence for Indian traders.',
+        description: 'Daily MCX commodity intelligence for Indian traders.',
         publisher: { '@id': `${BASE}/#organization` },
         potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${BASE}/briefs?q={search_term_string}` }, 'query-input': 'required name=search_term_string' },
       },

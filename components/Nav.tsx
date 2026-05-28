@@ -156,7 +156,7 @@ export default function Nav() {
               alignItems: 'center',
             }}
           >
-            Subscribe free →
+            Subscribe →
           </Link>
         </div>
       </nav>
