@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 156900,
-    "silver": 269630,
-    "crude": 8542,
-    "copper": 1338.15,
-    "natgas": 314,
+    "gold": 160094.3142250872,
+    "silver": 257002.50614882572,
+    "crude": 8617.363920000002,
+    "copper": 1422.29702466621,
+    "natgas": 315.3315,
     "usdinr": 95.7
   },
-  "lastChecked": "2026-05-28T22:07:06.294Z",
+  "lastChecked": "2026-05-28T23:01:53.169Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "315"
   },
   "articlesToday": [
-    "2026-05-29/2026-05-28-hawk-scan-natgas-20260528"
+    "2026-05-29/2026-05-28-hawk-scan-copper-20260528"
   ],
-  "lastArticleAt": "2026-05-28T22:07:18.798Z"
+  "lastArticleAt": "2026-05-28T23:02:03.959Z"
 }
