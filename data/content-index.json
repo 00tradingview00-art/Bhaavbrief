@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-023",
+    "href": "/briefs/edition-023",
+    "title": "Venezuela Shock Fades: Broad Risk Recovery Puts Gold Back in Charge",
+    "description": "As geopolitical supply-shock panic recedes, a coordinated risk-recovery bid is lifting metals while crude drifts sideways.",
+    "excerpt": "The Venezuela-driven supply shock that hijacked Edition 22 — surging crude, bleeding metals — is losing its grip. Today the market has reordered its priorities: the risk-off impulse that punished gold",
+    "date": "2026-05-28",
+    "edition": "23",
+    "tags": [
+      "MCX Gold",
+      "MCX NatGas",
+      "Macro",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-021",
     "href": "/briefs/edition-021",
     "title": "Fed Waits, Oil Slides, Copper Blinks: Risk Appetite Fractures",
