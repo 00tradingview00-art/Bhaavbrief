@@ -16,7 +16,6 @@ if (existsSync(envFile)) {
 const EDITION  = parseInt(process.env.EDITION ?? '1')
 const IG_USER  = process.env.INSTAGRAM_USER_ID
 const IG_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN
-const REPO     = process.env.GITHUB_REPOSITORY ?? '00tradingview00-art/Bhaavbrief'
 
 const TAG_HASHTAGS = {
   'MCX Gold':    '#MCXGold',
@@ -65,7 +64,7 @@ async function main() {
   const desc     = data.description ?? ''
   const tags     = (data.tags ?? []).map(t => TAG_HASHTAGS[t]).filter(Boolean).join(' ')
 
-  const imageUrl = `https://raw.githubusercontent.com/${REPO}/main/public/instagram/${slug}.png`
+  const imageUrl = `https://www.bhaavbrief.in/api/instagram-card/${slug}`
   const briefUrl = `https://www.bhaavbrief.in/briefs/${slug}`
 
   const caption = [
