@@ -19,6 +19,26 @@
   },
   {
     "type": "brief",
+    "slug": "edition-024",
+    "href": "/briefs/edition-024",
+    "title": "Dollar Cracks, Metals Surge: Broad Risk-On Momentum Takes Command",
+    "description": "A weakening dollar and fading rate-fear are driving a unified metals rally while crude slips — risk appetite is back in charge.",
+    "excerpt": "The Venezuela supply shock that hijacked Edition 22 and the partial recovery of Edition 23 have now fully resolved into a cleaner, more durable narrative: broad risk-on momentum anchored by dollar wea",
+    "date": "2026-05-28",
+    "edition": "24",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Copper",
+      "MCX NatGas",
+      "Macro",
+      "Fed"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-021",
     "href": "/briefs/edition-021",
     "title": "Fed Waits, Oil Slides, Copper Blinks: Risk Appetite Fractures",
