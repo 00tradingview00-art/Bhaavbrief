@@ -46,6 +46,7 @@ jobs:
         run: node scripts/build-content-index.js
 
       - name: Commit directly to main
+        id: commit
         env:
           EDITION: ${{ steps.edition.outputs.number }}
         run: |
@@ -56,11 +57,17 @@ jobs:
           git pull --rebase origin main
           git stash pop || true
           git add content/briefs/ data/content-index.json
-          git diff --staged --quiet && echo "Nothing to commit" && exit 0
+          if git diff --staged --quiet; then
+            echo "Nothing to commit — skipping newsletter"
+            echo "published=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           git commit -m "Brief #${EDITION} — $(date +'%d %b %Y')"
           git push origin main
+          echo "published=true" >> $GITHUB_OUTPUT
 
       - name: Wait for deploy then send newsletter
+        if: steps.commit.outputs.published == 'true'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
