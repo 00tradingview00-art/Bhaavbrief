@@ -99,10 +99,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <TickerStrip initialPrices={initialPrices} />
           <GeoRiskTicker />
         </div>
-        <main style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 24px' }}>
+        <main style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>
           {children}
         </main>
-        <footer style={{ borderTop: '1px solid var(--border)', padding: '32px 24px', marginTop: 64, textAlign: 'center' }}>
+        <footer style={{ borderTop: '1px solid var(--border)', padding: 'clamp(24px, 4vw, 32px) clamp(16px, 4vw, 24px)', marginTop: 'clamp(40px, 6vw, 64px)', textAlign: 'center' }}>
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--ink)', marginBottom: 8 }}>
             Bhaav<span style={{ color: 'var(--gold)' }}>Brief</span>
           </p>

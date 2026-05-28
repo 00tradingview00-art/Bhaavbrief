@@ -145,3 +145,22 @@
 /* About page two-column layout */
 .about-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
 @media (min-width: 768px) { .about-grid { grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; } }
+
+/* ── Mobile touch targets ─────────────────────────────────────────────────── */
+/* Ensure interactive elements are at least 44px tall on mobile */
+@media (max-width: 640px) {
+  button, a[href], input[type="submit"], input[type="button"] {
+    min-height: 44px;
+  }
+  /* But not inline/chip buttons — those are fine smaller */
+  button[style*="padding: 2px"], button[style*="padding:2px"],
+  .tag-chip { min-height: unset; }
+}
+
+/* ── Prevent horizontal overflow ─────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .overflow-mobile-safe {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -146,12 +146,13 @@ export default function SearchModal({ open, onClose }: Props) {
             value={query}
             onChange={e => handleChange(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && doSearch(query)}
-            placeholder="Ask anything about commodities or search past briefs…"
+            placeholder="Ask about commodities…"
             style={{
               flex: 1, border: 'none', outline: 'none',
               fontSize: 15, color: 'var(--ink)',
               background: 'transparent',
               fontFamily: 'var(--font-sans)',
+              minWidth: 0,
             }}
           />
           {loading && (
@@ -191,10 +192,12 @@ export default function SearchModal({ open, onClose }: Props) {
                     onClick={() => handleSuggestion(s)}
                     style={{
                       textAlign: 'left', background: 'none', border: 'none',
-                      padding: '8px 12px', borderRadius: 6, cursor: 'pointer',
+                      padding: '10px 12px', borderRadius: 6, cursor: 'pointer',
                       fontSize: 13, color: 'var(--ink-2)',
                       transition: 'background 0.1s',
                       fontFamily: 'var(--font-sans)',
+                      minHeight: 44, display: 'flex', alignItems: 'center',
+                      width: '100%',
                     }}
                     onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface-3)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'none')}
@@ -368,10 +371,11 @@ export default function SearchModal({ open, onClose }: Props) {
           padding: '10px 20px',
           borderTop: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          flexWrap: 'wrap', gap: '4px 12px',
         }}>
           <span style={{
             fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)',
-            letterSpacing: '0.06em',
+            letterSpacing: '0.04em',
           }}>
             Educational only · Not investment advice · Not SEBI registered
           </span>
