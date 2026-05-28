@@ -84,6 +84,14 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
   const url      = `${BASE_URL}/briefs/${brief.slug}`
 
+  const ogParams = new URLSearchParams({
+    title:   brief.title,
+    edition: String(brief.edition ?? ''),
+    date:    brief.displayDate ?? brief.date ?? '',
+    tags:    (brief.tags ?? []).slice(0, 3).join(','),
+  })
+  const ogImage = `${BASE_URL}/api/og?${ogParams}`
+
   const articleSchema = {
     '@context':          'https://schema.org',
     '@type':              'NewsArticle',
@@ -96,10 +104,11 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
     inLanguage:           'en-IN',
     keywords:             [...(brief.tags ?? []), ...(brief.commodities ?? [])].join(', '),
     articleSection:       brief.tags?.[0] ?? 'Commodities',
+    image: [{ '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 }],
     author: [{ '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL }],
     publisher: {
       '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL,
-      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` },
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png`, width: 500, height: 500 },
     },
     about: (brief.commodities ?? []).map(c => ({ '@type': 'Thing', name: c })),
     mentions: [
@@ -226,6 +235,31 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               </div>
             )
           })()}
+
+          {/* Learn section internal links */}
+          <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+              Learn
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {[
+                { label: 'Why commodity prices move', href: '/learn' },
+                { label: 'MCX lot sizes & margins',   href: '/learn' },
+                { label: 'OPEC, Fed & geopolitics',   href: '/learn' },
+                { label: 'How to hedge price risk',   href: '/learn' },
+              ].map(l => (
+                <Link key={l.label} href={l.href} style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 11,
+                  color: '#48483A', textDecoration: 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
+                }}>
+                  <span>{l.label}</span>
+                  <span style={{ fontSize: 10, color: '#C8C8B8' }}>→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
 
           <div style={{ background: '#18180F', padding: '1.25rem', color: '#FAFAF6' }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>Not SEBI registered</div>
