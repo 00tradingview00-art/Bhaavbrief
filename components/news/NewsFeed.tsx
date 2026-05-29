@@ -100,7 +100,7 @@ function truncate(text: string, maxLen = 220): string {
 
 function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
   if (itemType === 'hawk-scan') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#1A0A0A', color: '#FF4444', border: '0.5px solid #FF4444', fontWeight: 600 }}>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#FFF0E8', color: '#CC3300', border: '0.5px solid #CC3300', fontWeight: 600 }}>
       ⚡ HAWK-SCAN
     </span>
   )
@@ -305,8 +305,8 @@ export default function NewsFeed({ serverItems = [] }: Props) {
               <div style={item.itemType === 'hawk-scan' ? {
                 padding: '20px 20px 20px 16px',
                 borderBottom: '0.5px solid #DDDDD0',
-                background: '#0E0806',
-                borderLeft: '3px solid #FF4444',
+                background: '#FFF8F5',
+                borderLeft: '2px solid #CC3300',
                 marginLeft: -1,
               } : { padding: '22px 0', borderBottom: '0.5px solid #DDDDD0' }}>
 
@@ -314,8 +314,8 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
                   <Tag type={item.tagType}>{item.category}</Tag>
                   <TypeBadge itemType={item.itemType} />
-                  <span style={{ width: 1, height: 12, background: item.itemType === 'hawk-scan' ? 'rgba(255,68,68,0.3)' : '#DDDDD0', display: 'inline-block' }} />
-                  <span style={{ fontSize: 11, color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.45)' : '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
+                  <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
                     {item.pubDateIST
                       ? item.pubDateIST.split(', ')[1]
                       : relativeTime(item.pubDate)}
@@ -328,7 +328,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   fontSize: item.itemType === 'hawk-scan' ? 20 : 18,
                   fontWeight: 700,
                   lineHeight: 1.35,
-                  color: item.itemType === 'hawk-scan' ? '#FFFFFF' : '#18180F',
+                  color: '#18180F',
                   margin: '0 0 10px',
                   letterSpacing: '-0.01em',
                 }}>
@@ -341,7 +341,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                     {item.summary && (
                       <p style={{
                         fontSize: 14,
-                        color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.65)' : '#48483A',
+                        color: '#48483A',
                         lineHeight: 1.75,
                         margin: '0 0 8px',
                         fontWeight: 300,
@@ -353,7 +353,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                       <Link href={item.href} style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: 11,
-                        color: item.itemType === 'hawk-scan' ? '#FF6666' : '#C8720A',
+                        color: item.itemType === 'hawk-scan' ? '#CC3300' : '#C8720A',
                         textDecoration: 'none',
                         letterSpacing: '0.03em',
                       }}>
@@ -366,7 +366,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Cross-asset tags */}
                 {crossAssets.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: item.itemType === 'hawk-scan' ? 'rgba(255,255,255,0.35)' : '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
                       Touches
                     </span>
                     {crossAssets.map(a => (
@@ -375,9 +375,9 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                         fontSize: 9,
                         letterSpacing: '0.06em',
                         padding: '2px 7px',
-                        background: item.itemType === 'hawk-scan' ? 'rgba(255,68,68,0.1)' : '#F3F2EC',
-                        color: item.itemType === 'hawk-scan' ? '#FF8888' : '#48483A',
-                        border: item.itemType === 'hawk-scan' ? '0.5px solid rgba(255,68,68,0.3)' : '0.5px solid #DDDDD0',
+                        background: '#F3F2EC',
+                        color: '#48483A',
+                        border: '0.5px solid #DDDDD0',
                       }}>
                         {a.toUpperCase()}
                       </span>
