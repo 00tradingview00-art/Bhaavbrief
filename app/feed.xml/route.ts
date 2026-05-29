@@ -72,7 +72,7 @@ export async function GET() {
   xmlns:dc="http://purl.org/dc/elements/1.1/"
 >
   <channel>
-    <title>${SITE_NAME} — India's Commodity Intelligence</title>
+    <title>${SITE_NAME} — India's First Commodity Intelligence</title>
     <link>${BASE_URL}</link>
     <description>Daily MCX commodity intelligence for India's traders, investors and merchants. Published every weekday at 9:30 AM IST.</description>
     <language>en-in</language>

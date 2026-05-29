@@ -21,7 +21,7 @@ export default function Masthead() {
               BhaavBrief
             </div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8720A', marginTop: 4 }}>
-              India's Commodity Intelligence · Est. 2026
+              India's First Commodity Intelligence · Est. 2026
             </div>
           </Link>
           <div style={{ textAlign: 'right' }}>

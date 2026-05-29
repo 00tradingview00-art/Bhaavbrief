@@ -121,7 +121,7 @@ export default async function HomePage() {
           letterSpacing: '0.14em', textTransform: 'uppercase',
           color: 'var(--gold)', marginBottom: 10,
         }}>
-          BhaavBrief — India's Commodity Intelligence
+          BhaavBrief — India's First Commodity Intelligence
         </div>
         <p style={{
           fontFamily: 'var(--font-serif)',

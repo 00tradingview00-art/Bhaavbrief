@@ -102,7 +102,7 @@ export async function sendWelcomeEmail(email: string, latestBrief?: { title: str
       Bhaav<span style="color:#C8720A">Brief</span>
     </div>
     <div style="font-size:10px;color:#8A8A7A;font-family:monospace;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px">
-      India's Commodity Intelligence
+      India's First Commodity Intelligence
     </div>
   </div>
 
@@ -198,7 +198,7 @@ export function briefToHtml(brief: {
 <div class="wrap">
   <div class="mast">
     <h1>BhaavBrief</h1>
-    <p>INDIA'S COMMODITY INTELLIGENCE &nbsp;·&nbsp; EDITION ${brief.edition} &nbsp;·&nbsp; ${brief.date.toUpperCase()}</p>
+    <p>INDIA'S FIRST COMMODITY INTELLIGENCE &nbsp;·&nbsp; EDITION ${brief.edition} &nbsp;·&nbsp; ${brief.date.toUpperCase()}</p>
   </div>
   ${brief.content
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
