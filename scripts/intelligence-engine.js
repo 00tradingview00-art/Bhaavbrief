@@ -196,10 +196,13 @@ async function fetchPrices() {
         const close = parseFloat(cols[6])
         const open  = parseFloat(cols[3])
         if (!isNaN(close) && close > 0) {
-          const div = (yfKey === 'SI=F' || yfKey === 'HG=F') ? 100 : 1
+          const div    = (yfKey === 'SI=F' || yfKey === 'HG=F') ? 100 : 1
+          const rawPct = open > 0 ? ((close - open) / open) * 100 : 0
+          // Stooq returns intraday open→close pct; moves >12% are almost certainly
+          // bad OHLC (stale data, contract rollover, market-closed artefact) — zero them out
           q[yfKey] = {
             price: close / div,
-            pct:   open > 0 ? ((close - open) / open) * 100 : 0,
+            pct:   Math.abs(rawPct) > 12 ? 0 : rawPct,
             prev:  open / div,
           }
         }
@@ -645,6 +648,7 @@ function saveArticle(mdx) {
     .replace(/^```(?:mdx|md)?\n/, '')   // strip any leading code fence Claude adds
     .replace(/\n```\s*$/, '')           // strip trailing code fence
     .replace(/^slug:.*$/m, '')
+    .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
     .trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
 
@@ -767,8 +771,10 @@ async function main() {
   const softMove  = moves.some(m => !m.isHard)
   const hasSignal = newCirculars.length > 0 || eiaData?.isSignificant
 
-  // Hawk-Scan: price >3% OR significant EIA event
-  const isHawkEvent = hawkMove || eiaData?.isSignificant
+  // Hawk-Scan: price >3% (only with confirmed live Kite data) OR significant EIA event.
+  // Stooq-derived pct uses intraday open→close, which produces false spikes on rollover
+  // days or when Stooq serves stale OHLC — never fire HAWK-SCAN on unconfirmed data.
+  const isHawkEvent = (hawkMove && prices.priceSource === 'kite-live') || eiaData?.isSignificant
 
   const shouldPublish = isHawkEvent || hardMove || (softMove && hasSignal)
 

@@ -32,7 +32,7 @@ export async function getAllArticles(): Promise<ArticleMeta[]> {
 
     return {
       slug,
-      title:          data.title        ?? 'Market Update',
+      title:          (data.title ?? 'Market Update').replace(/^\[HAWK-SCAN\]\s*/i, ''),
       description:    data.description  ?? '',
       date:           data.date         ?? '',
       time:           data.time         ?? '',
@@ -60,7 +60,7 @@ export async function getArticleBySlug(slug: string) {
   return {
     slug,
     meta: {
-      title:          data.title        ?? 'Market Update',
+      title:          (data.title ?? 'Market Update').replace(/^\[HAWK-SCAN\]\s*/i, ''),
       description:    data.description  ?? '',
       date:           data.date         ?? '',
       time:           data.time         ?? '',
