@@ -554,6 +554,157 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
       </>
     ),
   },
+  {
+    id: 15,
+    section: 'Contracts',
+    title: 'Gold contracts — Standard, Mini, Guinea, Petal',
+    label: 'Contracts · Article 1 of 4',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          MCX offers four gold contracts — each designed for a different capital level and use case. All four track the same underlying price; what differs is lot size, ticket size, and how much capital you need.
+        </p>
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Quoted', 'Tick Size', 'P&L per tick', 'Approx margin*', 'Best for']}
+          rows={[
+            ['Gold',         '1 kg (1,000g)',  '₹/10g', '₹1',   '₹100/lot',  '~₹5–7 lakh',    'Large traders, institutions'],
+            ['Gold Mini',    '100 g',           '₹/10g', '₹1',   '₹10/lot',   '~₹55–75K',      'Active retail traders'],
+            ['Gold Guinea',  '8 g',             '₹/8g',  '₹1',   '₹1/lot',    '~₹5–8K',        'Very small capital, beginners'],
+            ['Gold Petal',   '1 g',             '₹/g',   '₹1',   '₹1/lot',    '~₹700–1,200',   'Micro-hedging, jewellers'],
+          ]}
+        />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Approximate SPAN margins based on mid-2026 price levels (~₹1,00,000/10g). Actual margins change daily with volatility. Always verify on your broker&apos;s SPAN calculator before placing a trade.
+        </p>
+        <InfoBox title="Gold Mini vs Gold Standard — which to use?">
+          For most retail traders, <strong>Gold Mini (100g)</strong> is the right entry point. At ~₹60,000–75,000 margin per lot, it&apos;s accessible without overexposing capital. The standard 1 kg contract requires ₹5–7 lakh in margin — appropriate only if you have sufficient capital to hold multiple lots without margin call risk.<br /><br />
+          Gold Guinea and Gold Petal are primarily used by small jewellers for physical-equivalent hedging. Their very small lot sizes mean low absolute P&L — useful for hedging specific customer orders but not practical for active trading.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          <strong>Expiry dates differ</strong>: Gold Standard and Gold Mini expire on the 5th of the contract month. Gold Guinea and Gold Petal expire on the last day of the month. Always check the specific expiry when rolling positions — mixing up dates is a common beginner error.
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          All MCX gold contracts settle against 995 purity LBMA-approved gold. Physical delivery is available (and compulsory if you hold to expiry without squaring off) at MCX accredited vaults in Ahmedabad, Mumbai, and Delhi.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 16,
+    section: 'Contracts',
+    title: 'Silver contracts — Standard, Mini, Micro',
+    label: 'Contracts · Article 2 of 4',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Silver on MCX trades in three contract sizes. Unlike gold, silver is both a monetary metal and a heavily industrial one — solar panels, electronics, and EV batteries all need silver. This dual demand makes silver more volatile than gold and creates distinct trading opportunities.
+        </p>
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Quoted', 'Tick Size', 'P&L per tick', 'Approx margin*', 'Best for']}
+          rows={[
+            ['Silver',       '30 kg',  '₹/kg', '₹1',  '₹30/lot',  '~₹1.5–2.5 lakh', 'Active traders, large hedgers'],
+            ['Silver Mini',  '5 kg',   '₹/kg', '₹1',  '₹5/lot',   '~₹25–40K',       'Retail traders — most popular'],
+            ['Silver Micro', '1 kg',   '₹/kg', '₹1',  '₹1/lot',   '~₹5–8K',         'Beginners, small capital'],
+          ]}
+        />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Based on ~₹1,00,000/kg silver price levels. Verify live margins on your broker&apos;s SPAN calculator — silver margins are higher relative to gold due to greater volatility.
+        </p>
+        <InfoBox title="Silver Mini — the most practical silver contract">
+          <strong>Silver Mini (5 kg)</strong> is the most actively traded silver contract for retail participants in India. At ~₹30,000–40,000 margin per lot, it offers meaningful exposure without the ₹1.5 lakh+ required for the standard 30 kg contract.<br /><br />
+          Silver Micro (1 kg) suits traders with under ₹50,000 in capital who want to learn silver trading mechanics before scaling up. The absolute P&L is small (₹1 per tick), but the percentage exposure and price dynamics are identical to the larger contracts.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          <strong>Silver vs gold volatility</strong>: Silver typically moves 2–3x more than gold in percentage terms. When gold is up 0.5%, silver is often up 1–1.5%. This leverage-within-leverage means silver trades require tighter risk management. The gold-silver ratio (gold price ÷ silver price) is a key indicator — historically it oscillates between 60x and 90x. At extremes, mean reversion trades become attractive.
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          <strong>Seasonal demand</strong> adds an Indian angle: silver demand spikes before Diwali (jewellery, gifting) and during large solar panel procurement cycles (India&apos;s solar installation targets require significant silver for panel contacts). Watch for these seasonal patterns in MCX Silver open interest around April–May and September–October.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 17,
+    section: 'Contracts',
+    title: 'Energy contracts — Crude Oil & Natural Gas',
+    label: 'Contracts · Article 3 of 4',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          MCX energy contracts track global benchmark prices directly — crude oil follows WTI/Brent, natural gas follows Henry Hub. Both are highly sensitive to geopolitical events and typically have the most intraday volatility of all MCX contracts.
+        </p>
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Quoted', 'Tick Size', 'P&L per tick', 'Approx margin*', 'Expiry']}
+          rows={[
+            ['Crude Oil',      '100 barrels', '₹/barrel', '₹1',    '₹100/lot',  '~₹30–45K',   '19th–20th of month'],
+            ['Crude Oil Mini', '10 barrels',  '₹/barrel', '₹1',    '₹10/lot',   '~₹3–5K',     '19th–20th of month'],
+            ['Natural Gas',    '1,250 mmBtu', '₹/mmBtu',  '₹0.10', '₹125/lot',  '~₹20–30K',   '25th of month'],
+            ['Nat Gas Mini',   '250 mmBtu',   '₹/mmBtu',  '₹0.10', '₹25/lot',   '~₹4–6K',     '25th of month'],
+          ]}
+        />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Approximate SPAN margins at mid-2026 price levels (Crude ~₹6,500/bbl; NatGas ~₹320/mmBtu). Energy margins can spike 50–100% during geopolitical events — always check live SPAN before trading.
+        </p>
+        <InfoBox title="Crude Oil — the most event-driven MCX contract">
+          MCX Crude is where geopolitics hits your P&amp;L fastest. OPEC production decisions, Iran-related news, and US EIA inventory data (every Wednesday at 8 PM IST) can move crude ₹200–500/bbl in minutes.<br /><br />
+          <strong>Crude Oil Mini (10 barrels)</strong> is excellent for retail traders — ₹3,000–5,000 margin, manageable P&amp;L swings of ₹10 per ₹1 move. The standard 100-barrel contract requires ₹30–45K and has ₹100 P&amp;L per ₹1 move — fine for experienced traders with clear stop-losses.<br /><br />
+          <strong>Expiry note</strong>: Crude expires around the 19th–20th of each month, earlier than most other MCX contracts. Holding into the last 3 days before expiry sees rapid open-interest unwinding and volatile spreads.
+        </InfoBox>
+        <InfoBox title="Natural Gas — high volatility, seasonal swings">
+          MCX Natural Gas tracks Henry Hub (US benchmark) converted to rupees. It is the most volatile MCX contract by percentage — winter demand, US storage reports, and LNG export capacity news can cause 5–10% single-day moves.<br /><br />
+          Natural Gas expires on the 25th of each month. The US EIA Natural Gas Storage report (every Thursday, ~8:30 PM IST) is the key weekly catalyst — builds above consensus fall the contract, draws below consensus push it higher.<br /><br />
+          The Mini (250 mmBtu) requires only ₹4,000–6,000 margin, making it accessible — but the high volatility means even small moves can create outsized P&amp;L relative to margin. Natural gas is best avoided by beginners until comfortable with crude.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          <strong>MCX Crude vs petrol/diesel prices</strong>: MCX crude and retail fuel prices in India are linked but not directly. OMCs (BPCL, IOCL, HPCL) absorb margin compression during crude spikes before passing costs to consumers. A ₹500/bbl rise in MCX Crude does not immediately translate to a petrol price hike — but sustained crude elevation over 2–3 months typically does.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: 18,
+    section: 'Contracts',
+    title: 'Base metals — Copper, Aluminium, Zinc, Lead, Nickel',
+    label: 'Contracts · Article 4 of 4',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          MCX base metals are the industrial heartbeat of the commodity market. Unlike gold, their price is driven almost entirely by real economic activity — manufacturing, construction, infrastructure. China, which consumes 40–55% of most base metals globally, is the dominant price driver.
+        </p>
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Quoted', 'Tick Size', 'P&L per tick', 'Approx margin*', 'Key driver']}
+          rows={[
+            ['Copper',          '1,000 kg (1 MT)',   '₹/kg',  '₹0.05', '₹50/lot',   '~₹80K–1.2L',  'China manufacturing, LME'],
+            ['Copper Mini',     '250 kg',             '₹/kg',  '₹0.05', '₹12.5/lot', '~₹20–30K',    'Retail traders'],
+            ['Aluminium',       '5,000 kg (5 MT)',   '₹/kg',  '₹0.05', '₹250/lot',  '~₹25–40K',    'Auto, packaging, infra'],
+            ['Aluminium Mini',  '1,000 kg (1 MT)',   '₹/kg',  '₹0.05', '₹50/lot',   '~₹5–8K',      'Small capital entry'],
+            ['Zinc',            '5,000 kg (5 MT)',   '₹/kg',  '₹0.05', '₹250/lot',  '~₹30–50K',    'Galvanising, construction'],
+            ['Zinc Mini',       '1,000 kg (1 MT)',   '₹/kg',  '₹0.05', '₹50/lot',   '~₹6–10K',     'Retail traders'],
+            ['Lead',            '5,000 kg (5 MT)',   '₹/kg',  '₹0.05', '₹250/lot',  '~₹50–70K',    'Auto batteries, cables'],
+            ['Lead Mini',       '1,000 kg (1 MT)',   '₹/kg',  '₹0.05', '₹50/lot',   '~₹10–14K',    'Retail traders'],
+            ['Nickel',          '250 kg',             '₹/kg',  '₹0.10', '₹25/lot',   '~₹20–30K',    'Stainless steel, EV batteries'],
+            ['Nickel Mini',     '100 kg',             '₹/kg',  '₹0.10', '₹10/lot',   '~₹8–12K',     'Small capital entry'],
+          ]}
+        />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Approximate SPAN margins at mid-2026 levels. All base metals expire on the last working day of the contract month. Verify live margins on your broker&apos;s SPAN calculator — base metal margins shift with LME inventory reports.
+        </p>
+        <InfoBox title="Copper — the economic barometer">
+          Copper is called &quot;Dr. Copper&quot; because its price historically predicts economic turning points before equity markets do. When China&apos;s PMI (Purchasing Managers&apos; Index) rises, copper leads higher. When China announces stimulus, copper is often the first MCX contract to react.<br /><br />
+          MCX Copper tracks COMEX copper (quoted in ¢/lb) converted to ₹/kg. Formula: COMEX ¢/lb × 22.0462 × USD/INR ÷ 100 × (1 + duty). A 1% COMEX copper move translates to roughly 1% on MCX Copper, amplified by any USD/INR move on the same day.<br /><br />
+          <strong>Copper Mini (250 kg)</strong> is the most practical entry — ₹20,000–30,000 margin, accessible for retail.
+        </InfoBox>
+        <InfoBox title="Nickel — the EV battery wildcard">
+          Nickel is the most volatile MCX base metal. It surged 250% in a single week in March 2022 on the LME (a historic short squeeze), forcing LME to halt trading. MCX Nickel followed with massive moves.<br /><br />
+          The long-term demand driver is EV batteries (nickel-manganese-cobalt cells) and stainless steel (68% of global nickel demand). Watch: any Tesla or BYD production data, Indonesian nickel export policy, and LME nickel inventory reports.<br /><br />
+          Given its extreme volatility, Nickel is best approached with tight stop-losses and smaller position sizing than other base metals — even with the Mini (100 kg) contract.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          <strong>Zinc and Lead</strong> tend to move together — both are by-products of mining operations and share many of the same demand drivers (construction for zinc galvanising; auto battery replacement cycle for lead). Aluminium has the most direct India-specific demand angle: packaging, two-wheeler manufacturing, and infrastructure spending. When India&apos;s Union Budget announces large infra allocation, aluminium and copper are typically the first MCX base metals to react.
+        </p>
+      </>
+    ),
+  },
   ] // end return
 } // end buildArticles
 
@@ -621,7 +772,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
           Learn
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
-          MCX basics, trading mechanics, investing strategies, and taxation — explained clearly.
+          All MCX contracts &amp; lot sizes, trading mechanics, market drivers, hedging and taxation — explained clearly.
         </p>
       </div>
 

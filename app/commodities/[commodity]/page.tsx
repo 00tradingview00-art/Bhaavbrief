@@ -35,6 +35,79 @@ const SLUG_MAP: Record<string, { key: string; priceKey: string; color: string }>
 
 const BASE = 'https://bhaavbrief.in'
 
+const COMMODITY_META: Record<string, { title: string; description: string; keywords: string[] }> = {
+  gold: {
+    title: 'Why MCX Gold Is Moving Today — Live Price & Analysis',
+    description: 'MCX gold price live today — why gold is up or down: Fed policy, rupee-dollar moves, COMEX spread and geopolitics. OHLC, import parity and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX gold moving today',
+      'MCX gold price today analysis India',
+      'why MCX gold up today',
+      'why MCX gold fell today',
+      'MCX gold COMEX import parity',
+      'rupee fall MCX gold impact',
+      'MCX gold lot size margin 2026',
+      'MCX gold standard vs mini difference',
+      'MCX gold vs sovereign gold bond India',
+    ],
+  },
+  silver: {
+    title: 'Why MCX Silver Is Moving Today — Live Price & Analysis',
+    description: 'MCX silver price live today — why silver is up or down: gold-silver ratio, industrial demand, COMEX moves and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX silver moving today',
+      'MCX silver price today analysis India',
+      'MCX silver lot size margin 2026',
+      'gold silver ratio India MCX',
+      'MCX silver mini micro difference',
+      'why MCX silver up today',
+      'solar panel demand silver India MCX',
+      'MCX silver COMEX parity today',
+    ],
+  },
+  crude: {
+    title: 'Why MCX Crude Oil Is Moving Today — WTI, OPEC Analysis',
+    description: 'MCX crude oil price live today — why crude is up or down: OPEC decisions, WTI/Brent spread, Iran risk, rupee impact. OHLC, import parity and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX crude oil moving today',
+      'why crude oil falling today India',
+      'why crude oil rising today MCX',
+      'OPEC decision MCX crude oil India',
+      'MCX crude WTI Brent difference',
+      'MCX crude oil lot size margin 2026',
+      'MCX crude oil mini contract lot size',
+      'petrol diesel crude oil MCX link India',
+    ],
+  },
+  copper: {
+    title: 'Why MCX Copper Is Moving Today — LME, China & Analysis',
+    description: 'MCX copper price live today — why copper is up or down: China PMI, LME inventory, COMEX moves and rupee impact. OHLC, import parity and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX copper moving today',
+      'MCX copper price today analysis India',
+      'China demand MCX copper impact',
+      'MCX copper LME COMEX price India',
+      'MCX copper lot size margin 2026',
+      'why MCX copper up today',
+      'MCX copper mini contract lot size',
+      'copper cable wire price MCX India',
+    ],
+  },
+  natgas: {
+    title: 'Why MCX Natural Gas Is Moving Today — Henry Hub Analysis',
+    description: 'MCX natural gas price live today — why nat gas is up or down: Henry Hub correlation, winter demand, LNG exports and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX natural gas moving today',
+      'MCX natural gas price today analysis India',
+      'Henry Hub MCX natural gas correlation',
+      'MCX natural gas lot size margin 2026',
+      'why MCX nat gas up today India',
+      'MCX natural gas mini contract',
+      'natural gas price India analysis today',
+    ],
+  },
+}
+
 interface Props {
   params: Promise<{ commodity: string }>
 }
@@ -47,15 +120,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { commodity } = await params
   const entry = SLUG_MAP[commodity]
   if (!entry) return {}
-  const marketStructure = loadMarketStructure()
-  const info = marketStructure[entry.key]
 
-  const title = `MCX ${info.name} Price Today — Live Price, OHLC & Market Intelligence`
-  const description = `Live MCX ${info.name} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
+  const meta = COMMODITY_META[entry.key]
+  const title       = meta ? `${meta.title} | BhaavBrief` : `MCX ${entry.key} Price Today — Live Price & Analysis | BhaavBrief`
+  const description = meta?.description ?? `Live MCX ${entry.key} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
+  const keywords    = meta?.keywords ?? []
 
   return {
     title,
     description,
+    keywords,
     alternates: { canonical: `${BASE}/commodities/${commodity}` },
     openGraph: {
       title,
