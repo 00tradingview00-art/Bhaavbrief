@@ -36,6 +36,23 @@
     "commodity": ""
   },
   {
+    "type": "brief",
+    "slug": "edition-027",
+    "href": "/briefs/edition-027",
+    "title": "Post-Fed Relief Trade: Gold Surges as Rate Anxiety Finally Clears",
+    "description": "The Fed uncertainty that paralysed Edition 26 has resolved into a directional relief trade, lifting gold while crude and copper stay under pressure.",
+    "excerpt": "For three sessions, the US Federal Reserve's rate-setting committee (FOMC) cast a shadow over every commodity. Traders sat on their hands, waiting. Today that waiting is over, and the resolution — rea",
+    "date": "2026-05-29",
+    "edition": "27",
+    "tags": [
+      "MCX Gold",
+      "Fed",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-05-28-mcx-close-29-ay2026-metals-rally-crude-slips",
     "href": "/articles/2026-05-28-mcx-close-29-ay2026-metals-rally-crude-slips",
@@ -49,6 +66,28 @@
       "Evening Brief",
       "Day Recap",
       "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-05-29-mcx-open-29-ay2026-risk-off-gold-surge",
+    "href": "/articles/2026-05-29-mcx-open-29-ay2026-risk-off-gold-surge",
+    "title": "MCX Open 29 May 2026: Risk-Off Lifts Gold, Crude Slides",
+    "description": "MCX Open Brief 29 May 2026: COMEX Gold +0.94% to $4569, WTI Crude -0.65% to $88.11, Silver -0.75%. Risk-off tone dominates Asian open.",
+    "excerpt": "title: \"MCX Open 29 May 2026: Risk-Off Lifts Gold, Crude Slides\" description: \"MCX Open Brief 29 May 2026: COMEX Gold +0.94% to $4569, WTI Crude -0.65% to $88.11, Silver -0.75%. Risk-off tone dominate",
+    "date": "2026-05-29",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
     ],
     "commodity": "multi",
     "commodities": [
