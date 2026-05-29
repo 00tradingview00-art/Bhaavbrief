@@ -1,5 +1,23 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-025",
+    "href": "/briefs/edition-025",
+    "title": "Risk-On Momentum Stalls: Dollar Steadies as Commodities Lose Conviction",
+    "description": "The broad dollar-weakness rally powering Edition 24's metals surge is losing momentum, with commodities drifting sideways to lower on Friday.",
+    "excerpt": "The clean, conviction-driven narrative of Edition 24 — dollar weakness lifting all commodities together — is showing its first cracks today. Gold is barely holding ground, silver is slipping, crude is",
+    "date": "2026-05-29",
+    "edition": "25",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro",
+      "Fed"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-05-28-mcx-close-29-ay2026-metals-rally-crude-slips",
     "href": "/articles/2026-05-28-mcx-close-29-ay2026-metals-rally-crude-slips",
@@ -57,45 +75,6 @@
     ],
     "commodities": [],
     "commodity": ""
-  },
-  {
-    "type": "hawk-scan",
-    "slug": "2026-05-28-hawk-scan-copper-20260528",
-    "href": "/articles/2026-05-28-hawk-scan-copper-20260528",
-    "title": "[HAWK-SCAN] MCX Copper: 6.29% surge — watch ₹1450 resistance",
-    "description": "MCX Copper spikes 6.29% to ₹1422.30/kg. Extreme single-session move triggers Hawk-Scan. COMEX-derived. Silver diverging sharply. Act with precision.",
-    "excerpt": "TRIGGER — MCX Copper cleared the 3% Hawk-Scan threshold with a 6.29% single-session surge to ₹1422.30/kg at 04:31 IST. PRICE — ₹1422.30 · +6.29% · SURGING SIGNAL — A sharp demand-side shock — likely a",
-    "date": "2026-05-28",
-    "edition": "hawk-scan",
-    "tags": [
-      "MCX Copper",
-      "MCX Silver",
-      "MCX Gold"
-    ],
-    "commodity": "MCX Copper",
-    "commodities": [
-      "MCX Copper"
-    ],
-    "priceAtPublish": 1422
-  },
-  {
-    "type": "hawk-scan",
-    "slug": "2026-05-28-hawk-scan-natgas-20260528",
-    "href": "/articles/2026-05-28-hawk-scan-natgas-20260528",
-    "title": "[HAWK-SCAN] MCX Nat Gas: +12.26% spike — watch ₹316 resistance",
-    "description": "MCX Nat Gas surges 12.26% to ₹314/mmBtu at 03:37 IST. Near 20-day high of ₹316. Crude plunges 5.24% simultaneously. Act with precision.",
-    "excerpt": "TRIGGER — MCX Nat Gas printed a 12.26% single-session surge to ₹314, breaching the 3% Hawk-Scan threshold decisively. PRICE — ₹314.00 · +12.26% · SPIKING SIGNAL — Henry Hub spot divergence from crude ",
-    "date": "2026-05-28",
-    "edition": "hawk-scan",
-    "tags": [
-      "MCX Nat Gas",
-      "MCX Crude"
-    ],
-    "commodity": "MCX Nat Gas",
-    "commodities": [
-      "MCX Nat Gas"
-    ],
-    "priceAtPublish": 314
   },
   {
     "type": "brief",
