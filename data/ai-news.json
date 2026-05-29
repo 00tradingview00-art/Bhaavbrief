@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-05-30-04-27-mcx-crude-drops-2-65-to-8311-as-iran-us",
+    "title": "MCX Crude Drops 2.65% to ₹8311 as Iran-US Conflict Triggers Equity-Commodity Divergence",
+    "summary": "The Iran-US conflict narrative is producing a textbook divergence this session: oil and gas equities are attracting geopolitical risk premium while crude futures price in demand destruction, with MCX Crude at ₹8311 per barrel posting a 2.65% decline — the sharpest mover in today's commodity complex. This split signal is the dominant cross-asset theme. The import parity chain runs as follows: global crude weakness transmitting through USD/INR at ₹95.00 amplifies the rupee-denominated downside, compressing MCX Crude further relative to any dollar-terms stabilization. The cross-market correlation to watch is MCX Natural Gas at ₹315.90, up 0.64%, historically exhibiting partial decoupling from crude during Middle East supply-risk events as LNG substitution demand assumptions shift. MCX Gold at ₹156000 per 10 grams edging down 0.59% confirms this is not a broad safe-haven session. The confirmatory data level for direction is Brent crude's Sunday electronic open relative to the 72.00 USD per barrel structural support zone.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-05-29T22:57:09.955Z",
+    "pubDateIST": "30 May 2026, 04:27"
+  },
+  {
+    "id": "2026-05-30-04-27-mcx-silver-slides-0-94-to-267-000-kg-as",
+    "title": "MCX Silver slides 0.94% to ₹267,000/kg as crude-led risk-off weighs on complex",
+    "summary": "The mechanism here is cross-commodity risk-off rotation. Crude's -2.65% decline signals demand-side concern, historically compressing the broader commodity complex as traders reprice growth expectations. Silver, carrying both monetary and industrial demand characteristics, absorbs pressure from both channels simultaneously.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-05-29T22:57:02.366Z",
+    "pubDateIST": "30 May 2026, 04:27"
+  },
+  {
+    "id": "2026-05-30-04-26-mcx-crude-slides-2-65-to-8311-bbl-as-glo",
+    "title": "MCX Crude Slides 2.65% to ₹8311/bbl as Global Supply Pressure Dominates Session",
+    "summary": "The mechanism driving this session is supply-side repricing in the global crude complex, with a 2.65% decline transmitting directly into MCX Crude at ₹8311/bbl. Historically, moves of this magnitude in US/EU sessions establish the opening range anchor for MCX the following day. Key observation: support at ₹8200/bbl, resistance at ₹8520/bbl.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-05-29T22:56:54.042Z",
+    "pubDateIST": "30 May 2026, 04:26"
+  },
+  {
     "id": "2026-05-30-02-54-mcx-silver-slides-0-94-to-267000-kg-as-c",
     "title": "MCX Silver slides 0.94% to ₹267000/kg as crude-led commodity selloff weighs on complex",
     "summary": "The mechanism here is risk-off contagion — crude's sharp -2.65% decline compresses inflation expectations, reducing silver's monetary hedge demand while simultaneously pressuring industrial silver offtake assumptions. Silver carries dual sensitivity: monetary and industrial.",
@@ -278,55 +308,5 @@
     "impact": "neutral",
     "pubDate": "2026-05-23T11:46:01.406Z",
     "pubDateIST": "23 May 2026, 17:16"
-  },
-  {
-    "id": "2026-05-23-03-17-assocham-rate-hold-signal-hits-gold-at-1",
-    "title": "ASSOCHAM Rate-Hold Signal Hits Gold at ₹158588 as Crude Drags Commodity Complex Down",
-    "summary": "This signal lands directly into a session where crude is already leading the commodity complex lower at -1.33%, amplifying the dovish monetary read for Indian markets. ASSOCHAM's explicit rate-hold call to RBI removes the currency-defense premium baked into INR assets — USD/INR holding at ₹95.70 means the rupee softens marginally on rate-hold expectations, partially offsetting the bearish pressure on MCX Gold at ₹158588/10g and MCX Silver at ₹271600/kg. The import parity chain: COMEX gold softness plus a stable-to-soft rupee at 95.70 translates to no fresh cost-push support for domestic gold pricing. A rate-hold posture reduces real yield anxiety — historically the primary driver of institutional gold allocation in India. MCX Copper at ₹1344.30 remains insulated given industrial demand independence from RBI policy. The cross-market correlation to watch: MCX Crude at ₹9218 falling alongside gold signals risk-off positioning, not inflation hedging — confirming the ASSOCHAM inflation-comfort narrative. Confirmation level: RBI MPC June meeting outcome or WPI print below 3.2% validates the full dovish repricing in gold.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-05-22T21:47:48.313Z",
-    "pubDateIST": "23 May 2026, 03:17"
-  },
-  {
-    "id": "2026-05-23-03-17-mcx-crude-drops-1-33-to-9218-as-iran-dea",
-    "title": "MCX Crude Drops 1.33% to ₹9218 as Iran Deal Stall Fails to Sustain Oil Rally",
-    "summary": "The dominant session narrative — crude leading losses at minus 1.33% — creates a direct contradiction with the incoming signal. Oil initially gained on US-Iran stall headlines, but the rally failed to hold, confirming the market has already priced geopolitical risk premium into crude. MCX Crude at ₹9218 per barrel now trades below the session open, meaning the geopolitical bid was sold into. The import parity chain shows global crude weakness compressing the INR-denominated price further: with USD/INR at 95.70, every one-dollar drop in Brent translates to approximately ₹95.70 on MCX, amplifying downside. MCX Silver at ₹271600 moving minus 1.19% alongside crude signals genuine risk-off dollar strength — not commodity-specific selling — pressuring the entire complex. MCX Gold at ₹158588 shows relative outperformance, consistent with safe-haven demand absorbing some pressure. The confirming level to watch: Brent crude holding or breaking the $64 handle in Monday's Asian open determines whether ₹9218 on MCX holds or cracks further at open.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-05-22T21:47:38.284Z",
-    "pubDateIST": "23 May 2026, 03:17"
-  },
-  {
-    "id": "2026-05-23-03-17-mcx-gold-slips-0-64-to-158-588-as-crude",
-    "title": "MCX Gold slips 0.64% to ₹158,588 as crude-led risk-off weighs on complex",
-    "summary": "Mechanism: Crude oil's -1.33% decline is compressing the broader commodity risk premium, pulling capital away from the metals complex. Gold's MCX decline of 0.64% to ₹158,588/10g reflects this sentiment drag despite Comex spot gaining over 2% on the week.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-05-22T21:47:30.005Z",
-    "pubDateIST": "23 May 2026, 03:17"
-  },
-  {
-    "id": "2026-05-23-03-17-mcx-silver-drops-1-19-to-271600-kg-as-do",
-    "title": "MCX Silver Drops 1.19% to ₹271600/kg as Dollar Strength Crushes Precious Metals Complex",
-    "summary": "The mechanism is classic dollar transmission: a stronger USD raises the effective cost of silver for non-dollar buyers, compressing global demand and driving Comex silver down $5/oz this session. That Comex print translates mechanically into MCX pressure independent of rupee movement.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-05-22T21:47:22.498Z",
-    "pubDateIST": "23 May 2026, 03:17"
-  },
-  {
-    "id": "2026-05-23-03-17-crude-leads-commodity-selloff-mcx-at-921",
-    "title": "Crude Leads Commodity Selloff, MCX at ₹9218 After 1.33% Session Decline",
-    "summary": "The mechanism: US-Iran de-escalation removes geopolitical risk premium from crude, triggering systematic long liquidation across energy. This is a supply-fear unwind, not a demand signal.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-05-22T21:47:15.035Z",
-    "pubDateIST": "23 May 2026, 03:17"
   }
 ]
