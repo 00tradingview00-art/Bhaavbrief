@@ -6,8 +6,28 @@ import Tag from '@/components/Tag'
 export const revalidate = 60
 
 export const metadata = {
-  title: 'Flash Intelligence — BhaavBrief',
-  description: 'Real-time MCX commodity market intelligence. Auto-generated when markets move.',
+  title: 'MCX Market Intelligence — Commodity Price Analysis | BhaavBrief',
+  description: 'Real-time MCX commodity market analysis — why gold, crude oil, silver, copper and natural gas are moving today. Auto-generated intelligence updated every 15 minutes during market hours.',
+  keywords: [
+    'MCX commodity market analysis today',
+    'why MCX gold moving today',
+    'why MCX crude oil moving today',
+    'MCX silver copper price analysis India',
+    'MCX price alert commodity India',
+    'MCX commodity intelligence real time',
+    'commodity market move analysis India',
+    'MCX hawk scan price alert',
+  ],
+  alternates: { canonical: 'https://bhaavbrief.in/articles' },
+  openGraph: {
+    title: 'MCX Market Intelligence — Why Commodities Are Moving | BhaavBrief',
+    description: 'Real-time MCX commodity intelligence — why gold, crude, silver and copper are moving. Updated every 15 minutes during market hours.',
+    url: 'https://bhaavbrief.in/articles',
+    siteName: 'BhaavBrief',
+    type: 'website' as const,
+    locale: 'en_IN',
+  },
+  twitter: { card: 'summary' as const, title: 'MCX Market Intelligence | BhaavBrief', description: 'Why MCX gold, crude oil, silver and copper are moving — real-time analysis every 15 minutes.', site: '@bhaavbrief' },
 }
 
 const COMMODITY_TAG_MAP: Record<string, string> = {

@@ -35,7 +35,7 @@ const SLUG_MAP: Record<string, { key: string; priceKey: string; color: string }>
 
 const BASE = 'https://bhaavbrief.in'
 
-const COMMODITY_META: Record<string, { title: string; description: string; keywords: string[] }> = {
+const COMMODITY_META: Record<string, { title: string; description: string; keywords: string[]; faq: Array<{ q: string; a: string }> }> = {
   gold: {
     title: 'Why MCX Gold Is Moving Today — Live Price & Analysis',
     description: 'MCX gold price live today — why gold is up or down: Fed policy, rupee-dollar moves, COMEX spread and geopolitics. OHLC, import parity and daily intelligence for Indian traders.',
@@ -49,6 +49,12 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       'MCX gold lot size margin 2026',
       'MCX gold standard vs mini difference',
       'MCX gold vs sovereign gold bond India',
+    ],
+    faq: [
+      { q: 'Why is MCX gold price up today?', a: 'MCX gold rises when any of these happen: the US dollar weakens (making dollar-priced gold cheaper globally), the Indian rupee falls against the dollar (requiring more rupees to buy the same gold), geopolitical tensions rise (safe-haven demand), US Federal Reserve signals rate cuts, or global central banks increase gold buying. A 1% rupee depreciation alone can add ₹1,000–₹1,500 to MCX gold per 10g even if COMEX gold is flat.' },
+      { q: 'Why is MCX gold price falling today?', a: 'MCX gold falls when: the US dollar strengthens (COMEX gold drops), the Indian rupee appreciates, US real yields rise (raising the opportunity cost of holding gold), the Fed signals rate hikes, or geopolitical tensions ease. Import duty cuts by the Indian government can also cause a sharp fall — each 1% duty reduction drops MCX gold by roughly ₹1,000/10g.' },
+      { q: 'Why does MCX gold price differ from international (COMEX) gold price?', a: 'MCX gold is priced in Indian rupees, not US dollars. The formula is: MCX Gold (₹/10g) = (COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + import duty + GST). At current duty levels (~15%), a COMEX price of $3,000/oz with USD/INR at ₹84 gives an MCX theoretical of ~₹93,000/10g. When actual MCX price is higher than this, it signals strong domestic demand or import tightness.' },
+      { q: 'What is the MCX Gold Mini lot size and margin?', a: 'MCX Gold Mini has a lot size of 100 grams, quoted in ₹ per 10 grams. At mid-2026 gold prices (~₹1,00,000/10g), one lot of Gold Mini is worth approximately ₹10 lakh. The required SPAN margin is approximately ₹55,000–₹75,000 per lot — making it the most accessible gold futures contract for retail traders. The standard 1 kg Gold contract requires ₹5–7 lakh in margin.' },
     ],
   },
   silver: {
@@ -64,6 +70,11 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       'solar panel demand silver India MCX',
       'MCX silver COMEX parity today',
     ],
+    faq: [
+      { q: 'Why is MCX silver price up or down today?', a: 'Silver moves on two separate demand streams: monetary (like gold) and industrial. It rises when gold rises, but also when industrial demand is strong — particularly solar panel manufacturing, electronics, and EVs. Silver typically moves 2–3× more than gold in percentage terms. If gold is up 0.5% and silver is up 1.2%, the extra industrial demand or a favourable gold-silver ratio is likely driving the outperformance.' },
+      { q: 'What is the gold-silver ratio and why does it matter for MCX?', a: 'The gold-silver ratio is the price of gold divided by the price of silver. Historically it oscillates between 60x and 90x. When the ratio is above 85x, silver is considered cheap relative to gold — traders watch for a mean reversion rally in silver. When below 65x, gold is relatively cheap. Indian traders use this ratio to time switches between MCX Gold and MCX Silver positions.' },
+      { q: 'What is the MCX Silver Mini lot size and margin?', a: 'MCX Silver Mini has a lot size of 5 kg, quoted in ₹ per kg. At mid-2026 silver prices (~₹1,00,000/kg), one Silver Mini lot is worth approximately ₹5 lakh. SPAN margin is approximately ₹25,000–₹40,000 per lot. The Silver Micro (1 kg) requires only ₹5,000–₹8,000 margin — suitable for beginners.' },
+    ],
   },
   crude: {
     title: 'Why MCX Crude Oil Is Moving Today — WTI, OPEC Analysis',
@@ -77,6 +88,12 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       'MCX crude oil lot size margin 2026',
       'MCX crude oil mini contract lot size',
       'petrol diesel crude oil MCX link India',
+    ],
+    faq: [
+      { q: 'Why is MCX crude oil price up or down today?', a: 'MCX crude oil moves with WTI and Brent crude benchmarks, adjusted for USD/INR. Key triggers for a move today: OPEC+ production cut or increase announcements, US EIA weekly inventory data (every Wednesday at 8 PM IST — a large inventory build is bearish, a draw is bullish), Iran-related geopolitical news (Strait of Hormuz risk), US dollar strength or weakness, and India\'s rupee level against the dollar.' },
+      { q: 'Does MCX crude oil price affect petrol and diesel prices in India?', a: 'Yes, but with a significant delay and government intervention in between. Indian oil marketing companies (BPCL, IOCL, HPCL) absorb crude oil price swings for weeks before passing them to consumers. A sustained ₹500–₹1000/bbl rise in MCX crude over 2–3 months typically triggers a petrol/diesel price revision. Short-term MCX crude moves of 1–3% rarely translate immediately to pump prices.' },
+      { q: 'What is the MCX Crude Oil Mini lot size and margin?', a: 'MCX Crude Oil Mini has a lot size of 10 barrels, quoted in ₹ per barrel. At ~₹6,500/bbl, one Crude Mini lot is worth ~₹65,000. SPAN margin is approximately ₹3,000–₹5,000 per lot — the most accessible energy futures contract for retail traders. The standard 100-barrel contract requires ₹30,000–₹45,000 margin. Crude expires around the 19th–20th of each month.' },
+      { q: 'What is the OPEC decision and how does it affect MCX crude?', a: 'OPEC+ (23 nations including Saudi Arabia and Russia) controls ~40% of global oil supply. When they announce production cuts, crude prices typically rise sharply — often ₹200–500/bbl on MCX within a single session. When they raise output, prices fall. OPEC meets every 2–3 months; pre-meeting signals from Saudi Arabia\'s energy ministry often move markets before the official decision.' },
     ],
   },
   copper: {
@@ -92,6 +109,11 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       'MCX copper mini contract lot size',
       'copper cable wire price MCX India',
     ],
+    faq: [
+      { q: 'Why is MCX copper price up or down today?', a: 'Copper is known as "Dr. Copper" because its price reflects global economic health. MCX copper rises when: China\'s PMI (Purchasing Managers\' Index) is above 50 (signals manufacturing expansion), China announces infrastructure stimulus, LME copper inventory falls (tight supply), or the US dollar weakens. It falls when China\'s economy slows, PMI drops below 50, or LME inventory builds sharply. China consumes ~55% of global copper.' },
+      { q: 'How does China affect MCX copper price in India?', a: 'China is the dominant demand driver for copper globally. Any data suggesting Chinese manufacturing is accelerating — PMI, industrial production, infrastructure project announcements — moves MCX copper within hours. The monthly Caixin and NBS China PMI releases (early morning IST) are the most watched single data points for MCX copper traders. China\'s property sector slowdown in 2022–2024 was a sustained bearish driver for copper.' },
+      { q: 'What is the MCX Copper lot size and margin?', a: 'MCX Copper standard contract has a lot size of 1,000 kg (1 metric tonne), quoted in ₹ per kg. At ~₹960/kg, one lot is worth approximately ₹9.6 lakh. SPAN margin is approximately ₹80,000–₹1.2 lakh. The Copper Mini (250 kg) requires ₹20,000–₹30,000 margin and is more accessible for retail traders. Tick size is ₹0.05/kg — each tick move earns or costs ₹50 on the standard lot.' },
+    ],
   },
   natgas: {
     title: 'Why MCX Natural Gas Is Moving Today — Henry Hub Analysis',
@@ -104,6 +126,11 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       'why MCX nat gas up today India',
       'MCX natural gas mini contract',
       'natural gas price India analysis today',
+    ],
+    faq: [
+      { q: 'Why is MCX natural gas price up or down today?', a: 'MCX Natural Gas tracks US Henry Hub prices (converted to rupees). It rises when: US natural gas storage draws are larger than expected (EIA report every Thursday at ~8:30 PM IST), winter heating demand is strong in the US or Europe, LNG export capacity increases tighten US domestic supply, or the rupee weakens. It falls when storage builds exceed expectations, weather forecasts are mild, or US production hits new highs.' },
+      { q: 'What is the EIA natural gas report and when is it released?', a: 'The US Energy Information Administration (EIA) releases weekly natural gas storage data every Thursday at approximately 8:30 PM IST. This is the most important weekly event for MCX Natural Gas traders. A storage draw larger than the market consensus is bullish (price rises); a build larger than consensus is bearish (price falls). The 5-year average storage level is used as the benchmark.' },
+      { q: 'What is the MCX Natural Gas lot size and margin?', a: 'MCX Natural Gas standard contract has a lot size of 1,250 mmBtu, quoted in ₹ per mmBtu. At ~₹320/mmBtu, one lot is worth approximately ₹4 lakh. SPAN margin is approximately ₹20,000–₹30,000. The Natural Gas Mini (250 mmBtu) requires only ₹4,000–₹6,000 margin — but natural gas is the most volatile MCX contract (5–10% single-day moves are common), so even the Mini carries significant risk for beginners.' },
     ],
   },
 }
@@ -174,6 +201,7 @@ export default async function CommodityPage({ params }: Props) {
   const marketStructure = loadMarketStructure()
   const info   = marketStructure[entry.key]
   const color  = entry.color
+  const meta   = COMMODITY_META[entry.key]
 
   const [prices, articles, allBriefs] = await Promise.all([
     getPrices().catch(() => null),
@@ -249,45 +277,37 @@ export default async function CommodityPage({ params }: Props) {
       {
         '@type': 'FAQPage',
         mainEntity: [
+          // Per-commodity targeted Q&As (search-intent aligned)
+          ...(meta?.faq ?? []).map(({ q, a }) => ({
+            '@type': 'Question',
+            name:    q,
+            acceptedAnswer: { '@type': 'Answer', text: a },
+          })),
+          // Generic market-structure Q&As
           {
             '@type': 'Question',
             name:    `What moves MCX ${info.name} price?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text:    info.priceDrivers.join(' '),
-            },
+            acceptedAnswer: { '@type': 'Answer', text: info.priceDrivers.join(' ') },
           },
           {
             '@type': 'Question',
             name:    `Who are the main buyers of ${info.name} in India?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text:    info.demandDrivers.join(' '),
-            },
+            acceptedAnswer: { '@type': 'Answer', text: info.demandDrivers.join(' ') },
           },
           {
             '@type': 'Question',
             name:    `Who controls ${info.name} supply globally?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text:    info.supplyControl,
-            },
+            acceptedAnswer: { '@type': 'Answer', text: info.supplyControl },
           },
           {
             '@type': 'Question',
             name:    `How is MCX ${info.name} price calculated from international prices?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text:    `The MCX ${info.name} price is derived using the import parity formula: ${info.importParity}`,
-            },
+            acceptedAnswer: { '@type': 'Answer', text: `The MCX ${info.name} price is derived using the import parity formula: ${info.importParity}` },
           },
           {
             '@type': 'Question',
             name:    `What are the key risks in MCX ${info.name} trading?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text:    info.keyRisk,
-            },
+            acceptedAnswer: { '@type': 'Answer', text: info.keyRisk },
           },
         ],
       },
