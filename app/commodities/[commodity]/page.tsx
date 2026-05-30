@@ -614,17 +614,81 @@ export default async function CommodityPage({ params }: Props) {
             </div>
             <p style={{ fontSize: 12, color: 'var(--ink-4)', margin: 0, lineHeight: 1.6 }}>{info.taxNote}</p>
           </div>
+
+          {/* Related guides — links to /learn */}
+          <div style={{
+            background: 'var(--surface-1)', border: '1px solid var(--border)',
+            borderRadius: 8, padding: '20px',
+          }}>
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 12 }}>
+              Learn MCX Trading
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[
+                { label: 'Contract lot sizes & margins',  href: '/learn' },
+                { label: 'How futures & leverage work',   href: '/learn' },
+                { label: 'Contango & backwardation',      href: '/learn' },
+                { label: 'How jewellers hedge',           href: '/learn' },
+                { label: 'MCX taxation guide',            href: '/learn' },
+              ].map(({ label, href }) => (
+                <Link key={label} href={href} style={{
+                  fontSize: 13, color: 'var(--gold)', textDecoration: 'none',
+                  display: 'flex', alignItems: 'center', gap: 6, lineHeight: 1.4,
+                }}>
+                  <span style={{ fontSize: 10, opacity: 0.6 }}>→</span> {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Other commodity pages */}
+          <div style={{
+            background: 'var(--surface-1)', border: '1px solid var(--border)',
+            borderRadius: 8, padding: '16px',
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 10 }}>
+              Also Track
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {[
+                { label: 'Gold',    href: '/commodities/gold',        key: 'gold' },
+                { label: 'Silver',  href: '/commodities/silver',      key: 'silver' },
+                { label: 'Crude',   href: '/commodities/crude-oil',   key: 'crude' },
+                { label: 'Copper',  href: '/commodities/copper',      key: 'copper' },
+                { label: 'Nat Gas', href: '/commodities/natural-gas', key: 'natgas' },
+              ].filter(c => c.key !== entry.key).map(c => (
+                <Link key={c.key} href={c.href} style={{
+                  fontSize: 12, fontWeight: 500, textDecoration: 'none',
+                  padding: '4px 10px', borderRadius: 4, border: '1px solid var(--border-2)',
+                  color: 'var(--ink-3)', background: 'var(--surface-2)',
+                }}>
+                  {c.label}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* All articles link */}
-      <div style={{ marginTop: 16, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
+      {/* Bottom nav strip */}
+      <div style={{ marginTop: 16, paddingTop: 24, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <Link href="/articles" style={{
           fontSize: 13, color, fontWeight: 500, textDecoration: 'none',
           display: 'inline-flex', alignItems: 'center', gap: 6,
         }}>
           ← All Market Intelligence
         </Link>
+        <div style={{ display: 'flex', gap: 20 }}>
+          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            Live Prices
+          </Link>
+          <Link href="/learn" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            Learn MCX
+          </Link>
+          <Link href="/invest" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            How to Invest
+          </Link>
+        </div>
       </div>
     </>
   )

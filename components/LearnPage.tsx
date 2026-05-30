@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 export interface ContractSpec {
   name: string
@@ -586,6 +587,15 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
           All MCX gold contracts settle against 995 purity LBMA-approved gold. Physical delivery is available (and compulsory if you hold to expiry without squaring off) at MCX accredited vaults in Ahmedabad, Mumbai, and Delhi.
         </p>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/commodities/gold" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Gold live price & analysis →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            All live prices
+          </Link>
+        </div>
       </>
     ),
   },
@@ -620,6 +630,15 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
           <strong>Seasonal demand</strong> adds an Indian angle: silver demand spikes before Diwali (jewellery, gifting) and during large solar panel procurement cycles (India&apos;s solar installation targets require significant silver for panel contacts). Watch for these seasonal patterns in MCX Silver open interest around April–May and September–October.
         </p>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/commodities/silver" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Silver live price & analysis →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            All live prices
+          </Link>
+        </div>
       </>
     ),
   },
@@ -658,6 +677,19 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
           <strong>MCX Crude vs petrol/diesel prices</strong>: MCX crude and retail fuel prices in India are linked but not directly. OMCs (BPCL, IOCL, HPCL) absorb margin compression during crude spikes before passing costs to consumers. A ₹500/bbl rise in MCX Crude does not immediately translate to a petrol price hike — but sustained crude elevation over 2–3 months typically does.
         </p>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/commodities/crude-oil" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Crude Oil live price & analysis →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/commodities/natural-gas" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Natural Gas →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            All live prices
+          </Link>
+        </div>
       </>
     ),
   },
@@ -702,6 +734,15 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
           <strong>Zinc and Lead</strong> tend to move together — both are by-products of mining operations and share many of the same demand drivers (construction for zinc galvanising; auto battery replacement cycle for lead). Aluminium has the most direct India-specific demand angle: packaging, two-wheeler manufacturing, and infrastructure spending. When India&apos;s Union Budget announces large infra allocation, aluminium and copper are typically the first MCX base metals to react.
         </p>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/commodities/copper" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Copper live price & analysis →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            All live prices
+          </Link>
+        </div>
       </>
     ),
   },
