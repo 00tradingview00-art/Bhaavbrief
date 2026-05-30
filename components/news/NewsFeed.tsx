@@ -316,9 +316,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   <TypeBadge itemType={item.itemType} />
                   <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
                   <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
-                    {item.pubDateIST
-                      ? item.pubDateIST.split(', ')[1]
-                      : relativeTime(item.pubDate)}
+                    {relativeTime(item.pubDate)}
                   </span>
                 </div>
 

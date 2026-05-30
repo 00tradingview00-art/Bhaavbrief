@@ -747,9 +747,9 @@ async function main() {
   const newSeen = [...seen]
   let processed = 0
 
-  function makeEntry(title, summary, category, tagType, impact) {
-    const ist    = getISTNow()
-    const now    = new Date()
+  function makeEntry(title, summary, category, tagType, impact, offsetMins = 0) {
+    const now    = new Date(Date.now() - offsetMins * 60 * 1000)
+    const ist    = new Date(now.getTime() + 5.5 * 60 * 60 * 1000)
     const istStr = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata',
       day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
     return { id: toId(title, ist), title, summary, category, tagType, impact, pubDate: now.toISOString(), pubDateIST: istStr }
@@ -766,7 +766,7 @@ async function main() {
         console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
         continue
       }
-      existing.unshift(makeEntry(title, summary, signal.category, signal.tagType, impact))
+      existing.unshift(makeEntry(title, summary, signal.category, signal.tagType, impact, processed * 2))
       currentRunTitles.push(title)
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
       processed++
@@ -787,7 +787,7 @@ async function main() {
         continue
       }
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
-      existing.unshift(makeEntry(title, summary, category, tagType, impact))
+      existing.unshift(makeEntry(title, summary, category, tagType, impact, processed * 2))
       currentRunTitles.push(title)
       newSeen.push(signal.url)
       processed++
