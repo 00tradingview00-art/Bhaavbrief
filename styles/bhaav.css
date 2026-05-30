@@ -142,9 +142,21 @@
 .nav-subscribe { display: none; }
 @media (min-width: 768px) { .nav-subscribe { display: flex; } }
 
-/* About page two-column layout */
+/* About page layouts */
 .about-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-@media (min-width: 768px) { .about-grid { grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; } }
+@media (min-width: 768px) { .about-grid { grid-template-columns: 1fr 310px; gap: 3rem; align-items: start; } }
+
+.about-stats-bar { display: grid; grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 600px) { .about-stats-bar { grid-template-columns: repeat(4, 1fr); } }
+
+.about-products-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 640px) { .about-products-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.about-ohlc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (min-width: 480px) { .about-ohlc-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.about-audience-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 520px) { .about-audience-grid { grid-template-columns: repeat(2, 1fr); } }
 
 /* ── Mobile touch targets ─────────────────────────────────────────────────── */
 /* Ensure interactive elements are at least 44px tall on mobile */
