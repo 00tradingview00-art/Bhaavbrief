@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export interface ContractSpec {
   name: string
@@ -763,12 +763,63 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
   const ARTICLES = buildArticles(specs ?? null)
   const SECTIONS = Array.from(new Set(ARTICLES.map(a => a.section)))
   const [activeId, setActiveId] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const [tocOpen, setTocOpen] = useState(false)
   const active = ARTICLES[activeId]
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 700)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  function selectArticle(id: number) {
+    setActiveId(id)
+    setTocOpen(false)
+    if (isMobile) window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const SidebarNav = () => (
+    <>
+      {SECTIONS.map(section => (
+        <div key={section}>
+          <div style={{
+            padding: '11px 16px',
+            borderBottom: '1px solid var(--border)',
+            fontSize: 10, fontWeight: 600, letterSpacing: '0.8px',
+            textTransform: 'uppercase', color: 'var(--ink-4)',
+            background: 'var(--surface-2)',
+          }}>
+            {section}
+          </div>
+          {ARTICLES.filter(a => a.section === section).map(article => (
+            <button
+              key={article.id}
+              onClick={() => selectArticle(article.id)}
+              style={{
+                display: 'block', width: '100%', textAlign: 'left',
+                padding: '10px 16px', borderBottom: '1px solid var(--border)',
+                fontSize: 13,
+                color: activeId === article.id ? 'var(--gold)' : 'var(--ink-3)',
+                fontWeight: activeId === article.id ? 500 : 400,
+                background: activeId === article.id ? 'var(--gold-pale)' : 'transparent',
+                border: 'none', cursor: 'pointer',
+                fontFamily: 'var(--font-sans)', transition: 'all .15s',
+              }}
+            >
+              {article.title}
+            </button>
+          ))}
+        </div>
+      ))}
+    </>
+  )
 
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: isMobile ? 24 : 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
           Learn
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
@@ -776,96 +827,120 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 28, alignItems: 'start' }}>
+      {isMobile ? (
+        /* ── Mobile layout ── */
+        <div>
+          {/* Collapsible TOC toggle */}
+          <button
+            onClick={() => setTocOpen(o => !o)}
+            style={{
+              width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '12px 16px', marginBottom: tocOpen ? 0 : 16,
+              background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: tocOpen ? '10px 10px 0 0' : 10,
+              fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+              cursor: 'pointer', fontFamily: 'var(--font-sans)',
+            }}
+          >
+            <span>
+              <span style={{ color: 'var(--ink-4)', marginRight: 6, fontSize: 11 }}>READING:</span>
+              {active.title}
+            </span>
+            <span style={{ fontSize: 16, color: 'var(--ink-3)' }}>{tocOpen ? '✕' : '☰'}</span>
+          </button>
 
-        {/* Sidebar nav */}
-        <div style={{
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 10,
-          overflow: 'hidden',
-          position: 'sticky',
-          top: 80,
-        }}>
-          {SECTIONS.map(section => (
-            <div key={section}>
-              <div style={{
-                padding: '11px 16px',
-                borderBottom: '1px solid var(--border)',
-                fontSize: 10, fontWeight: 600, letterSpacing: '0.8px',
-                textTransform: 'uppercase', color: 'var(--ink-4)',
-                background: 'var(--surface-2)',
-              }}>
-                {section}
-              </div>
-              {ARTICLES.filter(a => a.section === section).map(article => (
-                <button
-                  key={article.id}
-                  onClick={() => setActiveId(article.id)}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '10px 16px',
-                    borderBottom: '1px solid var(--border)',
-                    fontSize: 13,
-                    color: activeId === article.id ? 'var(--gold)' : 'var(--ink-3)',
-                    fontWeight: activeId === article.id ? 500 : 400,
-                    background: activeId === article.id ? 'var(--gold-pale)' : 'transparent',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'var(--font-sans)',
-                    transition: 'all .15s',
-                  }}
-                >
-                  {article.title}
-                </button>
-              ))}
+          {/* TOC dropdown */}
+          {tocOpen && (
+            <div style={{
+              border: '1px solid var(--border)', borderTop: 'none',
+              borderRadius: '0 0 10px 10px', overflow: 'hidden', marginBottom: 16,
+            }}>
+              <SidebarNav />
             </div>
-          ))}
-        </div>
+          )}
 
-        {/* Article content */}
-        <div style={{
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          borderRadius: 10,
-          padding: 36,
-        }}>
-          <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 12 }}>
-            {active.label}
-          </div>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, lineHeight: 1.3, color: 'var(--ink)', margin: '0 0 24px' }}>
-            {active.title}
-          </h2>
-
-          {active.content}
-
-          {/* Article navigation */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
-            {activeId > 0 ? (
-              <button onClick={() => setActiveId(activeId - 1)} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)',
-                background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)',
-                cursor: 'pointer', fontFamily: 'var(--font-sans)',
-              }}>
-                ← {ARTICLES[activeId - 1].title}
-              </button>
-            ) : <span />}
-            {activeId < ARTICLES.length - 1 ? (
-              <button onClick={() => setActiveId(activeId + 1)} style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)',
-                background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)',
-                cursor: 'pointer', fontFamily: 'var(--font-sans)',
-              }}>
-                Next: {ARTICLES[activeId + 1].title} →
-              </button>
-            ) : <span />}
+          {/* Article content */}
+          <div style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: '24px 18px',
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 10 }}>
+              {active.label}
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, lineHeight: 1.3, color: 'var(--ink)', margin: '0 0 20px' }}>
+              {active.title}
+            </h2>
+            {active.content}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 28, paddingTop: 20, borderTop: '1px solid var(--border)', gap: 8 }}>
+              {activeId > 0 ? (
+                <button onClick={() => selectArticle(activeId - 1)} style={{
+                  flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)',
+                  background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)',
+                  cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'left',
+                }}>
+                  ← {ARTICLES[activeId - 1].title}
+                </button>
+              ) : <span />}
+              {activeId < ARTICLES.length - 1 ? (
+                <button onClick={() => selectArticle(activeId + 1)} style={{
+                  flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)',
+                  background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)',
+                  cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'right',
+                }}>
+                  {ARTICLES[activeId + 1].title} →
+                </button>
+              ) : <span />}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* ── Desktop layout ── */
+        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 28, alignItems: 'start' }}>
+
+          {/* Sidebar nav */}
+          <div style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, overflow: 'hidden', position: 'sticky', top: 80,
+          }}>
+            <SidebarNav />
+          </div>
+
+          {/* Article content */}
+          <div style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: 10, padding: 36,
+          }}>
+            <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 12 }}>
+              {active.label}
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, lineHeight: 1.3, color: 'var(--ink)', margin: '0 0 24px' }}>
+              {active.title}
+            </h2>
+            {active.content}
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
+              {activeId > 0 ? (
+                <button onClick={() => selectArticle(activeId - 1)} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)',
+                  background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+                  cursor: 'pointer', fontFamily: 'var(--font-sans)',
+                }}>
+                  ← {ARTICLES[activeId - 1].title}
+                </button>
+              ) : <span />}
+              {activeId < ARTICLES.length - 1 ? (
+                <button onClick={() => selectArticle(activeId + 1)} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)',
+                  background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+                  cursor: 'pointer', fontFamily: 'var(--font-sans)',
+                }}>
+                  Next: {ARTICLES[activeId + 1].title} →
+                </button>
+              ) : <span />}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

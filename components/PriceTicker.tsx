@@ -55,7 +55,7 @@ export default function PriceTicker() {
         LIVE BHAAV
       </div>
       <div style={{ overflow: 'hidden', flex: 1, display: 'flex', alignItems: 'center' }}>
-        <div style={{ display: 'flex', animation: 'tickerScroll 28s linear infinite' }}>
+        <div style={{ display: 'flex', animation: 'tickerScroll 22s linear infinite' }}>
           {items.map((item, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 8,
