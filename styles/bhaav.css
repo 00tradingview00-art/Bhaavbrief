@@ -59,7 +59,7 @@
 .ticker-track {
   display: flex;
   gap: 36px;
-  animation: tickerScroll 35s linear infinite;
+  animation: tickerScroll 26s linear infinite;
   white-space: nowrap;
 }
 .ticker-track:hover { animation-play-state: paused; }
@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  animation: tickerScroll 50s linear infinite;
+  animation: tickerScroll 38s linear infinite;
   white-space: nowrap;
 }
 .geo-ticker-track:hover { animation-play-state: paused; }

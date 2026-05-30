@@ -2,7 +2,6 @@ import { notFound }      from 'next/navigation'
 import { Metadata }      from 'next'
 import { MDXRemote }     from 'next-mdx-remote/rsc'
 import Masthead          from '@/components/Masthead'
-import PriceTicker       from '@/components/PriceTicker'
 import CopyLinkButton    from '@/components/CopyLinkButton'
 import { getFlash, getAllFlash } from '@/lib/flash'
 
@@ -101,7 +100,6 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <Masthead />
-      <PriceTicker />
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <nav style={{ marginBottom: '1.5rem' }}>
