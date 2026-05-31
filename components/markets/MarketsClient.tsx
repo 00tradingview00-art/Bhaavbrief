@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
 import type { PriceData, MCXData } from '@/lib/prices'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -40,11 +41,11 @@ function isMCXOpen(): boolean {
 // ── Card config ───────────────────────────────────────────────────────────────
 
 const CARDS = [
-  { key: 'gold',   label: 'MCX Gold',    unit: '/10g',   fmtP: (v: number) => fmtINR(v) },
-  { key: 'silver', label: 'MCX Silver',  unit: '/kg',    fmtP: (v: number) => fmtINR(v) },
-  { key: 'crude',  label: 'MCX Crude',   unit: '/bbl',   fmtP: (v: number) => fmtINR(v) },
-  { key: 'copper', label: 'MCX Copper',  unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2) },
-  { key: 'natgas', label: 'MCX Nat Gas', unit: '/mmBtu', fmtP: (v: number) => fmtINR(v, 2) },
+  { key: 'gold',   label: 'MCX Gold',    unit: '/10g',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/gold'        },
+  { key: 'silver', label: 'MCX Silver',  unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/silver'      },
+  { key: 'crude',  label: 'MCX Crude',   unit: '/bbl',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/crude-oil'   },
+  { key: 'copper', label: 'MCX Copper',  unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/copper'      },
+  { key: 'natgas', label: 'MCX Nat Gas', unit: '/mmBtu', fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/natural-gas' },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -89,7 +90,7 @@ function PriceCard({
       borderRadius: 10,
       padding: '14px 16px',
       transition: 'background 0.5s ease, border-color 0.5s ease',
-      cursor: 'default',
+      cursor: 'pointer',
     }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -145,24 +146,26 @@ function PriceCard({
             </div>
           </div>
 
-          {/* Contract info */}
-          {data.mcxSymbol && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
-                {data.mcxSymbol}
-              </span>
-              {data.mcxExpiry && (
-                <span style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 9, padding: '2px 6px', borderRadius: 3,
-                  background: 'var(--gold-pale)', color: 'var(--gold-dark)',
-                }}>
-                  {daysToExpiry(data.mcxExpiry)} · {shortExpiry(data.mcxExpiry)}
-                </span>
-              )}
-            </div>
-          )}
         </>
       )}
+
+      {/* Footer — always visible */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, borderTop: '1px solid var(--border)', marginTop: hasKite ? 0 : 10 }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
+          {hasKite && data.mcxSymbol ? data.mcxSymbol : ''}
+        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {hasKite && data.mcxExpiry && (
+            <span style={{
+              fontFamily: 'var(--font-mono)', fontSize: 9, padding: '2px 6px', borderRadius: 3,
+              background: 'var(--gold-pale)', color: 'var(--gold-dark)',
+            }}>
+              {daysToExpiry(data.mcxExpiry)} · {shortExpiry(data.mcxExpiry)}
+            </span>
+          )}
+          <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>Chart & analysis →</span>
+        </div>
+      </div>
     </div>
   )
 }
@@ -240,9 +243,15 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         {CARDS.map(cfg => {
           const data = p?.[cfg.key as keyof PriceData] as MCXData | undefined
           if (!data) return (
-            <div key={cfg.key} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', height: 80 }} />
+            <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
+              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', height: 80, cursor: 'pointer' }} />
+            </Link>
           )
-          return <PriceCard key={cfg.key} cfg={cfg} data={data} flashing={flashing} />
+          return (
+            <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
+              <PriceCard cfg={cfg} data={data} flashing={flashing} />
+            </Link>
+          )
         })}
 
         {/* USD/INR card — special, not MCXData shape */}
