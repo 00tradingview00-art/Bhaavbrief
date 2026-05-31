@@ -301,11 +301,6 @@ export default async function CommodityPage({ params }: Props) {
           },
           {
             '@type': 'Question',
-            name:    `How is MCX ${info.name} price calculated from international prices?`,
-            acceptedAnswer: { '@type': 'Answer', text: `The MCX ${info.name} price is derived using the import parity formula: ${info.importParity}` },
-          },
-          {
-            '@type': 'Question',
             name:    `What are the key risks in MCX ${info.name} trading?`,
             acceptedAnswer: { '@type': 'Answer', text: info.keyRisk },
           },
@@ -551,23 +546,6 @@ export default async function CommodityPage({ params }: Props) {
             <p style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.5 }}>
               Margins are illustrative. Check your broker's SPAN calculator for live requirements.
             </p>
-          </div>
-
-          {/* Import parity */}
-          <div style={{
-            background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px',
-          }}>
-            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 10 }}>
-              Import Parity Formula
-            </div>
-            <div style={{
-              fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.7,
-              background: 'var(--surface-3)', borderRadius: 6, padding: '10px 14px',
-              fontFamily: 'var(--font-mono)',
-            }}>
-              {info.importParity}
-            </div>
           </div>
 
           {/* Supply control */}
