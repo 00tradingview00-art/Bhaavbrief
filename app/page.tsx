@@ -120,19 +120,22 @@ export default async function HomePage() {
         {/* B monogram watermark */}
         <div aria-hidden style={{
           position: 'absolute',
-          right: -24, top: '50%',
-          transform: 'translateY(-42%)',
-          fontFamily: 'Georgia, serif',
-          fontSize: 'clamp(180px, 22vw, 280px)',
-          fontWeight: 700,
-          color: 'var(--gold)',
-          opacity: 0.06,
-          lineHeight: 1,
-          userSelect: 'none',
+          top: 0, bottom: 0, right: 0,
+          display: 'flex',
+          alignItems: 'center',
           pointerEvents: 'none',
-          letterSpacing: '-0.05em',
+          userSelect: 'none',
         }}>
-          B
+          <span style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: 'clamp(140px, 18vw, 220px)',
+            fontWeight: 700,
+            color: 'var(--gold)',
+            opacity: 0.06,
+            lineHeight: 1,
+            letterSpacing: '-0.05em',
+            transform: 'translateX(16px)',
+          }}>B</span>
         </div>
 
         {/* Content */}
