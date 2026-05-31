@@ -11,6 +11,7 @@ const STATIC_PAGES = [
   { url: `${BASE}/briefs`,          priority: '0.9', changefreq: 'daily'   },
   { url: `${BASE}/markets`,         priority: '0.8', changefreq: 'hourly'  },
   { url: `${BASE}/news`,            priority: '0.8', changefreq: 'hourly'  },
+  { url: `${BASE}/articles`,        priority: '0.7', changefreq: 'daily'   },
   { url: `${BASE}/learn`,           priority: '0.6', changefreq: 'monthly' },
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },
