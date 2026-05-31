@@ -115,32 +115,103 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
-      <div style={{ marginBottom: 28 }}>
-        <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9,
-          letterSpacing: '0.14em', textTransform: 'uppercase',
-          color: 'var(--gold)', marginBottom: 10,
+      <div style={{ marginBottom: 32, position: 'relative', overflow: 'hidden' }}>
+
+        {/* B monogram watermark */}
+        <div aria-hidden style={{
+          position: 'absolute',
+          right: -32, top: '50%',
+          transform: 'translateY(-50%)',
+          fontFamily: 'Georgia, serif',
+          fontSize: 'clamp(220px, 28vw, 340px)',
+          fontWeight: 700,
+          color: 'var(--gold)',
+          opacity: 0.055,
+          lineHeight: 1,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          letterSpacing: '-0.05em',
         }}>
-          BhaavBrief — India's First Commodity Intelligence
+          B
         </div>
-        <p style={{
-          fontFamily: 'var(--font-serif)',
-          fontSize: 'clamp(22px, 3vw, 30px)',
-          fontWeight: 500, lineHeight: 1.25,
-          letterSpacing: '-0.3px',
-          color: 'var(--ink)',
-          margin: '0 0 10px',
-        }}>
-          Commodity prices move markets.<br />Know them first.
-        </p>
-        <p style={{
-          fontSize: 14, color: 'var(--ink-3)',
-          lineHeight: 1.75, margin: 0,
-          maxWidth: 560, fontWeight: 300,
-        }}>
-          Daily intelligence for India's traders, investors, merchants and businesses —
-          gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
-        </p>
+
+        {/* Content */}
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            fontFamily: 'var(--font-mono)', fontSize: 9,
+            letterSpacing: '0.14em', textTransform: 'uppercase',
+            color: 'var(--gold)', marginBottom: 10,
+          }}>
+            BhaavBrief — India's First Commodity Intelligence
+          </div>
+          <p style={{
+            fontFamily: 'var(--font-serif)',
+            fontSize: 'clamp(22px, 3vw, 30px)',
+            fontWeight: 500, lineHeight: 1.25,
+            letterSpacing: '-0.3px',
+            color: 'var(--ink)',
+            margin: '0 0 10px',
+          }}>
+            Commodity prices move markets.<br />Know them first.
+          </p>
+          <p style={{
+            fontSize: 14, color: 'var(--ink-3)',
+            lineHeight: 1.75, margin: '0 0 20px',
+            maxWidth: 560, fontWeight: 300,
+          }}>
+            Daily intelligence for India's traders, investors, merchants and businesses —
+            gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
+          </p>
+
+          {/* Live price strip */}
+          {prices && (
+            <div style={{
+              display: 'flex', flexWrap: 'wrap', gap: 8,
+            }}>
+              {[
+                { sym: 'Au', label: 'Gold',    price: prices.gold?.mcx,    pct: prices.gold?.mcxChangePct,    unit: '/10g' },
+                { sym: 'Ag', label: 'Silver',  price: prices.silver?.mcx,  pct: prices.silver?.mcxChangePct,  unit: '/kg'  },
+                { sym: 'WTI',label: 'Crude',   price: prices.crude?.mcx,   pct: prices.crude?.mcxChangePct,   unit: '/bbl' },
+                { sym: 'Cu', label: 'Copper',  price: prices.copper?.mcx,  pct: prices.copper?.mcxChangePct,  unit: '/kg'  },
+                { sym: 'NG', label: 'Nat Gas', price: prices.natgas?.mcx,  pct: prices.natgas?.mcxChangePct,  unit: '/mmBtu'},
+              ].filter(c => c.price).map(c => {
+                const up  = (c.pct ?? 0) >= 0
+                const pct = c.pct != null ? `${up ? '+' : ''}${c.pct.toFixed(2)}%` : null
+                return (
+                  <div key={c.sym} style={{
+                    display: 'flex', alignItems: 'center', gap: 7,
+                    background: 'var(--surface)',
+                    border: '0.5px solid var(--border)',
+                    padding: '6px 12px',
+                  }}>
+                    <span style={{
+                      fontFamily: 'var(--font-mono)', fontSize: 9,
+                      color: 'var(--gold)', letterSpacing: '0.06em',
+                      background: 'rgba(200,114,10,0.08)',
+                      padding: '1px 5px',
+                    }}>
+                      {c.sym}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 500, color: 'var(--ink)' }}>
+                      ₹{c.price!.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+                      {c.unit}
+                    </span>
+                    {pct && (
+                      <span style={{
+                        fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 500,
+                        color: up ? 'var(--up)' : 'var(--down)',
+                      }}>
+                        {pct}
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
