@@ -120,13 +120,13 @@ export default async function HomePage() {
         {/* B monogram watermark */}
         <div aria-hidden style={{
           position: 'absolute',
-          right: -32, top: '50%',
-          transform: 'translateY(-50%)',
+          right: -24, top: '50%',
+          transform: 'translateY(-42%)',
           fontFamily: 'Georgia, serif',
-          fontSize: 'clamp(220px, 28vw, 340px)',
+          fontSize: 'clamp(180px, 22vw, 280px)',
           fontWeight: 700,
           color: 'var(--gold)',
-          opacity: 0.055,
+          opacity: 0.06,
           lineHeight: 1,
           userSelect: 'none',
           pointerEvents: 'none',
