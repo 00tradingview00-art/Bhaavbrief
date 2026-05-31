@@ -9,9 +9,10 @@ export default function Icon() {
       <div style={{
         width: 32, height: 32,
         background: '#0E0D0A',
+        border: '1.5px solid #C8720A',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <span style={{ fontSize: 20, fontWeight: 700, color: '#B5862A', fontFamily: 'serif' }}>B</span>
+        <span style={{ fontSize: 20, fontWeight: 700, color: '#C8720A', fontFamily: 'serif' }}>B</span>
       </div>
     ),
     { ...size }

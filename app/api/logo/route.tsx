@@ -6,77 +6,150 @@ export const runtime = 'edge'
 const GOLD  = '#C8720A'
 const INK   = '#0E0D0A'
 const CREAM = '#F0EBE0'
-const DIM   = '#9A9080'
-const RED   = '#7A2A2A'
+const MUTED = '#8A8070'
 
 /*
-  Variants:
-  ?v=h   — horizontal wordmark, cream bg  (600×180) [default]
-  ?v=hd  — horizontal wordmark, dark bg   (600×180)
-  ?v=sq  — square icon mark, dark bg      (400×400) — use for RRM, profile pics
+  Variants via ?v=
+  h   — horizontal wordmark, cream bg  (640×160) [default, general use]
+  hd  — horizontal wordmark, dark bg   (640×160)
+  sq  — square B mark, dark bg         (400×400) — RRM, social profiles
+  sm  — compact B mark, dark bg        (200×200) — smaller profile pics
 */
 
 export async function GET(req: NextRequest) {
   const v = req.nextUrl.searchParams.get('v') ?? 'h'
-
-  if (v === 'sq') return square()
-  if (v === 'hd') return horizontal(true)
-  return horizontal(false)
+  if (v === 'sq') return squareMark(400)
+  if (v === 'sm') return squareMark(200)
+  if (v === 'hd') return wordmark(true)
+  return wordmark(false)
 }
 
-/* ─── Horizontal wordmark ─────────────────────────────────────────────────── */
+/* ─── B monogram mark ─────────────────────────────────────────────────────── */
 
-function horizontal(dark: boolean) {
-  const BG   = dark ? INK   : CREAM
-  const TEXT = dark ? CREAM : INK
-  const SUB  = dark ? '#7A7060' : '#9A9080'
+function squareMark(size: number) {
+  const border  = Math.round(size * 0.028)   // ~11px at 400
+  const inset   = Math.round(size * 0.05)    // ~20px at 400
+  const bSize   = Math.round(size * 0.62)    // ~248px at 400
+  const tagSize = Math.round(size * 0.048)   // ~19px at 400
 
   return new ImageResponse(
     (
       <div style={{
-        width: 600, height: 180,
+        width: size, height: size,
+        background: INK,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: `${border}px solid ${GOLD}`,
+      }}>
+        {/* Inner hairline frame */}
+        <div style={{
+          width: size - inset * 2,
+          height: size - inset * 2,
+          border: `0.5px solid rgba(200,114,10,0.25)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: 0,
+        }}>
+          {/* The B */}
+          <span style={{
+            fontFamily: 'serif',
+            fontSize: bSize,
+            fontWeight: 700,
+            color: GOLD,
+            lineHeight: 1,
+            letterSpacing: '-0.02em',
+            marginTop: Math.round(size * 0.04),
+          }}>
+            B
+          </span>
+          {/* Thin gold rule */}
+          <div style={{
+            width: Math.round(size * 0.22),
+            height: 1,
+            background: `rgba(200,114,10,0.4)`,
+            marginTop: Math.round(size * -0.04),
+            display: 'flex',
+          }} />
+          {/* Sub-text */}
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: tagSize,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'rgba(200,114,10,0.55)',
+            marginTop: Math.round(size * 0.025),
+          }}>
+            BHAAVBRIEF
+          </span>
+        </div>
+      </div>
+    ),
+    { width: size, height: size }
+  )
+}
+
+/* ─── Horizontal wordmark ─────────────────────────────────────────────────── */
+
+function wordmark(dark: boolean) {
+  const BG   = dark ? INK   : CREAM
+  const TEXT = dark ? CREAM : INK
+  const RULE = dark ? 'rgba(200,114,10,0.2)' : 'rgba(14,13,10,0.12)'
+
+  return new ImageResponse(
+    (
+      <div style={{
+        width: 640, height: 160,
         background: BG,
         display: 'flex',
         alignItems: 'center',
-        padding: '0 48px',
-        gap: 28,
+        padding: '0 44px',
+        gap: 32,
       }}>
 
-        {/* OHLC candlestick mark */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 7, height: 88 }}>
-
-          {/* Candle 1 — prior bearish session */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 88, justifyContent: 'center' }}>
-            <div style={{ width: 2, height: 10, background: DIM }} />
-            <div style={{ width: 13, height: 32, background: RED, opacity: 0.8 }} />
-            <div style={{ width: 2, height: 14, background: DIM }} />
-          </div>
-
-          {/* Candle 2 — indecision / doji */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 88, justifyContent: 'center' }}>
-            <div style={{ width: 2, height: 20, background: DIM }} />
-            <div style={{ width: 13, height: 8, background: DIM }} />
-            <div style={{ width: 2, height: 20, background: DIM }} />
-          </div>
-
-          {/* Candle 3 — bullish reversal (gold, tallest) */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 88, justifyContent: 'center' }}>
-            <div style={{ width: 2, height: 8, background: GOLD }} />
-            <div style={{ width: 13, height: 52, background: GOLD }} />
-            <div style={{ width: 2, height: 6, background: GOLD }} />
-          </div>
-
+        {/* B mark — compact */}
+        <div style={{
+          width: 72, height: 80,
+          background: dark ? 'rgba(200,114,10,0.08)' : INK,
+          border: `1.5px solid ${GOLD}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}>
+          <span style={{
+            fontFamily: 'serif',
+            fontSize: 52,
+            fontWeight: 700,
+            color: GOLD,
+            lineHeight: 1,
+            marginTop: 2,
+          }}>
+            B
+          </span>
         </div>
 
-        {/* Thin vertical rule */}
-        <div style={{ width: 1, height: 64, background: dark ? '#3A3828' : '#DDDDD0', display: 'flex' }} />
+        {/* Vertical rule */}
+        <div style={{
+          width: 1,
+          height: 56,
+          background: RULE,
+          display: 'flex',
+          flexShrink: 0,
+        }} />
 
         {/* Wordmark + tagline */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 0 }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 7,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 0, lineHeight: 1 }}>
             <span style={{
               fontFamily: 'serif',
-              fontSize: 52,
+              fontSize: 54,
               fontWeight: 700,
               color: TEXT,
               letterSpacing: '-1.5px',
@@ -86,7 +159,7 @@ function horizontal(dark: boolean) {
             </span>
             <span style={{
               fontFamily: 'serif',
-              fontSize: 52,
+              fontSize: 54,
               fontWeight: 400,
               color: GOLD,
               letterSpacing: '-1.5px',
@@ -98,9 +171,9 @@ function horizontal(dark: boolean) {
           <span style={{
             fontFamily: 'monospace',
             fontSize: 11,
-            letterSpacing: '0.14em',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: SUB,
+            color: MUTED,
           }}>
             India's First Commodity Intelligence
           </span>
@@ -108,78 +181,6 @@ function horizontal(dark: boolean) {
 
       </div>
     ),
-    { width: 600, height: 180 }
-  )
-}
-
-/* ─── Square icon mark ────────────────────────────────────────────────────── */
-
-function square() {
-  return new ImageResponse(
-    (
-      <div style={{
-        width: 400, height: 400,
-        background: INK,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 28,
-      }}>
-
-        {/* Three candles — larger, more dramatic */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-
-          {/* Candle 1 — bearish */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-            <div style={{ width: 3, height: 18, background: '#5A4848' }} />
-            <div style={{ width: 22, height: 54, background: RED, opacity: 0.75 }} />
-            <div style={{ width: 3, height: 24, background: '#5A4848' }} />
-          </div>
-
-          {/* Candle 2 — doji */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-            <div style={{ width: 3, height: 38, background: '#5A5448' }} />
-            <div style={{ width: 22, height: 12, background: '#9A9080' }} />
-            <div style={{ width: 3, height: 38, background: '#5A5448' }} />
-          </div>
-
-          {/* Candle 3 — bullish reversal */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-            <div style={{ width: 3, height: 14, background: GOLD }} />
-            <div style={{ width: 22, height: 90, background: GOLD }} />
-            <div style={{ width: 3, height: 10, background: GOLD }} />
-          </div>
-
-        </div>
-
-        {/* Wordmark */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline' }}>
-            <span style={{
-              fontFamily: 'serif', fontSize: 56, fontWeight: 700,
-              color: CREAM, letterSpacing: '-2px', lineHeight: 1,
-            }}>
-              Bhaav
-            </span>
-            <span style={{
-              fontFamily: 'serif', fontSize: 56, fontWeight: 400,
-              color: GOLD, letterSpacing: '-2px', lineHeight: 1,
-            }}>
-              Brief
-            </span>
-          </div>
-          <span style={{
-            fontFamily: 'monospace', fontSize: 10,
-            letterSpacing: '0.18em', textTransform: 'uppercase',
-            color: '#5A5448',
-          }}>
-            bhaavbrief.in
-          </span>
-        </div>
-
-      </div>
-    ),
-    { width: 400, height: 400 }
+    { width: 640, height: 160 }
   )
 }
