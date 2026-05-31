@@ -166,54 +166,6 @@ export default async function HomePage() {
             gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
           </p>
 
-          {/* Live price strip */}
-          {prices && (
-            <div style={{
-              display: 'flex', flexWrap: 'wrap', gap: 8,
-            }}>
-              {[
-                { sym: 'Au', label: 'Gold',    price: prices.gold?.mcx,    pct: prices.gold?.mcxChangePct,    unit: '/10g' },
-                { sym: 'Ag', label: 'Silver',  price: prices.silver?.mcx,  pct: prices.silver?.mcxChangePct,  unit: '/kg'  },
-                { sym: 'WTI',label: 'Crude',   price: prices.crude?.mcx,   pct: prices.crude?.mcxChangePct,   unit: '/bbl' },
-                { sym: 'Cu', label: 'Copper',  price: prices.copper?.mcx,  pct: prices.copper?.mcxChangePct,  unit: '/kg'  },
-                { sym: 'NG', label: 'Nat Gas', price: prices.natgas?.mcx,  pct: prices.natgas?.mcxChangePct,  unit: '/mmBtu'},
-              ].filter(c => c.price).map(c => {
-                const up  = (c.pct ?? 0) >= 0
-                const pct = c.pct != null ? `${up ? '+' : ''}${c.pct.toFixed(2)}%` : null
-                return (
-                  <div key={c.sym} style={{
-                    display: 'flex', alignItems: 'center', gap: 7,
-                    background: 'var(--surface)',
-                    border: '0.5px solid var(--border)',
-                    padding: '6px 12px',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 9,
-                      color: 'var(--gold)', letterSpacing: '0.06em',
-                      background: 'rgba(200,114,10,0.08)',
-                      padding: '1px 5px',
-                    }}>
-                      {c.sym}
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 500, color: 'var(--ink)' }}>
-                      ₹{c.price!.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
-                      {c.unit}
-                    </span>
-                    {pct && (
-                      <span style={{
-                        fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 500,
-                        color: up ? 'var(--up)' : 'var(--down)',
-                      }}>
-                        {pct}
-                      </span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
         </div>
       </div>
 
