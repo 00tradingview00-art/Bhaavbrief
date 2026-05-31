@@ -115,7 +115,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
-      <div style={{ marginBottom: 32, position: 'relative', overflow: 'hidden' }}>
+      <div style={{ marginBottom: 32, position: 'relative', overflow: 'hidden', minHeight: 220 }}>
 
         {/* B monogram watermark */}
         <div aria-hidden style={{
@@ -128,7 +128,7 @@ export default async function HomePage() {
         }}>
           <span style={{
             fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(140px, 18vw, 220px)',
+            fontSize: 'clamp(120px, 15vw, 200px)',
             fontWeight: 700,
             color: 'var(--gold)',
             opacity: 0.06,
