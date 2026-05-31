@@ -19,6 +19,7 @@ const MUTED = '#8A8070'
 export async function GET(req: NextRequest) {
   const v = req.nextUrl.searchParams.get('v') ?? 'h'
   if (v === 'sq') return squareMark(400)
+  if (v === 'sq512') return squareMark(512)
   if (v === 'sm') return squareMark(200)
   if (v === 'hd') return wordmark(true)
   return wordmark(false)
