@@ -1,7 +1,7 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { getAllArticles } from '@/lib/articles'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 const BASE = 'https://bhaavbrief.in'
 
