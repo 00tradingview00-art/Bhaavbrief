@@ -173,7 +173,7 @@ export default async function ArticlePage({ params }: Props) {
         {/* Article body */}
         <div style={{
           fontSize: 16, lineHeight: 1.8, color: 'var(--ink-2)',
-          fontFamily: 'var(--font-mono)',
+          fontFamily: 'var(--font-sans)',
         }} className={meta.edition === 'hawk-scan' ? 'article-body hawk-scan-body' : 'article-body'}>
           <MDXRemote source={content} />
         </div>
