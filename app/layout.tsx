@@ -123,7 +123,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in ·{' '}
-            <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>
+            <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>{' '}·{' '}
+            <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Terms of Use</a>
           </p>
           <p style={{
             fontSize: 11,
@@ -143,6 +144,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <Analytics />
+        {/* Google Reader Revenue Manager */}
+        <Script src="https://news.google.com/swg/js/v1/swg-basic.js" strategy="afterInteractive" />
+        <Script id="rrm-init" strategy="afterInteractive">{`
+          (self.SWG_BASIC = self.SWG_BASIC || []).push(basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAowmuLGDA:openaccess",
+              clientOptions: { theme: "light", lang: "en-IN" },
+            });
+          });
+        `}</Script>
         {/* Google Analytics 4 */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="afterInteractive" />
         <Script id="ga4" strategy="afterInteractive">{`
