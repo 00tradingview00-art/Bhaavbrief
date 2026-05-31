@@ -51,7 +51,14 @@ export default function Nav() {
           minWidth: 0,
         }}>
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: 'none', marginRight: 16, flexShrink: 0 }}>
+          <Link href="/" style={{ textDecoration: 'none', marginRight: 16, flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10 }}>
+            <img
+              src="/logo-mark.png"
+              alt="BhaavBrief"
+              width={32}
+              height={32}
+              style={{ display: 'block' }}
+            />
             <span style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 20,
