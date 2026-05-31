@@ -57,7 +57,7 @@ ${recentArticles.map(a =>
 Commodities: MCX Gold (₹/10g), MCX Silver (₹/kg), MCX Crude Oil (₹/bbl), MCX Copper (₹/kg), MCX Natural Gas (₹/mmBtu)
 Global references: COMEX Gold ($/oz), COMEX Silver ($/oz), LME Copper ($/MT), WTI Crude ($/bbl), Brent Crude ($/bbl), Henry Hub Gas ($/mmBtu)
 Currency: USD/INR
-Data points per brief: Open, High, Low, Close, % Change, Open Interest, Volume, Import Parity
+Data points per brief: Open, High, Low, Close, % Change, Open Interest, Volume
 
 ## Contact
 
