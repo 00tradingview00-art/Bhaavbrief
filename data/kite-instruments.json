@@ -31,10 +31,26 @@
     "expiry": "2026-06-25"
   },
   "currencies": {
-    "usdinr": { "token": 1689859, "symbol": "USDINR26JUNFUT", "expiry": "2026-06-25" },
-    "eurinr": { "token": 1682435, "symbol": "EURINR26JUNFUT", "expiry": "2026-06-25" },
-    "gbpinr": { "token": 1689091, "symbol": "GBPINR26JUNFUT", "expiry": "2026-06-25" },
-    "jpyinr": { "token": 1689603, "symbol": "JPYINR26JUNFUT", "expiry": "2026-06-25" }
+    "usdinr": {
+      "token": 1689859,
+      "symbol": "USDINR26JUNFUT",
+      "expiry": "2026-06-25"
+    },
+    "eurinr": {
+      "token": 1682435,
+      "symbol": "EURINR26JUNFUT",
+      "expiry": "2026-06-25"
+    },
+    "gbpinr": {
+      "token": 1689091,
+      "symbol": "GBPINR26JUNFUT",
+      "expiry": "2026-06-25"
+    },
+    "jpyinr": {
+      "token": 1689603,
+      "symbol": "JPYINR26JUNFUT",
+      "expiry": "2026-06-25"
+    }
   },
-  "updatedAt": "2026-06-01T03:14:23.141Z"
+  "updatedAt": "2026-06-01T04:59:06.943Z"
 }
