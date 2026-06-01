@@ -143,41 +143,63 @@ async function updateVercelEnv(token) {
 
 async function discoverInstruments(accessToken) {
   try {
-    const res = await fetch('https://api.kite.trade/instruments/MCX', {
-      headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${accessToken}` },
-      signal: AbortSignal.timeout(15000),
-    })
-    if (!res.ok) { console.error(`\n   Kite ${res.status}`); return false }
+    const [mcxRes, cdsRes] = await Promise.all([
+      fetch('https://api.kite.trade/instruments/MCX', {
+        headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${accessToken}` },
+        signal: AbortSignal.timeout(15000),
+      }),
+      fetch('https://api.kite.trade/instruments/CDS', {
+        headers: { 'X-Kite-Version': '3', Authorization: `token ${API_KEY}:${accessToken}` },
+        signal: AbortSignal.timeout(15000),
+      }),
+    ])
+    if (!mcxRes.ok) { console.error(`\n   Kite MCX ${mcxRes.status}`); return false }
 
-    const csv    = await res.text()
-    const lines  = csv.split('\n').filter(Boolean)
-    const header = lines[0].split(',')
-    const idx    = col => header.indexOf(col)
-    const today  = new Date(); today.setHours(0, 0, 0, 0)
+    const parseCSV = async (res) => {
+      const csv   = await res.text()
+      const lines = csv.split('\n').filter(Boolean)
+      const header = lines[0].split(',')
+      const idx    = col => header.indexOf(col)
+      const today  = new Date(); today.setHours(0, 0, 0, 0)
+      return lines.slice(1).map(line => {
+        const cols = line.split(',')
+        return {
+          token:  parseInt(cols[idx('instrument_token')] ?? '0'),
+          symbol: (cols[idx('tradingsymbol')]    ?? '').replace(/^"|"$/g, ''),
+          name:   (cols[idx('name')]             ?? '').replace(/^"|"$/g, ''),
+          expiry: (cols[idx('expiry')]           ?? '').replace(/^"|"$/g, ''),
+          type:   (cols[idx('instrument_type')]  ?? '').replace(/^"|"$/g, ''),
+        }
+      }).filter(i => i.token > 0 && i.type === 'FUT' && i.expiry)
+    }
 
-    const instruments = lines.slice(1).map(line => {
-      const cols = line.split(',')
-      return {
-        token:  parseInt(cols[idx('instrument_token')] ?? '0'),
-        symbol: (cols[idx('tradingsymbol')]    ?? '').replace(/^"|"$/g, ''),
-        name:   (cols[idx('name')]             ?? '').replace(/^"|"$/g, ''),
-        expiry: (cols[idx('expiry')]           ?? '').replace(/^"|"$/g, ''),
-        type:   (cols[idx('instrument_type')]  ?? '').replace(/^"|"$/g, ''),
-      }
-    }).filter(i => i.token > 0 && i.type === 'FUT' && i.expiry)
+    const today = new Date(); today.setHours(0, 0, 0, 0)
+    const instruments    = await parseCSV(mcxRes)
+    const cdsInstruments = cdsRes.ok ? await parseCSV(cdsRes) : []
 
-    const frontMonth = name => instruments
+    const frontMonth = (list, name) => list
       .filter(i => i.name.toUpperCase() === name.toUpperCase() && new Date(i.expiry) >= today)
-      .sort((a, b) => new Date(a.expiry) - new Date(b.expiry))[0] ?? null
+      // prefer monthly contracts (symbol ends in MONFUT) over weekly
+      .sort((a, b) => {
+        const aMonthly = /[A-Z]{3}FUT$/.test(a.symbol) ? 0 : 1
+        const bMonthly = /[A-Z]{3}FUT$/.test(b.symbol) ? 0 : 1
+        if (aMonthly !== bMonthly) return aMonthly - bMonthly
+        return new Date(a.expiry) - new Date(b.expiry)
+      })[0] ?? null
 
-    const gold   = frontMonth('GOLD')
-    const goldM  = frontMonth('GOLDM')
-    const silver = frontMonth('SILVER')
-    const crude  = frontMonth('CRUDEOIL')
-    const copper = frontMonth('COPPER')
-    const natgas = frontMonth('NATURALGAS')
+    const gold   = frontMonth(instruments, 'GOLD')
+    const goldM  = frontMonth(instruments, 'GOLDM')
+    const silver = frontMonth(instruments, 'SILVER')
+    const crude  = frontMonth(instruments, 'CRUDEOIL')
+    const copper = frontMonth(instruments, 'COPPER')
+    const natgas = frontMonth(instruments, 'NATURALGAS')
 
     if (!gold || !silver || !crude || !copper || !natgas) return false
+
+    const usdinr = frontMonth(cdsInstruments, 'USDINR')
+    const eurinr = frontMonth(cdsInstruments, 'EURINR')
+    const gbpinr = frontMonth(cdsInstruments, 'GBPINR')
+    const jpyinr = frontMonth(cdsInstruments, 'JPYINR')
 
     const map = {
       _note:    'Auto-updated by morning auth. Do not edit manually.',
@@ -187,6 +209,14 @@ async function discoverInstruments(accessToken) {
       crude:    { token: crude.token,                     symbol: crude.symbol,   expiry: crude.expiry   },
       copper:   { token: copper.token,                    symbol: copper.symbol,  expiry: copper.expiry  },
       natgas:   { token: natgas.token,                    symbol: natgas.symbol,  expiry: natgas.expiry  },
+      ...(usdinr && eurinr && gbpinr && jpyinr ? {
+        currencies: {
+          usdinr: { token: usdinr.token, symbol: usdinr.symbol, expiry: usdinr.expiry },
+          eurinr: { token: eurinr.token, symbol: eurinr.symbol, expiry: eurinr.expiry },
+          gbpinr: { token: gbpinr.token, symbol: gbpinr.symbol, expiry: gbpinr.expiry },
+          jpyinr: { token: jpyinr.token, symbol: jpyinr.symbol, expiry: jpyinr.expiry },
+        }
+      } : {}),
       updatedAt: new Date().toISOString(),
     }
 
@@ -199,6 +229,18 @@ async function discoverInstruments(accessToken) {
     console.log(`     Crude  ${crude.symbol} (${crude.token})`)
     console.log(`     Copper ${copper.symbol} (${copper.token})`)
     console.log(`     NatGas ${natgas.symbol} (${natgas.token})`)
+    if (usdinr) console.log(`     USD/INR ${usdinr.symbol} (${usdinr.token})`)
+    if (eurinr) console.log(`     EUR/INR ${eurinr.symbol} (${eurinr.token})`)
+    if (gbpinr) console.log(`     GBP/INR ${gbpinr.symbol} (${gbpinr.token})`)
+    if (jpyinr) console.log(`     JPY/INR ${jpyinr.symbol} (${jpyinr.token})`)
+
+    // Auto-commit so Vercel picks up the latest instrument tokens
+    try {
+      execFileSync('git', ['add', 'data/kite-instruments.json'], { cwd: ROOT, stdio: 'pipe' })
+      execFileSync('git', ['commit', '-m', `chore: update MCX instrument tokens ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`], { cwd: ROOT, stdio: 'pipe' })
+      execFileSync('git', ['push'], { cwd: ROOT, stdio: 'pipe' })
+    } catch { /* already up to date or no changes — ignore */ }
+
     return true
   } catch (err) {
     console.error('Instrument discovery failed:', err.message)

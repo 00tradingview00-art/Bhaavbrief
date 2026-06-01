@@ -258,8 +258,11 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
   const instruments = loadInstrumentTokens()
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const tokenList = ['gold', 'silver', 'crude', 'copper', 'natgas'].map(k => instruments[k].token)
-    return await client.getQuotes(tokenList)
+    const mcxTokens = ['gold', 'silver', 'crude', 'copper', 'natgas'].map(k => instruments[k].token)
+    const fxTokens  = instruments.currencies
+      ? Object.values(instruments.currencies as unknown as Record<string, InstrumentInfo>).map(c => c.token)
+      : []
+    return await client.getQuotes([...mcxTokens, ...fxTokens])
   } catch (err) {
     console.warn('Kite quote fetch failed:', (err as Error).message)
     return null
@@ -280,6 +283,19 @@ export interface MCXData {
   mcxOI:        number   // open interest in lots (0 if Kite unavailable)
   mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
   mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
+}
+
+export interface ForexData {
+  ltp:        number
+  changePct:  number
+  change:     number
+  open:       number
+  high:       number
+  low:        number
+  prevClose:  number
+  volume:     number
+  symbol:     string
+  expiry:     string
 }
 
 export interface PriceData {
@@ -309,6 +325,12 @@ export interface PriceData {
   copper: MCXData
   natgas: MCXData
   aluminium: { lme: number; lmeChangePct: number }
+  currencies?: {
+    usdinr: ForexData
+    eurinr: ForexData
+    gbpinr: ForexData
+    jpyinr: ForexData
+  }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -327,6 +349,22 @@ function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: n
     mcxOI:        hasLive ? (q!.oi            ?? 0)  : 0,
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
+  }
+}
+
+function buildForexData(q: KiteQuote | null, info: InstrumentInfo): ForexData {
+  const hasLive = !!(q && q.last_price > 0)
+  return {
+    ltp:       hasLive ? q!.last_price           : 0,
+    changePct: hasLive ? KiteClient.changePct(q!) : 0,
+    change:    hasLive ? q!.net_change            : 0,
+    open:      hasLive ? (q!.ohlc?.open  ?? 0)   : 0,
+    high:      hasLive ? (q!.ohlc?.high  ?? 0)   : 0,
+    low:       hasLive ? (q!.ohlc?.low   ?? 0)   : 0,
+    prevClose: hasLive ? (q!.ohlc?.close ?? 0)   : 0,
+    volume:    hasLive ? (q!.volume      ?? 0)   : 0,
+    symbol:    info.symbol,
+    expiry:    info.expiry,
   }
 }
 
@@ -402,6 +440,14 @@ export async function getPrices(): Promise<PriceData | null> {
       copper: buildMCXData(copperQ, y.mcxCopper, y.copperPct, instruments.copper),
       natgas: buildMCXData(natgasQ, y.mcxNatGas, y.gasPct,    instruments.natgas),
       aluminium: { lme: 0, lmeChangePct: 0 },
+      ...(instruments.currencies ? {
+        currencies: {
+          usdinr: buildForexData(kiteByToken((instruments.currencies as any).usdinr.token), (instruments.currencies as any).usdinr),
+          eurinr: buildForexData(kiteByToken((instruments.currencies as any).eurinr.token), (instruments.currencies as any).eurinr),
+          gbpinr: buildForexData(kiteByToken((instruments.currencies as any).gbpinr.token), (instruments.currencies as any).gbpinr),
+          jpyinr: buildForexData(kiteByToken((instruments.currencies as any).jpyinr.token), (instruments.currencies as any).jpyinr),
+        }
+      } : {}),
     }
   } catch (err) {
     console.error('getPrices error:', err)

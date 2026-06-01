@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import type { PriceData, MCXData } from '@/lib/prices'
+import type { PriceData, MCXData, ForexData } from '@/lib/prices'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -254,32 +254,55 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           )
         })}
 
-        {/* USD/INR card — special, not MCXData shape */}
-        <div style={{
-          background: flashing ? '#f0f9ff' : 'var(--surface)',
-          border: `1px solid ${flashing ? '#0ea5e9' : 'var(--border)'}`,
-          borderRadius: 10, padding: '14px 16px',
-          transition: 'background 0.5s ease, border-color 0.5s ease',
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
-              USD / INR
-            </span>
-            {p && (
-              <span style={{
-                fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4,
-                background: p.usdinrChangePct >= 0 ? 'var(--up-bg)' : 'var(--down-bg)',
-                color: p.usdinrChangePct >= 0 ? 'var(--up)' : 'var(--down)',
-              }}>
-                {p.usdinrChangePct >= 0 ? '▲' : '▼'} {fmtPct(p.usdinrChangePct)}
-              </span>
-            )}
-          </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
-            {p ? fmtINR(p.usdinr, 2) : '—'}
-          </div>
-          <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>spot rate</div>
-        </div>
+        {/* Currency cards from Kite CDS */}
+        {([
+          { key: 'usdinr', label: 'USD / INR', decimals: 4, unit: 'per USD'     },
+          { key: 'eurinr', label: 'EUR / INR', decimals: 4, unit: 'per EUR'     },
+          { key: 'gbpinr', label: 'GBP / INR', decimals: 4, unit: 'per GBP'     },
+          { key: 'jpyinr', label: 'JPY / INR', decimals: 4, unit: 'per 100 JPY' },
+        ] as { key: string; label: string; decimals: number; unit: string }[]).map(cfg => {
+          const fx = p?.currencies?.[cfg.key as keyof typeof p.currencies]
+          const ltp = fx?.ltp ?? (cfg.key === 'usdinr' ? p?.usdinr : 0) ?? 0
+          const pct = fx?.changePct ?? (cfg.key === 'usdinr' ? p?.usdinrChangePct : 0) ?? 0
+          const isUp = pct >= 0
+          return (
+            <div key={cfg.key} style={{
+              background: flashing ? (isUp ? '#f0fdf4' : '#fff1f0') : 'var(--surface)',
+              border: `1px solid ${flashing ? (isUp ? 'var(--up)' : 'var(--down)') : 'var(--border)'}`,
+              borderRadius: 10, padding: '14px 16px',
+              transition: 'background 0.5s ease, border-color 0.5s ease',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+                  {cfg.label}
+                </span>
+                {ltp > 0 && (
+                  <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: isUp ? 'var(--up-bg)' : 'var(--down-bg)', color: isUp ? 'var(--up)' : 'var(--down)' }}>
+                    {isUp ? '▲' : '▼'} {fmtPct(pct)}
+                  </span>
+                )}
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+                {ltp > 0 ? `₹${ltp.toLocaleString('en-IN', { minimumFractionDigits: cfg.decimals, maximumFractionDigits: cfg.decimals })}` : '—'}
+              </div>
+              {fx?.open && fx.open > 0 ? (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 8px', marginTop: 8 }}>
+                  {[{ l: 'O', v: fx.open }, { l: 'H', v: fx.high }, { l: 'L', v: fx.low }, { l: 'C', v: fx.prevClose }].map(({ l, v }) => (
+                    <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
+                      <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--ink-4)', minWidth: 10 }}>{l}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>₹{v.toFixed(cfg.decimals)}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>{cfg.unit}</div>
+              )}
+              {fx?.symbol && (
+                <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       {/* ── Global Reference ── */}
