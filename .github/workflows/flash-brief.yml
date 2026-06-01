@@ -47,11 +47,16 @@ jobs:
           TWELVE_DATA_API_KEY:  ${{ secrets.TWELVE_DATA_API_KEY }}
           ALPHA_VANTAGE_KEY:    ${{ secrets.ALPHA_VANTAGE_KEY }}
 
+      - name: Monitor MCX/SEBI circulars
+        run: node scripts/monitor-mcx-circulars.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
       - name: Commit and push
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/flash/ scripts/seen-articles.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
@@ -61,7 +66,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ scripts/seen-articles.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           git push origin main
