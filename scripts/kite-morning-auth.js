@@ -110,6 +110,21 @@ async function syncAll(token) {
   patchEnvLocal(token)
   console.log(' ✅')
 
+  // Always trigger a Vercel redeploy so the new token takes effect.
+  // instruments.json push only happens when contracts change (monthly),
+  // so we write a timestamp file to guarantee a deploy every morning.
+  process.stdout.write('🚀  Trigger deploy...')
+  try {
+    const stamp = { lastAuth: todayIST(), updated: new Date().toISOString() }
+    fs.writeFileSync(path.join(ROOT, 'data/last-kite-auth.json'), JSON.stringify(stamp, null, 2) + '\n', 'utf8')
+    execFileSync('git', ['add', 'data/last-kite-auth.json'], { cwd: ROOT, stdio: 'pipe' })
+    execFileSync('git', ['commit', '-m', `chore: kite token refresh ${todayIST()}`], { cwd: ROOT, stdio: 'pipe' })
+    execFileSync('git', ['push'], { cwd: ROOT, stdio: 'pipe' })
+    console.log(' ✅')
+  } catch {
+    console.log(' ⚠️   git push failed — redeploy manually')
+  }
+
   return ghOk && iOk
 }
 
