@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans, DM_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 import './globals.css'
 import '../styles/bhaav.css'
@@ -144,6 +145,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <Analytics />
+        <SpeedInsights />
         {/* Google Reader Revenue Manager */}
         <Script src="https://news.google.com/swg/js/v1/swg-basic.js" strategy="afterInteractive" />
         <Script id="rrm-init" strategy="afterInteractive">{`
