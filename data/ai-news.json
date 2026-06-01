@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-02-01-34-mcx-copper-gains-1-35-to-1367-kg-as-natg",
+    "title": "MCX Copper gains 1.35% to ₹1367/kg as NatGas rout leaves metals relatively bid",
+    "summary": "The mechanism here is relative rotation. NatGas collapsing 4.21% absorbs the session's bearish energy, leaving industrial metals with a cleaner bid. Copper's 1.35% advance to ₹1367/kg reflects that vacuum, not independent fundamental strength.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-01T20:04:19.057Z",
+    "pubDateIST": "02 Jun 2026, 01:34"
+  },
+  {
+    "id": "2026-06-02-01-36-mcx-natural-gas-slides-4-21-to-302-70-mm",
+    "title": "MCX Natural Gas Slides 4.21% to ₹302.70/mmBtu as Global Supply Pressure Dominates Session",
+    "summary": "The mechanism driving this session: NatGas is leading commodity weakness at -4.21%, with the move originating in US Henry Hub futures where elevated storage injection data has compressed the prompt contract. This reprices MCX NatGas to ₹302.70/mmBtu. Key observed levels: support at ₹292, resistance at ₹318.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-01T20:06:11.268Z",
+    "pubDateIST": "02 Jun 2026, 01:36"
+  },
+  {
     "id": "2026-06-01-21-20-mcx-natural-gas-falls-3-77-to-304-10-mmb",
     "title": "MCX Natural Gas falls 3.77% to ₹304.10/mmBtu as global supply pressure dominates session",
     "summary": "The mechanism here is supply-demand divergence. While crude's 8.13% surge signals energy demand broadly, natural gas trades on its own storage and LNG export dynamics — elevated US inventory builds and softer European spot demand are weighing on Henry Hub, transmitting directly into MCX pricing. Import parity arithmetic: Henry Hub approximately $2.35/mmBtu × ₹94.99 × duty/conversion factor (~1.35) implies theoretical MCX parity near ₹300-302/mmBtu — current ₹304.10 sits at a marginal premium of roughly ₹2-4. Support observed at ₹298; resistance at ₹315. The cross-commodity contradiction is notable: crude rallying 8.13% historically correlates with energy-complex strength, yet nat gas declining simultaneously confirms this is supply-specific, not demand-driven weakness. Watch Henry Hub settlement and Thursday's US EIA storage data for directional confirmation near ₹298 support.",
@@ -228,35 +248,5 @@
     "impact": "bullish",
     "pubDate": "2026-05-25T22:20:02.656Z",
     "pubDateIST": "26 May 2026, 03:50"
-  },
-  {
-    "id": "2026-05-25-23-50-silver-leads-metals-complex-1-7-as-mcx-g",
-    "title": "Silver Leads Metals Complex +1.7% as MCX Gold Holds ₹159025 in Thin Session",
-    "summary": "The mechanism driving this session is industrial-monetary metal rotation. Silver's +1.68% surge to ₹276400/kg signals simultaneous industrial demand and safe-haven flows, with the US-Iran tension backdrop keeping gold bid at ₹159025/10g.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-05-25T18:20:28.411Z",
-    "pubDateIST": "25 May 2026, 23:50"
-  },
-  {
-    "id": "2026-05-25-23-50-mcx-copper-holds-1347-70-as-silver-leads",
-    "title": "MCX Copper holds ₹1347.70 as silver leads base metals complex higher by +1.68%",
-    "summary": "Silver's +1.68% surge to ₹276400/kg is pulling industrial metals via the precious-industrial hybrid rotation — when silver outperforms gold on a risk-on session, copper typically follows with a lag. MCX Copper at ₹1347.70/kg sits with immediate support at ₹1332 and resistance at ₹1365.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-05-25T18:20:21.215Z",
-    "pubDateIST": "25 May 2026, 23:50"
-  },
-  {
-    "id": "2026-05-25-23-50-silver-leads-commodity-complex-with-1-68",
-    "title": "Silver Leads Commodity Complex With +1.68% Surge to ₹276,400/kg on MCX",
-    "summary": "Silver's outperformance this session is mechanically driven by industrial demand repricing — silver carries a dual role as monetary metal and electronics input, making it sensitive to any shift in risk appetite when gold moves sideways. MCX Silver anchors at ₹276,400/kg. Key support: ₹272,000; resistance: ₹279,500.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-05-25T18:20:13.987Z",
-    "pubDateIST": "25 May 2026, 23:50"
   }
 ]
