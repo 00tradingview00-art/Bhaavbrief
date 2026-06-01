@@ -26,6 +26,14 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
         setEmail('')
         ph?.capture('subscribe_success', { location: compact ? 'sidebar' : 'page' })
         ph?.identify(email.trim())
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ;(window as any).gtag('event', 'generate_lead', {
+            event_category: 'newsletter',
+            event_label: compact ? 'sidebar' : 'page',
+          })
+        }
       } else {
         setStatus('error')
         setMessage(data.error ?? 'Something went wrong. Try again.')
