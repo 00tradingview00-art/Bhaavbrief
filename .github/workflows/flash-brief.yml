@@ -57,11 +57,16 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
+      - name: Monitor India policy signals
+        run: node scripts/monitor-india-policy-signals.js
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
       - name: Commit and push
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
@@ -71,7 +76,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           git push origin main
