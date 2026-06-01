@@ -1,0 +1,268 @@
+#!/usr/bin/env node
+/**
+ * BhaavBrief — India Policy Signal Monitor
+ * Runs every 15 min via flash-brief.yml
+ * Detects Indian government/regulatory policy changes (import duties, export bans,
+ * MSP revisions, RBI decisions, GST changes) and publishes MCX commodity impact
+ * flash articles — catches domestic policy moves missed by geopolitical monitor.
+ */
+
+import fs   from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import Anthropic from '@anthropic-ai/sdk'
+
+const __dirname  = path.dirname(fileURLToPath(import.meta.url))
+const ROOT       = path.join(__dirname, '..')
+const FLASH_DIR  = path.join(ROOT, 'content/flash')
+const SEEN_FILE  = path.join(__dirname, 'seen-india-policy.json')
+const SEEN_TTL   = 72 * 3600 * 1000  // 72h
+
+const envFile = path.join(ROOT, '.env.local')
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
+    const [k, ...v] = line.split('=')
+    if (k?.trim() && v.length && !process.env[k.trim()])
+      process.env[k.trim()] = v.join('=').trim()
+  }
+}
+
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+// ── Sources ───────────────────────────────────────────────────────────────────
+
+const FEEDS = [
+  {
+    url:    'https://news.google.com/rss/search?q=india+import+duty+gold+silver+commodity+hike+cut&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=india+export+ban+restriction+wheat+rice+sugar+onion+commodity&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=RBI+rate+decision+repo+rate+monetary+policy+commodity+gold+rupee&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=india+MSP+minimum+support+price+crop+commodity+government&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=india+petroleum+LPG+fuel+price+revision+government&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=GST+council+commodity+tax+rate+change+india&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+  {
+    url:    'https://news.google.com/rss/search?q=CBIC+customs+duty+notification+commodity+india&hl=en-IN&gl=IN&ceid=IN:en',
+    source: 'India Policy',
+  },
+]
+
+const POLICY_SIGNALS = [
+  'import duty', 'export ban', 'export restriction', 'customs duty',
+  'minimum support price', 'msp', 'repo rate', 'monetary policy',
+  'rbi policy', 'rbi decision', 'rate hike', 'rate cut', 'lgp price',
+  'fuel price', 'petroleum price', 'gst', 'tax rate', 'excise duty',
+  'budget', 'finance ministry', 'cbic', 'notification', 'hike', 'revision',
+  'subsidy', 'levy', 'cess', 'tariff', 'quota', 'stockpile', 'buffer stock',
+]
+
+function isPolicyItem(title) {
+  const t = title.toLowerCase()
+  return POLICY_SIGNALS.some(s => t.includes(s))
+}
+
+function mapToCommodities(title) {
+  const t = title.toLowerCase()
+  const commodities = []
+  if (/gold|silver|bullion|precious metal/.test(t))              commodities.push('Gold', 'Silver')
+  if (/crude|petroleum|oil|fuel|petrol|diesel|lpg/.test(t))      commodities.push('Crude Oil', 'Natural Gas')
+  if (/copper|zinc|alumin|lead|nickel|base metal/.test(t))       commodities.push('Copper', 'Zinc', 'Aluminium')
+  if (/wheat|rice|sugar|onion|pulse|agri|crop|msp/.test(t))      commodities.push('Agri Commodities')
+  if (/natural gas|lng/.test(t))                                  commodities.push('Natural Gas')
+  if (/rbi|repo|rupee|interest rate|monetary/.test(t))           commodities.push('Gold', 'Silver', 'Crude Oil')
+  if (/gst|import duty|customs|tariff/.test(t) && commodities.length === 0) commodities.push('Gold', 'Silver')
+  return [...new Set(commodities)].join(', ') || 'Gold, Crude Oil'
+}
+
+// ── Seen state ────────────────────────────────────────────────────────────────
+
+function loadSeen() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8'))
+    const cutoff = Date.now() - SEEN_TTL
+    return raw.filter(e => new Date(e.seenAt).getTime() > cutoff)
+  } catch { return [] }
+}
+
+function saveSeen(entries) {
+  fs.writeFileSync(SEEN_FILE, JSON.stringify(entries.slice(-500), null, 2), 'utf8')
+}
+
+// ── RSS fetch ─────────────────────────────────────────────────────────────────
+
+async function fetchFeed(feed) {
+  try {
+    const res = await fetch(feed.url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' },
+      signal: AbortSignal.timeout(8000),
+    })
+    const xml = await res.text()
+
+    const items = []
+    const itemBlocks = xml.match(/<item[\s\S]*?<\/item>/g) ?? []
+    for (const block of itemBlocks.slice(0, 8)) {
+      const titleM = block.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>/) ??
+                     block.match(/<title>([^<]{10,200})<\/title>/)
+      const dateM  = block.match(/<pubDate>([^<]+)<\/pubDate>/)
+      const linkM  = block.match(/<link>([^<]+)<\/link>/) ??
+                     block.match(/<link[^>]*href="([^"]+)"/)
+
+      if (!titleM) continue
+      const title   = (titleM[1] ?? '').trim()
+      const pubDate = dateM ? new Date(dateM[1]) : new Date()
+      const url     = linkM ? linkM[1].trim() : feed.url
+
+      // Only items published in the last 3 hours
+      if (Date.now() - pubDate.getTime() > 3 * 3600 * 1000) continue
+
+      items.push({ title, url, source: feed.source, pubDate })
+    }
+    return items
+  } catch (e) {
+    console.warn(`Feed failed (${feed.source}):`, e.message)
+    return []
+  }
+}
+
+// ── AI breakdown ──────────────────────────────────────────────────────────────
+
+async function generateBreakdown(item, commodities) {
+  const prompt = `You are BhaavBrief's policy analyst. A new Indian government or regulatory policy change has been detected that affects commodity markets.
+
+POLICY EVENT: "${item.title}"
+MCX COMMODITIES AFFECTED: ${commodities}
+
+Write a 150-200 word flash article for Indian MCX commodity traders:
+
+**WHAT CHANGED**
+[1-2 sentences: the policy decision in plain English — what did the government/RBI/regulator actually do?]
+
+**WHY IT MATTERS FOR MCX**
+[How this directly impacts the affected commodities on MCX — demand shock, supply restriction, cost change, sentiment shift, etc.]
+
+**WHAT TO WATCH**
+[2-3 sentences: immediate price reaction to expect, follow-on announcements to track, key levels or timelines traders should note]
+
+RULES:
+- SEBI-compliant: educational only, no buy/sell advice
+- Never fabricate specific price targets or percentages not in the headline
+- Distinguish between immediate effect (today) and medium-term impact (weeks)
+- Write for an ET Markets/Mint reader, not a policy wonk
+- End with: Source: India Policy | bhaavbrief.in
+
+Return only the article body (no frontmatter).`
+
+  const r = await client.messages.create({
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 600,
+    messages:   [{ role: 'user', content: prompt }],
+  })
+  return r.content[0].type === 'text' ? r.content[0].text.trim() : null
+}
+
+// ── Save flash article ────────────────────────────────────────────────────────
+
+function slugify(title) {
+  return title.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 60)
+    .replace(/-$/, '')
+}
+
+function saveFlashArticle(item, body) {
+  const now        = new Date()
+  const datePrefix = now.toISOString().slice(0, 10)
+  const timePrefix = now.toISOString().slice(11, 16).replace(':', '-')
+  const slug       = slugify(item.title)
+  const fname      = `${datePrefix}-${timePrefix}-${slug}.mdx`
+  const fpath      = path.join(FLASH_DIR, fname)
+
+  if (fs.existsSync(fpath)) return null
+
+  const mdx = `---
+title: "${item.title.replace(/"/g, '\\"')}"
+date: "${now.toISOString()}"
+source: "${item.source}"
+category: "policy"
+published: true
+---
+
+${body}
+`.trim()
+
+  fs.writeFileSync(fpath, mdx, 'utf8')
+  return fname
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
+async function main() {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.log('ANTHROPIC_API_KEY not set — skipping India policy monitor')
+    return
+  }
+
+  if (!fs.existsSync(FLASH_DIR)) fs.mkdirSync(FLASH_DIR, { recursive: true })
+
+  const seen    = loadSeen()
+  const seenIds = new Set(seen.map(e => e.id))
+
+  const feedResults = await Promise.all(FEEDS.map(fetchFeed))
+  const allItems = feedResults.flat()
+
+  const newEvents = []
+  for (const item of allItems) {
+    const id = item.title.slice(0, 100)
+    if (seenIds.has(id)) continue
+    if (!isPolicyItem(item.title)) continue
+    newEvents.push({ ...item, id })
+    seenIds.add(id)
+  }
+
+  console.log(`India policy monitor: ${allItems.length} items fetched, ${newEvents.length} new policy events`)
+
+  let published = 0
+  for (const event of newEvents) {
+    const commodities = mapToCommodities(event.title)
+    console.log(`  → ${event.title.slice(0, 80)} [${commodities}]`)
+    try {
+      const body  = await generateBreakdown(event, commodities)
+      if (!body) continue
+      const fname = saveFlashArticle(event, body)
+      if (fname) {
+        console.log(`    ✅ Published: ${fname}`)
+        published++
+      }
+    } catch (e) {
+      console.warn(`    ⚠️  Failed: ${e.message}`)
+    }
+  }
+
+  const now = new Date().toISOString()
+  const updatedSeen = [
+    ...seen,
+    ...newEvents.map(e => ({ id: e.id, seenAt: now })),
+  ]
+  saveSeen(updatedSeen)
+
+  console.log(`India policy monitor done — ${published} articles published`)
+}
+
+main().catch(e => { console.error('Fatal:', e); process.exit(1) })
