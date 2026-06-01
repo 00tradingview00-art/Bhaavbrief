@@ -21,14 +21,14 @@
     "expiry": "2026-06-18"
   },
   "copper": {
-    "token": 130682887,
-    "symbol": "COPPER26MAYFUT",
-    "expiry": "2026-05-29"
+    "token": 141493255,
+    "symbol": "COPPER26JUNFUT",
+    "expiry": "2026-06-30"
   },
   "natgas": {
     "token": 129091847,
     "symbol": "NATURALGAS26JUNFUT",
     "expiry": "2026-06-25"
   },
-  "updatedAt": "2026-05-28T03:06:29.994Z"
+  "updatedAt": "2026-06-01T03:14:23.141Z"
 }
