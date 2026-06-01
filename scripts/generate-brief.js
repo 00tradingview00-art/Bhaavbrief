@@ -14,9 +14,22 @@ if (fs.existsSync(envFile)) {
   }
 }
 
-const client    = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-const EDITION   = parseInt(process.env.EDITION ?? '1', 10)
+const client     = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
+
+function detectNextEdition() {
+  if (process.env.EDITION) return parseInt(process.env.EDITION, 10)
+  try {
+    const files = fs.readdirSync(BRIEFS_DIR)
+      .filter(f => f.match(/^edition-\d+\.mdx$/))
+      .sort()
+    if (files.length === 0) return 1
+    const last = files[files.length - 1].match(/edition-(\d+)\.mdx/)
+    return last ? parseInt(last[1], 10) + 1 : 1
+  } catch { return 1 }
+}
+
+const EDITION = detectNextEdition()
 
 // ── Prices ────────────────────────────────────────────────────────────────────
 
