@@ -194,6 +194,7 @@ WRITING RULES
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
 - Use ONLY the prices given above. Never invent levels.
+- CRITICAL — TITLE PRICE RULE: If the title contains a price or level (e.g. "$90", "₹1,55,000"), that exact number MUST appear verbatim in the price data above. Never round up, never pick a dramatic threshold, never extrapolate. If WTI is $89.73, the title may say "toward $90" only if you write it as an approximation — never "$100" or any invented milestone.
 - Sharp, specific, factual — no waffle, no filler, no hedging.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
@@ -241,7 +242,7 @@ MCX Gold | MCX Silver | MCX Crude | MCX Copper | MCX NatGas | Macro | Geopolitic
 Return ONLY valid MDX with frontmatter:
 
 ---
-title: "[Sharp headline — lead with the narrative, not the commodity. Under 12 words.]"
+title: "[Sharp headline — lead with the narrative, not the commodity. Under 12 words. Any price level in the title must be a number that appears verbatim in the price data provided above — never invent or round to a dramatic threshold.]"
 description: "[One crisp sentence under 25 words that captures the narrative shift.]"
 date: "${today.toISOString().split('T')[0]}"
 edition: ${EDITION}
