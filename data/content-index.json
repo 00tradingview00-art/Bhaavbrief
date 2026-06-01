@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
+    "href": "/articles/2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
+    "title": "MCX Close 2 Jun 2026: Gold Holds, Crude Slips",
+    "description": "MCX Evening Brief 2 Jun 2026 — COMEX Gold steady at $4517.80 (+0.09%) as crude dips on demand caution; USD/INR at ₹94.99 shapes overnight risk.",
+    "excerpt": "title: \"MCX Close 2 Jun 2026: Gold Holds, Crude Slips\" description: \"MCX Evening Brief 2 Jun 2026 — COMEX Gold steady at $4517.80 (+0.09%) as crude dips on demand caution; USD/INR at ₹94.99 shapes ove",
+    "date": "2026-06-02",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-06-01-mcx-open-02-un2026-crude-surges-gold-slips",
     "href": "/articles/2026-06-01-mcx-open-02-un2026-crude-surges-gold-slips",
     "title": "MCX Open 2 Jun 2026: Crude Surges, Gold Slips",
@@ -78,6 +99,27 @@
       "MCX Nat Gas"
     ],
     "priceAtPublish": 303
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-01-mcx-copper-surges-5-percent-gold-holds-crude-slips",
+    "href": "/articles/2026-06-01-mcx-copper-surges-5-percent-gold-holds-crude-slips",
+    "title": "MCX Copper Surges 5.66% as Gold Holds, Crude Slips",
+    "description": "MCX Copper at ₹1444.40/kg, up 5.66% overnight. Gold steady at ₹158564/10g. Crude soft at -0.57%. What tomorrow's MCX open may look like.",
+    "excerpt": "Copper is the outlier this session — and it stands in direct contrast to the session's dominant story. WTI crude is at $91.97/barrel, down 0.57%, signalling soft industrial demand or easing supply-sid",
+    "date": "2026-06-01",
+    "edition": "flash",
+    "tags": [
+      "MCX Copper",
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Copper",
+    "commodities": [
+      "MCX Copper"
+    ],
+    "priceAtPublish": 1444
   },
   {
     "type": "brief",
