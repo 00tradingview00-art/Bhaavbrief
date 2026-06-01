@@ -125,10 +125,14 @@ async function updateGitHubSecret(token) {
 
 async function updateVercelEnv(token) {
   try {
-    // Strip VERCEL_TOKEN from child env — a stale token in .env.local overrides local CLI auth
     const env = { ...process.env }
     delete env.VERCEL_TOKEN
-    execFileSync('vercel', ['env', 'add', 'KITE_ACCESS_TOKEN', 'production', '--force'],
+    // Remove first (ignore errors if it doesn't exist), then add fresh
+    try {
+      execFileSync('vercel', ['env', 'rm', 'KITE_ACCESS_TOKEN', 'production', '--yes'],
+        { stdio: ['pipe', 'pipe', 'pipe'], env })
+    } catch { /* ignore — may not exist yet */ }
+    execFileSync('vercel', ['env', 'add', 'KITE_ACCESS_TOKEN', 'production'],
       { input: token, stdio: ['pipe', 'pipe', 'pipe'], env })
     return true
   } catch (err) {
