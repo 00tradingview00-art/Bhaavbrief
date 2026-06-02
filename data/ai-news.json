@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-02-23-35-rbi-rate-pause-signal-meets-risk-on-surg",
     "title": "RBI Rate Pause Signal Meets Risk-On Surge; MCX Gold Holds ₹154750",
     "summary": "The RBI rate-pause signal arrives precisely as the cross-asset complex is running a risk-on, China-demand narrative — copper at ₹1379.50/kg up 1.00% and crude at ₹8970/bbl up 2.68% confirming industrial appetite. A stable repo rate removes the rupee-strengthening pressure that would otherwise compress import-parity gold values; with USD/INR anchored at ₹95.27, the import parity chain holds: COMEX gold translated at spot, layered with customs duty and refining premium, keeps MCX Gold's ₹154750/10g floor structurally supported. MCX Silver at ₹266522/kg carries dual sensitivity here — rate stability sustains precious metal positioning while the industrial-metals bid reinforces silver's fabrication demand component. Cross-market correlation to watch: MCX Copper's 1.00% advance historically moves in the same session direction as silver when both rate and risk signals align. The 10-year Indian government bond yield at tomorrow's open is the confirming data point — a yield decline would validate the rate-pause read and reinforce the metals complex setup.",
@@ -48,6 +49,56 @@
     "impact": "bullish",
     "pubDate": "2026-06-02T18:13:15.985Z",
     "pubDateIST": "02 Jun 2026, 23:43"
+=======
+    "id": "2026-06-02-23-37-rbi-repo-rate-hold-signal-meets-risk-on",
+    "title": "RBI Repo Rate Hold Signal Meets Risk-On Crude +2.68% and Copper +1.00% Surge",
+    "summary": "The risk-on complex currently driving crude oil to ₹8970/bbl (+2.68%) and copper to ₹1379.50/kg (+1.00%) on China demand signals now intersects with a domestically significant rate signal. An unchanged RBI repo rate historically sustains INR liquidity conditions without tightening pressure, which at the current USD/INR rate of ₹85.27 preserves import parity cost structures across dollar-denominated MCX contracts. The import parity chain runs as follows: stable or softening INR borrowing costs reduce hedge financing pressure on bullion and base metal importers, while the current ₹85.27 rate already transmits the global crude rally directly into MCX crude at ₹8970. Gold at ₹154750/10g and silver at ₹266522/kg reflect the cross-asset picture where rate stability historically supports precious metal positioning. The cross-market correlation to watch is crude-copper alignment — both advancing simultaneously has historically indicated genuine industrial demand rather than speculative positioning alone. The data point that confirms or negates this setup is Wednesday's RBI Monetary Policy Committee statement release and the accompanying USD/INR fixing at the 9:00 AM IST open.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:07:08.282Z",
+    "pubDateIST": "02 Jun 2026, 23:37"
+  },
+  {
+    "id": "2026-06-02-23-38-rbi-mpc-decision-looms-as-mcx-gold-holds",
+    "title": "RBI MPC Decision Looms as MCX Gold Holds ₹154750 Amid Rate Uncertainty",
+    "summary": "The RBI MPC outcome lands directly inside an already risk-on commodity session where crude has moved +2.68% to ₹8970/bbl and copper +1.00% to ₹1379.50/kg, confirming industrial demand optimism. However, the MPC introduces a domestic policy overlay that cuts across that global signal. The import parity chain runs as follows: spot gold in USD terms feeds through USD/INR at ₹95.27, then customs duty and handling premiums, arriving at MCX Gold's current ₹154750/10g. A rate cut from RBI would mechanically pressure the rupee, elevating the INR import cost of dollar-denominated commodities including gold and silver, currently at ₹266522/kg. Historically, MPC easing cycles have correlated with upward INR-denominated commodity price adjustments independent of USD spot moves. The cross-market correlation to observe is USD/INR — any rupee depreciation post-announcement directly amplifies MCX gold and silver settlement values. The specific level to watch is USD/INR ₹95.50 — a breach there would confirm rupee weakness is compounding the commodity import parity uplift. The MPC statement release time is the data event that confirms or negates tomorrow's MCX open direction.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:08:59.432Z",
+    "pubDateIST": "02 Jun 2026, 23:38"
+  },
+  {
+    "id": "2026-06-02-23-40-el-ni-o-farm-stress-meets-risk-on-crude",
+    "title": "El Niño Farm Stress Meets Risk-On Crude Surge — MCX Crude at ₹8970 Signals Input Cost Squeeze",
+    "summary": "The current cross-asset narrative centers on a risk-on industrial bid, with MCX Crude rallying 2.68% to ₹8970 per barrel and MCX Copper gaining 1.00% to ₹1379.50 per kg on positive China demand signals. Against this backdrop, the weak monsoon and El Niño advisory amplifies the crude move's downstream significance for India's agricultural economy — diesel for irrigation pumps, tractors, and cold-chain logistics is priced off crude. The import parity chain runs as follows: a global crude lift transmits through USD/INR at ₹95.27, elevating the rupee-denominated landed cost of energy inputs before customs duty application, compressing farm-sector margins further. MCX Crude at ₹8970 is the live expression of that chain. MCX Natural Gas at ₹302.30 per mmBtu moves alongside crude historically as a co-input in fertilizer production, making it the relevant cross-market correlation for Indian agricultural traders monitoring input cost pressure. The India Meteorological Department's June 15 monsoon progress update for the northwest region represents the data release that will confirm or negate the intensity of this agricultural stress signal.",
+    "category": "Agri",
+    "tagType": "agri",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:10:50.392Z",
+    "pubDateIST": "02 Jun 2026, 23:40"
+  },
+  {
+    "id": "2026-06-02-23-42-mcx-copper-rises-1-00-to-1379-50-kg-as-c",
+    "title": "MCX Copper Rises 1.00% to ₹1379.50/kg as China Demand Signal Lifts Industrial Metals",
+    "summary": "The mechanism driving this session is a coordinated industrial risk-on signal: copper's 1.00% advance reflects market pricing of stronger forward demand, with LME copper move transmitting into MCX via the import parity channel. Import parity arithmetic: LME copper approximately $9,680/tonne × ₹95.27/USD ÷ 1,000 × 1.05 duty factor = approximately ₹969/kg theoretical base; MCX at ₹1379.50 incorporates domestic warehousing, GST, and local premiums, placing it at a modest premium to raw parity — consistent with historically observed tight domestic inventory conditions. Key support observed at ₹1360; resistance observed at ₹1395. Cross-commodity confirmation: MCX Crude +2.68% to ₹8970/bbl moves in the same direction, historically correlated with broad industrial activity expansion, which reinforces rather than challenges the copper signal. Watch Wednesday's China Caixin Services PMI release for demand confirmation.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:12:41.566Z",
+    "pubDateIST": "02 Jun 2026, 23:42"
+  },
+  {
+    "id": "2026-06-02-23-44-mcx-crude-surges-2-68-to-8970-bbl-as-ris",
+    "title": "MCX Crude surges 2.68% to ₹8970/bbl as risk-on industrial demand signal dominates session",
+    "summary": "The mechanism driving this move is a coordinated risk-on rotation — crude and copper advancing simultaneously signals market pricing of improved industrial demand expectations, likely anchored in China activity optimism rather than supply disruption. When copper confirms crude's direction, the demand-side thesis carries greater weight than a supply-shock narrative.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:14:33.675Z",
+    "pubDateIST": "02 Jun 2026, 23:44"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-02-01-34-mcx-copper-gains-1-35-to-1367-kg-as-natg",
