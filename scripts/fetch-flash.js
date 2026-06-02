@@ -386,7 +386,7 @@ async function main() {
         slug,
         title:    article.title,
         date:     article.pubDate ?? new Date().toISOString(),
-        source:   article.source,
+        source:   'BhaavBrief',
         category,
         content,
       })
