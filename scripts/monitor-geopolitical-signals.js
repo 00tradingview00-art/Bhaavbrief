@@ -39,9 +39,16 @@ const FEEDS = [
 ]
 
 const GEOPOLITICAL_SIGNALS = [
-  'strike', 'attack', 'war', 'conflict', 'sanctions', 'opec', 'hormuz',
-  'red sea', 'pipeline', 'military', 'invasion', 'blockade', 'embargo',
-  'ceasefire', 'escalat', 'tariff', 'trade war', 'production cut',
+  'strike', 'attack', 'war', 'sanctions', 'opec', 'hormuz',
+  'red sea', 'pipeline', 'invasion', 'blockade', 'embargo',
+  'escalat', 'tariff', 'trade war', 'production cut',
+]
+
+// Must ALSO mention commodities/prices directly — prevents pure political news
+const COMMODITY_SIGNALS = [
+  'oil', 'crude', 'gas', 'gold', 'silver', 'copper', 'metal',
+  'supply', 'price', 'brent', 'wti', 'opec', 'barrel', 'energy',
+  'commodity', 'fuel', 'petrole', 'refiner',
 ]
 
 // Google News appends " - Source Name" to every headline — strip it
@@ -51,7 +58,10 @@ function cleanTitle(raw) {
 
 function isGeopoliticalItem(title) {
   const t = title.toLowerCase()
-  return GEOPOLITICAL_SIGNALS.some(s => t.includes(s))
+  const hasGeo = GEOPOLITICAL_SIGNALS.some(s => t.includes(s))
+  const hasCommodity = COMMODITY_SIGNALS.some(s => t.includes(s))
+  // Both must be present — no pure political news without commodity angle
+  return hasGeo && hasCommodity
 }
 
 function mapToCommodities(title) {
@@ -224,7 +234,7 @@ async function main() {
   console.log(`Geopolitical monitor: ${allItems.length} items fetched, ${newEvents.length} new events`)
 
   let published = 0
-  for (const event of newEvents) {
+  for (const event of newEvents.slice(0, 1)) {  // max 1 per run
     const commodities = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${commodities}]`)
     try {
