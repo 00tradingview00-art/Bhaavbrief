@@ -39,9 +39,11 @@ jobs:
           echo "new_token=$NEW_TOKEN" >> $GITHUB_OUTPUT
 
       - name: Update INSTAGRAM_ACCESS_TOKEN secret
+        if: steps.refresh.outputs.new_token != ''
         run: |
           gh secret set INSTAGRAM_ACCESS_TOKEN \
             --body "${{ steps.refresh.outputs.new_token }}" \
             --repo ${{ github.repository }}
+          echo "Secret updated successfully"
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
