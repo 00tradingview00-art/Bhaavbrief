@@ -235,20 +235,23 @@ export default async function ArticlePage({ params }: Props) {
           margin-bottom: 6px;
         }
 
-        /* Hawk-Scan body: monospace structured format */
+        /* Hawk-Scan body */
         .hawk-scan-body {
-          font-family: var(--font-mono);
-          font-size: 14px;
-          line-height: 1.9;
+          font-family: var(--font-sans);
+          font-size: 15px;
+          line-height: 1.85;
           color: var(--ink-2);
         }
         .hawk-scan-body p {
-          margin-bottom: 8px;
+          margin-bottom: 12px;
         }
         .hawk-scan-body strong {
           color: var(--ink);
-          font-weight: 600;
-          letter-spacing: 0.04em;
+          font-weight: 700;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
       `}</style>
     </>

@@ -647,6 +647,7 @@ function saveArticle(mdx) {
   const cleanMdx = mdx
     .replace(/^```(?:mdx|md)?\n/, '')   // strip any leading code fence Claude adds
     .replace(/\n```\s*$/, '')           // strip trailing code fence
+    .replace(/^```\s*$/gm, '')          // strip bare ``` lines anywhere in body
     .replace(/^slug:.*$/m, '')
     .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
     .trim()
