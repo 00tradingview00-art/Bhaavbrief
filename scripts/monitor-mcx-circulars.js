@@ -10,6 +10,7 @@ import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
+import { fetchPexelsImage } from './lib/pexels.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
@@ -163,7 +164,7 @@ function slugify(title) {
     .replace(/-$/, '')
 }
 
-function saveFlashArticle(circular, body) {
+function saveFlashArticle(circular, body, coverImage) {
   const now    = new Date()
   const datePrefix = now.toISOString().slice(0, 10)
   const timePrefix = now.toISOString().slice(11, 16).replace(':', '-')
@@ -173,12 +174,13 @@ function saveFlashArticle(circular, body) {
 
   if (fs.existsSync(fpath)) return null
 
+  const coverLine = coverImage ? `\ncoverImage: "${coverImage}"` : ''
   const mdx = `---
 title: "${circular.title.replace(/"/g, '\\"')}"
 date: "${now.toISOString()}"
 source: "${circular.source}"
 category: "regulatory"
-published: true
+published: true${coverLine}
 ---
 
 ${body}
@@ -222,7 +224,8 @@ async function main() {
     try {
       const body  = await generateBreakdown(circular)
       if (!body) continue
-      const fname = saveFlashArticle(circular, body)
+      const coverImage = await fetchPexelsImage(circular.title, 'regulatory')
+      const fname = saveFlashArticle(circular, body, coverImage)
       if (fname) {
         console.log(`    ✅ Published: ${fname}`)
         published++

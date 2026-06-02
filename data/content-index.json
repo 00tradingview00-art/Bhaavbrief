@@ -1,5 +1,41 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-030",
+    "href": "/briefs/edition-030",
+    "title": "Crude Falls, Gold Recovers: The Supply Shock Story Is Reversing",
+    "description": "WTI crude slides to $91.27 while gold climbs to ₹155180 — yesterday's unified fear trade is now splitting at the seams.",
+    "excerpt": "For two sessions, Edition 28 and 29 told a single story: Middle East conflict fears driving crude and commodities as one. Edition 29 showed the first crack — crude surging while gold fell, suggesting ",
+    "date": "2026-06-02",
+    "edition": "30",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-031",
+    "href": "/briefs/edition-031",
+    "title": "Gold Holds at ₹155180 as Stagflation Hedge Trade Deepens",
+    "description": "Crude slips again while gold and silver climb, confirming a stagflation hedge narrative over a pure supply-shock read.",
+    "excerpt": "Edition 30 identified the first signs of this shift: crude falling and gold recovering together, suggesting traders were no longer reading the Iran conflict as a simple oil story. Today that reading h",
+    "date": "2026-06-02",
+    "edition": "31",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "Macro",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
     "href": "/articles/2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
@@ -83,9 +119,9 @@
     "type": "hawk-scan",
     "slug": "2026-06-01-hawk-scan-natgas-20260601",
     "href": "/articles/2026-06-01-hawk-scan-natgas-20260601",
-    "title": "MCX Nat Gas: 5.47% plunge tests 302 support — act now",
+    "title": "MCX Nat Gas: 5.47% plunge tests ₹302 support",
     "description": "MCX Nat Gas crashes ₹303/mmBtu (-5.47%) as HH slides to $3.19 — 20-SMA at 302 is the line. Crude surges 4.26% simultaneously.",
-    "excerpt": "``` --- TRIGGER — MCX Nat Gas collapsed 5.47% to ₹303/mmBtu, breaching the 3% Hawk-Scan threshold, with Henry Hub sliding to $3.19 in the same session. PRICE — ₹303/mmBtu · 5.47% · PLUNGING SIGNAL — H",
+    "excerpt": "TRIGGER — MCX Nat Gas collapsed 5.47% to ₹303/mmBtu, breaching the 3% Hawk-Scan threshold, with Henry Hub sliding to $3.19 in the same session. PRICE — ₹303/mmBtu · 5.47% · PLUNGING SIGNAL — Henry Hub",
     "date": "2026-06-01",
     "edition": "hawk-scan",
     "tags": [

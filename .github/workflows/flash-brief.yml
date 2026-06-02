@@ -36,6 +36,7 @@ jobs:
         run: node scripts/fetch-flash.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Generate AI news feed
         id: news
@@ -51,16 +52,19 @@ jobs:
         run: node scripts/monitor-mcx-circulars.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor geopolitical signals
         run: node scripts/monitor-geopolitical-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor India policy signals
         run: node scripts/monitor-india-policy-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Commit and push
         run: |
