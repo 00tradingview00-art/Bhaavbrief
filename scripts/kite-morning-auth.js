@@ -159,13 +159,13 @@ async function updateVercelEnv(token) {
     const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN' && e.target?.includes('production'))
 
     if (existing) {
-      // PATCH the existing env var
+      // PATCH — preserve existing type (sensitive vars reject type changes)
       const patchRes = await fetch(
         `https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env/${existing.id}`,
         {
           method: 'PATCH',
           headers,
-          body: JSON.stringify({ value: token, target: ['production'], type: 'encrypted' }),
+          body: JSON.stringify({ value: token, target: ['production'], type: existing.type }),
           signal: AbortSignal.timeout(10000),
         }
       )
@@ -177,7 +177,7 @@ async function updateVercelEnv(token) {
         {
           method: 'POST',
           headers,
-          body: JSON.stringify({ key: 'KITE_ACCESS_TOKEN', value: token, target: ['production'], type: 'encrypted' }),
+          body: JSON.stringify({ key: 'KITE_ACCESS_TOKEN', value: token, target: ['production'], type: 'sensitive' }),
           signal: AbortSignal.timeout(10000),
         }
       )
