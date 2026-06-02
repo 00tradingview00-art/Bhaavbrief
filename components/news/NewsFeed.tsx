@@ -39,6 +39,7 @@ export interface NewsItem {
   pubDateIST?: string
   href?:       string
   itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan'
+  coverImage?: string
 }
 
 function relativeTime(iso: string): string {
@@ -319,6 +320,19 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                     {relativeTime(item.pubDate)}
                   </span>
                 </div>
+
+                {/* Cover thumbnail */}
+                {item.coverImage && (
+                  <div style={{ float: 'right', marginLeft: 14, marginBottom: 6 }}>
+                    <img
+                      src={item.coverImage}
+                      alt=""
+                      width={110}
+                      height={74}
+                      style={{ width: 110, height: 74, objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                )}
 
                 {/* Headline */}
                 <h2 style={{
