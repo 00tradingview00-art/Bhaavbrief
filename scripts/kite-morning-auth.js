@@ -139,19 +139,53 @@ async function updateGitHubSecret(token) {
 }
 
 async function updateVercelEnv(token) {
+  if (!VERCEL_TOKEN || !VERCEL_PROJECT) {
+    console.error('\n   VERCEL_TOKEN or VERCEL_PROJECT_ID not set in .env.local')
+    return false
+  }
   try {
-    const env = { ...process.env }
-    delete env.VERCEL_TOKEN
-    // Remove first (ignore errors if it doesn't exist), then add fresh
-    try {
-      execFileSync('vercel', ['env', 'rm', 'KITE_ACCESS_TOKEN', 'production', '--yes'],
-        { stdio: ['pipe', 'pipe', 'pipe'], env })
-    } catch { /* ignore — may not exist yet */ }
-    execFileSync('vercel', ['env', 'add', 'KITE_ACCESS_TOKEN', 'production'],
-      { input: token, stdio: ['pipe', 'pipe', 'pipe'], env })
+    const headers = {
+      Authorization: `Bearer ${VERCEL_TOKEN}`,
+      'Content-Type': 'application/json',
+    }
+
+    // Find existing env var ID for KITE_ACCESS_TOKEN
+    const listRes = await fetch(
+      `https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env?decrypt=false`,
+      { headers, signal: AbortSignal.timeout(10000) }
+    )
+    if (!listRes.ok) throw new Error(`List env failed: ${listRes.status}`)
+    const { envs } = await listRes.json()
+    const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN' && e.target?.includes('production'))
+
+    if (existing) {
+      // PATCH the existing env var
+      const patchRes = await fetch(
+        `https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env/${existing.id}`,
+        {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({ value: token, target: ['production'], type: 'encrypted' }),
+          signal: AbortSignal.timeout(10000),
+        }
+      )
+      if (!patchRes.ok) throw new Error(`Patch env failed: ${patchRes.status} ${await patchRes.text()}`)
+    } else {
+      // POST new env var
+      const postRes = await fetch(
+        `https://api.vercel.com/v10/projects/${VERCEL_PROJECT}/env`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ key: 'KITE_ACCESS_TOKEN', value: token, target: ['production'], type: 'encrypted' }),
+          signal: AbortSignal.timeout(10000),
+        }
+      )
+      if (!postRes.ok) throw new Error(`Post env failed: ${postRes.status} ${await postRes.text()}`)
+    }
     return true
   } catch (err) {
-    console.error('\n   vercel CLI error:', err.stderr?.toString().trim() ?? err.message)
+    console.error('\n   Vercel API error:', err.message)
     return false
   }
 }
