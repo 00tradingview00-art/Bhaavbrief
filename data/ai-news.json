@@ -1,5 +1,55 @@
 [
   {
+    "id": "2026-06-02-23-35-rbi-rate-pause-signal-meets-risk-on-surg",
+    "title": "RBI Rate Pause Signal Meets Risk-On Surge; MCX Gold Holds ₹154750",
+    "summary": "The RBI rate-pause signal arrives precisely as the cross-asset complex is running a risk-on, China-demand narrative — copper at ₹1379.50/kg up 1.00% and crude at ₹8970/bbl up 2.68% confirming industrial appetite. A stable repo rate removes the rupee-strengthening pressure that would otherwise compress import-parity gold values; with USD/INR anchored at ₹95.27, the import parity chain holds: COMEX gold translated at spot, layered with customs duty and refining premium, keeps MCX Gold's ₹154750/10g floor structurally supported. MCX Silver at ₹266522/kg carries dual sensitivity here — rate stability sustains precious metal positioning while the industrial-metals bid reinforces silver's fabrication demand component. Cross-market correlation to watch: MCX Copper's 1.00% advance historically moves in the same session direction as silver when both rate and risk signals align. The 10-year Indian government bond yield at tomorrow's open is the confirming data point — a yield decline would validate the rate-pause read and reinforce the metals complex setup.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:05:52.730Z",
+    "pubDateIST": "02 Jun 2026, 23:35"
+  },
+  {
+    "id": "2026-06-02-23-37-rbi-mpc-decision-looms-as-gold-holds-154",
+    "title": "RBI MPC Decision Looms as Gold Holds 154750 Amid Rate and Geopolitical Uncertainty",
+    "summary": "The RBI MPC outcome lands directly into a cross-asset environment already pricing risk-on signals — crude at 8970 up 2.68% and copper at 1379.50 up 1.00% reflect industrial demand optimism, yet the MPC decision introduces a domestic monetary variable that can override that global tailwind. A rate cut would soften the rupee's attractiveness, applying depreciation pressure on USD/INR from its current 95.27, mechanically lifting import-parity costs for gold and silver. The import parity chain runs: global gold price translated at 95.27, plus 15% customs duty and MMTC/bank premiums, anchors MCX Gold near 154750 per 10g. Any rupee weakness amplifies that floor. MCX Silver at 266522 carries the same FX sensitivity. Cross-market correlation: the 10-year G-Sec yield movement post-MPC historically tracks inverse to gold positioning by domestic institutions. The confirmation level to observe is USD/INR holding above or breaking below 95.00 post-announcement, as that rate threshold historically demarcates the import-parity support zone for MCX Gold.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-02T18:07:43.524Z",
+    "pubDateIST": "02 Jun 2026, 23:37"
+  },
+  {
+    "id": "2026-06-02-23-39-el-ni-o-farm-stress-meets-risk-on-crude",
+    "title": "El Niño Farm Stress Meets Risk-On Crude Surge — MCX Crude Holds ₹8970",
+    "summary": "The current cross-asset narrative centers on risk-on momentum, with MCX Crude at ₹8970 per barrel posting a 2.68% session gain and MCX Copper at ₹1379.50 per kg up 1.00%, both signaling positive industrial demand reads. The El Niño and weak monsoon stress on India's farm economy now intersects this picture through the input cost channel: agricultural operations are diesel-intensive, and elevated crude pricing transmits directly into farm input costs via import parity mechanics. The global crude move translates through USD/INR at ₹95.27, with customs duty and refinery margins layering additional premium onto domestic pricing. Historically, prolonged monsoon deficits coinciding with elevated energy costs have compressed rural purchasing power and agricultural output margins simultaneously. MCX NatGas at ₹302.30 per mmBtu moves alongside crude as a parallel energy input indicator. The Brent crude settlement price at tomorrow's Asian open will either sustain or moderate the current ₹8970 MCX level.",
+    "category": "Agri",
+    "tagType": "agri",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:09:31.809Z",
+    "pubDateIST": "02 Jun 2026, 23:39"
+  },
+  {
+    "id": "2026-06-02-23-41-mcx-copper-advances-1-00-to-1379-50-kg-a",
+    "title": "MCX Copper advances 1.00% to ₹1379.50/kg as industrial risk appetite lifts base metals complex",
+    "summary": "The mechanism driving this move is a coordinated risk-on signal: LME copper and crude oil rising simultaneously indicates markets are pricing stronger industrial demand, likely China-led activity expectations. This dual advance historically correlates with global manufacturing expansion signals rather than isolated currency or fund flows.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:11:23.977Z",
+    "pubDateIST": "02 Jun 2026, 23:41"
+  },
+  {
+    "id": "2026-06-02-23-43-mcx-crude-surges-2-68-to-8970-bbl-as-ris",
+    "title": "MCX Crude surges 2.68% to ₹8970/bbl as risk-on industrial demand signal dominates session",
+    "summary": "The mechanism driving this move is a simultaneous copper-crude advance — copper +1.0% alongside crude +2.7% historically signals coordinated industrial demand repricing rather than isolated supply disruption. When both move together, market structure typically reflects macro risk appetite expansion, not single-commodity news.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-02T18:13:15.985Z",
+    "pubDateIST": "02 Jun 2026, 23:43"
+  },
+  {
     "id": "2026-06-02-01-34-mcx-copper-gains-1-35-to-1367-kg-as-natg",
     "title": "MCX Copper gains 1.35% to ₹1367/kg as NatGas rout leaves metals relatively bid",
     "summary": "The mechanism here is relative rotation. NatGas collapsing 4.21% absorbs the session's bearish energy, leaving industrial metals with a cleaner bid. Copper's 1.35% advance to ₹1367/kg reflects that vacuum, not independent fundamental strength.",
@@ -208,15 +258,5 @@
     "impact": "bullish",
     "pubDate": "2026-05-26T19:30:57.894Z",
     "pubDateIST": "27 May 2026, 01:00"
-  },
-  {
-    "id": "2026-05-26-08-11-brent-crude-jumps-2-wti-near-90-on-us-ir",
-    "title": "Brent Crude Jumps 2%, WTI Near $90 on US-Iran Strike — MCX Crude ₹8626 Faces Sharp Gap-Up Open",
-    "summary": "The cross-asset narrative entering today's session flagged sub-0.2% moves across the complex, making this 2% Brent surge a direct and significant deviation from that baseline. US military strikes on Iran have introduced a hard geopolitical risk premium into crude, a supply-shock catalyst that overrides the otherwise flat overnight tone. MCX Crude Oil December contract, last at ₹8626 per barrel, faces a mechanically-driven repricing at open. At WTI near $90, applying the current USD/INR rate of ₹95.24 and standard customs plus port premium of approximately ₹180-200 per barrel, the import parity calculation points to an MCX open in the ₹8,780-8,820 range, a gap of roughly 180-200 rupees above last close. The critical cross-market correlation to monitor is MCX Natural Gas at ₹277.50 per mmBtu — Iran supply disruption fears historically lift gas alongside crude as market participants price in broader Middle East infrastructure risk, and any simultaneous move in NatGas above ₹285 confirms the risk premium is broadening beyond oil. The single level that confirms this move holds versus a dead-cat bounce is WTI sustaining trade above $89.50 through the Asian session into MCX open at 09:00 IST. A retreat below that level negates the gap-up thesis entirely.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-05-26T02:41:00.758Z",
-    "pubDateIST": "26 May 2026, 08:11"
   }
 ]
