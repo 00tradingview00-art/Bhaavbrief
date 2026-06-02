@@ -1,5 +1,127 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
+    "href": "/articles/2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
+    "title": "MCX Close 2 Jun 2026: Gold Holds, Crude Slips",
+    "description": "MCX Evening Brief 2 Jun 2026 — COMEX Gold steady at $4517.80 (+0.09%) as crude dips on demand caution; USD/INR at ₹94.99 shapes overnight risk.",
+    "excerpt": "title: \"MCX Close 2 Jun 2026: Gold Holds, Crude Slips\" description: \"MCX Evening Brief 2 Jun 2026 — COMEX Gold steady at $4517.80 (+0.09%) as crude dips on demand caution; USD/INR at ₹94.99 shapes ove",
+    "date": "2026-06-02",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-01-mcx-open-02-un2026-crude-surges-gold-slips",
+    "href": "/articles/2026-06-01-mcx-open-02-un2026-crude-surges-gold-slips",
+    "title": "MCX Open 2 Jun 2026: Crude Surges, Gold Slips",
+    "description": "MCX Open 2 Jun 2026: WTI +3.93% overnight, copper +2.88% on China demand, gold -0.90%. Key levels: crude ₹8749, gold ₹153451, copper ₹1368.",
+    "excerpt": "title: \"MCX Open 2 Jun 2026: Crude Surges, Gold Slips\" description: \"MCX Open 2 Jun 2026: WTI +3.93% overnight, copper +2.88% on China demand, gold -0.90%. Key levels: crude ₹8749, gold ₹153451, coppe",
+    "date": "2026-06-02",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
+    "slug": "edition-028",
+    "href": "/briefs/edition-028",
+    "title": "Oil Near $90, Gold Slips: Iran War Premium Meets a Fracturing OPEC",
+    "description": "Middle East war fears are lifting crude and pressuring gold as the post-Fed relief trade gives way to a supply-shock narrative.",
+    "excerpt": "The post-Fed relief trade that drove gold's surge in Edition 27 has lost its engine. Today, a new — and harder — narrative is taking over: a genuine Middle East supply-shock fear, with WTI crude at $8",
+    "date": "2026-06-01",
+    "edition": "28",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics",
+      "OPEC",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-029",
+    "href": "/briefs/edition-029",
+    "title": "Crude Surges to $92, Gold Slips: The Supply Shock Narrative Fractures",
+    "description": "WTI crude at $92.17 leads a split market as the Middle East supply narrative diverges sharply across commodities.",
+    "excerpt": "Edition 28's dominant story was unity: Middle East supply fears lifting crude *and* gold together, with the threat of sudden supply disruption acting as a single engine for the whole commodity complex",
+    "date": "2026-06-01",
+    "edition": "29",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics",
+      "MCX Copper"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-01-hawk-scan-natgas-20260601",
+    "href": "/articles/2026-06-01-hawk-scan-natgas-20260601",
+    "title": "MCX Nat Gas: 5.47% plunge tests 302 support — act now",
+    "description": "MCX Nat Gas crashes ₹303/mmBtu (-5.47%) as HH slides to $3.19 — 20-SMA at 302 is the line. Crude surges 4.26% simultaneously.",
+    "excerpt": "``` --- TRIGGER — MCX Nat Gas collapsed 5.47% to ₹303/mmBtu, breaching the 3% Hawk-Scan threshold, with Henry Hub sliding to $3.19 in the same session. PRICE — ₹303/mmBtu · 5.47% · PLUNGING SIGNAL — H",
+    "date": "2026-06-01",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 303
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-01-mcx-copper-surges-5-percent-gold-holds-crude-slips",
+    "href": "/articles/2026-06-01-mcx-copper-surges-5-percent-gold-holds-crude-slips",
+    "title": "MCX Copper Surges 5.66% as Gold Holds, Crude Slips",
+    "description": "MCX Copper at ₹1444.40/kg, up 5.66% overnight. Gold steady at ₹158564/10g. Crude soft at -0.57%. What tomorrow's MCX open may look like.",
+    "excerpt": "Copper is the outlier this session — and it stands in direct contrast to the session's dominant story. WTI crude is at $91.97/barrel, down 0.57%, signalling soft industrial demand or easing supply-sid",
+    "date": "2026-06-01",
+    "edition": "flash",
+    "tags": [
+      "MCX Copper",
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Copper",
+    "commodities": [
+      "MCX Copper"
+    ],
+    "priceAtPublish": 1444
+  },
+  {
     "type": "brief",
     "slug": "edition-025",
     "href": "/briefs/edition-025",
@@ -58,7 +180,7 @@
     "href": "/articles/2026-05-28-mcx-close-29-ay2026-metals-rally-crude-slips",
     "title": "MCX Close 29 May 2026: Metals Rally, Crude Slips",
     "description": "MCX Evening Brief 29 May 2026: Copper leads +1.45% as broad metals advance on dollar weakness; crude sheds 0.67% to ₹8542.",
-    "excerpt": "title: \"MCX Close 29 May 2026: Metals Rally, Crude Slips\" description: \"MCX Evening Brief 29 May 2026: Copper leads +1.45% as broad metals advance on dollar weakness; crude sheds 0.67% to ₹8542.\" date",
+    "excerpt": "Friday's MCX session delivered a clear metals-versus-energy split. Dollar softness drove a broad reflation bid across the base and precious metals complex. Copper led the board, closing at ₹1338.15/kg",
     "date": "2026-05-29",
     "edition": "evening-brief",
     "tags": [
@@ -79,7 +201,7 @@
     "href": "/articles/2026-05-29-mcx-open-29-ay2026-risk-off-gold-surge",
     "title": "MCX Open 29 May 2026: Risk-Off Lifts Gold, Crude Slides",
     "description": "MCX Open Brief 29 May 2026: COMEX Gold +0.94% to $4569, WTI Crude -0.65% to $88.11, Silver -0.75%. Risk-off tone dominates Asian open.",
-    "excerpt": "title: \"MCX Open 29 May 2026: Risk-Off Lifts Gold, Crude Slides\" description: \"MCX Open Brief 29 May 2026: COMEX Gold +0.94% to $4569, WTI Crude -0.65% to $88.11, Silver -0.75%. Risk-off tone dominate",
+    "excerpt": "COMEX Gold gained +0.94% to $4,569.76/oz as risk-off sentiment dominated overnight flows. WTI Crude fell -0.65% to $88.11/bbl while COMEX Silver slipped -0.75% to $75.42/oz despite gold's advance — a ",
     "date": "2026-05-29",
     "edition": "morning-brief",
     "tags": [
@@ -177,7 +299,7 @@
     "href": "/articles/2026-05-26-mcx-close-27-ay2026-energy-leads-metals-retreat",
     "title": "MCX Close 27 May 2026: Energy Leads, Metals Retreat",
     "description": "MCX Evening Brief 27 May 2026 — Crude surged +4.50% to ₹9014/bbl while Silver fell -2.33% to ₹270270/kg as energy outperformed across the session.",
-    "excerpt": "title: \"MCX Close 27 May 2026: Energy Leads, Metals Retreat\" description: \"MCX Evening Brief 27 May 2026 — Crude surged +4.50% to ₹9014/bbl while Silver fell -2.33% to ₹270270/kg as energy outperforme",
+    "excerpt": "*Educational summary published 30 minutes before MCX close (11:30 PM IST). BhaavBrief is unregistered — this is not investment advice. No buy/sell/hold calls are made here.* --- Energy dominated Wedne",
     "date": "2026-05-27",
     "edition": "evening-brief",
     "tags": [
@@ -257,7 +379,7 @@
     "href": "/articles/2026-05-25-mcx-close-26-ay2026-silver-leads-comex-confirms",
     "title": "MCX Close 26 May 2026: Silver Leads, COMEX Confirms",
     "description": "MCX Evening Brief 26 May 2026: Silver surged +1.68% to ₹276400/kg. COMEX Silver extends to +1.84% — overnight tone is bullish.",
-    "excerpt": "title: \"MCX Close 26 May 2026: Silver Leads, COMEX Confirms\" description: \"MCX Evening Brief 26 May 2026: Silver surged +1.68% to ₹276400/kg. COMEX Silver extends to +1.84% — overnight tone is bullish",
+    "excerpt": "Silver owned Tuesday's session, closing at ₹276400/kg — a sharp +1.68% gain driven by a combination of USD softness, industrial demand optimism out of China, and a breakout in COMEX Silver above the $",
     "date": "2026-05-26",
     "edition": "evening-brief",
     "tags": [
@@ -278,7 +400,7 @@
     "href": "/articles/2026-05-26-mcx-open-26-ay2026-crude-surges",
     "title": "MCX Open 26 May 2026: Crude Surges, Metals Slide",
     "description": "MCX Daily Brief 26 May 2026: WTI crude +3.21%, MCX crude opens ₹9019; gold -0.83%, silver -2.27% as dollar pressure weighs on metals complex.",
-    "excerpt": "title: \"MCX Open 26 May 2026: Crude Surges, Metals Slide\" description: \"MCX Daily Brief 26 May 2026: WTI crude +3.21%, MCX crude opens ₹9019; gold -0.83%, silver -2.27% as dollar pressure weighs on me",
+    "excerpt": "--- Crude dominated overnight trade, with WTI surging +3.21% to $93.94/bbl on NYMEX — the single strongest move across the complex. The move drove a broad rotation out of metals: COMEX Gold fell -1.27",
     "date": "2026-05-26",
     "edition": "morning-brief",
     "tags": [
@@ -354,7 +476,7 @@
     "href": "/articles/2026-05-25-mcx-open-25-ay2026-risk-off-gold-silver-surge",
     "title": "MCX Open 25 May 2026: Risk-Off Lifts Gold, Silver Surges",
     "description": "MCX Open 25 May 2026: Gold +0.34% at ₹159220, Silver surges +1.59% to ₹276178, Crude crashes -5.14% to ₹8697. Risk-off dominates.",
-    "excerpt": "title: \"MCX Open 25 May 2026: Risk-Off Lifts Gold, Silver Surges\" description: \"MCX Open 25 May 2026: Gold +0.34% at ₹159220, Silver surges +1.59% to ₹276178, Crude crashes -5.14% to ₹8697. Risk-off d",
+    "excerpt": "Classic risk-off swept through overnight markets. WTI crude shed 1.66% to $90.98/bbl on demand-concern selling, while COMEX gold climbed 0.65% to $4,603.09/oz and silver led the complex with a sharp +",
     "date": "2026-05-25",
     "edition": "morning-brief",
     "tags": [

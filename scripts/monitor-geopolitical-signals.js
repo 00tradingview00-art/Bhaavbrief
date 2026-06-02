@@ -214,7 +214,7 @@ async function main() {
 
   const newEvents = []
   for (const item of allItems) {
-    const id = item.title.slice(0, 100)
+    const id = item.title.slice(0, 80)
     if (seenIds.has(id)) continue
     if (!isGeopoliticalItem(item.title)) continue
     newEvents.push({ ...item, id })
