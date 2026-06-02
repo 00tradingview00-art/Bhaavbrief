@@ -17,6 +17,25 @@
     "commodity": ""
   },
   {
+    "type": "brief",
+    "slug": "edition-031",
+    "href": "/briefs/edition-031",
+    "title": "Gold Holds at ₹155180 as Stagflation Hedge Trade Deepens",
+    "description": "Crude slips again while gold and silver climb, confirming a stagflation hedge narrative over a pure supply-shock read.",
+    "excerpt": "Edition 30 identified the first signs of this shift: crude falling and gold recovering together, suggesting traders were no longer reading the Iran conflict as a simple oil story. Today that reading h",
+    "date": "2026-06-02",
+    "edition": "31",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "Macro",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
     "href": "/articles/2026-06-01-mcx-close-02-un2026-gold-holds-crude-slips",
