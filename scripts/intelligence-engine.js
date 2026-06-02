@@ -458,7 +458,7 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels }) {
   const commodity = primaryMove?.label ?? 'commodities'
   const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
 
-  const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format, read by professional MCX traders who need to act in seconds.
+  const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
 A HAWK-SCAN fires only on extreme market events. This is one of those moments.
 
@@ -475,7 +475,7 @@ ${eiaBlock}${techBlock}
 OUTPUT FORMAT — SACRED. DO NOT DEVIATE. Return exactly this structure, no extra prose:
 
 ---
-title: "[HAWK-SCAN] [Commodity]: [Specific action + key level] — under 70 chars"
+title: "[HAWK-SCAN] [Commodity]: [What happened + key level, observational only] — under 70 chars. FORBIDDEN words in title: act, buy, sell, enter, exit, trade, now, urgent, alert"
 description: "Under 155 chars. Include current ₹ price and the extreme trigger. For traders."
 date: "${today.toISOString().split('T')[0]}"
 time: "${timeStr}"
@@ -505,7 +505,7 @@ RULES:
 - Each section header is exactly as shown above (TRIGGER, PRICE, SIGNAL, etc.)
 - Each section is ONE sentence or one line of arithmetic — no more
 - No "experts say". Facts, data, mechanics only.
-- SEBI COMPLIANCE: No buy/sell/accumulate/avoid/exit/enter directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" framing for patterns.
+- SEBI COMPLIANCE: No buy/sell/accumulate/avoid/exit/enter/act directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" framing for patterns. Title must be purely descriptive — never action-oriented.
 - If this is an EIA significant event, IMPORT COST must show the WTI→MCX crude parity math.
 - Total body: 80–130 words. Lean is the mandate.`
 
