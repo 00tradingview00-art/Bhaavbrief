@@ -9,6 +9,11 @@ on:
     - cron: '7,22,37 18 * * 1-5'         # 11:37 PM IST final window
   workflow_dispatch:
 
+# Queue concurrent keepalive/cron runs — never cancel to avoid partial commits
+concurrency:
+  group: flash-intelligence
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -31,36 +36,42 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # continue-on-error on every content step so one API failure doesn't kill
+      # the workflow and cause GitHub to disable the cron schedule.
+
       - name: Fetch flash articles
-        id: flash
+        continue-on-error: true
         run: node scripts/fetch-flash.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Generate AI news feed
-        id: news
+        continue-on-error: true
         run: node scripts/generate-news.js
         env:
-          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
-          KITE_API_KEY:         ${{ secrets.KITE_API_KEY }}
-          KITE_ACCESS_TOKEN:    ${{ secrets.KITE_ACCESS_TOKEN }}
-          TWELVE_DATA_API_KEY:  ${{ secrets.TWELVE_DATA_API_KEY }}
-          ALPHA_VANTAGE_KEY:    ${{ secrets.ALPHA_VANTAGE_KEY }}
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          KITE_API_KEY:        ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
+          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
+          ALPHA_VANTAGE_KEY:   ${{ secrets.ALPHA_VANTAGE_KEY }}
 
       - name: Monitor MCX/SEBI circulars
+        continue-on-error: true
         run: node scripts/monitor-mcx-circulars.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor geopolitical signals
+        continue-on-error: true
         run: node scripts/monitor-geopolitical-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor India policy signals
+        continue-on-error: true
         run: node scripts/monitor-india-policy-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

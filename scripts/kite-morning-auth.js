@@ -13,6 +13,10 @@
  *   KITE_API_KEY, KITE_API_SECRET
  *   GITHUB_REPO (default: 00tradingview00-art/Bhaavbrief)
  *   VERCEL_TOKEN, VERCEL_PROJECT_ID
+ *   VERCEL_DEPLOY_HOOK  ← Vercel dashboard → project → Settings → Git → Deploy Hooks
+ *                          Create a hook named "kite-auth", paste the URL here.
+ *                          This triggers an immediate Vercel redeploy so prices go live
+ *                          without waiting for a git push. Strongly recommended.
  */
 
 import { exec, execFileSync } from 'child_process'
@@ -38,11 +42,12 @@ if (fs.existsSync(envFile)) {
   }
 }
 
-const API_KEY        = process.env.KITE_API_KEY
-const API_SECRET     = process.env.KITE_API_SECRET
-const GITHUB_REPO    = process.env.GITHUB_REPO ?? '00tradingview00-art/Bhaavbrief'
-const VERCEL_TOKEN   = process.env.VERCEL_TOKEN
-const VERCEL_PROJECT = process.env.VERCEL_PROJECT_ID
+const API_KEY         = process.env.KITE_API_KEY
+const API_SECRET      = process.env.KITE_API_SECRET
+const GITHUB_REPO     = process.env.GITHUB_REPO ?? '00tradingview00-art/Bhaavbrief'
+const VERCEL_TOKEN    = process.env.VERCEL_TOKEN
+const VERCEL_PROJECT  = process.env.VERCEL_PROJECT_ID
+const VERCEL_HOOK_URL = process.env.VERCEL_DEPLOY_HOOK  // optional but strongly recommended
 
 if (!API_KEY || !API_SECRET) {
   console.error('❌  KITE_API_KEY and KITE_API_SECRET must be set in .env.local')
@@ -101,6 +106,10 @@ async function syncAll(token) {
   process.stdout.write('🔺  Vercel env......')
   const vOk = await updateVercelEnv(token)
   console.log(vOk ? ' ✅' : ' ⚠️   VERCEL_TOKEN not set')
+
+  process.stdout.write('🚦  Vercel deploy...')
+  const deployOk = await triggerVercelRedeploy()
+  console.log(deployOk ? ' ✅  (prices will be live in ~2 min)' : ' ⚠️   set VERCEL_DEPLOY_HOOK in .env.local')
 
   process.stdout.write('🔍  MCX instruments.')
   const iOk = await discoverInstruments(token)
@@ -186,6 +195,53 @@ async function updateVercelEnv(token) {
     return true
   } catch (err) {
     console.error('\n   Vercel API error:', err.message)
+    return false
+  }
+}
+
+/** Trigger Vercel redeploy so the new KITE_ACCESS_TOKEN env var takes effect immediately.
+ *  Uses a Deploy Hook URL if configured, otherwise falls back to the Vercel Deployments API. */
+async function triggerVercelRedeploy() {
+  // Primary: Deploy Hook (zero-config, just POST to the URL)
+  if (VERCEL_HOOK_URL) {
+    try {
+      const r = await fetch(VERCEL_HOOK_URL, {
+        method: 'POST',
+        signal: AbortSignal.timeout(10000),
+      })
+      if (r.ok) return true
+      console.error(`\n   Deploy hook responded ${r.status}`)
+    } catch (err) {
+      console.error('\n   Deploy hook failed:', err.message)
+    }
+  }
+
+  // Fallback: Vercel Deployments API — find latest production deployment and redeploy it
+  if (!VERCEL_TOKEN || !VERCEL_PROJECT) return false
+  try {
+    const headers = { Authorization: `Bearer ${VERCEL_TOKEN}` }
+    const listRes = await fetch(
+      `https://api.vercel.com/v6/deployments?projectId=${VERCEL_PROJECT}&target=production&limit=1&state=READY`,
+      { headers, signal: AbortSignal.timeout(10000) }
+    )
+    if (!listRes.ok) return false
+    const { deployments } = await listRes.json()
+    const latestId = deployments?.[0]?.uid
+    if (!latestId) return false
+
+    const redeployRes = await fetch('https://api.vercel.com/v13/deployments', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deploymentId: latestId, target: 'production' }),
+      signal: AbortSignal.timeout(15000),
+    })
+    if (!redeployRes.ok) {
+      console.error('\n   Vercel redeploy API:', redeployRes.status, await redeployRes.text())
+      return false
+    }
+    return true
+  } catch (err) {
+    console.error('\n   Vercel redeploy failed:', err.message)
     return false
   }
 }

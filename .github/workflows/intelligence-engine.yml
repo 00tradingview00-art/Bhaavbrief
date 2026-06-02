@@ -7,6 +7,11 @@ on:
     - cron: '0,15,30 18 * * 1-5'  # 11 PM – 11:30 PM IST final window
   workflow_dispatch:               # Manual trigger anytime
 
+# Queue concurrent runs — never cancel to avoid partial commits
+concurrency:
+  group: intelligence-engine
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -35,6 +40,7 @@ jobs:
 
       - name: Run Intelligence Engine
         id: engine
+        continue-on-error: true
         env:
           ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
           EIA_API_KEY:        ${{ secrets.EIA_API_KEY }}
@@ -44,6 +50,7 @@ jobs:
         run: node scripts/intelligence-engine.js
 
       - name: Rebuild content search index
+        continue-on-error: true
         run: node scripts/build-content-index.js
 
       - name: Commit & push if article published

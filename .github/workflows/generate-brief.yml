@@ -2,8 +2,13 @@ name: Generate Daily Brief
 
 on:
   schedule:
-    - cron: '0 4 * * 1-5'
+    - cron: '0 4 * * 1-5'   # 9:30 AM IST Mon–Fri
   workflow_dispatch:
+
+# Only one brief per run — queue if keepalive also fires, never cancel in progress
+concurrency:
+  group: generate-brief
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -34,7 +39,7 @@ jobs:
       - name: Get next edition number
         id: edition
         run: |
-          LAST=$(ls content/briefs/ | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
+          LAST=$(ls content/briefs/ 2>/dev/null | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
           NEXT=$(( 10#${LAST:-0} + 1 ))
           echo "number=$NEXT" >> $GITHUB_OUTPUT
 
@@ -46,6 +51,7 @@ jobs:
 
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
+        continue-on-error: true
 
       - name: Commit brief to main
         id: commit
@@ -60,7 +66,7 @@ jobs:
           git stash pop || true
           git add content/briefs/ data/content-index.json
           if git diff --staged --quiet; then
-            echo "Nothing to commit — skipping newsletter and Instagram"
+            echo "Nothing to commit — brief already published today"
             echo "published=false" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -68,22 +74,24 @@ jobs:
           git push origin main
           echo "published=true" >> $GITHUB_OUTPUT
 
-      - name: Wait for deploy then send newsletter
+      - name: Wait for Vercel deploy then send newsletter
         if: steps.commit.outputs.published == 'true'
         continue-on-error: true
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
-          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-          EDITION: ${{ steps.edition.outputs.number }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          EDITION:       ${{ steps.edition.outputs.number }}
         run: |
-          sleep 180
+          echo "Waiting 4 minutes for Vercel to deploy..."
+          sleep 240
           node scripts/send-newsletter.js
 
       - name: Post to Instagram
         if: steps.commit.outputs.published == 'true'
+        continue-on-error: true
         env:
-          EDITION: ${{ steps.edition.outputs.number }}
-          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+          EDITION:                  ${{ steps.edition.outputs.number }}
+          INSTAGRAM_USER_ID:        ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js

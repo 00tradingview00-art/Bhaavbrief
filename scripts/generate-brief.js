@@ -272,6 +272,19 @@ async function main() {
     return
   }
 
+  // Date dedup: check most recent brief's frontmatter date to prevent double-publishing on the same day
+  try {
+    const files = fs.readdirSync(BRIEFS_DIR).filter(f => /^edition-\d+\.mdx$/.test(f)).sort()
+    if (files.length > 0) {
+      const lastContent = fs.readFileSync(path.join(BRIEFS_DIR, files[files.length - 1]), 'utf8')
+      const dateMatch   = lastContent.match(/^date:\s*"?(\d{4}-\d{2}-\d{2})/m)
+      if (dateMatch && dateMatch[1] === today) {
+        console.log(`Brief for ${today} already published (${files[files.length - 1]}) — skipping`)
+        process.exit(0)
+      }
+    }
+  } catch { /* BRIEFS_DIR may not exist yet on first run */ }
+
   const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
   console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
   console.log(`News: ${news.length} headlines`)
