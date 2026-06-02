@@ -61,8 +61,9 @@ export default async function NewsPage() {
         category: f.category,
         tagType:  f.category === 'forex' ? 'macro' : f.category,
         pubDate:  f.date,
-        href:     `/flash/${f.slug}`,
-        itemType: 'flash' as const,
+        href:       `/flash/${f.slug}`,
+        itemType:   'flash' as const,
+        coverImage: f.coverImage,
       })),
     ...articles
       .filter(a => a.title !== 'Market Update' && a.date)
