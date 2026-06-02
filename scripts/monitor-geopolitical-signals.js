@@ -44,6 +44,11 @@ const GEOPOLITICAL_SIGNALS = [
   'ceasefire', 'escalat', 'tariff', 'trade war', 'production cut',
 ]
 
+// Google News appends " - Source Name" to every headline — strip it
+function cleanTitle(raw) {
+  return raw.replace(/\s+-\s+[^-]{2,50}$/, '').trim()
+}
+
 function isGeopoliticalItem(title) {
   const t = title.toLowerCase()
   return GEOPOLITICAL_SIGNALS.some(s => t.includes(s))
@@ -94,9 +99,9 @@ async function fetchFeed(feed) {
                      block.match(/<link[^>]*href="([^"]+)"/)
 
       if (!titleM) continue
-      const title = (titleM[1] ?? '').trim()
+      const title   = cleanTitle((titleM[1] ?? '').trim())
       const pubDate = dateM ? new Date(dateM[1]) : new Date()
-      const url   = linkM ? linkM[1].trim() : feed.url
+      const url     = linkM ? linkM[1].trim() : feed.url
 
       // Only items published in the last 3 hours
       if (Date.now() - pubDate.getTime() > 3 * 3600 * 1000) continue
@@ -118,7 +123,9 @@ async function generateBreakdown(item, commodities) {
 EVENT: "${item.title}"
 MCX COMMODITIES AFFECTED: ${commodities}
 
-Write a 150-200 word flash article for Indian MCX commodity traders:
+Write a flash article for Indian MCX commodity traders. Use this exact format:
+
+TITLE: [BhaavBrief-framed headline focused on MCX impact, under 70 chars, no source names]
 
 **WHAT HAPPENED**
 [1-2 sentences: the event in plain English, no jargon]
@@ -132,17 +139,24 @@ Write a 150-200 word flash article for Indian MCX commodity traders:
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - Never fabricate specific price targets
+- Never include news outlet names (Reuters, BBC, etc.) anywhere
 - Write for an ET Markets reader, not a geopolitics expert
-- End with: Source: International News | bhaavbrief.in
-
-Return only the article body (no frontmatter).`
+- Total body length 150-200 words
+- End with: Source: International News | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
     max_tokens: 600,
     messages:   [{ role: 'user', content: prompt }],
   })
-  return r.content[0].type === 'text' ? r.content[0].text.trim() : null
+  if (r.content[0].type !== 'text') return null
+
+  const raw = r.content[0].text.trim()
+  const titleMatch = raw.match(/^TITLE:\s*(.+)/m)
+  const title = titleMatch ? titleMatch[1].trim() : item.title
+  const body  = raw.replace(/^TITLE:.*\n?/m, '').trim()
+
+  return { title, body }
 }
 
 // ── Save flash article ────────────────────────────────────────────────────────
@@ -156,20 +170,20 @@ function slugify(title) {
     .replace(/-$/, '')
 }
 
-function saveFlashArticle(item, body) {
+function saveFlashArticle(item, aiTitle, body) {
   const now        = new Date()
   const datePrefix = now.toISOString().slice(0, 10)
   const timePrefix = now.toISOString().slice(11, 16).replace(':', '-')
-  const slug       = slugify(item.title)
+  const slug       = slugify(aiTitle)
   const fname      = `${datePrefix}-${timePrefix}-${slug}.mdx`
   const fpath      = path.join(FLASH_DIR, fname)
 
   if (fs.existsSync(fpath)) return null
 
   const mdx = `---
-title: "${item.title.replace(/"/g, '\\"')}"
+title: "${aiTitle.replace(/"/g, '\\"')}"
 date: "${now.toISOString()}"
-source: "${item.source}"
+source: "BhaavBrief"
 category: "geopolitical"
 published: true
 ---
@@ -200,7 +214,7 @@ async function main() {
 
   const newEvents = []
   for (const item of allItems) {
-    const id = item.title.slice(0, 100)
+    const id = item.title.slice(0, 80)
     if (seenIds.has(id)) continue
     if (!isGeopoliticalItem(item.title)) continue
     newEvents.push({ ...item, id })
@@ -214,9 +228,10 @@ async function main() {
     const commodities = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${commodities}]`)
     try {
-      const body  = await generateBreakdown(event, commodities)
-      if (!body) continue
-      const fname = saveFlashArticle(event, body)
+      const result = await generateBreakdown(event, commodities)
+      if (!result) continue
+      const { title: aiTitle, body } = result
+      const fname = saveFlashArticle(event, aiTitle, body)
       if (fname) {
         console.log(`    ✅ Published: ${fname}`)
         published++
