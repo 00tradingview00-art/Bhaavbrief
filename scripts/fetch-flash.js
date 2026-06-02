@@ -8,6 +8,7 @@ import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
+import { fetchPexelsImage } from './lib/pexels.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -295,15 +296,16 @@ Article: ${article.title}. ${article.description}`
   return (await res.json()).content?.[0]?.text?.trim() ?? ''
 }
 
-function saveFlash({ slug, title, date, source, category, content }) {
+function saveFlash({ slug, title, date, source, category, content, coverImage }) {
   if (!fs.existsSync(FLASH_DIR)) fs.mkdirSync(FLASH_DIR, { recursive: true })
   const safeTitle = title.replace(/"/g, "'").replace(/[\r\n]+/g, ' ').trim()
+  const coverLine = coverImage ? `\ncoverImage: "${coverImage}"` : ''
   const mdx = `---
 title: "${safeTitle}"
 date: "${date}"
 source: "${source}"
 category: "${category}"
-published: true
+published: true${coverLine}
 ---
 
 ${content}
@@ -381,6 +383,7 @@ async function main() {
       const p        = n => String(n).padStart(2, '0')
       const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${p(ist.getHours())}-${p(ist.getMinutes())}-${toSlug(article.title)}`
       const category = detectCategory(`${article.title} ${article.description}`)
+      const coverImage = await fetchPexelsImage(article.title, category)
 
       saveFlash({
         slug,
@@ -389,6 +392,7 @@ async function main() {
         source:   'BhaavBrief',
         category,
         content,
+        coverImage,
       })
 
       newSeen.push(article.url)

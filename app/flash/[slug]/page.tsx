@@ -131,6 +131,17 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
             </div>
           </header>
 
+          {flash.coverImage && (
+            <div style={{ marginBottom: '1.5rem', borderRadius: 6, overflow: 'hidden', aspectRatio: '16/7' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={flash.coverImage}
+                alt={flash.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </div>
+          )}
+
           <div className="brief-prose">
             <MDXRemote source={flash.content} />
           </div>

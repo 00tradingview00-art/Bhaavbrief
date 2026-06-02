@@ -5,13 +5,14 @@ import matter from 'gray-matter'
 const FLASH_DIR = path.join(process.cwd(), 'content/flash')
 
 export interface FlashMeta {
-  slug:      string
-  title:     string
-  date:      string
-  source:    string
-  category:  'energy' | 'metals' | 'forex' | 'macro'
-  published: boolean
-  excerpt:   string
+  slug:        string
+  title:       string
+  date:        string
+  source:      string
+  category:    'energy' | 'metals' | 'forex' | 'macro'
+  published:   boolean
+  excerpt:     string
+  coverImage?: string
 }
 
 export interface Flash extends FlashMeta {
@@ -38,12 +39,13 @@ export function getAllFlash(): FlashMeta[] {
       const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
       return {
         slug,
-        title:     data.title     || 'Untitled',
-        date:      data.date      || '',
-        source:    data.source    || '',
-        category:  (data.category as FlashMeta['category']) || 'macro',
-        published: data.published !== false,
+        title:       data.title     || 'Untitled',
+        date:        data.date      || '',
+        source:      data.source    || '',
+        category:    (data.category as FlashMeta['category']) || 'macro',
+        published:   data.published !== false,
         excerpt,
+        coverImage:  data.coverImage || undefined,
       }
     })
     .filter(f => f.published && f.date)
@@ -68,12 +70,13 @@ export function getFlash(slug: string): Flash | null {
 
   return {
     slug,
-    title:     data.title     || 'Untitled',
-    date:      data.date      || '',
-    source:    data.source    || '',
-    category:  (data.category as FlashMeta['category']) || 'macro',
-    published: data.published !== false,
+    title:       data.title     || 'Untitled',
+    date:        data.date      || '',
+    source:      data.source    || '',
+    category:    (data.category as FlashMeta['category']) || 'macro',
+    published:   data.published !== false,
     excerpt,
+    coverImage:  data.coverImage || undefined,
     content,
   }
 }

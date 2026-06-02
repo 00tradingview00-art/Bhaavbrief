@@ -10,6 +10,7 @@ import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
+import { fetchPexelsImage } from './lib/pexels.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
@@ -180,7 +181,7 @@ function slugify(title) {
     .replace(/-$/, '')
 }
 
-function saveFlashArticle(item, aiTitle, body) {
+function saveFlashArticle(item, aiTitle, body, coverImage) {
   const now        = new Date()
   const datePrefix = now.toISOString().slice(0, 10)
   const timePrefix = now.toISOString().slice(11, 16).replace(':', '-')
@@ -190,12 +191,13 @@ function saveFlashArticle(item, aiTitle, body) {
 
   if (fs.existsSync(fpath)) return null
 
+  const coverLine = coverImage ? `\ncoverImage: "${coverImage}"` : ''
   const mdx = `---
 title: "${aiTitle.replace(/"/g, '\\"')}"
 date: "${now.toISOString()}"
 source: "BhaavBrief"
 category: "geopolitical"
-published: true
+published: true${coverLine}
 ---
 
 ${body}
@@ -241,7 +243,8 @@ async function main() {
       const result = await generateBreakdown(event, commodities)
       if (!result) continue
       const { title: aiTitle, body } = result
-      const fname = saveFlashArticle(event, aiTitle, body)
+      const coverImage = await fetchPexelsImage(aiTitle, 'geopolitical')
+      const fname = saveFlashArticle(event, aiTitle, body, coverImage)
       if (fname) {
         console.log(`    ✅ Published: ${fname}`)
         published++
