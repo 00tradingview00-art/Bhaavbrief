@@ -100,12 +100,48 @@ function mdxToHtml(content, title, edition, date) {
 
 // ─── Send via Brevo ───────────────────────────────────────────────────────────
 
+/** Find an existing Brevo campaign by name. Returns the campaign object or null. */
+async function findExistingCampaign(name) {
+  try {
+    const res = await fetch(`${BREVO_API}/emailCampaigns?limit=50&sort=desc`, {
+      headers: { 'api-key': API_KEY },
+    })
+    if (!res.ok) return null
+    const { campaigns } = await res.json()
+    return campaigns?.find(c => c.name === name) ?? null
+  } catch { return null }
+}
+
 async function sendCampaign(subject, htmlContent, previewText) {
+  const campaignName = `BhaavBrief — ${subject}`
+
+  // Idempotency: check if this campaign was already created (covers double-send retries)
+  const existing = await findExistingCampaign(campaignName)
+  if (existing) {
+    if (existing.status === 'sent' || existing.status === 'queued') {
+      console.log(`Campaign already sent/queued (ID ${existing.id}, status: ${existing.status}) — skipping`)
+      return existing.id
+    }
+    // Draft exists — just send it
+    console.log(`Draft campaign found (ID ${existing.id}) — sending now`)
+    const sendRes = await fetch(`${BREVO_API}/emailCampaigns/${existing.id}/sendNow`, {
+      method: 'POST',
+      headers: { 'api-key': API_KEY },
+    })
+    if (!sendRes.ok) {
+      const e = await sendRes.json()
+      throw new Error(`Send failed: ${JSON.stringify(e)}`)
+    }
+    console.log(`Newsletter sent — Campaign ID: ${existing.id}`)
+    return existing.id
+  }
+
+  // Create new campaign
   const createRes = await fetch(`${BREVO_API}/emailCampaigns`, {
     method: 'POST',
     headers: { 'api-key': API_KEY, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      name:        `BhaavBrief — ${subject}`,
+      name:        campaignName,
       subject,
       previewText,
       sender:      { name: 'BhaavBrief', email: FROM_EMAIL },
