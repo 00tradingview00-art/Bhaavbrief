@@ -1,5 +1,47 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-02-mcx-close-03-un2026-crude-surges-metals-slip",
+    "href": "/articles/2026-06-02-mcx-close-03-un2026-crude-surges-metals-slip",
+    "title": "MCX Close 3 Jun 2026: Crude Surges, Metals Slip",
+    "description": "MCX Evening Brief 3 Jun 2026: WTI Crude surged +1.68% to $95.41 as gold and silver slid. USD/INR at ₹95.27 shapes overnight commodity positioning.",
+    "excerpt": "title: \"MCX Close 3 Jun 2026: Crude Surges, Metals Slip\" description: \"MCX Evening Brief 3 Jun 2026: WTI Crude surged +1.68% to $95.41 as gold and silver slid. USD/INR at ₹95.27 shapes overnight commo",
+    "date": "2026-06-03",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-03-mcx-copper-surges-crude-leads-commodities-gap-up",
+    "href": "/articles/2026-06-03-mcx-copper-surges-crude-leads-commodities-gap-up",
+    "title": "MCX Copper Surges 6.49% as Crude Leads Commodities Higher",
+    "description": "MCX Copper at ₹1469.06/kg, up 6.49%. Crude's 1.12% session gain leads commodities while gold and silver ease. MCX gap-up expected tomorrow.",
+    "excerpt": "Crude oil is the session's dominant force, and copper is amplifying that signal sharply. WTI at $94.88/bbl (up 1.12%) reflects tightening supply expectations — OPEC's voluntary production cuts and a d",
+    "date": "2026-06-03",
+    "edition": "flash",
+    "tags": [
+      "MCX Copper",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Copper",
+    "commodities": [
+      "MCX Copper"
+    ],
+    "priceAtPublish": 1469
+  },
+  {
     "type": "brief",
     "slug": "edition-030",
     "href": "/briefs/edition-030",
