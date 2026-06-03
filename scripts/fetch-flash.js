@@ -17,24 +17,56 @@ const FLASH_DIR         = path.join(__dirname, '../content/flash')
 const SEEN_FILE         = path.join(__dirname, 'seen-articles.json')
 
 const FEEDS = [
-  { url: 'https://news.google.com/rss/search?q=gold+silver+price+india+mcx+comex+today&hl=en-IN&gl=IN&ceid=IN:en',  source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=crude+oil+price+india+brent+wti+today&hl=en-IN&gl=IN&ceid=IN:en',    source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=copper+nickel+aluminium+LME+metal+price&hl=en&gl=US&ceid=US:en',     source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+supply+production+cut&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+India+rate&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=india+agri+monsoon+ncdex+crop&hl=en-IN&gl=IN&ceid=IN:en',            source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=iran+russia+sanctions+oil+supply+commodity&hl=en&gl=US&ceid=US:en',  source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',       source: 'Google News' },
-  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+price+india+demand&hl=en-IN&gl=IN&ceid=IN:en',       source: 'Google News' },
-  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                           source: 'NDTV Profit' },
+  // Precious metals
+  { url: 'https://news.google.com/rss/search?q=gold+silver+price+india+mcx+comex+today&hl=en-IN&gl=IN&ceid=IN:en',       source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=gold+import+duty+india+bullion+mcx&hl=en-IN&gl=IN&ceid=IN:en',             source: 'Google News' },
+  // Energy
+  { url: 'https://news.google.com/rss/search?q=crude+oil+price+india+brent+wti+today&hl=en-IN&gl=IN&ceid=IN:en',          source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+supply+production+cut&hl=en&gl=US&ceid=US:en',               source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=EIA+crude+oil+natural+gas+inventory+weekly&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+henry+hub+price+india&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Google News' },
+  // Base metals — LME + India
+  { url: 'https://news.google.com/rss/search?q=copper+LME+price+china+comex+today&hl=en&gl=US&ceid=US:en',                 source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=zinc+aluminium+lead+nickel+LME+metal+price&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=zinc+aluminium+nickel+price+india+MCX&hl=en-IN&gl=IN&ceid=IN:en',           source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=Hindustan+Zinc+aluminium+nickel+india+production&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News' },
+  // Macro / forex
+  { url: 'https://news.google.com/rss/search?q=Federal+Reserve+FOMC+rate+dollar+commodity&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=RBI+rupee+forex+india+rate+commodity&hl=en-IN&gl=IN&ceid=IN:en',            source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=US+CPI+inflation+dollar+index+commodity&hl=en&gl=US&ceid=US:en',            source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=china+economy+pmi+stimulus+commodity+demand&hl=en&gl=US&ceid=US:en',        source: 'Google News' },
+  // Geopolitical supply risk
+  { url: 'https://news.google.com/rss/search?q=iran+russia+sanctions+oil+supply+commodity&hl=en&gl=US&ceid=US:en',         source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=indonesia+nickel+export+ban+mining+commodity&hl=en&gl=US&ceid=US:en',       source: 'Google News' },
+  // India policy
+  { url: 'https://news.google.com/rss/search?q=india+import+export+duty+commodity+dgft+customs&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News' },
+  { url: 'https://news.google.com/rss/search?q=india+agri+monsoon+ncdex+msp+crop&hl=en-IN&gl=IN&ceid=IN:en',               source: 'Google News' },
+  // EV / energy transition
+  { url: 'https://news.google.com/rss/search?q=EV+battery+lithium+nickel+copper+commodity+demand&hl=en&gl=US&ceid=US:en',  source: 'Google News' },
+  // India financial press
+  { url: 'https://feeds.feedburner.com/ndtvprofit-latest',                                                                  source: 'NDTV Profit' },
+  { url: 'https://economictimes.indiatimes.com/markets/commodities/rssfeeds/1808152059.cms',                                source: 'ET Markets' },
+  { url: 'https://www.business-standard.com/rss/markets-106.rss',                                                          source: 'Business Standard' },
 ]
 
 const KEYWORDS = [
-  'opec', 'rbi', 'sanctions', 'hormuz', 'suez', 'eia inventory', 'import duty',
-  'monsoon forecast', 'supply disruption', 'port strike', 'fed rate', 'crude',
-  'gold price', 'silver price', 'commodity', 'mcx', 'rupee', 'usdinr',
-  'inflation', 'iran', 'russia', 'ukraine', 'china demand', 'brent', 'opec+',
-  'federal reserve', 'rate cut', 'rate hike', 'refinery', 'inventory',
+  // Exchange + regulatory
+  'opec', 'opec+', 'rbi', 'sebi', 'mcx', 'ncdex', 'eia inventory',
+  // Trade / policy
+  'sanctions', 'import duty', 'export ban', 'dgft', 'customs duty', 'tariff',
+  // Supply routes
+  'hormuz', 'suez', 'red sea', 'port strike', 'supply disruption', 'refinery',
+  // Macro
+  'federal reserve', 'fomc', 'fed rate', 'rate cut', 'rate hike', 'cpi', 'inflation',
+  'rupee', 'usdinr', 'dollar index', 'treasury yield', 'china pmi', 'china demand',
+  // Commodities
+  'crude', 'brent', 'wti', 'natural gas', 'lng', 'henry hub',
+  'gold price', 'silver price', 'copper', 'zinc', 'aluminium', 'nickel', 'lead',
+  'commodity',
+  // Geopolitical
+  'iran', 'russia', 'ukraine', 'monsoon forecast', 'monsoon',
+  // Demand drivers
+  'inventory', 'ev battery', 'lithium', 'indonesia nickel',
 ]
 
 const SEEN_TTL_HOURS = 36  // expire seen URLs after 36h so stale list never locks out new content
