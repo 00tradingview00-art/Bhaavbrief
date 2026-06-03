@@ -132,7 +132,7 @@ async function fetchFeed(feed) {
       const url     = linkM ? linkM[1].trim() : feed.url
 
       // Only items from the last 3 hours
-      if (Date.now() - pubDate.getTime() > 3 * 3600 * 1000) continue
+      if (Date.now() - pubDate.getTime() > 6 * 3600 * 1000) continue
 
       items.push({ title, url, source: feed.source, pubDate })
     }

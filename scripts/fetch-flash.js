@@ -379,19 +379,21 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
 
-  // Filter: unseen + important + not MCX stock + FRESH (< 90 min old)
+  // Filter: unseen + important + not MCX stock + FRESH (< 360 min / 6h old)
+  // Google News RSS — especially Indian outlets — can return articles 2-6h old.
+  // 90-min window was killing most legitimate stories.
   const candidates = allItems.filter(item => {
     const text = `${item.title} ${item.description}`
-    if (seen.includes(item.url))      return false
-    if (!isImportant(text))           return false
-    if (isMCXStockArticle(text))      return false
-    if (!isFresh(item.pubDate, 90))   return false  // skip anything older than 90 min
+    if (seen.includes(item.url))       return false
+    if (!isImportant(text))            return false
+    if (isMCXStockArticle(text))       return false
+    if (!isFresh(item.pubDate, 360))   return false  // skip anything older than 6h
     return true
   })
 
-  // Mark all stale unseen items as seen so they never accumulate
+  // Mark items older than 6h as seen so they never accumulate
   const staleUnseen = allItems.filter(item =>
-    !seen.includes(item.url) && !isFresh(item.pubDate, 90)
+    !seen.includes(item.url) && !isFresh(item.pubDate, 360)
   )
   const newSeen = [...seen, ...staleUnseen.map(i => i.url)]
 
