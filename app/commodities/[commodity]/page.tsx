@@ -26,11 +26,15 @@ function loadMarketStructure(): Record<string, CommodityInfo> {
 // ── Slug → internal key mapping ───────────────────────────────────────────────
 
 const SLUG_MAP: Record<string, { key: string; priceKey: string; color: string }> = {
-  'gold':        { key: 'gold',   priceKey: 'gold',   color: '#B45309' },
-  'silver':      { key: 'silver', priceKey: 'silver', color: '#2B4FC7' },
-  'crude-oil':   { key: 'crude',  priceKey: 'crude',  color: '#7C3AED' },
-  'copper':      { key: 'copper', priceKey: 'copper', color: '#065F46' },
-  'natural-gas': { key: 'natgas', priceKey: 'natgas', color: '#D97706' },
+  'gold':        { key: 'gold',      priceKey: 'gold',      color: '#B45309' },
+  'silver':      { key: 'silver',    priceKey: 'silver',    color: '#2B4FC7' },
+  'crude-oil':   { key: 'crude',     priceKey: 'crude',     color: '#7C3AED' },
+  'copper':      { key: 'copper',    priceKey: 'copper',    color: '#065F46' },
+  'natural-gas': { key: 'natgas',    priceKey: 'natgas',    color: '#D97706' },
+  'zinc':        { key: 'zinc',      priceKey: 'zinc',      color: '#475569' },
+  'aluminium':   { key: 'aluminium', priceKey: 'aluminium', color: '#6366F1' },
+  'lead':        { key: 'lead',      priceKey: 'lead',      color: '#64748B' },
+  'nickel':      { key: 'nickel',    priceKey: 'nickel',    color: '#0F766E' },
 }
 
 const BASE = 'https://bhaavbrief.in'
@@ -113,6 +117,86 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       { q: 'Why is MCX copper price up or down today?', a: 'Copper is known as "Dr. Copper" because its price reflects global economic health. MCX copper rises when: China\'s PMI (Purchasing Managers\' Index) is above 50 (signals manufacturing expansion), China announces infrastructure stimulus, LME copper inventory falls (tight supply), or the US dollar weakens. It falls when China\'s economy slows, PMI drops below 50, or LME inventory builds sharply. China consumes ~55% of global copper.' },
       { q: 'How does China affect MCX copper price in India?', a: 'China is the dominant demand driver for copper globally. Any data suggesting Chinese manufacturing is accelerating — PMI, industrial production, infrastructure project announcements — moves MCX copper within hours. The monthly Caixin and NBS China PMI releases (early morning IST) are the most watched single data points for MCX copper traders. China\'s property sector slowdown in 2022–2024 was a sustained bearish driver for copper.' },
       { q: 'What is the MCX Copper lot size and margin?', a: 'MCX Copper standard contract has a lot size of 1,000 kg (1 metric tonne), quoted in ₹ per kg. At ~₹960/kg, one lot is worth approximately ₹9.6 lakh. SPAN margin is approximately ₹80,000–₹1.2 lakh. The Copper Mini (250 kg) requires ₹20,000–₹30,000 margin and is more accessible for retail traders. Tick size is ₹0.05/kg — each tick move earns or costs ₹50 on the standard lot.' },
+    ],
+  },
+  zinc: {
+    title: 'Why MCX Zinc Is Moving Today — LME, Hindustan Zinc Analysis',
+    description: 'MCX zinc price live today — why zinc is up or down: LME stocks, Hindustan Zinc output, China galvanizing demand and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX zinc moving today',
+      'MCX zinc price today analysis India',
+      'MCX zinc lot size India',
+      'Hindustan Zinc MCX price impact',
+      'LME zinc price India MCX',
+      'Indonesia nickel ban MCX zinc',
+      'why MCX zinc up today',
+      'MCX zinc mini contract lot size',
+      'galvanizing steel zinc price India',
+    ],
+    faq: [
+      { q: 'Why is MCX zinc price up or down today?', a: 'MCX zinc is primarily driven by LME zinc prices (converted via USD/INR) and domestic supply from Hindustan Zinc. It rises when LME zinc warehouse stocks fall (tight supply), China galvanizing demand picks up (real estate or auto recovery), or Hindustan Zinc announces production cuts. It falls when Chinese property sector slows, global steel output drops, or the rupee strengthens against the dollar. Zinc\'s main use — galvanizing steel to prevent rust — ties it tightly to the construction and auto cycle.' },
+      { q: 'How does Hindustan Zinc affect MCX zinc price?', a: 'Hindustan Zinc (Vedanta subsidiary, listed on NSE as HINDZINC) is India\'s dominant zinc producer, supplying ~75% of India\'s primary zinc needs. Any change in their production guidance, mine closures at Rajasthan operations, or quarterly earnings surprises directly moves MCX zinc. Hindustan Zinc\'s dividend policy also affects the Vedanta group\'s cash flow, which occasionally triggers sell-side zinc inventory movements. Watch for their quarterly results (April, July, October, January).' },
+      { q: 'What is MCX zinc lot size and margin?', a: 'MCX Zinc standard contract has a lot size of 1,000 kg, quoted in ₹ per kg. At mid-2026 zinc prices (~₹285/kg), one lot is worth approximately ₹2.85 lakh. SPAN margin is approximately ₹7,000–14,000 per lot. The Zinc Mini (500 kg) requires roughly half the margin. Tick size is ₹0.05/kg — each tick is ₹50 on the standard lot.' },
+    ],
+  },
+  aluminium: {
+    title: 'Why MCX Aluminium Is Moving Today — LME, China Smelter Analysis',
+    description: 'MCX aluminium price live today — why aluminium is up or down: China smelter output, LME stocks, EU energy costs and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX aluminium moving today',
+      'MCX aluminium price today analysis India',
+      'MCX aluminium lot size India',
+      'China smelter policy MCX aluminium',
+      'LME aluminium price India MCX',
+      'why MCX aluminium up today',
+      'MCX aluminium mini contract lot size',
+      'Hindalco MCX aluminium impact',
+      'EV aluminium demand India MCX',
+    ],
+    faq: [
+      { q: 'Why is MCX aluminium price up or down today?', a: 'MCX aluminium tracks LME aluminium (London Metal Exchange) via import parity. It rises when Chinese aluminium smelters curtail output (power rationing, environmental inspections), LME warehouse stocks fall, or the rupee weakens. It falls when China pumps more aluminium into the market, energy costs ease (lowering smelting costs), or the US imposes safeguard measures that redirect Chinese exports. Aluminium is the most "state-influenced" base metal — Chinese government power subsidies are the single biggest price suppressant.' },
+      { q: 'How does Chinese aluminium production affect MCX prices in India?', a: 'China produces 58% of global primary aluminium. Monthly output data from China\'s National Bureau of Statistics (NBS), released around the 16th of each month, is the most closely watched supply signal. A surprise drop in Chinese output typically lifts LME prices 1–3% within a session. Indian producers (Hindalco, BALCO/Vedanta) also respond — they benefit from higher LME prices but face competition from cheaper Chinese imports. Watch for Chinese power availability in Yunnan and Inner Mongolia where most smelters operate.' },
+      { q: 'What is MCX aluminium lot size and margin?', a: 'MCX Aluminium standard contract has a lot size of 1,000 kg, quoted in ₹ per kg. At mid-2026 aluminium prices (~₹265/kg), one lot is worth approximately ₹2.65 lakh. SPAN margin is approximately ₹5,000–9,000 per lot. The Aluminium Mini (500 kg) is available for smaller capital. Tick size is ₹0.05/kg.' },
+    ],
+  },
+  lead: {
+    title: 'Why MCX Lead Is Moving Today — Battery, Hindustan Zinc Analysis',
+    description: 'MCX lead price live today — why lead is up or down: battery demand, inverter cycle, Hindustan Zinc output and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX lead moving today',
+      'MCX lead price today analysis India',
+      'MCX lead lot size India',
+      'Hindustan Zinc lead price India',
+      'lead acid battery MCX lead price',
+      'why MCX lead up today',
+      'MCX lead mini contract lot size',
+      'India inverter battery lead demand',
+      'LME lead price India MCX',
+    ],
+    faq: [
+      { q: 'Why is MCX lead price up or down today?', a: 'Lead\'s price is 80% driven by battery demand — auto starter batteries, inverter/UPS batteries, and e-rickshaws. MCX lead rises when Indian auto production recovers, pre-monsoon inverter restocking begins (March–May), or Hindustan Zinc cuts lead output. It falls when vehicle production slumps, scrap battery availability rises (secondary smelting supply), or LME lead warehouse stocks build. India has one of the world\'s largest inverter markets, making Indian domestic demand a unique driver that can diverge from global LME signals.' },
+      { q: 'Why does India\'s inverter market matter for MCX lead price?', a: 'India has over 100 million lead-acid inverter/UPS batteries installed in homes and offices, with an average replacement cycle of 3–4 years. The pre-summer period (March–June) sees a spike in inverter battery replacements as households prepare for power cuts — this creates a recurring seasonal demand pulse for lead in India. This domestic demand sometimes causes MCX lead to trade at a premium to LME import parity. E-rickshaw battery demand in UP, Bihar, and Rajasthan adds another India-specific consumption layer that doesn\'t exist in most other markets.' },
+      { q: 'What is MCX lead lot size and margin?', a: 'MCX Lead standard contract has a lot size of 1,000 kg, quoted in ₹ per kg. At mid-2026 lead prices (~₹185/kg), one lot is worth approximately ₹1.85 lakh. SPAN margin is approximately ₹5,000–9,000 per lot. Lead is among the lowest-capital base metal contracts on MCX, but it can still swing 2–4% on battery demand or Hindustan Zinc news.' },
+    ],
+  },
+  nickel: {
+    title: 'Why MCX Nickel Is Moving Today — Indonesia, LME & EV Analysis',
+    description: 'MCX nickel price live today — why nickel is up or down: Indonesia export ban, LME stocks, EV battery demand and rupee impact. OHLC and daily intelligence for Indian traders.',
+    keywords: [
+      'why is MCX nickel moving today',
+      'MCX nickel price today analysis India',
+      'MCX nickel lot size India',
+      'Indonesia nickel export ban MCX India',
+      'why MCX nickel up today',
+      'MCX nickel mini contract lot size',
+      'EV battery nickel demand MCX India',
+      'LME nickel short squeeze India',
+      'Norilsk Nickel price MCX India',
+    ],
+    faq: [
+      { q: 'Why is MCX nickel price up or down today?', a: 'MCX nickel tracks LME nickel and is one of the most volatile base metals. It rises when Indonesia signals tighter nickel ore export controls, LME nickel stocks fall, stainless steel demand surges from China, or EV battery demand upgrades nickel consumption forecasts. It falls when Indonesia increases RKAB (mining quota) allowances, China stainless steel output slows, or battery chemistry shifts from NMC (nickel-rich) to LFP (no nickel) accelerate. The March 2022 LME short squeeze (price doubled to $100,000/tonne in 48 hours before trading was halted) remains a defining reminder of nickel\'s extreme volatility.' },
+      { q: 'Why does Indonesia\'s nickel policy matter so much for MCX nickel price?', a: 'Indonesia banned nickel ore exports in 2020 and now controls 48% of global mined nickel supply — the highest concentration of any critical mineral in one country. Any Indonesian government statement about export quotas, RKAB mining permits, or processing requirements moves global nickel prices immediately. Indonesia has used this leverage to force global battery and stainless steel manufacturers to build processing plants (HPAL facilities) inside Indonesia, effectively verticalizing the entire nickel-to-battery supply chain. For Indian traders, Indonesian policy announcements at dawn (IST) can gap MCX nickel up or down 3–5% at the open.' },
+      { q: 'What is MCX nickel lot size and margin?', a: 'MCX Nickel standard contract has a lot size of 250 kg, quoted in ₹ per kg. At mid-2026 nickel prices (~₹1,650/kg), one lot is worth approximately ₹4.1 lakh. SPAN margin is approximately ₹20,000–35,000 per lot. Despite the smaller lot size, nickel\'s high price-per-kg and volatility make it a high-risk contract. Nickel is available in 250 kg increments only (no mini contract on MCX).' },
     ],
   },
   natgas: {
@@ -223,11 +307,15 @@ export default async function CommodityPage({ params }: Props) {
 
   // Map commodity slug to the label used in brief frontmatter
   const BRIEF_COMMODITY_MAP: Record<string, string> = {
-    gold:   'MCX Gold',
-    silver: 'MCX Silver',
-    crude:  'MCX Crude',
-    copper: 'MCX Copper',
-    natgas: 'MCX Natural Gas',
+    gold:      'MCX Gold',
+    silver:    'MCX Silver',
+    crude:     'MCX Crude',
+    copper:    'MCX Copper',
+    natgas:    'MCX Natural Gas',
+    zinc:      'MCX Zinc',
+    aluminium: 'MCX Aluminium',
+    lead:      'MCX Lead',
+    nickel:    'MCX Nickel',
   }
   const briefCommodityLabel = BRIEF_COMMODITY_MAP[entry.key]
   const recentBriefs = allBriefs
@@ -627,13 +715,35 @@ export default async function CommodityPage({ params }: Props) {
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 10 }}>
               Also Track
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.3px', marginBottom: 6 }}>
+              Precious &amp; Energy
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
               {[
                 { label: 'Gold',    href: '/commodities/gold',        key: 'gold' },
                 { label: 'Silver',  href: '/commodities/silver',      key: 'silver' },
                 { label: 'Crude',   href: '/commodities/crude-oil',   key: 'crude' },
                 { label: 'Copper',  href: '/commodities/copper',      key: 'copper' },
                 { label: 'Nat Gas', href: '/commodities/natural-gas', key: 'natgas' },
+              ].filter(c => c.key !== entry.key).map(c => (
+                <Link key={c.key} href={c.href} style={{
+                  fontSize: 12, fontWeight: 500, textDecoration: 'none',
+                  padding: '4px 10px', borderRadius: 4, border: '1px solid var(--border-2)',
+                  color: 'var(--ink-3)', background: 'var(--surface-2)',
+                }}>
+                  {c.label}
+                </Link>
+              ))}
+            </div>
+            <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.3px', marginBottom: 6 }}>
+              Base Metals
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {[
+                { label: 'Zinc',      href: '/commodities/zinc',      key: 'zinc' },
+                { label: 'Aluminium', href: '/commodities/aluminium', key: 'aluminium' },
+                { label: 'Lead',      href: '/commodities/lead',      key: 'lead' },
+                { label: 'Nickel',    href: '/commodities/nickel',    key: 'nickel' },
               ].filter(c => c.key !== entry.key).map(c => (
                 <Link key={c.key} href={c.href} style={{
                   fontSize: 12, fontWeight: 500, textDecoration: 'none',

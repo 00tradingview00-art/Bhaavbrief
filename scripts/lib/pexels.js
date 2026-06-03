@@ -26,6 +26,18 @@ export function getPexelsQuery(title, category) {
   if (category === 'regulatory')  return 'financial regulation exchange'
   if (category === 'policy')      return 'india parliament finance'
   if (category === 'geopolitical') return 'world map geopolitics'
+  if (category === 'agri')         return 'india agriculture farm field'
+  if (/jeera|cumin/.test(t))       return 'cumin spice india'
+  if (/turmeric|haldi/.test(t))    return 'turmeric powder india'
+  if (/chana|gram|chickpea/.test(t)) return 'chickpea grain india'
+  if (/guar/.test(t))              return 'guar farming india'
+  if (/mustard|sarson/.test(t))    return 'mustard field india'
+  if (/soybean|soya/.test(t))      return 'soybean agriculture'
+  if (/castor/.test(t))            return 'castor crop india'
+  if (/zinc/.test(t))              return 'zinc metal industrial'
+  if (/aluminium/.test(t))         return 'aluminium metal industrial'
+  if (/nickel/.test(t))            return 'nickel metal mining'
+  if (/lead|battery/.test(t))      return 'lead battery industrial'
   return 'commodity trading market'
 }
 

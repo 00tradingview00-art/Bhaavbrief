@@ -118,6 +118,125 @@
     "taxNote": "MCX copper futures: business income. CTT 0.01% on sell side.",
     "macroLinks": ["LME Copper 3M", "COMEX Copper", "China Caixin PMI", "LME warehouse stocks", "USD/INR", "China property data"]
   },
+  "zinc": {
+    "name": "Zinc",
+    "mcxSymbol": "ZINC",
+    "unit": "₹ per kg",
+    "lotSize": "1,000 kg",
+    "tickSize": "₹0.05 per kg = ₹50/lot",
+    "typicalMargin": "₹7,000–14,000",
+    "contractValue": "~₹2.85 lakh at ₹285/kg",
+    "importParity": "MCX Zinc = LME Zinc ($/tonne) ÷ 1000 × USD/INR × 1.068 (Basic Customs Duty 5% + IGST ~18%)",
+    "supplyControl": "China mines 31% and refines 44% of global zinc. Peru (11%) and Australia (10%) are the next largest miners. India's Hindustan Zinc (Vedanta subsidiary) is among the world's top five zinc-lead miners and supplies roughly 75% of India's primary zinc needs — making it the single most important stock to watch for MCX zinc price direction.",
+    "keyBodies": ["London Metal Exchange (LME)", "International Lead and Zinc Study Group (ILZSG)", "Hindustan Zinc Ltd", "Nyrstar (global smelter)"],
+    "demandDrivers": [
+      "Galvanizing (55% of global demand) — zinc-coated steel prevents rust in construction, auto bodies, white goods",
+      "Die-casting alloys for automobile parts, hardware, and electronics enclosures",
+      "Brass production (copper-zinc alloy) — plumbing, electrical fittings, decorative hardware",
+      "Indian infrastructure — galvanized steel pipes, power transmission towers, railway wagons",
+      "Battery sector — zinc-air and zinc-ion batteries as next-generation storage alternatives"
+    ],
+    "priceDrivers": [
+      "LME zinc inventory — low stocks signal supply tightness and push spot premium higher",
+      "China galvanized steel demand — real estate and auto sector health are the leading indicators",
+      "Hindustan Zinc production guidance — output cuts or smelter maintenance directly affects Indian supply",
+      "Energy costs for smelting — zinc smelting is electricity-intensive; European energy crisis caused smelter closures in 2022",
+      "USD/INR — MCX zinc tracks LME via import parity; rupee depreciation raises MCX price"
+    ],
+    "keyRisk": "Zinc is closely tied to the steel and construction cycle. A China property sector slowdown is the dominant bearish risk — it hit zinc prices hard in 2022–2024. Hindustan Zinc results and Vedanta group debt restructuring news are India-specific volatility triggers.",
+    "taxNote": "MCX zinc futures gains: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["LME Zinc 3M", "LME zinc warehouse stocks", "China property data", "Hindustan Zinc production", "USD/INR", "Steel prices"]
+  },
+  "aluminium": {
+    "name": "Aluminium",
+    "mcxSymbol": "ALUMINIUM",
+    "unit": "₹ per kg",
+    "lotSize": "1,000 kg",
+    "tickSize": "₹0.05 per kg = ₹50/lot",
+    "typicalMargin": "₹5,000–9,000",
+    "contractValue": "~₹2.65 lakh at ₹265/kg",
+    "importParity": "MCX Aluminium = LME Aluminium ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 7.5% + IGST)",
+    "supplyControl": "China produces 58% of global primary aluminium — the highest concentration of any major metal. Russia (Rusal, 6%) and Canada (5%) are the next largest. Aluminium smelting is extremely electricity-intensive (15,000 kWh per tonne), so cheap hydropower nations (China, Russia, Iceland, Norway) dominate. Power costs determine who runs and who shuts.",
+    "keyBodies": ["London Metal Exchange (LME)", "International Aluminium Institute (IAI)", "Rusal (Russia)", "Hindalco Industries / Novelis (India/global)"],
+    "demandDrivers": [
+      "Transportation (30% of demand) — aviation, auto (lightweighting for EVs), rail",
+      "Construction — windows, facades, roofing, power transmission cables",
+      "Packaging — aluminium cans, foil, food-grade containers",
+      "Electrical — power cables (aluminium is the main conductor for high-voltage lines)",
+      "Green energy transition — EV battery casings, solar panel frames, wind turbine parts"
+    ],
+    "priceDrivers": [
+      "China smelter output — Chinese aluminium production data (monthly) is the single most important supply signal",
+      "Energy prices — European gas/electricity costs determine European smelter viability",
+      "LME aluminium warehouse stocks — low inventory = tight physical market",
+      "China stimulus — infrastructure and EV policy announcements directly lift aluminium",
+      "US tariffs on aluminium imports — Section 232 tariffs distort global trade flows",
+      "USD/INR — import parity transmission to MCX"
+    ],
+    "keyRisk": "Aluminium's price is heavily state-influenced — Chinese government subsidies to aluminium smelters (cheap power, cheap alumina) suppress the global price floor. Sudden US or EU import tariff changes cause sharp basis dislocations. Indian producers (Hindalco, Vedanta's BALCO) are large enough to influence MCX premiums.",
+    "taxNote": "MCX aluminium futures gains: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["LME Aluminium 3M", "China aluminium output (monthly NBS)", "EU electricity prices", "LME aluminium stocks", "USD/INR", "Hindalco results"]
+  },
+  "lead": {
+    "name": "Lead",
+    "mcxSymbol": "LEAD",
+    "unit": "₹ per kg",
+    "lotSize": "1,000 kg",
+    "tickSize": "₹0.05 per kg = ₹50/lot",
+    "typicalMargin": "₹5,000–9,000",
+    "contractValue": "~₹1.85 lakh at ₹185/kg",
+    "importParity": "MCX Lead = LME Lead ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST)",
+    "supplyControl": "China dominates global lead smelting (45% of refined output). Australia (14%) and Peru (8%) are the top miners. India's Hindustan Zinc is also a major lead producer — lead is mined alongside zinc at Hindustan Zinc's Rajasthan operations. Secondary (recycled) lead from scrap batteries accounts for 60% of global supply — the auto scrappage cycle is critical.",
+    "keyBodies": ["London Metal Exchange (LME)", "International Lead and Zinc Study Group (ILZSG)", "Hindustan Zinc Ltd", "Exide Industries (India — major secondary smelter)"],
+    "demandDrivers": [
+      "Lead-acid batteries (80% of demand) — automotive starter batteries, inverter/UPS batteries, e-rickshaws",
+      "India specifically: massive inverter and e-rickshaw market keeps Indian lead demand structurally elevated",
+      "Industrial batteries — forklifts, telecom backup, grid energy storage",
+      "Ammunition and radiation shielding (niche industrial use)",
+      "Cable sheathing — declining but still present in legacy power infrastructure"
+    ],
+    "priceDrivers": [
+      "Auto production and sales — vehicle output directly drives demand for starter batteries",
+      "India inverter/UPS battery replacement cycle — 3–4 year battery lifespan creates a steady demand pulse",
+      "Scrap lead availability — secondary lead supply depends on old battery collection and smelting capacity",
+      "Hindustan Zinc production guidance — lead output from Rajasthan mines affects domestic supply",
+      "LME lead inventory — warehouse stocks signal global supply balance",
+      "USD/INR — import parity transmission"
+    ],
+    "keyRisk": "Lead is the most 'India-driven' base metal on MCX because India's inverter and e-rickshaw market creates unique domestic demand patterns that can diverge from LME. Environmental regulations on secondary lead smelters (informal sector) periodically tighten supply sharply. Lead is also the most prone to seasonal moves — pre-monsoon UPS battery restocking lifts Indian prices.",
+    "taxNote": "MCX lead futures gains: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["LME Lead 3M", "LME lead warehouse stocks", "India auto sales data", "Hindustan Zinc production", "USD/INR", "Exide Industries results"]
+  },
+  "nickel": {
+    "name": "Nickel",
+    "mcxSymbol": "NICKEL",
+    "unit": "₹ per kg",
+    "lotSize": "250 kg",
+    "tickSize": "₹0.10 per kg = ₹25/lot",
+    "typicalMargin": "₹20,000–35,000",
+    "contractValue": "~₹4.1 lakh at ₹1,650/kg",
+    "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
+    "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
+    "keyBodies": ["London Metal Exchange (LME)", "Nickel Institute", "Norilsk Nickel (Russia)", "PT Vale Indonesia", "Indonesian Mining Ministry (ESDM)"],
+    "demandDrivers": [
+      "Stainless steel (70% of global nickel demand) — stainless steel uses 8–12% nickel content",
+      "EV batteries — lithium-nickel-manganese-cobalt oxide (NMC) cathode requires 40–80 kg nickel per EV",
+      "Superalloys for jet engines and gas turbines (high-temperature applications)",
+      "Electroplating — decorative and corrosion-resistant coatings",
+      "Indian stainless steel production — India is a major stainless steel producer and growing EV market"
+    ],
+    "priceDrivers": [
+      "Indonesia export policy — any change to the nickel ore export ban sends shockwaves through the market",
+      "EV battery demand trajectory — NMC vs LFP battery chemistry shifts alter nickel demand forecasts sharply",
+      "LME nickel warehouse stocks — historically low stocks caused the infamous March 2022 LME short squeeze (price doubled to $100,000/tonne in 2 days)",
+      "China stainless steel production — China makes 55% of global stainless steel",
+      "Russia sanctions — Norilsk Nickel supply risk from geopolitical escalation",
+      "USD/INR — import parity transmission to MCX"
+    ],
+    "keyRisk": "Nickel is the most volatile and 'story-driven' base metal. The 2022 LME short squeeze (price doubled in 48 hours, LME suspended trading) remains the single worst day in exchange history for a commodity. Indonesia policy risk is ever-present. MCX nickel's small lot size (250 kg) makes it accessible but leverage is still high. Battery chemistry shifts (from NMC to LFP) could structurally reduce nickel demand from EVs.",
+    "taxNote": "MCX nickel futures gains: business income. CTT 0.01% on sell side.",
+    "macroLinks": ["LME Nickel 3M", "Indonesia nickel export policy", "LME nickel warehouse stocks", "China stainless steel output", "EV battery chemistry news", "USD/INR"]
+  },
   "natgas": {
     "name": "Natural Gas",
     "mcxSymbol": "NATURALGAS",
