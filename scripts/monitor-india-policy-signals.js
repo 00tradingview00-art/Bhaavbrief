@@ -163,8 +163,11 @@ One sentence. State the specific policy action — what the government/RBI/regul
 **WHAT IT MEANS**
 2-3 sentences. Name the mechanism AND the specific actors: e.g. "edible oil refiners importing crude soybean oil face higher landed costs", "kirana wholesalers and dal millers buying chana on forward contracts see their hedge costs shift", "MCX gold futures traders holding overnight positions face a new import cost floor". No generic phrases.
 
+**WHO IS AFFECTED**
+Name specific industries, businesses, and consumer groups — never abstractions. Examples: "edible oil refiners in Gujarat and Maharashtra, dal mills in Madhya Pradesh, and households buying mustard oil in north India" or "jewellery exporters in Surat and Mumbai, and retail gold buyers ahead of Akshaya Tritiya".
+
 **BOTTOM LINE**
-One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
+3 sentences structured as: (1) Businesses: one named sector and one concrete cost/revenue consequence. (2) Investors: one named MCX contract and the directional signal. (3) Consumers: one named product and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
 
 **WHAT TO WATCH**
 1-2 sentences. The next specific trigger — gazette notification date, parliamentary session, scheduled RBI review, or price level — that will extend or reverse this impact.
@@ -174,12 +177,12 @@ RULES:
 - Never fabricate specific price targets or percentages not in the headline
 - Never include news outlet names (ET, Mint, Reuters, etc.) anywhere
 - Write for an ET Markets/Mint reader, not a policy wonk
-- Total body length 160-200 words
+- Total body length 220-270 words
 - End with: Source: India Policy | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 750,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null

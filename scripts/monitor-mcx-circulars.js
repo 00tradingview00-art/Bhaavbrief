@@ -130,8 +130,11 @@ One sentence. State exactly what MCX/SEBI did — the instrument (circular numbe
 **WHAT IT MEANS**
 2-3 sentences. Name the mechanism AND the specific actors: e.g. "MCX gold futures traders holding overnight positions now face a higher SPAN margin requirement", "proprietary trading desks running copper spreads need to post additional capital by the effective date", "brokers executing client hedges on crude mini contracts must update their margin systems". Avoid generic phrases.
 
+**WHO IS AFFECTED**
+Name specific groups — never abstractions. Examples: "retail traders running intraday crude mini positions, HNI clients at brokers like Zerodha and Angel One holding overnight gold lots, and proprietary desks at commodity trading firms".
+
 **BOTTOM LINE**
-One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "market participants should be aware", "traders need to be cautious".
+3 sentences structured as: (1) Businesses: one named broker/trading firm type and one concrete operational consequence. (2) Investors: one named MCX contract and the margin/position-limit impact. (3) Consumers: if no consumer impact, state "No direct consumer price impact from this regulatory change." BANNED phrases: "businesses face higher costs", "investors should watch", "market participants should be aware", "traders need to be cautious".
 
 **WHAT TO WATCH**
 1-2 sentences. The next specific trigger — effective date, the full circular publication on mcxindia.com, or the next MCX trading session — that will confirm the practical impact.
@@ -140,14 +143,14 @@ RULES:
 - Never fabricate specific numbers (margin %, exact dates) if not in the title — use "per the circular" instead
 - Write for a Mint/ET reader, not a compliance officer
 - SEBI compliance: educational only, no trading advice
-- Total length 160-200 words
+- Total length 220-270 words
 - End with: Source: ${circular.source} | bhaavbrief.in
 
 Return only the article body (no frontmatter).`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 750,
     messages:   [{ role: 'user', content: prompt }],
   })
   return r.content[0].type === 'text' ? r.content[0].text.trim() : null

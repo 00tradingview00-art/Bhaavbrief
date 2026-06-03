@@ -169,10 +169,13 @@ TITLE: [BhaavBrief-framed headline showing the MCX impact, under 70 chars, no so
 One sentence. State the specific macro data point or decision — the number, the direction, vs expectations. Facts only.
 
 **WHAT IT MEANS**
-2-3 sentences. Name the transmission mechanism AND the specific actors: e.g. "a stronger dollar raises rupee-denominated import costs for jewellers and bullion dealers", "falling US real yields reduce the opportunity cost of holding gold for ETF funds and central banks", "China PMI above 50 signals higher copper demand from Chinese fabricators and construction firms". Name the exact MCX contracts affected and why.
+2-3 sentences. Name the transmission mechanism AND the specific actors: e.g. "a stronger dollar raises rupee-denominated import costs for jewellers and bullion dealers at Zaveri Bazaar", "falling US real yields reduce the opportunity cost of holding gold for ETF funds and central banks including RBI", "China PMI above 50 signals higher copper demand from Chinese fabricators and construction firms". Name the exact MCX contracts affected and why.
+
+**WHO IS AFFECTED**
+Name specific industries, businesses, and consumer groups — never abstractions. Examples: "MCX gold traders and jewellery exporters in Mumbai and Surat, corporate treasury desks hedging USD payables, and RBI's foreign reserve management desk" or "copper cable manufacturers in Pune and Chennai, auto component suppliers, and EV battery assemblers sourcing copper foil".
 
 **BOTTOM LINE**
-One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "market participants should be aware", "traders should be cautious".
+3 sentences structured as: (1) Businesses: one named sector and one concrete cost/revenue consequence. (2) Investors: one named MCX contract and the directional signal. (3) Consumers: one named product and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "market participants should be aware", "traders should be cautious".
 
 **WHAT TO WATCH**
 1-2 sentences. The next specific macro data release, Fed speech, or China data point that will extend or reverse this commodity impact.
@@ -182,12 +185,12 @@ RULES:
 - Never fabricate specific price targets
 - Never include news outlet names anywhere
 - Write for an ET Markets reader who trades MCX
-- Total body length 160-200 words
+- Total body length 220-270 words
 - End with: Source: Macro Intelligence | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 750,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null

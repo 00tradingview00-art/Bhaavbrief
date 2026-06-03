@@ -144,8 +144,11 @@ One sentence. State the specific fact — what occurred, where, who acted. Facts
 **WHAT IT MEANS**
 2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "west-coast refiners HPCL/BPCL face higher crude import costs", "jewellers and bullion dealers holding dollar-denominated gold see rupee inventory values rise", "copper wire manufacturers sourcing from LME-linked contracts face spot premium expansion". No generic phrases.
 
+**WHO IS AFFECTED**
+Name specific industries, businesses, and consumer groups — never abstractions. Examples: "MCX crude traders, airline fuel desks at IndiGo and Air India, and petrol pump operators on the western coast" or "jewellers in Zaveri Bazaar and institutional gold ETF desks at HDFC AMC and SBI Mutual Fund".
+
 **BOTTOM LINE**
-One sentence. Name one specific group and one concrete consequence — e.g. "MCX crude oil traders see gap-up risk at Thursday open as Hormuz shipping risk premium reprices." BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware".
+3 sentences structured as: (1) Businesses: one named sector and one concrete cost/revenue consequence. (2) Investors: one named MCX contract and the directional signal. (3) Consumers: one named product and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware".
 
 **WHAT TO WATCH**
 1-2 sentences. Name the next specific catalyst — a data release, OPEC statement, price level breach, or scheduled event — that will confirm or negate this move.
@@ -155,12 +158,12 @@ RULES:
 - Never fabricate specific price targets
 - Never include news outlet names (Reuters, BBC, etc.) anywhere
 - Write for an ET Markets reader, not a geopolitics expert
-- Total body length 160-200 words
+- Total body length 220-270 words
 - End with: Source: International News | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 750,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null

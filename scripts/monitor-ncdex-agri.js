@@ -161,8 +161,11 @@ One sentence. State the specific fact — what changed, where, with what figure.
 **WHAT IT MEANS**
 2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "Unjha mandi traders holding jeera inventory see spot prices reprice against the futures basis", "mustard oil refiners in Rajasthan sourcing from Alwar mandi face a higher procurement cost", "NCDEX chana April contract holders see open interest shift as dal mills adjust forward hedges". Explain mandi terms in context where needed (e.g., "Unjha — India's largest jeera spot market"). No generic phrases.
 
+**WHO IS AFFECTED**
+Name specific industries, businesses, and consumer groups — never abstractions. Examples: "jeera farmers in Rajkot and Unjha districts, exporters shipping to Middle East buyers, and spice traders at Jodhpur mandi" or "dal millers in Madhya Pradesh and Rajasthan, kirana stores buying chana in bulk, and households in north India where dal is a staple".
+
 **BOTTOM LINE**
-One sentence. Name one specific group and one concrete consequence. BANNED phrases: "farmers may benefit", "traders should watch", "businesses face higher costs", "investors should be aware", "market participants need to monitor".
+3 sentences structured as: (1) Businesses: one named sector/mandi and one concrete consequence. (2) Investors: one named NCDEX contract and the directional signal. (3) Consumers: one named food product and the price direction. BANNED phrases: "farmers may benefit", "traders should watch", "businesses face higher costs", "investors should be aware", "market participants need to monitor".
 
 **WHAT TO WATCH**
 1-2 sentences. The next specific catalyst — NCDEX spot price update, government procurement data, IMD monsoon forecast revision, or CACP recommendation — that will confirm or shift this move.
@@ -172,12 +175,12 @@ RULES:
 - Never fabricate specific price targets
 - Never include news outlet names anywhere
 - Write for a NCDEX/ET Agri reader — someone who trades from a mandi town
-- Total body length 160-200 words
+- Total body length 220-270 words
 - End with: Source: Agri Market Intelligence | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 750,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null
