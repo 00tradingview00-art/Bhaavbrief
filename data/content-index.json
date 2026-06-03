@@ -1,5 +1,27 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
+    "href": "/articles/2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
+    "title": "MCX Open 4 Jun 2026: Crude Surges, Metals Slide",
+    "description": "MCX Open Brief 4 Jun 2026: WTI crude +2.74%, COMEX gold -1.17%, silver -2.74% overnight. Energy supply fears dominate cross-asset trade.",
+    "excerpt": "title: \"MCX Open 4 Jun 2026: Crude Surges, Metals Slide\" description: \"MCX Open Brief 4 Jun 2026: WTI crude +2.74%, COMEX gold -1.17%, silver -2.74% overnight. Energy supply fears dominate cross-asset",
+    "date": "2026-06-04",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-032",
     "href": "/briefs/edition-032",
@@ -30,6 +52,25 @@
       "MCX Crude",
       "MCX Gold",
       "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
+    "slug": "edition-034",
+    "href": "/briefs/edition-034",
+    "title": "Oil Fear Trade Deepens as Gold Fades and Copper Cracks",
+    "description": "Crude extends its rally to $96.40 while gold, silver, and copper all fall — the oil-dominated fear trade is hardening.",
+    "excerpt": "What began as a disruption in Edition 32 and hardened into a directional shift in Edition 33 has now settled into something more uncomfortable: a market that is actively repricing risk around oil, not",
+    "date": "2026-06-03",
+    "edition": "34",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Copper",
+      "Geopolitics",
+      "Macro"
     ],
     "commodities": [],
     "commodity": ""
