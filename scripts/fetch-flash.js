@@ -391,16 +391,14 @@ async function main() {
     return true
   })
 
-  // Mark items older than 6h as seen so they never accumulate
-  const staleUnseen = allItems.filter(item =>
-    !seen.includes(item.url) && !isFresh(item.pubDate, 360)
-  )
-  const newSeen = [...seen, ...staleUnseen.map(i => i.url)]
+  // Only mark URLs seen when actually published — never pre-mark stale items
+  // (pre-marking caused 761 URLs to be bulk-poisoned in a single run)
+  const newSeen = [...seen]
 
   // Sort by relevance: recency + trending match + keyword density
   candidates.sort((a, b) => scoreArticle(b, trendingTopics) - scoreArticle(a, trendingTopics))
 
-  console.log(`Fresh important articles: ${candidates.length} (${staleUnseen.length} stale skipped)`)
+  console.log(`Fresh important articles: ${candidates.length}`)
   if (candidates.length === 0) {
     saveSeen(newSeen)
     console.log('Nothing fresh to publish — exiting cleanly')
