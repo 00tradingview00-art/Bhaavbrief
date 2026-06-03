@@ -411,7 +411,7 @@ async function main() {
   const titles  = []
 
   for (const article of candidates) {
-    if (processed >= 3) break  // max 3 per run — quality over quantity
+    if (processed >= 1) break  // max 1 per run — prevents burst after seen-list reset
     try {
       const ageMin = article.pubDate
         ? ((Date.now() - new Date(article.pubDate).getTime()) / 60000).toFixed(0)
