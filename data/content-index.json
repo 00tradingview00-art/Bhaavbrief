@@ -1,27 +1,5 @@
 [
   {
-    "type": "article",
-    "slug": "2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
-    "href": "/articles/2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
-    "title": "MCX Open 4 Jun 2026: Crude Surges, Metals Slide",
-    "description": "MCX Open Brief 4 Jun 2026: WTI crude +2.74%, COMEX gold -1.17%, silver -2.74% overnight. Energy supply fears dominate cross-asset trade.",
-    "excerpt": "title: \"MCX Open 4 Jun 2026: Crude Surges, Metals Slide\" description: \"MCX Open Brief 4 Jun 2026: WTI crude +2.74%, COMEX gold -1.17%, silver -2.74% overnight. Energy supply fears dominate cross-asset",
-    "date": "2026-06-04",
-    "edition": "morning-brief",
-    "tags": [
-      "MCX Open",
-      "Daily Brief",
-      "Gold",
-      "Crude Oil",
-      "Silver"
-    ],
-    "commodity": "multi",
-    "commodities": [
-      "multi"
-    ],
-    "priceAtPublish": 0
-  },
-  {
     "type": "brief",
     "slug": "edition-032",
     "href": "/briefs/edition-032",
