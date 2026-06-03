@@ -263,18 +263,21 @@ Live market context:
 ${priceContext}
 ${trendingLine ? '\n' + trendingLine : ''}
 
-Write a 200-250 word intelligence flash on the article below. Use this exact structure (include the bold headers):
+Write a 200-240 word intelligence flash on the article below. Use this exact structure (include the bold headers):
 
 **WHAT HAPPENED**
-One sentence. State the specific fact with the key number or figure.
+One sentence. State the specific fact with the key number or figure. Facts only, no interpretation.
 
-**MCX IMPACT**
-3-4 sentences. Name the specific MCX contract(s) affected. Reference a key price level from the live context above. Explain what it means for Indian traders specifically — customs duty, import cost, spread vs COMEX. No buy/sell calls. No "may", "could", "might". Only facts and market mechanics.
+**WHAT IT MEANS**
+2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "west-coast refiners HPCL/BPCL face a higher crude import cost at current WTI levels", "jewellers and bullion dealers holding gold inventory see rupee-denominated valuations rise", "MCX copper futures traders see basis vs COMEX tighten as import parity reprices". Reference a price level from the live context above. No "may", "could", "might" — only facts and market mechanics.
 
-**WATCH**
-1-2 sentences. Name the next data release, event, or price level that will either confirm or negate this move.
+**BOTTOM LINE**
+One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
 
-Rules: No opinions. No action verbs directed at the reader. Historical framing only for patterns. No title. No byline. End with: Source: ${article.source}
+**WHAT TO WATCH**
+1-2 sentences. Name the next specific data release, event, or price level that will confirm or negate this move.
+
+Rules: No opinions. No action verbs directed at the reader. No title. No byline. End with: Source: ${article.source}
 
 Article: ${article.title}. ${article.description}`
 
@@ -287,7 +290,7 @@ Article: ${article.title}. ${article.description}`
     },
     body: JSON.stringify({
       model:      'claude-sonnet-4-6',
-      max_tokens: 400,
+      max_tokens: 500,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })

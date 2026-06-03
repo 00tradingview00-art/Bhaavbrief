@@ -122,32 +122,32 @@ ANNOUNCEMENT: "${circular.title}"
 SOURCE: ${circular.source}
 DETECTED AT: ${circular.pubDate.toISOString()}
 
-Write a concise flash article explaining this announcement in plain English for Indian commodity traders. Structure:
+Write a concise flash article explaining this announcement in plain English for Indian commodity traders. Use this exact format:
 
-**WHAT IT SAYS**
-[1-2 sentences explaining what the circular/notice does in simple terms. No jargon.]
+**WHAT HAPPENED**
+One sentence. State exactly what MCX/SEBI did — the instrument (circular number if in title, margin revision, contract change) and which commodity. Facts only.
 
-**WHICH COMMODITIES ARE AFFECTED**
-[List affected MCX commodities (Gold, Silver, Crude, Copper, NatGas, or all). If unknown from title, say "Likely affects [inferred commodity] — full circular pending confirmation."]
+**WHAT IT MEANS**
+2-3 sentences. Name the mechanism AND the specific actors: e.g. "MCX gold futures traders holding overnight positions now face a higher SPAN margin requirement", "proprietary trading desks running copper spreads need to post additional capital by the effective date", "brokers executing client hedges on crude mini contracts must update their margin systems". Avoid generic phrases.
 
-**WHAT CHANGES FOR TRADERS**
-[2-3 sentences on the practical impact: Does margin requirement change? Does contract expiry shift? Are position limits revised? Is there a new compliance deadline?]
+**BOTTOM LINE**
+One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "market participants should be aware", "traders need to be cautious".
 
-**EFFECTIVE DATE**
-[If determinable from the title, state it. Otherwise: "Effective date not yet confirmed — check mcxindia.com for full circular."]
+**WHAT TO WATCH**
+1-2 sentences. The next specific trigger — effective date, the full circular publication on mcxindia.com, or the next MCX trading session — that will confirm the practical impact.
 
 RULES:
 - Never fabricate specific numbers (margin %, exact dates) if not in the title — use "per the circular" instead
-- Write for an Mint/ET reader, not a compliance officer
+- Write for a Mint/ET reader, not a compliance officer
 - SEBI compliance: educational only, no trading advice
-- Keep total length under 200 words
+- Total length 160-200 words
 - End with: Source: ${circular.source} | bhaavbrief.in
 
 Return only the article body (no frontmatter).`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 600,
+    max_tokens: 700,
     messages:   [{ role: 'user', content: prompt }],
   })
   return r.content[0].type === 'text' ? r.content[0].text.trim() : null

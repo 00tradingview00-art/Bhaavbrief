@@ -139,25 +139,28 @@ Write a flash article for Indian MCX commodity traders. Use this exact format:
 TITLE: [BhaavBrief-framed headline focused on MCX impact, under 70 chars, no source names]
 
 **WHAT HAPPENED**
-[1-2 sentences: the event in plain English, no jargon]
+One sentence. State the specific fact — what occurred, where, who acted. Facts only, no interpretation.
 
-**MCX IMPACT**
-[Why these specific commodities move — supply route, safe-haven demand, production disruption, etc.]
+**WHAT IT MEANS**
+2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "west-coast refiners HPCL/BPCL face higher crude import costs", "jewellers and bullion dealers holding dollar-denominated gold see rupee inventory values rise", "copper wire manufacturers sourcing from LME-linked contracts face spot premium expansion". No generic phrases.
+
+**BOTTOM LINE**
+One sentence. Name one specific group and one concrete consequence — e.g. "MCX crude oil traders see gap-up risk at Thursday open as Hormuz shipping risk premium reprices." BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware".
 
 **WHAT TO WATCH**
-[2-3 sentences: price levels, confirmation signals, or follow-on events traders should track]
+1-2 sentences. Name the next specific catalyst — a data release, OPEC statement, price level breach, or scheduled event — that will confirm or negate this move.
 
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - Never fabricate specific price targets
 - Never include news outlet names (Reuters, BBC, etc.) anywhere
 - Write for an ET Markets reader, not a geopolitics expert
-- Total body length 150-200 words
+- Total body length 160-200 words
 - End with: Source: International News | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 600,
+    max_tokens: 700,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null

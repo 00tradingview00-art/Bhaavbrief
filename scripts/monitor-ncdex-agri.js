@@ -156,26 +156,28 @@ Write a flash article for Indian agri commodity traders. Use this exact format:
 TITLE: [BhaavBrief-framed headline focused on NCDEX/MCX impact, under 70 chars, no source names]
 
 **WHAT HAPPENED**
-[1-2 sentences: the news in plain English]
+One sentence. State the specific fact — what changed, where, with what figure. Facts only from the news item.
 
-**NCDEX/MCX IMPACT**
-[Why these specific contracts move — supply outlook, export/import policy, mandi arrivals, MSP change, monsoon effect, etc.]
+**WHAT IT MEANS**
+2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "Unjha mandi traders holding jeera inventory see spot prices reprice against the futures basis", "mustard oil refiners in Rajasthan sourcing from Alwar mandi face a higher procurement cost", "NCDEX chana April contract holders see open interest shift as dal mills adjust forward hedges". Explain mandi terms in context where needed (e.g., "Unjha — India's largest jeera spot market"). No generic phrases.
+
+**BOTTOM LINE**
+One sentence. Name one specific group and one concrete consequence. BANNED phrases: "farmers may benefit", "traders should watch", "businesses face higher costs", "investors should be aware", "market participants need to monitor".
 
 **WHAT TO WATCH**
-[2-3 sentences: mandi arrival trends, government policy follow-on, seasonal patterns, or price levels to track]
+1-2 sentences. The next specific catalyst — NCDEX spot price update, government procurement data, IMD monsoon forecast revision, or CACP recommendation — that will confirm or shift this move.
 
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - Never fabricate specific price targets
 - Never include news outlet names anywhere
-- Write for a Navbharat Times or Economic Times Agri reader — someone who trades NCDEX from a mandis town
-- Explain mandi price terms in context if needed (e.g., "Unjha mandi — India's largest jeera market")
-- Total body length 150-200 words
+- Write for a NCDEX/ET Agri reader — someone who trades from a mandi town
+- Total body length 160-200 words
 - End with: Source: Agri Market Intelligence | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 600,
+    max_tokens: 700,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null

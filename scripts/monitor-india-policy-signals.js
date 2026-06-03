@@ -157,27 +157,29 @@ Write a flash article for Indian MCX commodity traders. Use this exact format:
 
 TITLE: [BhaavBrief-framed headline focused on MCX impact, under 70 chars, no source names]
 
-**WHAT CHANGED**
-[1-2 sentences: the policy decision in plain English — what did the government/RBI/regulator actually do?]
+**WHAT HAPPENED**
+One sentence. State the specific policy action — what the government/RBI/regulator did, with the exact instrument (e.g. "DGFT circular", "RBI repo rate change", "import duty notification"). Facts only.
 
-**WHY IT MATTERS FOR MCX**
-[How this directly impacts the affected commodities on MCX — demand shock, supply restriction, cost change, sentiment shift, etc.]
+**WHAT IT MEANS**
+2-3 sentences. Name the mechanism AND the specific actors: e.g. "edible oil refiners importing crude soybean oil face higher landed costs", "kirana wholesalers and dal millers buying chana on forward contracts see their hedge costs shift", "MCX gold futures traders holding overnight positions face a new import cost floor". No generic phrases.
+
+**BOTTOM LINE**
+One sentence. Name one specific group and one concrete consequence. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
 
 **WHAT TO WATCH**
-[2-3 sentences: immediate price reaction to expect, follow-on announcements to track, key levels or timelines traders should note]
+1-2 sentences. The next specific trigger — gazette notification date, parliamentary session, scheduled RBI review, or price level — that will extend or reverse this impact.
 
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - Never fabricate specific price targets or percentages not in the headline
 - Never include news outlet names (ET, Mint, Reuters, etc.) anywhere
-- Distinguish between immediate effect (today) and medium-term impact (weeks)
 - Write for an ET Markets/Mint reader, not a policy wonk
-- Total body length 150-200 words
+- Total body length 160-200 words
 - End with: Source: India Policy | bhaavbrief.in`
 
   const r = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 600,
+    max_tokens: 700,
     messages:   [{ role: 'user', content: prompt }],
   })
   if (r.content[0].type !== 'text') return null
