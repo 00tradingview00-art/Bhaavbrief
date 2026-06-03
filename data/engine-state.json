@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 158640.54651405785,
-    "silver": 252808.6325011655,
-    "crude": 9220.001952,
-    "copper": 1469.0554893794008,
-    "natgas": 302.0059,
-    "usdinr": 95.27
+    "gold": 154800,
+    "silver": 262900,
+    "crude": 9239,
+    "copper": 1367.9,
+    "natgas": 309.5,
+    "usdinr": 95.71
   },
-  "lastChecked": "2026-06-03T00:15:22.069Z",
+  "lastChecked": "2026-06-03T18:35:52.868Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,11 +15,12 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-05-22",
-    "value": "315"
+    "period": "2026-05-29",
+    "value": "511"
   },
   "articlesToday": [
-    "2026-06-03/2026-06-03-mcx-copper-surges-crude-leads-commodities-gap-up"
+    "2026-06-03/2026-06-03-mcx-copper-surges-crude-leads-commodities-gap-up",
+    "2026-06-04/2026-06-03-hawk-scan-copper-20260603"
   ],
-  "lastArticleAt": "2026-06-03T00:15:35.906Z"
+  "lastArticleAt": "2026-06-03T18:36:04.852Z"
 }
