@@ -172,6 +172,7 @@ Name specific industries, businesses, and consumer groups — never abstractions
 
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
+- FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
 - Never fabricate specific price targets
 - Never include news outlet names anywhere
 - Write for a NCDEX/ET Agri reader — someone who trades from a mandi town

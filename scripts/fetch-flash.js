@@ -331,6 +331,8 @@ CRITICAL GATE — check this FIRST before writing anything:
 If the article is primarily about equity share prices, stock market indices (Sensex/Nifty/barometers), sector stock performance (pharma/IT/FMCG), or company earnings with no direct link to MCX-traded commodities (gold, silver, crude, copper, natural gas, zinc, aluminium) — respond with exactly: SKIP
 Do not write the article. Do not explain. Just: SKIP
 
+FORMATTING: Use **bold** to highlight key data points inline — price levels (e.g. **₹9,254/bbl**), percentage moves (e.g. **+2.3%**), company/commodity names on first mention (e.g. **Hindalco**, **MCX Aluminium**), and critical thresholds (e.g. **400,000 tonnes**). Do not bold entire sentences — only the specific numbers, names, and figures that a trader would scan for first.
+
 Rules: No opinions. No action verbs directed at the reader. No title. No byline. End with: Source: ${article.source}
 
 Article: ${article.title}. ${article.description}`

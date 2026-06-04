@@ -585,6 +585,7 @@ WRITING STANDARDS — NON-NEGOTIABLE:
 4. Explain the CROSS-ASSET CHAIN: what is the rest of the complex doing? Show cause-and-effect across assets.
 5. Quantify the INDIAN IMPORT PARITY: COMEX price + USD/INR rate + customs duty → exact MCX ₹ parity. Show the arithmetic.
 6. 150–250 words. Sharp. No filler. No "experts say". Facts, levels, mechanics only.
+6a. Use **bold** inline for key data: price levels (e.g. **₹9,093**), % moves (e.g. **−1.83%**), commodity/company names on first mention (e.g. **MCX Crude**, **WTI**), and critical thresholds. Bold specific numbers and names only — never full sentences.
 7. Include a **WHO IS AFFECTED** section before the Watch line:
    - **Businesses:** one named sector + one concrete cost/revenue consequence (e.g. "Paint companies: raw material costs rise ₹X/kg")
    - **Investors:** one named MCX contract + the directional signal

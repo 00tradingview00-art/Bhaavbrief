@@ -143,6 +143,7 @@ RULES:
 - Never fabricate specific numbers (margin %, exact dates) if not in the title — use "per the circular" instead
 - Write for a Mint/ET reader, not a compliance officer
 - SEBI compliance: educational only, no trading advice
+- FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
 - Total length 220-270 words
 - End with: Source: ${circular.source} | bhaavbrief.in
 
