@@ -144,21 +144,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <Analytics />
-        {/* Google Reader Revenue Manager */}
-        <Script src="https://news.google.com/swg/js/v1/swg-basic.js" strategy="afterInteractive" />
-        <Script id="rrm-init" strategy="afterInteractive">{`
-          (self.SWG_BASIC = self.SWG_BASIC || []).push(basicSubscriptions => {
-            basicSubscriptions.init({
-              type: "NewsArticle",
-              isPartOfType: ["Product"],
-              isPartOfProductId: "CAowmuLGDA:openaccess",
-              clientOptions: { theme: "light", lang: "en-IN" },
-            });
-          });
-        `}</Script>
-        {/* Google Analytics 4 */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="afterInteractive" />
-        <Script id="ga4" strategy="afterInteractive">{`
+        {/* Google Analytics 4 — lazyOnload so it doesn't block interactivity */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="lazyOnload" />
+        <Script id="ga4" strategy="lazyOnload">{`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
