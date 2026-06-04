@@ -164,10 +164,10 @@ One sentence. State the specific policy action — what the government/RBI/regul
 2-3 sentences. Name the mechanism AND the specific actors: e.g. "edible oil refiners importing crude soybean oil face higher landed costs", "kirana wholesalers and dal millers buying chana on forward contracts see their hedge costs shift", "MCX gold futures traders holding overnight positions face a new import cost floor". No generic phrases.
 
 **WHO IS AFFECTED**
-Name specific industries, businesses, and consumer groups — never abstractions. Examples: "edible oil refiners in Gujarat and Maharashtra, dal mills in Madhya Pradesh, and households buying mustard oil in north India" or "jewellery exporters in Surat and Mumbai, and retail gold buyers ahead of Akshaya Tritiya".
+Write 2 flowing prose sentences — not a list. First sentence: name the commercial and industrial actors with their specific exposure. Second sentence: name the end consumers and their direct impact. Example: "Edible oil refiners in Gujarat and Maharashtra face a higher import cost on every tonne of crude soybean oil cleared under the revised duty structure, while dal mills in Madhya Pradesh buying imported pulses on forward contracts see their landed cost reprice immediately. Households purchasing mustard oil and retailers stocking refined edible oils in north India absorb the change at the shelf."
 
 **BOTTOM LINE**
-3 sentences structured as: (1) Businesses: one named sector and one concrete cost/revenue consequence. (2) Investors: one named MCX contract and the directional signal. (3) Consumers: one named product and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
+3 complete prose sentences — no category labels, no colons prefixing sentences. First sentence: name one specific business sector and one concrete cost or revenue consequence. Second sentence: name one specific MCX contract and its directional signal with a price level or threshold. Third sentence: name one specific consumer product or end-user group and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
 
 **WHAT TO WATCH**
 1-2 sentences. The next specific trigger — gazette notification date, parliamentary session, scheduled RBI review, or price level — that will extend or reverse this impact.
