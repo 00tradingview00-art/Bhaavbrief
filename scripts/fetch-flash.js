@@ -122,13 +122,17 @@ function detectCategory(text) {
 }
 
 function toSlug(title) {
-  return title
+  const slug = title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
-    .slice(0, 48)
-    .replace(/-+$/, '')
+    .replace(/-+/g, '-')
+  if (slug.length <= 60) return slug
+  // Cut at word boundary — never mid-word
+  const cut = slug.slice(0, 60)
+  const lastDash = cut.lastIndexOf('-')
+  return lastDash > 25 ? cut.slice(0, lastDash) : cut
 }
 
 function decodeHtmlEntities(text) {
@@ -419,7 +423,7 @@ async function main() {
       const content  = await generateFlashContent(article, priceContext, trendingTopics)
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
-      const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${p(ist.getHours())}-${p(ist.getMinutes())}-${toSlug(article.title)}`
+      const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${toSlug(article.title)}`
       const category = detectCategory(`${article.title} ${article.description}`)
       const coverImage = await fetchPexelsImage(article.title, category)
 

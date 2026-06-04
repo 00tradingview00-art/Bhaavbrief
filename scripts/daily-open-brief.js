@@ -266,7 +266,8 @@ function saveArticle(mdx) {
 
   const today   = new Date().toISOString().split('T')[0]
   const rawSlug = slugMatch?.[1]?.trim() ?? `mcx-open-${today}`
-  const slug    = `${today}-${rawSlug}`.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').slice(0, 80)
+  const slugRaw = `${today}-${rawSlug}`.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+  const slug    = slugRaw.length <= 75 ? slugRaw : (() => { const c = slugRaw.slice(0, 75); const d = c.lastIndexOf('-'); return d > 30 ? c.slice(0, d) : c })()
   const filepath = path.join(ARTICLES_DIR, `${slug}.mdx`)
 
   if (fs.existsSync(filepath)) {
