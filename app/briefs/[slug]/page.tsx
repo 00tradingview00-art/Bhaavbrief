@@ -1,10 +1,10 @@
-import { notFound }    from 'next/navigation'
-import { Metadata }    from 'next'
-import Link            from 'next/link'
-import { MDXRemote }   from 'next-mdx-remote/rsc'
-import SubscribeForm   from '@/components/SubscribeForm'
-import CopyLinkButton  from '@/components/CopyLinkButton'
-import { getBrief, getAllBriefs, formatDate } from '@/lib/briefs'
+import { notFound, redirect } from 'next/navigation'
+import { Metadata }           from 'next'
+import Link                   from 'next/link'
+import { MDXRemote }          from 'next-mdx-remote/rsc'
+import SubscribeForm          from '@/components/SubscribeForm'
+import CopyLinkButton         from '@/components/CopyLinkButton'
+import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 
 const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
@@ -27,7 +27,7 @@ export async function generateMetadata(
 
   const title       = `${brief.title} | BhaavBrief`
   const description = brief.description || brief.summary || `MCX commodity intelligence — ${(brief.tags ?? []).join(', ')} analysis for Indian traders.`
-  const url         = `${BASE_URL}/briefs/${brief.slug}`
+  const url         = `${BASE_URL}/briefs/${brief.urlSlug}`
 
   const ogParams = new URLSearchParams({
     title:   brief.title,
@@ -64,7 +64,13 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  return (await getAllBriefs()).map(b => ({ slug: b.slug }))
+  const briefs = await getAllBriefs()
+  // Generate routes for SEO urlSlugs (primary) + edition-XXX filename slugs (redirect targets)
+  return briefs.flatMap(b => {
+    const params: { slug: string }[] = [{ slug: b.urlSlug }]
+    if (b.slug !== b.urlSlug) params.push({ slug: b.slug })
+    return params
+  })
 }
 
 const TAG_STYLES: Record<string, React.CSSProperties> = {
@@ -80,9 +86,14 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   const brief = getBrief(slug)
   if (!brief || !brief.published) notFound()
 
+  // Permanent redirect from old edition-XXX slugs to SEO-friendly URL
+  if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
+
+  const { prev, next } = getPrevNextBriefs(brief.urlSlug)
+
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
-  const url      = `${BASE_URL}/briefs/${brief.slug}`
+  const url      = `${BASE_URL}/briefs/${brief.urlSlug}`
 
   const ogParams = new URLSearchParams({
     title:   brief.title,
@@ -197,9 +208,52 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               <CopyLinkButton url={url} title={brief.title} />
             </div>
 
-            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
-              <a href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← All editions</a>
-            </div>
+            {/* Prev / Next navigation */}
+            <nav aria-label="Edition navigation" style={{
+              marginTop: '2rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0',
+              display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 12, alignItems: 'center',
+            }}>
+              {/* Older edition */}
+              <div>
+                {prev && (
+                  <Link href={`/briefs/${prev.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                      ← Previous edition
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
+                      #{String(prev.edition).padStart(3,'0')} · {prev.displayDate.split(',')[0]}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#48483A', lineHeight: 1.4, marginTop: 2, fontWeight: 500 }}>
+                      {prev.title}
+                    </div>
+                  </Link>
+                )}
+              </div>
+
+              {/* All editions */}
+              <div style={{ textAlign: 'center' }}>
+                <Link href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '0.5px solid #C8C8B8', paddingBottom: 1 }}>
+                  All editions
+                </Link>
+              </div>
+
+              {/* Newer edition */}
+              <div style={{ textAlign: 'right' }}>
+                {next && (
+                  <Link href={`/briefs/${next.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                      Next edition →
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
+                      #{String(next.edition).padStart(3,'0')} · {next.displayDate.split(',')[0]}
+                    </div>
+                    <div style={{ fontSize: 12, color: '#48483A', lineHeight: 1.4, marginTop: 2, fontWeight: 500 }}>
+                      {next.title}
+                    </div>
+                  </Link>
+                )}
+              </div>
+            </nav>
           </article>
         </main>
 

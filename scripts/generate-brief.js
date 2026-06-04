@@ -301,11 +301,20 @@ async function main() {
   let mdx = await generate(prices, news, recentBriefs)
   if (!mdx) { console.error('No output from model'); process.exit(1) }
 
-  mdx = mdx.trim().replace(/^```(?:mdx)?\n?/, '').replace(/\n?```\s*$/, '').trim()
+  mdx = mdx.trim().replace(/^```[a-z]*\n?/, '').replace(/\n?```\s*$/, '').trim()
 
   if (!mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated:\n', mdx.slice(0, 200))
     process.exit(1)
+  }
+
+  // Inject urlSlug derived from date + title for SEO-friendly URLs
+  const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
+  const dateVal    = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+  if (titleMatch?.[1]) {
+    const urlSlug = dateVal + '-' + titleMatch[1]
+      .toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 55)
+    mdx = mdx.replace(/^(---\n)/, `$1urlSlug: "${urlSlug}"\n`)
   }
 
   if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
