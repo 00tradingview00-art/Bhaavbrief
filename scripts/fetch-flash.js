@@ -310,7 +310,9 @@ Live market context:
 ${priceContext}
 ${trendingLine ? '\n' + trendingLine : ''}
 
-Write a 200-240 word intelligence flash on the article below. Use this exact structure (include the bold headers):
+Write a 200-240 word intelligence flash on the article below. Use this exact structure:
+
+TITLE: [Your own MCX-framed headline — under 12 words, lead with the commodity or market angle, NOT the source's headline. Examples: "Steel Output Surge Lifts MCX Copper Demand Signal", "Hindalco Aluminium Push Tightens Domestic Ingot Supply". Never copy the source title.]
 
 **WHAT HAPPENED**
 One sentence. State the specific fact with the key number or figure. Facts only, no interpretation.
@@ -446,24 +448,29 @@ async function main() {
         continue
       }
 
+      // Extract generated title from TITLE: line, fall back to source title
+      const titleLine = content.match(/^TITLE:\s*(.+)$/m)
+      const title     = titleLine?.[1]?.trim().replace(/^["']|["']$/g, '') ?? article.title
+      const body      = content.replace(/^TITLE:.*$/m, '').trim()
+
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
-      const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${toSlug(article.title)}`
-      const category = detectCategory(`${article.title} ${article.description}`)
-      const coverImage = await fetchPexelsImage(article.title, category)
+      const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${toSlug(title)}`
+      const category = detectCategory(`${title} ${article.description}`)
+      const coverImage = await fetchPexelsImage(title, category)
 
       saveFlash({
         slug,
-        title:    article.title,
+        title,
         date:     new Date().toISOString(),
         source:   'BhaavBrief',
         category,
-        content,
+        content:  body,
         coverImage,
       })
 
       newSeen.push(article.url)
-      titles.push(article.title)
+      titles.push(title)
       processed++
     } catch (e) {
       console.warn(`  Skipped: ${e.message}`)
