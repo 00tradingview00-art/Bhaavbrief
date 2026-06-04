@@ -1,5 +1,46 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-03-mcx-close-04-un2026-gold-leads-crude-slips",
+    "href": "/articles/2026-06-03-mcx-close-04-un2026-gold-leads-crude-slips",
+    "title": "MCX Close 4 Jun 2026: Gold Leads, Crude Slips",
+    "description": "MCX Evening Brief 4 Jun 2026 — COMEX Gold at $4476/oz (+0.24%) holds firm as crude eases; overnight signals for Indian commodity traders.",
+    "excerpt": "title: \"MCX Close 4 Jun 2026: Gold Leads, Crude Slips\" description: \"MCX Evening Brief 4 Jun 2026 — COMEX Gold at $4476/oz (+0.24%) holds firm as crude eases; overnight signals for Indian commodity tr",
+    "date": "2026-06-04",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-04-mcx-silver-drops-copper-surges-cross-asset-split",
+    "href": "/articles/2026-06-04-mcx-silver-drops-copper-surges-cross-asset-split",
+    "title": "MCX Silver Drops 5.62% as Copper Surges: What Changed",
+    "description": "MCX Silver at ₹248117/kg fell 5.62% while MCX Copper surged 5.20% to ₹1439/kg. Here's the cross-asset mechanics behind the split.",
+    "excerpt": "A sharp divergence has opened inside the metals complex overnight. MCX Silver fell 5.62% to ₹248,117/kg even as MCX Copper climbed 5.20% to ₹1,439/kg — a split that reflects two entirely separate dema",
+    "date": "2026-06-04",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 248117
+  },
+  {
     "type": "brief",
     "slug": "edition-032",
     "href": "/briefs/edition-032",
