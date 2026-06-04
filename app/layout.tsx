@@ -12,14 +12,14 @@ import PostHogProvider from '@/components/PostHogProvider'
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
-  weight: ['400', '500', '600'],
+  weight: ['400', '700', '800'],
   display: 'swap',
 })
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-dm-sans',
-  weight: ['300', '400', '500'],
+  weight: ['400', '500'],
   display: 'swap',
 })
 

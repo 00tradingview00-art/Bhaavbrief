@@ -142,6 +142,9 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
               <img
                 src={flash.coverImage}
                 alt={flash.title}
+                width={680}
+                height={297}
+                loading="lazy"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               />
             </div>

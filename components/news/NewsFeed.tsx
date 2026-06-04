@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Tag from '@/components/Tag'
 
 const FILTERS = ['All', 'Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
@@ -327,13 +328,14 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
                 {/* Cover thumbnail */}
                 {item.coverImage && (
-                  <div style={{ float: 'right', marginLeft: 14, marginBottom: 6 }}>
-                    <img
+                  <div style={{ float: 'right', marginLeft: 14, marginBottom: 6, width: 110, height: 74, flexShrink: 0, overflow: 'hidden' }}>
+                    <Image
                       src={item.coverImage}
                       alt=""
                       width={110}
                       height={74}
-                      style={{ width: 110, height: 74, objectFit: 'cover', display: 'block' }}
+                      style={{ objectFit: 'cover', display: 'block' }}
+                      loading="lazy"
                     />
                   </div>
                 )}

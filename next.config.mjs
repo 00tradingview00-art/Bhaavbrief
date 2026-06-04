@@ -4,6 +4,11 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.pexels.com' },
+    ],
+  },
   async redirects() {
     return [
       { source: '/articles', destination: '/news', permanent: true },
