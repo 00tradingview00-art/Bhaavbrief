@@ -1,113 +1,42 @@
 [
   {
-<<<<<<< Updated upstream
-    "id": "2026-06-04-19-40-mcx-natural-gas-surges-3-23-to-319-90-mm",
-    "title": "MCX Natural Gas surges 3.23% to ₹319.90/mmBtu amid broad energy-metals divergence this session",
-    "summary": "The mechanism here is dollar weakness feeding a reflationary bid across energy complexes globally, lifting Henry Hub spot prices and transmitting directly into MCX via import parity. At ₹95.71 per dollar, the USD/INR channel amplifies every cent-move in global gas. Import parity arithmetic: approximately $3.10/mmBtu Henry Hub equivalent, multiplied by ₹95.71, multiplied by a customs/duty factor of ~1.085, yields a theoretical MCX parity near ₹321 — placing current MCX at a marginal discount to parity. Support is observed at ₹308, resistance at ₹327. Cross-commodity confirmation: MCX Copper advancing alongside gas historically signals genuine dollar-weakness-driven reflation rather than isolated demand. Crude falling -4.32% simultaneously challenges the energy-bullish narrative — that divergence warrants monitoring. Watch the Thursday 19:30 IST US EIA Natural Gas Storage report for directional confirmation into close.",
-    "category": "Energy",
-    "tagType": "energy",
+    "id": "2026-06-04-19-46-rbi-rate-hold-signal-pressures-rupee-out",
+    "title": "RBI Rate Hold Signal Pressures Rupee Outlook as Gold Trades at ₹156000",
+    "summary": "The SBI chief's commentary on RBI's MPC stance arrives as gold trades at ₹156000 per 10g, up 1.08% in today's session, compounding an already active safe-haven bid that is simultaneously pressuring crude down 4.37% to ₹8836 per barrel. A rate hold scenario, if confirmed by MPC, removes a rupee-supportive policy catalyst. The import parity chain runs directly through USD/INR, currently at ₹95.71. Each 50-paisa rupee depreciation on a $3300 per troy ounce global gold price mechanically adds approximately ₹500 to MCX gold's landed cost before customs duty and exchange premium. Silver at ₹264801 per kilogram faces the same FX transmission. The cross-market correlation to watch is USD/INR itself, which historically tracks rate differential expectations between the Fed and RBI. A confirmed rate hold widens that differential if the Fed holds simultaneously, placing the rupee under measured pressure and amplifying MCX precious metals' domestic price floor. The specific level that confirms or negates this transmission: USD/INR ₹96.00, the breach of which would reset the import parity calculation for both gold and silver into the evening close.",
+    "category": "Macro",
+    "tagType": "macro",
     "impact": "bullish",
-    "pubDate": "2026-06-04T14:10:20.150Z",
-    "pubDateIST": "04 Jun 2026, 19:40"
+    "pubDate": "2026-06-04T14:16:36.407Z",
+    "pubDateIST": "04 Jun 2026, 19:46"
   },
   {
-    "id": "2026-06-04-19-42-mcx-crude-collapses-4-32-to-8841-as-risk",
-    "title": "MCX Crude Collapses 4.32% to ₹8841 as Risk-Off Flows Dominate Afternoon Session",
-    "summary": "The mechanism driving MCX Crude lower is a classic risk-off rotation — capital exiting growth-sensitive energy and moving into safe-haven assets. Brent's global selloff transmits directly into MCX via import parity arithmetic: approximately $74/bbl (implied from ₹8841 at ₹95.71) multiplied by ₹95.71 multiplied by applicable customs duty factor of roughly 1.01 places theoretical parity near ₹8820-8860 — MCX is trading broadly at parity, suggesting the move is globally anchored, not a local distortion. Support is observed at ₹8780; resistance sits near ₹9020. The confirming cross-commodity signal is NatGas advancing 3.23% to ₹319.90 — energy complex divergence historically signals supply-side differentiation rather than pure demand destruction. Watch the ₹8780 support level into close; any breach historically accelerates momentum selling in evening sessions.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-04T14:12:12.152Z",
-    "pubDateIST": "04 Jun 2026, 19:42"
-=======
-    "id": "2026-06-04-19-39-rbi-mpc-june-2026-rate-decision-intersec",
+    "id": "2026-06-04-19-48-rbi-mpc-june-2026-rate-decision-intersec",
     "title": "RBI MPC June 2026 Rate Decision Intersects Gold at ₹156000 Amid Risk-Off Session",
-    "summary": "The RBI MPC outcome lands directly into a session already structured around safe-haven demand, with MCX Gold trading at ₹156000 per 10 grams, up 1.08% on the day. The cross-asset picture is unambiguous: crude collapsing 4.19% to ₹8853 per barrel signals growth concern, which is precisely the environment where a rate cut or dovish MPC signal historically compresses the real yield differential and weakens the rupee. USD/INR at ₹95.71 is the mechanical link — any rupee softening from a dovish pivot transmits directly into import parity for gold, where global price appreciation plus currency depreciation compounds the MCX rupee landing cost. MCX Silver at ₹265000 per kilogram moves in the same channel, historically tracking gold's rate-sensitivity with amplified beta. The one confirmation level is USD/INR ₹96.20 — a breach there arithmetically lifts MCX Gold's import parity floor and would either validate or negate the currency transmission component of this trade thesis.",
+    "summary": "The RBI MPC outcome lands directly into a session already dominated by safe-haven positioning — MCX Gold trading at ₹156000 per 10g, up 1.08%, while crude collapses 4.37% to ₹8836 per barrel. A rate cut decision would compress INR-denominated gold's carry cost and historically coincides with domestic institutional accumulation cycles in bullion. The import parity chain is live: spot gold advancing globally, USD/INR holding at 95.71, translating each dollar move in COMEX gold into approximately ₹9,571 per ounce on MCX before customs duty and refining premium adjustments. MCX Silver at ₹264801 per kg, up 0.70%, moves in sympathy as the reflation-versus-risk-off tension sharpens. The RBI policy rate differential against the Fed funds rate is the cross-market variable Indian bullion desks are pricing alongside dollar weakness. The 95.71 USD/INR level and the official MPC rate announcement text are the data points that confirm or negate the current ₹156000 gold support structure this session.",
     "category": "Policy",
     "tagType": "macro",
     "impact": "bullish",
-    "pubDate": "2026-06-04T14:09:42.077Z",
-    "pubDateIST": "04 Jun 2026, 19:39"
+    "pubDate": "2026-06-04T14:18:27.263Z",
+    "pubDateIST": "04 Jun 2026, 19:48"
   },
   {
-    "id": "2026-06-04-19-41-mcx-natural-gas-surges-3-16-to-319-70-mm",
-    "title": "MCX Natural Gas surges 3.16% to ₹319.70/mmBtu as safe-haven flows reshape energy complex",
-    "summary": "The mechanism: crude oil's -4.19% collapse signals demand destruction fears, but natural gas trades on a structurally separate supply-demand curve, attracting rotation from energy sellers seeking relative value within the complex. Dollar weakness amplifies the move — a softer greenback reduces import costs, compressing the parity gap and supporting domestic price discovery.",
+    "id": "2026-06-04-19-50-mcx-natural-gas-surges-3-19-to-319-80-mm",
+    "title": "MCX Natural Gas surges 3.19% to ₹319.80/mmBtu as risk-off session reshapes energy complex",
+    "summary": "The mechanism here is divergence within energy. Crude's -4.37% decline reflects demand-destruction fears, but natural gas trades on separate fundamentals — domestic supply tightness and import parity dynamics — allowing it to decouple decisively upward.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "bullish",
-    "pubDate": "2026-06-04T14:11:33.740Z",
-    "pubDateIST": "04 Jun 2026, 19:41"
+    "pubDate": "2026-06-04T14:20:18.657Z",
+    "pubDateIST": "04 Jun 2026, 19:50"
   },
   {
-    "id": "2026-06-04-19-43-mcx-crude-crashes-4-19-to-8853-bbl-as-ri",
-    "title": "MCX Crude Crashes 4.19% to ₹8853/bbl as Risk-Off Dominates Afternoon Session",
-    "summary": "The mechanism driving this move is a sharp risk-off rotation — global crude selling pressure is transmitting directly into MCX via import parity linkage. With USD/INR at ₹95.71, applying a standard duty factor of approximately 1.10, theoretical MCX parity sits near ₹9,100-9,200/bbl range, placing current MCX Crude at a notable discount to parity — reflecting domestic demand concerns layered over the global selloff.",
+    "id": "2026-06-04-19-52-mcx-crude-collapses-4-37-to-8836-as-risk",
+    "title": "MCX Crude Collapses 4.37% to ₹8836 as Risk-Off Dominates Afternoon Session",
+    "summary": "The mechanism driving this session is risk-off rotation — capital is exiting growth-sensitive assets and flowing into safe havens, as evidenced by crude falling sharply while gold advances 1.08% to ₹156000/10g simultaneously.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "bearish",
-    "pubDate": "2026-06-04T14:13:25.396Z",
-    "pubDateIST": "04 Jun 2026, 19:43"
->>>>>>> Stashed changes
-  },
-  {
-    "id": "2026-06-04-05-46-rbi-rate-pause-signal-leaves-gold-at-158",
-    "title": "RBI Rate Pause Signal Leaves Gold at ₹158618/10g With INR at 95.71",
-    "summary": "In a session already characterised by sub-0.2% moves across the entire commodity complex, Gita Gopinath's rate pause commentary introduces a domestically-driven variable into an otherwise directionless cross-asset environment. A prolonged pause in RBI's rate cycle historically correlates with rupee stability or mild softening, which directly feeds the MCX import parity chain. At USD/INR 95.71, COMEX Gold at $4482/oz translates to approximately ₹158618/10g on MCX Gold (5g, June contract). A rate pause that anchors the rupee near current levels keeps this import parity calculation largely unchanged. The cross-market correlation to watch is USD/INR against MCX Silver, currently estimated at ₹248611/kg — any rupee drift on shifted rate expectations amplifies landed cost. The confirmation level is tomorrow's RBI MPC official resolution statement; any deviation from the anticipated pause language re-prices the INR component of the entire metals import parity chain.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-04T00:16:46.516Z",
-    "pubDateIST": "04 Jun 2026, 05:46"
-  },
-  {
-    "id": "2026-06-04-05-48-wti-crude-holds-95-44-as-forecast-noise",
-    "title": "WTI Crude Holds $95.44 as Forecast Noise Enters a Flat-Session Commodity Complex",
-    "summary": "In a session where the entire commodity complex has registered sub-0.2% movement, a circulating oil price forecast piece enters a market that is offering no directional confirmation. WTI currently prints $95.44 per barrel, translating at the live USD/INR rate of 95.71 to approximately 9,317 rupees per barrel on the MCX import parity chain — a figure that absorbs customs duty and refinery premium before reaching MCX Crude Oil contract pricing. The signal here is the absence of a signal: forecast-driven commentary carries reduced weight when realized volatility is suppressed and no cross-asset catalyst is present. COMEX Gold at $4,482 and Silver at $73.45 are similarly range-bound, confirming broad participation hesitation. Historically, forecast publications during low-volatility sessions have preceded range continuation rather than breakout. The data point that will confirm or negate any directional bias tomorrow at MCX open is the Friday EIA drilling productivity report alongside the overnight USD/INR fix at 9:00 IST.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-04T00:18:39.241Z",
-    "pubDateIST": "04 Jun 2026, 05:48"
-  },
-  {
-    "id": "2026-06-04-00-26-rbi-repo-pause-holds-at-6-25-as-crude-su",
-    "title": "RBI Repo Pause Holds at 6.25% as Crude Surges 3.23% to ₹9239/bbl on MCX",
-    "summary": "The MPC's repo rate pause at 6.25% lands inside a session where the energy complex is the dominant force — crude oil on MCX is already printing ₹9239/bbl, up 3.23%, alongside natural gas at ₹309.50/mmBtu, up 2.35%. The repo hold removes an immediate rupee-weakening catalyst, but USD/INR at ₹95.71 remains the critical transmission lever for the import parity chain: every dollar move in Brent feeds directly into MCX crude via that exchange rate, meaning a stable rupee partially offsets the global supply-driven crude spike rather than amplifying it. The cross-market correlation to track here is MCX Copper at ₹1367.90/kg, down 0.83% — growth-sensitive metals softening while energy surges historically signals supply shock rather than demand expansion, a distinction that carries weight for reading tomorrow's MCX open across the complex. The Brent crude settlement price at the US close tonight, and Friday's RBI liquidity data, are the two data points that will confirm or contradict tonight's energy-driven price action.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-03T18:56:08.738Z",
-    "pubDateIST": "04 Jun 2026, 00:26"
-  },
-  {
-    "id": "2026-06-04-00-28-rbi-rate-pause-signal-meets-crude-surge",
-    "title": "RBI Rate Pause Signal Meets Crude Surge, USD/INR at ₹95.71 Anchors MCX Complex",
-    "summary": "The RBI MPC rate pause signal arrives precisely as the energy complex drives the dominant cross-asset narrative — crude up 3.23% and natural gas up 2.35% in today's session. A pause in the rate cycle keeps domestic liquidity conditions stable, which historically has supported commodity demand expectations in India even as imported inflation risk from energy builds simultaneously. MCX Crude at ₹9239/bbl reflects the global supply-concern bid already priced in; the import parity chain runs as follows — every 1% move in Brent at USD/INR ₹95.71 translates to approximately ₹92-95 per barrel on MCX before customs duty and port premium adjustment. The critical cross-market correlation here is MCX Silver at ₹262,900 per kg, down 1.43% — a rate pause environment historically compresses silver's monetary premium when energy-driven inflation dominates the narrative rather than rate-cut optimism. The confirmation level to observe is the RBI's official June MPC resolution language; any revision to the inflation trajectory band above 5.1% negates the pause narrative entirely.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bullish",
-    "pubDate": "2026-06-03T18:58:00.061Z",
-    "pubDateIST": "04 Jun 2026, 00:28"
-  },
-  {
-    "id": "2026-06-04-00-29-mcx-natural-gas-surges-2-35-to-309-50-mm",
-    "title": "MCX Natural Gas Surges 2.35% to ₹309.50/mmBtu as Global Energy Supply Concerns Intensify",
-    "summary": "The mechanism: simultaneous crude +3.2% and nat gas +2.3% in US/EU session signals a supply-side shock narrative, not demand pull — traders repricing energy risk premium across the complex.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-03T18:59:51.227Z",
-    "pubDateIST": "04 Jun 2026, 00:29"
-  },
-  {
-    "id": "2026-06-04-00-31-mcx-crude-surges-3-23-to-9-239-bbl-as-en",
-    "title": "MCX Crude Surges 3.23% to ₹9,239/bbl as Energy Complex Sees Broad Supply-Driven Rally",
-    "summary": "The mechanism: simultaneous crude +3.23% and natural gas +2.35% moves indicate a supply-side shock narrative rather than demand-pull, historically associated with geopolitical or inventory disruption signals entering the US session.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-03T19:01:43.162Z",
-    "pubDateIST": "04 Jun 2026, 00:31"
+    "pubDate": "2026-06-04T14:22:10.262Z",
+    "pubDateIST": "04 Jun 2026, 19:52"
   }
 ]
