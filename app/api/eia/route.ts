@@ -5,12 +5,20 @@ export const dynamic = 'force-dynamic'
 // EIA publishes weekly on Wednesdays — cache for 1 hour
 export const revalidate = 3600
 
+export interface EIAWeek {
+  period:    string   // "2026-05-16"
+  stocksM:   number   // total stocks in million barrels
+  changeM:   number   // week-on-week change in million barrels
+  direction: 'draw' | 'build'
+}
+
 export interface EIAData {
   period:        string   // "2026-05-16" (week ending date)
   changeM:       number   // change in million barrels (negative = draw)
   direction:     'draw' | 'build'
   isSignificant: boolean  // |change| > 1M bbls
   stocksM:       number   // total current stocks in million barrels
+  history:       EIAWeek[] // last 8 weeks newest-first
   updatedAt:     string   // ISO timestamp of this fetch
 }
 
@@ -44,7 +52,7 @@ export async function GET(): Promise<NextResponse<EIAResponse>> {
       'sort[0][column]':        'period',
       'sort[0][direction]':     'desc',
       offset:                   '0',
-      length:                   '2',
+      length:                   '9',
     })
 
     const res = await fetch(`${EIA_URL}?${params}`, {
@@ -71,6 +79,18 @@ export async function GET(): Promise<NextResponse<EIAResponse>> {
     const changeM  = changeKb / 1000
     const stocksM  = latest.value / 1000
 
+    // Build 8-week history (rows[0] is newest)
+    const history: EIAWeek[] = rows.slice(0, 8).map((row, i) => {
+      const next = rows[i + 1]
+      const wChange = next ? (row.value - next.value) / 1000 : 0
+      return {
+        period:    row.period,
+        stocksM:   parseFloat((row.value / 1000).toFixed(1)),
+        changeM:   parseFloat(wChange.toFixed(2)),
+        direction: wChange < 0 ? 'draw' : 'build',
+      }
+    })
+
     return NextResponse.json(
       {
         period:        latest.period,
@@ -78,6 +98,7 @@ export async function GET(): Promise<NextResponse<EIAResponse>> {
         direction:     changeM < 0 ? 'draw' : 'build',
         isSignificant: Math.abs(changeM) > 1,
         stocksM:       parseFloat(stocksM.toFixed(1)),
+        history,
         updatedAt:     now,
       } satisfies EIAData,
       {
