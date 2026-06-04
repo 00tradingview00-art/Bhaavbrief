@@ -209,7 +209,13 @@ WRITE A 300-380 WORD MARKET OPEN BRIEF covering ALL of the following:
 
 4. IMPORT PARITY CHECK (40-50 words): For the commodity with the biggest overnight move — show the exact import parity math: COMEX price → USD/INR → customs duty estimate → MCX theoretical fair value vs actual open.
 
-5. WATCH TODAY (40-50 words): Name 2-3 specific price levels across the complex that will determine direction. Name any scheduled data releases today (EIA Wednesday, Fed speakers, India inflation data, etc.) that traders should have on their radar.
+5. WHO IS AFFECTED (3 sentences, one each):
+   - **Businesses:** name one sector and one concrete cost/revenue consequence today (e.g. "Oil marketing companies: refinery margins compress as crude opens ₹9,124")
+   - **Investors:** name one MCX contract and the directional signal from today's open
+   - **Consumers:** name one product and whether prices are likely to rise or fall at the pump/shop level
+   - BANNED: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware"
+
+6. WATCH TODAY (40-50 words): Name 2-3 specific price levels across the complex that will determine direction. Name any scheduled data releases today (EIA Wednesday, Fed speakers, India inflation data, etc.) that traders should have on their radar.
 
 LANGUAGE RULES — NON-NEGOTIABLE:
 Write for a first-time investor or small trader, NOT a Bloomberg analyst. Assume zero finance background.

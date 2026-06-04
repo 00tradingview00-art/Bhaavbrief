@@ -232,6 +232,12 @@ Include specific price levels from the data above.]
 ## What Kills It
 [One specific trigger or data point that would reverse the narrative. What should traders have on their radar?]
 
+## Who Is Affected
+3 sentences — one each, specific and concrete:
+- **Businesses:** name one sector and one concrete cost/revenue consequence (e.g. "Paint companies: raw material costs rise ₹X/kg as copper surges"). Never say "businesses face higher costs".
+- **Investors:** name one MCX contract and the directional signal. Never say "investors should watch".
+- **Consumers:** name one product and whether prices will rise or fall at the pump or shop. Never say "consumers may see higher prices".
+
 **Edge of the Day:** [The single most important price level to monitor, or scheduled data release that will either confirm or negate this narrative. An observation — never a buy/sell call.]
 
 ═══════════════════════════════════════════

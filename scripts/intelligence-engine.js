@@ -585,7 +585,12 @@ WRITING STANDARDS — NON-NEGOTIABLE:
 4. Explain the CROSS-ASSET CHAIN: what is the rest of the complex doing? Show cause-and-effect across assets.
 5. Quantify the INDIAN IMPORT PARITY: COMEX price + USD/INR rate + customs duty → exact MCX ₹ parity. Show the arithmetic.
 6. 150–250 words. Sharp. No filler. No "experts say". Facts, levels, mechanics only.
-7. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
+7. Include a **WHO IS AFFECTED** section before the Watch line:
+   - **Businesses:** one named sector + one concrete cost/revenue consequence (e.g. "Paint companies: raw material costs rise ₹X/kg")
+   - **Investors:** one named MCX contract + the directional signal
+   - **Consumers:** one named product + price direction (e.g. "Petrol/diesel: pump prices may rise")
+   - BANNED: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware"
+8. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
 
 LANGUAGE — NON-NEGOTIABLE:
 Write for a first-time investor or small trader who reads Hindi newspapers but follows commodity prices. NOT a Bloomberg analyst. Assume zero finance background.
@@ -621,7 +626,7 @@ priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
 slug: "[url-slug-max-8-words-hyphens-only]"
 ---
 
-[Article body — 150–250 words, cross-asset narrative, specific levels, Indian trader impact]`
+[Article body — cross-asset narrative, specific levels, then WHO IS AFFECTED section, then Watch line]`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
