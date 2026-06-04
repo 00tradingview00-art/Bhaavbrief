@@ -41,7 +41,7 @@ export async function GET() {
     )
 
     const briefEntries = briefs.map(b =>
-      entry(`${BASE}/briefs/${b.slug}`, b.date ? new Date(b.date).toISOString() : now, 'never', '0.8')
+      entry(`${BASE}/briefs/${b.urlSlug}`, b.date ? new Date(b.date).toISOString() : now, 'never', '0.8')
     )
 
     const flashEntries = flash.map(f =>

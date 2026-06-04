@@ -27,7 +27,7 @@ export async function GET() {
 
   const briefEntries = briefs
     .filter(b => { const ts = new Date(b.date).getTime(); return !isNaN(ts) && ts >= cutoff })
-    .map(b => newsEntry(`${BASE}/briefs/${b.slug}`, new Date(b.date).toISOString(), escapeXml(b.title)))
+    .map(b => newsEntry(`${BASE}/briefs/${b.urlSlug}`, new Date(b.date).toISOString(), escapeXml(b.title)))
 
   const flashEntries = flash
     .filter(f => { const ts = new Date(f.date).getTime(); return !isNaN(ts) && ts >= cutoff })
