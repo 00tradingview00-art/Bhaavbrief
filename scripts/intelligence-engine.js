@@ -696,6 +696,13 @@ async function main() {
     return
   }
 
+  // No articles midnight–9 AM IST. Let markets open first.
+  const istHour = new Date(Date.now() + 5.5 * 3600 * 1000).getUTCHours()
+  if (istHour >= 0 && istHour < 9) {
+    console.log(`Pre-market blackout (${istHour}:xx IST) — engine sleeping until 9 AM`)
+    return
+  }
+
   const state = loadState()
 
   if (!state.lastChecked) {
