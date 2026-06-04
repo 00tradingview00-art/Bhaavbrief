@@ -99,6 +99,11 @@ function isMCXStockArticle(text) {
   return (
     // MCX the company's stock
     /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week)|mcx\s+(split|bonus|dividend)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop)|block\s+trade.*nse|nse.*block\s+trade/.test(t) ||
+    // Equity market loser/gainer lists — pure stock market, no MCX commodity angle
+    /leads?\s+(losers?|gainers?)\s+in|top\s+(losers?|gainers?)\s+(?:today|on\s+(?:bse|nse))|(?:bse|nse)\s+(?:top|biggest)\s+(?:losers?|gainers?)/.test(t) ||
+    /(?:a|b|s|t)\s+group\s+(?:stocks?|shares?|losers?|gainers?)|(?:losers?|gainers?)\s+in\s+(?:a|b|s|t)\s+group/.test(t) ||
+    // Equity stocks unrelated to commodities
+    /(?:zensar|infosys|wipro|tcs|hcl\s+tech|tech\s+mahindra|delta\s+corp|gabriel\s+india|lumax)\s+(?:shares?|stocks?|falls?|rises?|gains?|loses?|surges?|plunges?|results?|earnings?)/.test(t) ||
     // Evergreen clickbait that gets recycled with old dates
     /price.prediction.today|will\s+(gold|silver|crude).*(rise|fall|rally|crash).*(today|tomorrow)/.test(t) ||
     // Old-date rate roundups (e.g. "rates today august 21", "rates today october 13")
@@ -421,6 +426,14 @@ async function main() {
       console.log(`Processing (${ageMin}min old): ${article.title.slice(0, 70)}`)
 
       const content  = await generateFlashContent(article, priceContext, trendingTopics)
+
+      // If Claude refused to write (no commodity angle), skip silently
+      if (!content || /i'm not able to write|i cannot write|no direct commodity|i am not able/i.test(content)) {
+        console.log(`  Skipped (no commodity angle): ${article.title.slice(0, 60)}`)
+        newSeen.push(article.url)  // mark seen so we don't retry
+        continue
+      }
+
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
       const slug     = `${ist.getFullYear()}-${p(ist.getMonth()+1)}-${p(ist.getDate())}-${toSlug(article.title)}`
