@@ -258,7 +258,9 @@ function saveArticle(mdx) {
     return null
   }
 
-  const cleanMdx = mdx.replace(/^slug:.*$/m, '').trim()
+  const cleanMdx = mdx
+    .replace(/^```(?:mdx)?\n/m, '').replace(/\n```\s*$/m, '')  // strip code fences Claude sometimes adds
+    .replace(/^slug:.*$/m, '').trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
   console.log(`Saved: content/articles/${slug}.mdx`)
   return { slug, title: titleMatch?.[1] ?? 'MCX Open Brief' }
