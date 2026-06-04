@@ -1,5 +1,24 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-035",
+    "href": "/briefs/edition-035",
+    "title": "MCX Open 4 Jun 2026: Gold Gains on Risk-Off, Crude Slips",
+    "description": "MCX Open 4 Jun 2026: Gold +0.57% on COMEX, crude -0.61% overnight. Gold holds ₹154,332, crude drops to ₹9,124. Key levels and import parity inside.",
+    "excerpt": "--- COMEX and NYMEX overnight trade was defined by a classic risk-off rotation. COMEX Gold gained +0.57% to $4,490.82/oz while WTI Crude fell -0.61% to $95.17/bbl, a divergence consistent with defensi",
+    "date": "2026-06-04",
+    "edition": "35",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "MCX Gold",
+      "MCX Crude",
+      "MCX Silver"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-06-03-mcx-close-04-un2026-gold-leads-crude-slips",
     "href": "/articles/2026-06-03-mcx-close-04-un2026-gold-leads-crude-slips",
@@ -22,23 +41,65 @@
   },
   {
     "type": "article",
-    "slug": "2026-06-04-mcx-silver-drops-copper-surges-cross-asset-split",
-    "href": "/articles/2026-06-04-mcx-silver-drops-copper-surges-cross-asset-split",
-    "title": "MCX Silver Drops 5.62% as Copper Surges: What Changed",
-    "description": "MCX Silver at ₹248117/kg fell 5.62% while MCX Copper surged 5.20% to ₹1439/kg. Here's the cross-asset mechanics behind the split.",
-    "excerpt": "A sharp divergence has opened inside the metals complex overnight. MCX Silver fell 5.62% to ₹248,117/kg even as MCX Copper climbed 5.20% to ₹1,439/kg — a split that reflects two entirely separate dema",
+    "slug": "2026-06-04-mcx-close-04-un2026-gold-leads-risk-off",
+    "href": "/articles/2026-06-04-mcx-close-04-un2026-gold-leads-risk-off",
+    "title": "MCX Close 4 Jun 2026: Gold Leads Risk-Off Rally",
+    "description": "MCX Evening Brief 4 Jun 2026: Gold +0.67% to ₹155,369 leads defensive session; crude falls -1.62% to ₹9,090 as risk-off dominates.",
+    "excerpt": "title: \"MCX Close 4 Jun 2026: Gold Leads Risk-Off Rally\" description: \"MCX Evening Brief 4 Jun 2026: Gold +0.67% to ₹155,369 leads defensive session; crude falls -1.62% to ₹9,090 as risk-off dominates",
+    "date": "2026-06-04",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-04-mcx-nat-gas-surges-crude-slides-demand-fear",
+    "href": "/articles/2026-06-04-mcx-nat-gas-surges-crude-slides-demand-fear",
+    "title": "MCX Nat Gas Surges 3.19% as Crude Slides on Demand Fear",
+    "description": "MCX Nat Gas at ₹319.80/mmBtu, up 3.19%; MCX Crude falls 2.35% to ₹8,855/bbl as global demand fears hit energy markets.",
+    "excerpt": "MCX Nat Gas is trading at ₹319.80/mmBtu, up 3.19% in today's evening session — even as MCX Crude drops 2.35% to ₹8,855/bbl. These two moves look contradictory. Here is why they are happening together.",
     "date": "2026-06-04",
     "edition": "flash",
     "tags": [
-      "MCX Silver",
-      "MCX Copper",
-      "MCX Gold"
+      "MCX Nat Gas",
+      "MCX Crude"
     ],
-    "commodity": "MCX Silver",
+    "commodity": "MCX Nat Gas",
     "commodities": [
-      "MCX Silver"
+      "MCX Nat Gas"
     ],
-    "priceAtPublish": 248117
+    "priceAtPublish": 320
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-04-mcx-open-04-un2026-gold-risk-off-crude-slips",
+    "href": "/articles/2026-06-04-mcx-open-04-un2026-gold-risk-off-crude-slips",
+    "title": "MCX Open 4 Jun 2026: Gold Gains on Risk-Off, Crude Slips",
+    "description": "MCX Open 4 Jun 2026: Gold +0.57% on COMEX, crude -0.61% overnight. Gold holds ₹154332, crude drops to ₹9124. Key levels and import parity inside.",
+    "excerpt": "--- COMEX and NYMEX overnight trade was defined by a classic risk-off rotation. COMEX Gold gained +0.57% to $4,490.82/oz while WTI Crude fell -0.61% to $95.17/bbl, a divergence consistent with defensi",
+    "date": "2026-06-04",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
   },
   {
     "type": "brief",
@@ -135,6 +196,28 @@
       "MCX Copper"
     ],
     "priceAtPublish": 1469
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
+    "href": "/articles/2026-06-03-mcx-open-04-un2026-crude-surge-metals-slide",
+    "title": "MCX Open 4 Jun 2026: Crude Surges, Metals Slide",
+    "description": "MCX Open Brief 4 Jun 2026: WTI crude +2.72%, COMEX gold -1.17%, silver -2.75% overnight. MCX crude opens ₹9239, gold ₹154800, silver ₹262900.",
+    "excerpt": "Energy dominated overnight trade as supply concerns drove WTI crude +2.72% to $96.38/bbl and Henry Hub natural gas +1.55% to $3.22/mmBtu. The move appears supply-driven rather than demand-led. Preciou",
+    "date": "2026-06-03",
+    "edition": "morning-brief",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
   },
   {
     "type": "brief",
