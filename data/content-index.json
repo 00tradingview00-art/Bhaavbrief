@@ -46,6 +46,7 @@
     "title": "MCX Close 4 Jun 2026: Gold Leads Risk-Off Rally",
     "description": "MCX Evening Brief 4 Jun 2026: Gold +0.67% to ₹155,369 leads defensive session; crude falls -1.62% to ₹9,090 as risk-off dominates.",
     "excerpt": "title: \"MCX Close 4 Jun 2026: Gold Leads Risk-Off Rally\" description: \"MCX Evening Brief 4 Jun 2026: Gold +0.67% to ₹155,369 leads defensive session; crude falls -1.62% to ₹9,090 as risk-off dominates",
+<<<<<<< Updated upstream
     "date": "2026-06-04",
     "edition": "evening-brief",
     "tags": [
@@ -67,9 +68,12 @@
     "title": "MCX Nat Gas Surges 3.19% as Crude Slides on Demand Fear",
     "description": "MCX Nat Gas at ₹319.80/mmBtu, up 3.19%; MCX Crude falls 2.35% to ₹8,855/bbl as global demand fears hit energy markets.",
     "excerpt": "MCX Nat Gas is trading at ₹319.80/mmBtu, up 3.19% in today's evening session — even as MCX Crude drops 2.35% to ₹8,855/bbl. These two moves look contradictory. Here is why they are happening together.",
+=======
+>>>>>>> Stashed changes
     "date": "2026-06-04",
-    "edition": "flash",
+    "edition": "evening-brief",
     "tags": [
+<<<<<<< Updated upstream
       "MCX Nat Gas",
       "MCX Crude"
     ],
@@ -78,6 +82,18 @@
       "MCX Nat Gas"
     ],
     "priceAtPublish": 320
+=======
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+>>>>>>> Stashed changes
   },
   {
     "type": "article",
