@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-04-19-40-mcx-natural-gas-surges-3-23-to-319-90-mm",
+    "title": "MCX Natural Gas surges 3.23% to ₹319.90/mmBtu amid broad energy-metals divergence this session",
+    "summary": "The mechanism here is dollar weakness feeding a reflationary bid across energy complexes globally, lifting Henry Hub spot prices and transmitting directly into MCX via import parity. At ₹95.71 per dollar, the USD/INR channel amplifies every cent-move in global gas. Import parity arithmetic: approximately $3.10/mmBtu Henry Hub equivalent, multiplied by ₹95.71, multiplied by a customs/duty factor of ~1.085, yields a theoretical MCX parity near ₹321 — placing current MCX at a marginal discount to parity. Support is observed at ₹308, resistance at ₹327. Cross-commodity confirmation: MCX Copper advancing alongside gas historically signals genuine dollar-weakness-driven reflation rather than isolated demand. Crude falling -4.32% simultaneously challenges the energy-bullish narrative — that divergence warrants monitoring. Watch the Thursday 19:30 IST US EIA Natural Gas Storage report for directional confirmation into close.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-04T14:10:20.150Z",
+    "pubDateIST": "04 Jun 2026, 19:40"
+  },
+  {
+    "id": "2026-06-04-19-42-mcx-crude-collapses-4-32-to-8841-as-risk",
+    "title": "MCX Crude Collapses 4.32% to ₹8841 as Risk-Off Flows Dominate Afternoon Session",
+    "summary": "The mechanism driving MCX Crude lower is a classic risk-off rotation — capital exiting growth-sensitive energy and moving into safe-haven assets. Brent's global selloff transmits directly into MCX via import parity arithmetic: approximately $74/bbl (implied from ₹8841 at ₹95.71) multiplied by ₹95.71 multiplied by applicable customs duty factor of roughly 1.01 places theoretical parity near ₹8820-8860 — MCX is trading broadly at parity, suggesting the move is globally anchored, not a local distortion. Support is observed at ₹8780; resistance sits near ₹9020. The confirming cross-commodity signal is NatGas advancing 3.23% to ₹319.90 — energy complex divergence historically signals supply-side differentiation rather than pure demand destruction. Watch the ₹8780 support level into close; any breach historically accelerates momentum selling in evening sessions.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-04T14:12:12.152Z",
+    "pubDateIST": "04 Jun 2026, 19:42"
+  },
+  {
     "id": "2026-06-04-05-46-rbi-rate-pause-signal-leaves-gold-at-158",
     "title": "RBI Rate Pause Signal Leaves Gold at ₹158618/10g With INR at 95.71",
     "summary": "In a session already characterised by sub-0.2% moves across the entire commodity complex, Gita Gopinath's rate pause commentary introduces a domestically-driven variable into an otherwise directionless cross-asset environment. A prolonged pause in RBI's rate cycle historically correlates with rupee stability or mild softening, which directly feeds the MCX import parity chain. At USD/INR 95.71, COMEX Gold at $4482/oz translates to approximately ₹158618/10g on MCX Gold (5g, June contract). A rate pause that anchors the rupee near current levels keeps this import parity calculation largely unchanged. The cross-market correlation to watch is USD/INR against MCX Silver, currently estimated at ₹248611/kg — any rupee drift on shifted rate expectations amplifies landed cost. The confirmation level is tomorrow's RBI MPC official resolution statement; any deviation from the anticipated pause language re-prices the INR component of the entire metals import parity chain.",
