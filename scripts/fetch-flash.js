@@ -99,9 +99,15 @@ function isMCXStockArticle(text) {
   return (
     // MCX the company's stock
     /mcx\s+shares?|mcx\s+stock\b|mcx\s+q[1-4]\s+(result|profit|revenue|pat)|mcx\s+share\s+price|mcx\s+(hit|hits)\s+(all.time|52.week)|mcx\s+(split|bonus|dividend)|multi.commodity exchange of india\s+(ltd|limited|share|stock|surge|soar|jump|plunge|fall|drop)|block\s+trade.*nse|nse.*block\s+trade/.test(t) ||
-    // Equity market loser/gainer lists — pure stock market, no MCX commodity angle
+    // Equity market roundups and loser/gainer lists — no MCX commodity angle
     /leads?\s+(losers?|gainers?)\s+in|top\s+(losers?|gainers?)\s+(?:today|on\s+(?:bse|nse))|(?:bse|nse)\s+(?:top|biggest)\s+(?:losers?|gainers?)/.test(t) ||
     /(?:a|b|s|t)\s+group\s+(?:stocks?|shares?|losers?|gainers?)|(?:losers?|gainers?)\s+in\s+(?:a|b|s|t)\s+group/.test(t) ||
+    // Generic equity market state articles ("barometers", "broader market", "benchmark indices")
+    /barometers?\s+(turn|turns?|remain|stays?|trade|trades?)|broader\s+market\s+(falls?|rises?|gains?|declines?|rangebound|flat)|benchmark\s+indices/.test(t) ||
+    // Pharma, IT, FMCG sector moves — not MCX commodities
+    /(?:pharma|it\s+stocks?|fmcg|realty|psu\s+banks?|auto\s+stocks?)\s+(?:shares?\s+)?(?:advance|gain|fall|decline|rally|plunge|outperform|lead)/.test(t) ||
+    // Market open/close roundups
+    /(?:sensex|nifty|nse|bse)\s+(?:opens?|closes?|ends?|settles?|gains?|falls?|rises?|drops?)\s+\d/.test(t) ||
     // Equity stocks unrelated to commodities
     /(?:zensar|infosys|wipro|tcs|hcl\s+tech|tech\s+mahindra|delta\s+corp|gabriel\s+india|lumax)\s+(?:shares?|stocks?|falls?|rises?|gains?|loses?|surges?|plunges?|results?|earnings?)/.test(t) ||
     // Evergreen clickbait that gets recycled with old dates
@@ -321,6 +327,10 @@ Name specific industries, businesses, and consumer groups — never abstractions
 **WHAT TO WATCH**
 1-2 sentences. Name the next specific data release, event, or price level that will confirm or negate this move.
 
+CRITICAL GATE — check this FIRST before writing anything:
+If the article is primarily about equity share prices, stock market indices (Sensex/Nifty/barometers), sector stock performance (pharma/IT/FMCG), or company earnings with no direct link to MCX-traded commodities (gold, silver, crude, copper, natural gas, zinc, aluminium) — respond with exactly: SKIP
+Do not write the article. Do not explain. Just: SKIP
+
 Rules: No opinions. No action verbs directed at the reader. No title. No byline. End with: Source: ${article.source}
 
 Article: ${article.title}. ${article.description}`
@@ -427,8 +437,8 @@ async function main() {
 
       const content  = await generateFlashContent(article, priceContext, trendingTopics)
 
-      // If Claude refused to write (no commodity angle), skip silently
-      if (!content || /i'm not able to write|i cannot write|no direct commodity|i am not able/i.test(content)) {
+      // If Claude refused or flagged no commodity angle, skip silently
+      if (!content || /^SKIP\s*$/i.test(content.trim()) || /i'm not able to write|i cannot write|no direct commodity|i am not able/i.test(content)) {
         console.log(`  Skipped (no commodity angle): ${article.title.slice(0, 60)}`)
         newSeen.push(article.url)  // mark seen so we don't retry
         continue
