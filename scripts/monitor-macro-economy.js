@@ -180,6 +180,10 @@ Name specific industries, businesses, and consumer groups — never abstractions
 **WHAT TO WATCH**
 1-2 sentences. The next specific macro data release, Fed speech, or China data point that will extend or reverse this commodity impact.
 
+CRITICAL GATE — check this FIRST:
+If the article is primarily about equity markets (Sensex, Nifty, stock prices, share price moves, equity sector performance) with no direct repricing mechanism for MCX commodities (gold, silver, crude, copper, natural gas, zinc, aluminium) — respond with exactly: SKIP
+Do not write the article. Do not explain. Just: SKIP
+
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
@@ -269,13 +273,17 @@ async function main() {
   console.log(`Macro monitor: ${allItems.length} items fetched, ${newEvents.length} new events`)
 
   let published = 0
-  for (const event of newEvents.slice(0, 2)) {  // max 2 per run
+  for (const event of newEvents.slice(0, 1)) {  // max 1 per run
     const contracts = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${contracts}]`)
     try {
       const result = await generateBreakdown(event, contracts)
       if (!result) continue
       const { title: aiTitle, body } = result
+      if (/^SKIP\s*$/i.test(body.trim())) {
+        console.log(`    Skipped (no direct MCX commodity angle): ${event.title.slice(0, 60)}`)
+        continue
+      }
       const coverImage = await fetchPexelsImage(aiTitle, 'macro')
       const fname = saveFlashArticle(event, aiTitle, body, coverImage)
       if (fname) {

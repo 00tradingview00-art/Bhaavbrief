@@ -64,20 +64,22 @@ export default async function ArticlePage({ params }: Props) {
   const color = COMMODITY_COLORS[meta.commodity] ?? '#7A7668'
 
   // JSON-LD schema for SEO
+  const articleUrl = `https://bhaavbrief.in/articles/${slug}`
   const schema = {
-    '@context':      'https://schema.org',
-    '@type':         'NewsArticle',
-    headline:        meta.title,
-    description:     meta.description,
-    datePublished:   meta.date,
+    '@context':    'https://schema.org',
+    '@type':       'NewsArticle',
+    headline:      meta.title,
+    description:   meta.description,
+    datePublished: meta.date,
+    dateModified:  meta.date,
+    url:           articleUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+    author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' }],
     publisher: {
       '@type': 'Organization',
       name:    'BhaavBrief',
       url:     'https://bhaavbrief.in',
-    },
-    mainEntityOfPage: {
-      '@type': '@id',
-      '@id':   `https://bhaavbrief.in/articles/${slug}`,
+      logo:    { '@type': 'ImageObject', url: 'https://bhaavbrief.in/logo.png', width: 200, height: 60 },
     },
   }
 

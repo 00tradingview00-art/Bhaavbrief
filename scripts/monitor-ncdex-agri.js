@@ -259,7 +259,7 @@ async function main() {
   console.log(`NCDEX agri monitor: ${allItems.length} items fetched, ${newEvents.length} new events`)
 
   let published = 0
-  for (const event of newEvents.slice(0, 3)) {  // max 3 per run
+  for (const event of newEvents.slice(0, 1)) {  // max 1 per run
     const contracts = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${contracts}]`)
     try {

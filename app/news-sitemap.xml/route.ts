@@ -2,6 +2,8 @@ import { getAllBriefs }   from '@/lib/briefs'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
+export const dynamic = 'force-dynamic'
+
 const BASE = 'https://bhaavbrief.in'
 
 // Google News sitemaps must only include articles published in the last 48 hours.

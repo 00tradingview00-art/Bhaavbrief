@@ -172,6 +172,10 @@ Name specific industries, businesses, and consumer groups — never abstractions
 **WHAT TO WATCH**
 1-2 sentences. The next specific trigger — gazette notification date, parliamentary session, scheduled RBI review, or price level — that will extend or reverse this impact.
 
+CRITICAL GATE — check this FIRST:
+If this policy event's primary angle is about stock market/equity reactions (Sensex, Nifty, share prices, equity indices, IT/pharma/FMCG sector stocks), or if there is NO direct link to MCX-traded commodities (gold, silver, crude, copper, natural gas, zinc, aluminium) — respond with exactly: SKIP
+Do not write the article. Do not explain. Just: SKIP
+
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
@@ -261,13 +265,18 @@ async function main() {
   console.log(`India policy monitor: ${allItems.length} items fetched, ${newEvents.length} new policy events`)
 
   let published = 0
-  for (const event of newEvents) {
+  for (const event of newEvents.slice(0, 1)) {  // max 1 per run — prevents burst when multiple RBI/policy events hit at once
     const commodities = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${commodities}]`)
     try {
       const result = await generateBreakdown(event, commodities)
       if (!result) continue
       const { title: aiTitle, body } = result
+      // SKIP gate: if Claude flagged no direct commodity angle, skip silently
+      if (/^SKIP\s*$/i.test(body.trim())) {
+        console.log(`    Skipped (no direct MCX commodity angle): ${event.title.slice(0, 60)}`)
+        continue
+      }
       const coverImage = await fetchPexelsImage(aiTitle, 'policy')
       const fname = saveFlashArticle(event, aiTitle, body, coverImage)
       if (fname) {

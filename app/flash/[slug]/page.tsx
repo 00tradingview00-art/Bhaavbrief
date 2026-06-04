@@ -78,11 +78,15 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
       '@type':       'NewsArticle',
       headline:      flash.title,
       datePublished: flash.date,
+      dateModified:  flash.date,
       url,
+      ...(flash.coverImage && {
+        image: [{ '@type': 'ImageObject', url: flash.coverImage, width: 1200, height: 630 }],
+      }),
       author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL }],
       publisher: {
         '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL,
-        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png` },
+        logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png`, width: 200, height: 60 },
       },
     },
     {

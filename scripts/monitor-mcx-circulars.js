@@ -223,7 +223,7 @@ async function main() {
   console.log(`Circular monitor: ${allItems.length} items fetched, ${newCirculars.length} new regulatory items`)
 
   let published = 0
-  for (const circular of newCirculars) {
+  for (const circular of newCirculars.slice(0, 1)) {  // max 1 per run
     console.log(`  → ${circular.source}: ${circular.title.slice(0, 80)}`)
     try {
       const body  = await generateBreakdown(circular)
