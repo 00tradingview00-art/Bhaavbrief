@@ -303,6 +303,18 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             </div>
           )
         })}
+
+        {/* RBI Repo Rate */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+            <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>RBI</span>
+            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>RBI Repo</span>
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+            5.25
+          </div>
+          <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
+        </div>
       </div>
 
       {/* ── Global Reference ── */}
@@ -315,12 +327,10 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
           {p && ([
-            { label: 'COMEX Gold',   exch: 'COMEX', price: p.comexGold,   pct: p.goldComexPct,   unit: '/oz',  fmt: (v: number) => fmtUSD(v, 0) },
-            { label: 'COMEX Silver', exch: 'COMEX', price: p.comexSilver, pct: p.silverComexPct, unit: '/oz',  fmt: (v: number) => fmtUSD(v, 3) },
-            { label: 'WTI Crude',    exch: 'NYMEX', price: p.wti,         pct: p.crudePct,       unit: '/bbl', fmt: fmtUSD },
-            { label: 'Brent Crude',  exch: 'NYMEX', price: p.brent,       pct: p.brentPct,       unit: '/bbl', fmt: fmtUSD },
+            { label: 'COMEX Gold',   exch: 'COMEX', price: p.comexGold,   pct: p.goldComexPct,   unit: '/oz',    fmt: (v: number) => fmtUSD(v, 0) },
+            { label: 'COMEX Silver', exch: 'COMEX', price: p.comexSilver, pct: p.silverComexPct, unit: '/oz',    fmt: (v: number) => fmtUSD(v, 3) },
+            { label: 'WTI Crude',    exch: 'NYMEX', price: p.wti,         pct: p.crudePct,       unit: '/bbl',   fmt: fmtUSD },
             { label: 'Henry Hub',    exch: 'NYMEX', price: p.henryHub,    pct: p.gasPct,         unit: '/mmBtu', fmt: fmtUSD },
-            { label: 'RBI Repo',     exch: 'RBI',   price: 5.25,          pct: undefined,        unit: '%',    fmt: (v: number) => v.toFixed(2) },
           ] as { label: string; exch: string; price: number | undefined; pct: number | undefined; unit: string; fmt: (v: number) => string }[]).map(({ label, exch, price, pct, unit, fmt }) => {
             const isUp = (pct ?? 0) >= 0
             const EXCH_STYLE: Record<string, { bg: string; color: string }> = {
