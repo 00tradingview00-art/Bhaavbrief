@@ -123,21 +123,14 @@ export default function EIACard() {
       overflow:     'hidden',
       marginBottom: 16,
     }}>
-      {/* Header — clickable to EIA source */}
-      <a
-        href="https://www.eia.gov/petroleum/supply/weekly/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          display:        'flex',
-          padding:        '10px 16px',
-          borderBottom:   '1px solid var(--border)',
-          alignItems:     'center',
-          justifyContent: 'space-between',
-          textDecoration: 'none',
-          cursor:         'pointer',
-        }}
-      >
+      {/* Header */}
+      <div style={{
+        display:        'flex',
+        padding:        '10px 16px',
+        borderBottom:   '1px solid var(--border)',
+        alignItems:     'center',
+        justifyContent: 'space-between',
+      }}>
         <span style={{
           fontFamily:    'var(--font-mono)',
           fontSize:      9,
@@ -146,7 +139,7 @@ export default function EIACard() {
           color:         'var(--ink-3)',
           fontWeight:    500,
         }}>
-          EIA Crude Stocks ↗
+          EIA Crude Stocks
         </span>
         <span style={{
           fontFamily: 'var(--font-mono)',
@@ -155,7 +148,7 @@ export default function EIACard() {
         }}>
           Wed weekly
         </span>
-      </a>
+      </div>
 
       {/* Body */}
       <div style={{
