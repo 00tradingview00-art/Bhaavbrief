@@ -317,7 +317,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
                 {/* Meta row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-                  <Tag type={item.tagType}>{item.category}</Tag>
+                  <Tag type={item.tagType}>{item.category.charAt(0).toUpperCase() + item.category.slice(1)}</Tag>
                   <TypeBadge itemType={item.itemType} />
                   <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
                   <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>

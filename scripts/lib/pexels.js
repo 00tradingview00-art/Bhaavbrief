@@ -43,7 +43,10 @@ export function getPexelsQuery(title, category) {
 
 export async function fetchPexelsImage(title, category) {
   const key = process.env.PEXELS_API_KEY
-  if (!key) return null
+  if (!key) {
+    console.warn('  [pexels] PEXELS_API_KEY not set — skipping cover image')
+    return null
+  }
 
   const query = getPexelsQuery(title, category)
   try {
@@ -51,11 +54,19 @@ export async function fetchPexelsImage(title, category) {
       `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=5&orientation=landscape&size=medium`,
       { headers: { Authorization: key }, signal: AbortSignal.timeout(6000) }
     )
-    if (!res.ok) return null
+    if (!res.ok) {
+      console.warn(`  [pexels] API error ${res.status} for query "${query}"`)
+      return null
+    }
     const data = await res.json()
     const photo = data.photos?.[0]
-    return photo?.src?.large2x ?? photo?.src?.large ?? null
-  } catch {
+    if (!photo) {
+      console.warn(`  [pexels] No photos returned for query "${query}"`)
+      return null
+    }
+    return photo.src?.large2x ?? photo.src?.large ?? null
+  } catch (e) {
+    console.warn(`  [pexels] Fetch failed: ${e.message}`)
     return null
   }
 }
