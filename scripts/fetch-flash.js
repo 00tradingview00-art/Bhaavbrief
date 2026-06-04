@@ -455,7 +455,7 @@ async function main() {
       saveFlash({
         slug,
         title:    article.title,
-        date:     article.pubDate ?? new Date().toISOString(),
+        date:     new Date().toISOString(),
         source:   'BhaavBrief',
         category,
         content,
