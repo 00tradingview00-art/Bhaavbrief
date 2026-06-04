@@ -52,6 +52,16 @@ export function getAllFlash(): FlashMeta[] {
     .sort((a, b) => b.date.localeCompare(a.date))
 }
 
+export function getAdjacentFlash(slug: string): { prev: FlashMeta | null; next: FlashMeta | null } {
+  const all = getAllFlash() // newest first
+  const idx = all.findIndex(f => f.slug === slug)
+  if (idx === -1) return { prev: null, next: null }
+  return {
+    prev: idx > 0 ? all[idx - 1] : null,               // newer article
+    next: idx < all.length - 1 ? all[idx + 1] : null,  // older article
+  }
+}
+
 export function getFlash(slug: string): Flash | null {
   const mdxPath = path.join(FLASH_DIR, `${slug}.mdx`)
   const mdPath  = path.join(FLASH_DIR, `${slug}.md`)

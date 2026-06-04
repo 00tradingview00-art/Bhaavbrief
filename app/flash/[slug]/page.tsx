@@ -3,7 +3,7 @@ import { Metadata }      from 'next'
 import { MDXRemote }     from 'next-mdx-remote/rsc'
 import Masthead          from '@/components/Masthead'
 import CopyLinkButton    from '@/components/CopyLinkButton'
-import { getFlash, getAllFlash } from '@/lib/flash'
+import { getFlash, getAllFlash, getAdjacentFlash } from '@/lib/flash'
 
 export const revalidate = 300
 
@@ -69,8 +69,9 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
   const flash = getFlash(slug)
   if (!flash || !flash.published) notFound()
 
-  const catStyle = CAT_STYLES[flash.category] ?? CAT_STYLES.macro
-  const url      = `${BASE_URL}/flash/${flash.slug}`
+  const catStyle          = CAT_STYLES[flash.category] ?? CAT_STYLES.macro
+  const url               = `${BASE_URL}/flash/${flash.slug}`
+  const { prev, next }    = getAdjacentFlash(slug)
 
   const schema = [
     {
@@ -156,9 +157,25 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           <CopyLinkButton url={url} title={flash.title} />
         </div>
 
-        <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
+        <nav style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
+          {(prev || next) && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
+              {next ? (
+                <a href={`/flash/${next.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4 }}>
+                  <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>← Older</span>
+                  {next.title.length > 72 ? next.title.slice(0, 72) + '…' : next.title}
+                </a>
+              ) : <span />}
+              {prev ? (
+                <a href={`/flash/${prev.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4, textAlign: 'right' }}>
+                  <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>Newer →</span>
+                  {prev.title.length > 72 ? prev.title.slice(0, 72) + '…' : prev.title}
+                </a>
+              ) : <span />}
+            </div>
+          )}
           <a href="/news" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← Intelligence Feed</a>
-        </div>
+        </nav>
       </div>
     </div>
   )
