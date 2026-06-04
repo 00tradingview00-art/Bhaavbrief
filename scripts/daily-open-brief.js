@@ -212,7 +212,17 @@ WRITE A 300-380 WORD MARKET OPEN BRIEF covering ALL of the following:
 
 5. WATCH TODAY (40-50 words): Name 2-3 specific price levels across the complex that will determine direction. Name any scheduled data releases today (EIA Wednesday, Fed speakers, India inflation data, etc.) that traders should have on their radar.
 
-Rules: No opinions. No buy/sell/accumulate/avoid/exit calls. Only facts, levels, and mechanics. End with one line: "Key focus today: [the single most important data point or level for Indian MCX traders to monitor]"
+LANGUAGE RULES — NON-NEGOTIABLE:
+Write for a first-time investor or small trader, NOT a Bloomberg analyst. Assume zero finance background.
+- Explain every term on first use: "WTI crude (the US oil benchmark)", "COMEX (the US commodity exchange)", "20-SMA (the average price over the last 20 days)"
+- "risk-off" → "investors moving money to safer assets like gold"
+- "safe-haven bid" → "investors buying gold for safety"
+- "the market is pricing in" → replace with plain language describing what is actually happening
+- "stagflation" → "rising prices combined with a slowing economy"
+- Short sentences. One idea per sentence. Max 25 words per sentence.
+- If you reference a previous edition (e.g. Edition 32), write it as a markdown link: [Edition 32](/briefs/edition-032)
+
+CONTENT RULES: No opinions. No buy/sell/accumulate/avoid/exit calls. Only facts, levels, and mechanics. End with one line: "Key focus today: [the single most important data point or level for Indian MCX traders to monitor]"
 
 SEO RULES:
 - Title: specific, includes "MCX Open" + dominant overnight theme (under 65 chars)

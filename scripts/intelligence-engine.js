@@ -588,14 +588,19 @@ WRITING STANDARDS — NON-NEGOTIABLE:
 7. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
 
 LANGUAGE — NON-NEGOTIABLE:
-Write for an educated Indian reader (Mint/ET level), NOT a Bloomberg terminal analyst. Avoid finance-desk shorthand.
-- "risk-off" → "fear-driven selling" or "investors pulling back from risky assets"
-- "risk-on" → "markets regaining confidence"
+Write for a first-time investor or small trader who reads Hindi newspapers but follows commodity prices. NOT a Bloomberg analyst. Assume zero finance background.
+- Explain EVERY term on first use: "WTI crude (the US oil benchmark)", "COMEX (the US commodity exchange)", "20-SMA (20-day average price)"
+- "risk-off" → "investors moving money to safer assets like gold"
+- "risk-on" → "investors feeling confident and moving into higher-risk assets"
 - "commodity complex" → "commodities"
-- "safe-haven bid" → "demand for gold as a safe harbour"
-- "the market is pricing in" → say what's actually happening
-- FOMC, OPEC, EIA are acceptable (widely known) but explain once if central to the article
+- "safe-haven bid" → "investors buying gold for safety"
+- "the market is pricing in" → replace with what is actually happening, in plain words
+- "stagflation" → "a situation where prices are rising but the economy is slowing"
+- "hawkish/dovish" → "leaning toward raising/cutting interest rates"
+- FOMC → "US Federal Reserve (India's equivalent: RBI)", OPEC → explain once as "the oil-producing countries' group"
 - Never stack two jargon terms in one sentence
+- Short sentences. One idea per sentence. If a sentence is longer than 25 words, break it.
+- If you reference a previous edition (e.g. Edition 32), write it as a markdown link: [Edition 32](/briefs/edition-032)
 
 SEO RULES:
 - Title: commodity name + specific action + key reason (under 65 chars, include "MCX")
