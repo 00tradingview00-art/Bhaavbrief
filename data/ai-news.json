@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-04-05-46-rbi-rate-pause-signal-leaves-gold-at-158",
+    "title": "RBI Rate Pause Signal Leaves Gold at ₹158618/10g With INR at 95.71",
+    "summary": "In a session already characterised by sub-0.2% moves across the entire commodity complex, Gita Gopinath's rate pause commentary introduces a domestically-driven variable into an otherwise directionless cross-asset environment. A prolonged pause in RBI's rate cycle historically correlates with rupee stability or mild softening, which directly feeds the MCX import parity chain. At USD/INR 95.71, COMEX Gold at $4482/oz translates to approximately ₹158618/10g on MCX Gold (5g, June contract). A rate pause that anchors the rupee near current levels keeps this import parity calculation largely unchanged. The cross-market correlation to watch is USD/INR against MCX Silver, currently estimated at ₹248611/kg — any rupee drift on shifted rate expectations amplifies landed cost. The confirmation level is tomorrow's RBI MPC official resolution statement; any deviation from the anticipated pause language re-prices the INR component of the entire metals import parity chain.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-04T00:16:46.516Z",
+    "pubDateIST": "04 Jun 2026, 05:46"
+  },
+  {
+    "id": "2026-06-04-05-48-wti-crude-holds-95-44-as-forecast-noise",
+    "title": "WTI Crude Holds $95.44 as Forecast Noise Enters a Flat-Session Commodity Complex",
+    "summary": "In a session where the entire commodity complex has registered sub-0.2% movement, a circulating oil price forecast piece enters a market that is offering no directional confirmation. WTI currently prints $95.44 per barrel, translating at the live USD/INR rate of 95.71 to approximately 9,317 rupees per barrel on the MCX import parity chain — a figure that absorbs customs duty and refinery premium before reaching MCX Crude Oil contract pricing. The signal here is the absence of a signal: forecast-driven commentary carries reduced weight when realized volatility is suppressed and no cross-asset catalyst is present. COMEX Gold at $4,482 and Silver at $73.45 are similarly range-bound, confirming broad participation hesitation. Historically, forecast publications during low-volatility sessions have preceded range continuation rather than breakout. The data point that will confirm or negate any directional bias tomorrow at MCX open is the Friday EIA drilling productivity report alongside the overnight USD/INR fix at 9:00 IST.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-04T00:18:39.241Z",
+    "pubDateIST": "04 Jun 2026, 05:48"
+  },
+  {
     "id": "2026-06-04-00-26-rbi-repo-pause-holds-at-6-25-as-crude-su",
     "title": "RBI Repo Pause Holds at 6.25% as Crude Surges 3.23% to ₹9239/bbl on MCX",
     "summary": "The MPC's repo rate pause at 6.25% lands inside a session where the energy complex is the dominant force — crude oil on MCX is already printing ₹9239/bbl, up 3.23%, alongside natural gas at ₹309.50/mmBtu, up 2.35%. The repo hold removes an immediate rupee-weakening catalyst, but USD/INR at ₹95.71 remains the critical transmission lever for the import parity chain: every dollar move in Brent feeds directly into MCX crude via that exchange rate, meaning a stable rupee partially offsets the global supply-driven crude spike rather than amplifying it. The cross-market correlation to track here is MCX Copper at ₹1367.90/kg, down 0.83% — growth-sensitive metals softening while energy surges historically signals supply shock rather than demand expansion, a distinction that carries weight for reading tomorrow's MCX open across the complex. The Brent crude settlement price at the US close tonight, and Friday's RBI liquidity data, are the two data points that will confirm or contradict tonight's energy-driven price action.",
