@@ -398,6 +398,23 @@ async function main() {
   const seen = loadSeen()
   console.log(`BhaavBrief Flash — seen: ${seen.length} URLs`)
 
+  // Build a set of normalised titles already published in content/flash/
+  // so the same story from a different URL doesn't get written twice
+  const publishedTitles = new Set(
+    fs.existsSync(FLASH_DIR)
+      ? fs.readdirSync(FLASH_DIR)
+          .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
+          .map(f => {
+            try {
+              const raw = fs.readFileSync(path.join(FLASH_DIR, f), 'utf8')
+              const m   = raw.match(/^title:\s*"(.+)"/m)
+              return m ? m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : ''
+            } catch { return '' }
+          })
+          .filter(Boolean)
+      : []
+  )
+
   // Mark all URLs seen regardless — so stale articles never get retried
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
   console.log(`Total fetched: ${allItems.length}`)
@@ -406,11 +423,13 @@ async function main() {
   // Google News RSS — especially Indian outlets — can return articles 2-6h old.
   // 90-min window was killing most legitimate stories.
   const candidates = allItems.filter(item => {
-    const text = `${item.title} ${item.description}`
-    if (seen.includes(item.url))       return false
-    if (!isImportant(text))            return false
-    if (isMCXStockArticle(text))       return false
-    if (!isFresh(item.pubDate, 360))   return false  // skip anything older than 6h
+    const text          = `${item.title} ${item.description}`
+    const normalisedTitle = item.title.toLowerCase().replace(/[^a-z0-9]/g, '')
+    if (seen.includes(item.url))              return false
+    if (publishedTitles.has(normalisedTitle)) return false  // same story, different URL
+    if (!isImportant(text))                   return false
+    if (isMCXStockArticle(text))              return false
+    if (!isFresh(item.pubDate, 360))          return false  // skip anything older than 6h
     return true
   })
 

@@ -219,6 +219,16 @@ function slugify(title) {
     .replace(/-$/, '')
 }
 
+function getPublishedTitles() {
+  if (!fs.existsSync(FLASH_DIR)) return new Set()
+  return new Set(
+    fs.readdirSync(FLASH_DIR)
+      .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
+      .map(f => { try { const m = fs.readFileSync(path.join(FLASH_DIR, f), 'utf8').match(/^title:\s*"(.+)"/m); return m ? m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : '' } catch { return '' } })
+      .filter(Boolean)
+  )
+}
+
 function saveFlashArticle(item, aiTitle, body, coverImage) {
   const now        = new Date()
   const datePrefix = now.toISOString().slice(0, 10)
@@ -228,6 +238,7 @@ function saveFlashArticle(item, aiTitle, body, coverImage) {
   const fpath      = path.join(FLASH_DIR, fname)
 
   if (fs.existsSync(fpath)) return null
+  if (getPublishedTitles().has(aiTitle.toLowerCase().replace(/[^a-z0-9]/g, ''))) return null
 
   const coverLine = coverImage ? `\ncoverImage: "${coverImage}"` : ''
   const mdx = `---
