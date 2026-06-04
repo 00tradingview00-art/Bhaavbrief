@@ -27,6 +27,7 @@ const ROOT = path.join(__dirname, '..')
 
 const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const ARTICLES_DIR = path.join(ROOT, 'content/articles')
+const BRIEFS_DIR   = path.join(ROOT, 'content/briefs')
 const STATE_FILE   = path.join(ROOT, 'data/daily-brief-state.json')
 
 // ── Load today's state (prevent double-publish) ───────────────────────────────
@@ -266,6 +267,53 @@ function saveArticle(mdx) {
   return { slug, title: titleMatch?.[1] ?? 'MCX Open Brief' }
 }
 
+// ── Save to content/briefs/ with auto-incremented edition number ──────────────
+function nextEditionNumber() {
+  if (!fs.existsSync(BRIEFS_DIR)) return 1
+  const nums = fs.readdirSync(BRIEFS_DIR)
+    .map(f => f.match(/^edition-(\d+)\.mdx$/)?.[1])
+    .filter(Boolean)
+    .map(Number)
+  return nums.length ? Math.max(...nums) + 1 : 1
+}
+
+function saveBrief(cleanMdx, editionNum) {
+  if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
+
+  const titleMatch = cleanMdx.match(/^title:\s*"([^"]+)"/m)
+  const descMatch  = cleanMdx.match(/^description:\s*"([^"]+)"/m)
+  const tagsMatch  = cleanMdx.match(/^tags:\s*(\[.*?\])/m)
+  const dateMatch  = cleanMdx.match(/^date:\s*"([^"]+)"/m)
+
+  // Build brief frontmatter with numeric edition
+  const briefFrontmatter = [
+    '---',
+    `title: ${titleMatch?.[0].slice(6) ?? '"MCX Open Brief"'}`,
+    `description: ${descMatch?.[0].slice(12) ?? '""'}`,
+    `date: "${dateMatch?.[1] ?? new Date().toISOString().split('T')[0]}"`,
+    `edition: ${editionNum}`,
+    'published: true',
+    `tags: ${tagsMatch?.[1] ?? '[]'}`,
+    '---',
+  ].join('\n')
+
+  // Extract body (everything after the closing ---)
+  const bodyStart = cleanMdx.indexOf('\n---\n', cleanMdx.indexOf('---') + 3)
+  const body = bodyStart !== -1 ? cleanMdx.slice(bodyStart + 5).trim() : cleanMdx
+
+  const padded   = String(editionNum).padStart(3, '0')
+  const filename = `edition-${padded}.mdx`
+  const filepath = path.join(BRIEFS_DIR, filename)
+
+  if (fs.existsSync(filepath)) {
+    console.warn(`Brief already exists: content/briefs/${filename}`)
+    return
+  }
+
+  fs.writeFileSync(filepath, `${briefFrontmatter}\n\n${body}\n`, 'utf8')
+  console.log(`Saved: content/briefs/${filename} (Edition #${editionNum})`)
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function main() {
   const startTime = Date.now()
@@ -345,6 +393,11 @@ async function main() {
 
   const result = saveArticle(mdx)
   if (result) {
+    const cleanMdx = mdx
+      .replace(/^```(?:mdx)?\n/m, '').replace(/\n```\s*$/m, '')
+      .replace(/^slug:.*$/m, '').trim()
+    const editionNum = nextEditionNumber()
+    saveBrief(cleanMdx, editionNum)
     state.lastBriefDate = today
     saveState(state)
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
