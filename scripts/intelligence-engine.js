@@ -655,7 +655,7 @@ function saveArticle(mdx) {
   }
 
   const cleanMdx = mdx
-    .replace(/^```(?:mdx|md)?\n/, '')   // strip any leading code fence Claude adds
+    .replace(/^```[a-z]*\n/m, '')       // strip any leading code fence (```yaml, ```mdx, etc.)
     .replace(/\n```\s*$/, '')           // strip trailing code fence
     .replace(/^```\s*$/gm, '')          // strip bare ``` lines anywhere in body
     .replace(/^slug:.*$/m, '')
