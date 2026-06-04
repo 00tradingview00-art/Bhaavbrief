@@ -48,6 +48,23 @@ body {
   color: var(--ink);
   font-weight: 500;
 }
+/* Section header labels — WHAT HAPPENED, WHAT IT MEANS, etc.
+   Claude writes these as **LABEL** at the start of a paragraph (single newline),
+   so they land as the first <strong> child of a <p>. Display them as a block label. */
+.brief-prose p > strong:first-child {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 5px;
+  margin-top: 1.5rem;
+}
+.brief-prose p:first-of-type > strong:first-child {
+  margin-top: 0;
+}
 .brief-prose ul {
   list-style: none;
   padding: 0;
