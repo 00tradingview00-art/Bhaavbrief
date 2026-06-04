@@ -83,6 +83,12 @@ jobs:
           SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
           EDITION:       ${{ steps.edition.outputs.number }}
         run: |
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF_PATH="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF_PATH" ]; then
+            echo "Brief file not found: $BRIEF_PATH — skipping newsletter"
+            exit 0
+          fi
           echo "Waiting 4 minutes for Vercel to deploy..."
           sleep 240
           node scripts/send-newsletter.js

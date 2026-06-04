@@ -19,18 +19,23 @@ jobs:
           RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/refresh_access_token?grant_type=ig_refresh_token&access_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
           echo "Meta API response: $RESPONSE"
 
+          # Guard: if response isn't JSON (e.g. empty or HTML), jq will fail — treat as error
+          if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
+            echo "::error::Instagram refresh returned non-JSON response — token may be expired. Paste a new token manually."
+            exit 1
+          fi
+
           NEW_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token // empty')
           EXPIRES_IN=$(echo "$RESPONSE" | jq -r '.expires_in // 0')
           ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty')
 
           if [ -n "$ERROR" ]; then
-            echo "Token refresh error: $ERROR"
-            # Exit 0 — don't break the workflow if Meta returns a transient error
-            exit 0
+            echo "::error::Instagram token refresh failed: $ERROR — token is expired or invalid. Go to developers.facebook.com and generate a new token."
+            exit 1
           fi
 
           if [ -z "$NEW_TOKEN" ]; then
-            echo "No token returned — skipping secret update"
+            echo "::warning::No token returned from Meta — skipping secret update"
             exit 0
           fi
 
