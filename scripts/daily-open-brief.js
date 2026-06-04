@@ -288,12 +288,27 @@ async function main() {
   const startTime = Date.now()
   console.log(`\nBhaavBrief Daily Open Brief — ${new Date().toISOString()}\n`)
 
-  // Prevent double-publish
-  const state = loadState()
   const today = todayIST()
-  if (state.lastBriefDate === today) {
-    console.log(`Open brief already published for ${today} — skipping`)
+
+  // Guard: only run between 8 AM and 2 PM IST (open brief window)
+  const istHour = new Date(Date.now() + 5.5 * 3600 * 1000).getUTCHours()
+  if (istHour < 8 || istHour >= 14) {
+    console.log(`Outside open brief window (${istHour}:xx IST, expected 8–14) — skipping`)
     return
+  }
+
+  // Prevent double-publish: check state AND verify no file already exists for today
+  const state = loadState()
+  const existingFile = fs.existsSync(ARTICLES_DIR)
+    ? fs.readdirSync(ARTICLES_DIR).find(f => f.startsWith(today) && f.includes('open'))
+    : null
+  if (existingFile || state.lastBriefDate === today) {
+    if (!existingFile && state.lastBriefDate === today) {
+      console.log(`State says published but no file found — regenerating`)
+    } else {
+      console.log(`Open brief already published for ${today} — skipping`)
+      return
+    }
   }
 
   if (isTradingHoliday(today)) {
@@ -366,6 +381,8 @@ async function main() {
     saveState(state)
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
     console.log(`\nDone in ${elapsed}s — "${result.title}"`)
+    // Output filepath for workflow newsletter step
+    console.log(`BRIEF_FILE=content/articles/${result.slug}.mdx`)
   }
 }
 

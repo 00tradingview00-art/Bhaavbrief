@@ -4,7 +4,7 @@ on:
   schedule:
     # 9:00 AM IST = 3:30 AM UTC, Mon–Fri
     - cron: '30 3 * * 1-5'
-  workflow_dispatch:  # Manual trigger for testing
+  workflow_dispatch:
 
 concurrency:
   group: daily-open-brief
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node 20
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '24'
@@ -37,14 +37,19 @@ jobs:
         run: npm ci
 
       - name: Generate Daily Open Brief
-        continue-on-error: false
+        id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/daily-open-brief.js
+        run: |
+          OUTPUT=$(node scripts/daily-open-brief.js 2>&1)
+          echo "$OUTPUT"
+          BRIEF_FILE=$(echo "$OUTPUT" | grep '^BRIEF_FILE=' | cut -d= -f2-)
+          echo "brief_file=${BRIEF_FILE}" >> $GITHUB_OUTPUT
 
       - name: Commit & push
+        id: commit
         run: |
           git config user.name "BhaavBrief Intelligence"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -53,7 +58,29 @@ jobs:
           git pull --rebase origin main
           git stash pop || true
           git add content/articles/ data/daily-brief-state.json
-          git diff --staged --quiet && echo "No new brief" && exit 0
+          if git diff --staged --quiet; then
+            echo "No new brief"
+            echo "published=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
           git commit -m "📊 MCX Open Brief — ${DATE_IST}"
           git push origin main
+          echo "published=true" >> $GITHUB_OUTPUT
+
+      - name: Wait for Vercel then send newsletter
+        if: steps.commit.outputs.published == 'true' && steps.generate.outputs.brief_file != ''
+        continue-on-error: true
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          BRIEF_FILE:    ${{ steps.generate.outputs.brief_file }}
+        run: |
+          if [ ! -f "$BRIEF_FILE" ]; then
+            echo "Brief file not found: $BRIEF_FILE — skipping newsletter"
+            exit 0
+          fi
+          echo "Waiting 3 minutes for Vercel to deploy..."
+          sleep 180
+          node scripts/send-newsletter.js

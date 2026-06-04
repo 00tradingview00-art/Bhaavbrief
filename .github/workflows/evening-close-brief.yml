@@ -2,8 +2,8 @@ name: BhaavBrief Evening MCX Close Brief
 
 on:
   schedule:
-    # 11:00 PM IST = 5:30 PM UTC, Mon–Fri (30 min before MCX close)
-    - cron: '30 17 * * 1-5'
+    # 11:45 PM IST = 6:15 PM UTC, Mon–Fri (15 min after MCX close at 11:30 PM)
+    - cron: '15 18 * * 1-5'
   workflow_dispatch:
 
 permissions:

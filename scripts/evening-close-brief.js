@@ -286,12 +286,27 @@ function saveArticle(mdx) {
 async function main() {
   console.log(`\nBhaavBrief Evening Close Brief — ${new Date().toISOString()}\n`)
 
-  // Prevent double-publish
-  const state = loadState()
   const today = todayIST()
-  if (state.lastEveningDate === today) {
-    console.log(`Evening brief already published for ${today} — skipping`)
+
+  // Guard: only run between 9 PM and 2 AM IST (evening/close window)
+  const istHour = new Date(Date.now() + 5.5 * 3600 * 1000).getUTCHours()
+  if (istHour < 21 && istHour >= 2) {
+    console.log(`Outside evening brief window (${istHour}:xx IST, expected 21–02) — skipping`)
     return
+  }
+
+  // Prevent double-publish: check state AND file existence
+  const state = loadState()
+  const existingFile = fs.existsSync(ARTICLES_DIR)
+    ? fs.readdirSync(ARTICLES_DIR).find(f => f.startsWith(today) && f.includes('close'))
+    : null
+  if (existingFile || state.lastEveningDate === today) {
+    if (!existingFile && state.lastEveningDate === today) {
+      console.log(`State says published but no file found — regenerating`)
+    } else {
+      console.log(`Evening brief already published for ${today} — skipping`)
+      return
+    }
   }
 
   if (isTradingHoliday(today)) {
