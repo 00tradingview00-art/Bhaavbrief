@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-05-02-34-rbi-mpc-rate-pause-at-5-25-leaves-mcx-go",
+    "title": "RBI MPC Rate Pause at 5.25% Leaves MCX Gold at ₹155722 Unreinforced by Domestic Easing",
+    "summary": "The RBI MPC's expected hold at 5.25% arrives precisely as the broader commodity complex is running a dollar-weakness and reflation narrative — gold up 0.90% to ₹155722/10g, silver up 0.65% to ₹264680/kg, copper up 0.62% to ₹1376.35/kg. A rate pause means no fresh domestic liquidity injection to amplify the global reflation signal already embedded in these prices. The import parity chain is the mechanical anchor: spot gold in USD, converted at ₹95.78 per dollar, plus 15% customs duty and exchange premium, currently settles near prevailing MCX levels. A rate cut would have weakened the rupee at the margin and widened that conversion spread; a hold keeps USD/INR at ₹95.78 as the operative multiplier. Cross-market correlation: the rupee's relative stability under a hold regime historically reduces imported inflation in crude (₹8851/bbl), limiting one secondary driver of gold's safe-haven demand domestically. The data point to monitor is Saturday's MCX opening print versus ₹155722 — a gap beyond 0.5% in either direction signals whether global dollar dynamics are overriding the domestic neutral-rate signal entirely.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-04T21:04:30.540Z",
+    "pubDateIST": "05 Jun 2026, 02:34"
+  },
+  {
+    "id": "2026-06-05-02-36-mcx-silver-gains-0-65-to-264680-kg-as-do",
+    "title": "MCX Silver Gains 0.65% to ₹264680/kg as Dollar Weakness Fuels Broad Metal Rally",
+    "summary": "The mechanism here is dollar depreciation compressing the opportunity cost of holding non-yielding metals. When the dollar weakens, dollar-denominated commodities require fewer dollars to purchase, mechanically lifting prices across gold, silver, and copper simultaneously — a classic reflation rotation.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-04T21:06:20.177Z",
+    "pubDateIST": "05 Jun 2026, 02:36"
+  },
+  {
+    "id": "2026-06-05-02-38-dollar-weakness-lifts-mcx-gold-0-90-to-1",
+    "title": "Dollar Weakness Lifts MCX Gold 0.90% to ₹155,722 as Reflation Trade Grips Global Commodities",
+    "summary": "The primary mechanism here is dollar depreciation compressing the denominator in gold's pricing equation — when USD weakens, dollar-denominated commodities reprice upward in foreign-currency terms, amplifying INR-denominated MCX moves. USD/INR at ₹95.78 acts as an additional multiplier.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-04T21:08:08.247Z",
+    "pubDateIST": "05 Jun 2026, 02:38"
+  },
+  {
     "id": "2026-06-04-19-46-rbi-rate-hold-signal-pressures-rupee-out",
     "title": "RBI Rate Hold Signal Pressures Rupee Outlook as Gold Trades at ₹156000",
     "summary": "The SBI chief's commentary on RBI's MPC stance arrives as gold trades at ₹156000 per 10g, up 1.08% in today's session, compounding an already active safe-haven bid that is simultaneously pressuring crude down 4.37% to ₹8836 per barrel. A rate hold scenario, if confirmed by MPC, removes a rupee-supportive policy catalyst. The import parity chain runs directly through USD/INR, currently at ₹95.71. Each 50-paisa rupee depreciation on a $3300 per troy ounce global gold price mechanically adds approximately ₹500 to MCX gold's landed cost before customs duty and exchange premium. Silver at ₹264801 per kilogram faces the same FX transmission. The cross-market correlation to watch is USD/INR itself, which historically tracks rate differential expectations between the Fed and RBI. A confirmed rate hold widens that differential if the Fed holds simultaneously, placing the rupee under measured pressure and amplifying MCX precious metals' domestic price floor. The specific level that confirms or negates this transmission: USD/INR ₹96.00, the breach of which would reset the import parity calculation for both gold and silver into the evening close.",
