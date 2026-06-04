@@ -777,7 +777,10 @@ async function main() {
   // days or when Stooq serves stale OHLC — never fire HAWK-SCAN on unconfirmed data.
   const isHawkEvent = (hawkMove && prices.priceSource === 'kite-live') || eiaData?.isSignificant
 
-  const shouldPublish = isHawkEvent || hardMove || (softMove && hasSignal)
+  // Price-move articles (hard/soft) also require live Kite data — stooq-derived MCX
+  // prices are estimates and produce false move alerts when MCX is closed pre-market.
+  const liveData = prices.priceSource === 'kite-live'
+  const shouldPublish = isHawkEvent || (hardMove && liveData) || (softMove && liveData && hasSignal) || (!liveData && hasSignal)
 
   if (!shouldPublish) {
     if (moves.length === 0) console.log('No significant price moves')
