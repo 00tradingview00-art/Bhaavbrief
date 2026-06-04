@@ -103,7 +103,7 @@ export async function GET(): Promise<NextResponse<EIAResponse>> {
       } satisfies EIAData,
       {
         headers: {
-          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=300',
+          'Cache-Control': 'no-store',
         },
       }
     )

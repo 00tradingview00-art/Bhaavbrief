@@ -105,7 +105,7 @@ export default function EIACard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/eia')
+    fetch('/api/eia', { cache: 'no-store' })
       .then(r => r.json())
       .then(setData)
       .catch(() => setData({ error: 'api_down', updatedAt: new Date().toISOString() }))
