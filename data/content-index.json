@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-036",
+    "href": "/briefs/edition-036",
+    "title": "Oil Fear Trade Cracks: Gold Slides as WTI Holds at $93.07",
+    "description": "The crude-led fear trade that dominated three sessions is losing grip as gold and silver fall together with oil easing.",
+    "excerpt": "For three sessions, this newsletter tracked a single dominant story: oil surging, gold fading, and fear concentrating in crude rather than precious metals. Today that structure is fracturing. WTI crud",
+    "date": "2026-06-05",
+    "edition": "36",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-035",
     "href": "/briefs/edition-035",
     "title": "MCX Open 4 Jun 2026: Gold Gains on Risk-Off, Crude Slips",
