@@ -74,3 +74,11 @@ jobs:
           TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
           git commit -m "⚡ Flash: ${TITLE}"
           git push origin main
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"sender":{"name":"BhaavBrief Bot","email":"${{ secrets.SENDER_EMAIL }}"},"to":[{"email":"00tradingview00@gmail.com"}],"subject":"ACTION REQUIRED: Intelligence Engine failed — '$(TZ=Asia/Kolkata date +'%d %b %Y')'","htmlContent":"<p><strong>Intelligence Engine</strong> workflow failed on <strong>'$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/intelligence-engine.yml\">Re-run workflow →</a></p>"}'

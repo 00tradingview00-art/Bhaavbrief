@@ -118,11 +118,16 @@ async function fetchComexOvernight() {
 
 // ── Fetch USD/INR ─────────────────────────────────────────────────────────────
 async function fetchUSDINR() {
+  const MIN = 82, MAX = 110
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
-    if (r.ok) return (await r.json()).rates?.INR ?? 85.0
+    if (r.ok) { const v = (await r.json()).rates?.INR ?? 0; if (v >= MIN && v <= MAX) return v }
   } catch {}
-  return 85.0
+  try {
+    const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD', { signal: AbortSignal.timeout(5000) })
+    if (r.ok) { const v = (await r.json()).rates?.INR ?? 0; if (v >= MIN && v <= MAX) return v }
+  } catch {}
+  return null
 }
 
 // ── Build narrative ───────────────────────────────────────────────────────────
@@ -332,6 +337,7 @@ async function main() {
     fetchUSDINR(),
   ])
 
+  if (!usdinr) { console.error('USDINR fetch failed from both sources — aborting'); process.exit(1) }
   console.log(`  USD/INR: ₹${usdinr.toFixed(2)}`)
   console.log(`  COMEX: ${Object.values(comex).map(c => `${c.label.split(' ').pop()} ${c.pct >= 0 ? '+' : ''}${c.pct.toFixed(1)}%`).join(' | ')}`)
   console.log(`  Kite: ${kitePrices ? 'available' : 'unavailable'}`)

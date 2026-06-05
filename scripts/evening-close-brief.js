@@ -128,11 +128,16 @@ async function fetchComexCurrentSession() {
 }
 
 async function fetchUSDINR() {
+  const MIN = 82, MAX = 110
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
-    if (r.ok) return (await r.json()).rates?.INR ?? 85.0
+    if (r.ok) { const v = (await r.json()).rates?.INR ?? 0; if (v >= MIN && v <= MAX) return v }
   } catch {}
-  return 85.0
+  try {
+    const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD', { signal: AbortSignal.timeout(5000) })
+    if (r.ok) { const v = (await r.json()).rates?.INR ?? 0; if (v >= MIN && v <= MAX) return v }
+  } catch {}
+  return null
 }
 
 // ── Identify the day's top movers ─────────────────────────────────────────────
@@ -326,6 +331,7 @@ async function main() {
     fetchUSDINR(),
   ])
 
+  if (!usdinr) { console.error('USDINR fetch failed from both sources — aborting'); process.exit(1) }
   console.log(`  MCX data: ${kitePrices ? Object.keys(kitePrices).join(', ') : 'unavailable'}`)
   console.log(`  COMEX: ${Object.keys(comex).join(', ')}`)
   console.log(`  USD/INR: ${usdinr.toFixed(2)}`)
