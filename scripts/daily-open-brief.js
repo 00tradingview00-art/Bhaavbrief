@@ -353,7 +353,8 @@ async function main() {
         if (!token) return null
         const candles = await fetchKiteHistorical(token, 22)
         if (!candles) return null
-        const currentPrice = kitePrices?.[key]?.ltp ?? 0
+        const mcxCache     = kitePrices ? null : (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data/mcx-last-prices.json'), 'utf8')) } catch { return null } })()
+        const currentPrice = kitePrices?.[key]?.ltp ?? mcxCache?.[key] ?? 0
         const levels = computeTechnicalLevels(candles, currentPrice)
         if (!levels) return null
         return formatTechnicalBlock(MCX_LABELS[key], MCX_UNITS[key], currentPrice, levels)

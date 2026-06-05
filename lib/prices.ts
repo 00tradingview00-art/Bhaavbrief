@@ -218,6 +218,30 @@ async function fetchUsdInr(): Promise<number> {
   } catch { return 0 }
 }
 
+// ── MCX prev-close cache (written by intelligence engine after each Kite fetch) ─
+
+interface MCXCache {
+  ts:        string
+  gold:      number | null
+  goldPct:   number
+  silver:    number | null
+  silverPct: number
+  crude:     number | null
+  crudePct:  number
+  copper:    number | null
+  copperPct: number
+  natgas:    number | null
+  natgasPct: number
+}
+
+function loadMCXCache(): MCXCache | null {
+  try {
+    const file = path.join(process.cwd(), 'data/mcx-last-prices.json')
+    if (!fs.existsSync(file)) return null
+    return JSON.parse(fs.readFileSync(file, 'utf8')) as MCXCache
+  } catch { return null }
+}
+
 // ── MCX derivation from COMEX ─────────────────────────────────────────────────
 
 const USDINR_MIN = 82, USDINR_MAX = 110
@@ -398,6 +422,9 @@ export async function getPrices(): Promise<PriceData | null> {
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
 
+    // When Kite is down, use last cached prev-close prices so ticker shows real data
+    const cache = usingKite ? null : loadMCXCache()
+
     return {
       source: usingKite
         ? (usingTwelve ? 'kite+twelvedata' : 'kite+stooq')
@@ -422,24 +449,24 @@ export async function getPrices(): Promise<PriceData | null> {
       gasPct:         y.gasPct,
 
       gold: {
-        ...buildMCXData(goldQ, 0, 0, instruments.gold),
+        ...buildMCXData(goldQ, cache?.gold ?? 0, cache?.goldPct ?? 0, instruments.gold),
         comex:          y.comexGold,
         comexChangePct: y.goldPct,
       },
       silver: {
-        ...buildMCXData(silverQ, 0, 0, instruments.silver),
+        ...buildMCXData(silverQ, cache?.silver ?? 0, cache?.silverPct ?? 0, instruments.silver),
         comex:          y.comexSilver,
         comexChangePct: y.silverPct,
       },
       crude: {
-        ...buildMCXData(crudeQ, 0, 0, instruments.crude),
+        ...buildMCXData(crudeQ, cache?.crude ?? 0, cache?.crudePct ?? 0, instruments.crude),
         wti:            y.wti,
         wtiChangePct:   y.crudePct,
         brent:          y.brent,
         brentChangePct: y.brentPct,
       },
-      copper: buildMCXData(copperQ, 0, 0, instruments.copper),
-      natgas: buildMCXData(natgasQ, 0, 0, instruments.natgas),
+      copper: buildMCXData(copperQ, cache?.copper ?? 0, cache?.copperPct ?? 0, instruments.copper),
+      natgas: buildMCXData(natgasQ, cache?.natgas ?? 0, cache?.natgasPct ?? 0, instruments.natgas),
       aluminium: { lme: 0, lmeChangePct: 0 },
       ...(instruments.currencies ? {
         currencies: {

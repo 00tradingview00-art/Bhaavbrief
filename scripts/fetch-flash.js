@@ -249,31 +249,44 @@ async function fetchLivePrices() {
     } catch (e) { console.warn(`  Kite flash prices failed: ${e.message}`) }
   }
 
+  // Fallback: use cached prev-close prices when Kite is unavailable
+  if (!prices.kite) {
+    try {
+      const cache = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/mcx-last-prices.json'), 'utf8'))
+      const kite  = {}
+      for (const key of ['gold', 'silver', 'crude', 'copper', 'natgas']) {
+        if (cache[key] != null && cache[key] > 0) kite[key] = cache[key]
+      }
+      if (Object.keys(kite).length > 0) { prices.kite = kite; prices.kiteIsCached = true }
+    } catch {}
+  }
+
   return prices
 }
 
 function formatPriceContext(p) {
-  const fx = p.usdInr?.toFixed(2) ?? 'N/A'
-  const k  = p.kite ?? {}
-  const parts = [`USD/INR: ₹${fx}`]
+  const fx      = p.usdInr?.toFixed(2) ?? 'N/A'
+  const k       = p.kite ?? {}
+  const tag     = p.kiteIsCached ? ' [prev close]' : ''
+  const parts   = [`USD/INR: ₹${fx}`]
 
   if (p.gold) {
-    const mcxStr = k.gold ? `  MCX Gold: ₹${k.gold.toFixed(0)}/10g` : ''
+    const mcxStr = k.gold ? `  MCX Gold: ₹${k.gold.toFixed(0)}/10g${tag}` : ''
     parts.push(`Gold (COMEX): $${p.gold.toFixed(0)}/oz${mcxStr}`)
   }
   if (p.silver) {
-    const mcxStr = k.silver ? `  MCX Silver: ₹${k.silver.toFixed(0)}/kg` : ''
+    const mcxStr = k.silver ? `  MCX Silver: ₹${k.silver.toFixed(0)}/kg${tag}` : ''
     parts.push(`Silver (COMEX): $${p.silver.toFixed(2)}/oz${mcxStr}`)
   }
   if (p.crude) {
-    const mcxStr = k.crude ? `  MCX Crude: ₹${k.crude.toFixed(0)}/bbl` : ''
+    const mcxStr = k.crude ? `  MCX Crude: ₹${k.crude.toFixed(0)}/bbl${tag}` : ''
     parts.push(`WTI Crude: $${p.crude.toFixed(2)}/bbl${mcxStr}`)
   }
   if (p.copper) {
-    const mcxStr = k.copper ? `  MCX Copper: ₹${k.copper.toFixed(0)}/kg` : ''
+    const mcxStr = k.copper ? `  MCX Copper: ₹${k.copper.toFixed(0)}/kg${tag}` : ''
     parts.push(`Copper (COMEX): $${p.copper.toFixed(4)}/lb${mcxStr}`)
   }
-  if (k.natgas) parts.push(`MCX Natural Gas: ₹${k.natgas.toFixed(2)}/mmBtu`)
+  if (k.natgas) parts.push(`MCX Natural Gas: ₹${k.natgas.toFixed(2)}/mmBtu${tag}`)
   return parts.join('\n')
 }
 

@@ -31,9 +31,10 @@ const ROOT = path.join(__dirname, '..')
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
-const STATE_FILE   = path.join(ROOT, 'data/engine-state.json')
-const ARTICLES_DIR = path.join(ROOT, 'content/articles')
-const TITLE_FILE   = path.join(ROOT, 'data/last-article-title.txt')
+const STATE_FILE     = path.join(ROOT, 'data/engine-state.json')
+const MCX_CACHE_FILE = path.join(ROOT, 'data/mcx-last-prices.json')
+const ARTICLES_DIR   = path.join(ROOT, 'content/articles')
+const TITLE_FILE     = path.join(ROOT, 'data/last-article-title.txt')
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MOVE_THRESHOLD        = 1.0   // % — triggers article with supporting signal
@@ -41,6 +42,32 @@ const MOVE_THRESHOLD_HARD   = 2.0   // % — triggers article regardless
 const HAWK_SCAN_THRESHOLD   = 3.0   // % — triggers Hawk-Scan (highest urgency)
 const MAX_ARTICLES_PER_DAY  = 8
 const MIN_MINUTES_BETWEEN   = 30
+
+// ── MCX price cache ───────────────────────────────────────────────────────────
+// Written after every successful Kite fetch; read as prev-close fallback when Kite is down.
+function loadMCXCache() {
+  try { return JSON.parse(fs.readFileSync(MCX_CACHE_FILE, 'utf8')) }
+  catch { return null }
+}
+
+function saveMCXCache(prices) {
+  const cache = {
+    ts:        new Date().toISOString(),
+    gold:      prices.mcxGold   || null,
+    goldPct:   prices.goldPct   ?? 0,
+    silver:    prices.mcxSilver || null,
+    silverPct: prices.silverPct ?? 0,
+    crude:     prices.mcxCrude  || null,
+    crudePct:  prices.crudePct  ?? 0,
+    copper:    prices.mcxCopper || null,
+    copperPct: prices.copperPct ?? 0,
+    natgas:    prices.mcxNatGas || null,
+    natgasPct: prices.gasPct    ?? 0,
+  }
+  // Only save if at least one price is non-zero (real Kite data)
+  if (!Object.values(cache).some(v => typeof v === 'number' && v > 0)) return
+  fs.writeFileSync(MCX_CACHE_FILE, JSON.stringify(cache, null, 2), 'utf8')
+}
 
 // ── Kite MCX Enrichment (live prices, overrides Stooq-derived estimates) ──────
 function loadInstruments() {
@@ -271,6 +298,18 @@ async function fetchPrices() {
     if (kite.copper != null) { derived.mcxCopper = kite.copper; if (kite.copperPct != null) derived.copperPct = kite.copperPct }
     if (kite.natgas != null) { derived.mcxNatGas = kite.natgas; if (kite.natgasPct != null) derived.gasPct    = kite.natgasPct }
     derived.priceSource = 'kite-live'
+    saveMCXCache(derived)
+  } else {
+    // Kite unavailable — load prev-close cache so articles reference real prices
+    const cache = loadMCXCache()
+    if (cache) {
+      derived.mcxGold   = cache.gold   ?? 0
+      derived.mcxSilver = cache.silver ?? 0
+      derived.mcxCrude  = cache.crude  ?? 0
+      derived.mcxCopper = cache.copper ?? 0
+      derived.mcxNatGas = cache.natgas ?? 0
+      derived.priceSource = 'kite-cache'
+    }
   }
 
   return derived
@@ -740,22 +779,22 @@ async function main() {
   if (!state.lastChecked) {
     console.log('First run — seeding prices, no articles triggered')
     const prices = await fetchPrices()
-    if (prices) {
+    if (prices && prices.priceSource === 'kite-live') {
       state.lastPrices = {
         gold: prices.mcxGold, silver: prices.mcxSilver, crude: prices.mcxCrude,
         copper: prices.mcxCopper, natgas: prices.mcxNatGas, usdinr: prices.usdinr,
       }
-      state.lastChecked = new Date().toISOString()
-      saveState(state)
-      console.log('Prices seeded. Engine will trigger articles on next run.')
     }
+    state.lastChecked = new Date().toISOString()
+    saveState(state)
+    console.log('Prices seeded. Engine will trigger articles on next run.')
     return
   }
 
   if (!canPublish(state)) {
     // Still fetch + track prices during throttle so 15-min deltas stay accurate
     const throttledPrices = await fetchPrices()
-    if (throttledPrices) {
+    if (throttledPrices && throttledPrices.priceSource === 'kite-live') {
       state.lastPrices = {
         gold: throttledPrices.mcxGold, silver: throttledPrices.mcxSilver,
         crude: throttledPrices.mcxCrude, copper: throttledPrices.mcxCopper,
@@ -790,10 +829,12 @@ async function main() {
   const narrative = buildMarketNarrative(prices)
   const session   = getMarketSession()
 
-  // Update last prices
-  state.lastPrices = {
-    gold: prices.mcxGold, silver: prices.mcxSilver, crude: prices.mcxCrude,
-    copper: prices.mcxCopper, natgas: prices.mcxNatGas, usdinr: prices.usdinr,
+  // Only update lastPrices from live Kite data — prevents clobbering with zeros
+  if (prices.priceSource === 'kite-live') {
+    state.lastPrices = {
+      gold: prices.mcxGold, silver: prices.mcxSilver, crude: prices.mcxCrude,
+      copper: prices.mcxCopper, natgas: prices.mcxNatGas, usdinr: prices.usdinr,
+    }
   }
   state.lastChecked = new Date().toISOString()
 

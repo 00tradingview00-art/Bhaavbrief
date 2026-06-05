@@ -61,18 +61,20 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          # Only check for new article files — engine-state.json always changes and
-          # would cause a spurious commit even when no article was written.
           git add content/articles/ data/content-index.json
-          git add data/last-article-title.txt 2>/dev/null || true
+          git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
           if git diff --staged --quiet; then
-            echo "No new articles — skipping commit"
+            echo "Nothing to commit"
             exit 0
           fi
-          # New article confirmed — now also commit the updated state
-          git add data/engine-state.json
-          TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
-          git commit -m "⚡ Flash: ${TITLE}"
+          HAS_ARTICLE=$(git diff --staged --name-only -- content/articles/ | grep -c '\.mdx$' || true)
+          if [ "$HAS_ARTICLE" -gt 0 ]; then
+            git add data/engine-state.json
+            TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
+            git commit -m "⚡ Flash: ${TITLE}"
+          else
+            git commit -m "chore: price cache $(date -u '+%H:%M UTC')"
+          fi
           git push origin main
 
       - name: Alert on failure
