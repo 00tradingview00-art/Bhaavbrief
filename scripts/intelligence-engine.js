@@ -477,7 +477,7 @@ OUTPUT FORMAT — SACRED. DO NOT DEVIATE. Return exactly this structure, no extr
 ---
 title: "[HAWK-SCAN] [Commodity]: [What happened + key level, observational only] — under 70 chars. FORBIDDEN words in title: act, buy, sell, enter, exit, trade, now, urgent, alert"
 description: "Under 155 chars. Include current ₹ price and the extreme trigger. For traders."
-date: "${today.toISOString().split('T')[0]}"
+date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "hawk-scan"
 commodity: "${primaryMove?.label ?? 'macro'}"
@@ -618,7 +618,7 @@ RETURN ONLY valid MDX frontmatter + article body, nothing else:
 ---
 title: "[SEO title — under 65 chars, includes MCX + commodity + trigger]"
 description: "[Under 155 chars — include current ₹ price and key reason]"
-date: "${today.toISOString().split('T')[0]}"
+date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "flash"
 commodity: "${primaryMove?.label ?? 'macro'}"
