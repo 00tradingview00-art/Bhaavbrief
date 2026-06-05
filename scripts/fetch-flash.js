@@ -11,10 +11,16 @@ import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 import { fetchPexelsImage } from './lib/pexels.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const ROOT      = path.join(__dirname, '..')
 
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const FLASH_DIR         = path.join(__dirname, '../content/flash')
 const SEEN_FILE         = path.join(__dirname, 'seen-articles.json')
+
+function loadInstruments() {
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kite-instruments.json'), 'utf8')) }
+  catch { return null }
+}
 
 const FEEDS = [
   // Precious metals
@@ -194,9 +200,9 @@ async function fetchLivePrices() {
     } catch {}
   }
   if (usdinr) prices.usdInr = usdinr
-  else console.warn('USDINR fetch failed — price context will omit MCX derived prices')
+  else console.warn('USDINR fetch failed')
 
-  // Stooq free CSV API — no key required
+  // Stooq free CSV API — no key required (COMEX reference prices only)
   const symbols = { gold: 'gc.f', silver: 'si.f', crude: 'cl.f', copper: 'hg.f' }
   await Promise.all(Object.entries(symbols).map(async ([name, sym]) => {
     try {
@@ -214,16 +220,60 @@ async function fetchLivePrices() {
     } catch {}
   }))
 
+  // Kite live MCX prices — real exchange prices, no formula derivation
+  const KITE_API_KEY      = process.env.KITE_API_KEY
+  const KITE_ACCESS_TOKEN = process.env.KITE_ACCESS_TOKEN
+  const instruments = loadInstruments()
+  if (KITE_API_KEY && KITE_ACCESS_TOKEN && instruments) {
+    try {
+      const keys = ['gold', 'silver', 'crude', 'copper', 'natgas']
+      const qs   = keys.filter(k => instruments[k]?.symbol).map(k => `i=MCX:${instruments[k].symbol}`).join('&')
+      if (qs) {
+        const res = await fetch(`https://api.kite.trade/quote?${qs}`, {
+          headers: { 'X-Kite-Version': '3', Authorization: `token ${KITE_API_KEY}:${KITE_ACCESS_TOKEN}` },
+          signal: AbortSignal.timeout(8000),
+        })
+        if (res.ok) {
+          const { data } = await res.json()
+          const kite = {}
+          for (const key of keys) {
+            const sym = instruments[key]?.symbol
+            const q   = data?.[`MCX:${sym}`]
+            if (!sym || !q) continue
+            const ltp = q.last_price
+            if (ltp != null && ltp > 0) kite[key] = ltp
+          }
+          if (Object.keys(kite).length > 0) prices.kite = kite
+        }
+      }
+    } catch (e) { console.warn(`  Kite flash prices failed: ${e.message}`) }
+  }
+
   return prices
 }
 
 function formatPriceContext(p) {
   const fx = p.usdInr?.toFixed(2) ?? 'N/A'
+  const k  = p.kite ?? {}
   const parts = [`USD/INR: ₹${fx}`]
-  if (p.gold)   parts.push(`Gold (COMEX): $${p.gold.toFixed(0)}/oz  (~₹${((p.gold / 31.1035) * 10 * p.usdInr * 1.15).toFixed(0)}/10g MCX)`)
-  if (p.silver) parts.push(`Silver (COMEX): $${p.silver.toFixed(2)}/oz  (~₹${((p.silver / 31.1035) * 1000 * p.usdInr * 1.10).toFixed(0)}/kg MCX)`)
-  if (p.crude)  parts.push(`WTI Crude: $${p.crude.toFixed(2)}/bbl  (~₹${(p.crude * p.usdInr * 1.02).toFixed(0)}/bbl MCX)`)
-  if (p.copper) parts.push(`Copper (COMEX): $${p.copper.toFixed(4)}/lb`)
+
+  if (p.gold) {
+    const mcxStr = k.gold ? `  MCX Gold: ₹${k.gold.toFixed(0)}/10g` : ''
+    parts.push(`Gold (COMEX): $${p.gold.toFixed(0)}/oz${mcxStr}`)
+  }
+  if (p.silver) {
+    const mcxStr = k.silver ? `  MCX Silver: ₹${k.silver.toFixed(0)}/kg` : ''
+    parts.push(`Silver (COMEX): $${p.silver.toFixed(2)}/oz${mcxStr}`)
+  }
+  if (p.crude) {
+    const mcxStr = k.crude ? `  MCX Crude: ₹${k.crude.toFixed(0)}/bbl` : ''
+    parts.push(`WTI Crude: $${p.crude.toFixed(2)}/bbl${mcxStr}`)
+  }
+  if (p.copper) {
+    const mcxStr = k.copper ? `  MCX Copper: ₹${k.copper.toFixed(0)}/kg` : ''
+    parts.push(`Copper (COMEX): $${p.copper.toFixed(4)}/lb${mcxStr}`)
+  }
+  if (k.natgas) parts.push(`MCX Natural Gas: ₹${k.natgas.toFixed(2)}/mmBtu`)
   return parts.join('\n')
 }
 

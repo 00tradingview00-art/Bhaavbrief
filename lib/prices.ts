@@ -7,9 +7,7 @@
  *   3. Stooq CSV — free, no API key, COMEX/NYMEX futures
  *   4. Frankfurter ECB — USD/INR floor, always works
  *
- * MCX price priority:
- *   1. Kite Connect live quotes (OHLC, Volume, OI included)
- *   2. Derived from COMEX via formula (no OHLC/Volume/OI available)
+ * MCX prices: Kite Connect live quotes only. Shows 0 (unavailable) when Kite is down.
  */
 
 import { unstable_cache } from 'next/cache'
@@ -241,11 +239,6 @@ function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
   return {
     usdinr, brent, comexGold, comexSilver: comexSilv,
     wti, comexCopper: comexCu, henryHub,
-    mcxGold:   comexGold > 0 ? (comexGold / 31.1035) * 10   * usdinr * 1.15 : 0,
-    mcxSilver: comexSilv > 0 ? (comexSilv / 31.1035) * 1000 * usdinr * 1.10 : 0,
-    mcxCrude:  wti       > 0 ? wti * usdinr * 1.02 : 0,
-    mcxCopper: comexCu   > 0 ? comexCu * 2.20462 * usdinr * 1.05 : 0,
-    mcxNatGas: henryHub  > 0 ? henryHub * usdinr : 0,
     goldPct:   yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
     silverPct: yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
     crudePct:  yahoo['CL=F']?.regularMarketChangePercent    ?? 0,
@@ -429,24 +422,24 @@ export async function getPrices(): Promise<PriceData | null> {
       gasPct:         y.gasPct,
 
       gold: {
-        ...buildMCXData(goldQ, y.mcxGold, y.goldPct, instruments.gold),
+        ...buildMCXData(goldQ, 0, 0, instruments.gold),
         comex:          y.comexGold,
         comexChangePct: y.goldPct,
       },
       silver: {
-        ...buildMCXData(silverQ, y.mcxSilver, y.silverPct, instruments.silver),
+        ...buildMCXData(silverQ, 0, 0, instruments.silver),
         comex:          y.comexSilver,
         comexChangePct: y.silverPct,
       },
       crude: {
-        ...buildMCXData(crudeQ, y.mcxCrude, y.crudePct, instruments.crude),
+        ...buildMCXData(crudeQ, 0, 0, instruments.crude),
         wti:            y.wti,
         wtiChangePct:   y.crudePct,
         brent:          y.brent,
         brentChangePct: y.brentPct,
       },
-      copper: buildMCXData(copperQ, y.mcxCopper, y.copperPct, instruments.copper),
-      natgas: buildMCXData(natgasQ, y.mcxNatGas, y.gasPct,    instruments.natgas),
+      copper: buildMCXData(copperQ, 0, 0, instruments.copper),
+      natgas: buildMCXData(natgasQ, 0, 0, instruments.natgas),
       aluminium: { lme: 0, lmeChangePct: 0 },
       ...(instruments.currencies ? {
         currencies: {

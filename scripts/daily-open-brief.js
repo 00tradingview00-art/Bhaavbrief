@@ -353,13 +353,7 @@ async function main() {
         if (!token) return null
         const candles = await fetchKiteHistorical(token, 22)
         if (!candles) return null
-        // Use Kite live price if available, else derive from COMEX
-        const currentPrice = kitePrices?.[key]?.ltp
-          ?? (key === 'gold'   && comex.gold   ? (comex.gold.price  / 31.1035) * 10   * usdinr * 1.15 : 0)
-          ?? (key === 'silver' && comex.silver  ? (comex.silver.price / 31.1035) * 1000 * usdinr * 1.10 : 0)
-          ?? (key === 'crude'  && comex.crude   ? comex.crude.price * usdinr * 1.02 : 0)
-          ?? (key === 'copper' && comex.copper  ? comex.copper.price * 2.20462 * usdinr * 1.05 : 0)
-          ?? 0
+        const currentPrice = kitePrices?.[key]?.ltp ?? 0
         const levels = computeTechnicalLevels(candles, currentPrice)
         if (!levels) return null
         return formatTechnicalBlock(MCX_LABELS[key], MCX_UNITS[key], currentPrice, levels)

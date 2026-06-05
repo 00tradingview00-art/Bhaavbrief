@@ -242,15 +242,15 @@ async function fetchPrices() {
   const comexCu   = q['HG=F']?.price ?? 0
   const henryHub  = q['NG=F']?.price ?? 0
 
-  // Build derived MCX prices from COMEX + USD/INR (with duty/premium estimates)
+  // MCX prices: Kite live only — no formula derivation. Zeros mean unavailable.
   const derived = {
     usdinr,
     comexGold, comexSilver: comexSilv, wti, brent, comexCopper: comexCu, henryHub,
-    mcxGold:   comexGold > 0 ? (comexGold  / 31.1035) * 10   * usdinr * 1.15 : 0,
-    mcxSilver: comexSilv > 0 ? (comexSilv  / 31.1035) * 1000 * usdinr * 1.10 : 0,
-    mcxCrude:  wti       > 0 ? wti         * usdinr  * 1.02 : 0,
-    mcxCopper: comexCu   > 0 ? comexCu     * 2.20462 * usdinr * 1.05 : 0,
-    mcxNatGas: henryHub  > 0 ? henryHub    * usdinr : 0,
+    mcxGold:   0,
+    mcxSilver: 0,
+    mcxCrude:  0,
+    mcxCopper: 0,
+    mcxNatGas: 0,
     goldPct:   q['GC=F']?.pct  ?? 0,
     silverPct: q['SI=F']?.pct  ?? 0,
     crudePct:  q['CL=F']?.pct  ?? 0,
