@@ -238,7 +238,7 @@ RETURN ONLY valid MDX frontmatter + article body:
 ---
 title: "[SEO title — under 65 chars, include MCX Open and dominant theme]"
 description: "[Under 155 chars — include date and key overnight moves]"
-date: "${today.toISOString().split('T')[0]}"
+date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "morning-brief"
 commodity: "multi"

@@ -241,7 +241,7 @@ RETURN ONLY valid MDX frontmatter + article body:
 ---
 title: "[under 65 chars — MCX Close + dominant theme]"
 description: "[under 155 chars — date + top mover + what happened]"
-date: "${now.toISOString().split('T')[0]}"
+date: "${now.toISOString()}"
 time: "${timeStr}"
 edition: "evening-brief"
 commodity: "multi"
