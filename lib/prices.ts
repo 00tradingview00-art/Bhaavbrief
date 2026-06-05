@@ -222,8 +222,16 @@ async function fetchUsdInr(): Promise<number> {
 
 // ── MCX derivation from COMEX ─────────────────────────────────────────────────
 
+const USDINR_MIN = 82, USDINR_MAX = 110
+
 function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
-  const usdinr    = yahoo['USDINR=X']?.regularMarketPrice ?? usdinrFallback
+  const yahooUsd = yahoo['USDINR=X']?.regularMarketPrice ?? 0
+  // Prefer Frankfurter (daily ECB rate, reliable) over Yahoo FX which can be stale.
+  // Reject either value if outside the plausible ₹82–₹110 range.
+  const usdinr =
+    (usdinrFallback >= USDINR_MIN && usdinrFallback <= USDINR_MAX) ? usdinrFallback :
+    (yahooUsd      >= USDINR_MIN && yahooUsd      <= USDINR_MAX) ? yahooUsd      :
+    0
   const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
   const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
   const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0

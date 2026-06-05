@@ -162,14 +162,34 @@ function saveState(state) {
 
 // ── 2. Price Fetching — Kite (live MCX) + Stooq COMEX + Frankfurter USD/INR ──
 async function fetchPrices() {
-  // USD/INR via Frankfurter (free, no key)
-  let usdinr = 85.0
+  // USD/INR: Frankfurter primary, exchangerate-api fallback
+  // Valid range ₹82–₹110; outside that treat as a fetch error
+  let usdinr = 0
+  const USDINR_MIN = 82, USDINR_MAX = 110
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
       signal: AbortSignal.timeout(6000),
     })
-    if (r.ok) usdinr = (await r.json()).rates?.INR ?? usdinr
+    if (r.ok) {
+      const v = (await r.json()).rates?.INR ?? 0
+      if (v >= USDINR_MIN && v <= USDINR_MAX) usdinr = v
+    }
   } catch {}
+  if (!usdinr) {
+    try {
+      const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD', {
+        signal: AbortSignal.timeout(6000),
+      })
+      if (r.ok) {
+        const v = (await r.json()).rates?.INR ?? 0
+        if (v >= USDINR_MIN && v <= USDINR_MAX) usdinr = v
+      }
+    } catch {}
+  }
+  if (!usdinr) {
+    console.error('USDINR fetch failed from both sources — aborting price derivation')
+    return null
+  }
 
   // COMEX / NYMEX futures via Stooq CSV — gives us COMEX reference prices + % change
   const stooqMap = {

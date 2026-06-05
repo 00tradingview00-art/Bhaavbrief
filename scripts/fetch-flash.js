@@ -168,14 +168,33 @@ function getISTNow() {
 
 // ── Live price fetch: Stooq (COMEX/NYMEX futures) + Frankfurter (USD/INR) ─────
 async function fetchLivePrices() {
-  const prices = { usdInr: 85.0 }
+  const prices = {}
+  const USDINR_MIN = 82, USDINR_MAX = 110
 
+  // USD/INR: Frankfurter primary, exchangerate-api fallback; reject out-of-range values
+  let usdinr = 0
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', {
       signal: AbortSignal.timeout(5000),
     })
-    if (r.ok) prices.usdInr = (await r.json()).rates?.INR ?? prices.usdInr
+    if (r.ok) {
+      const v = (await r.json()).rates?.INR ?? 0
+      if (v >= USDINR_MIN && v <= USDINR_MAX) usdinr = v
+    }
   } catch {}
+  if (!usdinr) {
+    try {
+      const r = await fetch('https://api.exchangerate-api.com/v4/latest/USD', {
+        signal: AbortSignal.timeout(5000),
+      })
+      if (r.ok) {
+        const v = (await r.json()).rates?.INR ?? 0
+        if (v >= USDINR_MIN && v <= USDINR_MAX) usdinr = v
+      }
+    } catch {}
+  }
+  if (usdinr) prices.usdInr = usdinr
+  else console.warn('USDINR fetch failed — price context will omit MCX derived prices')
 
   // Stooq free CSV API — no key required
   const symbols = { gold: 'gc.f', silver: 'si.f', crude: 'cl.f', copper: 'hg.f' }
