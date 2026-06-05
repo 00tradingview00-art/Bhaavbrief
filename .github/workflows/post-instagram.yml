@@ -1,0 +1,47 @@
+name: Post to Instagram
+
+# Manual re-post for any edition (e.g. if the inline post failed after brief generation).
+on:
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: 'Edition number (e.g. 36). Leave blank to use latest.'
+        required: false
+        default: ''
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Resolve edition number
+        id: edition
+        run: |
+          if [ -n "${{ github.event.inputs.edition }}" ]; then
+            echo "number=${{ github.event.inputs.edition }}" >> $GITHUB_OUTPUT
+          else
+            LAST=$(ls content/briefs/ 2>/dev/null | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
+            echo "number=${LAST:-1}" >> $GITHUB_OUTPUT
+            echo "Using latest edition: $LAST"
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Post to Instagram
+        env:
+          EDITION:                ${{ steps.edition.outputs.number }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/post-instagram.js

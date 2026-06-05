@@ -52,3 +52,17 @@ jobs:
           echo "Secret updated successfully"
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Instagram token refresh failed",
+              "htmlContent": "<p>The weekly Instagram token auto-refresh failed on <strong>'"$(date +'%d %b %Y')"'</strong>.</p><p>Instagram posts will stop working within days. Go to <a href=\"https://developers.facebook.com\">developers.facebook.com</a>, generate a new long-lived token, and run the <em>Refresh Instagram Token</em> workflow manually with the new token in the secret.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/refresh-instagram-token.yml\">View workflow →</a></p>"
+            }'
+          echo "Alert email sent"
