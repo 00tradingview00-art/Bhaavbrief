@@ -41,6 +41,14 @@ export function getPexelsQuery(title, category) {
   return 'commodity trading market'
 }
 
+// Stable hash of the article title so each unique title picks a different
+// photo from the result pool — prevents two same-topic articles sharing the same image.
+function titleHash(str) {
+  let h = 0
+  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
 export async function fetchPexelsImage(title, category) {
   const key = process.env.PEXELS_API_KEY
   if (!key) {
@@ -49,21 +57,25 @@ export async function fetchPexelsImage(title, category) {
   }
 
   const query = getPexelsQuery(title, category)
+  const hash  = titleHash(title ?? '')
+  const page  = (hash % 3) + 1   // pages 1–3 for variety without burning quota
+
   try {
     const res = await fetch(
-      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=5&orientation=landscape&size=medium`,
+      `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=10&page=${page}&orientation=landscape&size=medium`,
       { headers: { Authorization: key }, signal: AbortSignal.timeout(6000) }
     )
     if (!res.ok) {
       console.warn(`  [pexels] API error ${res.status} for query "${query}"`)
       return null
     }
-    const data = await res.json()
-    const photo = data.photos?.[0]
-    if (!photo) {
+    const data   = await res.json()
+    const photos = data.photos ?? []
+    if (!photos.length) {
       console.warn(`  [pexels] No photos returned for query "${query}"`)
       return null
     }
+    const photo = photos[hash % photos.length]
     return photo.src?.large2x ?? photo.src?.large ?? null
   } catch (e) {
     console.warn(`  [pexels] Fetch failed: ${e.message}`)
