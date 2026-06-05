@@ -534,11 +534,13 @@ Market signal: ${signal.title}. ${signal.desc}`
 
 // ── Price-action first: signals driven by what IS moving, not what RSS published ──
 
+const PRICE_ACTION_COOLDOWN_MS = 3 * 60 * 60 * 1000  // 3 hours — one brief per commodity per session block
+
 /**
  * For commodities moving > threshold, create a brief signal regardless of whether
  * there's a matching RSS article. RSS is optional supporting context, not the trigger.
  */
-function buildPriceActionSignals(prices, allItems, recentTitles) {
+function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
   const movers = prices.movers ?? {}
   const THRESHOLD = 0.2  // % — minimum move to warrant a price-action brief
 
@@ -557,6 +559,16 @@ function buildPriceActionSignals(prices, allItems, recentTitles) {
     if (Math.abs(pct) < THRESHOLD) continue
 
     const price = prices[key]  // Kite live price (INR) or Stooq COMEX price
+
+    // Skip if we already published a brief for this commodity within the cooldown window.
+    // This prevents the same commodity from being briefed every 15-minute run all session.
+    const alreadyCovered = existing.some(item => {
+      const age = Date.now() - new Date(item.pubDate).getTime()
+      if (age > PRICE_ACTION_COOLDOWN_MS) return false
+      const t = item.title.toLowerCase()
+      return kws.some(kw => t.includes(kw))
+    })
+    if (alreadyCovered) continue
 
     // Find the most informative RSS context article (longest description = most context for Claude)
     const context = allItems
@@ -691,7 +703,7 @@ async function main() {
   // ── PART 1: Price-action signals ─────────────────────────────────────────────
   // These are always generated when commodities are moving — no RSS article required.
   // Metals & Energy: price-action first.
-  const priceSignals = buildPriceActionSignals(prices, allItems, recentTitles)
+  const priceSignals = buildPriceActionSignals(prices, allItems, recentTitles, existing)
   console.log(`Price-action signals: ${priceSignals.length} (${priceSignals.map(s => `${s.label} ${s.pct >= 0 ? '+' : ''}${s.pct.toFixed(1)}%`).join(', ') || 'none moving'})`)
 
   // ── PART 2: RSS signals ───────────────────────────────────────────────────────
