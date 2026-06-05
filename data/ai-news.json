@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-05-19-28-rbi-rate-pause-holds-as-mcx-gold-slides",
     "title": "RBI Rate Pause Holds as MCX Gold Slides to ₹153299 Amid Dollar Surge",
     "summary": "The RBI's decision to hold the repo rate connects directly to today's cross-asset selloff narrative. A rate pause signals the RBI is not moving to support rupee yields, which keeps USD/INR elevated at ₹94.95 — a level that historically amplifies import-side pressure across dollar-denominated commodities on MCX. The import parity chain runs as follows: COMEX gold weakness, translated through ₹94.95, currently resolves to MCX Gold at ₹153299 per 10g, where domestic custom duty and exchange premium layers are already embedded. A held repo rate compresses the yield differential versus the dollar, sustaining rupee softness. MCX Silver at ₹251150 per kg, down 5.15%, reflects the same dollar-strength transmission more aggressively given silver's dual industrial-monetary character. The cross-market correlation to watch is MCX Copper at ₹1344.80, down 2.29%, confirming demand-deterioration rather than pure currency effect. The USD/INR 95.00 level is the specific threshold that will confirm or negate further commodity downside into today's close.",
@@ -38,6 +39,46 @@
     "impact": "bearish",
     "pubDate": "2026-06-05T14:04:06.687Z",
     "pubDateIST": "05 Jun 2026, 19:34"
+=======
+    "id": "2026-06-05-19-30-rbi-holds-repo-at-5-25-as-mcx-gold-slide",
+    "title": "RBI Holds Repo at 5.25% as MCX Gold Slides 2.61% to ₹151676",
+    "summary": "The RBI's decision to hold the repo rate at 5.25% arrives precisely as the MCX complex is under broad liquidation pressure — gold at ₹151676/10g, silver at ₹251632/kg, copper at ₹1346.35/kg, and crude at ₹8668/bbl all posting sharp session declines. The dominant narrative is dollar-driven demand deterioration, and a hold rather than a cut removes one potential rupee-weakening catalyst that would have mechanically supported INR-denominated commodity prices. The import parity chain is straightforward: global gold weakness transmitted through USD/INR at ₹94.95 amplifies the INR price decline; a rate cut would have pressured the rupee further, partially cushioning the MCX fall. Instead, with INR relatively stable, the global selloff transmits with less domestic offset. The cross-market correlation to watch is USD/INR itself — historically, RBI holds during dollar-strength episodes have kept the rupee from sharp depreciation, limiting relief for commodity longs. The level to monitor is USD/INR ₹95.50; a breach there would reopen the import parity buffer discussion into the close.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-05T14:00:01.950Z",
+    "pubDateIST": "05 Jun 2026, 19:30"
+  },
+  {
+    "id": "2026-06-05-19-31-rbi-flags-monsoon-risk-as-mcx-gold-slide",
+    "title": "RBI Flags Monsoon Risk as MCX Gold Slides 2.61% to ₹151676 Amid Broad Selloff",
+    "summary": "The RBI MPC's explicit identification of monsoon as a primary domestic risk arrives directly into a cross-asset environment already under sustained pressure — gold at ₹151676 per 10g, silver at ₹251632 per kg, and crude at ₹8668 per barrel all declining simultaneously, consistent with the dollar-strength or demand-deterioration narrative driving this session. The monsoon risk flag carries a specific import parity mechanic: weaker rural demand outlook compresses physical gold and silver offtake projections, which historically softens domestic premiums above London spot. At USD/INR ₹94.95, any rupee softening tied to growth uncertainty widens the import cost chain and complicates the spread. Copper at ₹1346.35 per kg — itself a demand-sensitivity proxy — is the key cross-market correlation here, as both copper and domestic commodity demand move with the agricultural income cycle. The June CPI print, sensitive to food and kharif crop expectations, is the data release that will confirm or negate the monsoon-risk repricing embedded in today's session.",
+    "category": "Agri",
+    "tagType": "agri",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:01:53.832Z",
+    "pubDateIST": "05 Jun 2026, 19:31"
+  },
+  {
+    "id": "2026-06-05-19-33-mcx-natural-gas-falls-2-95-to-312-40-as",
+    "title": "MCX Natural Gas Falls 2.95% to ₹312.40 as Dollar Strength Compresses Energy Complex",
+    "summary": "The transmission mechanism is dollar strength — a firming USD/INR at ₹94.95 raises the rupee cost of imports while simultaneously pressuring USD-denominated Henry Hub benchmarks, compressing both legs of MCX NatGas pricing. Import parity arithmetic: Henry Hub spot near $2.28/mmBtu × ₹94.95 × ~1.44 duty-logistics factor = approximately ₹311-313/mmBtu theoretical parity, placing MCX at roughly fair value to marginal premium. Cross-commodity confirmation arrives from MCX Crude, also down this session at ₹8668/bbl — correlated demand-outlook deterioration across hydrocarbons reinforces rather than challenges the NatGas move. Historically, simultaneous crude-gas declines during dollar-strength sessions have extended intraday ranges into close. Key support observed at ₹308; resistance at ₹318. Watch the 4:00 PM IST dollar index trajectory and US EIA storage revision headlines for directional confirmation into close.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:03:45.729Z",
+    "pubDateIST": "05 Jun 2026, 19:33"
+  },
+  {
+    "id": "2026-06-05-19-35-mcx-silver-collapses-4-97-to-251-632-kg",
+    "title": "MCX Silver Collapses 4.97% to ₹251,632/kg Amid Broad Complex Selloff",
+    "summary": "The mechanism driving this session's move is dollar-strength-induced demand compression, unwinding leveraged long positions across the entire metals complex simultaneously. MCX Silver at ₹251,632/kg has shed nearly 5% — support observed historically around ₹248,000 and resistance near ₹256,500.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:05:38.091Z",
+    "pubDateIST": "05 Jun 2026, 19:35"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-05-04-24-dollar-weakness-lifts-mcx-silver-0-65-to",
