@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Minimal reset — Tailwind base removed since zero utility classes are used */
+*, *::before, *::after { box-sizing: border-box; }
+body  { margin: 0; padding: 0; }
+img, video { max-width: 100%; }
 
 :root {
   /* local aliases used by brief-prose and border utilities */
