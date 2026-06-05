@@ -1,30 +1,12 @@
 [
   {
-    "type": "brief",
-    "slug": "edition-036",
-    "href": "/briefs/edition-036",
-    "title": "Oil Fear Trade Cracks: Gold Slides as WTI Holds at $93.07",
-    "description": "The crude-led fear trade that dominated three sessions is losing grip as gold and silver fall together with oil easing.",
-    "excerpt": "For three sessions, this newsletter tracked a single dominant story: oil surging, gold fading, and fear concentrating in crude rather than precious metals. Today that structure is fracturing. WTI crud",
-    "date": "2026-06-05",
-    "edition": "36",
-    "tags": [
-      "MCX Gold",
-      "MCX Crude",
-      "Macro",
-      "Geopolitics"
-    ],
-    "commodities": [],
-    "commodity": ""
-  },
-  {
     "type": "hawk-scan",
     "slug": "2026-06-05-hawk-scan-silver-20260605",
     "href": "/articles/2026-06-05-hawk-scan-silver-20260605",
     "title": "MCX Silver: 3.94% Single-Session Collapse Below 253000",
     "description": "MCX Silver crashes ₹252930/kg (-3.94%), breaching week-low as COMEX slides -4.48%. Crude off 3.55%, Copper -2.16% in rare multi-commodity flush.",
     "excerpt": "--- TRIGGER — MCX Silver collapsed 3.94% in a single session, breaching the 3% Hawk-Scan threshold and printing a multi-week low at ₹252930/kg. PRICE — ₹252930/kg · -3.94% · PLUNGING SIGNAL — Synchron",
-    "date": "2026-06-05",
+    "date": "2026-06-05T13:55:00.000Z",
     "edition": "hawk-scan",
     "tags": [
       "MCX Silver",
@@ -40,12 +22,30 @@
   },
   {
     "type": "brief",
+    "slug": "edition-036",
+    "href": "/briefs/edition-036",
+    "title": "Oil Fear Trade Cracks: Gold Slides as WTI Holds at $93.07",
+    "description": "The crude-led fear trade that dominated three sessions is losing grip as gold and silver fall together with oil easing.",
+    "excerpt": "For three sessions, this newsletter tracked a single dominant story: oil surging, gold fading, and fear concentrating in crude rather than precious metals. Today that structure is fracturing. WTI crud",
+    "date": "2026-06-05T04:00:00.000Z",
+    "edition": "36",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-035",
     "href": "/briefs/edition-035",
     "title": "MCX Open 4 Jun 2026: Gold Gains on Risk-Off, Crude Slips",
     "description": "MCX Open 4 Jun 2026: Gold +0.57% on COMEX, crude -0.61% overnight. Gold holds ₹154,332, crude drops to ₹9,124. Key levels and import parity inside.",
     "excerpt": "--- COMEX and NYMEX overnight trade was defined by a classic risk-off rotation. COMEX Gold gained +0.57% to $4,490.82/oz while WTI Crude fell -0.61% to $95.17/bbl, a divergence consistent with defensi",
-    "date": "2026-06-04",
+    "date": "2026-06-04T04:00:00.000Z",
     "edition": "35",
     "tags": [
       "MCX Open",
@@ -142,6 +142,25 @@
   },
   {
     "type": "brief",
+    "slug": "edition-034",
+    "href": "/briefs/edition-034",
+    "title": "Oil Fear Trade Deepens as Gold Fades and Copper Cracks",
+    "description": "Crude extends its rally to $96.40 while gold, silver, and copper all fall — the oil-dominated fear trade is hardening.",
+    "excerpt": "What began as a disruption in Edition 32 and hardened into a directional shift in Edition 33 has now settled into something more uncomfortable: a market that is actively repricing risk around oil, not",
+    "date": "2026-06-03T04:00:00.000Z",
+    "edition": "34",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Copper",
+      "Geopolitics",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-032",
     "href": "/briefs/edition-032",
     "title": "Oil at $94.82 Breaks the Stagflation Script — Crude Surges Back",
@@ -171,25 +190,6 @@
       "MCX Crude",
       "MCX Gold",
       "Geopolitics"
-    ],
-    "commodities": [],
-    "commodity": ""
-  },
-  {
-    "type": "brief",
-    "slug": "edition-034",
-    "href": "/briefs/edition-034",
-    "title": "Oil Fear Trade Deepens as Gold Fades and Copper Cracks",
-    "description": "Crude extends its rally to $96.40 while gold, silver, and copper all fall — the oil-dominated fear trade is hardening.",
-    "excerpt": "What began as a disruption in Edition 32 and hardened into a directional shift in Edition 33 has now settled into something more uncomfortable: a market that is actively repricing risk around oil, not",
-    "date": "2026-06-03",
-    "edition": "34",
-    "tags": [
-      "MCX Crude",
-      "MCX Gold",
-      "MCX Copper",
-      "Geopolitics",
-      "Macro"
     ],
     "commodities": [],
     "commodity": ""
