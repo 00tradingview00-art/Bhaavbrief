@@ -61,9 +61,16 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/articles/ data/engine-state.json data/content-index.json
+          # Only check for new article files — engine-state.json always changes and
+          # would cause a spurious commit even when no article was written.
+          git add content/articles/ data/content-index.json
           git add data/last-article-title.txt 2>/dev/null || true
-          git diff --staged --quiet && echo "No new articles" && exit 0
+          if git diff --staged --quiet; then
+            echo "No new articles — skipping commit"
+            exit 0
+          fi
+          # New article confirmed — now also commit the updated state
+          git add data/engine-state.json
           TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
           git commit -m "⚡ Flash: ${TITLE}"
           git push origin main

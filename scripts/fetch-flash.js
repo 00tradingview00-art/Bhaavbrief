@@ -398,22 +398,34 @@ async function main() {
   const seen = loadSeen()
   console.log(`BhaavBrief Flash — seen: ${seen.length} URLs`)
 
-  // Build a set of normalised titles already published in content/flash/
-  // so the same story from a different URL doesn't get written twice
-  const publishedTitles = new Set(
-    fs.existsSync(FLASH_DIR)
-      ? fs.readdirSync(FLASH_DIR)
-          .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
-          .map(f => {
-            try {
-              const raw = fs.readFileSync(path.join(FLASH_DIR, f), 'utf8')
-              const m   = raw.match(/^title:\s*"(.+)"/m)
-              return m ? m[1].toLowerCase().replace(/[^a-z0-9]/g, '') : ''
-            } catch { return '' }
-          })
-          .filter(Boolean)
-      : []
-  )
+  // Build keyword sets from flash articles published TODAY so the same story
+  // under a different URL doesn't produce a duplicate. Compare significant words
+  // (>4 chars) between candidate source titles and existing generated titles —
+  // exact-title match fails because Claude rewrites headlines.
+  const todayPrefix = getISTNow().toISOString().split('T')[0]
+  function sigWords(str) {
+    return new Set(str.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 4))
+  }
+  const todayFlashKeywords = fs.existsSync(FLASH_DIR)
+    ? fs.readdirSync(FLASH_DIR)
+        .filter(f => f.startsWith(todayPrefix) && (f.endsWith('.mdx') || f.endsWith('.md')))
+        .map(f => {
+          try {
+            const raw = fs.readFileSync(path.join(FLASH_DIR, f), 'utf8')
+            const m   = raw.match(/^title:\s*"(.+)"/m)
+            return m ? sigWords(m[1]) : new Set()
+          } catch { return new Set() }
+        })
+    : []
+
+  function alreadyCoveredToday(sourceTitle) {
+    const words = sigWords(sourceTitle)
+    return todayFlashKeywords.some(existing => {
+      let overlap = 0
+      for (const w of words) if (existing.has(w)) overlap++
+      return overlap >= 2
+    })
+  }
 
   // Mark all URLs seen regardless — so stale articles never get retried
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat()
@@ -423,10 +435,9 @@ async function main() {
   // Google News RSS — especially Indian outlets — can return articles 2-6h old.
   // 90-min window was killing most legitimate stories.
   const candidates = allItems.filter(item => {
-    const text          = `${item.title} ${item.description}`
-    const normalisedTitle = item.title.toLowerCase().replace(/[^a-z0-9]/g, '')
+    const text = `${item.title} ${item.description}`
     if (seen.includes(item.url))              return false
-    if (publishedTitles.has(normalisedTitle)) return false  // same story, different URL
+    if (alreadyCoveredToday(item.title))      return false  // same story, different URL
     if (!isImportant(text))                   return false
     if (isMCXStockArticle(text))              return false
     if (!isFresh(item.pubDate, 360))          return false  // skip anything older than 6h
