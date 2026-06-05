@@ -1,5 +1,45 @@
 [
   {
+    "id": "2026-06-05-19-28-rbi-rate-pause-holds-as-mcx-gold-slides",
+    "title": "RBI Rate Pause Holds as MCX Gold Slides to ₹153299 Amid Dollar Surge",
+    "summary": "The RBI's decision to hold the repo rate connects directly to today's cross-asset selloff narrative. A rate pause signals the RBI is not moving to support rupee yields, which keeps USD/INR elevated at ₹94.95 — a level that historically amplifies import-side pressure across dollar-denominated commodities on MCX. The import parity chain runs as follows: COMEX gold weakness, translated through ₹94.95, currently resolves to MCX Gold at ₹153299 per 10g, where domestic custom duty and exchange premium layers are already embedded. A held repo rate compresses the yield differential versus the dollar, sustaining rupee softness. MCX Silver at ₹251150 per kg, down 5.15%, reflects the same dollar-strength transmission more aggressively given silver's dual industrial-monetary character. The cross-market correlation to watch is MCX Copper at ₹1344.80, down 2.29%, confirming demand-deterioration rather than pure currency effect. The USD/INR 95.00 level is the specific threshold that will confirm or negate further commodity downside into today's close.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T13:58:40.471Z",
+    "pubDateIST": "05 Jun 2026, 19:28"
+  },
+  {
+    "id": "2026-06-05-19-30-rbi-holds-repo-at-5-25-cuts-gdp-to-6-6-a",
+    "title": "RBI Holds Repo at 5.25%, Cuts GDP to 6.6% as MCX Silver Slides 5.15%",
+    "summary": "The RBI's decision to hold repo at 5.25% while reducing India's GDP growth projection to 6.6% arrives precisely as the MCX complex is already absorbing a broad-based selloff — gold, crude, and copper declining simultaneously on dollar strength and deteriorating demand outlook. A downward GDP revision from India's central bank now adds a domestic demand layer to what was previously a purely dollar-driven narrative. MCX Silver at ₹251150/kg is the session's sharpest expression of this pressure, down 5.15%. The import parity chain shows COMEX silver weakness transmitting through USD/INR at ₹94.95 — a firmer rupee would partially offset global declines, but no such buffer exists today. MCX Copper at ₹1344.80/kg is the direct cross-market correlation to watch: copper prices historically price industrial demand expectations ahead of other metals, and its 2.29% decline alongside a domestic growth downgrade reinforces the same demand-deterioration signal. The level that will confirm or negate further pressure is COMEX silver's $31.00/oz handle — a sustained breach below that historically precedes accelerated INR-denominated carry-through to MCX contracts within the same session close.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:00:31.933Z",
+    "pubDateIST": "05 Jun 2026, 19:30"
+  },
+  {
+    "id": "2026-06-05-19-32-mcx-natural-gas-slides-3-11-to-311-90-mm",
+    "title": "MCX Natural Gas slides 3.11% to ₹311.90/mmBtu as dollar-driven selloff grips energy complex",
+    "summary": "The mechanism here is dollar strength compressing USD-denominated commodity prices globally, then transmitting directly into MCX via the USD/INR rate. When the dollar firms, Henry Hub futures fall and that reprices Indian import parity lower in tandem.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:02:15.110Z",
+    "pubDateIST": "05 Jun 2026, 19:32"
+  },
+  {
+    "id": "2026-06-05-19-34-mcx-silver-crashes-5-15-to-251150-kg-ami",
+    "title": "MCX Silver Crashes 5.15% to ₹251150/kg Amid Broad Multi-Asset Selloff Friday Session",
+    "summary": "The mechanism driving this move is dollar strength compressing rupee-denominated commodity valuations simultaneously across metals and energy. When USD/INR firms, import parity for silver adjusts upward theoretically, yet demand destruction fears are overpowering that cushion. Import parity arithmetic: Comex silver near approximately $32.50/oz converts to roughly $1044/kg, multiplied by USD/INR ₹94.95, multiplied by approximate duty factor 1.15, yields theoretical parity near ₹253,800/kg — placing MCX Silver at a marginal discount to parity currently. Key observation levels: ₹248000 as near-term support, ₹257000 as session resistance. Cross-commodity confirmation comes from MCX Copper falling 2.29% simultaneously — both are industrially sensitive metals, and synchronized weakness historically reflects deteriorating global demand outlook rather than isolated currency moves. Watch ₹248000 into close.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-05T14:04:06.687Z",
+    "pubDateIST": "05 Jun 2026, 19:34"
+  },
+  {
     "id": "2026-06-05-04-24-dollar-weakness-lifts-mcx-silver-0-65-to",
     "title": "Dollar Weakness Lifts MCX Silver 0.65% to ₹264,680/kg in Global Session",
     "summary": "The mechanism is dollar depreciation compressing the USD's purchasing power against hard assets, triggering a simultaneous bid across the precious metals complex. When USD/INR holds at ₹95.78 while Comex silver gains $3.7/oz, the rupee-denominated MCX price receives a dual amplification — higher dollar price plus an elevated conversion base.",
