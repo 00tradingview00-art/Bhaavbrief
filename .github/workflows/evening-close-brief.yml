@@ -52,3 +52,16 @@ jobs:
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
           git commit -m "🌙 MCX Close Brief — ${DATE_IST}"
           git push origin main
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: MCX Close Brief pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Evening MCX Close Brief</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/evening-close-brief.yml\">Re-run workflow →</a></p>"
+            }'

@@ -84,3 +84,16 @@ jobs:
           echo "Waiting 3 minutes for Vercel to deploy..."
           sleep 180
           node scripts/send-newsletter.js
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: MCX Open Brief pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Daily MCX Open Brief</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p>The MCX open brief may not have been published. Trigger the workflow manually if needed.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/daily-open-brief.yml\">Re-run workflow →</a></p>"
+            }'

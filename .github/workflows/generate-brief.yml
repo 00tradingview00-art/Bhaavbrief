@@ -101,3 +101,16 @@ jobs:
           INSTAGRAM_USER_ID:        ${{ secrets.INSTAGRAM_USER_ID }}
           INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Daily brief pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Generate Daily Brief</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p>Today'\''s brief may not have been sent to subscribers. Trigger the workflow manually if needed.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/generate-brief.yml\">Re-run workflow →</a></p>"
+            }'

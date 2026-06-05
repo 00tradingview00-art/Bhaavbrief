@@ -49,3 +49,16 @@ jobs:
           SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
           BRIEF_FILE:    ${{ steps.brief.outputs.file }}
         run: node scripts/send-newsletter.js
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Newsletter send failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Send Newsletter</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>. Subscribers may not have received today'\''s brief.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/send-newsletter.yml\">Re-run workflow →</a></p>"
+            }'
