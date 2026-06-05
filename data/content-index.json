@@ -18,6 +18,27 @@
     "commodity": ""
   },
   {
+    "type": "hawk-scan",
+    "slug": "2026-06-05-hawk-scan-silver-20260605",
+    "href": "/articles/2026-06-05-hawk-scan-silver-20260605",
+    "title": "MCX Silver: 3.94% Single-Session Collapse Below 253000",
+    "description": "MCX Silver crashes ₹252930/kg (-3.94%), breaching week-low as COMEX slides -4.48%. Crude off 3.55%, Copper -2.16% in rare multi-commodity flush.",
+    "excerpt": "--- TRIGGER — MCX Silver collapsed 3.94% in a single session, breaching the 3% Hawk-Scan threshold and printing a multi-week low at ₹252930/kg. PRICE — ₹252930/kg · -3.94% · PLUNGING SIGNAL — Synchron",
+    "date": "2026-06-05",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 252930
+  },
+  {
     "type": "brief",
     "slug": "edition-035",
     "href": "/briefs/edition-035",
