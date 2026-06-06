@@ -120,6 +120,47 @@ function loadRecentBriefs(count = 3) {
   }
 }
 
+// ── Format helpers ────────────────────────────────────────────────────────────
+
+function buildKeyNumber(prices) {
+  if (!prices) return null
+  const parts = []
+  if (prices.mcxGold)   parts.push(`MCX Gold ₹${prices.mcxGold}`)
+  if (prices.mcxCrude)  parts.push(`Crude ₹${prices.mcxCrude}`)
+  if (prices.usdinr)    parts.push(`USDINR ₹${prices.usdinr}`)
+  if (!parts.length) return null
+
+  const changes = []
+  const sign = n => parseFloat(n) > 0 ? '+' : ''
+  if (prices.mcxGold   && prices.goldPct   !== '0.00') changes.push(`Gold ${sign(prices.goldPct)}${prices.goldPct}%`)
+  if (prices.mcxCrude  && prices.crudePct  !== '0.00') changes.push(`Crude ${sign(prices.crudePct)}${prices.crudePct}%`)
+  if (prices.mcxSilver && prices.silverPct !== '0.00') changes.push(`Silver ${sign(prices.silverPct)}${prices.silverPct}%`)
+
+  const tail = changes.length ? ` — ${changes.join(' | ')}` : ''
+  return `**${parts.join(' | ')}**${tail}`
+}
+
+function buildPriceBridge(prices) {
+  if (!prices) return null
+  const rows = []
+  if (prices.comexGold   && prices.mcxGold)
+    rows.push(`| Gold    | $${prices.comexGold}/oz (COMEX)    | ₹${prices.usdinr} | **₹${prices.mcxGold}/10g** |`)
+  if (prices.wti         && prices.mcxCrude)
+    rows.push(`| Crude   | $${prices.wti}/bbl (WTI)          | ₹${prices.usdinr} | **₹${prices.mcxCrude}/bbl** |`)
+  if (prices.comexSilver && prices.mcxSilver)
+    rows.push(`| Silver  | $${prices.comexSilver}/oz (COMEX)  | ₹${prices.usdinr} | **₹${prices.mcxSilver}/kg** |`)
+  if (prices.comexCopper && prices.mcxCopper)
+    rows.push(`| Copper  | $${prices.comexCopper}/lb (COMEX)  | ₹${prices.usdinr} | **₹${prices.mcxCopper}/kg** |`)
+  if (!rows.length) return null
+  return `| Commodity | Global Price | USD/INR | MCX Price |
+|-----------|--------------|---------|-----------|
+${rows.join('\n')}`
+}
+
+const DISCLAIMER = `---
+
+*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information.*`
+
 // ── Generate ──────────────────────────────────────────────────────────────────
 
 async function generate(prices, news, recentBriefs) {
@@ -128,8 +169,11 @@ async function generate(prices, news, recentBriefs) {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   })
 
+  const keyNumber   = buildKeyNumber(prices)
+  const priceBridge = buildPriceBridge(prices)
+
   const priceBlock = prices ? `
-TODAY'S MCX PRICES (use these exact numbers):
+TODAY'S MCX PRICES (use these exact numbers — never invent or round):
 - MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today
 - MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today
 - MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today
@@ -214,8 +258,14 @@ Write for an educated Indian reader — someone who follows Mint or Economic Tim
 - Never stack two pieces of jargon in one sentence
 
 ═══════════════════════════════════════════
-STRUCTURE (follow exactly)
+STRUCTURE (follow exactly — every section required)
 ═══════════════════════════════════════════
+
+## Macro Thread
+Exactly 3 sentences — no more, no less:
+Sentence 1: The single overnight global event that matters most (name it specifically — a data release, a geopolitical move, a central bank action).
+Sentence 2: The direct MCX implication — which commodity, in which direction, and the mechanism.
+Sentence 3: The one thing to watch today that will confirm or kill that implication.
 
 ## [NARRATIVE NAME] — [STRENGTHENING / WEAKENING / REVERSING]
 [2-3 punchy sentences on what the narrative IS and why it's dominating today's market. Include one sentence on what's CHANGED vs yesterday.]
@@ -245,7 +295,7 @@ TAGS — pick the 1-3 most relevant (not always Gold):
 MCX Gold | MCX Silver | MCX Crude | MCX Copper | MCX NatGas | Macro | Geopolitics | OPEC | RBI | Fed | USD/INR | Inflation
 ═══════════════════════════════════════════
 
-Return ONLY valid MDX with frontmatter:
+Return ONLY valid MDX with frontmatter. Do NOT include a Key Number line or Price Bridge table — those are injected separately. Do NOT add a disclaimer — that is appended separately.
 
 ---
 title: "[Sharp headline — lead with the narrative, not the commodity. Under 12 words. Any price level in the title must be a number that appears verbatim in the price data provided above — never invent or round to a dramatic threshold.]"
@@ -256,7 +306,7 @@ published: true
 tags: ["tag1", "tag2"]
 ---
 
-[Brief content]`
+[Brief content starting with ## Macro Thread]`
 
   const r = await client.messages.create({
     model:      'claude-sonnet-4-6',
@@ -307,6 +357,24 @@ async function main() {
     console.error('Invalid MDX generated:\n', mdx.slice(0, 200))
     process.exit(1)
   }
+
+  // Inject Key Number + Price Bridge after closing frontmatter delimiter
+  const keyNumber   = buildKeyNumber(prices)
+  const priceBridge = buildPriceBridge(prices)
+  // Match opening --- to closing --- (must be on its own line), non-greedy
+  const fmMatch = mdx.match(/^(---\n[\s\S]*?\n---)\n([\s\S]*)$/)
+  if (fmMatch) {
+    const header = fmMatch[1]
+    const body   = fmMatch[2].trimStart()
+    const inject = [
+      keyNumber   ? keyNumber   : null,
+      priceBridge ? `## Price Bridge\n\n${priceBridge}` : null,
+    ].filter(Boolean).join('\n\n')
+    mdx = inject ? `${header}\n\n${inject}\n\n${body}` : `${header}\n\n${body}`
+  }
+
+  // Append disclaimer footer
+  mdx = mdx.trimEnd() + '\n\n' + DISCLAIMER
 
   // Inject urlSlug derived from date + title for SEO-friendly URLs
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
