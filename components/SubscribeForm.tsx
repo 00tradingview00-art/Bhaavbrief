@@ -2,17 +2,19 @@
 import { useState } from 'react'
 import { usePostHog } from 'posthog-js/react'
 
-export default function SubscribeForm({ compact = false }: { compact?: boolean }) {
+export default function SubscribeForm({ compact = false, location }: { compact?: boolean; location?: string }) {
   const [email,   setEmail]   = useState('')
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const ph = usePostHog()
 
+  const loc = location ?? (compact ? 'sidebar' : 'page')
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) return
     setStatus('loading')
-    ph?.capture('subscribe_attempted', { location: compact ? 'sidebar' : 'page' })
+    ph?.capture('subscribe_attempted', { location: loc })
     try {
       const res  = await fetch('/api/subscribe', {
         method: 'POST',
@@ -24,14 +26,14 @@ export default function SubscribeForm({ compact = false }: { compact?: boolean }
         setStatus('success')
         setMessage(data.message ?? 'You\'re in! First brief at 9:30 AM.')
         setEmail('')
-        ph?.capture('subscribe_success', { location: compact ? 'sidebar' : 'page' })
+        ph?.capture('subscribe_success', { location: loc })
         ph?.identify(email.trim())
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ;(window as any).gtag('event', 'generate_lead', {
             event_category: 'newsletter',
-            event_label: compact ? 'sidebar' : 'page',
+            event_label: loc,
           })
         }
       } else {

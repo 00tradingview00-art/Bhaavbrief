@@ -166,6 +166,11 @@ export default async function HomePage() {
             gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
           </p>
 
+          {/* Subscribe CTA — above the fold on all devices */}
+          <div style={{ maxWidth: 400 }}>
+            <SubscribeForm compact location="hero" />
+          </div>
+
         </div>
       </div>
 
@@ -467,8 +472,8 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* Subscribe card */}
-          <div id="subscribe" style={{
+          {/* Subscribe card — desktop only (mobile sees the hero form above the fold) */}
+          <div id="subscribe" className="desktop-only" style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
             borderRadius: 10,
