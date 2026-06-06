@@ -178,10 +178,11 @@ export default function NewsFeed({ serverItems = [] }: Props) {
     return [...serverItems, ...news]
       .filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
       .sort((a, b) => {
-        const aDate = a.pubDate.slice(0, 10)
-        const bDate = b.pubDate.slice(0, 10)
+        // Use IST dates — same grouping logic as the date dividers
+        const aDate = toISTDateKey(a.pubDate)
+        const bDate = toISTDateKey(b.pubDate)
         if (bDate !== aDate) return bDate.localeCompare(aDate)  // newest date first
-        // same day: hawk-scans float above other items
+        // same IST day: hawk-scans float above other items
         const aHawk = a.itemType === 'hawk-scan' ? 1 : 0
         const bHawk = b.itemType === 'hawk-scan' ? 1 : 0
         if (bHawk !== aHawk) return bHawk - aHawk
