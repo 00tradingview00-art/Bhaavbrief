@@ -519,7 +519,7 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels }) {
 
   const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
-A HAWK-SCAN fires only on extreme market events. This is one of those moments.
+A HAWK-SCAN fires only on extreme market events (>3% move or major EIA data). This is one.
 
 TIME: ${timeStr} IST, ${dateStr}
 HAWK TRIGGER: ${hawkTrigger}
@@ -530,12 +530,16 @@ ${moveBlock}
 CURRENT PRICES [${dataLabel}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
 ${priceLines.join('\n')}
 ${eiaBlock}${techBlock}
+SEBI COMPLIANCE — NON-NEGOTIABLE:
+- BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, act
+- No price targets. Historical patterns only: "In past supply shocks, crude rose 8–12%" ✓
+- Technical levels are observations: "Price broke ₹74,000 for the first time in 6 weeks" ✓ | "Strong support, accumulate" ✗
 
-OUTPUT FORMAT — SACRED. DO NOT DEVIATE. Return exactly this structure, no extra prose:
+RETURN EXACTLY THIS STRUCTURE — no extra prose, no section reordering:
 
 ---
-title: "[HAWK-SCAN] [Commodity]: [What happened + key level, observational only] — under 70 chars. FORBIDDEN words in title: act, buy, sell, enter, exit, trade, now, urgent, alert"
-description: "Under 155 chars. Include current ₹ price and the extreme trigger. For traders."
+title: "[HAWK-SCAN] [Commodity]: [What happened + key level] — under 70 chars. BANNED: act, buy, sell, enter, exit, trade, now, urgent, alert"
+description: "Under 155 chars. Include ₹ price and the specific trigger."
 date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "hawk-scan"
@@ -546,27 +550,28 @@ slug: "hawk-scan-[commodity-keyword]-[date-YYYYMMDD]"
 hawkTrigger: "${moves[0]?.absPct >= HAWK_SCAN_THRESHOLD ? 'price' : eia?.isSignificant ? 'eia' : 'extreme'}"
 ---
 
-TRIGGER — [One sentence. What exactly fired this scan. No softening.]
+TRIGGER — One sentence. The exact event that fired this scan — the number, the commodity, the direction.
+BAD: "Significant selling pressure has emerged across the commodity complex amid global risk-off sentiment."
+GOOD: "MCX Crude has fallen **3.4%** to **₹8,430/bbl** as OPEC+ announced a surprise production increase of 400,000 bpd."
 
-PRICE — ₹[exact level] · [exact %] · [direction in one word: SURGING/PLUNGING/SPIKING]
+PRICE — ₹[exact level] · [exact % change] · [one word: SURGING / PLUNGING / SPIKING]
 
-SIGNAL — [One sentence. The SPECIFIC MECHANISM behind this move — geopolitical, macro catalyst, technical break, supply shock. Name the cause explicitly.]
+SIGNAL — One sentence. Name the specific real-world cause — the policy decision, the data print, the supply event, the geopolitical trigger. Not "dollar strength" alone — say what drove the dollar.
+BAD: "The move is driven by global macro headwinds and risk-off positioning."
+GOOD: "The US Federal Reserve signalled rates will stay high for longer after CPI came in at 3.4% vs 3.1% expected."
 
-CROSS-ASSET — [One sentence. What is the REST of the complex doing right now. Show the chain.]
+CROSS-ASSET — One sentence. Name at least two other assets and their exact moves right now. Show the direction and magnitude.
+BAD: "Other commodities are also under pressure amid broad risk-off sentiment."
+GOOD: "MCX Gold is down **1.2% to ₹1,51,200/10g** while the dollar index rose **0.6%** to 104.8 — metals and energy moving together."
 
-IMPORT COST — [Compute: COMEX $X × ₹[usdinr rate] × [duty multiplier for this commodity] = ₹[MCX parity]. Show the arithmetic, one line.]
+IMPORT COST — One line of real arithmetic: [COMEX/benchmark price] × [USD/INR rate] × [duty factor if applicable] = ₹[MCX parity]. For crude: WTI $X × ₹${prices.usdinr?.toFixed(2)} ÷ 159 litres × 1.025 (customs) = ₹Y/litre or ₹Z/bbl.
 
-TECHNICAL — [Key support above/below current price. Use exact numbers from OHLC data above. If no OHLC available, use round numbers — label them as such.]
+TECHNICAL — One sentence. Use exact numbers from the OHLC data above. Name the level and how many times price has tested it.
+If no OHLC available, say "No intraday OHLC data — nearest round-number [support/resistance] at ₹X."
 
-WATCH — [One specific price level OR one scheduled data release that will either confirm or invalidate this move.]
+WATCH — One specific price level OR one data release in the next 48 hours that confirms or negates this move.
 
-RULES:
-- Each section header is exactly as shown above (TRIGGER, PRICE, SIGNAL, etc.)
-- Each section is ONE sentence or one line of arithmetic — no more
-- No "experts say". Facts, data, mechanics only.
-- SEBI COMPLIANCE: No buy/sell/accumulate/avoid/exit/enter/act directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" framing for patterns. Title must be purely descriptive — never action-oriented.
-- If this is an EIA significant event, IMPORT COST must show the WTI→MCX crude parity math.
-- Total body: 80–130 words. Lean is the mandate.`
+Total body: 80–130 words across all sections. Each section: one sentence or one line only.`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
