@@ -615,82 +615,70 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
   const commodity = primaryMove?.label ?? 'commodities'
   const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
 
-  const prompt = `You are BhaavBrief's senior market analyst — India's premier real-time commodity intelligence platform, read by traders, investors, merchants and businesses.
+  const prompt = `You are BhaavBrief's market reporter. Write a flash intelligence article for Indian commodity traders and merchants.
 
-Write a flash intelligence article triggered at ${timeStr} IST on ${dateStr}.
-
+TRIGGERED AT: ${timeStr} IST, ${dateStr}
 SESSION: ${session.toUpperCase()} — ${SESSION_FOCUS[session]}
 
-CROSS-ASSET MARKET NARRATIVE (the dominant theme driving the ENTIRE commodity complex right now):
-${narrative}
-
-TRIGGER (what specifically fired this article):
+WHAT FIRED THIS ARTICLE:
 ${moveBlock}
 
+MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE KITE' : 'ESTIMATED'}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
 ${priceBlock}
 
-${circularBlock ? circularBlock + '\n' : ''}${eiaBlock ? eiaBlock + '\n' : ''}${techBlock}SEBI COMPLIANCE — NON-NEGOTIABLE (BhaavBrief is unregistered, educational content only):
-- State data, never judge it: "Crude at $87.40, up 2.3%" ✅ | "Crude closed strong" ❌
-- No action verbs directed at reader. BANNED: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
-- No predictive framing: "Goldman Sachs projects crude at $95" ✅ | "Crude headed to $95" ❌
-- Historical context over prediction: "In past dollar-strength episodes, MCX gold fell 2-4%" ✅ | "MCX gold will fall" ❌
-- Macro linkage: "Historically, rising crude compresses OMC margins by 3-5%" ✅ | "Rising crude is bad for OMCs, avoid" ❌
-- Technical levels are observations, not triggers: "Price has rejected at ₹74,000 three times" ✅ | "Strong resistance, sell here" ❌
+CONTEXT: ${narrative}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${techBlock}
+SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
+- BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
+- No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
+- Technical levels are observations: "Gold has held ₹74,000 four times" ✓ | "Strong support, consider buying" ✗
 
-WRITING STANDARDS — NON-NEGOTIABLE:
-1. OPEN by connecting the trigger to the MARKET NARRATIVE above. This move never happens in isolation.
-2. Give the SPECIFIC mechanism: macro driver, geopolitical factor, technical level broken, or regulatory event.
-3. Cite ACTUAL TECHNICAL LEVELS from the OHLC data above — name exact support/resistance numbers, reference 20-SMA and round numbers. Do not invent levels.
-4. Explain the CROSS-ASSET CHAIN: what is the rest of the complex doing? Show cause-and-effect across assets.
-5. Quantify the INDIAN IMPORT PARITY: COMEX price + USD/INR rate + customs duty → exact MCX ₹ parity. Show the arithmetic.
-6. 150–250 words. Sharp. No filler. No "experts say". Facts, levels, mechanics only.
-6a. Use **bold** inline for key data: price levels (e.g. **₹9,093**), % moves (e.g. **−1.83%**), commodity/company names on first mention (e.g. **MCX Crude**, **WTI**), and critical thresholds. Bold specific numbers and names only — never full sentences.
-7. Include a **WHO IS AFFECTED** section before the Watch line:
-   - **Businesses:** one named sector + one concrete cost/revenue consequence (e.g. "Paint companies: raw material costs rise ₹X/kg")
-   - **Investors:** one named MCX contract + the directional signal
-   - **Consumers:** one named product + price direction (e.g. "Petrol/diesel: pump prices may rise")
-   - BANNED: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware"
-8. End with exactly one line: "Watch: [specific price level or upcoming data release to monitor]"
+WRITE EXACTLY THIS STRUCTURE — 4 sentences + 1 Watch line:
 
-LANGUAGE — NON-NEGOTIABLE:
-Write for a first-time investor or small trader who reads Hindi newspapers but follows commodity prices. NOT a Bloomberg analyst. Assume zero finance background.
-- Explain EVERY term on first use: "WTI crude (the US oil benchmark)", "COMEX (the US commodity exchange)", "20-SMA (20-day average price)"
-- "risk-off" → "investors moving money to safer assets like gold"
-- "risk-on" → "investors feeling confident and moving into higher-risk assets"
-- "commodity complex" → "commodities"
-- "safe-haven bid" → "investors buying gold for safety"
-- "the market is pricing in" → replace with what is actually happening, in plain words
-- "stagflation" → "a situation where prices are rising but the economy is slowing"
-- "hawkish/dovish" → "leaning toward raising/cutting interest rates"
-- FOMC → "US Federal Reserve (India's equivalent: RBI)", OPEC → explain once as "the oil-producing countries' group"
-- Never stack two jargon terms in one sentence
-- Short sentences. One idea per sentence. If a sentence is longer than 25 words, break it.
-- If you reference a previous edition (e.g. Edition 32), write it as a markdown link: [Edition 32](/briefs/edition-032)
+Sentence 1 — THE FACT: What moved and the exact number that proves it. Include the ₹ price and the % change.
+Sentence 2 — THE CAUSE: Why it happened. Name the specific real-world event (policy decision, macro data, geopolitical trigger, supply figure). Do not say "dollar strength" alone — say what drove the dollar.
+Sentence 3 — THE CHAIN: What else moved as a result, and how does USD/INR at ₹${prices.usdinr?.toFixed(2)} amplify this for Indian importers specifically.
+Sentence 4 — THE IMPACT: Pick one industry in India (name it — "cable manufacturers", "paint companies", "jewellery exporters") and give one concrete, specific consequence (a cost direction, a margin squeeze, a price movement).
+Watch: [one specific price level OR one data release in the next 48 hours that confirms or negates this move]
 
-SEO RULES:
-- Title: commodity name + specific action + key reason (under 65 chars, include "MCX")
-- Meta description: under 155 chars, include current ₹ price and key reason
-- Slug: lowercase, hyphens, include commodity and key trigger word
+TOTAL: 80–110 words. One idea per sentence. Break any sentence over 20 words.
+Use **bold** only for key numbers (prices, percentages, thresholds). Never bold whole sentences.
 
-RETURN ONLY valid MDX frontmatter + article body, nothing else:
+WHAT BAD WRITING LOOKS LIKE — never do this:
+✗ "The hardening of deposit and lending rates in Indian credit markets, despite RBI's policy rate pause, lands directly inside a global commodity complex already under synchronized selling pressure."
+✗ "The dominant narrative pointing to dollar strength compressing demand expectations globally."
+✗ "MCX Gold at ₹152,551 per 10g, MCX Copper at ₹1,334.95 per kg, and MCX Crude at ₹8,613 per barrel have each sold off between 2.05% and 3.01% this session..."
+
+WHAT GOOD WRITING LOOKS LIKE — do this:
+✓ "RBI held rates at **5.25%** today while MCX Gold fell **2.05% to ₹1,52,551/10g** and Copper dropped **3.01% to ₹1,334.95/kg**."
+✓ "The driver is a stronger US dollar — it rose after better-than-expected US jobs data reduced expectations of a Fed rate cut."
+✓ "A stronger dollar raises the rupee cost of every import: at USD/INR ₹94.95, MCX prices track COMEX higher even without a change in the underlying commodity."
+✓ "Cable manufacturers using copper as raw material will see input costs under pressure — a 3% drop in copper narrows their margin by an estimated ₹40–60/kg."
+
+SEO:
+- Title: commodity + specific action + key reason (under 65 chars, include "MCX")
+- Description: under 155 chars, ₹ price + key reason
+- Slug: lowercase hyphens, max 8 words
+
+RETURN ONLY valid MDX frontmatter + article body:
 
 ---
-title: "[SEO title — under 65 chars, includes MCX + commodity + trigger]"
-description: "[Under 155 chars — include current ₹ price and key reason]"
+title: "[under 65 chars]"
+description: "[under 155 chars]"
 date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "flash"
 commodity: "${primaryMove?.label ?? 'macro'}"
 tags: ["${tags}"]
 priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
-slug: "[url-slug-max-8-words-hyphens-only]"
+slug: "[url-slug-max-8-words]"
 ---
 
-[Article body — cross-asset narrative, specific levels, then WHO IS AFFECTED section, then Watch line]`
+[4 sentences + Watch line. Nothing else.]`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 1200,
+    max_tokens: 700,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -825,9 +813,20 @@ async function main() {
   }
 
   // Detect moves and build market narrative
-  const moves     = detectMoves(prices, state.lastPrices)
-  const narrative = buildMarketNarrative(prices)
-  const session   = getMarketSession()
+  const allMoves   = detectMoves(prices, state.lastPrices)
+  const narrative  = buildMarketNarrative(prices)
+  const session    = getMarketSession()
+
+  // Per-commodity cooldown: suppress a move if we already wrote about it within 3h
+  // (hawk-scan level moves always override the cooldown)
+  const COMMODITY_COOLDOWN_HOURS = 3
+  const nowMs = Date.now()
+  const moves = allMoves.filter(m => {
+    if (m.absPct >= HAWK_SCAN_THRESHOLD) return true
+    const lastAt = state.lastCoveredAt?.[m.key]
+    if (!lastAt) return true
+    return (nowMs - new Date(lastAt).getTime()) / 3_600_000 >= COMMODITY_COOLDOWN_HOURS
+  })
 
   // Only update lastPrices from live Kite data — prevents clobbering with zeros
   if (prices.priceSource === 'kite-live') {
@@ -840,7 +839,7 @@ async function main() {
 
   console.log(`Price source: ${prices.priceSource} | Session: ${session}`)
   console.log(`Market narrative: ${narrative}`)
-  console.log(`Price moves: ${moves.length}`)
+  console.log(`Price moves (after cooldown): ${moves.length} / ${allMoves.length} total`)
   moves.forEach(m => console.log(`  ${m.label}: ${m.pct.toFixed(2)}% → ₹${m.price.toFixed(0)}`))
   console.log(`New circulars: ${newCirculars.length}`)
   newCirculars.forEach(c => console.log(`  [${c.source}] ${c.title.slice(0, 60)}`))
@@ -920,6 +919,10 @@ async function main() {
   state.articlesToday = state.articlesToday ?? []
   state.articlesToday.push(`${today}/${result.slug}`)
   state.lastArticleAt = new Date().toISOString()
+
+  // Record cooldown timestamp for each commodity covered
+  state.lastCoveredAt = state.lastCoveredAt ?? {}
+  moves.forEach(m => { state.lastCoveredAt[m.key] = state.lastArticleAt })
 
   saveState(state)
 
