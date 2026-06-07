@@ -1,13 +1,13 @@
 {
-  "ts": null,
-  "gold": null,
+  "ts": "2026-06-05T14:09:00.588Z",
+  "gold": 151676,
   "goldPct": 0,
-  "silver": null,
+  "silver": 251156,
   "silverPct": 0,
-  "crude": null,
+  "crude": 8715,
   "crudePct": 0,
-  "copper": null,
+  "copper": 1344.2,
   "copperPct": 0,
-  "natgas": null,
+  "natgas": 313,
   "natgasPct": 0
 }

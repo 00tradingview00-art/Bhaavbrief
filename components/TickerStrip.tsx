@@ -4,7 +4,9 @@ import type { PriceData } from '@/lib/prices'
 
 // IST market hours: 9:00 AM – 11:30 PM = 03:30–18:00 UTC
 function isMCXOpen(): boolean {
-  const now  = new Date()
+  const now = new Date()
+  const day = now.getUTCDay() // 0=Sun, 6=Sat
+  if (day === 0 || day === 6) return false
   const mins = now.getUTCHours() * 60 + now.getUTCMinutes()
   return mins >= 210 && mins <= 1080
 }

@@ -34,7 +34,10 @@ function shortExpiry(expiry: string): string {
   return new Date(expiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
 }
 function isMCXOpen(): boolean {
-  const m = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
+  const now = new Date()
+  const day = now.getUTCDay() // 0=Sun, 6=Sat
+  if (day === 0 || day === 6) return false
+  const m = now.getUTCHours() * 60 + now.getUTCMinutes()
   return m >= 210 && m <= 1080
 }
 
@@ -97,9 +100,15 @@ function PriceCard({
         <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
           {cfg.label}
         </span>
-        <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: bg, color }}>
-          {isUp ? '▲' : '▼'} {fmtPct(data.mcxChangePct)}
-        </span>
+        {hasKite ? (
+          <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: bg, color }}>
+            {isUp ? '▲' : '▼'} {fmtPct(data.mcxChangePct)}
+          </span>
+        ) : data.mcx > 0 ? (
+          <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: 'var(--surface-2)', color: 'var(--ink-4)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+            Prev close
+          </span>
+        ) : null}
       </div>
 
       {/* Price */}
