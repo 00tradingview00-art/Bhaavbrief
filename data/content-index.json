@@ -1,6 +1,71 @@
 [
   {
     "type": "hawk-scan",
+    "slug": "2026-06-08-hawk-scan-natgas-20260608",
+    "href": "/articles/2026-06-08-hawk-scan-natgas-20260608",
+    "title": "MCX Nat Gas Plunges 4.06% to ₹300 — Below 20-SMA",
+    "description": "MCX Nat Gas dropped 4.06% to ₹300/mmBtu, breaching the 20-SMA of ₹306 and testing the critical round-number floor.",
+    "excerpt": "TRIGGER — MCX Nat Gas has fallen 4.06% to ₹300/mmBtu, breaching the 20-SMA of ₹306 as Henry Hub dropped to $3.13/mmBtu on the session. PRICE — ₹300/mmBtu · ▼4.06% · PLUNGING SIGNAL — Henry Hub weakene",
+    "date": "2026-06-08T16:54:09.154Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 300
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-08-iran-israel-escalation-mcx-crude-surge",
+    "href": "/articles/2026-06-08-iran-israel-escalation-mcx-crude-surge",
+    "title": "Iran-Israel Escalation Sends MCX Crude Surging",
+    "description": "Iran-Israel hostilities escalate, driving MCX Crude up 5.20% to ₹9,062/bbl as Hormuz supply fears grip global oil markets.",
+    "excerpt": "Fresh hostilities between Iran and Israel escalated on Monday, 8 June 2026, raising immediate fears over safe passage through the Strait of Hormuz, through which roughly 20% of global seaborne oil tra",
+    "date": "2026-06-08T09:19:17.909Z",
+    "edition": "flash",
+    "tags": [
+      "Geopolitical",
+      "MCX Crude",
+      "MCX"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9062
+  },
+  {
+    "type": "brief",
+    "slug": "edition-037",
+    "href": "/briefs/edition-037",
+    "title": "MCX Open 8 Jun 2026: Crude Surges, Metals Bleed",
+    "description": "WTI crude soars +4.17% to $94.32/bbl overnight; MCX crude opens +4.74% at ₹9022 while gold slips to ₹153812 and silver drops -2.07%.",
+    "excerpt": "An aggressive overnight bid in energy rewrote the morning's agenda before Indian markets opened. WTI crude on NYMEX vaulted 4.17% to $94.32 per barrel — the dominant event of the session — dragging ri",
+    "date": "2026-06-08",
+    "edition": "37",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "hawk-scan",
     "slug": "2026-06-05-hawk-scan-silver-20260605",
     "href": "/articles/2026-06-05-hawk-scan-silver-20260605",
     "title": "MCX Silver: 3.94% Single-Session Collapse Below 253000",
