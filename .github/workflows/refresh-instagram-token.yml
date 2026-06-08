@@ -2,14 +2,12 @@ name: Refresh Instagram Token
 
 on:
   schedule:
-    - cron: '0 6 * * 1'   # Every Monday at 6 AM UTC — refreshes well before 60-day expiry
+    - cron: '0 6 */15 * *'  # Every 15 days — refreshes well before 60-day expiry
   workflow_dispatch:
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     timeout-minutes: 5
 
     steps:
@@ -19,23 +17,22 @@ jobs:
           RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/refresh_access_token?grant_type=ig_refresh_token&access_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
           echo "Meta API response: $RESPONSE"
 
-          # Guard: if response isn't JSON (e.g. empty or HTML), jq will fail — treat as error
           if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
-            echo "::error::Instagram refresh returned non-JSON response — token may be expired. Paste a new token manually."
+            echo "::error::Instagram refresh returned non-JSON — token expired. Run scripts/refresh-instagram-token.js locally."
+            exit 1
+          fi
+
+          ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty')
+          if [ -n "$ERROR" ]; then
+            echo "::error::Refresh failed: $ERROR — token expired. Run scripts/refresh-instagram-token.js locally."
             exit 1
           fi
 
           NEW_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token // empty')
           EXPIRES_IN=$(echo "$RESPONSE" | jq -r '.expires_in // 0')
-          ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty')
-
-          if [ -n "$ERROR" ]; then
-            echo "::error::Instagram token refresh failed: $ERROR — token is expired or invalid. Go to developers.facebook.com and generate a new token."
-            exit 1
-          fi
 
           if [ -z "$NEW_TOKEN" ]; then
-            echo "::warning::No token returned from Meta — skipping secret update"
+            echo "::warning::No token returned — skipping"
             exit 0
           fi
 
@@ -62,7 +59,6 @@ jobs:
             -d '{
               "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
               "to": [{ "email": "00tradingview00@gmail.com" }],
-              "subject": "ACTION REQUIRED: Instagram token refresh failed",
-              "htmlContent": "<p>The weekly Instagram token auto-refresh failed on <strong>'"$(date +'%d %b %Y')"'</strong>.</p><p>Instagram posts will stop working within days. Go to <a href=\"https://developers.facebook.com\">developers.facebook.com</a>, generate a new long-lived token, and run the <em>Refresh Instagram Token</em> workflow manually with the new token in the secret.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/refresh-instagram-token.yml\">View workflow →</a></p>"
+              "subject": "ACTION REQUIRED: Instagram token expired — manual refresh needed",
+              "htmlContent": "<p>The Instagram token auto-refresh failed on <strong>'"$(date +'%d %b %Y')"'</strong>.</p><p>Run this locally to fix it:</p><pre>node scripts/refresh-instagram-token.js</pre><p>You need a fresh short-lived token from <a href=\"https://developers.facebook.com/tools/explorer/\">Graph API Explorer</a> plus META_APP_ID and META_APP_SECRET in .env.local.</p>"
             }'
-          echo "Alert email sent"
