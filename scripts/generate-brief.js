@@ -235,6 +235,21 @@ BhaavBrief is unregistered. Every sentence must pass the educational test.
 ═══════════════════════════════════════════
 WRITING RULES
 ═══════════════════════════════════════════
+- HOOK SENTENCE MANDATORY: The FIRST sentence of every section (Macro Thread, Narrative, The Market Is Saying) must create tension, stakes, or curiosity BEFORE any analysis. Choose one type:
+  STAKES: "₹2,300 crore of HPCL's crude import bill just got repriced in the last 48 hours."
+  DRAMA: "Oil crossed ₹9,000 this morning. The last time that happened, petrol prices followed within 10 days."
+  PUZZLE: "Crude is up 4% and gold is down 2% on the same day — that doesn't happen without a reason."
+  CONTRARIAN: "Everyone is buying gold right now. Here is why that instinct may be the wrong one."
+  NEVER open any section with a price followed by a percentage change. Open with what it MEANS.
+
+- THE TWIST: Inside the Historical Context section, include exactly one sentence that names the contrarian view — what smart money or analysts on the OTHER side of this trade argue. Frame as historical observation per SEBI rules.
+  Example: "The contrary read, based on past OPEC spare-capacity episodes, is that any move above $95 historically becomes self-defeating as cheating by smaller members accelerates."
+  Example: "The twist worth watching: gold is falling INTO a war, which historically lasts no more than 48 hours before safe-haven demand reasserts — a sustained selloff here would be the anomaly."
+
+- VERNACULAR: Use 1–2 Indian vernacular phrases per brief, woven naturally into English prose. Never forced, never in SEBI-sensitive sentences.
+  "crude ka yeh khel" (crude's game/play) | "sonar bazaar mein" (in the gold market) | "sone ka bhav" (gold's price)
+  Example: "The sonar bazaar is caught between two conflicting forces today — a geopolitical bid for safety and a dollar that refuses to weaken."
+
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
 - Use ONLY the prices given above. Never invent levels.
@@ -242,7 +257,8 @@ WRITING RULES
 - Sharp, specific, factual — no waffle, no filler, no hedging.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
-- End with "Edge of the Day:" — one specific data point or level to monitor.
+- End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences.
+  Example: "Tomorrow: US CPI at 6:00 PM IST — above 3.5% makes the Iran crude premium look cheap and upgrades the bullish thesis; below 3.0% and the entire energy rally looks borrowed."
 
 LANGUAGE — NON-NEGOTIABLE:
 Write for an educated Indian reader — someone who follows Mint or Economic Times, not a Bloomberg terminal analyst. Explain finance terms in plain language.
@@ -284,11 +300,13 @@ Include specific price levels from the data above.]
 
 ## Who Is Affected
 3 sentences — one each, specific and concrete:
-- **Businesses:** name one sector and one concrete cost/revenue consequence (e.g. "Paint companies: raw material costs rise ₹X/kg as copper surges"). Never say "businesses face higher costs".
+- **Businesses:** Translate the price move into ₹ crore impact on ONE named company. Use the formula: daily import volume × price move = ₹ crore. Examples: "HPCL's daily crude import bill changes by approximately ₹X crore at this price level — sustained above ₹9,000/bbl through the fortnightly revision window, the next retail fuel price increase becomes inevitable." or "Titan Company's gold inventory revaluation shifts by an estimated ₹X crore at this COMEX move." Never say "businesses face higher costs" — always name the company and the crore figure.
 - **Investors:** name one MCX contract and the directional signal. Never say "investors should watch".
 - **Consumers:** name one product and whether prices will rise or fall at the pump or shop. Never say "consumers may see higher prices".
 
-**Edge of the Day:** [The single most important price level to monitor, or scheduled data release that will either confirm or negate this narrative. An observation — never a buy/sell call.]
+**Edge of the Day:** [The single most important price level to monitor today, or the scheduled data release that will confirm or negate this narrative. An observation — never a buy/sell call.]
+
+**Tomorrow:** [One sentence. Name the next data release or market event in the next 24 hours, the exact time IST, and the two conditions: "if X, the narrative strengthens/upgrades to Y; if Z, it reverses/fades." This is what creates a reason to read tomorrow's brief. Example: "Tomorrow: EIA crude inventory data at 8:00 PM IST — a draw above 3 million barrels confirms the supply-tight thesis and would take WTI toward $97; a surprise build above 2 million barrels unwinding the Iran premium entirely."]
 
 ═══════════════════════════════════════════
 TAGS — pick the 1-3 most relevant (not always Gold):
@@ -390,6 +408,124 @@ async function main() {
   if (fs.existsSync(file)) { console.warn('Already exists, skipping'); process.exit(0) }
   fs.writeFileSync(file, mdx.trim(), 'utf8')
   console.log(`Saved: ${file}`)
+
+  // Arc detection — runs after brief is saved
+  try {
+    await detectAndUpdateArc(mdx, EDITION)
+  } catch (e) {
+    console.warn('Arc detection failed (non-fatal):', e.message)
+  }
+}
+
+// ── Story Arc Detection ───────────────────────────────────────────────────────
+const ARC_FILE = path.join(process.cwd(), 'data/story-arcs.json')
+
+function loadArcs() {
+  try { return JSON.parse(fs.readFileSync(ARC_FILE, 'utf8')) }
+  catch { return { arcs: [] } }
+}
+
+function saveArcs(data) {
+  fs.writeFileSync(ARC_FILE, JSON.stringify(data, null, 2), 'utf8')
+}
+
+async function detectAndUpdateArc(mdx, edition) {
+  const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
+  const tagsMatch  = mdx.match(/^tags:\s*(\[.*?\])/m)
+  const dateMatch  = mdx.match(/^date:\s*"?(\d{4}-\d{2}-\d{2})/m)
+  if (!titleMatch) return
+
+  const title   = titleMatch[1]
+  const tags    = tagsMatch ? tagsMatch[1] : '[]'
+  const date    = dateMatch ? dateMatch[1] : new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+  const excerpt = mdx.replace(/^---[\s\S]*?---\n*/m, '').slice(0, 800)
+
+  const arcData    = loadArcs()
+  const activeArcs = arcData.arcs.filter(a => a.status === 'active')
+
+  const prompt = `You are reading a new BhaavBrief market brief. Determine if it starts, continues, or ends a story arc.
+
+ACTIVE ARCS (may be empty):
+${JSON.stringify(activeArcs, null, 2)}
+
+NEW BRIEF:
+Title: ${title}
+Edition: ${edition}
+Date: ${date}
+Tags: ${tags}
+Content excerpt:
+${excerpt}
+
+Return ONLY valid JSON (no markdown, no code fences):
+{
+  "action": "none" | "start" | "continue" | "end",
+  "arcId": "kebab-case-id-matching-existing-or-new" | null,
+  "title": "Short arc title (e.g. Iran-Israel Escalation: Crude Surge)" | null,
+  "dayNumber": 1,
+  "summary": "One sentence describing the arc story so far" | null,
+  "primaryCommodity": "MCX Crude" | "MCX Gold" | "MCX Silver" | "MCX Copper" | "MCX NatGas" | null,
+  "keyLevel": "₹9,000" | null,
+  "tags": ["Iran", "MCX Crude", "Geopolitics"] | null
+}
+
+Rules:
+- "start": This brief opens a NEW multi-day story not covered by existing arcs (war escalation, Fed pivot, supply shock, sanctions, major data surprise). The story must be able to run for 3+ days.
+- "continue": This brief is day 2+ of an EXISTING active arc. Use the exact arcId from ACTIVE ARCS.
+- "end": An existing active arc has clearly resolved (ceasefire announced, meeting concluded, supply restored). Use the existing arcId.
+- "none": Standalone brief with no multi-day arc — routine market open, minor moves.
+- Only create arcs for significant macro/geopolitical events, NOT routine daily briefs.
+- dayNumber: 1 for new arc, existing latestDay+1 for continue.`
+
+  const response = await client.messages.create({
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 300,
+    messages:   [{ role: 'user', content: prompt }],
+  })
+
+  const text  = response.content[0]?.type === 'text' ? response.content[0].text.trim() : ''
+  const match = text.match(/\{[\s\S]*\}/)
+  if (!match) return
+
+  const result = JSON.parse(match[0])
+  if (!result.action || result.action === 'none') return
+
+  if (result.action === 'start' && result.arcId) {
+    arcData.arcs.push({
+      id:               result.arcId,
+      title:            result.title ?? title,
+      startDate:        date,
+      status:           'active',
+      editions:         [edition],
+      latestDay:        1,
+      summary:          result.summary ?? '',
+      primaryCommodity: result.primaryCommodity ?? 'MCX Crude',
+      keyLevel:         result.keyLevel ?? '',
+      tags:             result.tags ?? [],
+    })
+    console.log(`  Arc started: "${result.title}" (${result.arcId})`)
+  }
+
+  if (result.action === 'continue' && result.arcId) {
+    const arc = arcData.arcs.find(a => a.id === result.arcId)
+    if (arc && !arc.editions.includes(edition)) {
+      arc.editions.push(edition)
+      arc.latestDay = result.dayNumber ?? arc.latestDay + 1
+      if (result.summary) arc.summary = result.summary
+      console.log(`  Arc continued: "${arc.title}" Day ${arc.latestDay}`)
+    }
+  }
+
+  if (result.action === 'end' && result.arcId) {
+    const arc = arcData.arcs.find(a => a.id === result.arcId)
+    if (arc) {
+      arc.status  = 'closed'
+      arc.endDate = date
+      if (!arc.editions.includes(edition)) arc.editions.push(edition)
+      console.log(`  Arc closed: "${arc.title}"`)
+    }
+  }
+
+  saveArcs(arcData)
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1) })

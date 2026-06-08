@@ -23,6 +23,19 @@ interface ThesisData {
   history:   ThesisResolved[]
 }
 
+function calcStreak(history: ThesisResolved[]): { streak: number; total: number; correct: number } {
+  let streak = 0
+  for (const entry of history) {
+    if (entry.outcome === 'CORRECT') streak++
+    else break
+  }
+  return {
+    streak,
+    total:   history.length,
+    correct: history.filter(h => h.outcome === 'CORRECT').length,
+  }
+}
+
 export default function DailyThesis() {
   const [data, setData] = useState<ThesisData | null>(null)
 
@@ -36,6 +49,7 @@ export default function DailyThesis() {
   if (!data || (!data.current && !data.yesterday)) return null
 
   const { current, yesterday } = data
+  const { streak, total, correct } = calcStreak(data.history ?? [])
 
   // IST close time display
   const closeTime = '11:30 PM IST tonight'
@@ -174,7 +188,7 @@ export default function DailyThesis() {
             </p>
           )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 10,
@@ -183,6 +197,33 @@ export default function DailyThesis() {
             }}>
               Watch: ₹{current.targetLevel.toLocaleString('en-IN')} · Resolution {closeTime}
             </span>
+
+            {total > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {streak >= 2 && (
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 9,
+                    fontWeight: 700,
+                    color: 'var(--up)',
+                    background: 'var(--up-bg)',
+                    padding: '2px 7px',
+                    borderRadius: 3,
+                    letterSpacing: '0.06em',
+                  }}>
+                    {streak}-DAY STREAK
+                  </span>
+                )}
+                <span style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 9,
+                  color: 'var(--ink-4)',
+                  letterSpacing: '0.04em',
+                }}>
+                  {correct}/{total} correct
+                </span>
+              </div>
+            )}
           </div>
         </div>
       )}

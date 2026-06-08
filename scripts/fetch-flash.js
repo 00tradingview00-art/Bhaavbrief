@@ -402,11 +402,16 @@ One sentence. State the specific fact with the key number or figure. Facts only,
 **WHAT IT MEANS**
 2-3 sentences. Name the mechanism AND the specific actors in the same breath. Examples: "west-coast refiners HPCL/BPCL face a higher crude import cost at current WTI levels", "jewellers and bullion dealers holding gold inventory see rupee-denominated valuations rise", "MCX copper futures traders see basis vs COMEX tighten as import parity reprices". Reference a price level from the live context above. No "may", "could", "might" — only facts and market mechanics.
 
+**THE TWIST**
+One sentence. The single most important thing most coverage is missing — a contrarian signal, why the obvious read might be wrong, or a counterintuitive implication. Historical framing only (SEBI).
+Examples: "The twist: this gold selloff is happening INTO a war — gold historically holds or rises in the first 48 hours of escalation; a sustained breakdown suggests institutional rebalancing rather than receding fear." | "The twist: copper is rising despite China PMI weakness — base metals markets tend to front-run China stimulus expectations by 4–6 weeks, suggesting the selloff was already priced in."
+NEVER use: "investors should note", "it is worth considering", "market participants may want to"
+
 **WHO IS AFFECTED**
-Write 2 flowing prose sentences — not a list. First sentence: name the commercial and industrial actors with their specific exposure. Second sentence: name the end consumers and their direct impact. Example: "HPCL and BPCL's crude procurement desks face a higher rupee-denominated import bill on every cargo cleared at current WTI levels, while MCX Crude futures traders holding overnight positions see basis risk widen. Petrol pump operators and household LPG consumers in metro cities absorb the cost at the retail end if the rupee holds below current levels."
+Write 2 flowing prose sentences — not a list. First sentence: name the commercial and industrial actors with their specific exposure and ₹ crore impact if calculable. Second sentence: name the end consumers and their direct impact. Example: "HPCL and BPCL's crude procurement desks face a higher rupee-denominated import bill — at ₹9,000/bbl, HPCL's daily crude cost rises by an estimated ₹180 crore, raising the probability of a retail fuel revision at the next fortnightly window. Petrol pump operators and household LPG consumers in metro cities absorb the cost at the retail end if the rupee holds below current levels."
 
 **BOTTOM LINE**
-3 complete prose sentences — no category labels, no colons prefixing sentences. First sentence: name one specific business sector and one concrete cost or revenue consequence. Second sentence: name one specific MCX contract and its directional signal with a price level or threshold. Third sentence: name one specific consumer product or end-user group and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
+3 complete prose sentences — no category labels, no colons prefixing sentences. First sentence: name one specific business and one concrete consequence in ₹ crore terms. Second sentence: name one specific MCX contract and its directional signal with a price level. Third sentence: name one specific consumer product or end-user group and the price direction. BANNED phrases: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware", "industry stakeholders".
 
 **WHAT TO WATCH**
 1-2 sentences. Name the next specific data release, event, or price level that will confirm or negate this move.
@@ -430,7 +435,7 @@ Article: ${article.title}. ${article.description}`
     },
     body: JSON.stringify({
       model:      'claude-sonnet-4-6',
-      max_tokens: 550,
+      max_tokens: 700,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })

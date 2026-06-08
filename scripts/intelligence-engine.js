@@ -702,6 +702,10 @@ SIGNAL — One sentence. Name the specific real-world cause — the policy decis
 BAD: "The move is driven by global macro headwinds and risk-off positioning."
 GOOD: "The US Federal Reserve signalled rates will stay high for longer after CPI came in at 3.4% vs 3.1% expected."
 
+TWIST — One sentence. The single most important contrarian signal or the thing most people are getting wrong about this move. Historical framing only (SEBI).
+Example: "The twist: gold is falling into an escalation — historically the precious metal holds or rises in the first 48 hours of geopolitical shock; a sustained breakdown signals institutional rebalancing rather than fear receding."
+Example: "The twist: OPEC spare capacity at 3.2mb/d — historically, crude rallies above $95 trigger member quota cheating within 6–8 weeks, capping the move."
+
 CROSS-ASSET — One sentence. Name at least two other assets and their exact moves right now. Show the direction and magnitude.
 BAD: "Other commodities are also under pressure amid broad risk-off sentiment."
 GOOD: "MCX Gold is down **1.2% to ₹1,51,200/10g** while the dollar index rose **0.6%** to 104.8 — metals and energy moving together."
@@ -789,11 +793,14 @@ WRITE EXACTLY THIS STRUCTURE — 4 sentences + 1 Watch line:
 
 Sentence 1 — THE FACT: What moved and the exact number that proves it. Include the ₹ price and the % change.
 Sentence 2 — THE CAUSE: Why it happened. Name the specific real-world event (policy decision, macro data, geopolitical trigger, supply figure). Do not say "dollar strength" alone — say what drove the dollar.
-Sentence 3 — THE CHAIN: What else moved as a result, and how does USD/INR at ₹${prices.usdinr?.toFixed(2)} amplify this for Indian importers specifically.
-Sentence 4 — THE IMPACT: Pick one industry in India (name it — "cable manufacturers", "paint companies", "jewellery exporters") and give one concrete, specific consequence (a cost direction, a margin squeeze, a price movement).
+Sentence 3 — THE TWIST: The one thing most people are getting wrong about this move, OR the contrarian signal an informed analyst would notice. Frame as historical observation (SEBI).
+  Example: "The twist: gold is falling INTO a war — historically, the first 48 hours of escalation see gold hold or rise; a breakdown here suggests institutional rebalancing, not receding fear."
+  Example: "The twist: copper is rising despite weak China PMI — the bad news was already priced in, and the base metals market is beginning to look through the slowdown."
+Sentence 4 — THE CHAIN: What else moved as a result, and how does USD/INR at ₹${prices.usdinr?.toFixed(2)} amplify this for Indian importers specifically.
+Sentence 5 — THE IMPACT: One named Indian company and one concrete consequence in ₹ crore terms if possible. Not "cable manufacturers face higher costs" — "Hindalco's copper procurement cost rises by an estimated ₹X crore per day at this LME level."
 Watch: [one specific price level OR one data release in the next 48 hours that confirms or negates this move]
 
-TOTAL: 80–110 words. One idea per sentence. Break any sentence over 20 words.
+TOTAL: 100–130 words. One idea per sentence. Break any sentence over 20 words.
 Use **bold** only for key numbers (prices, percentages, thresholds). Never bold whole sentences.
 
 WHAT BAD WRITING LOOKS LIKE — never do this:
@@ -826,11 +833,11 @@ priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
 slug: "[url-slug-max-8-words]"
 ---
 
-[4 sentences + Watch line. Nothing else.]`
+[5 sentences + Watch line. Nothing else.]`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 700,
+    max_tokens: 800,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -882,16 +889,26 @@ SEBI COMPLIANCE — NON-NEGOTIABLE:
 - No price targets. Historical precedents only: "In past Iran escalations, crude rose 4–8% over 3 sessions" ✓
 - Technical levels are observations only: "Crude is testing ₹9,000 resistance" ✓ | "Strong support, accumulate" ✗
 
-WRITE EXACTLY THIS STRUCTURE — 4 sentences + 1 Watch line:
+WRITE EXACTLY THIS STRUCTURE — 5 sentences + 1 Watch line:
 
-Sentence 1 — THE EVENT: State the geopolitical/macro event precisely. What happened, where, when.
-Sentence 2 — THE MECHANISM: Explain exactly how this transmits to MCX commodities — Hormuz risk for crude, safe-haven bid for gold, demand outlook for copper, etc.
-Sentence 3 — THE MCX NUMBER: Current MCX price and session move. Connect event to price.
-Sentence 4 — THE INDIA IMPACT: Name one specific Indian industry and one concrete cost consequence.
-Watch: [one specific trigger — a ceasefire headline, a key price level, or a scheduled data release — that would reverse or confirm this move]
+Sentence 1 — THE EVENT: State the geopolitical/macro event precisely. What happened, where, when. This must be a hook — not a price recap. Use drama or stakes to open.
+  GOOD: "Iran launched strikes on Israeli energy infrastructure on Monday, raising the first credible Hormuz blockade threat since 2019."
+  BAD: "MCX Crude opened at ₹9,022, up 4.74%, following geopolitical developments in the Middle East."
 
-TOTAL: 80–110 words. One idea per sentence.
-Use **bold** only for key numbers (₹ prices, percentages). Never bold whole sentences.
+Sentence 2 — THE MECHANISM: Explain exactly how this transmits to MCX prices — Hormuz risk for crude, safe-haven bid for gold, demand outlook for copper. Be specific about the supply/demand channel.
+
+Sentence 3 — THE TWIST: The contrarian view — what the other side of this trade argues, or why this move might be a head-fake. Historical framing only.
+  Example: "The twist: Hormuz has been threatened 14 times since 1984 and blocked zero times — historically, the war premium fades within 5 sessions if no physical disruption occurs."
+
+Sentence 4 — THE MCX NUMBER: Current MCX price and session move. Connect the event to the price with the ₹ crore consequence for one named Indian company.
+  Example: "MCX Crude has surged **5.2% to ₹9,062/bbl** — at this level, HPCL's daily crude import bill rises by an estimated **₹180 crore**, raising the probability of a retail fuel price revision at the next fortnightly cycle."
+
+Sentence 5 — THE INDIA IMPACT: One specific consumer group or downstream industry, their exposure, and the timeline for it to reach them.
+
+Watch: [one specific trigger — a ceasefire signal, a key price level breach, or a scheduled data release — that would reverse or confirm this move]
+
+TOTAL: 100–130 words. One idea per sentence.
+Use **bold** only for key numbers (₹ prices, percentages, crore figures). Never bold whole sentences.
 
 SEO:
 - Title: event + commodity + MCX implication (under 65 chars, include "MCX")
@@ -912,11 +929,11 @@ priceAtPublish: ${Math.round(primaryPrice)}
 slug: "[url-slug-max-8-words]"
 ---
 
-[4 sentences + Watch line. Nothing else.]`
+[5 sentences + Watch line. Nothing else.]`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 700,
+    max_tokens: 900,
     messages: [{ role: 'user', content: prompt }],
   })
 

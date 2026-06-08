@@ -6,6 +6,7 @@ import SubscribeForm from '@/components/SubscribeForm'
 import CommodityPulse from '@/components/CommodityPulse'
 import EIACard from '@/components/EIACard'
 import DailyThesis from '@/components/DailyThesis'
+import { getActiveArcs } from '@/lib/arcs'
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
@@ -111,6 +112,7 @@ export default async function HomePage() {
     getAllBriefs(),
     getPrices().catch(() => null),
   ])
+  const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
 
   return (
@@ -407,6 +409,63 @@ export default async function HomePage() {
 
         {/* RIGHT ─ sticky sidebar */}
         <div className="home-sidebar">
+
+          {/* Developing Story — shows when an active arc exists */}
+          {activeArcs.length > 0 && (() => {
+            const arc = activeArcs[0]
+            return (
+              <Link href={`/arcs/${arc.id}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 16 }}>
+                <div style={{
+                  background: 'var(--gold-pale)',
+                  border: '1px solid rgba(181,134,42,0.35)',
+                  borderLeft: '3px solid var(--gold)',
+                  borderRadius: '0 8px 8px 0',
+                  padding: '14px 16px',
+                }}>
+                  <div style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 9,
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    color: 'var(--gold)',
+                    fontWeight: 700,
+                    marginBottom: 6,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 6,
+                  }}>
+                    <span className="live-dot" style={{ background: 'var(--gold)' }} />
+                    Developing Story · Day {arc.latestDay}
+                  </div>
+                  <div style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: 'var(--ink)',
+                    lineHeight: 1.3,
+                    marginBottom: 6,
+                  }}>
+                    {arc.title}
+                  </div>
+                  <p style={{
+                    fontSize: 12,
+                    color: 'var(--ink-3)',
+                    margin: '0 0 8px',
+                    lineHeight: 1.5,
+                  }}>
+                    {arc.summary}
+                  </p>
+                  <span style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    color: 'var(--gold)',
+                  }}>
+                    Follow this story →
+                  </span>
+                </div>
+              </Link>
+            )
+          })()}
 
           {/* Live markets CTA */}
           <Link href="/markets" style={{ textDecoration: 'none', display: 'block' }}>

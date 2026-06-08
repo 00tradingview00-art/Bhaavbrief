@@ -5,6 +5,7 @@ import { MDXRemote }          from 'next-mdx-remote/rsc'
 import SubscribeForm          from '@/components/SubscribeForm'
 import CopyLinkButton         from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
+import { getBriefArcs } from '@/lib/arcs'
 
 const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
@@ -94,6 +95,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
   const url      = `${BASE_URL}/briefs/${brief.urlSlug}`
+  const arcs     = getBriefArcs(brief.edition)
 
   const ogParams = new URLSearchParams({
     title:   brief.title,
@@ -198,6 +200,52 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <span itemProp="url">{BASE_URL}</span>
               </span>
             </header>
+
+            {/* Story arc banner */}
+            {arcs.length > 0 && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                {arcs.map(arc => (
+                  <Link key={arc.id} href={`/arcs/${arc.id}`} style={{ textDecoration: 'none', display: 'block' }}>
+                    <div style={{
+                      border: '1px solid rgba(181,134,42,0.4)',
+                      borderLeft: '3px solid var(--gold)',
+                      background: 'var(--gold-pale)',
+                      padding: '10px 14px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 12,
+                      borderRadius: '0 4px 4px 0',
+                    }}>
+                      <div>
+                        <span style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 9,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          color: 'var(--gold)',
+                          fontWeight: 700,
+                          marginRight: 8,
+                        }}>
+                          {arc.status === 'active' ? `DAY ${arc.latestDay} OF` : 'STORY ARC'}
+                        </span>
+                        <span style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 11,
+                          color: 'var(--ink-2)',
+                          fontWeight: 500,
+                        }}>
+                          {arc.title}
+                        </span>
+                      </div>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', flexShrink: 0 }}>
+                        Full story →
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <div className="brief-prose" itemProp="articleBody">
               <MDXRemote source={brief.content} />
