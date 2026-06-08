@@ -25,6 +25,16 @@ import { isTradingHoliday, getHolidayName } from './lib/holidays.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 
+// Load .env.local so Kite token is available when run directly from the CLI
+const envFile = path.join(ROOT, '.env.local')
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
+    const [k, ...v] = line.split('=')
+    if (k?.trim() && v.length && !process.env[k.trim()])
+      process.env[k.trim()] = v.join('=').trim()
+  }
+}
+
 const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const ARTICLES_DIR = path.join(ROOT, 'content/articles')
 const STATE_FILE   = path.join(ROOT, 'data/daily-brief-state.json')
