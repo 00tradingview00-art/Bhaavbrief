@@ -12,7 +12,7 @@
  *   - Technical levels for each commodity (real Kite OHLC data)
  *   - Cross-asset narrative: dominant theme for today's session
  *   - Key macro/event calendar for the day
- *   - Saves to content/articles/ as MDX
+ *   - Saves to content/briefs/edition-NNN.mdx
  */
 
 import fs from 'fs'
@@ -36,7 +36,7 @@ if (fs.existsSync(envFile)) {
 }
 
 const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-const ARTICLES_DIR = path.join(ROOT, 'content/articles')
+const BRIEFS_DIR   = path.join(ROOT, 'content/briefs')
 const STATE_FILE   = path.join(ROOT, 'data/daily-brief-state.json')
 
 // ── Load today's state (prevent double-publish) ───────────────────────────────
@@ -272,30 +272,54 @@ slug: "[mcx-open-DDMMMYYYY-dominant-theme]"
   return response.content[0].type === 'text' ? response.content[0].text : null
 }
 
-// ── Save article ──────────────────────────────────────────────────────────────
+// ── Save brief to content/briefs/edition-NNN.mdx ─────────────────────────────
 function saveArticle(mdx) {
-  if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
+  if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
 
-  const slugMatch  = mdx.match(/^slug:\s*"?([^"\n]+)"?/m)
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
+  const descMatch  = mdx.match(/^description:\s*"([^"]+)"/m)
+  const dateMatch  = mdx.match(/^date:\s*"([^"T]+)/m)
+  const tagsMatch  = mdx.match(/^tags:\s*(\[.*?\])/m)
 
-  const today   = new Date().toISOString().split('T')[0]
-  const rawSlug = slugMatch?.[1]?.trim() ?? `mcx-open-${today}`
-  const slugRaw = `${today}-${rawSlug}`.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
-  const slug    = slugRaw.length <= 75 ? slugRaw : (() => { const c = slugRaw.slice(0, 75); const d = c.lastIndexOf('-'); return d > 30 ? c.slice(0, d) : c })()
-  const filepath = path.join(ARTICLES_DIR, `${slug}.mdx`)
+  // Find next edition number
+  const existing = fs.readdirSync(BRIEFS_DIR)
+    .filter(f => /^edition-\d+\.mdx$/.test(f))
+    .map(f => parseInt(f.match(/\d+/)[0]))
+    .sort((a, b) => a - b)
+  const nextEdition = (existing[existing.length - 1] ?? 0) + 1
+  const editionStr  = String(nextEdition).padStart(3, '0')
+  const filename    = `edition-${editionStr}.mdx`
+  const filepath    = path.join(BRIEFS_DIR, filename)
 
   if (fs.existsSync(filepath)) {
-    console.warn('Open brief already exists:', filepath)
+    console.warn('Brief already exists:', filepath)
     return null
   }
 
-  const cleanMdx = mdx
-    .replace(/^```[a-z]*\n/m, '').replace(/\n```\s*$/m, '')    // strip code fences Claude sometimes adds (```yaml, ```mdx, etc.)
-    .replace(/^slug:.*$/m, '').trim()
-  fs.writeFileSync(filepath, cleanMdx, 'utf8')
-  console.log(`Saved: content/articles/${slug}.mdx`)
-  return { slug, title: titleMatch?.[1] ?? 'MCX Open Brief' }
+  // Strip code fences and rebuild frontmatter for the briefs schema
+  const body = mdx
+    .replace(/^```[a-z]*\n/m, '').replace(/\n```\s*$/m, '')
+    .replace(/^---[\s\S]*?---\n*/m, '')
+    .trim()
+
+  const today    = dateMatch?.[1]?.trim().slice(0, 10) ?? new Date().toISOString().slice(0, 10)
+  const title    = titleMatch?.[1] ?? 'MCX Open Brief'
+  const desc     = descMatch?.[1]  ?? ''
+  const tags     = tagsMatch?.[1]  ?? '["MCX Open", "Daily Brief"]'
+
+  const frontmatter = `---
+title: "${title}"
+date: "${today}"
+edition: ${nextEdition}
+summary: "${desc}"
+tags: ${tags}
+commodities: ["MCX Gold", "MCX Silver", "MCX Crude", "MCX Copper", "MCX NatGas"]
+published: true
+---`
+
+  fs.writeFileSync(filepath, `${frontmatter}\n\n${body}\n`, 'utf8')
+  console.log(`Saved: content/briefs/${filename}`)
+  return { slug: `edition-${editionStr}`, title }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -312,10 +336,16 @@ async function main() {
     return
   }
 
-  // Prevent double-publish: check state AND verify no file already exists for today
+  // Prevent double-publish: check state AND verify no brief already exists for today
   const state = loadState()
-  const existingFile = fs.existsSync(ARTICLES_DIR)
-    ? fs.readdirSync(ARTICLES_DIR).find(f => f.startsWith(today) && f.includes('open'))
+  const existingFile = fs.existsSync(BRIEFS_DIR)
+    ? fs.readdirSync(BRIEFS_DIR).find(f => {
+        if (!/^edition-\d+\.mdx$/.test(f)) return false
+        try {
+          const raw = fs.readFileSync(path.join(BRIEFS_DIR, f), 'utf8')
+          return raw.includes(`date: "${today}"`)
+        } catch { return false }
+      })
     : null
   if (existingFile || state.lastBriefDate === today) {
     if (!existingFile && state.lastBriefDate === today) {
@@ -393,7 +423,7 @@ async function main() {
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
     console.log(`\nDone in ${elapsed}s — "${result.title}"`)
     // Output filepath for workflow newsletter step
-    console.log(`BRIEF_FILE=content/articles/${result.slug}.mdx`)
+    console.log(`BRIEF_FILE=content/briefs/${result.slug}.mdx`)
   }
 }
 
