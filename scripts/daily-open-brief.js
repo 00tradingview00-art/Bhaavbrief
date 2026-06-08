@@ -196,11 +196,13 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
     ? `\nTECHNICAL LEVELS (Kite MCX 20-day OHLC — use these EXACT numbers in your article):\n${technicalBlocks.join('\n\n')}`
     : ''
 
-  const prompt = `You are BhaavBrief's senior market analyst. Write the DAILY MCX MARKET OPEN BRIEF for ${dateStr}.
+  const dateLabel = today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })
 
-SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at reader. Technical levels are observations, not triggers. No predictive price targets — use "historically" or "in past episodes" framing only.
+  const prompt = `You are BhaavBrief's senior market analyst. Write the MCX MARKET OPEN BRIEF for ${dateStr}.
 
-DATA (use these EXACT numbers — do not invent or round):
+SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at the reader. Use "historically" or "in past episodes" framing when referencing price behaviour. State data, never judge it.
+
+DATA — use these EXACT numbers, do not round or invent:
 
 OVERNIGHT COMEX/NYMEX:
 ${comexLines}
@@ -211,48 +213,53 @@ MCX OPEN (${timeStr} IST):
 ${mcxLines}
 ${techSection}
 
-WRITE EXACTLY THESE 5 SECTIONS (no extras, no renaming):
+WRITE EXACTLY THESE 5 SECTIONS with these exact headings:
 
-### 1. Overnight Summary
-2-3 sentences. State what moved on COMEX overnight, by how much, and the dominant theme. Precise numbers only. No generic phrases.
+## [Dominant Theme Name] — [DIRECTION]
+Name this section after the dominant overnight theme (e.g. "Crude Surge — METALS UNDER PRESSURE" or "Risk-Off — GOLD LEADS"). 3–4 sentences of flowing narrative prose. What happened overnight on COMEX/NYMEX? What is the single dominant story? How does it connect to MCX opening? Use exact prices and percentages. No bullet points.
 
-### 2. MCX Open Levels
-One line per commodity in this exact format:
-**Gold (₹PRICE/10g, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
-**Silver (₹PRICE/kg, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
-**Crude (₹PRICE/bbl, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
-**Copper (₹PRICE/kg, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
-**Natural Gas (₹PRICE/mmBtu, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
+## The Market Is Saying
+Cover all 5 MCX commodities in flowing prose — not a table, not bullet points. For each: exact MCX open price, % change from previous close, key support and resistance from the OHLC data above. Weave them together as a connected narrative. End this section with how USD/INR at ₹${usdinr.toFixed(2)} is amplifying or dampening the COMEX move in rupee terms.
 
-### 3. Cross-Asset Connections
-2-3 sentences. USD/INR at ₹${usdinr.toFixed(2)} — state exactly how it translates the COMEX move into MCX. Note one cross-commodity spread if meaningful (gold-silver ratio, crude-natgas).
+## Historical Context
+Name 1–2 comparable past episodes (specific month/year) where a similar COMEX setup played out. What happened to MCX prices in those episodes — specific % ranges. What does that history suggest about the range of outcomes today? Use "historically" framing. No predictions.
 
-### 4. Import Parity Check
-For the commodity with the biggest COMEX move. Show the math on separate lines:
-COMEX [Commodity]: $X/[unit] ÷ [conversion] = $Y/g = $Z/10g
-× USD/INR ₹${usdinr.toFixed(2)} = ₹A/10g
-+ customs duty + GST (~X%): ₹A × 1.XX = ₹B/10g theoretical
-MCX actual open: ₹C — [₹D above/below] import parity.
+## What Kills It
+One paragraph. What is the single specific event or data point that would immediately reverse today's dominant thesis? Be precise — name a level, a data release, a geopolitical event. Not vague. No hedging.
 
-### 5. Watch Today
-Name 2-3 exact price levels across the complex that matter most today. Name any scheduled data releases (EIA Wednesday, Fed speakers, India CPI, RBI ops) on the calendar. End the entire brief with: "**Key focus today: [single most important level or event]**"
+## Who Is Affected
+Write four labelled subsections exactly as shown:
 
-WRITING RULES — STRICTLY ENFORCED:
-- No parenthetical definitions ("COMEX (the US...)", "20-SMA (average...)"). Use terms directly.
-- No filler: "it is worth noting", "it is important to", "market participants should be aware"
-- Precise numbers always. Never "approximately ₹X" when you have the exact figure.
-- Concise. Total article 280-350 words.
-- If referencing a previous edition, link it: [Edition 32](/briefs/edition-032)
+**BUSINESSES:**
+One specific sector (name actual companies if relevant) and the concrete cost or revenue consequence of today's MCX open. Precise. No generic "businesses face higher costs."
 
-SEO RULES:
-- Title format: "MCX Open ${today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}: [dominant theme]" — under 65 chars total
-- Description: under 155 chars, include date and the 2 biggest moves with exact prices
+**INVESTORS:**
+One specific MCX contract, its exact open price, and what the directional signal from today's open means for positioning. Reference a specific support or resistance level.
 
-RETURN ONLY valid MDX frontmatter + article body. No code fences.
+**CONSUMERS:**
+One specific product (petrol, cooking gas, gold jewellery, etc.) and whether today's open is likely to translate into a price change at the retail/consumer level. Explain the transmission mechanism briefly.
+
+**EDGE OF THE DAY:**
+The single most precise, actionable monitoring point for today — a specific price level on a specific contract, or a specific data release time. One sentence. This is what a trader should watch above everything else.
+
+WRITING RULES:
+- Flowing prose throughout — no numbered lists, no bullet points, no tables
+- No parenthetical definitions for standard terms
+- No filler phrases: "it is worth noting", "market participants should be aware", "it is important to"
+- Precise numbers always — never "approximately" when you have the exact figure
+- Tone: Mint newspaper, not Bloomberg Terminal. Accessible but authoritative
+- If referencing a previous edition: [Edition 32](/briefs/edition-032)
+- Total length: 420–520 words
+
+SEO:
+- Title: "MCX Open ${dateLabel}: [thematic headline]" — under 65 chars total
+- Description: under 155 chars — include today's date and the 2 biggest moves with exact prices
+
+RETURN ONLY valid MDX frontmatter + article body. No code fences. No markdown code blocks.
 
 ---
-title: "MCX Open ${today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}: [dominant theme — keep total under 65 chars]"
-description: "[Under 155 chars — date + 2 key moves with prices]"
+title: "MCX Open ${dateLabel}: [thematic headline under 65 chars total]"
+description: "[under 155 chars — date + 2 biggest moves with exact prices]"
 date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "morning-brief"
@@ -263,7 +270,7 @@ slug: "[mcx-open-DDMMMYYYY-theme]"
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 2000,
+    max_tokens: 3000,
     messages: [{ role: 'user', content: prompt }],
   })
 
