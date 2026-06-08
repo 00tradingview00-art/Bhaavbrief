@@ -61,10 +61,10 @@ async function main() {
   // Step 1: Exchange short-lived → long-lived token
   process.stdout.write('🔄  Exchanging for long-lived token...')
   const exchangeUrl = new URL('https://graph.facebook.com/v22.0/oauth/access_token')
-  exchangeUrl.searchParams.set('grant_type', 'ig_exchange_token')
+  exchangeUrl.searchParams.set('grant_type', 'fb_exchange_token')
   exchangeUrl.searchParams.set('client_id', APP_ID)
   exchangeUrl.searchParams.set('client_secret', APP_SECRET)
-  exchangeUrl.searchParams.set('access_token', SHORT_TOKEN)
+  exchangeUrl.searchParams.set('fb_exchange_token', SHORT_TOKEN)
 
   const exchangeRes  = await fetch(exchangeUrl.toString(), { signal: AbortSignal.timeout(10000) })
   const exchangeData = await exchangeRes.json()

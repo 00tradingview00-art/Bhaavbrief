@@ -14,7 +14,7 @@ jobs:
       - name: Refresh long-lived Instagram access token
         id: refresh
         run: |
-          RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/refresh_access_token?grant_type=ig_refresh_token&access_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
+          RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${{ secrets.META_APP_ID }}&client_secret=${{ secrets.META_APP_SECRET }}&fb_exchange_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
           echo "Meta API response: $RESPONSE"
 
           if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
