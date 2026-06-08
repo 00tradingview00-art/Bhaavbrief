@@ -316,6 +316,7 @@ function saveArticle(mdx) {
 title: "${title}"
 date: "${today}"
 edition: ${nextEdition}
+description: "${desc}"
 summary: "${desc}"
 tags: ${tags}
 commodities: ["MCX Gold", "MCX Silver", "MCX Crude", "MCX Copper", "MCX NatGas"]
