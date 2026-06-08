@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       tags:        meta.tags,
     },
     twitter: {
-      card:        'summary',
+      card:        'summary_large_image',
       title:       meta.title,
       description: meta.description,
     },
@@ -66,21 +66,33 @@ export default async function ArticlePage({ params }: Props) {
   // JSON-LD schema for SEO
   const articleUrl = `https://bhaavbrief.in/articles/${slug}`
   const schema = {
-    '@context':    'https://schema.org',
-    '@type':       'NewsArticle',
-    headline:      meta.title,
-    description:   meta.description,
-    datePublished: meta.date,
-    dateModified:  meta.date,
-    url:           articleUrl,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
-    author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' }],
-    publisher: {
-      '@type': 'Organization',
-      name:    'BhaavBrief',
-      url:     'https://bhaavbrief.in',
-      logo:    { '@type': 'ImageObject', url: 'https://bhaavbrief.in/logo.png', width: 200, height: 60 },
-    },
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type':       'NewsArticle',
+        headline:      meta.title,
+        description:   meta.description,
+        datePublished: meta.date,
+        dateModified:  meta.date,
+        url:           articleUrl,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+        author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' }],
+        publisher: {
+          '@type': 'Organization',
+          name:    'BhaavBrief',
+          url:     'https://bhaavbrief.in',
+          logo:    { '@type': 'ImageObject', url: 'https://bhaavbrief.in/logo.png', width: 200, height: 60 },
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',              item: 'https://bhaavbrief.in' },
+          { '@type': 'ListItem', position: 2, name: 'Flash Intelligence', item: 'https://bhaavbrief.in/articles' },
+          { '@type': 'ListItem', position: 3, name: meta.title,          item: articleUrl },
+        ],
+      },
+    ],
   }
 
   return (

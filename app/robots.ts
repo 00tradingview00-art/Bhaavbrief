@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 
+const BASE = 'https://bhaavbrief.in'
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
@@ -10,9 +12,9 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      'https://bhaavbrief.in/sitemap.xml',
-      'https://bhaavbrief.in/news-sitemap.xml',
+      `${BASE}/sitemap.xml`,
+      `${BASE}/news-sitemap.xml`,
     ],
-    host: 'https://bhaavbrief.in',
+    host: BASE,
   }
 }

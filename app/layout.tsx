@@ -51,6 +51,7 @@ export const metadata: Metadata = {
     'commodity market intelligence India',
   ],
   metadataBase: new URL(BASE),
+  manifest: '/manifest.json',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   alternates: {
     canonical: BASE,

@@ -9,7 +9,7 @@
  *
  * FLOW:
  *   1. Load state (last prices, last circulars seen)
- *   2. Fetch current prices — Kite MCX (live) with Stooq COMEX fallback
+ *   2. Fetch current prices — Kite MCX (live) with Yahoo Finance COMEX reference
  *   3. Build cross-asset market narrative (what's the dominant theme right now?)
  *   4. Detect moves vs last 15 min state
  *   5. Scrape govt agencies for new circulars
@@ -27,6 +27,19 @@ import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
+
+// Load .env.local for local runs
+const envFile = path.join(ROOT, '.env.local')
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
+    const eq = line.indexOf('=')
+    if (eq > 0 && !line.startsWith('#')) {
+      const k = line.slice(0, eq).trim()
+      const v = line.slice(eq + 1).trim()
+      if (k && !process.env[k]) process.env[k] = v
+    }
+  }
+}
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -69,7 +82,7 @@ function saveMCXCache(prices) {
   fs.writeFileSync(MCX_CACHE_FILE, JSON.stringify(cache, null, 2), 'utf8')
 }
 
-// ── Kite MCX Enrichment (live prices, overrides Stooq-derived estimates) ──────
+// ── Kite MCX Enrichment (live prices — primary MCX source) ──────────────────
 function loadInstruments() {
   try {
     return JSON.parse(fs.readFileSync(path.join(ROOT, 'data/kite-instruments.json'), 'utf8'))
@@ -177,6 +190,7 @@ function loadState() {
       lastChecked: null,
       lastCirculars: { sebi: null, mcx: null, rbi: null, ppac: null },
       lastEia: { period: null, value: null },
+      lastGeoNews: {},
       articlesToday: [],
       lastArticleAt: null,
     }
@@ -187,7 +201,7 @@ function saveState(state) {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8')
 }
 
-// ── 2. Price Fetching — Kite (live MCX) + Stooq COMEX + Frankfurter USD/INR ──
+// ── 2. Price Fetching — Kite (live MCX) + Yahoo Finance COMEX + Frankfurter USD/INR ──
 async function fetchPrices() {
   // USD/INR: Frankfurter primary, exchangerate-api fallback
   // Valid range ₹82–₹110; outside that treat as a fetch error
@@ -277,14 +291,14 @@ async function fetchPrices() {
     copperPct: q['HG=F']?.pct  ?? 0,
     gasPct:    q['NG=F']?.pct  ?? 0,
     usdPct:    0,
-    priceSource: 'stooq-derived',
+    priceSource: 'comex-only',
   }
 
   // Enrich with actual Kite MCX live prices when available
   // Kite gives us real MCX contract prices + accurate intraday % from prev close
   const kite = await fetchKiteMCX()
   if (kite) {
-    console.log('  Kite MCX live prices enriching Stooq data')
+    console.log('  Kite MCX live prices loaded')
     if (kite.gold   != null) { derived.mcxGold   = kite.gold;   if (kite.goldPct   != null) derived.goldPct   = kite.goldPct   }
     if (kite.silver != null) { derived.mcxSilver = kite.silver; if (kite.silverPct != null) derived.silverPct = kite.silverPct }
     if (kite.crude  != null) { derived.mcxCrude  = kite.crude;  if (kite.crudePct  != null) derived.crudePct  = kite.crudePct  }
@@ -440,7 +454,82 @@ async function checkCirculars(lastCirculars) {
   return { newCirculars, updatedLastCirculars: lastCirculars }
 }
 
-// ── 5. EIA Crude Inventory Monitor ───────────────────────────────────────────
+// ── 5. Geopolitical News Monitor ─────────────────────────────────────────────
+const GEO_QUERIES = {
+  iran:    'Iran+Israel+war+oil+crude+escalation',
+  opec:    'OPEC+production+cut+crude+oil+supply',
+  russia:  'Russia+Ukraine+energy+oil+sanctions',
+  mideast: 'Middle+East+conflict+oil+tanker+Hormuz',
+  gold:    'gold+war+safe+haven+geopolitical+central+bank',
+  macro:   'Fed+inflation+dollar+commodity+rate',
+}
+
+const COMMODITY_KEYWORDS = [
+  'oil', 'crude', 'gold', 'silver', 'copper', 'natural gas', 'lng',
+  'opec', 'iran', 'russia', 'ukraine', 'sanctions', 'supply', 'refinery',
+  'hormuz', 'pipeline', 'tanker', 'commodity', 'inflation', 'fed', 'dollar',
+  'ceasefire', 'strike', 'attack', 'escalation', 'war',
+]
+
+async function checkGeoNews(lastGeoNews) {
+  const newEvents = []
+  const updatedLastGeoNews = { ...lastGeoNews }
+
+  try {
+    await Promise.all(
+      Object.entries(GEO_QUERIES).map(async ([key, q]) => {
+        try {
+          const res = await fetch(
+            `https://news.google.com/rss/search?q=${q}&hl=en-IN&gl=IN&ceid=IN:en`,
+            { headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/1.0' }, signal: AbortSignal.timeout(8000) }
+          )
+          const xml = await res.text()
+          const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 5)
+
+          for (const [, itemXml] of items) {
+            const titleM = itemXml.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>|<title>([^<]{10,200})<\/title>/)
+            const dateM  = itemXml.match(/<pubDate>([^<]+)<\/pubDate>/)
+            if (!titleM) continue
+
+            const title = (titleM[1] ?? titleM[2] ?? '').trim()
+            if (!title) continue
+
+            // Only articles published within last 2 hours
+            if (dateM) {
+              const age = Date.now() - new Date(dateM[1]).getTime()
+              if (age > 2 * 3600 * 1000) continue
+            }
+
+            // Must contain at least one commodity-relevant keyword
+            const lc = title.toLowerCase()
+            if (!COMMODITY_KEYWORDS.some(kw => lc.includes(kw))) continue
+
+            const id = title.slice(0, 80)
+            if (id === lastGeoNews[key]) continue
+
+            newEvents.push({ id, title, topic: key })
+            updatedLastGeoNews[key] = id
+            break // one new event per topic per run
+          }
+        } catch {}
+      })
+    )
+  } catch (err) {
+    console.warn('Geo news RSS failed:', err.message)
+  }
+
+  // Deduplicate by id across topics
+  const seen = new Set()
+  const deduped = newEvents.filter(e => {
+    if (seen.has(e.id)) return false
+    seen.add(e.id)
+    return true
+  })
+
+  return { newGeoEvents: deduped, updatedLastGeoNews }
+}
+
+// ── 6. EIA Crude Inventory Monitor ───────────────────────────────────────────
 async function checkEIA(lastEia) {
   if (!process.env.EIA_API_KEY) return null
 
@@ -683,7 +772,90 @@ slug: "[url-slug-max-8-words]"
   return response.content[0].type === 'text' ? response.content[0].text : null
 }
 
-// ── 7. Save Article as MDX ────────────────────────────────────────────────────
+// ── 6c. Geo Article Generator ─────────────────────────────────────────────────
+async function generateGeoArticle({ geoEvents, prices }) {
+  const today = new Date()
+  const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
+
+  const dataLabel = prices.priceSource === 'kite-live' ? 'LIVE MCX DATA' : 'COMEX-DERIVED ESTIMATES'
+  const priceBlock = [
+    `CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.toFixed(2)}]:`,
+    `- MCX Gold:   ₹${prices.mcxGold?.toFixed(0) ?? 'N/A'}/10g    (COMEX: $${prices.comexGold?.toFixed(0)}/oz, session: ${prices.goldPct?.toFixed(2) ?? '0.00'}%)`,
+    `- MCX Silver: ₹${prices.mcxSilver?.toFixed(0) ?? 'N/A'}/kg   (COMEX: $${prices.comexSilver?.toFixed(2)}/oz, session: ${prices.silverPct?.toFixed(2) ?? '0.00'}%)`,
+    `- MCX Crude:  ₹${prices.mcxCrude?.toFixed(0) ?? 'N/A'}/bbl   (WTI: $${prices.wti?.toFixed(2)}, Brent: $${prices.brent?.toFixed(2)}, session: ${prices.crudePct?.toFixed(2) ?? '0.00'}%)`,
+    `- MCX Copper: ₹${prices.mcxCopper?.toFixed(2) ?? 'N/A'}/kg   (COMEX: $${prices.comexCopper?.toFixed(2)}/lb, session: ${prices.copperPct?.toFixed(2) ?? '0.00'}%)`,
+    `- MCX NatGas: ₹${prices.mcxNatGas?.toFixed(2) ?? 'N/A'}/mmBtu (Henry Hub: $${prices.henryHub?.toFixed(2)}, session: ${prices.gasPct?.toFixed(2) ?? '0.00'}%)`,
+  ].join('\n')
+
+  const headlines = geoEvents.slice(0, 3).map(e => `- ${e.title}`).join('\n')
+
+  // Determine primary commodity from headline content
+  const allText = geoEvents.map(e => e.title.toLowerCase()).join(' ')
+  const primaryKey  = allText.includes('gold') ? 'gold'
+    : allText.includes('copper') ? 'copper'
+    : 'crude'
+  const primaryLabel = { gold: 'MCX Gold', silver: 'MCX Silver', crude: 'MCX Crude', copper: 'MCX Copper', natgas: 'MCX NatGas' }[primaryKey]
+  const primaryPrice = { gold: prices.mcxGold, crude: prices.mcxCrude, copper: prices.mcxCopper }[primaryKey] ?? 0
+
+  const prompt = `You are BhaavBrief's market reporter. Write a macro-context intelligence article for Indian commodity traders.
+
+A geopolitical or macro event is breaking that directly affects MCX prices.
+
+TIME: ${timeStr} IST, ${dateStr}
+
+BREAKING NEWS HEADLINES:
+${headlines}
+
+${priceBlock}
+
+SEBI COMPLIANCE — NON-NEGOTIABLE:
+- BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
+- No price targets. Historical precedents only: "In past Iran escalations, crude rose 4–8% over 3 sessions" ✓
+- Technical levels are observations only: "Crude is testing ₹9,000 resistance" ✓ | "Strong support, accumulate" ✗
+
+WRITE EXACTLY THIS STRUCTURE — 4 sentences + 1 Watch line:
+
+Sentence 1 — THE EVENT: State the geopolitical/macro event precisely. What happened, where, when.
+Sentence 2 — THE MECHANISM: Explain exactly how this transmits to MCX commodities — Hormuz risk for crude, safe-haven bid for gold, demand outlook for copper, etc.
+Sentence 3 — THE MCX NUMBER: Current MCX price and session move. Connect event to price.
+Sentence 4 — THE INDIA IMPACT: Name one specific Indian industry and one concrete cost consequence.
+Watch: [one specific trigger — a ceasefire headline, a key price level, or a scheduled data release — that would reverse or confirm this move]
+
+TOTAL: 80–110 words. One idea per sentence.
+Use **bold** only for key numbers (₹ prices, percentages). Never bold whole sentences.
+
+SEO:
+- Title: event + commodity + MCX implication (under 65 chars, include "MCX")
+- Description: under 155 chars, include the event name and price impact
+- Slug: lowercase hyphens, max 8 words, include the event keyword (e.g. iran-strike, opec-cut)
+
+RETURN ONLY valid MDX frontmatter + article body:
+
+---
+title: "[under 65 chars]"
+description: "[under 155 chars]"
+date: "${today.toISOString()}"
+time: "${timeStr}"
+edition: "flash"
+commodity: "${primaryLabel}"
+tags: ["Geopolitical", "${primaryLabel}", "MCX"]
+priceAtPublish: ${Math.round(primaryPrice)}
+slug: "[url-slug-max-8-words]"
+---
+
+[4 sentences + Watch line. Nothing else.]`
+
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 700,
+    messages: [{ role: 'user', content: prompt }],
+  })
+
+  return response.content[0].type === 'text' ? response.content[0].text : null
+}
+
+// ── 8. Save Article as MDX ────────────────────────────────────────────────────
 function saveArticle(mdx) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
 
@@ -792,15 +964,18 @@ async function main() {
     return
   }
 
-  // Fetch prices + circulars + EIA in parallel
-  const [prices, circularResult, eiaData] = await Promise.all([
+  // Fetch prices + circulars + EIA + geo news in parallel
+  const [prices, circularResult, eiaData, geoResult] = await Promise.all([
     fetchPrices(),
     checkCirculars(state.lastCirculars),
     checkEIA(state.lastEia),
+    checkGeoNews(state.lastGeoNews ?? {}),
   ])
 
   state.lastCirculars = circularResult.updatedLastCirculars
   const newCirculars  = circularResult.newCirculars
+  state.lastGeoNews   = geoResult.updatedLastGeoNews
+  const newGeoEvents  = geoResult.newGeoEvents
 
   if (eiaData) state.lastEia = { period: eiaData.period, value: eiaData.value }
 
@@ -842,36 +1017,44 @@ async function main() {
   console.log(`New circulars: ${newCirculars.length}`)
   newCirculars.forEach(c => console.log(`  [${c.source}] ${c.title.slice(0, 60)}`))
   console.log(`EIA data: ${eiaData ? eiaData.summary : 'none'}`)
+  console.log(`Geo events: ${newGeoEvents.length}`)
+  newGeoEvents.forEach(e => console.log(`  [${e.topic}] ${e.title.slice(0, 70)}`))
 
   // ── Trigger Logic ──────────────────────────────────────────────────────────
-  const hawkMove  = moves.some(m => m.absPct >= HAWK_SCAN_THRESHOLD)
-  const hardMove  = moves.some(m => m.isHard)
-  const softMove  = moves.some(m => !m.isHard)
-  const hasSignal = newCirculars.length > 0 || eiaData?.isSignificant
+  const hawkMove    = moves.some(m => m.absPct >= HAWK_SCAN_THRESHOLD)
+  const hardMove    = moves.some(m => m.isHard)
+  const softMove    = moves.some(m => !m.isHard)
+  const hasSignal   = newCirculars.length > 0 || eiaData?.isSignificant
+  const hasGeoEvent = newGeoEvents.length > 0
 
   // Hawk-Scan: price >3% (only with confirmed live Kite data) OR significant EIA event.
-  // Stooq-derived pct uses intraday open→close, which produces false spikes on rollover
-  // days or when Stooq serves stale OHLC — never fire HAWK-SCAN on unconfirmed data.
+  // comex-only pct uses COMEX reference prices without confirmed MCX open — never fire
+  // HAWK-SCAN on unconfirmed data (pre-market false spikes).
   const isHawkEvent = (hawkMove && prices.priceSource === 'kite-live') || eiaData?.isSignificant
 
-  // Price-move articles (hard/soft) also require live Kite data — stooq-derived MCX
-  // prices are estimates and produce false move alerts when MCX is closed pre-market.
-  const liveData = prices.priceSource === 'kite-live'
-  const shouldPublish = isHawkEvent || (hardMove && liveData) || (softMove && liveData && hasSignal) || (!liveData && hasSignal)
+  // Price-move articles (hard/soft) also require live Kite data — comex-only fallback
+  // produces false move alerts when MCX is closed or pre-market.
+  // Geo events fire standalone articles when live Kite data is available.
+  const liveData    = prices.priceSource === 'kite-live'
+  const isGeoOnly   = hasGeoEvent && liveData && !hawkMove && !hardMove && !softMove
+  const shouldPublish = isHawkEvent || (hardMove && liveData) || (softMove && liveData && hasSignal) || (!liveData && hasSignal) || (hasGeoEvent && liveData)
 
   if (!shouldPublish) {
-    if (moves.length === 0) console.log('No significant price moves')
-    else console.log('Moves detected but no supporting signal — holding')
+    if (moves.length === 0 && !hasGeoEvent) console.log('No significant price moves')
+    else if (!hasGeoEvent) console.log('Moves detected but no supporting signal — holding')
+    else console.log('Geo event detected but no live Kite data — holding')
     saveState(state)
     return
   }
 
-  if (isHawkEvent)           console.log('\nHAWK-SCAN TRIGGERED')
-  else                       console.log('\nTRIGGER FIRED — generating article...')
-  if (hawkMove)              console.log('  Reason: Extreme price move >3%')
-  if (eiaData?.isSignificant) console.log('  Reason: Significant EIA inventory event')
-  if (hardMove && !isHawkEvent) console.log('  Reason: Hard move >2%')
+  if (isHawkEvent)                           console.log('\nHAWK-SCAN TRIGGERED')
+  else if (isGeoOnly)                        console.log('\nGEO EVENT TRIGGERED — generating article...')
+  else                                       console.log('\nTRIGGER FIRED — generating article...')
+  if (hawkMove)                              console.log('  Reason: Extreme price move >3%')
+  if (eiaData?.isSignificant)                console.log('  Reason: Significant EIA inventory event')
+  if (hardMove && !isHawkEvent)              console.log('  Reason: Hard move >2%')
   if (softMove && hasSignal && !isHawkEvent) console.log('  Reason: Soft move + circular/EIA signal')
+  if (hasGeoEvent)                           console.log(`  Reason: Geopolitical event — ${newGeoEvents[0]?.title?.slice(0, 60)}`)
 
   // Fetch Kite historical OHLC for the top 2 triggered commodities to get real technical levels
   const instruments = loadInstruments()
@@ -900,6 +1083,8 @@ async function main() {
 
   const mdx = isHawkEvent
     ? await generateHawkScan({ moves, eia: eiaData, prices, technicalLevels })
+    : isGeoOnly
+    ? await generateGeoArticle({ geoEvents: newGeoEvents, prices })
     : await generateArticle({ moves, circulars: newCirculars, eia: eiaData, prices, technicalLevels })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
