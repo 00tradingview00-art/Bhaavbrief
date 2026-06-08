@@ -5,6 +5,7 @@ import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import CommodityPulse from '@/components/CommodityPulse'
 import EIACard from '@/components/EIACard'
+import DailyThesis from '@/components/DailyThesis'
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
@@ -296,6 +297,9 @@ export default async function HomePage() {
 
       {/* ── COMMODITY PULSE ──────────────────────────────────────────────────── */}
       <CommodityPulse />
+
+      {/* ── DAILY THESIS ─────────────────────────────────────────────────────── */}
+      <DailyThesis />
 
       {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
       <div className="home-body">

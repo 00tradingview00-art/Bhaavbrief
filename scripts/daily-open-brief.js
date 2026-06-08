@@ -38,6 +38,117 @@ if (fs.existsSync(envFile)) {
 const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const BRIEFS_DIR   = path.join(ROOT, 'content/briefs')
 const STATE_FILE   = path.join(ROOT, 'data/daily-brief-state.json')
+const THESIS_FILE  = path.join(ROOT, 'data/thesis-tracker.json')
+
+// ── Thesis helpers ────────────────────────────────────────────────────────────
+function loadThesis() {
+  try { return JSON.parse(fs.readFileSync(THESIS_FILE, 'utf8')) }
+  catch { return { current: null, yesterday: null, history: [] } }
+}
+
+function saveThesis(data) {
+  fs.writeFileSync(THESIS_FILE, JSON.stringify(data, null, 2), 'utf8')
+}
+
+function yesterdayIST() {
+  const d = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
+  d.setDate(d.getDate() - 1)
+  return d.toISOString().slice(0, 10)
+}
+
+// Step A — resolve yesterday's thesis against cached MCX close
+function resolveYesterdayThesis(thesisData) {
+  const current = thesisData.current
+  if (!current) return thesisData
+
+  const yesterdayDate = yesterdayIST()
+  if (current.date !== yesterdayDate) {
+    // current is older than yesterday — just archive it without resolution
+    const updated = { ...thesisData, current: null }
+    if (!updated.history) updated.history = []
+    return updated
+  }
+
+  // Load yesterday's MCX close from cache
+  let actualClose = 0
+  try {
+    const cache = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/mcx-last-prices.json'), 'utf8'))
+    const key = current.commodity.toLowerCase().replace('mcx ', '')
+    actualClose = cache[key] ?? 0
+  } catch {}
+
+  if (!actualClose) {
+    console.log('  Thesis: no MCX close data for resolution — carrying forward')
+    return thesisData
+  }
+
+  const target = current.targetLevel
+  const dir    = current.direction
+  let outcome  = 'WRONG'
+  let outcomeNote = ''
+
+  if (dir === 'bearish') {
+    outcome = actualClose < target ? 'CORRECT' : 'WRONG'
+    outcomeNote = outcome === 'CORRECT'
+      ? `Closed ₹${actualClose.toLocaleString('en-IN')} — fell below ₹${target.toLocaleString('en-IN')}.`
+      : `Closed ₹${actualClose.toLocaleString('en-IN')} — held above ₹${target.toLocaleString('en-IN')}.`
+  } else {
+    outcome = actualClose > target ? 'CORRECT' : 'WRONG'
+    outcomeNote = outcome === 'CORRECT'
+      ? `Closed ₹${actualClose.toLocaleString('en-IN')} — held above ₹${target.toLocaleString('en-IN')}.`
+      : `Closed ₹${actualClose.toLocaleString('en-IN')} — fell below ₹${target.toLocaleString('en-IN')}.`
+  }
+
+  const resolved = { ...current, outcome, actualClose, outcomeNote }
+  const updated  = {
+    current:   null,
+    yesterday: resolved,
+    history:   [resolved, ...(thesisData.history ?? [])].slice(0, 30),
+  }
+
+  console.log(`  Thesis resolved: ${outcome} — "${current.thesis.slice(0, 60)}…"`)
+  return updated
+}
+
+// Step B — extract today's thesis from generated brief body
+async function extractThesis(briefBody, editionNumber) {
+  const today = todayIST()
+  const prompt = `You are reading a BhaavBrief market brief. Extract one testable daily thesis from the "What Kills It" and "Edge of the Day" / "TOMORROW:" sections.
+
+Return ONLY valid JSON (no markdown, no code fences):
+{
+  "thesis": "One bold sentence — a directional claim resolvable by MCX close today",
+  "commodity": "MCX Crude" or "MCX Gold" or "MCX Silver" or "MCX Copper" or "MCX NatGas",
+  "direction": "bullish" or "bearish",
+  "targetLevel": <number — the key ₹ level to watch>,
+  "reasoning": "One sentence: why this level matters today"
+}
+
+Rules:
+- thesis must name a specific ₹ level and direction (e.g. "Crude will not hold ₹9,000 by MCX close")
+- targetLevel is the number the thesis lives or dies by
+- SEBI: frame as market hypothesis, not a recommendation
+
+BRIEF:
+${briefBody.slice(0, 3000)}`
+
+  try {
+    const response = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const text = response.content[0]?.type === 'text' ? response.content[0].text.trim() : ''
+    const match = text.match(/\{[\s\S]*\}/)
+    if (!match) return null
+    const parsed = JSON.parse(match[0])
+    if (!parsed.thesis || !parsed.commodity || !parsed.direction || !parsed.targetLevel) return null
+    return { date: today, editionRef: editionNumber, ...parsed }
+  } catch (e) {
+    console.warn('  Thesis extraction failed:', e.message)
+    return null
+  }
+}
 
 // ── Load today's state (prevent double-publish) ───────────────────────────────
 function loadState() {
@@ -216,7 +327,16 @@ ${techSection}
 WRITE EXACTLY THESE 5 SECTIONS with these exact headings:
 
 ## [Dominant Theme Name] — [DIRECTION]
-Name this section after the dominant overnight theme (e.g. "Crude Surge — METALS UNDER PRESSURE" or "Risk-Off — GOLD LEADS"). 3–4 sentences of flowing narrative prose. What happened overnight on COMEX/NYMEX? What is the single dominant story? How does it connect to MCX opening? Use exact prices and percentages. No bullet points.
+Name this section after the dominant overnight theme (e.g. "Crude Surge — METALS UNDER PRESSURE" or "Risk-Off — GOLD LEADS"). 3–4 sentences of flowing narrative prose.
+
+HOOK SENTENCE MANDATORY — the FIRST sentence must create tension or stakes, NOT report a price. Choose one type:
+  STAKES: "₹2,300 crore of HPCL's crude import bill got repriced overnight."
+  DRAMA: "Oil crossed ₹9,000 at the open. The last time that happened, petrol prices followed within 10 days."
+  PUZZLE: "Crude surged 4% and gold fell 2% on the same night — that divergence tells you something."
+  CONTRARIAN: "The knee-jerk read is to buy gold. Here is what the overnight positioning data says about that instinct."
+NEVER open with "[Commodity] [opened/traded/moved] at ₹X, [up/down] [Y]%." — that is a data report, not a hook.
+
+After the hook: explain what happened overnight on COMEX/NYMEX, the single dominant story, and how it connects to MCX opening. Use exact prices. No bullet points.
 
 ## The Market Is Saying
 Cover all 5 MCX commodities in flowing prose — not a table, not bullet points. For each: exact MCX open price, % change from previous close, key support and resistance from the OHLC data above. Weave them together as a connected narrative. End this section with how USD/INR at ₹${usdinr.toFixed(2)} is amplifying or dampening the COMEX move in rupee terms.
@@ -231,7 +351,7 @@ One paragraph. What is the single specific event or data point that would immedi
 Write four labelled subsections exactly as shown:
 
 **BUSINESSES:**
-One specific sector (name actual companies if relevant) and the concrete cost or revenue consequence of today's MCX open. Precise. No generic "businesses face higher costs."
+Translate today's price move into ₹ crore impact on ONE named company. Formula: daily volume × price change = ₹ crore impact. Name IndiGo/BPCL/HPCL for crude, Titan/Kalyan for gold, Hindalco/Sterlite for copper. Example: "IndiGo's daily ATF procurement cost changes by an estimated ₹X crore at ₹9,022/bbl crude — sustained above this level through the next fortnightly revision, a ticket-price increase becomes probable." Never write "businesses face higher costs."
 
 **INVESTORS:**
 One specific MCX contract, its exact open price, and what the directional signal from today's open means for positioning. Reference a specific support or resistance level.
@@ -240,7 +360,11 @@ One specific MCX contract, its exact open price, and what the directional signal
 One specific product (petrol, cooking gas, gold jewellery, etc.) and whether today's open is likely to translate into a price change at the retail/consumer level. Explain the transmission mechanism briefly.
 
 **EDGE OF THE DAY:**
-The single most precise, actionable monitoring point for today — a specific price level on a specific contract, or a specific data release time. One sentence. This is what a trader should watch above everything else.
+The single most precise monitoring point for today — a specific price level on a specific contract, or a specific data release time. One sentence.
+
+**TOMORROW:**
+One sentence. Name the next data release or market event within 24 hours, the time IST, and the two conditions and their consequences. This creates a reason to return tomorrow.
+Example: "Tomorrow: EIA crude inventory at 8:00 PM IST — a draw above 3 million barrels confirms the supply-tight thesis and takes WTI toward $97; a surprise build above 2 million barrels unwinds the Iran premium."
 
 WRITING RULES:
 - Flowing prose throughout — no numbered lists, no bullet points, no tables
@@ -248,6 +372,8 @@ WRITING RULES:
 - No filler phrases: "it is worth noting", "market participants should be aware", "it is important to"
 - Precise numbers always — never "approximately" when you have the exact figure
 - Tone: Mint newspaper, not Bloomberg Terminal. Accessible but authoritative
+- THE TWIST: In the Historical Context section, include one sentence naming the contrarian view — what the other side of this trade argues. Frame as historical observation. Example: "The contrary read, based on past OPEC spare-capacity episodes, is that sustained moves above $95 historically trigger member quota cheating within 6 weeks, capping the rally."
+- VERNACULAR: Use 1–2 Indian vernacular phrases woven naturally into English. "crude ka yeh khel" (crude's game) | "sonar bazaar mein" (in the gold market) | "sone ka bhav" (gold's price). Never in SEBI-sensitive sentences.
 - If referencing a previous edition: [Edition 32](/briefs/edition-032)
 - Total length: 420–520 words
 
@@ -325,7 +451,7 @@ published: true
 
   fs.writeFileSync(filepath, `${frontmatter}\n\n${body}\n`, 'utf8')
   console.log(`Saved: content/briefs/${filename}`)
-  return { slug: `edition-${editionStr}`, title }
+  return { slug: `edition-${editionStr}`, title, editionNumber: nextEdition }
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -340,6 +466,14 @@ async function main() {
   if (istHour < 8 || istHour >= 14) {
     console.log(`Outside open brief window (${istHour}:xx IST, expected 8–14) — skipping`)
     return
+  }
+
+  // Step A — resolve yesterday's thesis before anything else
+  const thesisData = loadThesis()
+  if (thesisData.current && thesisData.current.date !== today) {
+    const resolved = resolveYesterdayThesis(thesisData)
+    saveThesis(resolved)
+    console.log('  Thesis tracker updated — yesterday resolved')
   }
 
   // Prevent double-publish: check state AND verify no brief already exists for today
@@ -426,6 +560,19 @@ async function main() {
   if (result) {
     state.lastBriefDate = today
     saveState(state)
+
+    // Step B — extract today's thesis from the saved brief
+    console.log('\nExtracting daily thesis...')
+    const thesis = await extractThesis(mdx, result.editionNumber ?? 0)
+    if (thesis) {
+      const fresh = loadThesis()
+      fresh.current = thesis
+      saveThesis(fresh)
+      console.log(`  Thesis set: ${thesis.direction} ${thesis.commodity} @ ₹${thesis.targetLevel.toLocaleString('en-IN')}`)
+    } else {
+      console.log('  Thesis: no extractable thesis today')
+    }
+
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
     console.log(`\nDone in ${elapsed}s — "${result.title}"`)
     // Output filepath for workflow newsletter step
