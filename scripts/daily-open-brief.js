@@ -94,31 +94,31 @@ async function fetchKitePrices(instruments) {
   } catch (e) { console.warn(`  Kite failed: ${e.message}`); return null }
 }
 
-// ── Fetch COMEX overnight moves from Stooq ────────────────────────────────────
+// ── Fetch COMEX overnight moves from Yahoo Finance ────────────────────────────
 async function fetchComexOvernight() {
-  const stooqMap = {
-    gold:   { sym: 'gc.f',   label: 'COMEX Gold',   unit: '$/oz',    div: 1   },
-    silver: { sym: 'si.f',   label: 'COMEX Silver',  unit: '$/oz',    div: 100 },
-    crude:  { sym: 'cl.f',   label: 'WTI Crude',     unit: '$/bbl',   div: 1   },
-    brent:  { sym: 'lcod.uk',label: 'Brent Crude',   unit: '$/bbl',   div: 1   },
-    copper: { sym: 'hg.f',   label: 'COMEX Copper',  unit: '$/lb',    div: 100 },
-    natgas: { sym: 'ng.f',   label: 'Henry Hub Gas', unit: '$/mmBtu', div: 1   },
+  const yahooMap = {
+    gold:   { sym: 'GC%3DF', label: 'COMEX Gold',   unit: '$/oz'    },
+    silver: { sym: 'SI%3DF', label: 'COMEX Silver',  unit: '$/oz'    },
+    crude:  { sym: 'CL%3DF', label: 'WTI Crude',     unit: '$/bbl'   },
+    copper: { sym: 'HG%3DF', label: 'COMEX Copper',  unit: '$/lb'    },
+    natgas: { sym: 'NG%3DF', label: 'Henry Hub Gas', unit: '$/mmBtu' },
   }
 
   const results = {}
-  await Promise.all(Object.entries(stooqMap).map(async ([key, { sym, label, unit, div }]) => {
+  await Promise.all(Object.entries(yahooMap).map(async ([key, { sym, label, unit }]) => {
     try {
-      const r = await fetch(`https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`, {
-        signal: AbortSignal.timeout(6000),
-      })
+      const r = await fetch(
+        `https://query2.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`,
+        { headers: { 'User-Agent': 'Mozilla/5.0', Accept: 'application/json' }, signal: AbortSignal.timeout(8000) }
+      )
       if (!r.ok) return
-      const lines = (await r.text()).trim().split('\n')
-      if (lines.length < 2) return
-      const cols  = lines[1].split(',')
-      const open  = parseFloat(cols[3]) / div
-      const close = parseFloat(cols[6]) / div
-      if (!isNaN(close) && close > 0) {
-        results[key] = { label, unit, price: close, pct: open > 0 ? ((close - open) / open) * 100 : 0 }
+      const { chart } = await r.json()
+      const meta = chart?.result?.[0]?.meta
+      if (!meta) return
+      const price = meta.regularMarketPrice
+      const prev  = meta.chartPreviousClose
+      if (price > 0 && prev > 0) {
+        results[key] = { label, unit, price, pct: ((price - prev) / prev) * 100 }
       }
     } catch {}
   }))
@@ -198,70 +198,68 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
 
   const prompt = `You are BhaavBrief's senior market analyst. Write the DAILY MCX MARKET OPEN BRIEF for ${dateStr}.
 
-This is the most important article of the day — professional Indian MCX traders read this at 9 AM. It must be comprehensive, precise, and data-driven.
+SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at reader. Technical levels are observations, not triggers. No predictive price targets — use "historically" or "in past episodes" framing only.
 
-SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" or "in past episodes" framing. State data, never judge it.
+DATA (use these EXACT numbers — do not invent or round):
 
-OVERNIGHT CROSS-ASSET NARRATIVE:
-${narrative}
-
-OVERNIGHT COMEX/NYMEX MOVES:
+OVERNIGHT COMEX/NYMEX:
 ${comexLines}
 
 USD/INR: ₹${usdinr.toFixed(2)}
 
-MCX OPENING PRICES (at ${timeStr} IST):
+MCX OPEN (${timeStr} IST):
 ${mcxLines}
 ${techSection}
 
-WRITE A 300-380 WORD MARKET OPEN BRIEF covering ALL of the following:
+WRITE EXACTLY THESE 5 SECTIONS (no extras, no renaming):
 
-1. OVERNIGHT SUMMARY (50-60 words): What happened on COMEX/NYMEX overnight? What is the dominant theme? Why?
+### 1. Overnight Summary
+2-3 sentences. State what moved on COMEX overnight, by how much, and the dominant theme. Precise numbers only. No generic phrases.
 
-2. MCX OPEN LEVELS (80-100 words): For each commodity — current MCX price, % change from yesterday's close, and the key level to hold vs break today. Use the EXACT technical levels from the OHLC data above. Name specific support and resistance prices.
+### 2. MCX Open Levels
+One line per commodity in this exact format:
+**Gold (₹PRICE/10g, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
+**Silver (₹PRICE/kg, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
+**Crude (₹PRICE/bbl, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
+**Copper (₹PRICE/kg, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
+**Natural Gas (₹PRICE/mmBtu, PCT%):** [resistance at ₹X, support at ₹Y. 20-SMA at ₹Z.]
 
-3. CROSS-ASSET CONNECTIONS (60-70 words): What is USD/INR doing and how does it amplify or offset the COMEX move? Any cross-commodity correlation worth noting (gold-silver ratio, crude-natgas spread, etc.)?
+### 3. Cross-Asset Connections
+2-3 sentences. USD/INR at ₹${usdinr.toFixed(2)} — state exactly how it translates the COMEX move into MCX. Note one cross-commodity spread if meaningful (gold-silver ratio, crude-natgas).
 
-4. IMPORT PARITY CHECK (40-50 words): For the commodity with the biggest overnight move — show the exact import parity math: COMEX price → USD/INR → customs duty estimate → MCX theoretical fair value vs actual open.
+### 4. Import Parity Check
+For the commodity with the biggest COMEX move. Show the math on separate lines:
+COMEX [Commodity]: $X/[unit] ÷ [conversion] = $Y/g = $Z/10g
+× USD/INR ₹${usdinr.toFixed(2)} = ₹A/10g
++ customs duty + GST (~X%): ₹A × 1.XX = ₹B/10g theoretical
+MCX actual open: ₹C — [₹D above/below] import parity.
 
-5. WHO IS AFFECTED (3 sentences, one each):
-   - **Businesses:** name one sector and one concrete cost/revenue consequence today (e.g. "Oil marketing companies: refinery margins compress as crude opens ₹9,124")
-   - **Investors:** name one MCX contract and the directional signal from today's open
-   - **Consumers:** name one product and whether prices are likely to rise or fall at the pump/shop level
-   - BANNED: "businesses face higher costs", "investors should watch", "consumers may see higher prices", "market participants should be aware"
+### 5. Watch Today
+Name 2-3 exact price levels across the complex that matter most today. Name any scheduled data releases (EIA Wednesday, Fed speakers, India CPI, RBI ops) on the calendar. End the entire brief with: "**Key focus today: [single most important level or event]**"
 
-6. WATCH TODAY (40-50 words): Name 2-3 specific price levels across the complex that will determine direction. Name any scheduled data releases today (EIA Wednesday, Fed speakers, India inflation data, etc.) that traders should have on their radar.
-
-LANGUAGE RULES — NON-NEGOTIABLE:
-Write for a first-time investor or small trader, NOT a Bloomberg analyst. Assume zero finance background.
-- Explain every term on first use: "WTI crude (the US oil benchmark)", "COMEX (the US commodity exchange)", "20-SMA (the average price over the last 20 days)"
-- "risk-off" → "investors moving money to safer assets like gold"
-- "safe-haven bid" → "investors buying gold for safety"
-- "the market is pricing in" → replace with plain language describing what is actually happening
-- "stagflation" → "rising prices combined with a slowing economy"
-- Short sentences. One idea per sentence. Max 25 words per sentence.
-- If you reference a previous edition (e.g. Edition 32), write it as a markdown link: [Edition 32](/briefs/edition-032)
-
-CONTENT RULES: No opinions. No buy/sell/accumulate/avoid/exit calls. Only facts, levels, and mechanics. End with one line: "Key focus today: [the single most important data point or level for Indian MCX traders to monitor]"
+WRITING RULES — STRICTLY ENFORCED:
+- No parenthetical definitions ("COMEX (the US...)", "20-SMA (average...)"). Use terms directly.
+- No filler: "it is worth noting", "it is important to", "market participants should be aware"
+- Precise numbers always. Never "approximately ₹X" when you have the exact figure.
+- Concise. Total article 280-350 words.
+- If referencing a previous edition, link it: [Edition 32](/briefs/edition-032)
 
 SEO RULES:
-- Title: specific, includes "MCX Open" + dominant overnight theme (under 65 chars)
-- Description: under 155 chars, include today's date and 2-3 key moves
+- Title: "MCX Open D Mon YYYY: [dominant theme]" — under 65 chars
+- Description: under 155 chars, include date and the 2 biggest moves with exact prices
 
-RETURN ONLY valid MDX frontmatter + article body:
+RETURN ONLY valid MDX frontmatter + article body. No code fences.
 
 ---
-title: "[SEO title — under 65 chars, include MCX Open and dominant theme]"
-description: "[Under 155 chars — include date and key overnight moves]"
+title: "[MCX Open D Mon YYYY: dominant theme — under 65 chars]"
+description: "[Under 155 chars — date + 2 key moves with prices]"
 date: "${today.toISOString()}"
 time: "${timeStr}"
 edition: "morning-brief"
 commodity: "multi"
 tags: ["MCX Open", "Daily Brief", "Gold", "Crude Oil", "Silver"]
-slug: "[mcx-open-DDMMMYYYY-dominant-theme]"
----
-
-[Article body — 300-380 words, all 5 sections, specific levels, no hedging]`
+slug: "[mcx-open-DDMMMYYYY-theme]"
+---`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
