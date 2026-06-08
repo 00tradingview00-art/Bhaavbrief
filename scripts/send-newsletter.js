@@ -112,8 +112,8 @@ async function findExistingCampaign(name) {
   } catch { return null }
 }
 
-async function sendCampaign(subject, htmlContent, previewText) {
-  const campaignName = `BhaavBrief — ${subject}`
+async function sendCampaign(subject, htmlContent, previewText, edition) {
+  const campaignName = `BhaavBrief E${String(edition).padStart(3, '0')} — ${subject}`
 
   // Idempotency: check if this campaign was already created (covers double-send retries)
   const existing = await findExistingCampaign(campaignName)
@@ -190,7 +190,7 @@ async function main() {
   console.log(`Sending Edition ${edition}: "${title}"`)
 
   const html = mdxToHtml(content, title, edition, date)
-  await sendCampaign(title, html, summary)
+  await sendCampaign(title, html, summary, edition)
 }
 
 main().catch(err => {
