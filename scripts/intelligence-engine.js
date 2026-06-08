@@ -44,10 +44,65 @@ if (fs.existsSync(envFile)) {
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
-const STATE_FILE     = path.join(ROOT, 'data/engine-state.json')
-const MCX_CACHE_FILE = path.join(ROOT, 'data/mcx-last-prices.json')
-const ARTICLES_DIR   = path.join(ROOT, 'content/articles')
-const TITLE_FILE     = path.join(ROOT, 'data/last-article-title.txt')
+const STATE_FILE      = path.join(ROOT, 'data/engine-state.json')
+const MCX_CACHE_FILE  = path.join(ROOT, 'data/mcx-last-prices.json')
+const ARTICLES_DIR    = path.join(ROOT, 'content/articles')
+const TITLE_FILE      = path.join(ROOT, 'data/last-article-title.txt')
+const IMPACT_MAP_FILE = path.join(ROOT, 'data/impact-map.json')
+
+// ── Impact Map — persistent knowledge base ───────────────────────────────────
+let _impactMap = null
+function loadImpactMap() {
+  if (_impactMap) return _impactMap
+  try { _impactMap = JSON.parse(fs.readFileSync(IMPACT_MAP_FILE, 'utf8')) }
+  catch { _impactMap = { events: {}, commodities: {} } }
+  return _impactMap
+}
+
+function getEventContext(headlines, commodityKey) {
+  const map = loadImpactMap()
+  const text = (Array.isArray(headlines) ? headlines.join(' ') : headlines).toLowerCase()
+
+  // Match event type by keywords
+  const matchedEvents = Object.entries(map.events ?? {})
+    .filter(([, ev]) => (ev.keywords ?? []).some(kw => text.includes(kw)))
+    .slice(0, 2)
+
+  // Always include the primary commodity context
+  const commodityCtx = map.commodities?.[commodityKey]
+
+  const sections = []
+
+  for (const [eventKey, ev] of matchedEvents) {
+    const mechanismText = Object.entries(ev.mechanism ?? {})
+      .map(([k, v]) => `  ${k.toUpperCase()}: ${v}`)
+      .join('\n')
+
+    const affectedText = Object.entries(ev.india_affected ?? {})
+      .map(([sector, detail]) => `  ${sector}: ${detail}`)
+      .join('\n')
+
+    sections.push(`EVENT TYPE: ${eventKey.replace(/_/g, ' ').toUpperCase()}
+TRANSMISSION MECHANISM:
+${mechanismText}
+INDIA AFFECTED (name these specifically, don't generalise):
+${affectedText}
+HISTORICAL PRECEDENTS: ${ev.historical_moves ?? 'none on record'}
+REVERSAL TRIGGER: ${ev.reversal_trigger ?? 'unknown'}`)
+  }
+
+  if (commodityCtx) {
+    sections.push(`COMMODITY KNOWLEDGE — ${commodityKey.toUpperCase()}:
+Contract: ${commodityCtx.mcx_contract ?? ''}
+Transmission: ${commodityCtx.transmission ?? ''}
+India context: ${commodityCtx.india_context ?? commodityCtx.india_demand ?? ''}
+Price mechanism: ${commodityCtx.india_price_mechanism ?? ''}`)
+  }
+
+  return sections.length > 0
+    ? `\nENGINE KNOWLEDGE BASE (use these specific facts — do not invent different ones):\n${sections.join('\n\n')}\n`
+    : ''
+}
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const MOVE_THRESHOLD        = 1.0   // % — triggers article with supporting signal
@@ -599,6 +654,11 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels }) {
   const commodity = primaryMove?.label ?? 'commodities'
   const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
 
+  const impactContext = getEventContext(
+    [hawkTrigger, eia?.summary ?? ''].join(' '),
+    primaryMove?.key ?? 'crude'
+  )
+
   const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
 A HAWK-SCAN fires only on extreme market events (>3% move or major EIA data). This is one.
@@ -611,7 +671,7 @@ ${moveBlock}
 
 CURRENT PRICES [${dataLabel}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
 ${priceLines.join('\n')}
-${eiaBlock}${techBlock}
+${eiaBlock}${techBlock}${impactContext}
 SEBI COMPLIANCE — NON-NEGOTIABLE:
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, act
 - No price targets. Historical patterns only: "In past supply shocks, crude rose 8–12%" ✓
@@ -702,6 +762,11 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
   const commodity = primaryMove?.label ?? 'commodities'
   const tags = [...new Set(moves.map(m => m.label))].slice(0, 4).join('", "')
 
+  const impactContext = getEventContext(
+    [narrative, circularBlock, eiaBlock].filter(Boolean).join(' '),
+    primaryMove?.key ?? 'crude'
+  )
+
   const prompt = `You are BhaavBrief's market reporter. Write a flash intelligence article for Indian commodity traders and merchants.
 
 TRIGGERED AT: ${timeStr} IST, ${dateStr}
@@ -714,7 +779,7 @@ MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE KITE' : 'ESTIMATED'}, U
 ${priceBlock}
 
 CONTEXT: ${narrative}
-${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${techBlock}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${techBlock}${impactContext}
 SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
@@ -798,6 +863,8 @@ async function generateGeoArticle({ geoEvents, prices }) {
   const primaryLabel = { gold: 'MCX Gold', silver: 'MCX Silver', crude: 'MCX Crude', copper: 'MCX Copper', natgas: 'MCX NatGas' }[primaryKey]
   const primaryPrice = { gold: prices.mcxGold, crude: prices.mcxCrude, copper: prices.mcxCopper }[primaryKey] ?? 0
 
+  const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey)
+
   const prompt = `You are BhaavBrief's market reporter. Write a macro-context intelligence article for Indian commodity traders.
 
 A geopolitical or macro event is breaking that directly affects MCX prices.
@@ -806,6 +873,7 @@ TIME: ${timeStr} IST, ${dateStr}
 
 BREAKING NEWS HEADLINES:
 ${headlines}
+${impactContext}
 
 ${priceBlock}
 

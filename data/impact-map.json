@@ -1,0 +1,249 @@
+{
+  "_note": "Engine knowledge base — how events transmit to MCX and who in India gets hit. Load into article/geo prompts for precise, institutional-quality writing.",
+
+  "events": {
+    "iran_israel_escalation": {
+      "keywords": ["iran", "israel", "strike", "attack", "escalat", "tehran", "tel aviv"],
+      "primary_commodities": ["crude", "gold"],
+      "mechanism": {
+        "crude": "Hormuz Strait carries ~20% of global seaborne oil (17–20 mb/d). Any credible blockade risk adds a war premium of $5–15/bbl to WTI/Brent within hours. MCX crude amplifies this by USD/INR — every $1/bbl on WTI = ~₹130–160/bbl on MCX at current exchange rates.",
+        "gold": "Classic safe-haven bid. Past Iran escalations drove gold +2–4% in the first 48 hours before fading as premiums compress. Silver moves in sympathy but with higher volatility."
+      },
+      "india_affected": {
+        "aviation": "IndiGo, Air India, SpiceJet, Akasa — ATF (aviation turbine fuel) is revised fortnightly by OMCs. A $10/bbl move in crude = ~₹6–8/litre ATF cost change. Unhedged carriers face direct margin pressure within 15 days.",
+        "omcs": "BPCL, HPCL, Indian Oil — under-recovery risk if retail petrol/diesel prices are not revised to match crude. Government often absorbs short-term spikes; sustained move above $95 Brent for 10+ days typically triggers a retail price revision.",
+        "paint": "Asian Paints, Berger Paints, Kansai Nerolac — solvents (toluene, xylene) and titanium dioxide feedstocks are crude derivatives. A 5% crude spike adds ~1–2% raw material cost within one procurement cycle (45–60 days).",
+        "petrochemicals": "Reliance Industries, HPCL-Mittal Energy, GAIL — naphtha and LPG feedstock costs rise directly with crude. Downstream polymer margins compress.",
+        "fertilisers": "Coromandel International, Chambal Fertilisers — urea and DAP use natural gas as feedstock; crude spikes often drag natgas higher. Import cost of phosphatic fertilisers rises.",
+        "logistics": "Blue Dart, Delhivery, VRL Logistics — diesel costs (which track crude with a lag) feed directly into per-km operating costs. Freight rate revisions typically lag 30–60 days.",
+        "tyres": "MRF, Apollo Tyres, CEAT — natural rubber is unaffected but synthetic rubber (SBR, PBR) is a crude derivative. A sustained crude spike adds to input costs within one quarter."
+      },
+      "historical_moves": "Oct 2023 (Hamas attack): WTI +4.3% intraday, MCX Crude +4.8%, reversed 60% within 5 sessions. Apr 2024 (Iran drone strike): WTI +3.1%, gold +1.8%, both reversed within 72h on no escalation. Jun 2025 (naval incident): crude +2.8%, faded same session. Pattern: initial spike of 3–8% fades within 3–5 sessions if Hormuz remains open.",
+      "reversal_trigger": "Confirmed ceasefire, US diplomatic mediation announcement, or IAEA-verified Iran nuclear compliance signal.",
+      "escalation_trigger": "Confirmed Hormuz tanker seizure, Iranian port blockade, or Israeli strike on Iranian oil infrastructure."
+    },
+
+    "opec_production_cut": {
+      "keywords": ["opec", "production cut", "output cut", "supply cut", "quota reduction", "vienna agreement"],
+      "primary_commodities": ["crude"],
+      "mechanism": {
+        "crude": "OPEC+ collectively controls ~40% of global oil supply. A 500k bpd cut tightens the market by ~0.5% of global demand (~100 mb/d). Price impact depends on pre-existing inventory levels — cuts during inventory draws amplify; cuts during builds are partially offset. Typical initial WTI move: +2–5% on surprise cuts, +1–2% on telegraphed cuts."
+      },
+      "india_affected": {
+        "omcs": "BPCL, HPCL, Indian Oil — India imports ~85% of crude needs. Higher crude = higher import bill. Every $10/bbl sustained rise costs India ~$15bn/year in additional import costs, widening the current account deficit.",
+        "refining_margins": "Reliance (GRM) — tighter crude supply historically improves gross refining margins for complex refiners who can process heavier grades that widen in discount. Simple refiners face margin compression.",
+        "aviation": "Same as Iran scenario — ATF cost pressure with 15-day revision lag.",
+        "steel": "JSW Steel, Tata Steel — coking coal logistics and energy costs rise; marginal impact compared to direct crude users but present in energy-intensive steelmaking."
+      },
+      "historical_moves": "Nov 2022 OPEC+ 2mb/d cut: WTI +8% over 3 sessions. Apr 2023 surprise 1.16mb/d cut: WTI +6.3% in one session. Oct 2023 extended cuts: WTI +3.2%. Pattern: surprise cuts move market 4–8%; pre-signalled cuts move 1–3%.",
+      "reversal_trigger": "US SPR release announcement, surprise inventory build >4mb EIA, or Saudi Arabia signalling quota relaxation.",
+      "key_data": "OPEC+ meets every 2 months. Saudi Aramco official selling price (OSP) for Asia, released first week of each month, is the real-time signal of Saudi supply intent."
+    },
+
+    "opec_production_increase": {
+      "keywords": ["opec", "production increase", "output increase", "supply increase", "quota increase", "pumping more"],
+      "primary_commodities": ["crude"],
+      "mechanism": {
+        "crude": "Opposite of cut. 400–500k bpd increase = ~0.4–0.5% of global supply addition. Market impact softened if demand outlook is strong. Typical WTI move: -2–5% on surprise increases."
+      },
+      "india_affected": {
+        "omcs": "Relief for BPCL, HPCL, IOC — lower crude = lower import costs = under-recovery narrows. Government saves on LPG and kerosene subsidies.",
+        "aviation": "IndiGo, Air India — ATF cost reduction with 15-day lag. Margin relief for unhedged carriers.",
+        "consumers": "Retail petrol/diesel price reduction likely within one fortnightly revision cycle if crude sustains below key levels."
+      },
+      "historical_moves": "Jun 2023 OPEC+ surprise increase: WTI -5.2% in one session. Aug 2022 token 100k bpd increase: minimal price impact (-0.8%) — market read it as cover for actual flat output.",
+      "reversal_trigger": "Geopolitical flare-up, demand surge from China, or EIA draw >3mb."
+    },
+
+    "russia_ukraine_escalation": {
+      "keywords": ["russia", "ukraine", "putin", "zelensky", "nato", "kyiv", "moscow", "dnipro", "odessa"],
+      "primary_commodities": ["crude", "natgas", "wheat", "gold"],
+      "mechanism": {
+        "crude": "Russia produces ~9–10 mb/d. Western sanctions and price caps affect ~1–1.5 mb/d of flow routing. Escalation raises re-routing risk and tightens European energy markets.",
+        "natgas": "Russia supplied ~35% of European gas pre-2022. Disruptions to Nord Stream (now offline), TurkStream, or Ukrainian transit routes spike European TTF gas, which drives LNG demand globally and lifts Henry Hub by correlation.",
+        "gold": "War escalation consistently drives gold safe-haven demand. Ukraine-Russia conflict correlation with gold: +0.7 over 30-day windows during escalation phases.",
+        "wheat": "Ukraine + Russia = ~30% of global wheat exports. Port blockades at Odessa historically spike wheat futures 5–15% within 48h. India grows wheat domestically but global price sets the import parity floor."
+      },
+      "india_affected": {
+        "fertilisers": "India imports ~60% of its potash from Belarus/Russia. Sanctions disruption raises DAP/MOP import costs — Coromandel, Chambal, IFFCO face input cost pressure.",
+        "sunflower_oil": "Ukraine supplies ~50% of global sunflower oil. Port disruptions spike edible oil prices — Adani Wilmar, Ruchi Soya face raw material cost pressure.",
+        "steel": "Ukraine is a major pig iron and semi-finished steel exporter. Disruptions tighten global scrap/billet supply — marginal tightening for Indian steelmakers.",
+        "gas": "India's LNG imports (primarily from Qatar and US) see demand competition from Europe scrambling for LNG. Spot LNG prices can spike 20–40% in acute disruption — GAIL, Petronet LNG face procurement cost pressure."
+      },
+      "historical_moves": "Feb 24 2022 invasion: WTI +8%, gold +2.7%, wheat futures +15% in one session. Oct 2022 escalation: crude +2.1%, gold +1.3%. Pattern: initial spike fades within 5–10 sessions unless supply is physically disrupted.",
+      "reversal_trigger": "Ceasefire talks, US/EU mediation, grain corridor agreement, or IAEA nuclear facility safety confirmation."
+    },
+
+    "red_sea_suez_disruption": {
+      "keywords": ["red sea", "suez", "houthi", "bab-el-mandeb", "shipping", "tanker reroute", "cape of good hope"],
+      "primary_commodities": ["crude"],
+      "mechanism": {
+        "crude": "Suez Canal handles ~10% of global seaborne oil (and ~30% of container trade). Rerouting via Cape of Good Hope adds 10–14 days and $1–3mn per voyage in fuel/time costs. This creates a physical tightening of ~500k–1mb/d equivalent, pushing freight rates (VLCC) and crude spot premiums higher."
+      },
+      "india_affected": {
+        "textile": "India is a major textile exporter to Europe. Rerouting adds 10–14 days and 20–30% to freight costs — Arvind Ltd, Welspun, KPR Mill face margin compression.",
+        "electronics": "Consumer electronics imports from Europe routed via Suez face delays — Dixon Technologies (contract manufacturer) supply chain disruption.",
+        "crude_importers": "BPCL, HPCL, Reliance — freight premium on crude imports from Middle East loaded on Suezmax tankers rises $1–2/bbl.",
+        "gems_jewellery": "Diamond rough imports from Antwerp route via Suez — rerouting costs add to import lead times."
+      },
+      "historical_moves": "Nov 2023 Houthi attacks: VLCC freight rates +40% in 3 weeks, Brent +2.1%. Jan 2024 full rerouting: Brent premium +$3–4/bbl sustained. Pattern: price impact is gradual (weeks) not immediate (hours) unless tanker is directly attacked.",
+      "reversal_trigger": "US/coalition naval escort programme, Houthi ceasefire, or Yemen political resolution."
+    },
+
+    "fed_rate_hike": {
+      "keywords": ["federal reserve", "fed hike", "rate hike", "fomc", "hawkish", "higher for longer", "powell"],
+      "primary_commodities": ["gold", "silver", "copper", "crude"],
+      "mechanism": {
+        "gold": "Higher US rates raise the opportunity cost of holding non-yielding gold. Dollar strengthens, gold falls. Rule of thumb: 25bps surprise hike = gold -0.8 to -1.5%.",
+        "silver": "Dual sensitivity — safe-haven (like gold, falls with rate hike) and industrial (falls with slower growth expectations). Typically falls more than gold on hikes.",
+        "copper": "Rate hikes signal slower growth → lower industrial demand → copper falls. China demand offset is the key variable.",
+        "crude": "Dollar strengthening from rate hikes makes dollar-priced crude more expensive for non-US buyers, dampening demand. Secondary effect via growth slowdown expectations."
+      },
+      "india_affected": {
+        "jewellers": "Titan, Kalyan Jewellers, Senco Gold — lower gold prices reduce inventory mark-to-market but also soften consumer buying sentiment (expecting further falls).",
+        "gold_importers": "India imports ~800–1000 tonnes/year. Lower gold = lower import bill = CAD relief. Every $100/oz fall saves India ~$3–4bn/year.",
+        "rupee": "Fed hike typically strengthens dollar → rupee weakens → ALL MCX prices higher in INR even if USD price falls. Net effect on MCX gold is often muted or positive in INR terms.",
+        "nbfcs": "Gold loan NBFCs (Muthoot Finance, Manappuram) — collateral values fall, LTV buffers compress if gold falls >10% from pledged levels."
+      },
+      "historical_moves": "Mar 2022 first hike: gold -0.9% on day, rallied +4% over next month (war risk offset). Jun 2022 75bps hike: gold -1.7% on day. Aug 2023 Jackson Hole hawkish: gold -1.4%, silver -2.1%. Pattern: initial negative reaction, recovery if real rates plateau.",
+      "reversal_trigger": "Fed pivot signal, pause language, softer CPI print, or weak NFP."
+    },
+
+    "fed_rate_cut": {
+      "keywords": ["fed cut", "rate cut", "dovish", "pivot", "easing", "fomc cut", "lower rates"],
+      "primary_commodities": ["gold", "silver", "copper", "crude"],
+      "mechanism": {
+        "gold": "Lower rates reduce opportunity cost of gold. Dollar weakens, gold rises. Rule of thumb: 25bps surprise cut = gold +0.8 to +2%.",
+        "silver": "Benefits doubly — safe-haven and industrial demand both supported by easing.",
+        "copper": "Lower rates support growth expectations → industrial demand → copper rises.",
+        "crude": "Weaker dollar makes crude cheaper in non-USD currencies, supporting demand."
+      },
+      "india_affected": {
+        "jewellers": "Titan, Kalyan Jewellers — gold rally typically boosts wedding season buying and investment demand.",
+        "gold_etfs": "SGB (Sovereign Gold Bond) redemptions accelerate when gold rallies. Nippon India Gold ETF, HDFC Gold ETF see inflows.",
+        "rupee": "Dollar weakens → rupee strengthens → MCX prices partially offset despite USD commodity rally. Net effect: MCX gold rises but less than COMEX."
+      },
+      "historical_moves": "Sep 2024 50bps cut: gold +1.2% same day, +3.8% over week. Nov 2023 pause-then-pivot: gold +4.1% in 2 weeks.",
+      "reversal_trigger": "Hotter-than-expected CPI, strong NFP, or Fed re-signalling higher for longer."
+    },
+
+    "china_pmi_weak": {
+      "keywords": ["china pmi", "caixin", "nbs pmi", "china manufacturing", "china slowdown", "china contraction"],
+      "primary_commodities": ["copper", "crude", "silver"],
+      "mechanism": {
+        "copper": "China consumes ~55% of global refined copper. PMI below 50 signals contraction in manufacturing activity. Rule of thumb: PMI miss of 1 point = copper -0.8 to -1.5% on day.",
+        "crude": "China is the world's largest crude importer (~11 mb/d). Demand growth assumptions drive futures premium. Weak PMI cuts demand growth forecasts — crude falls 1–3% on significant miss.",
+        "silver": "Industrial demand (solar panels, electronics) falls with China slowdown. Silver underperforms gold when China PMI weakens."
+      },
+      "india_affected": {
+        "copper": "Hindalco (copper smelter), Sterlite Copper — LME copper price sets benchmark for MCX; lower copper = lower realisation.",
+        "steel": "JSW, Tata Steel — China oversupply risk rises when domestic demand weakens, as excess steel floods export markets and depresses global prices.",
+        "zinc_aluminium": "Hindustan Zinc, Nalco — same dynamic as copper."
+      },
+      "historical_moves": "Aug 2023 weak Caixin PMI: copper -2.3%, crude -1.8%. Apr 2024 PMI miss: copper -1.1%. Pattern: sharp same-day reaction, often partially recovered within 48h.",
+      "reversal_trigger": "China stimulus announcement, PBoC rate cut, or strong exports data offsetting PMI weakness."
+    },
+
+    "india_rbi_policy": {
+      "keywords": ["rbi", "repo rate", "monetary policy", "mpc", "das", "shaktikanta", "rbi governor"],
+      "primary_commodities": ["gold", "rupee"],
+      "mechanism": {
+        "gold": "RBI rate hold or cut → rupee pressure → MCX gold rises in INR even if COMEX flat. RBI hike → rupee firms → MCX gold falls in INR even if COMEX flat.",
+        "rupee": "RBI is the primary driver of USD/INR. Surprise cuts weaken rupee 0.3–0.8% on day; surprise hikes firm rupee 0.2–0.6%."
+      },
+      "india_affected": {
+        "gold_importers": "India's jewellery industry (Titan, Kalyan) — MCX gold price is the direct reference for domestic gold retail pricing. RBI action changes MCX more than COMEX.",
+        "importers": "All commodity importers face rupee transmission — crude, edible oils, fertilisers, copper all priced in dollars. Weaker rupee = higher INR landed cost.",
+        "exporters": "IT companies, pharma — benefit from weaker rupee. Not commodity relevant directly but drives macro flows."
+      },
+      "historical_moves": "Feb 2023 surprise 25bps hike: rupee +0.4%, MCX gold -0.7% same day. Apr 2023 pause: rupee flat, MCX gold +0.2%.",
+      "reversal_trigger": "Inflation data surprise, foreign capital outflows, or global dollar move overriding RBI action."
+    },
+
+    "india_import_duty_change": {
+      "keywords": ["import duty", "customs duty", "gold duty", "silver duty", "copper duty", "basic customs"],
+      "primary_commodities": ["gold", "silver", "copper"],
+      "mechanism": {
+        "gold": "India's basic customs duty on gold is currently 15% (6% basic + 5% AIDC + 4% IGST approximate). Each 1% BCD change = ~₹1,500–1,800/10g change in domestic MCX price relative to international parity. Duty cuts immediately reduce MCX gold vs COMEX spread.",
+        "silver": "Similar duty structure. 1% duty change = ~₹2,000–2,500/kg impact on MCX silver.",
+        "copper": "Lower duty for raw copper ore vs refined copper — changes affect domestic pricing of Hindalco's secondary copper."
+      },
+      "india_affected": {
+        "jewellers": "Titan, Kalyan, PC Jeweller — duty cuts reduce gold purchase cost, improve margins; duty hikes squeeze margins or force price increases reducing volume.",
+        "smuggling": "High duty historically increases smuggling — DGRI/DRI seizure data is a lagging indicator of duty arbitrage.",
+        "recycling": "Domestic gold recycling volumes rise when imports become expensive (high duty); fall when imports are cheap.",
+        "importers": "MMTC, STC, authorised bank importers — duty changes affect their import economics directly."
+      },
+      "historical_moves": "Jul 2024 BCD cut from 15% to 6%: MCX gold fell ₹4,000–5,000/10g same day (largest single-day drop in years). Jul 2022 BCD hike from 10.75% to 15%: MCX gold rose ₹1,500/10g above international parity.",
+      "reversal_trigger": "Duty cuts are typically permanent until next budget. Hikes may be partially reversed if CAD widens."
+    },
+
+    "eia_crude_draw": {
+      "keywords": ["eia", "crude inventory", "draw", "inventory decline", "stockpile fell", "weekly petroleum"],
+      "primary_commodities": ["crude"],
+      "mechanism": {
+        "crude": "EIA weekly petroleum status report (Wednesday 8 PM IST). Draw = inventory fell = supply tighter than demand. Significant draw >3mb/week = bullish. Cushing OK hub draws get more weight than total US inventories. Rule of thumb: 3mb draw surprise = WTI +0.8 to +1.5%."
+      },
+      "india_affected": {
+        "omcs": "BPCL, HPCL, IOC — inventory-driven crude rally sustains import cost pressure. Short-term price setter for OMC procurement hedging.",
+        "refining": "Reliance Industries — GRM (gross refining margin) is sensitive to crude-product spread. Inventory draws that raise crude faster than product prices temporarily compress GRM."
+      },
+      "historical_moves": "Aug 2023 -17mb surprise draw: WTI +2.3% in session. Feb 2024 -7mb: WTI +1.1%. Pattern: draws >5mb are reliably bullish; draws 1–3mb are noise.",
+      "reversal_trigger": "Consecutive builds, SPR refill announcement, or demand destruction evidence."
+    },
+
+    "eia_crude_build": {
+      "keywords": ["eia", "crude build", "inventory rise", "stockpile rose", "inventory increase"],
+      "primary_commodities": ["crude"],
+      "mechanism": {
+        "crude": "Build = inventory rose = supply exceeding demand. Significant build >3mb/week = bearish. Consecutive builds historically signal demand weakness or supply glut. Rule of thumb: 3mb build surprise = WTI -0.8 to -1.5%."
+      },
+      "india_affected": {
+        "omcs": "BPCL, HPCL, IOC — lower crude costs reduce import bill; potential for downstream fuel price reduction. OMC refining margins may improve as product prices hold while crude falls.",
+        "consumers": "Petrol/diesel price revision (fortnightly) becomes more likely if builds persist and crude falls >$5 from last revision baseline."
+      },
+      "historical_moves": "Jun 2023 +7mb build: WTI -3.4% in session. Oct 2022 +9.9mb: WTI -2.1%. Pattern: large surprise builds (>5mb) reliably bearish; smaller builds absorbed.",
+      "reversal_trigger": "OPEC+ supply discipline re-affirmation, geopolitical risk premium, or China demand revival signal."
+    }
+  },
+
+  "commodities": {
+    "crude": {
+      "mcx_contract": "MCX Crude Oil — NYMEX WTI-linked. Lot size: 100 barrels. Pricing in ₹/barrel.",
+      "india_import_dependency": "India imports ~85% of crude requirements (~5 mb/d). Second-largest crude importer after China.",
+      "transmission": "WTI $1/bbl move = MCX ₹130–160/bbl at USD/INR 84–86. USD/INR amplifies or dampens the move.",
+      "key_data_releases": ["EIA weekly (Wed 8PM IST)", "API weekly (Tue night)", "OPEC MOMR (monthly)", "IEA OMR (monthly)", "Baker Hughes rig count (Fri night)"],
+      "major_producers": "Saudi Arabia, Russia, USA, UAE, Iraq. OPEC+ collectively ~40% of global supply.",
+      "india_price_mechanism": "Retail petrol/diesel revised fortnightly by OMCs (Indian Oil, BPCL, HPCL) based on 15-day rolling average of benchmark crude + exchange rate."
+    },
+    "gold": {
+      "mcx_contract": "MCX Gold — COMEX-linked. Lot size: 1 kg (Gold Mini: 100g). Pricing in ₹/10g.",
+      "india_demand": "India is world's second-largest gold consumer (~800–1000 tonnes/year). ~60% jewellery, ~25% investment, ~15% industrial.",
+      "transmission": "COMEX $1/oz move = MCX ~₹2.7/10g at current rates. Import duty (currently ~15%) creates a domestic premium above import parity.",
+      "key_data_releases": ["US CPI (monthly)", "US NFP (first Friday)", "FOMC (8x/year)", "India wedding season demand (Oct-Dec, Feb-Apr)", "World Gold Council demand report (quarterly)"],
+      "seasonal_pattern": "Akha Teej (Apr-May), Dhanteras (Oct-Nov), wedding season (Nov-Dec, Feb-Apr) = peak physical demand. Lean season: Jan-Feb, Jun-Sep.",
+      "india_price_mechanism": "MCX gold = COMEX gold × USD/INR × import duty factor × GST. Hallmarking mandatory since 2022 for all retail gold."
+    },
+    "silver": {
+      "mcx_contract": "MCX Silver — COMEX-linked. Lot size: 30 kg. Pricing in ₹/kg.",
+      "india_demand": "India imports ~6,000–8,000 tonnes/year. Largest single-country silver importer globally. Used in solar panels, electronics, jewellery.",
+      "transmission": "Dual driver — gold moves (safe haven) AND industrial demand (China PMI, solar installations). Silver more volatile than gold: gold:silver volatility ratio ~1:1.7.",
+      "key_data_releases": ["Gold/silver ratio (daily)", "Solar installation data", "India import data (DGCI&S monthly)"],
+      "unique_india_factor": "India's solar mission (500 GW by 2030) is a structural demand driver. Every GW of solar requires ~1.5 tonnes of silver for photovoltaic cells."
+    },
+    "copper": {
+      "mcx_contract": "MCX Copper — LME-linked. Lot size: 1 tonne. Pricing in ₹/kg.",
+      "india_context": "India produces ~750,000 tonnes/year (Hindalco + Vedanta). Net importer of refined copper. Major user: power cables, telecom, EVs.",
+      "transmission": "LME copper drives MCX copper. China 55% of global demand — China PMI is the primary driver.",
+      "key_data_releases": ["China PMI (monthly)", "LME copper stocks (daily)", "Chile production data (monthly)", "China copper imports (monthly)"],
+      "india_growth_driver": "India's power sector capex (PGCIL, state DISCOMs) and EV adoption are structural demand drivers. Each EV uses 4× more copper than ICE vehicle."
+    },
+    "natgas": {
+      "mcx_contract": "MCX Natural Gas — Henry Hub-linked. Lot size: 1,250 mmBtu. Pricing in ₹/mmBtu.",
+      "india_context": "India is a growing LNG importer. Domestic gas prices are partially deregulated. Key users: fertiliser plants, power generation, CGD (city gas distribution).",
+      "transmission": "Henry Hub drives MCX NatGas. European TTF and JKM (Japan/Korea marker) diverge during supply crunches and pull LNG spot prices.",
+      "key_data_releases": ["EIA natural gas storage (Thursday)", "US weather forecasts", "LNG cargo diversion data"],
+      "india_specific": "GAIL, Petronet LNG, IGL, MGL are key domestic gas distributors. CNG prices (auto sector) and PNG prices (households) track domestic gas price revisions."
+    }
+  }
+}
