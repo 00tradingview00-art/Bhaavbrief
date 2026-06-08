@@ -245,13 +245,13 @@ WRITING RULES — STRICTLY ENFORCED:
 - If referencing a previous edition, link it: [Edition 32](/briefs/edition-032)
 
 SEO RULES:
-- Title: "MCX Open D Mon YYYY: [dominant theme]" — under 65 chars
+- Title format: "MCX Open ${today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}: [dominant theme]" — under 65 chars total
 - Description: under 155 chars, include date and the 2 biggest moves with exact prices
 
 RETURN ONLY valid MDX frontmatter + article body. No code fences.
 
 ---
-title: "[MCX Open D Mon YYYY: dominant theme — under 65 chars]"
+title: "MCX Open ${today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}: [dominant theme — keep total under 65 chars]"
 description: "[Under 155 chars — date + 2 key moves with prices]"
 date: "${today.toISOString()}"
 time: "${timeStr}"
