@@ -218,47 +218,40 @@ async function fetchPrices() {
     return null
   }
 
-  // COMEX / NYMEX futures via Stooq CSV — gives us COMEX reference prices + % change
-  const stooqMap = {
-    'GC=F': 'gc.f',   // COMEX Gold $/troy oz
-    'SI=F': 'si.f',   // COMEX Silver $/troy oz
-    'CL=F': 'cl.f',   // NYMEX WTI Crude $/bbl
-    'HG=F': 'hg.f',   // COMEX Copper ¢/lb
-    'NG=F': 'ng.f',   // Henry Hub Nat Gas $/mmBtu
-    'BZ=F': 'lcod.uk', // Brent (ICE London)
+  // COMEX / NYMEX futures via Yahoo Finance — gives us COMEX reference prices + % change
+  const yahooSyms = {
+    'GC=F': 'GC%3DF',   // COMEX Gold $/troy oz
+    'SI=F': 'SI%3DF',   // COMEX Silver $/troy oz
+    'CL=F': 'CL%3DF',   // NYMEX WTI Crude $/bbl
+    'HG=F': 'HG%3DF',   // COMEX Copper $/lb
+    'NG=F': 'NG%3DF',   // Henry Hub Nat Gas $/mmBtu
+    'BZ=F': 'BZ%3DF',   // Brent (ICE)
   }
 
   const q = {}
   await Promise.all(
-    Object.entries(stooqMap).map(async ([yfKey, stooqSym]) => {
+    Object.entries(yahooSyms).map(async ([key, sym]) => {
       try {
         const r = await fetch(
-          `https://stooq.com/q/l/?s=${stooqSym}&f=sd2t2ohlcv&h&e=csv`,
-          { signal: AbortSignal.timeout(6000) }
+          `https://query2.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`,
+          { headers: { 'User-Agent': 'Mozilla/5.0', Accept: 'application/json' }, signal: AbortSignal.timeout(8000) }
         )
         if (!r.ok) return
-        const lines = (await r.text()).trim().split('\n')
-        if (lines.length < 2) return
-        const cols  = lines[1].split(',')
-        const close = parseFloat(cols[6])
-        const open  = parseFloat(cols[3])
-        if (!isNaN(close) && close > 0) {
-          const div    = (yfKey === 'SI=F' || yfKey === 'HG=F') ? 100 : 1
-          const rawPct = open > 0 ? ((close - open) / open) * 100 : 0
-          // Stooq returns intraday open→close pct; moves >12% are almost certainly
-          // bad OHLC (stale data, contract rollover, market-closed artefact) — zero them out
-          q[yfKey] = {
-            price: close / div,
-            pct:   Math.abs(rawPct) > 12 ? 0 : rawPct,
-            prev:  open / div,
-          }
+        const meta = (await r.json())?.chart?.result?.[0]?.meta
+        if (!meta) return
+        const price = meta.regularMarketPrice
+        const prev  = meta.chartPreviousClose
+        if (price > 0 && prev > 0) {
+          const rawPct = ((price - prev) / prev) * 100
+          // Moves >12% are almost certainly bad data — zero them out
+          q[key] = { price, pct: Math.abs(rawPct) > 12 ? 0 : rawPct, prev }
         }
       } catch {}
     })
   )
 
   if (Object.keys(q).length === 0) {
-    console.error('Price fetch failed: no Stooq data returned')
+    console.error('Price fetch failed: no Yahoo Finance data returned')
     return null
   }
 
