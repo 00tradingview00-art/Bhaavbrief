@@ -1,0 +1,117 @@
+name: BhaavBrief Watchdog
+
+on:
+  schedule:
+    # 9:45 AM IST = 4:15 AM UTC, Mon–Fri
+    # Checks that morning brief published on time
+    - cron: '15 4 * * 1-5'
+    # 2:00 PM IST = 8:30 AM UTC, Mon–Fri
+    # Checks that intelligence engine is active mid-session
+    - cron: '30 8 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  watchdog:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check morning brief (9:45 AM IST run only)
+        id: brief_check
+        run: |
+          UTC_HOUR=$(date -u +%H)
+          if [ "$UTC_HOUR" != "04" ]; then
+            echo "Not the 9:45 AM check — skipping brief check"
+            echo "brief_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+          echo "Checking for brief dated $TODAY..."
+
+          FOUND=$(grep -rl "date: \"$TODAY\"" content/briefs/ 2>/dev/null | head -1)
+
+          if [ -z "$FOUND" ]; then
+            echo "brief_ok=false" >> $GITHUB_OUTPUT
+            echo "brief_date=$TODAY" >> $GITHUB_OUTPUT
+            echo "::error::Morning brief NOT published for $TODAY"
+          else
+            echo "brief_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Morning brief found: $FOUND"
+          fi
+
+      - name: Check intelligence engine (2:00 PM IST run only)
+        id: engine_check
+        run: |
+          UTC_HOUR=$(date -u +%H)
+          if [ "$UTC_HOUR" != "08" ]; then
+            echo "Not the 2:00 PM check — skipping engine check"
+            echo "engine_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+          echo "Checking for intelligence articles dated $TODAY..."
+
+          FOUND=$(grep -rl "date: \"$TODAY\"" content/articles/ 2>/dev/null | head -1)
+
+          if [ -z "$FOUND" ]; then
+            echo "engine_ok=false" >> $GITHUB_OUTPUT
+            echo "engine_date=$TODAY" >> $GITHUB_OUTPUT
+            echo "::error::Intelligence engine has NOT published any articles for $TODAY by 2:00 PM IST"
+          else
+            COUNT=$(grep -rl "date: \"$TODAY\"" content/articles/ 2>/dev/null | wc -l | tr -d ' ')
+            echo "engine_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Engine articles today: $COUNT"
+          fi
+
+      - name: Alert — brief missing
+        if: steps.brief_check.outputs.brief_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
+          RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/daily-open-brief.yml"
+
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Morning brief MISSING — ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The MCX Open Brief for <strong>${DATE_LABEL}</strong> was not found in <code>content/briefs/</code> by 9:45 AM IST.</p><p>The brief may have been silently skipped — holiday guard, double-publish guard, or script error.</p><p><a href='${RUN_URL}'>Trigger the brief manually →</a></p>\"
+            }"
+
+          echo "Alert sent for missing brief"
+          exit 1
+
+      - name: Alert — engine silent
+        if: steps.engine_check.outputs.engine_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
+          RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/intelligence-engine.yml"
+
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Intelligence engine silent — ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>No intelligence articles found for <strong>${DATE_LABEL}</strong> by 2:00 PM IST.</p><p>The engine has been running since 9:00 AM but published nothing — possible Kite auth failure, Claude API error, or price threshold not triggered.</p><p><a href='${RUN_URL}'>Check engine workflow →</a></p>\"
+            }"
+
+          echo "Alert sent for silent engine"
+          exit 1
