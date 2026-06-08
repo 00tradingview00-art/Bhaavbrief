@@ -1,12 +1,21 @@
 [
   {
     "id": "2026-06-09-04-34-us-crude-price-forecast-circulates-as-mc",
+<<<<<<< Updated upstream
     "title": "US Crude Price Forecast Circulates as MCX Crude Awaits Direction at ₹95.71 USD/INR",
     "summary": "In a session where the commodity complex shows sub-0.2% movement across the board and no dominant cross-asset theme has emerged, a circulating crude oil price forecast carries reduced directional weight. The absence of macro catalysts — no significant USD/INR movement from ₹95.71, no equity-driven risk shift — means any forecast signal enters a low-conviction environment. MCX Crude Oil futures (June contract) are the primary instrument to watch. The import parity chain runs: NYMEX WTI spot → applied USD/INR at ₹95.71 → customs duty plus port premium → landed cost benchmark for MCX pricing. On cross-market correlation, Brent-WTI spread movement historically tracks INR-denominated crude import costs for Indian refiners, making it a secondary reference for MCX positioning context. The specific level that confirms or negates near-term directional sentiment: NYMEX WTI holding or breaching the $72.00 handle at tomorrow's Asia open.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "neutral",
     "pubDate": "2026-06-08T23:04:05.937Z",
+=======
+    "title": "US Crude Price Forecast Circulates as MCX Crude Awaits Direction Near ₹95.71 FX Rate",
+    "summary": "In a session where the commodity complex has logged sub-0.2% moves with no dominant cross-asset theme, a circulating US crude price forecast carries limited incremental signal. The absence of FX volatility — USD/INR holding at 95.71 — means the import parity transmission mechanism is currently inert: no currency amplification is present to magnify or suppress any directional crude impulse into MCX Crude Oil futures. The import parity chain reads as follows — flat global crude plus stable USD/INR at 95.71 plus standard customs and refinery premium equals broadly unchanged INR-denominated landed cost. The primary MCX contract affected is Crude Oil (near-month). A cross-market correlation to monitor is natural gas, which historically trades with crude sentiment during low-conviction sessions. The price level that confirms or negates any directional bias is the NYMEX WTI settlement print relative to the 72.00 USD/barrel area heading into tomorrow's MCX open. This is educational analysis only, not investment advice.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-08T23:04:58.095Z",
+>>>>>>> Stashed changes
     "pubDateIST": "09 Jun 2026, 04:34"
   },
   {
