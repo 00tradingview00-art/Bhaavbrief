@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-10-02-34-brent-crude-crashes-below-88-on-iran-dea",
+    "title": "Brent Crude Crashes Below $88 on Iran Deal Hopes, MCX Crude at ₹8428",
+    "summary": "Today's dominant narrative is gold leading losses at -1.53%, signaling broad risk-off pressure across the commodity complex. The crude collapse layered on top of this confirms the session is not commodity-specific but macro-driven — geopolitical risk premium unwinding simultaneously across energy and metals. MCX Crude Oil, currently at ₹8428 per barrel, is the direct transmission point. The import parity chain runs as follows: Brent falling toward $88 translates at USD/INR ₹95.35 to approximately ₹8382 per barrel at spot parity, placing current MCX levels marginally above implied fair value before customs and refinery premiums are applied. MCX Copper at ₹1327.00 is also softer by -0.64%, historically correlating with crude during risk-off sessions as both track industrial demand sentiment. The one level to watch: Brent $87.50 — a sustained close below that historically accelerates the geopolitical premium compression cycle. Tomorrow's MCX open will be the first domestic price discovery event following this move.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-09T21:04:02.769Z",
+    "pubDateIST": "10 Jun 2026, 02:34"
+  },
+  {
+    "id": "2026-06-10-02-35-mcx-copper-slides-0-64-to-1327-kg-as-gol",
+    "title": "MCX Copper slides 0.64% to ₹1327/kg as gold-led risk-off weighs on base metals",
+    "summary": "The mechanism here is risk sentiment compression. Gold falling 1.53% signals dollar strength or liquidity withdrawal — conditions that historically compress base metal demand expectations simultaneously, as institutional desks reduce cross-commodity exposure.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-09T21:05:54.620Z",
+    "pubDateIST": "10 Jun 2026, 02:35"
+  },
+  {
+    "id": "2026-06-10-02-37-mcx-gold-slides-1-53-to-152-420-as-globa",
+    "title": "MCX Gold slides 1.53% to ₹152,420 as global risk-off pressure hits commodity complex",
+    "summary": "The mechanism driving this session is a broad-based repricing of gold's geopolitical risk premium. When conflict-driven safe-haven flows unwind, gold historically leads the commodity complex lower — today's 1.53% decline reflects that mean-reversion dynamic. MCX Gold sits at ₹152,420/10g; traders are observing ₹150,800 as near-term support and ₹154,200 as resistance. Import parity arithmetic: spot gold near $3,185/oz × ₹95.35 × conversion and duty factor (approximately 1.155) yields theoretical parity near ₹153,800 — placing MCX at a marginal discount to parity. MCX Copper's concurrent -0.64% move confirms broad industrial and precious metal softness, consistent with dollar-strength mechanics suppressing the entire complex. MCX Silver's comparatively contained -0.18% decline presents a correlation divergence worth monitoring. Thursday's US CPI release is the scheduled data point to watch.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-09T21:07:47.275Z",
+    "pubDateIST": "10 Jun 2026, 02:37"
+  },
+  {
     "id": "2026-06-09-19-32-hdfc-bank-mclr-hike-10-bps-tightens-dome",
     "title": "HDFC Bank MCLR Hike 10 bps Tightens Domestic Credit While Crude Drops 3.94% at ₹8364",
     "summary": "The dominant session narrative is crude-led commodity compression, with MCX Crude at ₹8364 per barrel down 3.94%, signaling tightening global risk appetite. HDFC Bank's unilateral MCLR increase of up to 10 basis points, independent of RBI's unchanged repo rate, reinforces that domestic credit conditions are tightening through the banking transmission channel rather than the policy channel. This is a distinct liquidity signal. For MCX Copper at ₹1346.20 per kilogram, the cross-market correlation is direct: MCLR-driven credit tightening historically compresses industrial financing margins and defers inventory accumulation by domestic fabricators, weighing on physical demand. The USD/INR rate at ₹95.35 means any imported commodity repricing carries an elevated rupee cost base. The confirmation level to observe is whether the RBI's next liquidity corridor adjustment or overnight MIBOR rate reflects transmission of this commercial bank MCLR divergence.",
