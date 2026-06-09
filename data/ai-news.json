@@ -1,5 +1,15 @@
 [
   {
+    "id": "2026-06-10-04-35-us-crude-price-forecast-signals-circulat",
+    "title": "US Crude Price Forecast Signals Circulate as MCX Crude Awaits Direction at ₹95.35 USD/INR",
+    "summary": "In a session characterised by sub-0.2% moves across the commodity complex, the absence of a dominant cross-asset theme means incoming forecast signals for US Crude carry reduced directional conviction — price discovery is range-bound rather than trend-driven, which limits signal reliability. The primary MCX contract in focus is Crude Oil (June or near-month expiry), with USD/INR steady at ₹95.35. The import parity chain remains mechanical: every USD 1.00 move in NYMEX WTI translates to approximately ₹95.35 per barrel at spot rate, before adding customs duty, port handling, and refinery premium, which historically embed an additional ₹200-350 per barrel into MCX settlement. The correlated instrument to monitor is the USD Index (DXY) — historically, a firming dollar compresses rupee-adjusted crude costs on the import side, affecting domestic pricing dynamics. The data release that would confirm or negate any directional bias is the US EIA Weekly Crude Inventory report; a draw exceeding one million barrels historically aligns with upward price pressure, while a build of equivalent magnitude aligns with the inverse pattern.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-09T23:05:06.275Z",
+    "pubDateIST": "10 Jun 2026, 04:35"
+  },
+  {
     "id": "2026-06-10-02-34-brent-crude-crashes-below-88-on-iran-dea",
     "title": "Brent Crude Crashes Below $88 on Iran Deal Hopes, MCX Crude at ₹8428",
     "summary": "Today's dominant narrative is gold leading losses at -1.53%, signaling broad risk-off pressure across the commodity complex. The crude collapse layered on top of this confirms the session is not commodity-specific but macro-driven — geopolitical risk premium unwinding simultaneously across energy and metals. MCX Crude Oil, currently at ₹8428 per barrel, is the direct transmission point. The import parity chain runs as follows: Brent falling toward $88 translates at USD/INR ₹95.35 to approximately ₹8382 per barrel at spot parity, placing current MCX levels marginally above implied fair value before customs and refinery premiums are applied. MCX Copper at ₹1327.00 is also softer by -0.64%, historically correlating with crude during risk-off sessions as both track industrial demand sentiment. The one level to watch: Brent $87.50 — a sustained close below that historically accelerates the geopolitical premium compression cycle. Tomorrow's MCX open will be the first domestic price discovery event following this move.",
