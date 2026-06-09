@@ -1,5 +1,30 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-038",
+    "href": "/briefs/edition-038",
+    "title": "MCX Open 9 Jun 2026: Crude Slides, Metals Hold Steady",
+    "description": "9 Jun 2026: WTI drops to $90.38/bbl (-1.01%) and COMEX Silver falls to $67.80/oz (-1.15%) as MCX opens flat across all five commodities.",
+    "excerpt": "Crude fell overnight and silver cracked, yet gold refused to follow — and that split tells you exactly where the market's conviction lies this Tuesday morning. WTI crude dropped 1.01% to $90.38/bbl on",
+    "date": "2026-06-09",
+    "edition": "38",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-06-08-hawk-scan-natgas-20260608",
     "href": "/articles/2026-06-08-hawk-scan-natgas-20260608",
