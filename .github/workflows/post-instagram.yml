@@ -1,12 +1,18 @@
 name: Post to Instagram
 
-# Manual re-post for any edition (e.g. if the inline post failed after brief generation).
 on:
   workflow_dispatch:
     inputs:
       edition:
         description: 'Edition number (e.g. 36). Leave blank to use latest.'
         required: false
+        default: ''
+  workflow_call:
+    inputs:
+      edition:
+        description: 'Edition number passed from calling workflow'
+        required: false
+        type: string
         default: ''
 
 jobs:
@@ -22,8 +28,9 @@ jobs:
       - name: Resolve edition number
         id: edition
         run: |
-          if [ -n "${{ github.event.inputs.edition }}" ]; then
-            echo "number=${{ github.event.inputs.edition }}" >> $GITHUB_OUTPUT
+          INPUT="${{ github.event.inputs.edition }}${{ inputs.edition }}"
+          if [ -n "$INPUT" ]; then
+            echo "number=$INPUT" >> $GITHUB_OUTPUT
           else
             LAST=$(ls content/briefs/ 2>/dev/null | grep -oP '(?<=edition-)\d+' | sort -n | tail -1)
             echo "number=${LAST:-1}" >> $GITHUB_OUTPUT

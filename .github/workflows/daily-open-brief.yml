@@ -97,3 +97,9 @@ jobs:
               "subject": "ACTION REQUIRED: MCX Open Brief pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
               "htmlContent": "<p>The <strong>Daily MCX Open Brief</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p>The MCX open brief may not have been published. Trigger the workflow manually if needed.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/daily-open-brief.yml\">Re-run workflow →</a></p>"
             }'
+
+  post-instagram:
+    needs: open-brief
+    if: needs.open-brief.result == 'success'
+    uses: ./.github/workflows/post-instagram.yml
+    secrets: inherit
