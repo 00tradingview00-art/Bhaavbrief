@@ -39,14 +39,18 @@ jobs:
       # continue-on-error on every content step so one API failure doesn't kill
       # the workflow and cause GitHub to disable the cron schedule.
 
-      - name: Fetch flash articles
+      - name: Fetch market snapshot
         continue-on-error: true
-        run: node scripts/fetch-flash.js
+        run: node scripts/fetch-snapshot.mjs
         env:
-          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY:      ${{ secrets.PEXELS_API_KEY }}
           KITE_API_KEY:        ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
+
+      - name: Flash monitor (event-driven)
+        continue-on-error: true
+        run: node scripts/flash-monitor.mjs
+        env:
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Generate AI news feed
         continue-on-error: true
@@ -97,7 +101,7 @@ jobs:
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
@@ -107,7 +111,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ scripts/seen-articles.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           git push origin main
