@@ -823,9 +823,13 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
     if (isMobile) window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const linkedSections = SECTIONS.filter(section =>
+    ARTICLES.some(a => a.section === section && a.href)
+  )
+
   const SidebarNav = () => (
     <>
-      {SECTIONS.map(section => (
+      {linkedSections.map(section => (
         <div key={section}>
           <div style={{
             padding: '11px 16px',
@@ -836,37 +840,29 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
           }}>
             {section}
           </div>
-          {ARTICLES.filter(a => a.section === section).map(article => {
+          {ARTICLES.filter(a => a.section === section && a.href).map(article => {
             const navStyle = {
               display: 'block', width: '100%', textAlign: 'left' as const,
               padding: '10px 16px', borderBottom: '1px solid var(--border)',
               fontSize: 13,
-              color: activeId === article.id ? 'var(--gold)' : 'var(--ink-3)',
-              fontWeight: (activeId === article.id ? 500 : 400) as number,
-              background: activeId === article.id ? 'var(--gold-pale)' : 'transparent',
+              color: 'var(--gold)',
+              fontWeight: 500 as number,
+              background: 'transparent',
               cursor: 'pointer',
               fontFamily: 'var(--font-sans)', transition: 'all .15s',
               textDecoration: 'none',
             }
-            if (article.href) {
-              return (
-                <Link key={article.id} href={article.href} style={navStyle}>
-                  {article.title} ↗
-                </Link>
-              )
-            }
             return (
-              <button
-                key={article.id}
-                onClick={() => selectArticle(article.id)}
-                style={{ ...navStyle, border: 'none', width: '100%' }}
-              >
-                {article.title}
-              </button>
+              <Link key={article.id} href={article.href!} style={navStyle}>
+                {article.title} ↗
+              </Link>
             )
           })}
         </div>
       ))}
+      <div style={{ padding: '10px 16px', fontSize: 12, color: 'var(--ink-4)', fontStyle: 'italic' }}>
+        More guides publishing weekly.
+      </div>
     </>
   )
 
@@ -874,7 +870,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
     <div>
       <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: isMobile ? 24 : 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
-          Learn
+          Learn MCX Trading: Lot Sizes, Margins &amp; Taxation
         </h1>
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
           All MCX contracts &amp; lot sizes, trading mechanics, market drivers, hedging and taxation — explained clearly.

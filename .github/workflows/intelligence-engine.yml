@@ -38,6 +38,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Fetch market snapshot
+        continue-on-error: true
+        env:
+          KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
+          KITE_API_SECRET:    ${{ secrets.KITE_API_SECRET }}
+          KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/fetch-snapshot.mjs
+
       - name: Run Intelligence Engine
         id: engine
         continue-on-error: true
@@ -63,6 +71,7 @@ jobs:
           git stash pop || true
           git add content/articles/ data/content-index.json
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
+          git add data/market-snapshot.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Nothing to commit"
             exit 0
@@ -73,7 +82,7 @@ jobs:
             TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
             git commit -m "⚡ Flash: ${TITLE}"
           else
-            git commit -m "chore: price cache $(date -u '+%H:%M UTC')"
+            git commit -m "chore: snapshot $(date -u '+%H:%M UTC')"
           fi
           git push origin main
 
