@@ -61,7 +61,12 @@ jobs:
           EDITION: ${{ steps.edition.outputs.number }}
         run: |
           PADDED=$(printf '%03d' $EDITION)
-          node scripts/validate-brief.mjs data/market-snapshot.json content/briefs/edition-${PADDED}.mdx
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF" ]; then
+            echo "No new brief generated (already published today or skipped) — skipping validation"
+            exit 0
+          fi
+          node scripts/validate-brief.mjs data/market-snapshot.json "$BRIEF"
 
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
