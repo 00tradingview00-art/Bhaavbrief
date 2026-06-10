@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `https://bhaavbrief.in/articles/${slug}`
 
   return {
-    title:       `${meta.title} — BhaavBrief`,
+    title:       meta.title,
     description: meta.description,
     alternates:  { canonical },
     openGraph: {

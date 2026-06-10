@@ -36,15 +36,17 @@ interface Item {
   pct:   number
 }
 
+// No hardcoded fallback prices — show dashes until live data arrives.
+// Stale hardcoded prices destroy trust when they disagree with the brief body.
 const FALLBACK: Item[] = [
-  { label: 'MCX GOLD',    price: '₹1,58,197', pct: 0 },
-  { label: 'MCX SILVER',  price: '₹2,76,023', pct: 0 },
-  { label: 'MCX CRUDE',   price: '₹9,640',    pct: 0 },
-  { label: 'MCX COPPER',  price: '₹1,348',    pct: 0 },
-  { label: 'MCX NAT GAS', price: '₹294',      pct: 0 },
-  { label: 'USD / INR',   price: '₹96.34',    pct: 0 },
-  { label: 'COMEX GOLD',  price: '$4,542',     pct: 0 },
-  { label: 'WTI CRUDE',   price: '$104.00',    pct: 0 },
+  { label: 'MCX GOLD',    price: '—', pct: 0 },
+  { label: 'MCX SILVER',  price: '—', pct: 0 },
+  { label: 'MCX CRUDE',   price: '—', pct: 0 },
+  { label: 'MCX COPPER',  price: '—', pct: 0 },
+  { label: 'MCX NAT GAS', price: '—', pct: 0 },
+  { label: 'USD / INR',   price: '—', pct: 0 },
+  { label: 'COMEX GOLD',  price: '—', pct: 0 },
+  { label: 'WTI CRUDE',   price: '—', pct: 0 },
 ]
 
 function mapToItems(d: PriceData): Item[] {
@@ -61,7 +63,8 @@ function mapToItems(d: PriceData): Item[] {
 }
 
 export default function TickerStrip({ initialPrices }: { initialPrices?: PriceData | null }) {
-  const [items, setItems]         = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : FALLBACK)
+  // Start with real SSR prices if available, otherwise nothing — never stale hardcoded values
+  const [items, setItems]         = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : [])
   const [source, setSource]       = useState<string>(initialPrices?.source ?? '')
   const intervalRef               = useRef<NodeJS.Timeout>()
 
@@ -73,7 +76,7 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
       setItems(mapToItems(d))
       setSource(d.source)
     } catch {
-      // Keep current values
+      // Keep current values — don't replace live data with nothing
     }
   }
 
@@ -92,6 +95,9 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
     scheduleNext()
     return () => clearTimeout(intervalRef.current)
   }, [])
+
+  // Don't render the bar at all until we have live data — avoid an empty animated strip
+  if (items.length === 0) return null
 
   const doubled = [...items, ...items]
 

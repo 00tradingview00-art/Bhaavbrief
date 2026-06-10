@@ -15,7 +15,7 @@ export async function generateMetadata(
   const arc = getArcById(id)
   if (!arc) return { title: 'Story not found' }
 
-  const title       = `${arc.title} | BhaavBrief`
+  const title       = arc.title
   const description = `${arc.summary} Day-by-day coverage of ${arc.primaryCommodity} on MCX.`
   return {
     title,

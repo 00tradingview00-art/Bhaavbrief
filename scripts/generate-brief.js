@@ -246,10 +246,6 @@ WRITING RULES
   Example: "The contrary read, based on past OPEC spare-capacity episodes, is that any move above $95 historically becomes self-defeating as cheating by smaller members accelerates."
   Example: "The twist worth watching: gold is falling INTO a war, which historically lasts no more than 48 hours before safe-haven demand reasserts — a sustained selloff here would be the anomaly."
 
-- VERNACULAR: Use 1–2 Indian vernacular phrases per brief, woven naturally into English prose. Never forced, never in SEBI-sensitive sentences.
-  "crude ka yeh khel" (crude's game/play) | "sonar bazaar mein" (in the gold market) | "sone ka bhav" (gold's price)
-  Example: "The sonar bazaar is caught between two conflicting forces today — a geopolitical bid for safety and a dollar that refuses to weaken."
-
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
 - Use ONLY the prices given above. Never invent levels.
@@ -293,7 +289,7 @@ The divergence between A and B is telling you Z about narrative conviction.
 Include specific price levels from the data above.]
 
 ## Historical Context
-[How have MCX commodities behaved in past episodes of this same narrative — use "historically", "in past instances", "during similar periods". Never a directional call — only documented patterns with attribution.]
+[How have MCX commodities behaved in past episodes of this same narrative — use "historically", "in past instances", "during similar periods". Describe the CHARACTER and DIRECTION of the price response. Only cite a specific percentage if you are certain of the exact figure. If uncertain, write "prices moved sharply higher/lower" — do not invent statistics. Never a directional call — only documented patterns.]
 
 ## What Kills It
 [One specific trigger or data point that would reverse the narrative. What should traders have on their radar?]
@@ -375,6 +371,9 @@ async function main() {
     console.error('Invalid MDX generated:\n', mdx.slice(0, 200))
     process.exit(1)
   }
+
+  console.log('Running consistency check...')
+  await checkConsistency(mdx, prices)
 
   // Inject Key Number + Price Bridge after closing frontmatter delimiter
   const keyNumber   = buildKeyNumber(prices)
@@ -526,6 +525,58 @@ Rules:
   }
 
   saveArcs(arcData)
+}
+
+// ── Post-generation consistency check ────────────────────────────────────────
+async function checkConsistency(mdx, prices) {
+  if (!prices) return
+  const body = mdx.replace(/^---[\s\S]*?---\n*/m, '').trim()
+
+  const today = new Date(Date.now() + 5.5 * 3600000)
+  const monthName = today.toLocaleString('en-US', { month: 'long' })
+  const sign = n => parseFloat(n) >= 0 ? '+' : ''
+  const dataLines = [
+    `Today: ${today.toISOString().slice(0, 10)} (${monthName} ${today.getUTCFullYear()})`,
+    `USD/INR: ₹${prices.usdinr}`,
+    prices.mcxGold    ? `MCX Gold: ₹${prices.mcxGold}/10g, ${sign(prices.goldPct)}${prices.goldPct}%` : null,
+    prices.mcxSilver  ? `MCX Silver: ₹${prices.mcxSilver}/kg, ${sign(prices.silverPct)}${prices.silverPct}%` : null,
+    prices.mcxCrude   ? `MCX Crude: ₹${prices.mcxCrude}/bbl, ${sign(prices.crudePct)}${prices.crudePct}%` : null,
+    prices.mcxCopper  ? `MCX Copper: ₹${prices.mcxCopper}/kg, ${sign(prices.copperPct)}${prices.copperPct}%` : null,
+    prices.comexGold  ? `COMEX Gold: $${prices.comexGold}/oz` : null,
+    prices.wti        ? `WTI Crude: $${prices.wti}/bbl` : null,
+  ].filter(Boolean)
+
+  const prompt = `You are a fact-checker for a financial newsletter. Compare the BRIEF TEXT against the RAW DATA (ground truth).
+
+RAW DATA:
+${dataLines.join('\n')}
+
+BRIEF TEXT (first 2000 chars):
+${body.slice(0, 2000)}
+
+List only clear contradictions where the brief states something that conflicts with the raw data — wrong direction, wrong month/year, wrong price magnitude. Do NOT flag historical claims or predictions.
+
+Return ONLY a JSON array of short contradiction strings. If none, return [].`
+
+  try {
+    const resp = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const text = resp.content[0]?.type === 'text' ? resp.content[0].text.trim() : '[]'
+    const match = text.match(/\[[\s\S]*\]/)
+    const issues = match ? JSON.parse(match[0]) : []
+    if (issues.length > 0) {
+      console.warn('\n⚠️  CONSISTENCY WARNINGS (review before newsletter):')
+      issues.forEach((issue, i) => console.warn(`  ${i + 1}. ${issue}`))
+      console.warn('')
+    } else {
+      console.log('  Consistency check: clean')
+    }
+  } catch (e) {
+    console.warn('  Consistency check skipped:', e.message)
+  }
 }
 
 main().catch(e => { console.error('Fatal:', e); process.exit(1) })

@@ -26,7 +26,7 @@ export async function generateMetadata(
   const brief = getBrief(slug)
   if (!brief) return { title: 'Brief not found' }
 
-  const title       = `${brief.title} | BhaavBrief`
+  const title       = brief.title
   const description = brief.description || brief.summary || `MCX commodity intelligence — ${(brief.tags ?? []).join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.urlSlug}`
 

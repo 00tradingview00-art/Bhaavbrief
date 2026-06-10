@@ -23,7 +23,7 @@ export async function generateMetadata(
   const flash = getFlash(slug)
   if (!flash) return { title: 'Flash not found' }
 
-  const title       = `${flash.title} | BhaavBrief`
+  const title       = flash.title
   const firstPara   = flash.content.split('\n\n')[0].trim().replace(/\n/g, ' ')
   const description = firstPara.slice(0, 160) || `MCX ${flash.category} intelligence: ${flash.title}.`
   const url         = `${BASE_URL}/flash/${flash.slug}`

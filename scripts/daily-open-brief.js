@@ -342,7 +342,7 @@ After the hook: explain what happened overnight on COMEX/NYMEX, the single domin
 Cover all 5 MCX commodities in flowing prose — not a table, not bullet points. For each: exact MCX open price, % change from previous close, key support and resistance from the OHLC data above. Weave them together as a connected narrative. End this section with how USD/INR at ₹${usdinr.toFixed(2)} is amplifying or dampening the COMEX move in rupee terms.
 
 ## Historical Context
-Name 1–2 comparable past episodes (specific month/year) where a similar COMEX setup played out. What happened to MCX prices in those episodes — specific % ranges. What does that history suggest about the range of outcomes today? Use "historically" framing. No predictions.
+Name 1–2 comparable past episodes (specific month/year) where a similar macro setup played out. Describe the CHARACTER and DIRECTION of the MCX price response — not a specific percentage unless you are certain of the exact figure from training data. If you do not have the exact percentage, write "prices moved sharply higher/lower" rather than inventing a number. Use "historically" framing. No predictions.
 
 ## What Kills It
 One paragraph. What is the single specific event or data point that would immediately reverse today's dominant thesis? Be precise — name a level, a data release, a geopolitical event. Not vague. No hedging.
@@ -373,7 +373,6 @@ WRITING RULES:
 - Precise numbers always — never "approximately" when you have the exact figure
 - Tone: Mint newspaper, not Bloomberg Terminal. Accessible but authoritative
 - THE TWIST: In the Historical Context section, include one sentence naming the contrarian view — what the other side of this trade argues. Frame as historical observation. Example: "The contrary read, based on past OPEC spare-capacity episodes, is that sustained moves above $95 historically trigger member quota cheating within 6 weeks, capping the rally."
-- VERNACULAR: Use 1–2 Indian vernacular phrases woven naturally into English. "crude ka yeh khel" (crude's game) | "sonar bazaar mein" (in the gold market) | "sone ka bhav" (gold's price). Never in SEBI-sensitive sentences.
 - If referencing a previous edition: [Edition 32](/briefs/edition-032)
 - Total length: 420–520 words
 
@@ -401,6 +400,61 @@ slug: "[mcx-open-DDMMMYYYY-theme]"
   })
 
   return response.content[0].type === 'text' ? response.content[0].text : null
+}
+
+// ── Post-generation consistency check ────────────────────────────────────────
+// Compares the generated text against the raw data to catch date/price contradictions.
+// Non-fatal: logs warnings but never blocks the pipeline.
+async function checkConsistency(mdx, { comex, kitePrices, usdinr }) {
+  const body = mdx.replace(/^---[\s\S]*?---\n*/m, '').trim()
+
+  const today = new Date(Date.now() + 5.5 * 3600000)
+  const monthName = today.toLocaleString('en-US', { month: 'long' })
+  const dataLines = [
+    `Today: ${today.toISOString().slice(0, 10)} (${monthName} ${today.getUTCFullYear()})`,
+    `USD/INR: ₹${usdinr.toFixed(2)}`,
+  ]
+  for (const [, c] of Object.entries(comex)) {
+    const sign = c.pct >= 0 ? '+' : ''
+    dataLines.push(`${c.label}: ${sign}${c.pct.toFixed(2)}% overnight${c.close ? `, close $${c.close}` : ''}`)
+  }
+  if (kitePrices) {
+    for (const [key, p] of Object.entries(kitePrices)) {
+      if (p?.ltp) dataLines.push(`MCX ${key}: ₹${p.ltp}`)
+    }
+  }
+
+  const prompt = `You are a fact-checker for a financial newsletter. Compare the BRIEF TEXT against the RAW DATA (ground truth).
+
+RAW DATA:
+${dataLines.join('\n')}
+
+BRIEF TEXT (first 2000 chars):
+${body.slice(0, 2000)}
+
+List only clear contradictions where the brief states something that conflicts with the raw data above — e.g. wrong direction, wrong month/year, wrong price magnitude. Do NOT flag historical claims or predictions.
+
+Return ONLY a JSON array of short contradiction strings. If none, return [].`
+
+  try {
+    const resp = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }],
+    })
+    const text = resp.content[0]?.type === 'text' ? resp.content[0].text.trim() : '[]'
+    const match = text.match(/\[[\s\S]*\]/)
+    const issues = match ? JSON.parse(match[0]) : []
+    if (issues.length > 0) {
+      console.warn('\n⚠️  CONSISTENCY WARNINGS (review before newsletter):')
+      issues.forEach((issue, i) => console.warn(`  ${i + 1}. ${issue}`))
+      console.warn('')
+    } else {
+      console.log('  Consistency check: clean')
+    }
+  } catch (e) {
+    console.warn('  Consistency check skipped:', e.message)
+  }
 }
 
 // ── Save brief to content/briefs/edition-NNN.mdx ─────────────────────────────
@@ -555,6 +609,9 @@ async function main() {
     console.error('Invalid MDX generated — aborting')
     return
   }
+
+  console.log('Running consistency check...')
+  await checkConsistency(mdx, { comex, kitePrices, usdinr })
 
   const result = saveArticle(mdx)
   if (result) {

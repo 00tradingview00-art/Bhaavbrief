@@ -105,11 +105,14 @@ export default function EIACard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/eia', { cache: 'no-store' })
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 8000)
+
+    fetch('/api/eia', { cache: 'no-store', signal: controller.signal })
       .then(r => r.json())
       .then(setData)
       .catch(() => setData({ error: 'api_down', updatedAt: new Date().toISOString() }))
-      .finally(() => setLoading(false))
+      .finally(() => { clearTimeout(timeout); setLoading(false) })
   }, [])
 
   const draw        = isEIAData(data) && data.direction === 'draw'

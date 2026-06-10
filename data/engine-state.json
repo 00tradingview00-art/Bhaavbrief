@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 154731,
-    "silver": 247633,
-    "crude": 8454,
-    "copper": 1345.15,
+    "gold": 155025,
+    "silver": 247683,
+    "crude": 8729,
+    "copper": 1338,
     "natgas": 298.9,
     "usdinr": 95.71
   },
-  "lastChecked": "2026-06-09T13:34:34.296Z",
+  "lastChecked": "2026-06-08T16:16:08.279Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,13 +19,15 @@
     "value": "511"
   },
   "articlesToday": [
-    "2026-06-09/2026-06-09-hawk-scan-mcx-crude-20260609"
+    "2026-06-08/2026-06-08-hawk-scan-natgas-crude-20260608",
+    "2026-06-08/2026-06-08-iran-israel-escalation-mcx-crude-surge",
+    "2026-06-08/2026-06-08-hawk-scan-mcx-crude-20260608"
   ],
-  "lastArticleAt": "2026-06-09T13:34:48.497Z",
+  "lastArticleAt": "2026-06-08T16:16:21.289Z",
   "lastArticleTime": "2026-06-04T01:00:00.000Z",
   "lastCoveredAt": {
     "natgas": "2026-06-08T08:36:20.857Z",
-    "crude": "2026-06-09T13:34:48.497Z",
+    "crude": "2026-06-08T16:16:21.289Z",
     "silver": "2026-06-08T16:16:21.289Z",
     "copper": "2026-06-08T08:36:20.857Z",
     "gold": "2026-06-08T08:36:20.857Z"
