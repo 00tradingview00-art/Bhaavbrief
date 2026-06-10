@@ -31,42 +31,33 @@ function detectNextEdition() {
 
 const EDITION = detectNextEdition()
 
-// ── Prices ────────────────────────────────────────────────────────────────────
+// ── Prices — derived from snapshot only ──────────────────────────────────────
+// No live API fetch. fetch-snapshot.mjs runs before this script and writes
+// data/market-snapshot.json. All price data flows from that file.
 
-async function fetchPrices() {
-  try {
-    const res = await fetch('https://www.bhaavbrief.in/api/prices', {
-      signal: AbortSignal.timeout(15000),
-    })
-    if (!res.ok) throw new Error(`API ${res.status}`)
-    const d = await res.json()
-    if (!d || d.error) throw new Error(d?.error ?? 'empty response')
+function snapshotToPrices(snapshot) {
+  const i   = snapshot.instruments
+  const fmt = (v, dec = 0) => (v > 0 ? v.toFixed(dec) : null)
+  const pct = (v) => (v != null ? v.toFixed(2) : '0.00')
 
-    const fmt = (n, dec = 0) => n > 0 ? n.toFixed(dec) : null
-    const pct  = (n) => n != null ? n.toFixed(2) : '0.00'
-
-    return {
-      usdinr:      d.usdinr?.toFixed(2) ?? null,
-      comexGold:   fmt(d.comexGold),
-      mcxGold:     fmt(d.gold?.mcx),
-      comexSilver: fmt(d.comexSilver, 2),
-      mcxSilver:   fmt(d.silver?.mcx),
-      wti:         fmt(d.wti, 2),
-      brent:       fmt(d.brent, 2),
-      mcxCrude:    fmt(d.crude?.mcx),
-      comexCopper: fmt(d.comexCopper, 2),
-      mcxCopper:   fmt(d.copper?.mcx, 2),
-      henryHub:    fmt(d.henryHub, 2),
-      mcxGas:      fmt(d.natgas?.mcx, 2),
-      goldPct:     pct(d.goldComexPct),
-      silverPct:   pct(d.silverComexPct),
-      crudePct:    pct(d.crudePct),
-      copperPct:   pct(d.copperComexPct),
-      gasPct:      pct(d.gasPct),
-    }
-  } catch (e) {
-    console.warn('Price fetch failed:', e.message)
-    return null
+  return {
+    usdinr:      fmt(i.USDINR?.price,      2),
+    comexGold:   fmt(i.COMEX_GOLD?.price,  0),
+    mcxGold:     fmt(i.MCX_GOLD?.price,    0),
+    comexSilver: fmt(i.COMEX_SILVER?.price, 2),
+    mcxSilver:   fmt(i.MCX_SILVER?.price,  0),
+    wti:         fmt(i.WTI?.price,         2),
+    brent:       fmt(i.BRENT?.price,       2),
+    mcxCrude:    fmt(i.MCX_CRUDE?.price,   0),
+    comexCopper: null,  // COMEX copper not in snapshot; MCX copper row still shown below
+    mcxCopper:   fmt(i.MCX_COPPER?.price,  2),
+    henryHub:    fmt(i.HENRY_HUB?.price,   2),
+    mcxGas:      fmt(i.MCX_NATGAS?.price,  2),
+    goldPct:     pct(i.MCX_GOLD?.changePct),
+    silverPct:   pct(i.MCX_SILVER?.changePct),
+    crudePct:    pct(i.MCX_CRUDE?.changePct),
+    copperPct:   pct(i.MCX_COPPER?.changePct),
+    gasPct:      pct(i.MCX_NATGAS?.changePct),
   }
 }
 
@@ -172,8 +163,7 @@ async function generate(prices, news, recentBriefs, snapshot) {
   const keyNumber   = buildKeyNumber(prices)
   const priceBridge = buildPriceBridge(prices)
 
-  // Snapshot block — if the snapshot exists, it is the ground truth.
-  // Formatted prices remain as a secondary reference for readability.
+  // Snapshot block — raw JSON so the validator can cross-check every number.
   const snapshotBlock = snapshot ? `
 AUTHORITATIVE MARKET SNAPSHOT (JSON) — use ONLY these numbers, never recall prices from memory:
 ${JSON.stringify(snapshot.instruments, null, 2)}
@@ -183,7 +173,7 @@ Snapshot as of: ${snapshot.generatedAtIST}
 ` : ''
 
   const priceBlock = prices ? `
-TODAY'S MCX PRICES (formatted view of the snapshot above):
+TODAY'S MCX PRICES (formatted from the snapshot above — same numbers, human-readable):
 - MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today
 - MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today
 - MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today
@@ -260,6 +250,7 @@ WRITING RULES
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
 - Use ONLY the prices given above. Never invent levels.
+- CONTRACTS: MCX uses rolling near-month contracts. NEVER mention specific calendar months for MCX contracts (e.g., "June contract", "Feb-Mar expiry"). The price in the snapshot IS the active front-month price. Expired contract months from memory are wrong.
 - CRITICAL — TITLE PRICE RULE: If the title contains a price or level (e.g. "$90", "₹1,55,000"), that exact number MUST appear verbatim in the price data above. Never round up, never pick a dramatic threshold, never extrapolate. If WTI is $89.73, the title may say "toward $90" only if you write it as an approximation — never "$100" or any invented milestone.
 - Sharp, specific, factual — no waffle, no filler, no hedging.
 - 450-600 words total.
@@ -369,18 +360,24 @@ async function main() {
   // Load snapshot — the ground truth written by fetch-snapshot.mjs before this script runs
   let snapshot = null
   try {
-    const snapshotFile = path.join(ROOT, 'data/market-snapshot.json')
+    const snapshotFile = path.join(process.cwd(), 'data/market-snapshot.json')
     if (fs.existsSync(snapshotFile)) {
       snapshot = JSON.parse(fs.readFileSync(snapshotFile, 'utf8'))
       const ageMin = (Date.now() - new Date(snapshot.generatedAt).getTime()) / 60000
       console.log(`Snapshot: loaded (${ageMin.toFixed(0)}m old, ${snapshot.source})`)
     } else {
-      console.log('Snapshot: not found — brief will rely on live price fetch only')
+      console.log('Snapshot: not found — brief will have no price data')
     }
   } catch (e) { console.warn('Snapshot load failed:', e.message) }
 
-  const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
-  console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
+  if (!snapshot) {
+    console.error('Cannot generate brief without a snapshot — run fetch-snapshot.mjs first')
+    process.exit(1)
+  }
+
+  const prices = snapshotToPrices(snapshot)
+  const news   = await fetchNews()
+  console.log(`Prices: OK (from snapshot, ${snapshot.generatedAtIST})`)
   console.log(`News: ${news.length} headlines`)
 
   const recentBriefs = loadRecentBriefs(3)
