@@ -1,5 +1,15 @@
 [
   {
+    "id": "2026-06-11-04-45-us-crude-forecast-signals-arrive-into-su",
+    "title": "US Crude Forecast Signals Arrive Into Sub-0.2% Drift Session; MCX Crude Near ₹6,400",
+    "summary": "The incoming oil price forecast signal lands against a session where the entire commodity complex has posted sub-0.2% moves, with no dominant cross-asset theme establishing directional conviction. In that context, forecast-based narrative carries reduced weight — price discovery is thin and momentum signals are unreliable. The directly affected MCX contract is MCX Crude Oil (near-month), where import parity mechanics run as follows: every USD 1.00 shift in NYMEX WTI translates to approximately ₹85-90 per barrel impact on MCX after applying the live USD/INR rate of ₹95.27 and factoring standard customs duty and freight premiums. The cross-market correlation to monitor is USD/INR itself — rupee stability at 95.27 currently neutralises any modest dollar-denominated oil drift before it reaches MCX. Historically, flat US session closes in crude have produced range-bound MCX opens. The data release that will confirm or negate directional pressure is the US Baker Hughes Rig Count, scheduled Friday.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-10T23:15:17.334Z",
+    "pubDateIST": "11 Jun 2026, 04:45"
+  },
+  {
     "id": "2026-06-11-03-51-rbi-holds-repo-rate-unchanged-projects-6",
     "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid Crude Surge",
     "summary": "The RBI's rate hold arrives precisely as MCX Crude trades at ₹8,675/bbl, up 3.02% on the session, creating a direct macro tension. An unchanged repo rate preserves rupee carry dynamics at USD/INR ₹95.27, but a sustained crude rally structurally widens India's import bill, pressuring the current account and introducing latent INR depreciation risk. The import parity chain runs as follows: every dollar rise in Brent translates to approximately ₹95.27 per barrel of additional landed cost at current FX, compounding the crude rally's domestic impact. The 6.9% GDP projection sustains industrial demand assumptions for MCX Copper, currently at ₹1,314.40/kg despite today's 1.00% decline. MCX Gold at ₹1,47,946/10g faces competing forces: a rate hold is historically supportive of gold, while risk-on energy sentiment historically compresses safe-haven premiums. The confirmation level to watch is the next WTI settlement relative to the ₹90/bbl crude import parity threshold for RBI's fiscal math.",

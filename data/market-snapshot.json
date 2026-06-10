@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-10T23:15:01.398Z",
+=======
+  "generatedAt": "2026-06-10T23:15:06.915Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-06-11 04:45 IST",
   "source": "stale-cache+yahoo",
   "instruments": {
@@ -45,6 +49,7 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
+<<<<<<< Updated upstream
       "price": 4074.6,
       "prevClose": 4260,
       "changePct": -4.3521,
@@ -54,6 +59,17 @@
       "price": 62.92,
       "prevClose": 65.09,
       "changePct": -3.3398,
+=======
+      "price": 4071.2,
+      "prevClose": 4260,
+      "changePct": -4.4319,
+      "unit": "USD/oz"
+    },
+    "COMEX_SILVER": {
+      "price": 62.83,
+      "prevClose": 65.09,
+      "changePct": -3.478,
+>>>>>>> Stashed changes
       "unit": "USD/oz"
     },
     "WTI": {
@@ -76,8 +92,13 @@
     }
   },
   "derived": {
+<<<<<<< Updated upstream
     "importParityGoldINR": 124792,
     "mcxComexGoldSpreadPct": 18.8,
+=======
+    "importParityGoldINR": 124688,
+    "mcxComexGoldSpreadPct": 18.9,
+>>>>>>> Stashed changes
     "goldSilverRatio": 64.8
   }
 }
