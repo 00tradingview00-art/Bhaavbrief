@@ -947,9 +947,16 @@ function saveArticle(mdx) {
   const slugMatch  = mdx.match(/^slug:\s*"?([^"\n]+)"?/m)
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
 
-  const today   = new Date().toISOString().split('T')[0]
-  const rawSlug = slugMatch?.[1]?.trim() ?? `market-update-${Date.now()}`
-  const slugRaw = `${today}-${rawSlug}`.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+  const today = new Date().toISOString().split('T')[0]
+  // Build slug deterministically from date + title — never from Claude's slug field.
+  // Claude writes month names with capital letters (22May2026) which the lowercase
+  // regex then strips to "22-ay2026". Generating from title avoids this entirely.
+  const titleForSlug = (titleMatch?.[1] ?? 'market-update')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60)
+  const slugRaw = `${today}-${titleForSlug}`
   const slug    = slugRaw.length <= 75 ? slugRaw : (() => { const c = slugRaw.slice(0, 75); const d = c.lastIndexOf('-'); return d > 30 ? c.slice(0, d) : c })()
 
   const filepath = path.join(ARTICLES_DIR, `${slug}.mdx`)

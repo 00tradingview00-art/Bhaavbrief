@@ -1,12 +1,14 @@
 import { NextResponse } from 'next/server'
-import { getPrices } from '@/lib/prices'
+import { getPrices, loadFromSnapshot } from '@/lib/prices'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
 
 export async function GET() {
-  const prices = await getPrices()
+  // Try the committed snapshot first — it's always consistent with the brief.
+  // Falls back to live fetches if the snapshot is missing or >90 min old.
+  const prices = loadFromSnapshot() ?? await getPrices()
 
   if (!prices) {
     return NextResponse.json(

@@ -43,11 +43,25 @@ jobs:
           NEXT=$(( 10#${LAST:-0} + 1 ))
           echo "number=$NEXT" >> $GITHUB_OUTPUT
 
+      - name: Fetch market snapshot
+        env:
+          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/fetch-snapshot.mjs
+
       - name: Generate brief MDX
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           EDITION: ${{ steps.edition.outputs.number }}
         run: node scripts/generate-brief.js
+
+      - name: Validate brief (publish gate)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: |
+          PADDED=$(printf '%03d' $EDITION)
+          node scripts/validate-brief.mjs data/market-snapshot.json content/briefs/edition-${PADDED}.mdx
 
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
@@ -64,7 +78,9 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/briefs/ data/content-index.json
+          # Commit brief + snapshot together — they must be one atomic commit
+          # so the site and email can never show prices from different vintages.
+          git add content/briefs/ data/market-snapshot.json data/content-index.json
           if git diff --staged --quiet; then
             echo "Nothing to commit — brief already published today"
             echo "published=false" >> $GITHUB_OUTPUT

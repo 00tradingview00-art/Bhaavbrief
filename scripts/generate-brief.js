@@ -163,7 +163,7 @@ const DISCLAIMER = `---
 
 // ── Generate ──────────────────────────────────────────────────────────────────
 
-async function generate(prices, news, recentBriefs) {
+async function generate(prices, news, recentBriefs, snapshot) {
   const today  = new Date()
   const dateStr = today.toLocaleDateString('en-IN', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
@@ -172,8 +172,18 @@ async function generate(prices, news, recentBriefs) {
   const keyNumber   = buildKeyNumber(prices)
   const priceBridge = buildPriceBridge(prices)
 
+  // Snapshot block — if the snapshot exists, it is the ground truth.
+  // Formatted prices remain as a secondary reference for readability.
+  const snapshotBlock = snapshot ? `
+AUTHORITATIVE MARKET SNAPSHOT (JSON) — use ONLY these numbers, never recall prices from memory:
+${JSON.stringify(snapshot.instruments, null, 2)}
+
+Derived: ${JSON.stringify(snapshot.derived)}
+Snapshot as of: ${snapshot.generatedAtIST}
+` : ''
+
   const priceBlock = prices ? `
-TODAY'S MCX PRICES (use these exact numbers — never invent or round):
+TODAY'S MCX PRICES (formatted view of the snapshot above):
 - MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today
 - MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today
 - MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today
@@ -193,6 +203,7 @@ TODAY'S MCX PRICES (use these exact numbers — never invent or round):
 
 BhaavBrief's edge is the NARRATIVE ENGINE — we don't just report prices, we track the dominant macro story shaping Indian commodity markets and show traders if it's gaining or losing power.
 
+${snapshotBlock}
 ${priceBlock}
 
 ${newsBlock}
@@ -355,6 +366,19 @@ async function main() {
     }
   } catch { /* BRIEFS_DIR may not exist yet on first run */ }
 
+  // Load snapshot — the ground truth written by fetch-snapshot.mjs before this script runs
+  let snapshot = null
+  try {
+    const snapshotFile = path.join(ROOT, 'data/market-snapshot.json')
+    if (fs.existsSync(snapshotFile)) {
+      snapshot = JSON.parse(fs.readFileSync(snapshotFile, 'utf8'))
+      const ageMin = (Date.now() - new Date(snapshot.generatedAt).getTime()) / 60000
+      console.log(`Snapshot: loaded (${ageMin.toFixed(0)}m old, ${snapshot.source})`)
+    } else {
+      console.log('Snapshot: not found — brief will rely on live price fetch only')
+    }
+  } catch (e) { console.warn('Snapshot load failed:', e.message) }
+
   const [prices, news] = await Promise.all([fetchPrices(), fetchNews()])
   console.log(`Prices: ${prices ? 'OK' : 'FAILED'}`)
   console.log(`News: ${news.length} headlines`)
@@ -362,7 +386,7 @@ async function main() {
   const recentBriefs = loadRecentBriefs(3)
   console.log(`Loaded ${recentBriefs ? '3' : '0'} recent briefs for context`)
 
-  let mdx = await generate(prices, news, recentBriefs)
+  let mdx = await generate(prices, news, recentBriefs, snapshot)
   if (!mdx) { console.error('No output from model'); process.exit(1) }
 
   mdx = mdx.trim().replace(/^```[a-z]*\n?/, '').replace(/\n?```\s*$/, '').trim()

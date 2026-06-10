@@ -482,3 +482,84 @@ export async function getPrices(): Promise<PriceData | null> {
     return null
   }
 }
+
+// ── Snapshot reader — try the committed snapshot before live fetching ─────────
+// If data/market-snapshot.json is fresh (≤90 min), serve it directly.
+// This makes the API consistent with what the brief was generated from.
+
+function loadFromSnapshot(): PriceData | null {
+  try {
+    const file = path.join(process.cwd(), 'data/market-snapshot.json')
+    if (!fs.existsSync(file)) return null
+    const snap = JSON.parse(fs.readFileSync(file, 'utf8'))
+    const ageMs = Date.now() - new Date(snap.generatedAt).getTime()
+    if (ageMs > 90 * 60 * 1000) return null  // stale — fall back to live fetch
+    const inst = snap.instruments
+    if (!inst) return null
+
+    const mcxUnits: Record<string, InstrumentInfo> = loadInstrumentTokens()
+
+    function mcxData(key: string, instKey: string): MCXData & { comex?: number; comexChangePct?: number } {
+      const d = inst[instKey]
+      const info = mcxUnits[key] ?? { token: 0, symbol: '', expiry: '' }
+      return {
+        mcx:          d?.price         ?? 0,
+        mcxChangePct: d?.changePct     ?? 0,
+        mcxChange:    0,
+        mcxOpen:      0,
+        mcxHigh:      0,
+        mcxLow:       0,
+        mcxPrevClose: d?.prevClose     ?? 0,
+        mcxVolume:    0,
+        mcxOI:        0,
+        mcxSymbol:    info.symbol,
+        mcxExpiry:    info.expiry,
+      }
+    }
+
+    return {
+      source:         (snap.source?.includes('kite') ? 'kite+stooq' : 'stooq') as PriceData['source'],
+      updatedAt:      snap.generatedAt,
+      marketOpen:     true,
+
+      usdinr:         inst.USDINR?.price         ?? 0,
+      usdinrChangePct:inst.USDINR?.changePct      ?? 0,
+
+      comexGold:      inst.COMEX_GOLD?.price      ?? 0,
+      comexSilver:    inst.COMEX_SILVER?.price    ?? 0,
+      wti:            inst.WTI?.price             ?? 0,
+      brent:          inst.BRENT?.price           ?? 0,
+      comexCopper:    0,
+      henryHub:       inst.HENRY_HUB?.price       ?? 0,
+      goldComexPct:   inst.COMEX_GOLD?.changePct  ?? 0,
+      silverComexPct: inst.COMEX_SILVER?.changePct ?? 0,
+      crudePct:       inst.WTI?.changePct         ?? 0,
+      brentPct:       inst.BRENT?.changePct       ?? 0,
+      copperComexPct: 0,
+      gasPct:         inst.HENRY_HUB?.changePct   ?? 0,
+
+      gold: {
+        ...mcxData('gold', 'MCX_GOLD'),
+        comex:          inst.COMEX_GOLD?.price     ?? 0,
+        comexChangePct: inst.COMEX_GOLD?.changePct ?? 0,
+      },
+      silver: {
+        ...mcxData('silver', 'MCX_SILVER'),
+        comex:          inst.COMEX_SILVER?.price     ?? 0,
+        comexChangePct: inst.COMEX_SILVER?.changePct ?? 0,
+      },
+      crude: {
+        ...mcxData('crude', 'MCX_CRUDE'),
+        wti:            inst.WTI?.price     ?? 0,
+        wtiChangePct:   inst.WTI?.changePct ?? 0,
+        brent:          inst.BRENT?.price   ?? 0,
+        brentChangePct: inst.BRENT?.changePct ?? 0,
+      },
+      copper:    mcxData('copper', 'MCX_COPPER'),
+      natgas:    mcxData('natgas', 'MCX_NATGAS'),
+      aluminium: { lme: 0, lmeChangePct: 0 },
+    }
+  } catch { return null }
+}
+
+export { loadFromSnapshot }

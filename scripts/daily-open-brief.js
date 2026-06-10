@@ -280,7 +280,7 @@ function buildOpeningNarrative(comex) {
 }
 
 // ── Generate the open brief via Claude ───────────────────────────────────────
-async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative }) {
+async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot }) {
   const today   = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
   const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
@@ -309,10 +309,14 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
 
   const dateLabel = today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })
 
+  const snapshotBlock = snapshot
+    ? `\nAUTHORITATIVE MARKET SNAPSHOT (JSON) — use ONLY these numbers, never recall prices from memory:\n${JSON.stringify(snapshot.instruments, null, 2)}\nDerived: ${JSON.stringify(snapshot.derived)}\nSnapshot as of: ${snapshot.generatedAtIST}\n`
+    : ''
+
   const prompt = `You are BhaavBrief's senior market analyst. Write the MCX MARKET OPEN BRIEF for ${dateStr}.
 
 SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at the reader. Use "historically" or "in past episodes" framing when referencing price behaviour. State data, never judge it.
-
+${snapshotBlock}
 DATA — use these EXACT numbers, do not round or invent:
 
 OVERNIGHT COMEX/NYMEX:
@@ -602,8 +606,19 @@ async function main() {
   const narrative = buildOpeningNarrative(comex)
   console.log(`  Narrative: ${narrative}`)
 
+  // Load snapshot if available — the single source of truth written by fetch-snapshot.mjs
+  let snapshot = null
+  try {
+    const snapshotFile = path.join(ROOT, 'data/market-snapshot.json')
+    if (fs.existsSync(snapshotFile)) {
+      snapshot = JSON.parse(fs.readFileSync(snapshotFile, 'utf8'))
+      const ageMin = (Date.now() - new Date(snapshot.generatedAt).getTime()) / 60000
+      console.log(`  Snapshot: loaded (${ageMin.toFixed(0)}m old, ${snapshot.source})`)
+    }
+  } catch (e) { console.warn('  Snapshot load failed:', e.message) }
+
   console.log('\nGenerating open brief via Claude Sonnet...')
-  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative })
+  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
