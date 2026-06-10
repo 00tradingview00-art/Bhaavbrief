@@ -15,7 +15,16 @@
     "lastRoundBucket": 23
   },
   "MCX_CRUDE": {
-    "lastRoundBucket": 17
+    "lastFlashAt": "2026-06-10T22:25:19.297Z",
+    "lastFlashPrice": 8675,
+    "lastRoundBucket": 17,
+    "recentFlashes": [
+      {
+        "at": "11 Jun, 03:55 am IST",
+        "title": "MCX Crude Surges 3.02% to ₹8,675 as WTI Jumps 4.50%",
+        "price": 8675
+      }
+    ]
   },
   "MCX_COPPER": {
     "lastRoundBucket": 26
