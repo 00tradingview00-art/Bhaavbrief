@@ -21,6 +21,16 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
 const SNAPSHOT_FILE  = path.join(ROOT, "data/market-snapshot.json");
+
+// Load .env.local for local dev runs (same pattern as fetch-snapshot.mjs)
+const envFile = path.join(ROOT, ".env.local");
+if (fs.existsSync(envFile)) {
+  for (const line of fs.readFileSync(envFile, "utf8").split("\n")) {
+    const [k, ...v] = line.split("=");
+    if (k?.trim() && v.length && !process.env[k.trim()])
+      process.env[k.trim()] = v.join("=").trim();
+  }
+}
 const STATE_FILE     = path.join(ROOT, "data/flash-state.json");
 const FLASH_DIR      = path.join(ROOT, "content/flash");
 
@@ -238,13 +248,15 @@ function validateFlash(flash, cand) {
   const issues = [];
   const text = `${flash.title}\n${flash.body}`;
 
-  // Every ₹/$ number must be near a known price (snapshot or trigger packet)
+  // Every ₹/$ number must be near a known price, move amount, or round level.
+  const moveAmount = Math.abs((cand.packet.to ?? 0) - (cand.packet.from ?? 0));
   const validNumbers = [
     ...Object.values(snapshot.instruments).flatMap((i) => [i.price, i.prevClose]),
     cand.packet.from,
     cand.packet.to,
     cand.packet.level,
     cand.packet.price,
+    moveAmount,  // e.g. ₹3,070 drop in gold — derivable arithmetic, not hallucination
   ].filter((v) => typeof v === "number" && v > 0);
 
   for (const m of text.matchAll(/(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)/g)) {
