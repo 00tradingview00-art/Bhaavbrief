@@ -28,6 +28,7 @@ interface Article {
   section: string
   title: string
   label: string
+  href?: string  // if set, sidebar renders a link to a dedicated page
   content: React.ReactNode
 }
 
@@ -132,6 +133,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'MCX Basics',
     title: 'Lot sizes, expiry & tick size',
     label: 'MCX Basics · Article 3 of 3',
+    href: '/learn/mcx-lot-sizes',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -834,24 +836,35 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
           }}>
             {section}
           </div>
-          {ARTICLES.filter(a => a.section === section).map(article => (
-            <button
-              key={article.id}
-              onClick={() => selectArticle(article.id)}
-              style={{
-                display: 'block', width: '100%', textAlign: 'left',
-                padding: '10px 16px', borderBottom: '1px solid var(--border)',
-                fontSize: 13,
-                color: activeId === article.id ? 'var(--gold)' : 'var(--ink-3)',
-                fontWeight: activeId === article.id ? 500 : 400,
-                background: activeId === article.id ? 'var(--gold-pale)' : 'transparent',
-                border: 'none', cursor: 'pointer',
-                fontFamily: 'var(--font-sans)', transition: 'all .15s',
-              }}
-            >
-              {article.title}
-            </button>
-          ))}
+          {ARTICLES.filter(a => a.section === section).map(article => {
+            const navStyle = {
+              display: 'block', width: '100%', textAlign: 'left' as const,
+              padding: '10px 16px', borderBottom: '1px solid var(--border)',
+              fontSize: 13,
+              color: activeId === article.id ? 'var(--gold)' : 'var(--ink-3)',
+              fontWeight: (activeId === article.id ? 500 : 400) as number,
+              background: activeId === article.id ? 'var(--gold-pale)' : 'transparent',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-sans)', transition: 'all .15s',
+              textDecoration: 'none',
+            }
+            if (article.href) {
+              return (
+                <Link key={article.id} href={article.href} style={navStyle}>
+                  {article.title} ↗
+                </Link>
+              )
+            }
+            return (
+              <button
+                key={article.id}
+                onClick={() => selectArticle(article.id)}
+                style={{ ...navStyle, border: 'none', width: '100%' }}
+              >
+                {article.title}
+              </button>
+            )
+          })}
         </div>
       ))}
     </>
