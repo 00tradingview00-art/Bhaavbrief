@@ -1,165 +1,22 @@
 [
   {
-<<<<<<< Updated upstream
-    "id": "2026-06-10-20-08-mcx-gold-slides-2-10-to-149-244-as-energ",
-    "title": "MCX Gold slides 2.10% to ₹149,244 as energy surge reshapes session risk appetite",
-    "summary": "The mechanism at work is risk rotation, not demand destruction. Crude's 2.13% surge to ₹8,600/bbl and NatGas +1.76% to ₹306.90 are absorbing speculative capital, pulling positioning away from defensive metals. Gold's 2.10% decline to ₹149,244/10g reflects this reallocation, not a fundamental reversal in safe-haven demand.",
+    "id": "2026-06-10-22-17-mcx-gold-slides-2-75-to-148-250-as-crude",
+    "title": "MCX Gold slides 2.75% to ₹148,250 as crude-led risk rotation pressures safe-haven demand",
+    "summary": "The mechanism here is risk-appetite rotation. Crude's +3.1% surge signals markets pricing geopolitical risk through energy rather than safe-haven metals — capital is moving toward the supply-disruption trade, not the uncertainty hedge. That rotation pulls institutional money away from gold positions this session.",
     "category": "Metals",
     "tagType": "metals",
     "impact": "bearish",
-    "pubDate": "2026-06-10T14:38:29.055Z",
-    "pubDateIST": "10 Jun 2026, 20:08"
+    "pubDate": "2026-06-10T16:47:24.758Z",
+    "pubDateIST": "10 Jun 2026, 22:17"
   },
   {
-    "id": "2026-06-10-20-10-mcx-crude-surges-2-13-to-8-600-bbl-as-en",
-    "title": "MCX Crude surges 2.13% to ₹8,600/bbl as energy supply concerns grip afternoon session",
-    "summary": "The mechanism driving this move is supply-side stress in the global energy complex, where crude and natural gas are rising in tandem — a coordinated signal that physical availability concerns, not speculative positioning alone, are at work. MCX Crude at ₹8,600/bbl finds immediate support around ₹8,420 and faces resistance near ₹8,740 based on recent session structure. Import parity arithmetic: Brent approximate $90.35 × ₹95.27 × 1.00 duty factor = theoretical parity near ₹8,608 — MCX is trading at a marginal discount to parity. MCX NatGas confirming at +1.76% to ₹306.90/mmBtu strengthens the energy-wide supply narrative rather than challenging it. Meanwhile, MCX Gold slipping 2.10% reflects capital rotating toward risk assets. Watch ₹8,650 into close — historically a level where intraday momentum in energy either extends or stalls.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-10T14:40:16.887Z",
-    "pubDateIST": "10 Jun 2026, 20:10"
-  },
-  {
-=======
-    "id": "2026-06-10-20-10-mcx-crude-surges-1-98-to-8588-bbl-as-ene",
-    "title": "MCX Crude surges +1.98% to ₹8588/bbl as energy complex supply concerns dominate afternoon session",
-    "summary": "The mechanism driving this move is supply-side anxiety across the energy complex, with crude and natural gas rising in tandem — a coordination that historically reflects market pricing of production or geopolitical supply disruption rather than demand pull. MCX Crude at ₹8588/bbl finds near-term support around ₹8420 and faces resistance in the ₹8720 zone. Import parity arithmetic: Brent near $90.20 × ₹95.27 × ~1.00 duty-adjusted factor approximates ₹8595/bbl, placing MCX Crude broadly at parity with marginal premium. MCX NatGas confirming at +1.76% to ₹306.90/mmBtu reinforces the supply-concern narrative across the energy sector — this cross-commodity alignment historically strengthens the directional signal. MCX Gold's -2.07% divergence, however, suggests risk sentiment is not uniformly elevated. Watch the ₹8720 resistance level into close.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-10T14:40:03.469Z",
-    "pubDateIST": "10 Jun 2026, 20:10"
-  },
-  {
-    "id": "2026-06-10-20-11-mcx-gold-slides-2-07-to-149-284-as-energ",
-    "title": "MCX Gold slides 2.07% to ₹149,284 as energy surge redirects risk capital away from metals",
-    "summary": "The mechanism at work is capital rotation, not fundamental gold weakness. Crude surging 1.98% to ₹8,588 and NatGas +1.76% to ₹306.90 signal supply-driven energy inflation, which historically pulls speculative positioning toward energy instruments and away from non-yielding metals intraday.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-10T14:41:51.037Z",
-    "pubDateIST": "10 Jun 2026, 20:11"
-  },
-  {
->>>>>>> Stashed changes
-    "id": "2026-06-10-04-35-us-crude-price-forecast-signals-circulat",
-    "title": "US Crude Price Forecast Signals Circulate as MCX Crude Awaits Direction at ₹95.35 USD/INR",
-    "summary": "In a session characterised by sub-0.2% moves across the commodity complex, the absence of a dominant cross-asset theme means incoming forecast signals for US Crude carry reduced directional conviction — price discovery is range-bound rather than trend-driven, which limits signal reliability. The primary MCX contract in focus is Crude Oil (June or near-month expiry), with USD/INR steady at ₹95.35. The import parity chain remains mechanical: every USD 1.00 move in NYMEX WTI translates to approximately ₹95.35 per barrel at spot rate, before adding customs duty, port handling, and refinery premium, which historically embed an additional ₹200-350 per barrel into MCX settlement. The correlated instrument to monitor is the USD Index (DXY) — historically, a firming dollar compresses rupee-adjusted crude costs on the import side, affecting domestic pricing dynamics. The data release that would confirm or negate any directional bias is the US EIA Weekly Crude Inventory report; a draw exceeding one million barrels historically aligns with upward price pressure, while a build of equivalent magnitude aligns with the inverse pattern.",
+    "id": "2026-06-10-22-19-mcx-crude-surges-3-10-to-8682-bbl-as-ene",
+    "title": "MCX Crude surges 3.10% to ₹8682/bbl as energy complex leads commodity session",
+    "summary": "The 3.10% crude advance reflects a risk-on energy bid, with supply-side compression mechanics — historically, sessions where crude leads the complex by this magnitude show institutional rotation out of defensive metals into energy contracts. MCX Gold at ₹148250 and Silver at ₹235844 confirm capital rotation, each under pressure.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "neutral",
-    "pubDate": "2026-06-09T23:05:06.275Z",
-    "pubDateIST": "10 Jun 2026, 04:35"
-  },
-  {
-    "id": "2026-06-10-02-34-brent-crude-crashes-below-88-on-iran-dea",
-    "title": "Brent Crude Crashes Below $88 on Iran Deal Hopes, MCX Crude at ₹8428",
-    "summary": "Today's dominant narrative is gold leading losses at -1.53%, signaling broad risk-off pressure across the commodity complex. The crude collapse layered on top of this confirms the session is not commodity-specific but macro-driven — geopolitical risk premium unwinding simultaneously across energy and metals. MCX Crude Oil, currently at ₹8428 per barrel, is the direct transmission point. The import parity chain runs as follows: Brent falling toward $88 translates at USD/INR ₹95.35 to approximately ₹8382 per barrel at spot parity, placing current MCX levels marginally above implied fair value before customs and refinery premiums are applied. MCX Copper at ₹1327.00 is also softer by -0.64%, historically correlating with crude during risk-off sessions as both track industrial demand sentiment. The one level to watch: Brent $87.50 — a sustained close below that historically accelerates the geopolitical premium compression cycle. Tomorrow's MCX open will be the first domestic price discovery event following this move.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-09T21:04:02.769Z",
-    "pubDateIST": "10 Jun 2026, 02:34"
-  },
-  {
-    "id": "2026-06-10-02-35-mcx-copper-slides-0-64-to-1327-kg-as-gol",
-    "title": "MCX Copper slides 0.64% to ₹1327/kg as gold-led risk-off weighs on base metals",
-    "summary": "The mechanism here is risk sentiment compression. Gold falling 1.53% signals dollar strength or liquidity withdrawal — conditions that historically compress base metal demand expectations simultaneously, as institutional desks reduce cross-commodity exposure.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-09T21:05:54.620Z",
-    "pubDateIST": "10 Jun 2026, 02:35"
-  },
-  {
-    "id": "2026-06-10-02-37-mcx-gold-slides-1-53-to-152-420-as-globa",
-    "title": "MCX Gold slides 1.53% to ₹152,420 as global risk-off pressure hits commodity complex",
-    "summary": "The mechanism driving this session is a broad-based repricing of gold's geopolitical risk premium. When conflict-driven safe-haven flows unwind, gold historically leads the commodity complex lower — today's 1.53% decline reflects that mean-reversion dynamic. MCX Gold sits at ₹152,420/10g; traders are observing ₹150,800 as near-term support and ₹154,200 as resistance. Import parity arithmetic: spot gold near $3,185/oz × ₹95.35 × conversion and duty factor (approximately 1.155) yields theoretical parity near ₹153,800 — placing MCX at a marginal discount to parity. MCX Copper's concurrent -0.64% move confirms broad industrial and precious metal softness, consistent with dollar-strength mechanics suppressing the entire complex. MCX Silver's comparatively contained -0.18% decline presents a correlation divergence worth monitoring. Thursday's US CPI release is the scheduled data point to watch.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-09T21:07:47.275Z",
-    "pubDateIST": "10 Jun 2026, 02:37"
-  },
-  {
-    "id": "2026-06-09-19-32-hdfc-bank-mclr-hike-10-bps-tightens-dome",
-    "title": "HDFC Bank MCLR Hike 10 bps Tightens Domestic Credit While Crude Drops 3.94% at ₹8364",
-    "summary": "The dominant session narrative is crude-led commodity compression, with MCX Crude at ₹8364 per barrel down 3.94%, signaling tightening global risk appetite. HDFC Bank's unilateral MCLR increase of up to 10 basis points, independent of RBI's unchanged repo rate, reinforces that domestic credit conditions are tightening through the banking transmission channel rather than the policy channel. This is a distinct liquidity signal. For MCX Copper at ₹1346.20 per kilogram, the cross-market correlation is direct: MCLR-driven credit tightening historically compresses industrial financing margins and defers inventory accumulation by domestic fabricators, weighing on physical demand. The USD/INR rate at ₹95.35 means any imported commodity repricing carries an elevated rupee cost base. The confirmation level to observe is whether the RBI's next liquidity corridor adjustment or overnight MIBOR rate reflects transmission of this commercial bank MCLR divergence.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-09T14:02:18.341Z",
-    "pubDateIST": "09 Jun 2026, 19:32"
-  },
-  {
-    "id": "2026-06-09-19-14-cad-recovery-amid-commodity-rally-signal",
-    "title": "CAD Recovery Amid Commodity Rally Signals Divergence As MCX Crude Holds ₹8407",
-    "summary": "The Canadian Dollar recovering from two-month lows signals a commodities-driven risk appetite uptick in global FX markets. However, this sits in direct tension with today's dominant session narrative: MCX Crude at ₹8407 per barrel is down 3.45%, the sharpest mover in the entire commodity complex. If the CAD bounce were purely crude-led, MCX Crude's session behaviour would not confirm that thesis. The import parity chain clarifies this: global crude softness translated through USD/INR at ₹95.71 compresses the rupee-denominated barrel price, which explains the ₹8407 print. The cross-market correlation worth tracking is MCX Copper at ₹1345.00 per kg, up 0.70%, suggesting the CAD relief is more base-metals-driven than energy-driven. Historically, CAD and crude divergences of this magnitude have resolved within one to two sessions. The level to watch for confirmation or negation of this divergence is whether MCX Crude holds or breaks the ₹8350 intraday support into the evening close.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-09T13:44:21.510Z",
-    "pubDateIST": "09 Jun 2026, 19:14"
-  },
-  {
-    "id": "2026-06-09-19-16-mcx-natural-gas-holds-301-50-up-0-23-as",
-    "title": "MCX Natural Gas holds ₹301.50, up 0.23% as crude-led selloff leaves gas isolated",
-    "summary": "Natural gas is decoupling from the broader energy complex this session. Crude's -3.45% collapse — likely driven by demand destruction signals or supply-side pressure — is dragging petroleum-linked commodities, yet MCX Nat Gas at ₹301.50/mmBtu is holding marginal positive ground, suggesting gas fundamentals are responding to independent supply-demand mechanics rather than crude correlation.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-09T13:46:13.578Z",
-    "pubDateIST": "09 Jun 2026, 19:16"
-  },
-  {
-    "id": "2026-06-09-19-18-mcx-silver-holds-247400-kg-up-0-41-as-sa",
-    "title": "MCX Silver holds ₹247400/kg, up 0.41% as safe-haven flows offset crude drag",
-    "summary": "The mechanism here is safe-haven rotation — Comex silver gaining $3.7/oz signals institutional allocation into precious metals as crude's 3.45% decline raises growth-demand concerns across the commodity complex. Silver is receiving independent precious-metal bid rather than industrial-metal selling pressure.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-09T13:48:05.461Z",
-    "pubDateIST": "09 Jun 2026, 19:18"
-  },
-  {
-    "id": "2026-06-09-19-00-rbi-inflation-upgrade-pressures-gold-at",
-    "title": "RBI Inflation Upgrade Pressures Gold at ₹154706 as Crude Drops 2.8%",
-    "summary": "The RBI's revised inflation forecast and trimmed growth estimates arrive precisely as crude oil leads the commodity complex lower by 2.8%, with MCX Crude at ₹8463 per barrel compressing the inflation-via-energy channel simultaneously. Higher inflation forecasts historically support real-asset demand, yet tighter RBI policy expectations simultaneously strengthen the rupee outlook, which at ₹95.71 per USD directly caps the import parity advantage embedded in MCX Gold's current ₹154706 per 10 grams print. The import parity chain shows: softer global gold, multiplied by a stable-to-firming rupee against a hawkish RBI backdrop, reduces the currency buffer that has historically padded MCX Gold premiums above COMEX equivalents. The cross-market correlation to watch is MCX Silver at ₹247097, which carries both monetary and industrial demand components — RBI growth downgrades historically compress the industrial premium within silver pricing. The data point that confirms or negates this dynamic is the next RBI Monetary Policy Committee rate decision date and any revision to the official CPI trajectory number released alongside it.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-09T13:30:04.803Z",
-    "pubDateIST": "09 Jun 2026, 19:00"
-  },
-  {
-    "id": "2026-06-09-19-01-rbi-holds-repo-at-5-25-as-mcx-crude-lead",
-    "title": "RBI Holds Repo at 5.25% as MCX Crude Leads Complex Lower at ₹8463",
-    "summary": "The RBI rate hold arrives into a session already defined by crude's -2.80% decline to ₹8463/bbl, where rupee liquidity conditions directly shape import parity arithmetic across the entire MCX complex. A steady repo at 5.25% signals no additional INR liquidity injection, keeping USD/INR anchored near ₹95.71 — a rate at which every dollar-denominated commodity carries an elevated translation cost into rupee terms. For MCX Gold at ₹154706/10g and Silver at ₹247097/kg, the unchanged rate removes a near-term INR depreciation catalyst that could have mechanically lifted landed costs. The cross-market correlation to watch is MCX Copper at ₹1345.40/kg, up +0.73%, where real estate and construction demand signals embedded in the RBI's growth commentary historically correlate with base metal positioning. The specific confirmation level is USD/INR ₹95.71 holding through close — any rupee depreciation beyond that level would alter import parity calculations across metals independent of rate direction. The next material input is the RBI's accompanying monetary policy statement tone on growth, which defines the demand-side framing for industrial commodities into this session's close.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-09T13:31:55.705Z",
-    "pubDateIST": "09 Jun 2026, 19:01"
-  },
-  {
-    "id": "2026-06-09-19-03-mcx-copper-holds-0-73-gain-at-1345-kg-de",
-    "title": "MCX Copper holds +0.73% gain at ₹1345/kg despite crude-led commodity weakness",
-    "summary": "Copper's divergence from the broader commodity selloff is the operative mechanism here. Crude's -2.8% decline typically pressures energy-intensive metals through reduced industrial demand expectations, yet copper is absorbing that headwind — suggesting independent base metal demand signals are at work. LME's structural premium framework discussion adds a supply-side pricing floor narrative to the LME-MCX spread calculus.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-09T13:33:46.431Z",
-    "pubDateIST": "09 Jun 2026, 19:03"
-  },
-  {
-    "id": "2026-06-09-19-05-mcx-crude-drops-2-80-to-8-463-bbl-as-dem",
-    "title": "MCX Crude Drops 2.80% to ₹8,463/bbl as Demand Concerns Weigh on Energy Complex",
-    "summary": "The mechanism driving this session is crude-led risk-off, where demand pessimism — historically transmitted through the energy complex first — is compressing prices across the board. MCX Crude at ₹8,463/bbl finds near-term support observed around ₹8,380 and resistance at ₹8,620. Import parity arithmetic: Brent approximate at $88.40 × ₹95.71 × 1.01 duty factor implies theoretical parity near ₹8,541, placing MCX Crude at a modest discount to parity this session. Cross-commodity correlation: MCX NatGas is also declining at -0.47%, confirming broad energy-sector weakness rather than a crude-specific event — this alignment historically reinforces the directional pressure. Copper's +0.73% divergence, however, signals the move is energy-specific, not a universal risk-off. Watch ₹8,380 into close.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-09T13:35:38.192Z",
-    "pubDateIST": "09 Jun 2026, 19:05"
+    "pubDate": "2026-06-10T16:49:16.843Z",
+    "pubDateIST": "10 Jun 2026, 22:19"
   }
 ]
