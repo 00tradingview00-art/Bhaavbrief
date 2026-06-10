@@ -1,6 +1,31 @@
 [
   {
     "type": "brief",
+    "slug": "edition-039",
+    "href": "/briefs/edition-039",
+    "title": "MCX Open 10 Jun 2026: Silver Slammed, Gold Slides",
+    "description": "10 Jun 2026: COMEX Silver crashes 6.46% to $64.00/oz, Gold drops 3.10% to $4201.50/oz — MCX opens flat as rupee buffer absorbs overnight shock.",
+    "excerpt": "When silver loses 6.46% in a single overnight session, the market is not adjusting a position — it is liquidating one. COMEX Silver collapsed to $64.00/oz overnight while COMEX Gold shed 3.10% to $4,2",
+    "date": "2026-06-10",
+    "edition": "39",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-038",
     "href": "/briefs/edition-038",
     "title": "MCX Open 9 Jun 2026: Crude Slides, Metals Hold Steady",
