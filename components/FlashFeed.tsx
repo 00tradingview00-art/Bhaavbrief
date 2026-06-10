@@ -1,5 +1,4 @@
 'use client'
-import { useEffect, useState } from 'react'
 import type { FlashMeta } from '@/lib/flash'
 
 const CAT: Record<string, { bg: string; color: string; border: string }> = {
@@ -9,22 +8,16 @@ const CAT: Record<string, { bg: string; color: string; border: string }> = {
   macro:  { bg: '#F3F2EC', color: '#48483A', border: '#C8C8B8' },
 }
 
-function timeAgo(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const min  = Math.floor(diff / 60000)
-  if (min <  1)  return 'just now'
-  if (min < 60)  return `${min}m ago`
-  const hrs = Math.floor(min / 60)
-  if (hrs < 24)  return `${hrs}h ago`
-  return `${Math.floor(hrs / 24)}d ago`
+function fmtIST(dateStr: string): string {
+  return new Date(dateStr).toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: 'numeric', month: 'short',
+    hour: '2-digit', minute: '2-digit',
+    hour12: true,
+  })
 }
 
 export default function FlashFeed({ items }: { items: FlashMeta[] }) {
-  const [, tick] = useState(0)
-  useEffect(() => {
-    const id = setInterval(() => tick(t => t + 1), 60_000)
-    return () => clearInterval(id)
-  }, [])
 
   if (items.length === 0) return null
 
@@ -49,7 +42,7 @@ export default function FlashFeed({ items }: { items: FlashMeta[] }) {
                 </span>
               )}
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
-                {timeAgo(item.date)}
+                {fmtIST(item.date)}
               </span>
             </div>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: '0.9rem', fontWeight: 600, lineHeight: 1.35, color: '#18180F' }}>

@@ -324,9 +324,11 @@ export interface ForexData {
 }
 
 export interface PriceData {
-  source:     'kite+twelvedata' | 'twelvedata' | 'kite+stooq' | 'stooq'
-  updatedAt:  string
-  marketOpen: boolean
+  source:          'kite+twelvedata' | 'twelvedata' | 'kite+stooq' | 'stooq'
+  updatedAt:       string
+  generatedAtIST?: string   // IST timestamp from snapshot, e.g. "2026-06-10 09:30 IST"
+  snapshotStale?:  boolean  // true when snapshot is >2h old during MCX hours
+  marketOpen:      boolean
 
   usdinr:         number
   usdinrChangePct:number

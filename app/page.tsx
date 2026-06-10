@@ -1,5 +1,6 @@
 import { getAllBriefs } from '@/lib/briefs'
-import { getPrices, type PriceData } from '@/lib/prices'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import type { PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
@@ -108,10 +109,11 @@ function getTagType(tag?: string): string {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const [briefs, prices] = await Promise.all([
+  const [briefs] = await Promise.all([
     getAllBriefs(),
-    getPrices().catch(() => null),
   ])
+  const snap   = loadSnapshot()
+  const prices = snap ? snapshotToPriceData(snap) : null
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
 

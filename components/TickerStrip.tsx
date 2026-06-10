@@ -63,10 +63,9 @@ function mapToItems(d: PriceData): Item[] {
 }
 
 export default function TickerStrip({ initialPrices }: { initialPrices?: PriceData | null }) {
-  // Start with real SSR prices if available, otherwise nothing — never stale hardcoded values
-  const [items, setItems]         = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : [])
-  const [source, setSource]       = useState<string>(initialPrices?.source ?? '')
-  const intervalRef               = useRef<NodeJS.Timeout>()
+  const [items, setItems]             = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : [])
+  const [generatedAtIST, setGenAt]    = useState<string>(initialPrices?.generatedAtIST ?? '')
+  const intervalRef                   = useRef<NodeJS.Timeout>()
 
   async function load() {
     try {
@@ -74,7 +73,7 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
       if (!res.ok) return
       const d: PriceData = await res.json()
       setItems(mapToItems(d))
-      setSource(d.source)
+      if (d.generatedAtIST) setGenAt(d.generatedAtIST)
     } catch {
       // Keep current values — don't replace live data with nothing
     }
@@ -102,32 +101,38 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
   const doubled = [...items, ...items]
 
   return (
-    <div style={{
-      background: 'var(--ink)',
-      overflow: 'hidden',
-      padding: '7px 0',
-      borderBottom: '1px solid rgba(255,255,255,0.06)',
-    }}>
-      <div className="ticker-track" style={{ display: 'flex', gap: 36, whiteSpace: 'nowrap' }}>
-        {doubled.map((item, i) => (
-          <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
-            <span style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '0.3px' }}>
-              {item.label}
+    <div style={{ background: 'var(--ink)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <div style={{ overflow: 'hidden', padding: '7px 0' }}>
+        <div className="ticker-track" style={{ display: 'flex', gap: 36, whiteSpace: 'nowrap' }}>
+          {doubled.map((item, i) => (
+            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+              <span style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '0.3px' }}>
+                {item.label}
+              </span>
+              <span style={{ fontFamily: 'var(--font-mono)', color: '#fff', fontWeight: 500 }}>
+                {item.price}
+              </span>
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontWeight: 500,
+                color: item.pct > 0  ? '#4ADE80'
+                     : item.pct < 0  ? '#F87171'
+                     : 'rgba(255,255,255,0.35)',
+              }}>
+                {fmtPct(item.pct)}
+              </span>
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', color: '#fff', fontWeight: 500 }}>
-              {item.price}
-            </span>
-            <span style={{
-              fontFamily: 'var(--font-mono)', fontWeight: 500,
-              color: item.pct > 0  ? '#4ADE80'
-                   : item.pct < 0  ? '#F87171'
-                   : 'rgba(255,255,255,0.35)',
-            }}>
-              {fmtPct(item.pct)}
-            </span>
-          </span>
-        ))}
+          ))}
+        </div>
       </div>
+      {generatedAtIST && (
+        <div style={{
+          textAlign: 'right', padding: '0 12px 3px',
+          fontSize: 9, color: 'rgba(255,255,255,0.25)',
+          fontFamily: 'var(--font-mono)', letterSpacing: '0.03em',
+        }}>
+          as of {generatedAtIST}
+        </div>
+      )}
     </div>
   )
 }

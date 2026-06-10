@@ -1,7 +1,7 @@
 import { notFound }        from 'next/navigation'
 import Link                 from 'next/link'
 import type { Metadata }    from 'next'
-import { getPrices }        from '@/lib/prices'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
 import fs                   from 'fs'
@@ -287,11 +287,12 @@ export default async function CommodityPage({ params }: Props) {
   const color  = entry.color
   const meta   = COMMODITY_META[entry.key]
 
-  const [prices, articles, allBriefs] = await Promise.all([
-    getPrices().catch(() => null),
+  const [articles, allBriefs] = await Promise.all([
     getAllArticles().catch(() => []),
     getAllBriefs(),
   ])
+  const snap   = loadSnapshot()
+  const prices = snap ? snapshotToPriceData(snap) : null
 
   const priceData = prices ? (prices as Record<string, any>)[entry.priceKey] : null
   const ltp       = priceData?.mcx         ?? 0

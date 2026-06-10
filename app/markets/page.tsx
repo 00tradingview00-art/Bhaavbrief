@@ -1,5 +1,5 @@
 import MarketsClient from '@/components/markets/MarketsClient'
-import { getPrices } from '@/lib/prices'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 
 export const metadata = {
   title: 'MCX Live Prices — Gold, Silver, Crude Oil, Copper, Natural Gas',
@@ -30,8 +30,7 @@ export const dynamic  = 'force-dynamic'
 export const revalidate = 0
 
 export default async function MarketsPage() {
-  let initialPrices = null
-  try { initialPrices = await getPrices() } catch { /* client will fetch on load */ }
-
+  const snap = loadSnapshot()
+  const initialPrices = snap ? snapshotToPriceData(snap) : null
   return <MarketsClient initialPrices={initialPrices} />
 }

@@ -1,5 +1,5 @@
 import { NextResponse }  from 'next/server'
-import { getPrices }     from '@/lib/prices'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { readFileSync }  from 'fs'
 import path              from 'path'
 import Anthropic         from '@anthropic-ai/sdk'
@@ -112,8 +112,9 @@ Respond ONLY with valid JSON — no markdown, no explanation:
 
 export async function GET() {
   try {
-    const prices = await getPrices()
-    if (!prices) return NextResponse.json({ error: 'Prices unavailable' }, { status: 503 })
+    const snap = loadSnapshot()
+    if (!snap) return NextResponse.json({ error: 'Prices unavailable' }, { status: 503 })
+    const prices = snapshotToPriceData(snap)
 
     function fmt(v: number, dec = 0) {
       if (!v) return '—'

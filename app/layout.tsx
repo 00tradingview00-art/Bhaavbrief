@@ -8,6 +8,7 @@ import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
 import GeoRiskTicker from '@/components/GeoRiskTicker'
 import PostHogProvider from '@/components/PostHogProvider'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -75,8 +76,8 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // TickerStrip fetches prices client-side every 30s and has a static fallback
-  const initialPrices = null
+  const snap          = loadSnapshot()
+  const initialPrices = snap ? snapshotToPriceData(snap) : null
 
   const orgSchema = {
     '@context': 'https://schema.org',

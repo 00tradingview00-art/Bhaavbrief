@@ -182,10 +182,8 @@ function PriceCard({
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
 export default function MarketsClient({ initialPrices }: { initialPrices: PriceData | null }) {
-  const [prices, setPrices]       = useState<PriceData | null>(initialPrices)
-  const [lastAt, setLastAt]       = useState<Date>(new Date())
-  const [secsAgo, setSecsAgo]     = useState(0)
-  const [flashing, setFlashing]   = useState(false)
+  const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
+  const [flashing, setFlashing]     = useState(false)
   const [marketOpen, setMarketOpen] = useState(isMCXOpen())
   const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
@@ -195,8 +193,6 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
       if (!res.ok) return
       const data: PriceData = await res.json()
       setPrices(data)
-      setLastAt(new Date())
-      setSecsAgo(0)
       setMarketOpen(isMCXOpen())
       setFlashing(true)
       setTimeout(() => setFlashing(false), 600)
@@ -211,12 +207,6 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
     schedule()
     return () => clearTimeout(timerRef.current)
   }, [refresh])
-
-  // Live "Updated Xs ago" counter
-  useEffect(() => {
-    const id = setInterval(() => setSecsAgo(s => s + 1), 1000)
-    return () => clearInterval(id)
-  }, [])
 
   const p = prices
 
@@ -241,8 +231,9 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           }}>
             {marketOpen ? '● MCX Open' : '○ MCX Closed'}
           </span>
-          <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>
-            Updated {secsAgo}s ago
+          <span style={{ fontSize: 11, color: prices?.snapshotStale ? '#C87000' : 'var(--ink-4)' }}>
+            {prices?.generatedAtIST ? `as of ${prices.generatedAtIST}` : '—'}
+            {prices?.snapshotStale && ' · data delayed'}
           </span>
         </div>
       </div>
