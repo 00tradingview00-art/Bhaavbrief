@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-10-20-08-mcx-gold-slides-2-10-to-149-244-as-energ",
     "title": "MCX Gold slides 2.10% to ₹149,244 as energy surge reshapes session risk appetite",
     "summary": "The mechanism at work is risk rotation, not demand destruction. Crude's 2.13% surge to ₹8,600/bbl and NatGas +1.76% to ₹306.90 are absorbing speculative capital, pulling positioning away from defensive metals. Gold's 2.10% decline to ₹149,244/10g reflects this reallocation, not a fundamental reversal in safe-haven demand.",
@@ -20,6 +21,28 @@
     "pubDateIST": "10 Jun 2026, 20:10"
   },
   {
+=======
+    "id": "2026-06-10-20-10-mcx-crude-surges-1-98-to-8588-bbl-as-ene",
+    "title": "MCX Crude surges +1.98% to ₹8588/bbl as energy complex supply concerns dominate afternoon session",
+    "summary": "The mechanism driving this move is supply-side anxiety across the energy complex, with crude and natural gas rising in tandem — a coordination that historically reflects market pricing of production or geopolitical supply disruption rather than demand pull. MCX Crude at ₹8588/bbl finds near-term support around ₹8420 and faces resistance in the ₹8720 zone. Import parity arithmetic: Brent near $90.20 × ₹95.27 × ~1.00 duty-adjusted factor approximates ₹8595/bbl, placing MCX Crude broadly at parity with marginal premium. MCX NatGas confirming at +1.76% to ₹306.90/mmBtu reinforces the supply-concern narrative across the energy sector — this cross-commodity alignment historically strengthens the directional signal. MCX Gold's -2.07% divergence, however, suggests risk sentiment is not uniformly elevated. Watch the ₹8720 resistance level into close.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-10T14:40:03.469Z",
+    "pubDateIST": "10 Jun 2026, 20:10"
+  },
+  {
+    "id": "2026-06-10-20-11-mcx-gold-slides-2-07-to-149-284-as-energ",
+    "title": "MCX Gold slides 2.07% to ₹149,284 as energy surge redirects risk capital away from metals",
+    "summary": "The mechanism at work is capital rotation, not fundamental gold weakness. Crude surging 1.98% to ₹8,588 and NatGas +1.76% to ₹306.90 signal supply-driven energy inflation, which historically pulls speculative positioning toward energy instruments and away from non-yielding metals intraday.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-10T14:41:51.037Z",
+    "pubDateIST": "10 Jun 2026, 20:11"
+  },
+  {
+>>>>>>> Stashed changes
     "id": "2026-06-10-04-35-us-crude-price-forecast-signals-circulat",
     "title": "US Crude Price Forecast Signals Circulate as MCX Crude Awaits Direction at ₹95.35 USD/INR",
     "summary": "In a session characterised by sub-0.2% moves across the commodity complex, the absence of a dominant cross-asset theme means incoming forecast signals for US Crude carry reduced directional conviction — price discovery is range-bound rather than trend-driven, which limits signal reliability. The primary MCX contract in focus is Crude Oil (June or near-month expiry), with USD/INR steady at ₹95.35. The import parity chain remains mechanical: every USD 1.00 move in NYMEX WTI translates to approximately ₹95.35 per barrel at spot rate, before adding customs duty, port handling, and refinery premium, which historically embed an additional ₹200-350 per barrel into MCX settlement. The correlated instrument to monitor is the USD Index (DXY) — historically, a firming dollar compresses rupee-adjusted crude costs on the import side, affecting domestic pricing dynamics. The data release that would confirm or negate any directional bias is the US EIA Weekly Crude Inventory report; a draw exceeding one million barrels historically aligns with upward price pressure, while a build of equivalent magnitude aligns with the inverse pattern.",

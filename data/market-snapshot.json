@@ -1,6 +1,7 @@
 {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-10T14:39:55.777Z",
   "generatedAtIST": "2026-06-10 20:09 IST",
 =======
@@ -40,6 +41,9 @@
       "changePct": 1.8899,
 =======
   "generatedAt": "2026-06-10T14:41:08.323Z",
+=======
+  "generatedAt": "2026-06-10T14:41:28.575Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-06-10 20:11 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -50,6 +54,7 @@
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
+<<<<<<< Updated upstream
       "price": 236988,
       "prevClose": 238528,
       "changePct": -0.6456,
@@ -65,15 +70,35 @@
       "price": 1320.05,
       "prevClose": 1327.65,
       "changePct": -0.5724,
+=======
+      "price": 237103,
+      "prevClose": 238528,
+      "changePct": -0.5974,
+      "unit": "INR/kg"
+    },
+    "MCX_CRUDE": {
+      "price": 8588,
+      "prevClose": 8421,
+      "changePct": 1.9831,
+      "unit": "INR/bbl"
+    },
+    "MCX_COPPER": {
+      "price": 1320.4,
+      "prevClose": 1327.65,
+      "changePct": -0.5461,
+>>>>>>> Stashed changes
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
       "price": 306.5,
       "prevClose": 301.6,
       "changePct": 1.6247,
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
 =======
       "changePct": 1.691,
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       "unit": "INR/mmBtu"
     },
@@ -84,6 +109,7 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
       "price": 4184.7,
@@ -137,20 +163,48 @@
 =======
       "changePct": 1.6621,
 >>>>>>> Stashed changes
+=======
+      "price": 4181.9,
+      "prevClose": 4260,
+      "changePct": -1.8333,
+      "unit": "USD/oz"
+    },
+    "COMEX_SILVER": {
+      "price": 65.2,
+      "prevClose": 65.09,
+      "changePct": 0.1628,
+      "unit": "USD/oz"
+    },
+    "WTI": {
+      "price": 90.02,
+      "prevClose": 88.2,
+      "changePct": 2.0635,
+      "unit": "USD/bbl"
+    },
+    "BRENT": {
+      "price": 92.92,
+      "prevClose": 91.45,
+      "changePct": 1.6074,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.21,
       "prevClose": 3.14,
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       "changePct": 2.293,
 =======
       "changePct": 2.2611,
+>>>>>>> Stashed changes
+=======
+      "changePct": 2.1975,
 >>>>>>> Stashed changes
       "unit": "USD/mmBtu"
     }
   },
   "derived": {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
     "importParityGoldINR": 128352,
@@ -162,6 +216,10 @@
 =======
     "importParityGoldINR": 128202,
     "mcxComexGoldSpreadPct": 16.46,
+>>>>>>> Stashed changes
+=======
+    "importParityGoldINR": 128266,
+    "mcxComexGoldSpreadPct": 16.31,
 >>>>>>> Stashed changes
     "goldSilverRatio": 64.1
   }
