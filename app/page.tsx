@@ -571,7 +571,7 @@ export default async function HomePage() {
               }}>
                 Daily commodity intelligence for traders, investors and merchants. Every weekday at 9:30 AM.
               </p>
-              <SubscribeForm compact />
+              <SubscribeForm compact location="footer" />
             </div>
           </div>
 

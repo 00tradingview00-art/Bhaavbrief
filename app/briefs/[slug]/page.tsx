@@ -307,7 +307,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
         <aside className="brief-sidebar" style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem', alignSelf: 'start' }}>
           <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.25rem', marginBottom: '1.5rem' }}>
-            <SubscribeForm />
+            <SubscribeForm location="brief_page" />
           </div>
 
           {/* Commodity page links for commodities covered in this brief */}

@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { usePostHog } from 'posthog-js/react'
+import { trackSubscribe, trackEvent } from '@/lib/analytics'
 
 export default function SubscribeForm({ compact = false, location }: { compact?: boolean; location?: string }) {
   const [email,   setEmail]   = useState('')
@@ -28,18 +29,12 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
         setEmail('')
         ph?.capture('subscribe_success', { location: loc })
         ph?.identify(email.trim())
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ;(window as any).gtag('event', 'generate_lead', {
-            event_category: 'newsletter',
-            event_label: loc,
-          })
-        }
+        trackSubscribe(loc)
       } else {
         setStatus('error')
         setMessage(data.error ?? 'Something went wrong. Try again.')
         ph?.capture('subscribe_error', { error: data.error })
+        trackEvent('subscribe_error', { source: loc, status: res.status })
       }
     } catch {
       setStatus('error')

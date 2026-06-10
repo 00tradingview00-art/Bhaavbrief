@@ -273,7 +273,7 @@ export default function AboutPage() {
 
             {/* Subscribe */}
             <div style={{ background: '#F3F2EC', border: '0.5px solid #C8C8B8', padding: '1.5rem', marginBottom: '1.5rem' }}>
-              <SubscribeForm />
+              <SubscribeForm location="about" />
             </div>
 
             {/* Product stats */}
