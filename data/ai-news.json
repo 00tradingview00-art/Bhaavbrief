@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-11-22-36-mcx-silver-slides-0-64-to-234001-kg-as-s",
+    "title": "MCX Silver slides 0.64% to ₹234001/kg as session-wide commodity pressure persists",
+    "summary": "The mechanism here is cross-commodity drag — NatGas leading the complex lower at -2.85% creates a risk-off undertone that suppresses speculative positioning across MCX metals. Notably, this diverges from the supporting context: Comex silver gained roughly $3.7/oz on safe-haven flows, suggesting MCX-specific selling pressure rather than a global metals story.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T17:06:45.072Z",
+    "pubDateIST": "11 Jun 2026, 22:36"
+  },
+  {
+    "id": "2026-06-11-22-38-mcx-natural-gas-drops-2-85-to-297-mmbtu",
+    "title": "MCX Natural Gas Drops 2.85% to ₹297/mmBtu as Session Pressure Dominates Energy Complex",
+    "summary": "The mechanism driving this session is natural gas leading commodity weakness, with MCX NatGas at ₹297/mmBtu absorbing the full force of that pressure. Import parity arithmetic: Henry Hub spot approximately $2.15/mmBtu multiplied by USD/INR ₹95.75 multiplied by applicable duty and logistics factor of approximately 1.44 yields theoretical parity near ₹297/mmBtu — placing MCX broadly at parity, offering no structural premium buffer. Support observed at ₹289/mmBtu; resistance noted at ₹308/mmBtu. Cross-commodity confirmation arrives from MCX Crude Oil, also down 0.46% at ₹8686/bbl — both energy contracts declining in parallel, historically indicating broad energy demand sentiment rather than commodity-specific supply disruption. MCX Silver and Gold are echoing marginal weakness. Watch the ₹289/mmBtu level into close and the US EIA weekly natural gas storage report for directional context.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T17:08:34.109Z",
+    "pubDateIST": "11 Jun 2026, 22:38"
+  },
+  {
     "id": "2026-06-11-04-45-us-crude-forecast-signals-arrive-into-su",
     "title": "US Crude Forecast Signals Arrive Into Sub-0.2% Drift Session; MCX Crude Near ₹6,400",
     "summary": "The incoming oil price forecast signal lands against a session where the entire commodity complex has posted sub-0.2% moves, with no dominant cross-asset theme establishing directional conviction. In that context, forecast-based narrative carries reduced weight — price discovery is thin and momentum signals are unreliable. The directly affected MCX contract is MCX Crude Oil (near-month), where import parity mechanics run as follows: every USD 1.00 shift in NYMEX WTI translates to approximately ₹85-90 per barrel impact on MCX after applying the live USD/INR rate of ₹95.27 and factoring standard customs duty and freight premiums. The cross-market correlation to monitor is USD/INR itself — rupee stability at 95.27 currently neutralises any modest dollar-denominated oil drift before it reaches MCX. Historically, flat US session closes in crude have produced range-bound MCX opens. The data release that will confirm or negate directional pressure is the US Baker Hughes Rig Count, scheduled Friday.",
