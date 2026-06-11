@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-12-04-35-rbi-holds-repo-rate-unchanged-projects-6",
+    "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid Global Risk-Off Session",
+    "summary": "The RBI's rate hold and 6.9% real GDP growth projection arrive precisely as global markets are pricing a risk-off rotation — gold up 0.9% while crude collapses 4.6% this session. A stable domestic rate environment reduces INR volatility risk, which is materially relevant because MCX Gold at ₹149,304 per 10g and MCX Silver at ₹240,870 per kg are both leveraged to the USD/INR rate currently at ₹95.75. The import parity chain operates as follows: global gold strength translated through ₹95.75 spot rate plus customs duty and MMTC premium layers directly into MCX spot levels. A stable repo rate historically supports INR stability, which can partially compress the rupee-amplification effect on precious metal import prices. MCX Copper at ₹1,327.15 per kg, already up 1.04% this session, is the relevant cross-market correlation — domestic growth confirmation at 6.9% reinforces industrial demand assumptions that underpin copper's current bid. The specific data point to monitor is next Monday's USD/INR opening fix — any move beyond ₹96.00 or below ₹95.40 will either amplify or offset the domestic macro signal established today.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-11T23:05:00.445Z",
+    "pubDateIST": "12 Jun 2026, 04:35"
+  },
+  {
+    "id": "2026-06-12-04-36-mcx-nat-gas-slides-3-60-to-294-70-as-ris",
+    "title": "MCX Nat Gas slides 3.60% to ₹294.70 as risk-off selling dominates global energy complex",
+    "summary": "The mechanism here is a simultaneous crude selloff of 4.56% dragging the broader energy complex lower, with capital rotating into safe-haven gold rather than staying in risk commodities. Natural gas frequently correlates with crude on macro risk-off days when institutional desks reduce energy exposure wholesale.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T23:06:51.263Z",
+    "pubDateIST": "12 Jun 2026, 04:36"
+  },
+  {
+    "id": "2026-06-12-04-38-mcx-crude-collapses-4-56-to-8-328-as-ris",
+    "title": "MCX Crude Collapses 4.56% to ₹8,328 as Risk-Off Dominates Global Session",
+    "summary": "The mechanism driving this move is a sharp risk-off rotation — crude selling reflects demand destruction fears, not a supply shock, as evidenced by simultaneous safe-haven accumulation in gold. When equities face macro headwinds, crude and natgas historically liquidate together; MCX NatGas confirming at -3.60% reinforces this reading.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T23:08:44.080Z",
+    "pubDateIST": "12 Jun 2026, 04:38"
+  },
+  {
     "id": "2026-06-11-23-17-mcx-natural-gas-slides-3-63-to-294-60-as",
     "title": "MCX Natural Gas slides 3.63% to ₹294.60 as risk-off session hammers energy complex",
     "summary": "The mechanism is risk-off rotation — crude's 4.68% collapse is pulling the broader energy complex lower, with natural gas following through as correlated energy sentiment deteriorates. When crude reprices sharply downward, gas contracts historically compress in sympathy as traders reassess energy demand assumptions holistically.",
