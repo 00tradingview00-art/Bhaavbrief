@@ -81,10 +81,11 @@ function PriceCard({
   data: MCXData
   flashing: boolean
 }) {
-  const isUp    = data.mcxChangePct >= 0
-  const hasKite = data.mcxHigh > 0
-  const color   = isUp ? 'var(--up)' : 'var(--down)'
-  const bg      = isUp ? 'var(--up-bg)' : 'var(--down-bg)'
+  const isUp       = data.mcxChangePct >= 0
+  const hasKite    = data.mcxHigh > 0
+  const hasChangePct = data.mcxPrevClose > 0
+  const color      = isUp ? 'var(--up)' : 'var(--down)'
+  const bg         = isUp ? 'var(--up-bg)' : 'var(--down-bg)'
 
   return (
     <div style={{
@@ -100,7 +101,7 @@ function PriceCard({
         <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
           {cfg.label}
         </span>
-        {hasKite ? (
+        {hasChangePct ? (
           <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: bg, color }}>
             {isUp ? '▲' : '▼'} {fmtPct(data.mcxChangePct)}
           </span>

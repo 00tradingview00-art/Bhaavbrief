@@ -78,7 +78,7 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     return {
       mcx:          d.price,
       mcxChangePct: d.changePct,
-      mcxChange:    0,
+      mcxChange:    d.price > 0 && d.prevClose > 0 ? d.price - d.prevClose : 0,
       mcxOpen:      0,
       mcxHigh:      0,
       mcxLow:       0,
