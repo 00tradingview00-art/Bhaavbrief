@@ -69,8 +69,8 @@ for (const m of brief.matchAll(moneyRe)) {
   const near = snapshotNumbers.some(
     (s) => Math.abs(val - s.value) / s.value <= TOLERANCE
   );
-  // Round numbers (150000, 240000 etc.) are legitimate S/R level references.
-  const isRoundLevel = val >= 1000 && val % 500 === 0;
+  // Round numbers are legitimate S/R level references (₹150,000 gold, ₹500 NatGas, $95 WTI etc.)
+  const isRoundLevel = (val >= 1000 && val % 500 === 0) || (val >= 50 && val % 25 === 0);
   if (!near && !isRoundLevel) {
     issues.push(
       `NUMBER: "${m[0]}" not within ${TOLERANCE * 100}% of any snapshot value — hallucinated or stale?`

@@ -326,7 +326,7 @@ tags: ["tag1", "tag2"]
 
   const r = await client.messages.create({
     model:      'claude-sonnet-4-6',
-    max_tokens: 2000,
+    max_tokens: 2800,
     messages:   [{ role: 'user', content: prompt }],
   })
   return r.content[0].type === 'text' ? r.content[0].text : null
