@@ -50,12 +50,14 @@ jobs:
         run: node scripts/fetch-snapshot.mjs
 
       - name: Generate brief MDX
+        id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           EDITION: ${{ steps.edition.outputs.number }}
         run: node scripts/generate-brief.js
 
       - name: Validate brief (publish gate)
+        id: validate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           EDITION: ${{ steps.edition.outputs.number }}
@@ -124,7 +126,9 @@ jobs:
         run: node scripts/post-instagram.js
 
       - name: Alert on failure
-        if: failure()
+        # Only alert if generation or commit failed — not if validate blocked a bad brief.
+        # Validate failures are quality control, not infrastructure failures.
+        if: failure() && steps.validate.outcome != 'failure'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \

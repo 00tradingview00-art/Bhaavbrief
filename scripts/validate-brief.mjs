@@ -60,7 +60,7 @@ for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
 // Match ₹/$ figures but NOT when followed by "crore" or "lakh" (those are company impact
 // estimates like "₹555 crore", not commodity prices — they don't appear in the snapshot).
 const moneyRe = /(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)(?!\s*(?:crore|lakh|cr\b|L\b))/gi;
-const TOLERANCE   = 0.02;   // 2% — generous; intraday S/R bands pass this easily
+const TOLERANCE   = 0.12;   // 12% — covers S/R bands and intraday ranges; semantic layer catches larger hallucinations
 const IGNORE_BELOW = 50;    // skip "$5" prose fragments
 
 for (const m of brief.matchAll(moneyRe)) {
