@@ -8,3 +8,4 @@ out/
 *.log
 .vercel
 scripts/.kite-session.json
+tsconfig.tsbuildinfo
