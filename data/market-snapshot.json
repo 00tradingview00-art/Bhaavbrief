@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-11T17:08:20.650Z",
+=======
+  "generatedAt": "2026-06-11T17:08:35.356Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-06-11 22:38 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,9 +20,15 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
+<<<<<<< Updated upstream
       "price": 8687,
       "prevClose": 8726,
       "changePct": -0.4469,
+=======
+      "price": 8693,
+      "prevClose": 8726,
+      "changePct": -0.3782,
+>>>>>>> Stashed changes
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -46,6 +56,7 @@
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
+<<<<<<< Updated upstream
       "price": 63.98,
       "prevClose": 64.6,
       "changePct": -0.966,
@@ -61,6 +72,23 @@
       "price": 93.31,
       "prevClose": 93.1,
       "changePct": 0.2256,
+=======
+      "price": 63.99,
+      "prevClose": 64.6,
+      "changePct": -0.9427,
+      "unit": "USD/oz"
+    },
+    "WTI": {
+      "price": 90.79,
+      "prevClose": 90.03,
+      "changePct": 0.8442,
+      "unit": "USD/bbl"
+    },
+    "BRENT": {
+      "price": 93.35,
+      "prevClose": 93.1,
+      "changePct": 0.2685,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
