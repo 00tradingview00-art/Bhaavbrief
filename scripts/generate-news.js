@@ -272,12 +272,51 @@ async function fetchStooqFallback() {
   return p
 }
 
+function loadSnapshotPrices() {
+  try {
+    const file = path.join(ROOT, 'data/market-snapshot.json')
+    if (!fs.existsSync(file)) return null
+    const snap    = JSON.parse(fs.readFileSync(file, 'utf8'))
+    const ageMin  = (Date.now() - new Date(snap.generatedAt).getTime()) / 60000
+    if (ageMin > 720) return null   // >12h stale — MCX closed overnight gap is max ~9.5h
+    const i       = snap.instruments
+    const movers  = {}
+    if (i.MCX_GOLD?.changePct   != null) movers.gold   = i.MCX_GOLD.changePct
+    if (i.MCX_SILVER?.changePct != null) movers.silver = i.MCX_SILVER.changePct
+    if (i.MCX_CRUDE?.changePct  != null) movers.crude  = i.MCX_CRUDE.changePct
+    if (i.MCX_COPPER?.changePct != null) movers.copper = i.MCX_COPPER.changePct
+    if (i.MCX_NATGAS?.changePct != null) movers.natgas = i.MCX_NATGAS.changePct
+    return {
+      source:         'kite',              // same shape as live Kite — prices already in INR
+      usdInr:         i.USDINR?.price  ?? 0,
+      gold:           i.MCX_GOLD?.price   ?? 0,
+      silver:         i.MCX_SILVER?.price ?? 0,
+      crude:          i.MCX_CRUDE?.price  ?? 0,
+      copper:         i.MCX_COPPER?.price ?? 0,
+      natgas:         i.MCX_NATGAS?.price ?? 0,
+      movers,
+      generatedAtIST: snap.generatedAtIST,
+    }
+  } catch (e) {
+    console.warn('  Snapshot load failed:', e.message)
+    return null
+  }
+}
+
 async function fetchLivePrices() {
+  // Snapshot is the authoritative single source of truth — built by fetch-snapshot.mjs
+  // before this script runs. Use it unless missing/stale (e.g., very first deploy).
+  const snap = loadSnapshotPrices()
+  if (snap) {
+    console.log(`  Prices: snapshot (${snap.generatedAtIST})`)
+    return snap
+  }
+
+  // Fallback: Kite live
   const instruments = loadInstruments()
   if (instruments) {
     const kite = await fetchKitePrices(instruments)
     if (kite && (kite.gold != null || kite.silver != null || kite.crude != null)) {
-      // Attach USD/INR from Frankfurter even when using Kite (Kite is INR already)
       try {
         const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
         if (r.ok) kite.usdInr = (await r.json()).rates?.INR ?? 0
