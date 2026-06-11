@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-11-22-36-mcx-silver-slides-0-64-to-234001-kg-as-s",
     "title": "MCX Silver slides 0.64% to ₹234001/kg as session-wide commodity pressure persists",
     "summary": "The mechanism here is cross-commodity drag — NatGas leading the complex lower at -2.85% creates a risk-off undertone that suppresses speculative positioning across MCX metals. Notably, this diverges from the supporting context: Comex silver gained roughly $3.7/oz on safe-haven flows, suggesting MCX-specific selling pressure rather than a global metals story.",
@@ -18,6 +19,36 @@
     "impact": "bearish",
     "pubDate": "2026-06-11T17:08:34.109Z",
     "pubDateIST": "11 Jun 2026, 22:38"
+=======
+    "id": "2026-06-11-22-35-rupee-slumps-50-paise-to-95-75-mcx-gold",
+    "title": "Rupee Slumps 50 Paise to ₹95.75, MCX Gold Holds ₹147064 Amid Muted Session",
+    "summary": "The rupee's 50-paise depreciation to ₹95.75 arrives in a session already shaped by NatGas collapsing 2.88%, which has compressed broader commodity sentiment. The weaker rupee introduces a structural floor mechanism into the metals complex precisely when price pressure is building. The import parity chain runs directly through this signal: COMEX Gold in dollar terms translates to MCX at ₹147064 per 10g, where each 50-paise rupee move mechanically adds approximately ₹650-700 per 10g to landed cost before customs duty and premium layering. MCX Silver at ₹233982 per kg absorbs a parallel but amplified rupee effect given its higher absolute import volume sensitivity. The cross-market correlation to observe here is crude at ₹8696, where rupee weakness simultaneously raises India's import bill, historically tightening the current account dynamic that further pressures the currency. The USD/INR fixing at tomorrow's RBI reference rate will confirm whether this 95.75 level represents a one-session move or a sustained repricing of the import parity base.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-11T17:05:46.055Z",
+    "pubDateIST": "11 Jun 2026, 22:35"
+  },
+  {
+    "id": "2026-06-11-22-37-mcx-silver-slides-0-65-to-233982-kg-as-s",
+    "title": "MCX Silver slides 0.65% to ₹233982/kg as session-wide commodity pressure weighs",
+    "summary": "The mechanism driving this session is liquidity rotation, not fundamental selling. NatGas leading losses at -2.9% is compressing risk appetite across the entire MCX complex, pulling silver lower despite Comex silver gaining $3.7/oz on safe-haven flows — a divergence worth noting.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T17:07:37.882Z",
+    "pubDateIST": "11 Jun 2026, 22:37"
+  },
+  {
+    "id": "2026-06-11-22-39-mcx-natural-gas-falls-2-88-to-296-90-mmb",
+    "title": "MCX Natural Gas Falls 2.88% to ₹296.90/mmBtu as Session Selling Pressure Intensifies",
+    "summary": "The mechanism driving this decline is position unwinding ahead of close, with NatGas leading the broader commodity complex lower at -2.9% — the session's sharpest mover. When NatGas leads on the downside, it historically reflects either storage-side pressure or demand-revision flows in the underlying Henry Hub benchmark.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T17:09:30.013Z",
+    "pubDateIST": "11 Jun 2026, 22:39"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-11-04-45-us-crude-forecast-signals-arrive-into-su",
