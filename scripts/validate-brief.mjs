@@ -165,7 +165,7 @@ async function semanticCheck() {
       max_tokens: 800,
       system:
         "You are a pre-publication fact-consistency checker for a financial morning brief. " +
-        "You are NOT an editor of style or tone. You only flag factual self-contradictions. " +
+        "You are NOT an editor of style or tone. You only flag clear factual self-contradictions WITHIN today's brief. " +
         "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"severity\": \"block\"|\"warn\", \"detail\": string}]}. " +
         "No markdown fences, no preamble.",
       messages: [
@@ -173,16 +173,21 @@ async function semanticCheck() {
           role: "user",
           content:
             `Today's date (IST): ${istDate}\n\n` +
-            `MARKET SNAPSHOT (the only valid numbers):\n${JSON.stringify(snapshot.instruments, null, 2)}\n\n` +
+            `MARKET SNAPSHOT (the only valid numbers for today):\n${JSON.stringify(snapshot.instruments, null, 2)}\n\n` +
             `DRAFT BRIEF (first 3000 chars):\n${brief.slice(0, 3000)}\n\n` +
-            "Flag as 'block':\n" +
-            "1. Two different prices for the same instrument anywhere in the text\n" +
+            "RULES — read carefully before flagging anything:\n" +
+            "• MCX and COMEX are DIFFERENT markets. MCX Gold % change and COMEX Gold % change WILL differ — this is never a contradiction.\n" +
+            "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
+            "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
+            "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n\n" +
+            "Flag as 'block' ONLY:\n" +
+            "1. The SAME instrument cited at two genuinely different prices within today's body text\n" +
             "2. Event timing contradictions (e.g. 'CPI due tonight' vs 'CPI tomorrow'; wrong month label)\n" +
-            "3. Headline direction contradicting body data\n" +
-            "4. A percentage that doesn't match its own from/to prices\n" +
-            "Flag as 'warn':\n" +
-            "5. Historical claims stated as fact with specific numbers that cannot be sourced from the snapshot\n" +
-            "Ignore style, tone, word choice, and any Hinglish phrases.",
+            "3. Headline direction word (surge/slump) directly contradicting the same instrument's data in the body\n" +
+            "4. A percentage that doesn't match its own explicit from/to prices (e.g. '5% fall from $100 to $98' — 5% is wrong)\n" +
+            "Flag as 'warn' only:\n" +
+            "5. Historical claims with specific numbers that are stated as fact but cannot be sourced from the snapshot\n" +
+            "Do NOT flag: MCX vs COMEX % differences, historical vs today comparisons, rounding differences ≤0.05%, style/tone.",
         },
       ],
     }),
@@ -210,7 +215,9 @@ async function semanticCheck() {
         detail.includes("no contradiction") ||
         detail.includes("no block on this") ||
         detail.includes("not a contradiction") ||
-        detail.includes("consistent with");
+        detail.includes("consistent with") ||
+        detail.includes("matches snapshot") ||
+        detail.includes("which matches");
       const isBlock = it.severity === "block" && !selfContradicted;
       issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
     }
