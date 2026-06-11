@@ -1,6 +1,7 @@
 [
   {
     "id": "2026-06-12-04-38-india-wheat-msp-procurement-target-rises",
+<<<<<<< Updated upstream
     "title": "India Wheat MSP Procurement Target Rises 15% as Crude Craters 4.56% This Session",
     "summary": "The 15% expansion in government wheat procurement at MSP operates within a session where risk-off flows are driving gold up 0.9% while crude collapses 4.56% to MCX ₹8328/bbl — a combination that historically signals demand destruction anxiety rather than agricultural commodity stress. Wheat MSP procurement is a domestic price-floor mechanism administered in INR, insulated from the USD/INR rate of ₹95.75 that directly governs metals and energy import parity chains. MCX does not list wheat as a tradable contract, severing the direct futures transmission pathway. The cross-market correlation of note is MCX NatGas at ₹294.70/mmBtu down 3.60%, as lower energy costs reduce fertiliser input pricing for the broader agri complex. The data release that will clarify downstream agri commodity positioning is the FCI procurement volume confirmation against the revised target, expected in the next weekly government bulletin.",
     "category": "Policy",
@@ -28,6 +29,35 @@
     "impact": "bearish",
     "pubDate": "2026-06-11T23:11:49.886Z",
     "pubDateIST": "12 Jun 2026, 04:41"
+=======
+    "title": "India Wheat MSP Procurement Target Rises 15%, Rupee at ₹95.75 Amid Risk-Off Session",
+    "summary": "This procurement signal arrives inside a session where safe-haven flows are rotating capital toward gold and silver while crude collapses 4.56%, compressing input-cost inflation expectations across agricultural supply chains. A 15% expansion in government wheat offtake at MSP raises domestic floor-price support and signals sovereign balance sheet deployment into foodgrain inventory — a mechanism that historically anchors spot mandi prices and reduces free-float available to open-market buyers. The USD/INR rate at 95.75 is a secondary transmission variable here: wheat is priced domestically in rupee terms with MSP as the statutory anchor, not an import-parity construct. Cross-market correlation to watch is crude at MCX ₹8328 per barrel — historically, fertilizer and logistics cost curves for rabi wheat procurement track energy input costs, meaning the ongoing crude decline may compress per-quintal procurement overhead for the FCI. The confirmation level to monitor is the next FCI weekly procurement tonnage data release, which will indicate whether physical offtake is tracking the revised target or running below it.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-11T23:08:59.268Z",
+    "pubDateIST": "12 Jun 2026, 04:38"
+  },
+  {
+    "id": "2026-06-12-04-40-mcx-silver-surges-2-28-to-240870-kg-as-s",
+    "title": "MCX Silver surges 2.28% to ₹240870/kg as safe-haven demand overrides risk-off crude selloff",
+    "summary": "The mechanism here is safe-haven rotation, not reflation. Crude collapsing 4.56% signals demand destruction fears, which typically pressures industrial metals — yet silver is advancing 2.28% to ₹240870/kg because its monetary character is dominating its industrial one this session. Gold's $54/oz Comex jump is pulling silver higher via the traditional spillover.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-11T23:10:50.657Z",
+    "pubDateIST": "12 Jun 2026, 04:40"
+  },
+  {
+    "id": "2026-06-12-04-42-mcx-nat-gas-slides-3-60-to-294-70-mmbtu",
+    "title": "MCX Nat Gas slides 3.60% to ₹294.70/mmBtu as risk-off dominates global session",
+    "summary": "The mechanism here is energy-specific selling overlaid on a broader risk-off session — crude falling 4.56% signals demand destruction fears, and natural gas is tracking that sentiment rather than moving independently. At ₹294.70/mmBtu, immediate observed support sits near ₹288, with resistance at ₹305. On import parity: Henry Hub near $3.20/mmBtu multiplied by ₹95.75 and an approximate duty/landing factor of 1.15 yields a theoretical parity near ₹352 — placing MCX Nat Gas at a notable discount to landed parity, a structural condition that has historically compressed downside but not reversed short-term momentum. Cross-commodity confirmation: crude falling simultaneously removes the energy-complex bid, reinforcing rather than challenging this decline. Watch Henry Hub settlement and Monday's MCX open gap relative to ₹294.70 as the reference level.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T23:12:42.239Z",
+    "pubDateIST": "12 Jun 2026, 04:42"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-12-04-35-rbi-holds-repo-rate-unchanged-projects-6",
