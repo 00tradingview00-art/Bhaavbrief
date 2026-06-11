@@ -1,30 +1,30 @@
 {
-  "generatedAt": "2026-06-11T17:04:58.525Z",
-  "generatedAtIST": "2026-06-11 22:34 IST",
+  "generatedAt": "2026-06-11T17:08:20.650Z",
+  "generatedAtIST": "2026-06-11 22:38 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 146956,
+      "price": 147089,
       "prevClose": 148017,
-      "changePct": -0.7168,
+      "changePct": -0.627,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 233685,
+      "price": 234001,
       "prevClose": 235505,
-      "changePct": -0.7728,
+      "changePct": -0.6386,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8698,
+      "price": 8687,
       "prevClose": 8726,
-      "changePct": -0.3209,
+      "changePct": -0.4469,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1315.55,
+      "price": 1315.75,
       "prevClose": 1313.55,
-      "changePct": 0.1523,
+      "changePct": 0.1675,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
@@ -40,27 +40,27 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4100.7,
+      "price": 4102.8,
       "prevClose": 4108.2,
-      "changePct": -0.1826,
+      "changePct": -0.1314,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 63.91,
+      "price": 63.98,
       "prevClose": 64.6,
-      "changePct": -1.0743,
+      "changePct": -0.966,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 90.73,
+      "price": 90.75,
       "prevClose": 90.03,
-      "changePct": 0.7775,
+      "changePct": 0.7997,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 93.34,
+      "price": 93.31,
       "prevClose": 93.1,
-      "changePct": 0.2578,
+      "changePct": 0.2256,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -71,8 +71,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 126237,
-    "mcxComexGoldSpreadPct": 16.41,
-    "goldSilverRatio": 64.2
+    "importParityGoldINR": 126302,
+    "mcxComexGoldSpreadPct": 16.46,
+    "goldSilverRatio": 64.1
   }
 }
