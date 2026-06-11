@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-12-04-38-india-wheat-msp-procurement-target-rises",
+    "title": "India Wheat MSP Procurement Target Rises 15% as Crude Craters 4.56% This Session",
+    "summary": "The 15% expansion in government wheat procurement at MSP operates within a session where risk-off flows are driving gold up 0.9% while crude collapses 4.56% to MCX ₹8328/bbl — a combination that historically signals demand destruction anxiety rather than agricultural commodity stress. Wheat MSP procurement is a domestic price-floor mechanism administered in INR, insulated from the USD/INR rate of ₹95.75 that directly governs metals and energy import parity chains. MCX does not list wheat as a tradable contract, severing the direct futures transmission pathway. The cross-market correlation of note is MCX NatGas at ₹294.70/mmBtu down 3.60%, as lower energy costs reduce fertiliser input pricing for the broader agri complex. The data release that will clarify downstream agri commodity positioning is the FCI procurement volume confirmation against the revised target, expected in the next weekly government bulletin.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-11T23:08:05.718Z",
+    "pubDateIST": "12 Jun 2026, 04:38"
+  },
+  {
+    "id": "2026-06-12-04-39-mcx-silver-surges-2-28-to-240870-kg-as-s",
+    "title": "MCX Silver surges 2.28% to ₹240870/kg as safe-haven demand overwhelms energy selloff",
+    "summary": "The mechanism driving this move is a bifurcated risk-off session — crude collapsing 4.56% signals growth concern, while capital simultaneously rotates into monetary metals, lifting silver $3.7/oz on Comex. This is classic safe-haven flow amplified by dollar softness, compressing the crude-silver correlation that typically runs positive.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-11T23:09:58.485Z",
+    "pubDateIST": "12 Jun 2026, 04:39"
+  },
+  {
+    "id": "2026-06-12-04-41-mcx-nat-gas-slides-3-60-to-294-70-as-ris",
+    "title": "MCX Nat Gas slides 3.60% to ₹294.70 as risk-off session crushes energy complex",
+    "summary": "The mechanism here is a simultaneous crude selloff of 4.56% compressing the broader energy complex, with risk-off capital rotating into gold rather than staying in commodities. Nat gas is moving in sympathy with crude's demand-destruction signal, not on gas-specific fundamentals.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-11T23:11:49.886Z",
+    "pubDateIST": "12 Jun 2026, 04:41"
+  },
+  {
     "id": "2026-06-12-04-35-rbi-holds-repo-rate-unchanged-projects-6",
     "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid Global Risk-Off Session",
     "summary": "The RBI's rate hold and 6.9% real GDP growth projection arrive precisely as global markets are pricing a risk-off rotation — gold up 0.9% while crude collapses 4.6% this session. A stable domestic rate environment reduces INR volatility risk, which is materially relevant because MCX Gold at ₹149,304 per 10g and MCX Silver at ₹240,870 per kg are both leveraged to the USD/INR rate currently at ₹95.75. The import parity chain operates as follows: global gold strength translated through ₹95.75 spot rate plus customs duty and MMTC premium layers directly into MCX spot levels. A stable repo rate historically supports INR stability, which can partially compress the rupee-amplification effect on precious metal import prices. MCX Copper at ₹1,327.15 per kg, already up 1.04% this session, is the relevant cross-market correlation — domestic growth confirmation at 6.9% reinforces industrial demand assumptions that underpin copper's current bid. The specific data point to monitor is next Monday's USD/INR opening fix — any move beyond ₹96.00 or below ₹95.40 will either amplify or offset the domestic macro signal established today.",
