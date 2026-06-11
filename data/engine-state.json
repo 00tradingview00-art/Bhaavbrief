@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 147089,
-    "silver": 234001,
-    "crude": 8696,
-    "copper": 1315.75,
-    "natgas": 297,
+    "gold": 149304,
+    "silver": 240870,
+    "crude": 8328,
+    "copper": 1327.15,
+    "natgas": 294.7,
     "usdinr": 95.76
   },
-  "lastChecked": "2026-06-11T17:08:38.821Z",
+  "lastChecked": "2026-06-11T17:48:56.786Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,13 +19,14 @@
     "value": "330"
   },
   "articlesToday": [
-    "2026-06-11/2026-06-11-hawk-scan-mcx-nat-gas-plunges-3-41-to-297-below-20-sma"
+    "2026-06-11/2026-06-11-hawk-scan-mcx-nat-gas-plunges-3-41-to-297-below-20-sma",
+    "2026-06-11/2026-06-11-hawk-scan-mcx-crude-drops-4-23-to-8-328-near-20-day-range-fl"
   ],
-  "lastArticleAt": "2026-06-11T17:05:20.049Z",
+  "lastArticleAt": "2026-06-11T17:49:10.215Z",
   "lastArticleTime": "2026-06-04T01:00:00.000Z",
   "lastCoveredAt": {
     "natgas": "2026-06-11T17:05:20.049Z",
-    "crude": "2026-06-11T17:05:20.049Z",
+    "crude": "2026-06-11T17:49:10.215Z",
     "silver": "2026-06-11T17:05:20.049Z",
     "copper": "2026-06-10T14:39:10.473Z",
     "gold": "2026-06-11T17:05:20.049Z"
