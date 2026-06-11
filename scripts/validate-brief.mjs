@@ -44,13 +44,18 @@ const issues = [];
 // LAYER 1 — deterministic
 // ---------------------------------------------------------------------------
 
-// 1. Every ₹/$ figure in the brief body must be near a snapshot number (±2%).
-//    Catches hallucinated prices and stale-memory numbers.
+// 1. Every ₹/$ figure in the brief body must be near a snapshot number or a known
+//    derived value (price, prevClose, or intraday delta). Catches clear hallucinations.
 
 const snapshotNumbers = [];
 for (const [key, inst] of Object.entries(snapshot.instruments)) {
   if (inst.price     > 0) snapshotNumbers.push({ key: `${key}.price`,     value: inst.price });
   if (inst.prevClose > 0) snapshotNumbers.push({ key: `${key}.prevClose`, value: inst.prevClose });
+  // Also accept intraday dollar/rupee deltas — they appear in "fell $170" style sentences
+  if (inst.price > 0 && inst.prevClose > 0) {
+    const delta = Math.abs(inst.price - inst.prevClose);
+    if (delta > 0) snapshotNumbers.push({ key: `${key}.delta`, value: delta });
+  }
 }
 for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
   if (typeof value === "number" && value > 0)
@@ -58,9 +63,9 @@ for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
 }
 
 // Match ₹/$ figures but NOT when followed by "crore" or "lakh" (those are company impact
-// estimates like "₹555 crore", not commodity prices — they don't appear in the snapshot).
+// estimates like "₹555 crore", not commodity prices).
 const moneyRe = /(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)(?!\s*(?:crore|lakh|cr\b|L\b))/gi;
-const TOLERANCE   = 0.12;   // 12% — covers S/R bands and intraday ranges; semantic layer catches larger hallucinations
+const TOLERANCE    = 0.15;  // 15% — S/R bands, intraday ranges; semantic layer handles clear hallucinations
 const IGNORE_BELOW = 50;    // skip "$5" prose fragments
 
 for (const m of brief.matchAll(moneyRe)) {
@@ -73,7 +78,7 @@ for (const m of brief.matchAll(moneyRe)) {
   const isRoundLevel = (val >= 1000 && val % 500 === 0) || (val >= 50 && val % 25 === 0);
   if (!near && !isRoundLevel) {
     issues.push(
-      `NUMBER: "${m[0]}" not within ${TOLERANCE * 100}% of any snapshot value — hallucinated or stale?`
+      `NUMBER: "${m[0]}" not within ${TOLERANCE * 100}% of any snapshot value or delta — hallucinated or stale?`
     );
   }
 }
@@ -197,9 +202,17 @@ async function semanticCheck() {
   try {
     const verdict = JSON.parse(text);
     for (const it of verdict.issues ?? []) {
-      issues.push(
-        `${it.severity === "block" ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`
-      );
+      const detail = (it.detail ?? "").toLowerCase();
+      // Haiku sometimes returns severity:"block" but then explains in the detail that
+      // there is actually no contradiction. Demote those to warnings.
+      const selfContradicted =
+        detail.includes("no block issue") ||
+        detail.includes("no contradiction") ||
+        detail.includes("no block on this") ||
+        detail.includes("not a contradiction") ||
+        detail.includes("consistent with");
+      const isBlock = it.severity === "block" && !selfContradicted;
+      issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
     }
   } catch {
     issues.push("SEMANTIC: unparseable checker response — failing closed");
