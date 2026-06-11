@@ -1,6 +1,25 @@
 [
   {
     "type": "brief",
+    "slug": "edition-040",
+    "href": "/briefs/edition-040",
+    "title": "Oil at $91 While Gold Slides — The Fed Is the Reason",
+    "description": "Crude surges on Middle East supply fears while gold falls as Fed rate anxiety overrides safe-haven demand.",
+    "excerpt": "MCX Gold ₹146862 | Crude ₹8798 | USDINR ₹95.63 — Gold -0.78% | Crude +0.83% | Silver -0.91% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-06-11T04:05:33.511Z",
+    "edition": "40",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Fed",
+      "Geopolitics",
+      "Inflation"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-039",
     "href": "/briefs/edition-039",
     "title": "MCX Open 10 Jun 2026: Silver Slammed, Gold Slides",
