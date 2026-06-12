@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-12-19-47-india-wheat-msp-procurement-target-lifte",
+    "title": "India Wheat MSP Procurement Target Lifted 15%; Gold at ₹149847 Holds Session Bid",
+    "summary": "The 15% expansion in government wheat procurement at MSP lands during a session already defined by safe-haven positioning — gold at ₹149847 per 10g up 0.61% and crude at ₹8241 down 1.23% — confirming defensive capital allocation rather than reflation. Wheat is not a listed MCX contract, so the direct price-discovery impact routes instead through broader agricultural sentiment and rupee demand dynamics. USD/INR at ₹95.10 remains the transmission mechanism: elevated government procurement spending at MSP scale historically pressures fiscal arithmetic, which feeds sovereign risk perception and can exert marginal softening bias on the rupee. A weaker rupee mechanically lifts import parity for dollar-denominated MCX metals. MCX Silver at ₹241618 per kg, already the session's strongest mover at plus 0.82%, represents the most sensitive correlation to any rupee softening impulse. The RBI's next liquidity window data will confirm or negate fiscal-rupee stress from this procurement expansion.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-12T14:17:10.675Z",
+    "pubDateIST": "12 Jun 2026, 19:47"
+  },
+  {
+    "id": "2026-06-12-19-49-mcx-natural-gas-holds-296-mmbtu-up-0-54",
+    "title": "MCX Natural Gas holds ₹296/mmBtu, up 0.54% as risk-off dominates afternoon session",
+    "summary": "The mechanism driving this session is dollar softness feeding into a broad reflation/safe-haven rotation — weaker USD reduces the import cost denominator, lifting INR-denominated commodity floors. MCX NatGas trades ₹296/mmBtu; immediate support observed near ₹292, resistance near ₹300. Import parity arithmetic: Henry Hub approximate $2.70/mmBtu × ₹95.10 × conversion and duty factor (~1.15) yields a theoretical parity near ₹295–₹297/mmBtu — MCX is currently trading near parity, neither at meaningful premium nor discount. Cross-commodity confirmation: MCX Copper is also up 0.61%, historically correlated with industrial demand sentiment and dollar direction — both moving together here reinforces the dollar-weakness mechanism rather than a commodity-specific demand signal. Watch the ₹300 resistance level and the 5:00 PM IST EIA weekly gas storage release for directional clarity into close.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-12T14:19:02.893Z",
+    "pubDateIST": "12 Jun 2026, 19:49"
+  },
+  {
+    "id": "2026-06-12-19-50-mcx-copper-rises-0-61-to-1333-kg-as-doll",
+    "title": "MCX Copper rises 0.61% to ₹1333/kg as dollar weakness lifts base metals complex",
+    "summary": "The primary mechanism this session is dollar softness feeding directly into base metal purchasing power — when USD weakens, commodities priced globally in dollars become cheaper for non-dollar buyers, expanding demand signals. MCX Copper trades at ₹1333.10/kg. Observed support sits near ₹1318; resistance near ₹1348.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-12T14:20:55.947Z",
+    "pubDateIST": "12 Jun 2026, 19:50"
+  },
+  {
     "id": "2026-06-12-19-44-rbi-holds-repo-at-5-25-as-gold-trades-15",
     "title": "RBI Holds Repo at 5.25% as Gold Trades ₹150000 Amid Risk-Off Session",
     "summary": "The RBI's decision to hold the repo rate at 5.25% lands inside an already risk-off session where gold is advancing +0.72% to ₹150000 per 10g and silver is up +0.85% to ₹241700 per kg — a configuration that amplifies the policy signal. An unchanged rate preserves the interest rate differential dynamic that has kept USD/INR anchored at ₹95.10, directly sustaining the import parity floor for precious metals. The global gold price translated through ₹95.10 and standard customs duties maintains current MCX support levels. The ceasefire context matters: historically, post-conflict rate pauses have supported gold's safe-haven premium duration. MCX Copper at ₹1333.70 is the relevant cross-market read — copper's +0.66% advance alongside gold suggests dollar weakness rather than pure fear-driven flows. The domestic liquidity stance embedded in the policy statement, specifically any revision to the RBI's inflation trajectory commentary, is the data point that confirms or negates the current precious metals bid into close.",
