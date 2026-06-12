@@ -2,7 +2,7 @@
   "MCX_GOLD": {
     "lastFlashAt": "2026-06-10T09:04:19.100Z",
     "lastFlashPrice": 149361,
-    "lastRoundBucket": 29,
+    "lastRoundBucket": 30,
     "recentFlashes": [
       {
         "at": "10 Jun, 02:34 pm IST",
@@ -15,8 +15,8 @@
     "lastRoundBucket": 24
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-06-11T17:48:47.741Z",
-    "lastFlashPrice": 8318,
+    "lastFlashAt": "2026-06-12T21:09:06.488Z",
+    "lastFlashPrice": 8091,
     "lastRoundBucket": 16,
     "recentFlashes": [
       {
@@ -28,6 +28,11 @@
         "at": "11 Jun, 11:18 pm IST",
         "title": "MCX Crude Reverses 4.12% to ₹8,318 as WTI Slides 3.60% and Rupee Weakens",
         "price": 8318
+      },
+      {
+        "at": "13 Jun, 02:39 am IST",
+        "title": "MCX Crude Extends Decline 2.73% to ₹8,091 as WTI Drops Further to $84.25",
+        "price": 8091
       }
     ]
   },
