@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-041",
+    "href": "/briefs/edition-041",
+    "title": "Gold Reclaims ₹150,000 as Safe-Haven Demand Overwhelms Crude Selloff",
+    "description": "COMEX gold surges 3.2% and crude slides 1.7% on the same session — the safe-haven narrative is back in full force.",
+    "excerpt": "MCX Gold ₹150020 | Crude ₹8233 | USDINR ₹95.27 — Gold +0.73% | Crude -1.33% | Silver +1.14% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-06-12T04:07:53.866Z",
+    "edition": "41",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-040",
     "href": "/briefs/edition-040",
     "title": "Oil at $91 While Gold Slides — The Fed Is the Reason",
