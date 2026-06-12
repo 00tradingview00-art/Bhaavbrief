@@ -91,7 +91,7 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
   }
 
   return {
-    source:          (snap.source?.includes('kite') ? 'kite+stooq' : 'stooq') as PriceData['source'],
+    source:          (snap.source?.includes('kite') ? 'kite+twelvedata' : 'stooq') as PriceData['source'],
     updatedAt:       snap.generatedAt,
     generatedAtIST:  snap.generatedAtIST,
     snapshotStale,

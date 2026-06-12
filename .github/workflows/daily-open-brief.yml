@@ -55,6 +55,7 @@ jobs:
           echo "brief_file=${BRIEF_FILE}" >> $GITHUB_OUTPUT
 
       - name: Validate brief (publish gate)
+        id: validate
         if: steps.generate.outputs.brief_file != ''
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -104,7 +105,7 @@ jobs:
           node scripts/send-newsletter.js
 
       - name: Alert on failure
-        if: failure()
+        if: failure() && steps.validate.outcome != 'failure'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \

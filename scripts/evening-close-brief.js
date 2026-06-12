@@ -43,6 +43,17 @@ function loadInstruments() {
   catch { return null }
 }
 
+function loadSnapshot() {
+  try {
+    const file = path.join(ROOT, 'data/market-snapshot.json')
+    if (!fs.existsSync(file)) return null
+    const snap = JSON.parse(fs.readFileSync(file, 'utf8'))
+    const ageMin = (Date.now() - new Date(snap.generatedAt).getTime()) / 60000
+    if (ageMin > 90) return null // stale — fall through to live fetches
+    return snap
+  } catch { return null }
+}
+
 // ── Load today's published articles (to understand the day's narrative) ────────
 function loadTodayArticles() {
   const today = todayIST()
@@ -96,22 +107,34 @@ async function fetchKitePrices(instruments) {
   } catch (e) { console.warn(`  Kite failed: ${e.message}`); return null }
 }
 
-// ── Fetch current COMEX prices (mid-session for US market) ────────────────────
-async function fetchComexCurrentSession() {
+// ── Fetch current COMEX prices — snapshot first, stooq fallback ──────────────
+async function fetchComexCurrentSession(snapshot) {
+  // Primary: read from fresh snapshot (single source of truth)
+  if (snapshot) {
+    const i = snapshot.instruments
+    const results = {}
+    if (i.COMEX_GOLD?.price   > 0) results.gold   = { label: 'COMEX Gold',    unit: '$/oz',    price: i.COMEX_GOLD.price,   pct: i.COMEX_GOLD.changePct   ?? 0 }
+    if (i.COMEX_SILVER?.price > 0) results.silver  = { label: 'COMEX Silver',  unit: '$/oz',    price: i.COMEX_SILVER.price, pct: i.COMEX_SILVER.changePct ?? 0 }
+    if (i.WTI?.price          > 0) results.crude   = { label: 'WTI Crude',     unit: '$/bbl',   price: i.WTI.price,           pct: i.WTI.changePct           ?? 0 }
+    if (i.HENRY_HUB?.price    > 0) results.natgas  = { label: 'Henry Hub Gas', unit: '$/mmBtu', price: i.HENRY_HUB.price,    pct: i.HENRY_HUB.changePct    ?? 0 }
+    if (Object.keys(results).length >= 2) {
+      console.log('  COMEX: from snapshot')
+      return results
+    }
+  }
+
+  // Fallback: stooq CSV (no API key, but not the canonical source)
+  console.log('  COMEX: stooq fallback (snapshot unavailable or stale)')
   const stooqMap = {
     gold:   { sym: 'gc.f',    label: 'COMEX Gold',   unit: '$/oz',    div: 1   },
     silver: { sym: 'si.f',    label: 'COMEX Silver',  unit: '$/oz',    div: 100 },
     crude:  { sym: 'cl.f',    label: 'WTI Crude',     unit: '$/bbl',   div: 1   },
-    copper: { sym: 'hg.f',    label: 'COMEX Copper',  unit: '$/lb',    div: 100 },
     natgas: { sym: 'ng.f',    label: 'Henry Hub Gas', unit: '$/mmBtu', div: 1   },
   }
-
   const results = {}
   await Promise.all(Object.entries(stooqMap).map(async ([key, { sym, label, unit, div }]) => {
     try {
-      const r = await fetch(`https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`, {
-        signal: AbortSignal.timeout(6000),
-      })
+      const r = await fetch(`https://stooq.com/q/l/?s=${sym}&f=sd2t2ohlcv&h&e=csv`, { signal: AbortSignal.timeout(6000) })
       if (!r.ok) return
       const lines = (await r.text()).trim().split('\n')
       if (lines.length < 2) return
@@ -123,12 +146,15 @@ async function fetchComexCurrentSession() {
       }
     } catch {}
   }))
-
   return results
 }
 
-async function fetchUSDINR() {
+async function fetchUSDINR(snapshot) {
   const MIN = 82, MAX = 110
+  // Primary: snapshot (single source of truth)
+  const snapVal = snapshot?.instruments?.USDINR?.price
+  if (snapVal >= MIN && snapVal <= MAX) return snapVal
+  // Fallback: external APIs
   try {
     const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR', { signal: AbortSignal.timeout(5000) })
     if (r.ok) { const v = (await r.json()).rates?.INR ?? 0; if (v >= MIN && v <= MAX) return v }
@@ -284,6 +310,7 @@ function saveArticle(mdx) {
   const cleanMdx = mdx.replace(/^slug:.*$/m, '').trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
   console.log(`Saved: content/articles/${slug}.mdx`)
+  console.log(`BRIEF_FILE=content/articles/${slug}.mdx`)
   return { slug, title: titleMatch?.[1] ?? 'MCX Evening Brief' }
 }
 
@@ -323,12 +350,15 @@ async function main() {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
 
   const instruments = loadInstruments()
+  const snapshot    = loadSnapshot()
+  if (snapshot) console.log(`  Snapshot: ${snapshot.generatedAtIST} (${Math.round((Date.now() - new Date(snapshot.generatedAt).getTime()) / 60000)}min old)`)
+  else          console.log('  Snapshot: unavailable — using live fetches')
 
   console.log('Fetching MCX close prices and COMEX current session...')
   const [kitePrices, comex, usdinr] = await Promise.all([
     fetchKitePrices(instruments),
-    fetchComexCurrentSession(),
-    fetchUSDINR(),
+    fetchComexCurrentSession(snapshot),
+    fetchUSDINR(snapshot),
   ])
 
   if (!usdinr) { console.error('USDINR fetch failed from both sources — aborting'); process.exit(1) }

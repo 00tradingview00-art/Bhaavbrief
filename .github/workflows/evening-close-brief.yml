@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -32,14 +32,39 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Fetch market snapshot
+        continue-on-error: true
+        env:
+          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/fetch-snapshot.mjs
+
       - name: Generate Evening Close Brief
+        id: generate
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/evening-close-brief.js
+        run: |
+          OUTPUT=$(node scripts/evening-close-brief.js 2>&1)
+          echo "$OUTPUT"
+          BRIEF_FILE=$(echo "$OUTPUT" | grep '^BRIEF_FILE=' | cut -d= -f2-)
+          echo "brief_file=${BRIEF_FILE}" >> $GITHUB_OUTPUT
+
+      - name: Validate brief (publish gate)
+        id: validate
+        if: steps.generate.outputs.brief_file != ''
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -f "${{ steps.generate.outputs.brief_file }}" ]; then
+            node scripts/validate-brief.mjs data/market-snapshot.json "${{ steps.generate.outputs.brief_file }}"
+          else
+            echo "Brief file not found — skipping validation"
+          fi
 
       - name: Commit & push
+        id: commit
         run: |
           git config user.name "BhaavBrief Intelligence"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -47,14 +72,15 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/articles/ data/evening-brief-state.json
+          git add content/articles/ data/evening-brief-state.json data/market-snapshot.json
           git diff --staged --quiet && echo "No new brief" && exit 0
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
-          git commit -m "🌙 MCX Close Brief — ${DATE_IST}"
+          git commit -m "MCX Close Brief — ${DATE_IST}"
           git push origin main
 
       - name: Alert on failure
-        if: failure()
+        # Only alert on infrastructure failures — not when validator blocks bad content.
+        if: failure() && steps.validate.outcome != 'failure'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
