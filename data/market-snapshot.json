@@ -1,12 +1,22 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-12T14:20:28.149Z",
+=======
+  "generatedAt": "2026-06-12T14:20:30.882Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-06-12 19:50 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
+<<<<<<< Updated upstream
       "price": 149854,
       "prevClose": 148932,
       "changePct": 0.6191,
+=======
+      "price": 149847,
+      "prevClose": 148932,
+      "changePct": 0.6144,
+>>>>>>> Stashed changes
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
@@ -16,9 +26,15 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
+<<<<<<< Updated upstream
       "price": 8240,
       "prevClose": 8344,
       "changePct": -1.2464,
+=======
+      "price": 8241,
+      "prevClose": 8344,
+      "changePct": -1.2344,
+>>>>>>> Stashed changes
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -40,6 +56,7 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
+<<<<<<< Updated upstream
       "price": 4218.1,
       "prevClose": 4090.3,
       "changePct": 3.1245,
@@ -61,18 +78,46 @@
       "price": 89.38,
       "prevClose": 90.38,
       "changePct": -1.1064,
+=======
+      "price": 4217.6,
+      "prevClose": 4090.3,
+      "changePct": 3.1122,
+      "unit": "USD/oz"
+    },
+    "COMEX_SILVER": {
+      "price": 66.79,
+      "prevClose": 63.89,
+      "changePct": 4.5472,
+      "unit": "USD/oz"
+    },
+    "WTI": {
+      "price": 86.55,
+      "prevClose": 87.71,
+      "changePct": -1.3225,
+      "unit": "USD/bbl"
+    },
+    "BRENT": {
+      "price": 89.33,
+      "prevClose": 90.38,
+      "changePct": -1.1618,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.1,
       "prevClose": 3.09,
-      "changePct": 0.3887,
+      "changePct": 0.4211,
       "unit": "USD/mmBtu"
     }
   },
   "derived": {
+<<<<<<< Updated upstream
     "importParityGoldINR": 128970,
     "mcxComexGoldSpreadPct": 16.19,
+=======
+    "importParityGoldINR": 128955,
+    "mcxComexGoldSpreadPct": 16.2,
+>>>>>>> Stashed changes
     "goldSilverRatio": 63.1
   }
 }
