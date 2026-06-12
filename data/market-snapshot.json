@@ -1,6 +1,7 @@
 {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-12T23:03:24.179Z",
 =======
   "generatedAt": "2026-06-12T23:03:44.575Z",
@@ -9,6 +10,10 @@
   "generatedAt": "2026-06-12T23:03:55.854Z",
 >>>>>>> Stashed changes
   "generatedAtIST": "2026-06-13 04:33 IST",
+=======
+  "generatedAt": "2026-06-12T23:04:04.827Z",
+  "generatedAtIST": "2026-06-13 04:34 IST",
+>>>>>>> Stashed changes
   "source": "stale-cache+yahoo",
   "instruments": {
     "MCX_GOLD": {
