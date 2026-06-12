@@ -2,6 +2,7 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   "generatedAt": "2026-06-12T23:03:24.179Z",
 =======
   "generatedAt": "2026-06-12T23:03:44.575Z",
@@ -13,6 +14,10 @@
 =======
   "generatedAt": "2026-06-12T23:04:04.827Z",
   "generatedAtIST": "2026-06-13 04:34 IST",
+>>>>>>> Stashed changes
+=======
+  "generatedAt": "2026-06-12T23:06:42.871Z",
+  "generatedAtIST": "2026-06-13 04:36 IST",
 >>>>>>> Stashed changes
   "source": "stale-cache+yahoo",
   "instruments": {
