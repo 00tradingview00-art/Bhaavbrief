@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 149304,
-    "silver": 240870,
-    "crude": 8328,
-    "copper": 1327.15,
-    "natgas": 294.7,
-    "usdinr": 95.76
+    "gold": 149847,
+    "silver": 241618,
+    "crude": 8241,
+    "copper": 1333.1,
+    "natgas": 296,
+    "usdinr": 95.12
   },
-  "lastChecked": "2026-06-11T17:48:56.786Z",
+  "lastChecked": "2026-06-12T14:20:35.273Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -18,10 +18,7 @@
     "period": "2026-06-05",
     "value": "330"
   },
-  "articlesToday": [
-    "2026-06-11/2026-06-11-hawk-scan-mcx-nat-gas-plunges-3-41-to-297-below-20-sma",
-    "2026-06-11/2026-06-11-hawk-scan-mcx-crude-drops-4-23-to-8-328-near-20-day-range-fl"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-06-11T17:49:10.215Z",
   "lastArticleTime": "2026-06-04T01:00:00.000Z",
   "lastCoveredAt": {
