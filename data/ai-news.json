@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-13-02-35-rbi-holds-repo-rate-unchanged-projects-6",
     "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid ₹150675 Gold Rally",
     "summary": "The RBI's rate hold and 6.9% real GDP growth projection arrive precisely as gold, silver, and copper are advancing together on dollar weakness — a cross-asset configuration consistent with a reflation trade. A stable domestic rate environment reduces the opportunity cost of holding non-yielding metals, reinforcing the same directional pressure already visible in MCX Gold at ₹150675 per 10g and MCX Silver at ₹246604 per kg. On the import parity chain, dollar weakness compresses the landed cost of bullion in USD terms, but USD/INR at ₹95.10 partially offsets that relief for rupee-denominated contracts, leaving the net INR impact narrower than the headline USD move suggests. The cross-market correlation to watch is MCX Copper at ₹1335.00 per kg — historically, copper advances alongside growth-positive domestic macro signals, and its 0.75% session gain already reflects that linkage. The data point that will confirm or negate this setup is Monday's USD/INR opening print at the domestic forex market open — a rupee strengthening beyond ₹94.50 would materially alter the import parity arithmetic for all three metal contracts.",
@@ -28,6 +29,36 @@
     "impact": "bullish",
     "pubDate": "2026-06-12T21:09:23.450Z",
     "pubDateIST": "13 Jun 2026, 02:39"
+=======
+    "id": "2026-06-13-02-36-rbi-holds-repo-rate-steady-projects-6-9",
+    "title": "RBI Holds Repo Rate Steady, Projects 6.9% GDP Growth Amid ₹150675 Gold Rally",
+    "summary": "The RBI's decision to hold the repo rate unchanged lands directly inside an active reflation trade that is already lifting gold to ₹150675 per 10g, silver to ₹246604 per kg, and copper to ₹1335 per kg on MCX. A status-quo rate posture sustains rupee liquidity conditions and keeps domestic borrowing costs unchanged, which historically supports real-asset demand as a store of value. The 6.9% GDP growth projection reinforces the industrial demand side of the same trade, particularly for copper. On the import parity chain, gold's global advance translated through USD/INR at ₹95.10 amplifies the rupee-denominated price impact beyond the dollar move alone. The cross-market correlation to watch is MCX Silver at +2.90%, which historically leads the complex when both monetary accommodation and growth signals align simultaneously. The data point that will confirm or negate this setup is Monday's MCX open print relative to the ₹150675 gold closing reference level.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-12T21:06:42.768Z",
+    "pubDateIST": "13 Jun 2026, 02:36"
+  },
+  {
+    "id": "2026-06-13-02-38-dollar-weakness-lifts-mcx-gold-1-17-to-1",
+    "title": "Dollar Weakness Lifts MCX Gold 1.17% to ₹150,675 as Reflation Trade Accelerates",
+    "summary": "The primary mechanism: broad dollar softness is compressing the USD-denominated cost of holding gold, simultaneously lifting rupee-converted import parity. With USD/INR at ₹95.10, import parity arithmetic runs approximately: spot gold ~$3,170/oz × 32.15 (grams/oz conversion factor) × ₹95.10 × 1.185 (duty/GST factor) ≈ ₹150,400/10g, placing MCX Gold at a marginal premium of roughly ₹275 to theoretical parity. Key observational levels: ₹149,500 acts as nearest session support; ₹151,800 as overhead resistance from prior consolidation. MCX Silver's simultaneous +2.90% advance to ₹246,604/kg confirms the move is broad precious-metals driven rather than gold-specific — historically, silver outperforming gold intra-session amplifies the reflation signal. Watch the US June preliminary University of Michigan Consumer Sentiment release for directional confirmation on dollar trajectory into Monday's MCX open.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-12T21:08:35.673Z",
+    "pubDateIST": "13 Jun 2026, 02:38"
+  },
+  {
+    "id": "2026-06-13-02-40-mcx-silver-surges-2-90-to-246-604-kg-as",
+    "title": "MCX Silver surges 2.90% to ₹246,604/kg as dollar weakness fuels broad metals rally",
+    "summary": "The mechanism here is dollar compression — when the USD softens, dollar-denominated commodities require fewer dollars to purchase, simultaneously lifting global spot prices and weakening the denominator in the INR import parity calculation. Comex silver gained $3.70/oz this session. Import parity arithmetic: approximately 33.5 oz/kg × ($34.50 spot estimate) × ₹95.10 × ~1.11 duty factor yields a theoretical parity near ₹122,800... recalibrating at current Comex levels consistent with ₹246,604, MCX is trading broadly at parity, suggesting no structural premium or discount distortion today. Support observed near ₹240,500; resistance historically encountered around ₹250,000. Cross-commodity confirmation: MCX Copper advancing 0.75% simultaneously — both metals moving together historically signals genuine dollar-weakness-driven reflation rather than isolated safe-haven positioning. Watch Monday's US retail sales release for USD direction cues.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-12T21:10:27.674Z",
+    "pubDateIST": "13 Jun 2026, 02:40"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-12-19-47-india-wheat-msp-procurement-target-lifte",
