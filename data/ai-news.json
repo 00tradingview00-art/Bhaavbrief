@@ -1,112 +1,32 @@
 [
   {
-    "id": "2026-06-12-04-38-india-wheat-msp-procurement-target-rises",
-<<<<<<< Updated upstream
-    "title": "India Wheat MSP Procurement Target Rises 15% as Crude Craters 4.56% This Session",
-    "summary": "The 15% expansion in government wheat procurement at MSP operates within a session where risk-off flows are driving gold up 0.9% while crude collapses 4.56% to MCX ₹8328/bbl — a combination that historically signals demand destruction anxiety rather than agricultural commodity stress. Wheat MSP procurement is a domestic price-floor mechanism administered in INR, insulated from the USD/INR rate of ₹95.75 that directly governs metals and energy import parity chains. MCX does not list wheat as a tradable contract, severing the direct futures transmission pathway. The cross-market correlation of note is MCX NatGas at ₹294.70/mmBtu down 3.60%, as lower energy costs reduce fertiliser input pricing for the broader agri complex. The data release that will clarify downstream agri commodity positioning is the FCI procurement volume confirmation against the revised target, expected in the next weekly government bulletin.",
+    "id": "2026-06-12-19-44-rbi-holds-repo-at-5-25-as-gold-trades-15",
+    "title": "RBI Holds Repo at 5.25% as Gold Trades ₹150000 Amid Risk-Off Session",
+    "summary": "The RBI's decision to hold the repo rate at 5.25% lands inside an already risk-off session where gold is advancing +0.72% to ₹150000 per 10g and silver is up +0.85% to ₹241700 per kg — a configuration that amplifies the policy signal. An unchanged rate preserves the interest rate differential dynamic that has kept USD/INR anchored at ₹95.10, directly sustaining the import parity floor for precious metals. The global gold price translated through ₹95.10 and standard customs duties maintains current MCX support levels. The ceasefire context matters: historically, post-conflict rate pauses have supported gold's safe-haven premium duration. MCX Copper at ₹1333.70 is the relevant cross-market read — copper's +0.66% advance alongside gold suggests dollar weakness rather than pure fear-driven flows. The domestic liquidity stance embedded in the policy statement, specifically any revision to the RBI's inflation trajectory commentary, is the data point that confirms or negates the current precious metals bid into close.",
     "category": "Policy",
     "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-11T23:08:05.718Z",
-    "pubDateIST": "12 Jun 2026, 04:38"
+    "impact": "bullish",
+    "pubDate": "2026-06-12T14:14:57.460Z",
+    "pubDateIST": "12 Jun 2026, 19:44"
   },
   {
-    "id": "2026-06-12-04-39-mcx-silver-surges-2-28-to-240870-kg-as-s",
-    "title": "MCX Silver surges 2.28% to ₹240870/kg as safe-haven demand overwhelms energy selloff",
-    "summary": "The mechanism driving this move is a bifurcated risk-off session — crude collapsing 4.56% signals growth concern, while capital simultaneously rotates into monetary metals, lifting silver $3.7/oz on Comex. This is classic safe-haven flow amplified by dollar softness, compressing the crude-silver correlation that typically runs positive.",
+    "id": "2026-06-12-19-46-mcx-silver-surges-0-85-to-241700-kg-as-s",
+    "title": "MCX Silver surges 0.85% to ₹241700/kg as safe-haven flows dominate afternoon session",
+    "summary": "The operative mechanism this session is safe-haven rotation — Comex silver gained $3.7/oz as capital exits risk assets including crude, which is down 1.62% at ₹8209/bbl. Dollar weakness amplifies the move into precious metals.",
     "category": "Metals",
     "tagType": "metals",
     "impact": "bullish",
-    "pubDate": "2026-06-11T23:09:58.485Z",
-    "pubDateIST": "12 Jun 2026, 04:39"
+    "pubDate": "2026-06-12T14:16:49.750Z",
+    "pubDateIST": "12 Jun 2026, 19:46"
   },
   {
-    "id": "2026-06-12-04-41-mcx-nat-gas-slides-3-60-to-294-70-as-ris",
-    "title": "MCX Nat Gas slides 3.60% to ₹294.70 as risk-off session crushes energy complex",
-    "summary": "The mechanism here is a simultaneous crude selloff of 4.56% compressing the broader energy complex, with risk-off capital rotating into gold rather than staying in commodities. Nat gas is moving in sympathy with crude's demand-destruction signal, not on gas-specific fundamentals.",
+    "id": "2026-06-12-19-48-mcx-crude-slides-1-62-to-8-209-as-risk-o",
+    "title": "MCX Crude Slides 1.62% to ₹8,209 as Risk-Off Rotates Capital Into Safe Havens",
+    "summary": "The mechanism driving this session is a classic risk-off rotation — capital exiting energy and moving into gold and silver as perceived stores of value. Crude's -1.62% decline to ₹8,209/bbl reflects softening demand expectations, not a supply shock.",
     "category": "Energy",
     "tagType": "energy",
     "impact": "bearish",
-    "pubDate": "2026-06-11T23:11:49.886Z",
-    "pubDateIST": "12 Jun 2026, 04:41"
-=======
-    "title": "India Wheat MSP Procurement Target Rises 15%, Rupee at ₹95.75 Amid Risk-Off Session",
-    "summary": "This procurement signal arrives inside a session where safe-haven flows are rotating capital toward gold and silver while crude collapses 4.56%, compressing input-cost inflation expectations across agricultural supply chains. A 15% expansion in government wheat offtake at MSP raises domestic floor-price support and signals sovereign balance sheet deployment into foodgrain inventory — a mechanism that historically anchors spot mandi prices and reduces free-float available to open-market buyers. The USD/INR rate at 95.75 is a secondary transmission variable here: wheat is priced domestically in rupee terms with MSP as the statutory anchor, not an import-parity construct. Cross-market correlation to watch is crude at MCX ₹8328 per barrel — historically, fertilizer and logistics cost curves for rabi wheat procurement track energy input costs, meaning the ongoing crude decline may compress per-quintal procurement overhead for the FCI. The confirmation level to monitor is the next FCI weekly procurement tonnage data release, which will indicate whether physical offtake is tracking the revised target or running below it.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-11T23:08:59.268Z",
-    "pubDateIST": "12 Jun 2026, 04:38"
-  },
-  {
-    "id": "2026-06-12-04-40-mcx-silver-surges-2-28-to-240870-kg-as-s",
-    "title": "MCX Silver surges 2.28% to ₹240870/kg as safe-haven demand overrides risk-off crude selloff",
-    "summary": "The mechanism here is safe-haven rotation, not reflation. Crude collapsing 4.56% signals demand destruction fears, which typically pressures industrial metals — yet silver is advancing 2.28% to ₹240870/kg because its monetary character is dominating its industrial one this session. Gold's $54/oz Comex jump is pulling silver higher via the traditional spillover.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-11T23:10:50.657Z",
-    "pubDateIST": "12 Jun 2026, 04:40"
-  },
-  {
-    "id": "2026-06-12-04-42-mcx-nat-gas-slides-3-60-to-294-70-mmbtu",
-    "title": "MCX Nat Gas slides 3.60% to ₹294.70/mmBtu as risk-off dominates global session",
-    "summary": "The mechanism here is energy-specific selling overlaid on a broader risk-off session — crude falling 4.56% signals demand destruction fears, and natural gas is tracking that sentiment rather than moving independently. At ₹294.70/mmBtu, immediate observed support sits near ₹288, with resistance at ₹305. On import parity: Henry Hub near $3.20/mmBtu multiplied by ₹95.75 and an approximate duty/landing factor of 1.15 yields a theoretical parity near ₹352 — placing MCX Nat Gas at a notable discount to landed parity, a structural condition that has historically compressed downside but not reversed short-term momentum. Cross-commodity confirmation: crude falling simultaneously removes the energy-complex bid, reinforcing rather than challenging this decline. Watch Henry Hub settlement and Monday's MCX open gap relative to ₹294.70 as the reference level.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-11T23:12:42.239Z",
-    "pubDateIST": "12 Jun 2026, 04:42"
->>>>>>> Stashed changes
-  },
-  {
-    "id": "2026-06-12-04-35-rbi-holds-repo-rate-unchanged-projects-6",
-    "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid Global Risk-Off Session",
-    "summary": "The RBI's rate hold and 6.9% real GDP growth projection arrive precisely as global markets are pricing a risk-off rotation — gold up 0.9% while crude collapses 4.6% this session. A stable domestic rate environment reduces INR volatility risk, which is materially relevant because MCX Gold at ₹149,304 per 10g and MCX Silver at ₹240,870 per kg are both leveraged to the USD/INR rate currently at ₹95.75. The import parity chain operates as follows: global gold strength translated through ₹95.75 spot rate plus customs duty and MMTC premium layers directly into MCX spot levels. A stable repo rate historically supports INR stability, which can partially compress the rupee-amplification effect on precious metal import prices. MCX Copper at ₹1,327.15 per kg, already up 1.04% this session, is the relevant cross-market correlation — domestic growth confirmation at 6.9% reinforces industrial demand assumptions that underpin copper's current bid. The specific data point to monitor is next Monday's USD/INR opening fix — any move beyond ₹96.00 or below ₹95.40 will either amplify or offset the domestic macro signal established today.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "bullish",
-    "pubDate": "2026-06-11T23:05:00.445Z",
-    "pubDateIST": "12 Jun 2026, 04:35"
-  },
-  {
-    "id": "2026-06-12-04-36-mcx-nat-gas-slides-3-60-to-294-70-as-ris",
-    "title": "MCX Nat Gas slides 3.60% to ₹294.70 as risk-off selling dominates global energy complex",
-    "summary": "The mechanism here is a simultaneous crude selloff of 4.56% dragging the broader energy complex lower, with capital rotating into safe-haven gold rather than staying in risk commodities. Natural gas frequently correlates with crude on macro risk-off days when institutional desks reduce energy exposure wholesale.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-11T23:06:51.263Z",
-    "pubDateIST": "12 Jun 2026, 04:36"
-  },
-  {
-    "id": "2026-06-12-04-38-mcx-crude-collapses-4-56-to-8-328-as-ris",
-    "title": "MCX Crude Collapses 4.56% to ₹8,328 as Risk-Off Dominates Global Session",
-    "summary": "The mechanism driving this move is a sharp risk-off rotation — crude selling reflects demand destruction fears, not a supply shock, as evidenced by simultaneous safe-haven accumulation in gold. When equities face macro headwinds, crude and natgas historically liquidate together; MCX NatGas confirming at -3.60% reinforces this reading.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-11T23:08:44.080Z",
-    "pubDateIST": "12 Jun 2026, 04:38"
-  },
-  {
-    "id": "2026-06-11-23-17-mcx-natural-gas-slides-3-63-to-294-60-as",
-    "title": "MCX Natural Gas slides 3.63% to ₹294.60 as risk-off session hammers energy complex",
-    "summary": "The mechanism is risk-off rotation — crude's 4.68% collapse is pulling the broader energy complex lower, with natural gas following through as correlated energy sentiment deteriorates. When crude reprices sharply downward, gas contracts historically compress in sympathy as traders reassess energy demand assumptions holistically.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-11T17:47:09.878Z",
-    "pubDateIST": "11 Jun 2026, 23:17"
-  },
-  {
-    "id": "2026-06-11-23-19-mcx-crude-crashes-4-68-to-8318-as-risk-o",
-    "title": "MCX Crude Crashes 4.68% to ₹8318 as Risk-Off Bid Dominates Global Session",
-    "summary": "The mechanism driving this move is a sharp risk-off rotation — crude is absorbing macro growth fears while capital simultaneously flows into safe-haven gold, creating a classic risk-off divergence rather than a uniform commodity selloff.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-11T17:49:02.130Z",
-    "pubDateIST": "11 Jun 2026, 23:19"
+    "pubDate": "2026-06-12T14:18:41.414Z",
+    "pubDateIST": "12 Jun 2026, 19:48"
   }
 ]

@@ -2,7 +2,7 @@
   "MCX_GOLD": {
     "lastFlashAt": "2026-06-10T09:04:19.100Z",
     "lastFlashPrice": 149361,
-    "lastRoundBucket": 29,
+    "lastRoundBucket": 30,
     "recentFlashes": [
       {
         "at": "10 Jun, 02:34 pm IST",
@@ -38,6 +38,15 @@
     "lastRoundBucket": 11
   },
   "USDINR": {
-    "lastRoundBucket": 191
+    "lastFlashAt": "2026-06-12T14:18:23.965Z",
+    "lastFlashPrice": 95.1,
+    "lastRoundBucket": 190,
+    "recentFlashes": [
+      {
+        "at": "12 Jun, 07:48 pm IST",
+        "title": "Rupee Firms 54 Paise: USD/INR Slips to 95.10, Boosting MCX Precious Metals",
+        "price": 95.1
+      }
+    ]
   }
 }
