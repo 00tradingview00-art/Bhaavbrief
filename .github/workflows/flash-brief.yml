@@ -108,9 +108,12 @@ jobs:
           fi
           FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
           NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
+          cp data/market-snapshot.json /tmp/bb-snapshot.json 2>/dev/null || true
+          git checkout HEAD -- data/market-snapshot.json 2>/dev/null || true
           git stash
           git pull --rebase origin main
           git stash pop || true
+          cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"

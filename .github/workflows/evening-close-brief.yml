@@ -68,10 +68,13 @@ jobs:
         run: |
           git config user.name "BhaavBrief Intelligence"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp data/market-snapshot.json /tmp/bb-snapshot.json 2>/dev/null || true
           git add -A
+          git checkout HEAD -- data/market-snapshot.json 2>/dev/null || true
           git stash
           git pull --rebase origin main
           git stash pop || true
+          cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ data/evening-brief-state.json data/market-snapshot.json
           git diff --staged --quiet && echo "No new brief" && exit 0
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
