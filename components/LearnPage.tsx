@@ -335,6 +335,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'Taxation',
     title: 'Tax on commodity trading',
     label: 'Taxation · Article 1 of 2',
+    href: '/learn/mcx-commodity-tax-india',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
