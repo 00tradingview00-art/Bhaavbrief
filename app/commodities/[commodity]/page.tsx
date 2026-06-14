@@ -692,11 +692,15 @@ export default async function CommodityPage({ params }: Props) {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {[
-                { label: 'Contract lot sizes & margins',  href: '/learn' },
-                { label: 'How futures & leverage work',   href: '/learn' },
-                { label: 'Contango & backwardation',      href: '/learn' },
+                { label: 'Contract lot sizes & margins',  href: '/learn/mcx-lot-sizes' },
+                { label: 'How futures & leverage work',   href: '/learn/mcx-margin-calculation' },
+                { label: 'Contango & backwardation',      href: '/learn/mcx-rollover' },
                 { label: 'How jewellers hedge',           href: '/learn' },
-                { label: 'MCX taxation guide',            href: '/learn' },
+                { label: 'MCX taxation guide',            href: '/learn/mcx-commodity-tax-india' },
+                ...(entry.key === 'gold' ? [
+                  { label: 'MCX Gold vs Gold ETF',        href: '/learn/gold-etf-vs-mcx-gold' },
+                  { label: 'MCX Gold contract guide',     href: '/learn/mcx-gold-contracts' },
+                ] : []),
               ].map(({ label, href }) => (
                 <Link key={label} href={href} style={{
                   fontSize: 13, color: 'var(--gold)', textDecoration: 'none',

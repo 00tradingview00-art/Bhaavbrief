@@ -239,6 +239,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'Trading',
     title: 'Contango & backwardation',
     label: 'Trading · Article 3 of 3',
+    href: '/learn/mcx-rollover',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -269,6 +270,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'Investing',
     title: 'Gold ETF vs MCX Gold',
     label: 'Investing · Article 1 of 2',
+    href: '/learn/gold-etf-vs-mcx-gold',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>

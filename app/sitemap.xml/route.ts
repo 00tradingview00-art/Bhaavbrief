@@ -17,6 +17,8 @@ const STATIC_PAGES = [
   { url: `${BASE}/learn/mcx-margin-calculation`,    priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-gold-contracts`,        priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-commodity-tax-india`,   priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-rollover`,              priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/gold-etf-vs-mcx-gold`,     priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },
   { url: `${BASE}/privacy`,         priority: '0.2', changefreq: 'yearly'  },
