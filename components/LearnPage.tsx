@@ -168,6 +168,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'Trading',
     title: 'Margin & leverage',
     label: 'Trading · Article 1 of 3',
+    href: '/learn/mcx-margin-calculation',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -562,6 +563,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     section: 'Contracts',
     title: 'Gold contracts — Standard, Mini, Guinea, Petal',
     label: 'Contracts · Article 1 of 4',
+    href: '/learn/mcx-gold-contracts',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
