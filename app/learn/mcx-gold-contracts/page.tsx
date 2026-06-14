@@ -271,7 +271,8 @@ export default function Page() {
         <p style={prose}>
           Gold Mini and Gold Standard expire on the same date and track prices in lockstep. The only meaningful difference is size. A trader with ₹5 lakh in their commodity account can comfortably trade 3–4 Gold Mini lots while maintaining a 30% margin buffer — versus being limited to less than 1 Standard lot.
         </p>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F' }}>
+        <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F', minWidth: 300 }}>
           Example: Buy 1 Gold Mini at ₹{fmt(p.gold)}/10g<br />
           Contract value = ₹{fmt(p.gold)} × 10 = <strong>{fmtValue(goldMini)}</strong><br />
           Margin (at ~7%) = <strong>₹{fmt(Math.round(goldMini * 0.07))}</strong><br />
@@ -279,6 +280,7 @@ export default function Page() {
           Gold rises ₹2,000/10g → Profit = ₹2,000 × 10 = <strong>+₹20,000</strong><br />
           Gold falls ₹2,000/10g → Loss = ₹2,000 × 10 = <strong>−₹20,000</strong><br />
           (₹2,000 move = {((2000 / p.gold) * 100).toFixed(1)}% of current price)
+        </div>
         </div>
 
         <h2 style={h2}>MCX Gold Guinea (8g)</h2>

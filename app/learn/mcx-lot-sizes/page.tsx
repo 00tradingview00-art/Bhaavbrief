@@ -417,12 +417,14 @@ export default function Page() {
           MCX Gold is quoted in ₹ per 10 grams, not per gram or per kg. The standard lot is 1 kg
           = 100 units of 10g. So:
         </p>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1.9, color: '#18180F' }}>
+        <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1.9, color: '#18180F', minWidth: 280 }}>
           Contract value = price per 10g × lot size in 10g units<br />
           = ₹{fmt(p.gold)} × 100 = <strong>{fmtValue(goldStd)}</strong><br />
           <br />
           Gold Mini = ₹{fmt(p.gold)} × 10 = <strong>{fmtValue(goldMini)}</strong><br />
           Gold Guinea = ₹{fmt(p.gold)} × 0.8 = <strong>{fmtValue(goldGuinea)}</strong>
+        </div>
         </div>
         <p style={prose}>
           Silver, Crude, Copper, and Natural Gas use simpler math — they are quoted per unit of the

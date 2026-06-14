@@ -528,7 +528,8 @@ export default function Page() {
         <p style={prose}>
           Here is a complete tax calculation for a typical retail MCX trader in FY 2025-26.
         </p>
-        <div style={{ background: '#F3F2EC', padding: '20px 24px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2.1, color: '#18180F' }}>
+        <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <div style={{ background: '#F3F2EC', padding: '20px 24px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2.1, color: '#18180F', minWidth: 360 }}>
           <div style={{ marginBottom: 12, fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600 }}>Trader profile: Salaried (₹18L/year) + MCX trading on the side</div>
           <strong>Gross trading profits (all winning trades):</strong>  ₹{fmt(traderProfits)}<br />
           <strong>Gross trading losses (all losing trades):</strong>    ₹{fmt(traderLosses)}<br />
@@ -551,6 +552,7 @@ export default function Page() {
           <strong>Marginal tax on MCX income (at 30%):</strong>         ₹{fmt(traderTax30)}<br />
           <br />
           <strong>Audit required?</strong> Turnover ₹{fmt(traderTurnover)} &lt; ₹10Cr; profit {((traderNet/traderTurnover)*100).toFixed(1)}% of turnover &gt; 6% → <strong>No audit needed.</strong>
+        </div>
         </div>
         <p style={{ ...sub, marginBottom: 24 }}>
           This is illustrative. Actual tax depends on your slab, deductions under Chapter VIA, and other income. Consult a CA for your specific filing.

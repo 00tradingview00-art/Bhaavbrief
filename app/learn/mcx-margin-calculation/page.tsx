@@ -406,7 +406,8 @@ export default function Page() {
         <p style={prose}>
           MTM is the daily profit/loss settlement that happens every evening after MCX closes. It is the mechanism that makes your margin requirement dynamic rather than fixed.
         </p>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F' }}>
+        <div style={{ overflowX: 'auto', marginBottom: 24 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F', minWidth: 320 }}>
           Day 1: You buy 1 MCX Gold Mini at ₹{fmt(p.gold)}/10g.<br />
           Day 1 closing price: ₹{fmt(p.gold + 800)}/10g.<br />
           MTM profit: ₹800 × 10 units = <strong>+₹8,000</strong> credited to account.<br />
@@ -416,6 +417,7 @@ export default function Page() {
           MTM loss: ₹{fmt(p.gold + 800 - (p.gold - 1200))} × 10 = <strong>−₹20,000</strong> debited from account.<br />
           <br />
           Net P&amp;L over 2 days: −₹12,000. Account debited ₹12,000 total.
+        </div>
         </div>
         <p style={prose}>
           The critical lesson: you cannot &quot;ride out&quot; an adverse position by simply holding. Every day of adverse price movement withdraws cash from your account. If you run out of margin buffer, you are squared off — whether you wanted to be or not.
