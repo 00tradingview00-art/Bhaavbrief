@@ -12,8 +12,9 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/articles', destination: '/news', permanent: true },
-      // Broken "ay2026" article slugs (slug-generator bug, capital M stripped)
+      // Broken "ay2026" slugs (slug-generator bug, capital M stripped from "May")
       { source: '/articles/:slug(.*ay2026.*)', destination: '/briefs', permanent: true },
+      { source: '/briefs/:slug(.*ay2026.*)',   destination: '/briefs', permanent: true },
     ]
   },
 }
