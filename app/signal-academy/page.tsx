@@ -35,7 +35,7 @@ const SIGNALS = [
     audience: 'Hedgers, arbitrageurs',
     preview:  'Normal contango, elevated contango, backwardation — what each tells you about physical markets.',
     live:     false,
-    ready:    false,
+    ready:    true,
   },
   {
     slug:     'seasonal-patterns',
