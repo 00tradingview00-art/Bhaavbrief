@@ -45,7 +45,7 @@ const SIGNALS = [
     audience: 'All MCX traders',
     preview:  'Akshaya Tritiya, Dhanteras, monsoon, winter heating — the recurring cycles that move MCX.',
     live:     false,
-    ready:    false,
+    ready:    true,
   },
   {
     slug:     'volume-anomaly',

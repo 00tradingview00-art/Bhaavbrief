@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import BasisConvergenceSimulator from '@/components/signal-academy/BasisConvergenceSimulator'
+import SeasonalPatternsSimulator from '@/components/signal-academy/SeasonalPatternsSimulator'
 
-export default function BasisConvergencePage() {
+export default function SeasonalPatternsPage() {
   const [unlocked, setUnlocked] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function BasisConvergencePage() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
         <Link href="/signal-academy" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Signal Academy</Link>
         <span>›</span>
-        <span style={{ color: 'var(--ink-3)' }}>Signal 3</span>
+        <span style={{ color: 'var(--ink-3)' }}>Signal 4</span>
       </div>
 
       {/* Header */}
@@ -31,14 +31,14 @@ export default function BasisConvergencePage() {
             background: 'rgba(200,114,10,0.08)', border: '1px solid rgba(200,114,10,0.3)',
             padding: '2px 8px', borderRadius: 3, letterSpacing: '0.1em',
           }}>
-            SIGNAL 3 · HEDGERS & ARBITRAGEURS
+            SIGNAL 4 · ALL MCX TRADERS
           </span>
         </div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px,4vw,30px)', fontWeight: 700, color: 'var(--ink)', margin: '0 0 10px', lineHeight: 1.2 }}>
-          Basis Convergence
+          Seasonal Patterns
         </h1>
         <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0, fontWeight: 300 }}>
-          Basis — the gap between futures price and spot price — must converge to zero at expiry. When that gap is too wide, too narrow, or negative, the physical market is sending a signal that price alone cannot reveal.
+          Indian commodity markets run on two calendars — the Gregorian and the Hindu. Akshaya Tritiya, Dhanteras, monsoon onset, Rabi harvest: each creates recurring demand and supply patterns that professional traders build into their seasonal playbooks.
         </p>
       </div>
 
@@ -83,42 +83,60 @@ export default function BasisConvergencePage() {
             marginBottom: 28,
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
-              The four market structures
+              Why India has distinctive commodity seasonals
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 10 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               {[
                 {
-                  label: 'Normal contango',
-                  desc: 'Basis within carry range — equilibrium. No signal.',
-                  color: 'var(--up)', bg: 'rgba(34,197,94,0.06)', border: 'rgba(34,197,94,0.3)',
+                  label: 'Cultural demand',
+                  desc: 'Wedding season, Akshaya Tritiya, and Dhanteras create predictable jewellery and investment demand windows — visible in import data and MCX OI weeks in advance.',
+                  icon: '🪙',
                 },
                 {
-                  label: 'Elevated contango',
-                  desc: 'Basis above carry range — physical tightness or excess forward buying.',
-                  color: '#E07020', bg: 'rgba(224,112,32,0.06)', border: 'rgba(224,112,32,0.3)',
+                  label: 'Agricultural cycles',
+                  desc: 'Rabi (winter) and Kharif (monsoon) crop calendars drive NCDEX agri commodity prices through harvest arrival, storage, and export windows.',
+                  icon: '🌾',
                 },
                 {
-                  label: 'Tight contango',
-                  desc: 'Basis below carry range — mild surplus or cheap financing.',
-                  color: '#D4A830', bg: 'rgba(212,168,48,0.06)', border: 'rgba(212,168,48,0.3)',
+                  label: 'Monsoon impact',
+                  desc: 'The June–September monsoon compresses road transport, construction, and rural consumption — creating a mild seasonal headwind for crude and industrial metals.',
+                  icon: '🌧️',
                 },
                 {
-                  label: 'Backwardation',
-                  desc: 'Basis negative — near-term supply squeeze or demand emergency.',
-                  color: 'var(--down)', bg: 'rgba(239,68,68,0.06)', border: 'rgba(239,68,68,0.3)',
+                  label: 'Winter heating',
+                  desc: 'Growing city gas distribution networks mean Indian natural gas demand now has a domestic winter heating component layered on top of global LNG price cycles.',
+                  icon: '🔥',
                 },
               ].map(z => (
                 <div key={z.label} style={{
-                  background: z.bg,
-                  border: `1px solid ${z.border}`,
+                  background: 'var(--bg)',
+                  border: '1px solid var(--border)',
                   borderRadius: 6,
                   padding: '10px 12px',
                 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, color: z.color, marginBottom: 4 }}>{z.label}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-3)', lineHeight: 1.45 }}>{z.desc}</div>
+                  <div style={{ fontSize: 16, marginBottom: 4 }}>{z.icon}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, color: 'var(--ink)', marginBottom: 4 }}>{z.label}</div>
+                  <div style={{ fontSize: 11, color: 'var(--ink-3)', lineHeight: 1.5 }}>{z.desc}</div>
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* SEBI compliance notice */}
+          <div style={{
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderLeft: '3px solid var(--ink-4)',
+            borderRadius: '0 6px 6px 0',
+            padding: '12px 16px',
+            marginBottom: 24,
+          }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
+              SEBI compliance — important
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
+              Seasonal patterns shown here are historical tendencies based on illustrative multi-year data — not verified backtest results and not forward forecasts. They represent one input among several and can and do fail in any given year. Global macro factors (USD, oil prices, OPEC decisions) frequently override domestic seasonal patterns. This content teaches the concept of seasonal analysis — not a seasonal trading strategy.
+            </p>
           </div>
 
           {/* Simulator */}
@@ -132,64 +150,15 @@ export default function BasisConvergencePage() {
               justifyContent: 'space-between',
             }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
-                Interactive simulator — illustrative data
+                Seasonal calendar — illustrative patterns
               </span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
                 Not real-time · Educational only
               </span>
             </div>
             <div style={{ padding: '24px 20px' }}>
-              <BasisConvergenceSimulator />
+              <SeasonalPatternsSimulator />
             </div>
-          </div>
-
-          {/* Historical illustrative cases */}
-          <div style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 8,
-            padding: '16px 20px',
-            marginBottom: 28,
-          }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 14 }}>
-              Illustrative historical patterns
-            </div>
-            {[
-              {
-                period: 'COVID demand collapse — Crude (Apr 2020)',
-                signal: 'Deep backwardation briefly, then violent contango',
-                detail: 'WTI spot turned negative as storage hit capacity. MCX Crude basis collapsed into the widest contango seen in decades — storage operators were the only buyers. The structure normalized within 3 months as demand recovered.',
-              },
-              {
-                period: 'Dhanteras demand surge — Gold (Oct–Nov, most years)',
-                signal: 'Elevated contango in the 15–20 days before expiry',
-                detail: 'Physical gold demand spikes in the 10 days leading to Dhanteras. Jewellers buy forward, pushing basis above normal carry. Basis normalizes sharply after the festival window closes.',
-              },
-              {
-                period: 'Russia-Ukraine supply shock — Natural Gas (Feb–Mar 2022)',
-                signal: 'Persistent backwardation across European gas benchmarks',
-                detail: 'Spot prices reflected immediate supply disruption premium. Forward markets priced in eventual normalization. MCX Natural Gas basis followed global structure into backwardation before recovering as LNG supply routes adjusted.',
-              },
-            ].map((c, i) => (
-              <div key={i} style={{
-                borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
-                paddingBottom: i < 2 ? 14 : 0,
-                marginBottom: i < 2 ? 14 : 0,
-              }}>
-                <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 5 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', background: 'var(--bg)', border: '1px solid var(--border)', padding: '1px 6px', borderRadius: 3, flexShrink: 0 }}>
-                    Illustrative
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-3)' }}>{c.period}</span>
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, color: 'var(--ink)', marginBottom: 5 }}>
-                  {c.signal}
-                </div>
-                <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
-                  {c.detail}
-                </p>
-              </div>
-            ))}
           </div>
 
           {/* Next signal teaser */}
@@ -206,13 +175,13 @@ export default function BasisConvergencePage() {
           }}>
             <div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
-                Next — Signal 4
+                Next — Signal 5
               </div>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
-                Seasonal Patterns — India-specific demand calendar for each commodity
+                Volume Anomaly — authenticating price moves with participation data
               </div>
             </div>
-            <Link href="/signal-academy/seasonal-patterns" style={{
+            <Link href="/signal-academy/volume-anomaly" style={{
               fontFamily: 'var(--font-mono)', fontSize: 10,
               color: 'var(--gold)', textDecoration: 'none',
               padding: '7px 14px', border: '1px solid rgba(200,114,10,0.3)',
@@ -225,7 +194,7 @@ export default function BasisConvergencePage() {
           {/* Disclaimer */}
           <div style={{ borderTop: '1px solid var(--border)', marginTop: 32, paddingTop: 16 }}>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
-              Educational content only. BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser. All simulator data is illustrative. Past patterns are not indicative of future market behaviour. Consult a SEBI-registered RA or IA before making trading decisions.
+              Educational content only. BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser. All seasonal data is illustrative — historical tendencies, not verified backtests or forward forecasts. Past patterns are not indicative of future market behaviour. Consult a SEBI-registered RA or IA before making trading decisions.
             </p>
           </div>
         </>
