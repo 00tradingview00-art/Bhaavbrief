@@ -475,28 +475,48 @@ export default async function HomePage() {
               background: 'var(--surface)',
               border: '1px solid var(--border)',
               borderRadius: 10,
-              padding: '16px 20px',
+              padding: '14px 16px',
               marginBottom: 16,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 12,
             }}>
-              <div>
+              {/* Header row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: 9, letterSpacing: '0.1em',
                   textTransform: 'uppercase', color: 'var(--up)',
-                  marginBottom: 5, display: 'flex', alignItems: 'center', gap: 5,
+                  display: 'flex', alignItems: 'center', gap: 5,
                 }}>
                   <span className="live-dot" />
-                  Live markets
+                  Live MCX
                 </div>
-                <p style={{ fontSize: 13, color: 'var(--ink-2)', margin: 0, lineHeight: 1.5 }}>
-                  MCX OHLC, Volume &amp; Open Interest
-                </p>
+                <span style={{ color: 'var(--gold)', fontSize: 14, flexShrink: 0 }}>All markets →</span>
               </div>
-              <span style={{ color: 'var(--gold)', fontSize: 20, flexShrink: 0 }}>→</span>
+              {/* Mini price rows */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[
+                  { label: 'Gold',   price: prices?.gold?.mcx,   pct: prices?.gold?.mcxChangePct,   unit: '/10g' },
+                  { label: 'Crude',  price: prices?.crude?.mcx,  pct: prices?.crude?.mcxChangePct,  unit: '/bbl' },
+                  { label: 'Silver', price: prices?.silver?.mcx, pct: prices?.silver?.mcxChangePct, unit: '/kg'  },
+                ].map(({ label, price, pct, unit }) => {
+                  const up = (pct ?? 0) >= 0
+                  return (
+                    <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--ink)', fontWeight: 500 }}>
+                        {price ? `₹${price.toLocaleString('en-IN', { maximumFractionDigits: 0 })}` : '—'}
+                        <span style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
+                      </span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
+                        {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+              {/* Footer hint */}
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
+                OHLC · Volume · Open Interest · 5 commodities
+              </div>
             </div>
           </Link>
 
