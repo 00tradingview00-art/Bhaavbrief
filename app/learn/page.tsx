@@ -70,7 +70,7 @@ const FAQ_SCHEMA = {
     {
       '@type': 'Question',
       name: 'What is the difference between NSE Gold Futures and MCX Gold?',
-      acceptedAnswer: { '@type': 'Answer', text: 'MCX Gold has ~98% market share, deeper liquidity, tighter spreads, and trades until 11:30 PM IST (capturing US market moves). NSE Gold Futures launched in 2026 with lower margin requirements and work with existing equity demat accounts, but are in early-stage liquidity. Most active traders should use MCX Gold; NSE Gold suits traders who already have an equity account and trade only during day hours.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'MCX Gold has ~98% market share, deeper liquidity, tighter spreads, and trades until 11:30 PM IST (capturing US market moves). NSE Gold Futures launched in November 2023 with lower margin requirements and work with existing equity demat accounts, but have thinner liquidity than MCX. Most active traders should use MCX Gold; NSE Gold suits traders who already have an equity account and trade only during day hours.' },
     },
     {
       '@type': 'Question',
