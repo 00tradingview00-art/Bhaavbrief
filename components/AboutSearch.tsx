@@ -96,7 +96,7 @@ export default function AboutSearch() {
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         border: '1px solid #DDDDD0', background: '#FAFAF6',
-        padding: '10px 14px', borderRadius: 8,
+        padding: '10px 14px', borderRadius: 4,
         marginBottom: '1rem',
         transition: 'border-color 0.15s',
       }}>
@@ -150,7 +150,7 @@ export default function AboutSearch() {
       {/* Results */}
       {result && (
         <div style={{
-          border: '0.5px solid #DDDDD0', borderRadius: 8, overflow: 'hidden',
+          border: '0.5px solid #DDDDD0', borderRadius: 4, overflow: 'hidden',
           background: '#FFFFFF',
         }}>
           {/* Question echo */}

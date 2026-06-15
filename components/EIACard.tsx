@@ -121,7 +121,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
     <div style={{
       background:   'var(--surface)',
       border:       '1px solid var(--border)',
-      borderRadius: 10,
+      borderRadius: 4,
       overflow:     'hidden',
       marginBottom: 16,
     }}>

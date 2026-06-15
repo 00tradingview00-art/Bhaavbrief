@@ -234,7 +234,7 @@ export default function IVPercentileSimulator() {
         <div style={{
           background: meta.bg,
           border: `1px solid ${meta.border}`,
-          borderRadius: 8,
+          borderRadius: 4,
           padding: '16px 18px',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
@@ -273,7 +273,7 @@ export default function IVPercentileSimulator() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 6,
+        borderRadius: 4,
         padding: '12px 14px',
         marginBottom: 28,
       }}>
@@ -286,7 +286,7 @@ export default function IVPercentileSimulator() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '14px 16px',
         marginBottom: 24,
       }}>
@@ -322,7 +322,7 @@ export default function IVPercentileSimulator() {
               <div key={i} style={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
-                borderRadius: 8,
+                borderRadius: 4,
                 padding: '14px 16px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>

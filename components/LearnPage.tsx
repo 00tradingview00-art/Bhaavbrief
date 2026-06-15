@@ -968,8 +968,8 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
 
   const prevBtn = (mobile: boolean) => {
     const style = mobile
-      ? { flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'left' as const }
-      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
+      ? { flex: 1, padding: '10px 12px', borderRadius: 4, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'left' as const }
+      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 4, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
     return (
       <button onClick={() => activeId! > 0 ? selectArticle(activeId! - 1) : goToOverview()} style={style}>
         ← {activeId! > 0 ? ARTICLES[activeId! - 1].title : 'All guides'}
@@ -980,8 +980,8 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
   const nextBtn = (mobile: boolean) => {
     if (activeId === null || activeId >= ARTICLES.length - 1) return <span />
     const style = mobile
-      ? { flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'right' as const }
-      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
+      ? { flex: 1, padding: '10px 12px', borderRadius: 4, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'right' as const }
+      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 4, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
     return (
       <button onClick={() => selectArticle(activeId + 1)} style={style}>
         {mobile ? '' : 'Next: '}{ARTICLES[activeId + 1].title} →
@@ -1032,7 +1032,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
             </div>
           )}
 
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '24px 18px' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '24px 18px' }}>
             {active ? (
               <>
                 <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 10 }}>
@@ -1058,13 +1058,13 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
 
           <div style={{
             background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: 10, overflow: 'hidden', position: 'sticky', top: 80,
+            borderRadius: 4, overflow: 'hidden', position: 'sticky', top: 80,
             maxHeight: 'calc(100vh - 108px)', overflowY: 'auto',
           }}>
             <SidebarNav />
           </div>
 
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 36 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: 36 }}>
             {active ? (
               <>
                 <div style={{ fontSize: 11, fontWeight: 500, letterSpacing: '0.8px', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 12 }}>

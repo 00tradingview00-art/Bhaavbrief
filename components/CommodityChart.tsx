@@ -46,7 +46,7 @@ function CustomTooltip({ active, payload }: TooltipProps) {
   return (
     <div style={{
       background: '#18180F', border: '0.5px solid #3A3A2A',
-      padding: '8px 12px', borderRadius: 6, fontSize: 11,
+      padding: '8px 12px', borderRadius: 4, fontSize: 11,
       fontFamily: 'var(--font-mono)',
     }}>
       <div style={{ color: '#8A8A7A', marginBottom: 4, letterSpacing: '0.03em' }}>{fmtDateFull(d.date)}</div>
@@ -103,7 +103,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
     <div style={{
       background: 'var(--surface)',
       border: '1px solid var(--border)',
-      borderRadius: 10,
+      borderRadius: 4,
       overflow: 'hidden',
       marginBottom: 24,
     }}>

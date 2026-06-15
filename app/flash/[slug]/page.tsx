@@ -137,7 +137,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           </header>
 
           {flash.coverImage && (
-            <div style={{ marginBottom: '1.5rem', borderRadius: 6, overflow: 'hidden', aspectRatio: '16/7' }}>
+            <div style={{ marginBottom: '1.5rem', borderRadius: 4, overflow: 'hidden', aspectRatio: '16/7' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={flash.coverImage}

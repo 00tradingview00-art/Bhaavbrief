@@ -239,7 +239,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8',
                   color: active ? '#FAFAF6' : '#8A8A7A',
                   padding: '1px 5px',
-                  borderRadius: 10,
+                  borderRadius: 4,
                   lineHeight: 1.4,
                 }}>
                   {count}

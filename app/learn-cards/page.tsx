@@ -30,7 +30,7 @@ export default function LearnCardsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {cards.map(card => (
               <div key={card.slug} style={{
-                border: '1px solid #E0DFD5', borderRadius: 8,
+                border: '1px solid #E0DFD5', borderRadius: 4,
                 padding: '16px 20px',
                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               }}>
@@ -46,7 +46,7 @@ export default function LearnCardsPage() {
                   style={{
                     background: '#C8720A', color: '#fff',
                     fontSize: 15, fontWeight: 600,
-                    padding: '8px 16px', borderRadius: 6,
+                    padding: '8px 16px', borderRadius: 4,
                     textDecoration: 'none', flexShrink: 0,
                   }}
                 >

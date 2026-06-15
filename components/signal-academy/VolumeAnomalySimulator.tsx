@@ -253,7 +253,7 @@ export default function VolumeAnomalySimulator() {
       {/* Bar chart */}
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 8, padding: '14px 16px', marginBottom: 24,
+        borderRadius: 4, padding: '14px 16px', marginBottom: 24,
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
           Volume pattern — last 7 sessions (illustrative)
@@ -308,7 +308,7 @@ export default function VolumeAnomalySimulator() {
       </div>
 
       {/* Combined signal matrix quick reference */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px', marginBottom: 20 }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '12px 14px', marginBottom: 20 }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 8 }}>
           Combined signal matrix (Vol 2×+)
         </div>
@@ -350,7 +350,7 @@ export default function VolumeAnomalySimulator() {
       <div style={{
         background: result.bg,
         border: `1px solid ${result.border}`,
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '16px 18px',
         marginBottom: 24,
       }}>

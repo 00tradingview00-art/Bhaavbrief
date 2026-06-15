@@ -72,7 +72,7 @@ export default function OIDivergencePage() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '16px 20px',
         marginBottom: 28,
       }}>
@@ -111,7 +111,7 @@ export default function OIDivergencePage() {
       {/* Simulator */}
       <div style={{
         border: '1px solid var(--border)',
-        borderRadius: 10,
+        borderRadius: 4,
         overflow: 'hidden',
         marginBottom: 32,
       }}>
@@ -145,7 +145,7 @@ export default function OIDivergencePage() {
             <div key={i} style={{
               background: 'var(--surface)',
               border: '1px solid var(--border)',
-              borderRadius: 8,
+              borderRadius: 4,
               padding: '14px 16px',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
@@ -176,7 +176,7 @@ export default function OIDivergencePage() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '16px 18px',
         display: 'flex',
         alignItems: 'center',

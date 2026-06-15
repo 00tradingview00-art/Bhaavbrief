@@ -192,7 +192,7 @@ export default function SearchModal({ open, onClose }: Props) {
                     onClick={() => handleSuggestion(s)}
                     style={{
                       textAlign: 'left', background: 'none', border: 'none',
-                      padding: '10px 12px', borderRadius: 6, cursor: 'pointer',
+                      padding: '10px 12px', borderRadius: 4, cursor: 'pointer',
                       fontSize: 15, color: 'var(--ink-2)',
                       transition: 'background 0.1s',
                       fontFamily: 'var(--font-sans)',

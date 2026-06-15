@@ -47,7 +47,7 @@ export default function IVPercentilePage() {
         <div style={{
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          borderRadius: 10,
+          borderRadius: 4,
           padding: '40px 32px',
           textAlign: 'center',
         }}>
@@ -78,7 +78,7 @@ export default function IVPercentilePage() {
           <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '16px 20px',
             marginBottom: 28,
           }}>
@@ -95,7 +95,7 @@ export default function IVPercentilePage() {
                 <div key={z.zone} style={{
                   background: z.bg,
                   border: `1px solid ${z.border}`,
-                  borderRadius: 6,
+                  borderRadius: 4,
                   padding: '10px 12px',
                 }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 3 }}>{z.range}</div>
@@ -107,7 +107,7 @@ export default function IVPercentilePage() {
           </div>
 
           {/* Simulator */}
-          <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', marginBottom: 32 }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden', marginBottom: 32 }}>
             <div style={{
               background: 'var(--surface)',
               borderBottom: '1px solid var(--border)',
@@ -132,7 +132,7 @@ export default function IVPercentilePage() {
           <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '16px 18px',
             display: 'flex',
             alignItems: 'center',

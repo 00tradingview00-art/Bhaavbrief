@@ -104,7 +104,7 @@ function PulseSkeleton() {
     <div style={{
       background: 'var(--surface)',
       border: '1px solid var(--border)',
-      borderRadius: 8, overflow: 'hidden',
+      borderRadius: 4, overflow: 'hidden',
     }}>
       {[...Array(6)].map((_, i) => (
         <div key={i} className="pulse-grid" style={{
@@ -174,7 +174,7 @@ export default function CommodityPulse() {
       {loading ? <PulseSkeleton /> : !data ? null : (
         <div style={{
           background: 'var(--surface)',
-          borderRadius: 8,
+          borderRadius: 4,
           overflow: 'hidden',
           border: '1px solid var(--border)',
         }}>

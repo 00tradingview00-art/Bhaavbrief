@@ -114,7 +114,7 @@ export default function SignalAcademyPage() {
                 style={{
                   background: 'var(--surface)',
                   border: '1px solid var(--border)',
-                  borderRadius: 8,
+                  borderRadius: 4,
                   padding: '16px 18px',
                   opacity: accessible ? 1 : 0.7,
                   display: 'flex',

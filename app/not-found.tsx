@@ -29,7 +29,7 @@ export default function NotFound() {
         <Link href="/" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'var(--ink)', color: '#fff',
-          padding: '10px 22px', borderRadius: 6,
+          padding: '10px 22px', borderRadius: 4,
           fontSize: 15, fontWeight: 500, textDecoration: 'none',
         }}>
           ← Back to home
@@ -37,7 +37,7 @@ export default function NotFound() {
         <Link href="/briefs" style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           border: '1px solid var(--border)', color: 'var(--ink-2)',
-          padding: '10px 20px', borderRadius: 6,
+          padding: '10px 20px', borderRadius: 4,
           fontSize: 15, textDecoration: 'none',
         }}>
           Browse briefs

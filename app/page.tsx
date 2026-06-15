@@ -187,7 +187,7 @@ export default async function HomePage() {
           borderTop: '3px solid var(--gold)',
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          borderRadius: 10,
+          borderRadius: 4,
           padding: 'clamp(20px, 4vw, 32px) clamp(18px, 4vw, 36px)',
           marginBottom: 40,
           position: 'relative',
@@ -262,7 +262,7 @@ export default async function HomePage() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     background: 'var(--ink)', color: '#fff',
-                    padding: '10px 22px', borderRadius: 6,
+                    padding: '10px 22px', borderRadius: 4,
                     fontSize: 15, fontWeight: 500, textDecoration: 'none',
                     letterSpacing: '0.01em',
                   }}
@@ -274,7 +274,7 @@ export default async function HomePage() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     background: 'transparent', color: 'var(--ink-2)',
-                    padding: '10px 20px', borderRadius: 6,
+                    padding: '10px 20px', borderRadius: 4,
                     fontSize: 15, fontWeight: 400, textDecoration: 'none',
                     border: '1px solid var(--border)',
                   }}
@@ -476,7 +476,7 @@ export default async function HomePage() {
             <div style={{
               background: 'var(--surface)',
               border: '1px solid var(--border)',
-              borderRadius: 10,
+              borderRadius: 4,
               padding: '14px 16px',
               marginBottom: 16,
             }}>
@@ -529,7 +529,7 @@ export default async function HomePage() {
           <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 10,
+            borderRadius: 4,
             padding: '16px 20px',
             marginBottom: 16,
             display: 'grid',
@@ -563,7 +563,7 @@ export default async function HomePage() {
           <div id="subscribe" className="desktop-only" style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 10,
+            borderRadius: 4,
             overflow: 'hidden',
             marginBottom: 16,
           }}>
@@ -603,7 +603,7 @@ export default async function HomePage() {
           <div id="about" style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 10,
+            borderRadius: 4,
             padding: '16px 20px',
           }}>
             <p style={{

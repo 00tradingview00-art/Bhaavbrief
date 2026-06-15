@@ -181,7 +181,7 @@ export default function OIDivergenceSimulator() {
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
             Signal map
           </div>
-          <svg viewBox="0 0 160 160" style={{ width: '100%', border: '1px solid var(--border)', borderRadius: 6, display: 'block' }}>
+          <svg viewBox="0 0 160 160" style={{ width: '100%', border: '1px solid var(--border)', borderRadius: 4, display: 'block' }}>
             {/* Quadrant backgrounds */}
             <rect x={0}  y={0}   width={80} height={80} fill="rgba(239,68,68,0.06)" />
             <rect x={80} y={0}   width={80} height={80} fill="rgba(34,197,94,0.06)" />
@@ -224,7 +224,7 @@ export default function OIDivergenceSimulator() {
         <div style={{
           background: meta.bg,
           border: `1px solid ${meta.border}`,
-          borderRadius: 8,
+          borderRadius: 4,
           padding: '16px 18px',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
@@ -259,7 +259,7 @@ export default function OIDivergenceSimulator() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '16px 18px',
         marginBottom: 24,
       }}>

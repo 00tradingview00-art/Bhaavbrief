@@ -292,7 +292,7 @@ export default function BasisConvergenceSimulator() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '14px 16px',
         marginBottom: 20,
       }}>
@@ -334,7 +334,7 @@ export default function BasisConvergenceSimulator() {
           <div key={m.label} style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 6,
+            borderRadius: 4,
             padding: '10px 12px',
           }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 5 }}>
@@ -351,7 +351,7 @@ export default function BasisConvergenceSimulator() {
       <div style={{
         background: meta.bg,
         border: `1px solid ${meta.border}`,
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '16px 18px',
         marginBottom: 24,
       }}>
@@ -379,7 +379,7 @@ export default function BasisConvergenceSimulator() {
       {/* Commodity notes */}
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 6, padding: '12px 14px', marginBottom: 24,
+        borderRadius: 4, padding: '12px 14px', marginBottom: 24,
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 4, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           {commodity} — what distorts basis

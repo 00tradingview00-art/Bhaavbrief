@@ -118,7 +118,7 @@ export default async function ArticlePage({ params }: Props) {
             background: '#0E0806',
             border: '1px solid rgba(255,68,68,0.3)',
             borderLeft: '4px solid #FF4444',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '20px 24px',
             marginBottom: 28,
           }}>
@@ -209,7 +209,7 @@ export default async function ArticlePage({ params }: Props) {
         {/* Disclaimer */}
         <div style={{
           marginTop: 16, padding: '16px 20px',
-          background: 'var(--surface-3)', borderRadius: 8,
+          background: 'var(--surface-3)', borderRadius: 4,
           fontSize: 12, color: 'var(--ink-4)', lineHeight: 1.6,
         }}>
           <strong style={{ color: 'var(--ink-3)' }}>Disclaimer:</strong> BhaavBrief is for educational and informational purposes only. We are not registered with SEBI or any other regulatory authority. Nothing on this platform constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity. All data and analysis is sourced from publicly available information. Past patterns are not indicative of future results. Commodity and equity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.

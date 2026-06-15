@@ -117,7 +117,7 @@ export default function SeasonalPatternsSimulator() {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '14px 16px',
         marginBottom: 20,
       }}>
@@ -190,7 +190,7 @@ export default function SeasonalPatternsSimulator() {
       <div style={{
         background: 'rgba(200,114,10,0.05)',
         border: '1px solid rgba(200,114,10,0.25)',
-        borderRadius: 8,
+        borderRadius: 4,
         padding: '12px 16px',
         marginBottom: 20,
       }}>
@@ -244,7 +244,7 @@ export default function SeasonalPatternsSimulator() {
                 style={{
                   background: open ? m.bg : 'var(--surface)',
                   border: `1px solid ${open ? m.border : 'var(--border)'}`,
-                  borderRadius: 8,
+                  borderRadius: 4,
                   overflow: 'hidden',
                   transition: 'all 0.15s',
                 }}

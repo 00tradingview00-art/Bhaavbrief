@@ -54,7 +54,7 @@ export default function SentimentPanel() {
     <div style={{
       background: 'var(--surface)',
       border: '1px solid var(--border)',
-      borderRadius: 10,
+      borderRadius: 4,
       padding: '18px 20px',
       position: 'sticky',
       top: 120,

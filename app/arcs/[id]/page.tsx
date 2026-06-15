@@ -186,7 +186,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
                 flex: 1,
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
-                borderRadius: 8,
+                borderRadius: 4,
                 padding: '14px 16px',
                 transition: 'border-color 0.15s',
               }}>
@@ -232,7 +232,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
             </div>
             <div style={{
               flex: 1, border: '1px dashed var(--border)',
-              borderRadius: 8, padding: '14px 16px',
+              borderRadius: 4, padding: '14px 16px',
             }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Story continues · Next edition tomorrow

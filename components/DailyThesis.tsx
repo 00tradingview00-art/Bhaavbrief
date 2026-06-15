@@ -65,7 +65,7 @@ export default function DailyThesis() {
   return (
     <div style={{
       border: '1px solid var(--border-2)',
-      borderRadius: 8,
+      borderRadius: 4,
       overflow: 'hidden',
       marginBottom: 28,
     }}>

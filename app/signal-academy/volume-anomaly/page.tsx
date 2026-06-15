@@ -53,7 +53,7 @@ export default function VolumeAnomalyPage() {
         <div style={{
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          borderRadius: 10,
+          borderRadius: 4,
           padding: '40px 32px',
           textAlign: 'center',
         }}>
@@ -84,7 +84,7 @@ export default function VolumeAnomalyPage() {
           <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '16px 20px',
             marginBottom: 28,
           }}>
@@ -100,7 +100,7 @@ export default function VolumeAnomalyPage() {
           </div>
 
           {/* Simulator */}
-          <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden', marginBottom: 32 }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: 4, overflow: 'hidden', marginBottom: 32 }}>
             <div style={{
               background: 'var(--surface)',
               borderBottom: '1px solid var(--border)',
@@ -125,7 +125,7 @@ export default function VolumeAnomalyPage() {
           <div style={{
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '16px 20px',
             marginBottom: 28,
           }}>
@@ -174,7 +174,7 @@ export default function VolumeAnomalyPage() {
           <div style={{
             background: 'rgba(200,114,10,0.05)',
             border: '1px solid rgba(200,114,10,0.25)',
-            borderRadius: 8,
+            borderRadius: 4,
             padding: '16px 20px',
             marginBottom: 28,
           }}>

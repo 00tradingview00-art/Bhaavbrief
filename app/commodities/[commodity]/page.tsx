@@ -490,7 +490,7 @@ export default async function CommodityPage({ params }: Props) {
 
           {commodityArticles.length === 0 ? (
             <div style={{
-              background: 'var(--surface-3)', borderRadius: 8, padding: '20px 24px',
+              background: 'var(--surface-3)', borderRadius: 4, padding: '20px 24px',
               fontSize: 14, color: 'var(--ink-4)', marginBottom: 32,
             }}>
               No recent articles — check back after 9 AM IST when the daily brief publishes.
@@ -501,7 +501,7 @@ export default async function CommodityPage({ params }: Props) {
                 <Link key={a.slug} href={`/articles/${a.slug}`} style={{ textDecoration: 'none' }}>
                   <div style={{
                     background: 'var(--surface-1)', border: '1px solid var(--border)',
-                    borderRadius: 8, padding: '16px 20px',
+                    borderRadius: 4, padding: '16px 20px',
                     transition: 'border-color 0.15s',
                   }}>
                     <div style={{ fontSize: 11, color: 'var(--ink-4)', marginBottom: 6, display: 'flex', gap: 8 }}>
@@ -538,7 +538,7 @@ export default async function CommodityPage({ params }: Props) {
                   <Link key={b.slug} href={`/briefs/${b.slug}`} style={{ textDecoration: 'none' }}>
                     <div style={{
                       background: 'var(--surface-1)', border: '1px solid var(--border)',
-                      borderRadius: 8, padding: '14px 20px',
+                      borderRadius: 4, padding: '14px 20px',
                     }}>
                       <div style={{ fontSize: 11, color: 'var(--ink-4)', marginBottom: 5, display: 'flex', gap: 8 }}>
                         <span style={{ color, fontWeight: 600 }}>Edition #{b.edition}</span>
@@ -570,7 +570,7 @@ export default async function CommodityPage({ params }: Props) {
           </h2>
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px 24px', marginBottom: 32,
+            borderRadius: 4, padding: '20px 24px', marginBottom: 32,
           }}>
             <ul style={{ margin: 0, padding: '0 0 0 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {info.priceDrivers.map((driver, i) => (
@@ -585,7 +585,7 @@ export default async function CommodityPage({ params }: Props) {
           </h2>
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px 24px', marginBottom: 32,
+            borderRadius: 4, padding: '20px 24px', marginBottom: 32,
           }}>
             <ul style={{ margin: 0, padding: '0 0 0 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {info.demandDrivers.map((d, i) => (
@@ -597,7 +597,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Key risk */}
           <div style={{
             background: '#FEF3C7', border: '1px solid #F59E0B',
-            borderRadius: 8, padding: '16px 20px', marginBottom: 32,
+            borderRadius: 4, padding: '16px 20px', marginBottom: 32,
           }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: '#92400E', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 6 }}>
               Risk Note
@@ -611,7 +611,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Contract specs */}
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px',
+            borderRadius: 4, padding: '20px',
           }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 14 }}>
               MCX Contract Specs
@@ -640,7 +640,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Supply control */}
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px',
+            borderRadius: 4, padding: '20px',
           }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 10 }}>
               Who Controls Supply
@@ -653,7 +653,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Macro links */}
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px',
+            borderRadius: 4, padding: '20px',
           }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 12 }}>
               Watch These Signals
@@ -674,7 +674,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Tax */}
           <div style={{
             background: 'var(--surface-3)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '16px',
+            borderRadius: 4, padding: '16px',
           }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 8 }}>
               Tax Treatment
@@ -685,7 +685,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Related guides — links to /learn */}
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '20px',
+            borderRadius: 4, padding: '20px',
           }}>
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 12 }}>
               Learn MCX Trading
@@ -715,7 +715,7 @@ export default async function CommodityPage({ params }: Props) {
           {/* Other commodity pages */}
           <div style={{
             background: 'var(--surface-1)', border: '1px solid var(--border)',
-            borderRadius: 8, padding: '16px',
+            borderRadius: 4, padding: '16px',
           }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 10 }}>
               Also Track

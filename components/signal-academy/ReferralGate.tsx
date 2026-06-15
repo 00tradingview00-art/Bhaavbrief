@@ -64,7 +64,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
       <div style={{
         background: 'rgba(34,197,94,0.06)',
         border: '1px solid var(--up)',
-        borderRadius: 10,
+        borderRadius: 4,
         padding: '20px 24px',
         textAlign: 'center',
       }}>
@@ -84,7 +84,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
       <div style={{
         background: 'var(--surface)',
         border: '1px solid var(--border)',
-        borderRadius: 10,
+        borderRadius: 4,
         padding: '24px',
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 12 }}>
@@ -153,7 +153,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
     <div style={{
       background: 'var(--surface)',
       border: '1px solid var(--border)',
-      borderRadius: 10,
+      borderRadius: 4,
       padding: '24px',
     }}>
       {/* Progress */}

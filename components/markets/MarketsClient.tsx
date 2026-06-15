@@ -95,7 +95,7 @@ function PriceCard({
     <div style={{
       background: flashing ? (isUp ? '#f0fdf4' : '#fff1f0') : 'var(--surface)',
       border: `1px solid ${flashing ? color : 'var(--border)'}`,
-      borderRadius: 10,
+      borderRadius: 4,
       padding: '14px 16px',
       transition: 'background 0.5s ease, border-color 0.5s ease',
       cursor: 'pointer',
@@ -150,11 +150,11 @@ function PriceCard({
 
           {/* Volume + OI */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginBottom: 8 }}>
-            <div style={{ background: 'var(--surface-2)', borderRadius: 6, padding: '5px 8px' }}>
+            <div style={{ background: 'var(--surface-2)', borderRadius: 4, padding: '5px 8px' }}>
               <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Volume</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxVolume)}</div>
             </div>
-            <div style={{ background: 'var(--surface-2)', borderRadius: 6, padding: '5px 8px' }}>
+            <div style={{ background: 'var(--surface-2)', borderRadius: 4, padding: '5px 8px' }}>
               <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Open Int.</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxOI)}</div>
             </div>
@@ -229,7 +229,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <span style={{
-            fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 20,
+            fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 3,
             background: marketOpen ? 'var(--up-bg)' : 'var(--surface-3)',
             color: marketOpen ? 'var(--up)' : 'var(--ink-3)',
             border: `1px solid ${marketOpen ? 'var(--up)' : 'var(--border)'}`,
@@ -249,7 +249,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           const data = p?.[cfg.key as keyof PriceData] as MCXData | undefined
           if (!data) return (
             <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', minHeight: 80, cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px', minHeight: 80, cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 8, display: 'block' }}>{cfg.label}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-4)' }}>—</span>
                 <span style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 4 }}>awaiting data</span>
@@ -278,7 +278,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             <div key={cfg.key} style={{
               background: flashing ? (isUp ? '#f0fdf4' : '#fff1f0') : 'var(--surface)',
               border: `1px solid ${flashing ? (isUp ? 'var(--up)' : 'var(--down)') : 'var(--border)'}`,
-              borderRadius: 10, padding: '14px 16px',
+              borderRadius: 4, padding: '14px 16px',
               transition: 'background 0.5s ease, border-color 0.5s ease',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
@@ -314,7 +314,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         })}
 
         {/* RBI Repo Rate */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
             <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>RBI</span>
             <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>RBI Repo</span>
@@ -329,7 +329,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
       {/* ── Subscribe CTA ── */}
       <div style={{
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 10, padding: '18px 24px', marginBottom: 28,
+        borderRadius: 4, padding: '18px 24px', marginBottom: 28,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         flexWrap: 'wrap', gap: 16,
       }}>
@@ -346,7 +346,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           style={{
             display: 'inline-block', padding: '10px 20px',
             background: 'var(--ink)', color: '#fff',
-            borderRadius: 6, fontSize: 15, fontWeight: 600,
+            borderRadius: 4, fontSize: 15, fontWeight: 600,
             textDecoration: 'none', flexShrink: 0, letterSpacing: '0.02em',
           }}
         >
@@ -377,7 +377,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             }
             const exStyle = EXCH_STYLE[exch] ?? { bg: 'var(--surface-2)', color: 'var(--ink-3)' }
             return (
-              <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
+              <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: exStyle.bg, color: exStyle.color }}>{exch}</span>
