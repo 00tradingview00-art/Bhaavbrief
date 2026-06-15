@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { EIAResponse, EIAData, EIAWeek } from '@/app/api/eia/route'
+import type { EIAResponse, EIAData, EIAWeek } from '@/lib/eia'
+import { isEIAData } from '@/lib/eia'
 
 function timeAgo(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -21,9 +22,6 @@ function fmtPeriod(iso: string): string {
   } catch { return iso }
 }
 
-function isEIAData(r: EIAResponse | null): r is EIAData {
-  return r !== null && !('error' in r)
-}
 
 function BarChart({ history }: { history: EIAWeek[] }) {
   // Show oldest → newest left to right (reverse the array)
@@ -100,11 +98,12 @@ function BarChart({ history }: { history: EIAWeek[] }) {
   )
 }
 
-export default function EIACard() {
-  const [data, setData]       = useState<EIAResponse | null>(null)
-  const [loading, setLoading] = useState(true)
+export default function EIACard({ initialData }: { initialData?: EIAResponse }) {
+  const [data, setData]       = useState<EIAResponse | null>(initialData ?? null)
+  const [loading, setLoading] = useState(!initialData)
 
   useEffect(() => {
+    if (initialData) return  // SSR data provided — skip client fetch
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 8000)
 
@@ -113,7 +112,7 @@ export default function EIACard() {
       .then(setData)
       .catch(() => setData({ error: 'api_down', updatedAt: new Date().toISOString() }))
       .finally(() => { clearTimeout(timeout); setLoading(false) })
-  }, [])
+  }, [initialData])
 
   const draw        = isEIAData(data) && data.direction === 'draw'
   const accentColor = isEIAData(data) ? (draw ? 'var(--up)' : 'var(--down)') : 'var(--border)'

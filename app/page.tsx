@@ -6,6 +6,7 @@ import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import CommodityPulse from '@/components/CommodityPulse'
 import EIACard from '@/components/EIACard'
+import { loadEIA } from '@/lib/eia'
 import DailyThesis from '@/components/DailyThesis'
 import { getActiveArcs } from '@/lib/arcs'
 
@@ -109,8 +110,9 @@ function getTagType(tag?: string): string {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const [briefs] = await Promise.all([
+  const [briefs, eiaData] = await Promise.all([
     getAllBriefs(),
+    loadEIA(),
   ])
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
@@ -521,7 +523,7 @@ export default async function HomePage() {
           </Link>
 
           {/* EIA crude inventory card */}
-          <EIACard />
+          <EIACard initialData={eiaData} />
 
           {/* Stats strip */}
           <div style={{

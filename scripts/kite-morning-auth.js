@@ -107,6 +107,9 @@ async function syncAll(token) {
   const vOk = await updateVercelEnv(token)
   console.log(vOk ? ' ✅' : ' ⚠️   VERCEL_TOKEN not set')
 
+  // Ensure static keys that never rotate are present in Vercel production
+  await ensureVercelStaticEnv('EIA_API_KEY', process.env.EIA_API_KEY)
+
   process.stdout.write('🚦  Vercel deploy...')
   const deployOk = await triggerVercelRedeploy()
   console.log(deployOk ? ' ✅  (prices will be live in ~2 min)' : ' ⚠️   set VERCEL_DEPLOY_HOOK in .env.local')
@@ -197,6 +200,37 @@ async function updateVercelEnv(token) {
     console.error('\n   Vercel API error:', err.message)
     return false
   }
+}
+
+/** Ensure a static (non-rotating) env var exists in Vercel production. Creates it if absent; skips if value is falsy. */
+async function ensureVercelStaticEnv(key, value) {
+  if (!value || !VERCEL_TOKEN || !VERCEL_PROJECT) return
+  try {
+    const headers = { Authorization: `Bearer ${VERCEL_TOKEN}`, 'Content-Type': 'application/json' }
+    const listRes = await fetch(
+      `https://api.vercel.com/v9/projects/${VERCEL_PROJECT}/env?decrypt=false`,
+      { headers, signal: AbortSignal.timeout(10000) }
+    )
+    if (!listRes.ok) return
+    const { envs } = await listRes.json()
+    const existing = envs?.find(e => e.key === key && e.target?.includes('production'))
+    if (existing) return  // already set — don't overwrite
+
+    const postRes = await fetch(
+      `https://api.vercel.com/v10/projects/${VERCEL_PROJECT}/env`,
+      {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ key, value, target: ['production'], type: 'encrypted' }),
+        signal: AbortSignal.timeout(10000),
+      }
+    )
+    if (postRes.ok) {
+      process.stdout.write(`\n✅  Added ${key} to Vercel production`)
+    } else {
+      process.stdout.write(`\n⚠️   Failed to add ${key}: ${postRes.status}`)
+    }
+  } catch { /* non-fatal */ }
 }
 
 /** Trigger Vercel redeploy so the new KITE_ACCESS_TOKEN env var takes effect immediately.
@@ -292,12 +326,16 @@ async function discoverInstruments(accessToken) {
         return new Date(a.expiry) - new Date(b.expiry)
       })[0] ?? null
 
-    const gold   = frontMonth(instruments, 'GOLD')
-    const goldM  = frontMonth(instruments, 'GOLDM')
-    const silver = frontMonth(instruments, 'SILVER')
-    const crude  = frontMonth(instruments, 'CRUDEOIL')
-    const copper = frontMonth(instruments, 'COPPER')
-    const natgas = frontMonth(instruments, 'NATURALGAS')
+    const gold      = frontMonth(instruments, 'GOLD')
+    const goldM     = frontMonth(instruments, 'GOLDM')
+    const silver    = frontMonth(instruments, 'SILVER')
+    const crude     = frontMonth(instruments, 'CRUDEOIL')
+    const copper    = frontMonth(instruments, 'COPPER')
+    const natgas    = frontMonth(instruments, 'NATURALGAS')
+    const zinc      = frontMonth(instruments, 'ZINC')
+    const lead      = frontMonth(instruments, 'LEAD')
+    const aluminium = frontMonth(instruments, 'ALUMINIUM')
+    const nickel    = frontMonth(instruments, 'NICKEL')
 
     if (!gold || !silver || !crude || !copper || !natgas) return false
 
@@ -314,6 +352,10 @@ async function discoverInstruments(accessToken) {
       crude:    { token: crude.token,                     symbol: crude.symbol,   expiry: crude.expiry   },
       copper:   { token: copper.token,                    symbol: copper.symbol,  expiry: copper.expiry  },
       natgas:   { token: natgas.token,                    symbol: natgas.symbol,  expiry: natgas.expiry  },
+      ...(zinc      ? { zinc:      { token: zinc.token,      symbol: zinc.symbol,      expiry: zinc.expiry      } } : {}),
+      ...(lead      ? { lead:      { token: lead.token,      symbol: lead.symbol,      expiry: lead.expiry      } } : {}),
+      ...(aluminium ? { aluminium: { token: aluminium.token, symbol: aluminium.symbol, expiry: aluminium.expiry } } : {}),
+      ...(nickel    ? { nickel:    { token: nickel.token,    symbol: nickel.symbol,    expiry: nickel.expiry    } } : {}),
       ...(usdinr && eurinr && gbpinr && jpyinr ? {
         currencies: {
           usdinr: { token: usdinr.token, symbol: usdinr.symbol, expiry: usdinr.expiry },
@@ -334,6 +376,10 @@ async function discoverInstruments(accessToken) {
     console.log(`     Crude  ${crude.symbol} (${crude.token})`)
     console.log(`     Copper ${copper.symbol} (${copper.token})`)
     console.log(`     NatGas ${natgas.symbol} (${natgas.token})`)
+    if (zinc)      console.log(`     Zinc      ${zinc.symbol} (${zinc.token})`)
+    if (lead)      console.log(`     Lead      ${lead.symbol} (${lead.token})`)
+    if (aluminium) console.log(`     Aluminium ${aluminium.symbol} (${aluminium.token})`)
+    if (nickel)    console.log(`     Nickel    ${nickel.symbol} (${nickel.token})`)
     if (usdinr) console.log(`     USD/INR ${usdinr.symbol} (${usdinr.token})`)
     if (eurinr) console.log(`     EUR/INR ${eurinr.symbol} (${eurinr.token})`)
     if (gbpinr) console.log(`     GBP/INR ${gbpinr.symbol} (${gbpinr.token})`)
