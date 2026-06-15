@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
+    "href": "/articles/2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
+    "title": "MCX Crude Plunges 7.4% to ₹7636 — Key Support at ₹7610",
+    "description": "MCX Crude collapses 7.40% to ₹7636/bbl as WTI slides to $80.48, dragging energy markets; silver and gold surge on safe-haven demand.",
+    "excerpt": "TRIGGER — MCX Crude has plunged 7.40% to ₹7,636/bbl as WTI fell to $80.48 following an OPEC+ decision to accelerate output increases by 400,000 bpd effective July 2026. PRICE — ₹7,636/bbl · ▼7.40% · P",
+    "date": "2026-06-15T03:48:49.557Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7636
+  },
+  {
     "type": "brief",
     "slug": "edition-041",
     "href": "/briefs/edition-041",
