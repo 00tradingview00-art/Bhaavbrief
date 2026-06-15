@@ -15,6 +15,7 @@ const SIGNALS = [
     audience: 'All MCX traders',
     preview:  'Four-state matrix: price + OI tell you if a move has conviction or is exhaustion.',
     live:     true,
+    ready:    true,
   },
   {
     slug:     'iv-percentile',
@@ -24,6 +25,7 @@ const SIGNALS = [
     audience: 'Options traders',
     preview:  'Rank today\'s implied volatility against the past 52 weeks. Know when to buy or sell options.',
     live:     false,
+    ready:    true,
   },
   {
     slug:     'basis-convergence',
@@ -33,6 +35,7 @@ const SIGNALS = [
     audience: 'Hedgers, arbitrageurs',
     preview:  'Normal contango, elevated contango, backwardation — what each tells you about physical markets.',
     live:     false,
+    ready:    false,
   },
   {
     slug:     'seasonal-patterns',
@@ -42,6 +45,7 @@ const SIGNALS = [
     audience: 'All MCX traders',
     preview:  'Akshaya Tritiya, Dhanteras, monsoon, winter heating — the recurring cycles that move MCX.',
     live:     false,
+    ready:    false,
   },
   {
     slug:     'volume-anomaly',
@@ -51,6 +55,7 @@ const SIGNALS = [
     audience: 'All MCX traders',
     preview:  'When volume is 2× the 20-day average, it\'s an institutional move. Combined signal matrix shows you how to classify it.',
     live:     false,
+    ready:    false,
   },
 ]
 
@@ -97,7 +102,7 @@ export default function SignalAcademyPage() {
       {/* Signal cards */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
-          5 signals · {unlocked ? 'all unlocked' : '1 live · 4 locked'}
+          5 signals · {unlocked ? 'all unlocked' : '1 always free · 1 unlock to access · 3 coming soon'}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {SIGNALS.map(signal => {
@@ -178,6 +183,23 @@ export default function SignalAcademyPage() {
                     }}
                   >
                     Open →
+                  </Link>
+                ) : signal.ready ? (
+                  <Link
+                    href={`/signal-academy/${signal.slug}`}
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 10,
+                      color: 'var(--ink-3)',
+                      textDecoration: 'none',
+                      flexShrink: 0,
+                      padding: '6px 12px',
+                      border: '1px solid var(--border)',
+                      borderRadius: 4,
+                      alignSelf: 'center',
+                    }}
+                  >
+                    🔒 Unlock
                   </Link>
                 ) : (
                   <span style={{
