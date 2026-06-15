@@ -22,6 +22,31 @@
   },
   {
     "type": "brief",
+    "slug": "edition-042",
+    "href": "/briefs/edition-042",
+    "title": "MCX Open 15 Jun 2026: Gold Surges, Crude Crashes",
+    "description": "15 Jun 2026: MCX Gold opens at ₹153235 (+1.80%), MCX Crude collapses to ₹7624 (-5.56%) as metals rally and oil routs overnight.",
+    "excerpt": "When gold and oil move more than 5% in opposite directions on the same night, the market is not hedging — it is making a statement about the world. Overnight on COMEX, gold climbed to $4,345.20 per ou",
+    "date": "2026-06-15",
+    "edition": "42",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-041",
     "href": "/briefs/edition-041",
     "title": "Gold Reclaims ₹150,000 as Safe-Haven Demand Overwhelms Crude Selloff",
@@ -37,6 +62,45 @@
     ],
     "commodities": [],
     "commodity": ""
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-11-hawk-scan-mcx-crude-drops-4-23-to-8-328-near-20-day-range-fl",
+    "href": "/articles/2026-06-11-hawk-scan-mcx-crude-drops-4-23-to-8-328-near-20-day-range-fl",
+    "title": "MCX Crude Drops 4.23% to ₹8,328 — Near 20-Day Range Floor",
+    "description": "MCX Crude plunges 4.23% to ₹8,328/bbl (WTI $86.79) in a session-wide selloff, testing the lower bound of its 20-day range.",
+    "excerpt": "TRIGGER — MCX Crude has fallen 4.23% to ₹8,328/bbl in a single session, with WTI sliding to $86.79 and Brent to $89.65, the sharpest single-session drop in recent weeks. PRICE — ₹8,328/bbl · -4.23% · ",
+    "date": "2026-06-11T17:48:57.018Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8328
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-11-hawk-scan-mcx-nat-gas-plunges-3-41-to-297-below-20-sma",
+    "href": "/articles/2026-06-11-hawk-scan-mcx-nat-gas-plunges-3-41-to-297-below-20-sma",
+    "title": "MCX Nat Gas Plunges 3.41% to ₹297 — Below 20-SMA",
+    "description": "MCX Nat Gas crashes 3.41% to ₹297/mmBtu as Henry Hub slips to $3.10, breaching the 20-SMA of ₹304 in Thursday's session.",
+    "excerpt": "TRIGGER — MCX Nat Gas has fallen 3.41% to ₹297/mmBtu, breaching the 20-SMA of ₹304 as Henry Hub slides to $3.10/mmBtu in the overnight US session. PRICE — ₹297/mmBtu · ▼3.41% · PLUNGING SIGNAL — Henry",
+    "date": "2026-06-11T17:05:02.684Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 297
   },
   {
     "type": "brief",
@@ -56,6 +120,27 @@
     ],
     "commodities": [],
     "commodity": ""
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-10-hawk-scan-mcx-silver-plunges-4-48-below-237k-key-support-at-",
+    "href": "/articles/2026-06-10-hawk-scan-mcx-silver-plunges-4-48-below-237k-key-support-at-",
+    "title": "MCX Silver Plunges 4.48% Below ₹237K — Key Support at ₹232111",
+    "description": "MCX Silver crashes 4.48% to ₹236,580/kg as COMEX silver slips to $65.30/oz — price now testing 20-day range floor at ₹232,111.",
+    "excerpt": "TRIGGER — MCX Silver has fallen 4.48% to ₹236,580/kg, breaching intraday lows as COMEX silver slides to $65.30/oz in a sharp dual-metal selloff alongside gold. PRICE — ₹236,580/kg · ▼4.48% · PLUNGING ",
+    "date": "2026-06-10T14:38:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Nat Gas",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 236580
   },
   {
     "type": "brief",
@@ -81,6 +166,24 @@
       "MCX NatGas"
     ],
     "commodity": ""
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-09-hawk-scan-mcx-crude-20260609",
+    "href": "/articles/2026-06-09-hawk-scan-mcx-crude-20260609",
+    "title": "MCX Crude Drops 3.15% — Breaks Below ₹8500 Key Level",
+    "description": "MCX Crude plunges 3.15% to ₹8454/bbl as WTI slides to $89.00, breaching the psychologically critical ₹8500 round-number level.",
+    "excerpt": "TRIGGER — MCX Crude has fallen 3.15% to ₹8,454/bbl, with WTI dropping to $89.00 and Brent at $92.25, as the session's sell-off breaches the ₹8,500 round-number level on heavy volume. PRICE — ₹8,454/bb",
+    "date": "2026-06-09T13:34:34.546Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8454
   },
   {
     "type": "brief",
@@ -128,6 +231,25 @@
     "priceAtPublish": 300
   },
   {
+    "type": "hawk-scan",
+    "slug": "2026-06-08-hawk-scan-mcx-crude-20260608",
+    "href": "/articles/2026-06-08-hawk-scan-mcx-crude-20260608",
+    "title": "MCX Crude Drops 3.54% to ₹8729 — Tests Weekly Support",
+    "description": "MCX Crude plunges 3.54% to ₹8729/bbl while MCX Silver surges 2.19% to ₹247,683/kg in a sharp risk-divergence session.",
+    "excerpt": "TRIGGER — MCX Crude has fallen 3.54% to ₹8,729/bbl, breaching the Hawk-Scan threshold as WTI settled at $91.54 amid a sharp intraday reversal from the session high of ₹9,130. PRICE — ₹8,729/bbl · ▼3.5",
+    "date": "2026-06-08T16:16:08.352Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8729
+  },
+  {
     "type": "article",
     "slug": "2026-06-08-iran-israel-escalation-mcx-crude-surge",
     "href": "/articles/2026-06-08-iran-israel-escalation-mcx-crude-surge",
@@ -146,6 +268,27 @@
       "MCX Crude"
     ],
     "priceAtPublish": 9062
+  },
+  {
+    "type": "hawk-scan",
+    "slug": "2026-06-08-hawk-scan-natgas-crude-20260608",
+    "href": "/articles/2026-06-08-hawk-scan-natgas-crude-20260608",
+    "title": "MCX Crude Surges 3.9% to ₹9055 as Nat Gas Plunges 4.44%",
+    "description": "MCX Crude jumps 3.9% to ₹9055/bbl (WTI $94.81) while Nat Gas plunges 4.44% to ₹299/mmBtu in a split energy session.",
+    "excerpt": "TRIGGER — MCX Nat Gas has fallen 4.44% to ₹299/mmBtu while MCX Crude has simultaneously surged 3.90% to ₹9055/bbl, both breaching the Hawk-Scan 3% threshold in the same session. PRICE — ₹299/mmBtu · ▼",
+    "date": "2026-06-08T08:36:08.792Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Copper"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 299
   },
   {
     "type": "brief",
