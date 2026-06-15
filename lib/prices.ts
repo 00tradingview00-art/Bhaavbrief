@@ -146,6 +146,44 @@ async function fetchAlphaVantage(): Promise<Record<string, any>> {
 const fetchTwelveDataCached   = unstable_cache(fetchTwelveData,   ['td-prices'],    { revalidate: 900   })
 const fetchAlphaVantageCached = unstable_cache(fetchAlphaVantage, ['av-prices-v2'], { revalidate: 21600 })
 
+// ── Yahoo Finance v8 (primary COMEX/NYMEX source — no key, intraday) ──────────
+
+const YAHOO_COMEX = [
+  { key: 'GC=F',     sym: 'GC%3DF'     },  // COMEX Gold
+  { key: 'SI=F',     sym: 'SI%3DF'     },  // COMEX Silver
+  { key: 'CL=F',     sym: 'CL%3DF'     },  // WTI Crude
+  { key: 'BZ=F',     sym: 'BZ%3DF'     },  // Brent
+  { key: 'HG=F',     sym: 'HG%3DF'     },  // COMEX Copper
+  { key: 'NG=F',     sym: 'NG%3DF'     },  // Henry Hub
+  { key: 'USDINR=X', sym: 'USDINR%3DX' },  // USD/INR
+]
+
+async function fetchYahooComex(): Promise<Record<string, any>> {
+  const map: Record<string, any> = {}
+  await Promise.all(
+    YAHOO_COMEX.map(async ({ key, sym }) => {
+      try {
+        const r = await fetch(
+          `https://query2.finance.yahoo.com/v8/finance/chart/${sym}?interval=1d&range=2d`,
+          { headers: { 'User-Agent': 'Mozilla/5.0 BhaavBrief/2.0', Accept: 'application/json' }, signal: AbortSignal.timeout(9000), next: { revalidate: 900 } }
+        )
+        if (!r.ok) return
+        const { chart } = await r.json()
+        const meta = chart?.result?.[0]?.meta
+        if (!meta) return
+        const price     = meta.regularMarketPrice    ?? 0
+        const prevClose = meta.chartPreviousClose    ?? 0
+        if (!(price > 0)) return
+        map[key] = {
+          regularMarketPrice:         price,
+          regularMarketChangePercent: prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0,
+        }
+      } catch {}
+    })
+  )
+  return map
+}
+
 // ── Stooq (fallback — free CSV, no key, COMEX/NYMEX futures) ─────────────────
 
 async function fetchStooq(): Promise<Record<string, any>> {
@@ -187,21 +225,22 @@ async function fetchStooq(): Promise<Record<string, any>> {
 }
 
 async function fetchComexPrices(): Promise<Record<string, any>> {
+  // Yahoo v8 is primary — intraday, no key, covers all 6 symbols reliably
+  const yahoo = await fetchYahooComex()
+  if (Object.keys(yahoo).length >= 4) return yahoo
+
+  // Partial Yahoo result — fill gaps with TD + AV
   const [td, av] = await Promise.allSettled([fetchTwelveDataCached(), fetchAlphaVantageCached()])
   const tdMap = td.status === 'fulfilled' && td.value ? td.value : {}
   const avMap = av.status === 'fulfilled' ? av.value : {}
+  const combined = { ...yahoo, ...avMap, ...tdMap }
 
-  const combined = { ...avMap, ...tdMap }  // TD wins on overlap
-
-  // AV free tier returns daily EOD for crude/gas — always override with Stooq (intraday).
-  // Silver stays from AV (FX_DAILY is more accurate than Stooq's CME cents conversion).
-  const STOOQ_ALWAYS = new Set(['CL=F', 'BZ=F', 'NG=F', 'HG=F'])
-  const missing = (['SI=F', 'CL=F', 'HG=F', 'NG=F', 'BZ=F'] as const)
-    .filter(k => STOOQ_ALWAYS.has(k) || !combined[k] || !combined[k].regularMarketPrice)
-  if (missing.length > 0 || Object.keys(combined).length === 0) {
+  // Last resort: Stooq for anything still missing
+  const allKeys = ['GC=F', 'SI=F', 'CL=F', 'BZ=F', 'HG=F', 'NG=F'] as const
+  const missing = allKeys.filter(k => !combined[k]?.regularMarketPrice)
+  if (missing.length > 0) {
     const stooq = await fetchStooq()
     for (const k of missing) { if (stooq[k]) combined[k] = stooq[k] }
-    if (Object.keys(combined).length === 0) return stooq
   }
 
   return combined
