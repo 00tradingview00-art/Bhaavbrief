@@ -61,6 +61,12 @@ jobs:
         continue-on-error: true
         run: node scripts/build-content-index.js
 
+      - name: Arc health check
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/check-arc-health.mjs
+
       - name: Commit & push if article published
         run: |
           git config user.name "BhaavBrief Intelligence"
@@ -74,7 +80,7 @@ jobs:
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ data/content-index.json
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
-          git add data/market-snapshot.json 2>/dev/null || true
+          git add data/market-snapshot.json data/story-arcs.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Nothing to commit"
             exit 0

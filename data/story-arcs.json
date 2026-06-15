@@ -4,13 +4,28 @@
       "id": "middle-east-crude-surge-jun-2026",
       "title": "Middle East Supply Shock: The Crude Surge",
       "startDate": "2026-06-01",
-      "status": "active",
-      "editions": [29, 32, 33, 34, 36, 37, 38],
+      "status": "closed",
+      "editions": [
+        29,
+        32,
+        33,
+        34,
+        36,
+        37,
+        38
+      ],
       "latestDay": 7,
       "summary": "Iran-Israel tensions pushed WTI from $89 to $96.41 as the market priced in a Hormuz supply premium. MCX crude crossed ₹9,000 for the first time this year — HPCL and IndiGo are repricing exposure in real time.",
       "primaryCommodity": "MCX Crude",
       "keyLevel": "₹9,000",
-      "tags": ["Iran", "MCX Crude", "Geopolitics", "OPEC"]
+      "tags": [
+        "Iran",
+        "MCX Crude",
+        "Geopolitics",
+        "OPEC"
+      ],
+      "endDate": "2026-06-15",
+      "outcome": "MCX Crude retreated from the ₹9,000 key level back to ₹7,615 as the geopolitical supply premium from Iran-Israel tensions dissipated and market participants unwound their bullish exposure."
     }
   ]
 }
