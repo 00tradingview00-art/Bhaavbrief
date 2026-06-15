@@ -896,6 +896,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
                 }}
               >
                 {article.title}
+                <span style={{ fontSize: 10, color: 'var(--ink-4)', marginLeft: 4 }}>↓</span>
               </button>
             )
           })}
@@ -956,7 +957,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
                 }}
               >
                 <span>{article.title}</span>
-                <span style={{ fontSize: 12, color: 'var(--ink-4)', flexShrink: 0 }}>Read →</span>
+                <span style={{ fontSize: 12, color: 'var(--ink-4)', flexShrink: 0 }}>Read ↓</span>
               </button>
             )
           })}

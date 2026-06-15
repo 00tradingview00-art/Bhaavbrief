@@ -322,6 +322,34 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         </div>
       </div>
 
+      {/* ── Subscribe CTA ── */}
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border)',
+        borderRadius: 10, padding: '18px 24px', marginBottom: 28,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        flexWrap: 'wrap', gap: 16,
+      }}>
+        <div>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 4 }}>
+            Get the MCX morning brief — free
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+            Gold, crude, silver — why prices are moving, before the market opens.
+          </div>
+        </div>
+        <a
+          href="/briefs"
+          style={{
+            display: 'inline-block', padding: '10px 20px',
+            background: 'var(--ink)', color: '#fff',
+            borderRadius: 6, fontSize: 13, fontWeight: 600,
+            textDecoration: 'none', flexShrink: 0, letterSpacing: '0.02em',
+          }}
+        >
+          Read latest brief →
+        </a>
+      </div>
+
       {/* ── Global Reference ── */}
       <div style={{ marginBottom: 4 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
