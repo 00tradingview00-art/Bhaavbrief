@@ -30,8 +30,7 @@ export const metadata = {
   twitter: { card: 'summary' as const, title: 'MCX Live Prices | BhaavBrief', description: 'Gold, Silver, Crude Oil, Copper, Natural Gas — live MCX prices with OHLC and open interest.', site: '@bhaavbrief' },
 }
 
-export const dynamic  = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 30
 
 export default async function MarketsPage() {
   const snap = loadSnapshot()

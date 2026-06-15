@@ -1,13 +1,11 @@
 'use client'
 import { useState } from 'react'
-import { usePostHog } from 'posthog-js/react'
 import { trackSubscribe, trackEvent } from '@/lib/analytics'
 
 export default function SubscribeForm({ compact = false, location }: { compact?: boolean; location?: string }) {
   const [email,   setEmail]   = useState('')
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
-  const ph = usePostHog()
 
   const loc = location ?? (compact ? 'sidebar' : 'page')
 
@@ -15,7 +13,12 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
     e.preventDefault()
     if (!email.trim()) return
     setStatus('loading')
+
+    // posthog is already loaded by PostHogProvider by the time a user submits;
+    // import() here just resolves the cached module — no extra network request
+    const ph = await import('posthog-js').then(m => m.default).catch(() => null)
     ph?.capture('subscribe_attempted', { location: loc })
+
     try {
       const res  = await fetch('/api/subscribe', {
         method: 'POST',
