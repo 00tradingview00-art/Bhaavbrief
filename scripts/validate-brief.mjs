@@ -83,10 +83,10 @@ for (const m of brief.matchAll(moneyRe)) {
   }
 }
 
-// 2. Direction check: a direction word DIRECTLY modifying the commodity name must
-//    not contradict signed changePct data. We use a tight 25-char window each side
-//    to avoid false positives from "Gold surges while crude falls" where "surges"
-//    is near "crude" but clearly refers to gold.
+// 2. Direction check: a direction word must directly modify the commodity name —
+//    i.e. the commodity and direction verb appear as adjacent tokens with only
+//    whitespace/punctuation between them. This prevents "Gold Surges, Crude Craters"
+//    from flagging crude as "implies up" just because "surges" (for gold) is nearby.
 const dirChecks = [
   { name: "gold",   inst: "MCX_GOLD"   },
   { name: "silver", inst: "MCX_SILVER" },
@@ -94,20 +94,22 @@ const dirChecks = [
   { name: "copper", inst: "MCX_COPPER" },
 ];
 const firstBlock = brief.slice(0, 600).toLowerCase();
-const UP   = /(surge|jump|rall|gain|rise|soar|climb)/;
-const DOWN = /(slam|slide|crash|drop|fall|plunge|bleed|sink|rout)/;
+// These patterns match "[commodity] [surges]" or "[surges] [commodity]" —
+// only when the direction word is the direct grammatical neighbour of the name.
+function buildDirRegex(name, verbPat) {
+  return new RegExp(
+    `(?:${name}[^a-z]{0,6}(?:${verbPat})|(?:${verbPat})[^a-z]{0,6}${name})`,
+    'i'
+  );
+}
+const UP_VERBS   = 'surge|jump|rall|gain|rise|soar|climb';
+const DOWN_VERBS = 'slam|slide|crash|drop|fall|plunge|bleed|sink|rout|crater';
 for (const { name, inst } of dirChecks) {
   const pct = snapshot.instruments[inst]?.changePct;
   if (pct == null) continue;
-  const idx = firstBlock.indexOf(name);
-  if (idx === -1) continue;
-  // Tight window: only flag if the direction word is within 25 chars of the commodity
-  // name — this ensures the word is actually modifying that commodity, not a
-  // different one mentioned nearby (e.g. "Gold surges as crude falls").
-  const ctx = firstBlock.slice(Math.max(0, idx - 25), idx + 35);
-  if (pct > 0.3 && DOWN.test(ctx))
+  if (pct > 0.3 && buildDirRegex(name, DOWN_VERBS).test(firstBlock))
     issues.push(`DIRECTION: headline implies ${name} down, snapshot says +${pct}%`);
-  if (pct < -0.3 && UP.test(ctx))
+  if (pct < -0.3 && buildDirRegex(name, UP_VERBS).test(firstBlock))
     issues.push(`DIRECTION: headline implies ${name} up, snapshot says ${pct}%`);
 }
 
