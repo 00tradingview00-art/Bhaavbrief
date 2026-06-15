@@ -90,6 +90,44 @@ body {
   margin: 1rem 0;
 }
 
+/* Tables — Price Bridge and data tables in briefs */
+.brief-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  overflow-x: auto;
+  display: block;
+}
+.brief-prose thead tr {
+  border-bottom: 2px solid var(--rule2);
+}
+.brief-prose th {
+  text-align: left;
+  padding: 6px 12px 6px 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.brief-prose td {
+  padding: 7px 12px 7px 0;
+  color: var(--ink2);
+  border-bottom: 0.5px solid var(--rule);
+  vertical-align: top;
+  line-height: 1.5;
+}
+.brief-prose tr:last-child td {
+  border-bottom: none;
+}
+.brief-prose td strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 /* === Mobile-first responsive layout utilities === */
 
 .layout-hero {

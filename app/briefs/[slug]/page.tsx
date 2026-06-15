@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata }           from 'next'
 import Link                   from 'next/link'
 import { MDXRemote }          from 'next-mdx-remote/rsc'
+import remarkGfm              from 'remark-gfm'
 import SubscribeForm          from '@/components/SubscribeForm'
 import CopyLinkButton         from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
@@ -248,7 +249,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             )}
 
             <div className="brief-prose" itemProp="articleBody">
-              <MDXRemote source={brief.content} />
+              <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
             </div>
 
             <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
