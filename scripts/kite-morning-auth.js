@@ -108,7 +108,9 @@ async function syncAll(token) {
   console.log(vOk ? ' ✅' : ' ⚠️   VERCEL_TOKEN not set')
 
   // Ensure static keys that never rotate are present in Vercel production
-  await ensureVercelStaticEnv('EIA_API_KEY', process.env.EIA_API_KEY)
+  await ensureVercelStaticEnv('EIA_API_KEY',              process.env.EIA_API_KEY)
+  await ensureVercelStaticEnv('UPSTASH_REDIS_REST_URL',   process.env.UPSTASH_REDIS_REST_URL)
+  await ensureVercelStaticEnv('UPSTASH_REDIS_REST_TOKEN', process.env.UPSTASH_REDIS_REST_TOKEN)
 
   process.stdout.write('🚦  Vercel deploy...')
   const deployOk = await triggerVercelRedeploy()
