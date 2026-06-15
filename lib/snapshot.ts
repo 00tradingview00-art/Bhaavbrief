@@ -136,5 +136,12 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     ...(i.MCX_LEAD      ? { lead:      mcxRow('MCX_LEAD')      } : {}),
     ...(i.MCX_ALUMINIUM ? { aluminium: mcxRow('MCX_ALUMINIUM') } : {}),
     ...(i.MCX_NICKEL    ? { nickel:    mcxRow('MCX_NICKEL')    } : {}),
+
+    currencies: {
+      usdinr: { ltp: i.USDINR?.price ?? 0,  changePct: i.USDINR?.changePct  ?? 0, change: 0, open: 0, high: 0, low: 0, prevClose: i.USDINR?.prevClose  ?? 0, volume: 0, symbol: '', expiry: '' },
+      eurinr: { ltp: i.EURINR?.price ?? 0,  changePct: i.EURINR?.changePct  ?? 0, change: 0, open: 0, high: 0, low: 0, prevClose: i.EURINR?.prevClose  ?? 0, volume: 0, symbol: '', expiry: '' },
+      gbpinr: { ltp: i.GBPINR?.price ?? 0,  changePct: i.GBPINR?.changePct  ?? 0, change: 0, open: 0, high: 0, low: 0, prevClose: i.GBPINR?.prevClose  ?? 0, volume: 0, symbol: '', expiry: '' },
+      jpyinr: { ltp: i.JPYINR?.price ?? 0,  changePct: i.JPYINR?.changePct  ?? 0, change: 0, open: 0, high: 0, low: 0, prevClose: i.JPYINR?.prevClose  ?? 0, volume: 0, symbol: '', expiry: '' },
+    },
   }
 }

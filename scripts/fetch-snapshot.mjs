@@ -86,6 +86,49 @@ async function fetchKiteMCX() {
   }
 }
 
+// ── Kite CDS — currency futures (EUR/INR, GBP/INR, JPY/INR) ─────────────────
+
+async function fetchKiteCurrencies() {
+  const apiKey = process.env.KITE_API_KEY
+  const accessToken = process.env.KITE_ACCESS_TOKEN
+  const instruments = loadJSON(INSTRUMENTS_FILE)
+  if (!apiKey || !accessToken || !instruments?.currencies) return null
+
+  const pairs = ['eurinr', 'gbpinr', 'jpyinr']
+  const qs = pairs
+    .filter(k => instruments.currencies[k]?.symbol)
+    .map(k => `i=CDS:${instruments.currencies[k].symbol}`)
+    .join('&')
+  if (!qs) return null
+
+  try {
+    const res = await fetch(`https://api.kite.trade/quote?${qs}`, {
+      headers: { 'X-Kite-Version': '3', Authorization: `token ${apiKey}:${accessToken}` },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) { console.warn(`  Kite CDS ${res.status}`); return null }
+    const { data } = await res.json()
+    const result = {}
+    for (const key of pairs) {
+      const sym = instruments.currencies[key]?.symbol
+      const q = data?.[`CDS:${sym}`]
+      if (!q?.last_price) continue
+      const price = q.last_price
+      const prevClose = q.ohlc?.close ?? 0
+      result[key] = {
+        price,
+        prevClose: prevClose > 0 ? prevClose : price,
+        changePct: prevClose > 0 ? ((price - prevClose) / prevClose) * 100 : 0,
+      }
+    }
+    console.log(`  Kite CDS: ${Object.keys(result).length}/${pairs.length} pairs`)
+    return Object.keys(result).length > 0 ? result : null
+  } catch (e) {
+    console.warn(`  Kite CDS failed: ${e.message}`)
+    return null
+  }
+}
+
 // ── Yahoo Finance v8 — COMEX + USDINR ────────────────────────────────────────
 
 const YAHOO_SYMBOLS = [
@@ -148,8 +191,9 @@ async function main() {
   const mcxCache = loadJSON(MCX_CACHE_FILE)  // intelligence-engine cache (refreshes every 15 min)
 
   // Fetch all external data in parallel
-  const [kiteMCX, ...yahooResults] = await Promise.all([
+  const [kiteMCX, kiteCDS, ...yahooResults] = await Promise.all([
     fetchKiteMCX(),
+    fetchKiteCurrencies(),
     ...YAHOO_SYMBOLS.map(fetchYahooSymbol),
     fetchFrankfurterUSDINR(),
   ])
@@ -264,6 +308,19 @@ async function main() {
   if (leadInst)      instruments.MCX_LEAD      = leadInst
   if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst
   if (nickelInst)    instruments.MCX_NICKEL    = nickelInst
+
+  // Optional CDS currency pairs — silent if Kite CDS unavailable
+  for (const key of ['eurinr', 'gbpinr', 'jpyinr']) {
+    const d = kiteCDS?.[key]
+    if (d?.price > 0) {
+      instruments[key.toUpperCase()] = {
+        price:     roundTo(d.price, 4),
+        prevClose: roundTo(d.prevClose, 4),
+        changePct: roundTo(d.changePct, 4),
+        unit:      'INR',
+      }
+    }
+  }
 
   // Derived values — computed from the same numbers shown in the brief.
   // These can never disagree with the prices next to them.
