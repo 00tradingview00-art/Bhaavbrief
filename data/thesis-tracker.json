@@ -1,5 +1,13 @@
 {
-  "current": null,
+  "current": {
+    "date": "2026-06-15",
+    "editionRef": 42,
+    "thesis": "MCX Crude will break below ₹7,610 by MCX close today as the risk-off sentiment that drove the overnight 5.56% rout remains intact with no structural support visible.",
+    "commodity": "MCX Crude",
+    "direction": "bearish",
+    "targetLevel": 7610,
+    "reasoning": "₹7,610 is the only identified support level and the day's low; with the 20-SMA at ₹8,583 now 12.5% above price and no intermediate resistance named, a break below this level signals capitulation in the crude selloff."
+  },
   "yesterday": null,
   "history": []
 }
