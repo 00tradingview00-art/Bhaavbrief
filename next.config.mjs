@@ -12,6 +12,8 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/articles', destination: '/news', permanent: true },
+      // Instagram bio link — sends visitors to markets
+      { source: '/ig', destination: '/markets', permanent: false },
       // Broken "ay2026" slugs (slug-generator bug, capital M stripped from "May")
       { source: '/articles/:slug(.*ay2026.*)', destination: '/briefs', permanent: true },
       { source: '/briefs/:slug(.*ay2026.*)',   destination: '/briefs', permanent: true },
