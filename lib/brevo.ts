@@ -86,7 +86,7 @@ export async function sendWelcomeEmail(email: string, latestBrief?: { title: str
 
   const { getRefCode } = await import('@/lib/referral')
   const refCode = getRefCode(email)
-  const refUrl  = `https://bhaavbrief.com/?ref=${refCode}`
+  const refUrl  = `https://bhaavbrief.in/?ref=${refCode}`
 
   const briefSection = latestBrief ? `
   <div style="background:#F3F2EC;border-left:3px solid #C8720A;padding:16px 20px;margin:24px 0;border-radius:0 4px 4px 0">
@@ -145,7 +145,7 @@ export async function sendWelcomeEmail(email: string, latestBrief?: { title: str
     <div style="font-family:monospace;font-size:11px;background:#FAFAF6;border:0.5px solid #DDDDD0;padding:8px 12px;border-radius:3px;margin-bottom:12px;word-break:break-all;color:#48483A">
       ${refUrl}
     </div>
-    <a href="https://bhaavbrief.com/signal-academy" style="display:inline-block;background:#18180F;color:#FAFAF6;text-decoration:none;padding:8px 18px;font-family:monospace;font-size:11px;letter-spacing:0.04em">Check my progress →</a>
+    <a href="https://bhaavbrief.in/signal-academy" style="display:inline-block;background:#18180F;color:#FAFAF6;text-decoration:none;padding:8px 18px;font-family:monospace;font-size:11px;letter-spacing:0.04em">Check my progress →</a>
   </div>
 
   <p style="font-size:13px;line-height:1.7;color:#8A8A7A;margin:24px 0 0">

@@ -30,7 +30,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
   const [loading,  setLoading]  = useState(false)
   const [copied,   setCopied]   = useState(false)
 
-  const refUrl = refCode ? `https://bhaavbrief.com/?ref=${refCode}` : ''
+  const refUrl = refCode ? `https://bhaavbrief.in/?ref=${refCode}` : ''
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault()

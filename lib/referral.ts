@@ -12,7 +12,7 @@ export function getRefCode(email: string): string {
 
 /** Build the public referral URL for a given ref code */
 export function getRefUrl(refCode: string): string {
-  return `https://bhaavbrief.com/?ref=${refCode}`
+  return `https://bhaavbrief.in/?ref=${refCode}`
 }
 
 async function redis(cmd: string, ...args: string[]): Promise<unknown> {
