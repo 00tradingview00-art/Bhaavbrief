@@ -250,6 +250,7 @@ function validateFlash(flash, cand) {
 
   // Every ₹/$ number must be near a known price, move amount, or round level.
   const moveAmount = Math.abs((cand.packet.to ?? 0) - (cand.packet.from ?? 0));
+  const recentPrices = (state[cand.key]?.recentFlashes ?? []).map(f => f.price).filter(Boolean);
   const validNumbers = [
     ...Object.values(snapshot.instruments).flatMap((i) => [i.price, i.prevClose]),
     cand.packet.from,
@@ -257,6 +258,7 @@ function validateFlash(flash, cand) {
     cand.packet.level,
     cand.packet.price,
     moveAmount,  // e.g. ₹3,070 drop in gold — derivable arithmetic, not hallucination
+    ...recentPrices, // historical flash prices are valid to reference as context
   ].filter((v) => typeof v === "number" && v > 0);
 
   for (const m of text.matchAll(/(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)/g)) {

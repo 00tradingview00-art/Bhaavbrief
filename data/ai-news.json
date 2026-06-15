@@ -1,5 +1,55 @@
 [
   {
+    "id": "2026-06-15-20-25-india-wheat-msp-procurement-target-raise",
+    "title": "India Wheat MSP Procurement Target Raised 15%; Agri Inflation Watch Shifts to Gold at ₹153549",
+    "summary": "The 15% expansion in government wheat procurement at MSP lands directly into a session already running a hard risk-off script — MCX Gold +2.01% at ₹153549/10g, crude collapsing -5.67% to ₹7615/bbl, and safe-haven flows dominating the complex. Elevated domestic food procurement signals upward pressure on India's food inflation print, a variable the RBI has historically weighted heavily in its rate calculus. A higher-for-longer domestic rate environment, layered onto a USD/INR rate of ₹94.70, compresses the import parity ceiling for dollar-denominated metals by tightening rupee liquidity conditions. MCX Silver at ₹252800/kg, already +2.69% on safe-haven and industrial demand, historically shows sensitivity to Indian inflation expectation shifts alongside gold. The confirmation level to observe: India's next CPI food sub-index release — a print above 6% would structurally reinforce the inflation-hedge bid currently visible in gold's price action.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bullish",
+    "pubDate": "2026-06-15T14:55:38.263Z",
+    "pubDateIST": "15 Jun 2026, 20:25"
+  },
+  {
+    "id": "2026-06-15-20-27-odisha-kharif-task-force-signals-domesti",
+    "title": "Odisha Kharif Task Force Signals Domestic Agri Supply Cushion as Gold Surges to ₹153549",
+    "summary": "The dominant session narrative — risk-off flows pushing MCX Gold to ₹153549 per 10g and crushing MCX Crude to ₹7615 per barrel at -5.67% — is being driven by macro safe-haven demand, not domestic agricultural conditions. Within that backdrop, Odisha's state-level kharif task force formation addresses oilseed and pulse supply chains rather than the metals and energy complex currently in motion. The mild El Niño qualifier carries historical relevance for softer commodity yields, but no direct import parity chain exists to MCX-listed contracts at live prices today. MCX Silver at ₹252800 per kg is tracking the gold-led risk-off bid, not domestic monsoon sentiment. Cross-market correlation to watch: USD/INR at ₹94.70 remains the transmission mechanism between any global agri price shift and domestic futures. The India Meteorological Department's updated El Niño probability index is the single data release that would materially alter this agricultural supply narrative.",
+    "category": "Agri",
+    "tagType": "agri",
+    "impact": "neutral",
+    "pubDate": "2026-06-15T14:57:29.816Z",
+    "pubDateIST": "15 Jun 2026, 20:27"
+  },
+  {
+    "id": "2026-06-15-20-29-brent-crude-collapses-to-83-82-on-iran-d",
+    "title": "Brent Crude Collapses To $83.82 On Iran Deal, MCX Crude Hits ₹7615 Session Low",
+    "summary": "The US-Iran peace framework has unlocked anticipated Iranian supply volumes, triggering Brent's drop to $83.82 and WTI near $80 — a supply shock that maps directly onto today's dominant session narrative where crude is already the hardest-hit contract at -5.67%. MCX Crude June at ₹7615 per barrel is absorbing this simultaneously through two channels: the global price collapse and USD/INR holding at ₹94.70, which translates the dollar-denominated loss into rupee terms near full parity with no currency cushion offsetting the decline. The import parity arithmetic shows Brent at $83.82 multiplied by ₹94.70, adjusted for customs duty and freight, situates fair-value MCX Crude broadly in the ₹7500-7650 band. Concurrently, MCX Gold at ₹153549 per 10 grams is advancing +2.01%, confirming the classic crude-down, gold-up risk-off rotation historically observed when geopolitical risk premium unwinds from energy and transfers to safe-haven assets. MCX Silver at ₹252800 per kg, up +2.69%, is amplifying the gold signal with an industrial-metal overlay. The level to observe for directional confirmation into evening close is ₹7550 on MCX Crude — a sustained trade below that zone would reflect full market absorption of the supply-expansion narrative.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-15T14:59:21.457Z",
+    "pubDateIST": "15 Jun 2026, 20:29"
+  },
+  {
+    "id": "2026-06-15-20-31-mcx-silver-surges-2-69-to-252800-kg-as-s",
+    "title": "MCX Silver surges 2.69% to ₹252800/kg as safe-haven demand overwhelms risk assets",
+    "summary": "The mechanism is risk-off rotation — crude's -5.67% collapse is signalling growth fears, redirecting capital into monetary metals. Comex silver gained $3.7/oz; translating via USD/INR at ₹94.70 with an approximate 10-11% duty-and-levy factor yields a theoretical import parity near ₹249,000-251,000/kg, placing MCX Silver at a modest premium to parity of roughly ₹1,800-3,800. Key support sits near ₹248,500; resistance observed around ₹255,000. Cross-commodity confirmation: MCX Gold +2.01% at ₹153,549/10g is moving identically, validating the safe-haven thesis rather than a silver-specific industrial narrative. Notably, copper at ₹1,339.80 has not confirmed, historically suggesting the driver is financial demand, not industrial demand. Watch ₹255,000 resistance into evening close.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-15T15:01:11.222Z",
+    "pubDateIST": "15 Jun 2026, 20:31"
+  },
+  {
+    "id": "2026-06-15-20-33-mcx-crude-collapses-5-67-to-7-615-as-ris",
+    "title": "MCX Crude Collapses 5.67% to ₹7,615 as Risk-Off Dominates Afternoon Session",
+    "summary": "The mechanism at work is classic risk-off rotation: crude selling reflects growth-demand pessimism, simultaneously triggering safe-haven inflows into gold. MCX Crude at ₹7,615/bbl trades with immediate support observed near ₹7,480 and resistance at ₹7,820.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-15T15:03:01.974Z",
+    "pubDateIST": "15 Jun 2026, 20:33"
+  },
+  {
     "id": "2026-06-13-04-33-rbi-holds-repo-rate-unchanged-projects-6",
     "title": "RBI Holds Repo Rate Unchanged, Projects 6.9% GDP Growth Amid Risk-Off Global Session",
     "summary": "The RBI's rate-hold decision lands inside a global risk-off session where gold is absorbing crude's -1.17% decline, confirming safe-haven flows are the dominant cross-asset theme. A stable domestic rate environment removes a near-term rupee depreciation catalyst, which directly compresses the import parity cost embedded in MCX Gold at ₹149,743 per 10g and MCX Silver at ₹241,410 per kg. The import parity chain runs: international spot gold strength plus a steady USD/INR at ₹95.10, with customs duty and premium held constant, keeps the rupee-denominated MCX floor supported. The 6.9% GDP projection sustains industrial metals demand expectations, a fact directly relevant to MCX Copper at ₹1,332.50 per kg, which is already tracking a +0.57% session gain alongside silver's +0.73% move — consistent with a reflation-adjacent read. The confirmation level to monitor is USD/INR at ₹95.10; any breach toward ₹94.80 would alter the import parity arithmetic for Monday's MCX open.",
