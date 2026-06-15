@@ -147,7 +147,7 @@ function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹
   const prefix = chg === 0 ? '' : isUp ? '+' : ''
   return (
     <div style={{ textAlign: 'right' }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: '#18180F' }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: '#18180F' }}>
         {currency}{data.price.toLocaleString('en-IN', { maximumFractionDigits: currency === '$' ? 2 : 0 })}
       </div>
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color, marginTop: 1 }}>
@@ -177,7 +177,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
         <span style={{
           fontFamily: 'var(--font-mono)',
-          fontSize: 9, letterSpacing: '0.08em',
+          fontSize: 10, letterSpacing: '0.08em',
           padding: '2px 7px',
           background: typeColor.bg, color: typeColor.color,
           border: `0.5px solid ${typeColor.color}22`,
@@ -188,7 +188,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 13, fontWeight: 600, color: '#18180F', lineHeight: 1.35, marginBottom: 3 }}>
+      <div style={{ fontSize: 15, fontWeight: 600, color: '#18180F', lineHeight: 1.35, marginBottom: 3 }}>
         {item.name}
       </div>
 
@@ -198,7 +198,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       </div>
 
       {/* Underlying */}
-      <div style={{ fontSize: 13, color: '#48483A', lineHeight: 1.6, marginBottom: 10, fontWeight: 300 }}>
+      <div style={{ fontSize: 15, color: '#48483A', lineHeight: 1.6, marginBottom: 10, fontWeight: 300 }}>
         {item.underlying}
       </div>
 
@@ -213,12 +213,12 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       <div style={{ borderTop: '0.5px solid #DDDDD0', paddingTop: 10, marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 6 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {item.expenseRatio && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
               TER {item.expenseRatio}
             </span>
           )}
           {item.aum && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
               AUM {item.aum}
             </span>
           )}
@@ -288,7 +288,7 @@ export default function InvestPage() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#18180F', margin: '0 0 8px' }}>
           Invest in Commodities
         </h1>
-        <p style={{ fontSize: 13, color: '#48483A', margin: '0 0 14px', fontWeight: 300, lineHeight: 1.6, maxWidth: 560 }}>
+        <p style={{ fontSize: 15, color: '#48483A', margin: '0 0 14px', fontWeight: 300, lineHeight: 1.6, maxWidth: 560 }}>
           Every way to access commodity markets from India — ETFs, Mutual Funds, listed stocks, and global instruments.
         </p>
         {/* Price status */}
@@ -297,14 +297,14 @@ export default function InvestPage() {
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>Loading prices...</span>
           ) : (
             <>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {nseCount > 0 ? `● NSE live (${nseCount})` : '○ NSE offline'}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {globalCount > 0 ? `● Global live (${globalCount})` : '○ Global offline'}
               </span>
               {priceTime && (
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#C8C8B8' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8C8B8' }}>
                   as of {priceTime}
                 </span>
               )}
@@ -330,7 +330,7 @@ export default function InvestPage() {
               key={c}
               onClick={() => setCommodityFilter(c)}
               style={{
-                fontFamily: 'var(--font-mono)', fontSize: 9,
+                fontFamily: 'var(--font-mono)', fontSize: 10,
                 letterSpacing: '0.06em', textTransform: 'uppercase',
                 padding: '4px 10px',
                 border: commodityFilter === c ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
@@ -379,7 +379,7 @@ export default function InvestPage() {
         </p>
       )}
 
-      <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)', fontSize: 9, color: '#C8C8B8', lineHeight: 1.8, letterSpacing: '0.02em' }}>
+      <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8C8B8', lineHeight: 1.8, letterSpacing: '0.02em' }}>
         Not investment advice.
       </div>
     </div>

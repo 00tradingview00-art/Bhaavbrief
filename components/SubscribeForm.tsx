@@ -48,7 +48,7 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
   const inputStyle: React.CSSProperties = {
     display: 'block', width: '100%', padding: '10px 12px',
     border: '0.5px solid #C8C8B8', background: '#FAFAF6',
-    fontFamily: 'var(--font-sans)', fontSize: 13, color: '#18180F',
+    fontFamily: 'var(--font-sans)', fontSize: 15, color: '#18180F',
     outline: 'none', marginBottom: 8,
   }
   const btnStyle: React.CSSProperties = {
@@ -63,7 +63,7 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
     return (
       <div style={{ background: '#EAF5EE', border: '0.5px solid #5AAA70', padding: '1rem', textAlign: 'center' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1E6630', marginBottom: 4 }}>✓ Subscribed</div>
-        <p style={{ fontSize: 13, color: '#1E6630', margin: 0 }}>{message}</p>
+        <p style={{ fontSize: 15, color: '#1E6630', margin: 0 }}>{message}</p>
       </div>
     )
   }
@@ -72,7 +72,7 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
     <form onSubmit={handleSubmit}>
       {!compact && (
         <>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
             Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
@@ -97,7 +97,7 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
       {status === 'error' && (
         <p style={{ fontSize: 11, color: '#991818', marginTop: 6, fontFamily: 'var(--font-mono)' }}>{message}</p>
       )}
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.04em', color: '#8A8A7A', textAlign: 'center', marginTop: 8 }}>
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#8A8A7A', textAlign: 'center', marginTop: 8 }}>
         No spam · Unsubscribe anytime
       </p>
     </form>

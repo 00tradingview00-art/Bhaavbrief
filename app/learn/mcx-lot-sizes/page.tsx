@@ -171,7 +171,7 @@ export default function Page() {
   const cell: React.CSSProperties = {
     padding: '10px 14px',
     borderTop: '1px solid #DDDDD0',
-    fontSize: 13,
+    fontSize: 15,
     color: '#18180F',
     verticalAlign: 'top',
   }
@@ -419,7 +419,7 @@ export default function Page() {
           = 100 units of 10g. So:
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 1.9, color: '#18180F', minWidth: 280 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 1.9, color: '#18180F', minWidth: 280 }}>
           Contract value = price per 10g × lot size in 10g units<br />
           = ₹{fmt(p.gold)} × 100 = <strong>{fmtValue(goldStd)}</strong><br />
           <br />
@@ -447,16 +447,16 @@ export default function Page() {
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
           <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <Link href="/learn" style={{ fontSize: 13, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
+            <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
             </Link>
-            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX margin calculation →
             </Link>
-            <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX Gold contracts in detail →
             </Link>
-            <Link href="/commodities/gold" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/commodities/gold" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               Gold live price & analysis →
             </Link>
           </div>

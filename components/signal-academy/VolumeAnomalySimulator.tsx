@@ -212,7 +212,7 @@ export default function VolumeAnomalySimulator() {
     <div>
       {/* Volume slider */}
       <div style={{ marginBottom: 28 }}>
-        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
           Today's volume vs 20-day average
           <span style={{ marginLeft: 12, fontSize: 22, fontWeight: 600, color: zone.color, verticalAlign: 'middle' }}>
             {multiplier.toFixed(1)}×
@@ -255,7 +255,7 @@ export default function VolumeAnomalySimulator() {
         background: 'var(--surface)', border: '1px solid var(--border)',
         borderRadius: 8, padding: '14px 16px', marginBottom: 24,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>
           Volume pattern — last 7 sessions (illustrative)
         </div>
         <VolumeChart multiplier={multiplier} zone={zone} />
@@ -269,13 +269,13 @@ export default function VolumeAnomalySimulator() {
         transition: 'opacity 0.2s',
       }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
             Price direction (session)
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             {(['up', 'flat', 'down'] as PriceDir[]).map(d => (
               <button key={d} onClick={() => setPriceDir(d)} style={{
-                flex: 1, padding: '8px 0', fontFamily: 'var(--font-mono)', fontSize: 9,
+                flex: 1, padding: '8px 0', fontFamily: 'var(--font-mono)', fontSize: 10,
                 border: `1px solid ${priceDir === d ? (d === 'up' ? 'rgba(34,197,94,0.6)' : d === 'down' ? 'rgba(239,68,68,0.6)' : 'rgba(212,168,48,0.6)') : 'var(--border)'}`,
                 background: priceDir === d ? (d === 'up' ? 'rgba(34,197,94,0.08)' : d === 'down' ? 'rgba(239,68,68,0.08)' : 'rgba(212,168,48,0.08)') : 'var(--surface)',
                 color: priceDir === d ? (d === 'up' ? 'var(--up)' : d === 'down' ? 'var(--down)' : '#D4A830') : 'var(--ink-3)',
@@ -288,13 +288,13 @@ export default function VolumeAnomalySimulator() {
         </div>
 
         <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 8 }}>
             OI change (vs prev close)
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             {(['up', 'down'] as OIDir[]).map(d => (
               <button key={d} onClick={() => setOIDir(d)} style={{
-                flex: 1, padding: '8px 0', fontFamily: 'var(--font-mono)', fontSize: 9,
+                flex: 1, padding: '8px 0', fontFamily: 'var(--font-mono)', fontSize: 10,
                 border: `1px solid ${oiDir === d ? (d === 'up' ? 'rgba(34,197,94,0.6)' : 'rgba(239,68,68,0.6)') : 'var(--border)'}`,
                 background: oiDir === d ? (d === 'up' ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)') : 'var(--surface)',
                 color: oiDir === d ? (d === 'up' ? 'var(--up)' : 'var(--down)') : 'var(--ink-3)',
@@ -309,7 +309,7 @@ export default function VolumeAnomalySimulator() {
 
       {/* Combined signal matrix quick reference */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '12px 14px', marginBottom: 20 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 8 }}>
           Combined signal matrix (Vol 2×+)
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5 }}>
@@ -337,7 +337,7 @@ export default function VolumeAnomalySimulator() {
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)', width: 52, flexShrink: 0 }}>
                   P:{row.price} O:{row.oi}
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: row.color, fontWeight: active ? 600 : 400 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: row.color, fontWeight: active ? 600 : 400 }}>
                   {row.result}
                 </span>
               </div>
@@ -367,7 +367,7 @@ export default function VolumeAnomalySimulator() {
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, fontWeight: 600, color: 'var(--ink)', marginBottom: 8 }}>
           {result.label}
         </div>
-        <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
           {result.description}
         </p>
         <div style={{ borderTop: `1px solid ${result.border}`, paddingTop: 10, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.6 }}>
@@ -377,7 +377,7 @@ export default function VolumeAnomalySimulator() {
 
       {/* 5 rules */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
           5 rules for reading volume anomalies
         </div>
         {[
@@ -389,14 +389,14 @@ export default function VolumeAnomalySimulator() {
         ].map((rule, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--surface)',
+              fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--surface)',
               background: 'var(--ink-3)', borderRadius: '50%',
               width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, marginTop: 1,
             }}>
               {i + 1}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
+            <span style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
           </div>
         ))}
       </div>

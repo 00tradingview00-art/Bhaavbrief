@@ -79,7 +79,7 @@ export default async function ArticlesPage() {
             </h2>
 
             {article.description && (
-              <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
                 {article.description}
               </p>
             )}

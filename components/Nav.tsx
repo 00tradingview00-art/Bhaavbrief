@@ -83,7 +83,7 @@ export default function Nav() {
                   style={{
                     padding: '6px 12px',
                     borderRadius: 6,
-                    fontSize: 13,
+                    fontSize: 15,
                     fontWeight: isActive ? 500 : 400,
                     color: isActive ? 'var(--ink)' : 'var(--ink-3)',
                     background: isActive ? 'var(--surface-3)' : 'transparent',
@@ -157,7 +157,7 @@ export default function Nav() {
               color: '#fff',
               padding: '8px 16px',
               borderRadius: 6,
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 500,
               textDecoration: 'none',
               flexShrink: 0,

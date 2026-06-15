@@ -170,7 +170,7 @@ export default function Page() {
   const goldMaint      = Math.round(goldTotal * maintPct)
   const goldCallLoss   = goldTotal - goldMaint
 
-  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 13, color: '#18180F', verticalAlign: 'top' }
+  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
   const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
@@ -408,7 +408,7 @@ export default function Page() {
           MTM is the daily profit/loss settlement that happens every evening after MCX closes. It is the mechanism that makes your margin requirement dynamic rather than fixed.
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F', minWidth: 320 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2, color: '#18180F', minWidth: 320 }}>
           Day 1: You buy 1 MCX Gold Mini at ₹{fmt(p.gold)}/10g.<br />
           Day 1 closing price: ₹{fmt(p.gold + 800)}/10g.<br />
           MTM profit: ₹800 × 10 units = <strong>+₹8,000</strong> credited to account.<br />
@@ -484,16 +484,16 @@ export default function Page() {
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
           <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <Link href="/learn" style={{ fontSize: 13, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
+            <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
             </Link>
-            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX lot sizes →
             </Link>
-            <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX gold contracts →
             </Link>
-            <Link href="/commodities/gold" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/commodities/gold" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               Gold live price →
             </Link>
           </div>

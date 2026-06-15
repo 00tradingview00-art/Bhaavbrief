@@ -30,7 +30,7 @@ export default function NotFound() {
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: 'var(--ink)', color: '#fff',
           padding: '10px 22px', borderRadius: 6,
-          fontSize: 13, fontWeight: 500, textDecoration: 'none',
+          fontSize: 15, fontWeight: 500, textDecoration: 'none',
         }}>
           ← Back to home
         </Link>
@@ -38,7 +38,7 @@ export default function NotFound() {
           display: 'inline-flex', alignItems: 'center', gap: 8,
           border: '1px solid var(--border)', color: 'var(--ink-2)',
           padding: '10px 20px', borderRadius: 6,
-          fontSize: 13, textDecoration: 'none',
+          fontSize: 15, textDecoration: 'none',
         }}>
           Browse briefs
         </Link>

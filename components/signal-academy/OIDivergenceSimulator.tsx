@@ -116,7 +116,7 @@ export default function OIDivergenceSimulator() {
       <div style={{ display: 'flex', gap: 24, marginBottom: 28, flexWrap: 'wrap' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
           <span style={{ color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 9 }}>Illustrative price</span><br />
-          <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: 16 }}>{base.price}<span style={{ fontSize: 9, color: 'var(--ink-4)', marginLeft: 3 }}>{base.unit}</span></span>
+          <span style={{ color: 'var(--ink)', fontWeight: 600, fontSize: 16 }}>{base.price}<span style={{ fontSize: 10, color: 'var(--ink-4)', marginLeft: 3 }}>{base.unit}</span></span>
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}>
           <span style={{ color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', fontSize: 9 }}>Illustrative OI base</span><br />
@@ -127,12 +127,12 @@ export default function OIDivergenceSimulator() {
       {/* Sliders */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 32 }}>
         <div>
-          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
             Price change
             <span style={{
               marginLeft: 8,
               color: pricePct >= 0 ? 'var(--up)' : 'var(--down)',
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 600,
               verticalAlign: 'middle',
             }}>
@@ -150,12 +150,12 @@ export default function OIDivergenceSimulator() {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
             OI change
             <span style={{
               marginLeft: 8,
               color: oiPct >= 0 ? 'var(--up)' : 'var(--down)',
-              fontSize: 13,
+              fontSize: 15,
               fontWeight: 600,
               verticalAlign: 'middle',
             }}>
@@ -230,7 +230,7 @@ export default function OIDivergenceSimulator() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               fontWeight: 600,
               letterSpacing: '0.1em',
               textTransform: 'uppercase',
@@ -243,10 +243,10 @@ export default function OIDivergenceSimulator() {
               {meta.label}
             </span>
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginBottom: 6, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 6, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
             {meta.strength}
           </div>
-          <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
             {meta.description}
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.6, margin: 0, fontFamily: 'var(--font-mono)' }}>
@@ -263,7 +263,7 @@ export default function OIDivergenceSimulator() {
         padding: '16px 18px',
         marginBottom: 24,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
           Signal strength benchmarks
         </div>
         {SIGNAL_STRENGTH.map((s, i) => (
@@ -276,20 +276,20 @@ export default function OIDivergenceSimulator() {
 
       {/* Reading rules */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
           5 rules for reading OI divergence
         </div>
         {READING_RULES.map((rule, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--surface)',
+              fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--surface)',
               background: 'var(--ink-3)', borderRadius: '50%',
               width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, marginTop: 1,
             }}>
               {i + 1}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
+            <span style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
           </div>
         ))}
       </div>

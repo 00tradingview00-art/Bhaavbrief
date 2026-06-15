@@ -75,7 +75,7 @@ export default function SentimentPanel() {
         coverage.map(({ name, count, pct }) => (
           <div key={name} style={{ marginBottom: 18 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--ink)' }}>{name}</span>
+              <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--ink)' }}>{name}</span>
               <span style={{
                 fontFamily: 'var(--font-mono)', fontSize: 10,
                 color: 'var(--ink-4)', letterSpacing: '0.04em',

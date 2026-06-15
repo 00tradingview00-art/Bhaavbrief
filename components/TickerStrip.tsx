@@ -127,7 +127,7 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
       {generatedAtIST && (
         <div style={{
           textAlign: 'right', padding: '0 12px 3px',
-          fontSize: 9, color: 'rgba(255,255,255,0.25)',
+          fontSize: 10, color: 'rgba(255,255,255,0.25)',
           fontFamily: 'var(--font-mono)', letterSpacing: '0.03em',
         }}>
           as of {generatedAtIST}

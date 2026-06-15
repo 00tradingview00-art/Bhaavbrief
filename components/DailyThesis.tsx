@@ -89,7 +89,7 @@ export default function DailyThesis() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
               <span style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 9,
+                fontSize: 10,
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 color: yesterday.outcome === 'CORRECT' ? 'var(--up)' : 'var(--down)',
@@ -99,7 +99,7 @@ export default function DailyThesis() {
               </span>
               <span style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 9,
+                fontSize: 10,
                 color: 'white',
                 background: commodityColor[yesterday.commodity] ?? '#7A7668',
                 padding: '1px 6px',
@@ -110,7 +110,7 @@ export default function DailyThesis() {
             </div>
             <p style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 13,
+              fontSize: 15,
               color: 'var(--ink-2)',
               margin: '0 0 2px',
               lineHeight: 1.4,
@@ -133,7 +133,7 @@ export default function DailyThesis() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               color: 'var(--ink-3)',
@@ -143,7 +143,7 @@ export default function DailyThesis() {
             </span>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               color: 'white',
               background: commodityColor[current.commodity] ?? '#7A7668',
               padding: '1px 6px',
@@ -153,7 +153,7 @@ export default function DailyThesis() {
             </span>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               padding: '1px 6px',
               borderRadius: 3,
               background: current.direction === 'bullish' ? 'var(--up-bg)' : 'var(--down-bg)',
@@ -203,7 +203,7 @@ export default function DailyThesis() {
                 {streak >= 2 && (
                   <span style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 9,
+                    fontSize: 10,
                     fontWeight: 700,
                     color: 'var(--up)',
                     background: 'var(--up-bg)',
@@ -216,7 +216,7 @@ export default function DailyThesis() {
                 )}
                 <span style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 9,
+                  fontSize: 10,
                   color: 'var(--ink-4)',
                   letterSpacing: '0.04em',
                 }}>

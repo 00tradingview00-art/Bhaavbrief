@@ -424,9 +424,9 @@ export default async function CommodityPage({ params }: Props) {
                 fontSize: 10, fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase',
                 padding: '3px 8px', borderRadius: 4, background: `${color}15`, color,
               }}>MCX</span>
-              <span style={{ fontSize: 13, color: 'var(--ink-4)' }}>{info.mcxSymbol}</span>
-              <span style={{ fontSize: 13, color: 'var(--ink-4)' }}>·</span>
-              <span style={{ fontSize: 13, color: 'var(--ink-4)' }}>{info.unit}</span>
+              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>{info.mcxSymbol}</span>
+              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>·</span>
+              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>{info.unit}</span>
             </div>
             <h1 style={{
               fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500,
@@ -434,7 +434,7 @@ export default async function CommodityPage({ params }: Props) {
             }}>
               MCX {info.name} Price Today
             </h1>
-            <p style={{ fontSize: 13, color: 'var(--ink-4)', margin: 0 }}>
+            <p style={{ fontSize: 15, color: 'var(--ink-4)', margin: 0 }}>
               Live MCX price · Updated in real time
             </p>
           </div>
@@ -517,7 +517,7 @@ export default async function CommodityPage({ params }: Props) {
                       {a.title}
                     </div>
                     {a.description && (
-                      <div style={{ fontSize: 13, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.5 }}>
+                      <div style={{ fontSize: 15, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.5 }}>
                         {a.description}
                       </div>
                     )}
@@ -629,7 +629,7 @@ export default async function CommodityPage({ params }: Props) {
                 gap: 8,
               }}>
                 <span style={{ fontSize: 12, color: 'var(--ink-4)', flexShrink: 0 }}>{label}</span>
-                <span style={{ fontSize: 13, color: 'var(--ink-2)', fontWeight: 500, textAlign: 'right' }}>{value}</span>
+                <span style={{ fontSize: 15, color: 'var(--ink-2)', fontWeight: 500, textAlign: 'right' }}>{value}</span>
               </div>
             ))}
             <p style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.5 }}>
@@ -645,7 +645,7 @@ export default async function CommodityPage({ params }: Props) {
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 10 }}>
               Who Controls Supply
             </div>
-            <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.7, margin: 0 }}>
               {info.supplyControl}
             </p>
           </div>
@@ -703,7 +703,7 @@ export default async function CommodityPage({ params }: Props) {
                 ] : []),
               ].map(({ label, href }) => (
                 <Link key={label} href={href} style={{
-                  fontSize: 13, color: 'var(--gold)', textDecoration: 'none',
+                  fontSize: 15, color: 'var(--gold)', textDecoration: 'none',
                   display: 'flex', alignItems: 'center', gap: 6, lineHeight: 1.4,
                 }}>
                   <span style={{ fontSize: 10, opacity: 0.6 }}>→</span> {label}
@@ -766,19 +766,19 @@ export default async function CommodityPage({ params }: Props) {
       {/* Bottom nav strip */}
       <div style={{ marginTop: 16, paddingTop: 24, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
         <Link href="/articles" style={{
-          fontSize: 13, color, fontWeight: 500, textDecoration: 'none',
+          fontSize: 15, color, fontWeight: 500, textDecoration: 'none',
           display: 'inline-flex', alignItems: 'center', gap: 6,
         }}>
           ← All Market Intelligence
         </Link>
         <div style={{ display: 'flex', gap: 20 }}>
-          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             Live Prices
           </Link>
-          <Link href="/learn" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/learn" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             Learn MCX
           </Link>
-          <Link href="/invest" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/invest" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             How to Invest
           </Link>
         </div>

@@ -116,10 +116,10 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
         <article>
           <header style={{ paddingBottom: '1.25rem', marginBottom: '1.25rem', borderBottom: '0.5px solid #DDDDD0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', border: `0.5px solid ${catStyle.borderColor as string}`, background: catStyle.background as string, color: catStyle.color as string }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', border: `0.5px solid ${catStyle.borderColor as string}`, background: catStyle.background as string, color: catStyle.color as string }}>
                 {flash.category}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', background: '#F3F2EC', color: '#8A8A7A', border: '0.5px solid #C8C8B8' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', background: '#F3F2EC', color: '#8A8A7A', border: '0.5px solid #C8C8B8' }}>
                 Flash
               </span>
               <time dateTime={flash.date} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>

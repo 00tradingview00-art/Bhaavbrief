@@ -88,13 +88,13 @@ export default function VolumeAnomalyPage() {
             padding: '16px 20px',
             marginBottom: 28,
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
               Why the 20-day average matters
             </div>
-            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
+            <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
               The 20-session average volume represents normal market participation — the baseline of retail, hedging, and routine institutional flow. When today's volume exceeds this baseline by 2× or more, something has changed: a new catalyst, a forced position unwind, or deliberate institutional accumulation or distribution.
             </p>
-            <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0, fontWeight: 300 }}>
+            <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0, fontWeight: 300 }}>
               Volume alone does not tell you the direction. But combined with price direction and OI change, it classifies exactly what type of participant is driving the move — and whether that move has the conviction to continue.
             </p>
           </div>
@@ -109,10 +109,10 @@ export default function VolumeAnomalyPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
                 Interactive simulator — illustrative thresholds
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Not real-time · Educational only
               </span>
             </div>
@@ -129,7 +129,7 @@ export default function VolumeAnomalyPage() {
             padding: '16px 20px',
             marginBottom: 28,
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 14 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 14 }}>
               Illustrative historical patterns
             </div>
             {[
@@ -155,10 +155,10 @@ export default function VolumeAnomalyPage() {
                 marginBottom: i < 2 ? 14 : 0,
               }}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 5 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', background: 'var(--bg)', border: '1px solid var(--border)', padding: '1px 6px', borderRadius: 3, flexShrink: 0 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', background: 'var(--bg)', border: '1px solid var(--border)', padding: '1px 6px', borderRadius: 3, flexShrink: 0 }}>
                     Illustrative
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-3)' }}>{c.period}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)' }}>{c.period}</span>
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, color: 'var(--ink)', marginBottom: 5 }}>
                   {c.signal}
@@ -178,7 +178,7 @@ export default function VolumeAnomalyPage() {
             padding: '16px 20px',
             marginBottom: 28,
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 14 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 14 }}>
               All 5 signals — the combined framework
             </div>
             {[
@@ -194,7 +194,7 @@ export default function VolumeAnomalyPage() {
                 paddingBottom: i < 4 ? 10 : 0, marginBottom: i < 4 ? 10 : 0,
               }}>
                 <span style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 9,
+                  fontFamily: 'var(--font-mono)', fontSize: 10,
                   color: 'var(--gold)', background: 'rgba(200,114,10,0.1)',
                   border: '1px solid rgba(200,114,10,0.3)',
                   borderRadius: 3, width: 22, height: 22,
@@ -232,7 +232,7 @@ export default function VolumeAnomalyPage() {
 
           {/* Disclaimer */}
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
               Educational content only. BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser. All simulator data is illustrative. Past patterns are not indicative of future market behaviour. Consult a SEBI-registered RA or IA before making trading decisions.
             </p>
           </div>

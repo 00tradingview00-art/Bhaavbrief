@@ -57,7 +57,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
           }}>
             <div style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               letterSpacing: '0.09em',
               textTransform: 'uppercase',
               color: 'var(--ink-3)',
@@ -75,7 +75,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
             }}>
               {item.price}
               {item.unit && (
-                <span style={{ fontSize: 9, color: 'var(--ink-4)', marginLeft: 3, fontWeight: 400 }}>
+                <span style={{ fontSize: 10, color: 'var(--ink-4)', marginLeft: 3, fontWeight: 400 }}>
                   {item.unit}
                 </span>
               )}
@@ -148,7 +148,7 @@ export default async function HomePage() {
         {/* Content */}
         <div style={{ position: 'relative' }}>
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9,
+            fontFamily: 'var(--font-mono)', fontSize: 10,
             letterSpacing: '0.14em', textTransform: 'uppercase',
             color: 'var(--gold)', marginBottom: 10,
           }}>
@@ -206,7 +206,7 @@ export default async function HomePage() {
           }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9, fontWeight: 500,
+              fontSize: 10, fontWeight: 500,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               color: 'var(--gold)',
               background: 'var(--gold-pale)',
@@ -263,7 +263,7 @@ export default async function HomePage() {
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     background: 'var(--ink)', color: '#fff',
                     padding: '10px 22px', borderRadius: 6,
-                    fontSize: 13, fontWeight: 500, textDecoration: 'none',
+                    fontSize: 15, fontWeight: 500, textDecoration: 'none',
                     letterSpacing: '0.01em',
                   }}
                 >
@@ -275,7 +275,7 @@ export default async function HomePage() {
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     background: 'transparent', color: 'var(--ink-2)',
                     padding: '10px 20px', borderRadius: 6,
-                    fontSize: 13, fontWeight: 400, textDecoration: 'none',
+                    fontSize: 15, fontWeight: 400, textDecoration: 'none',
                     border: '1px solid var(--border)',
                   }}
                 >
@@ -356,7 +356,7 @@ export default async function HomePage() {
               {/* Edition number column */}
               <div style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 13,
+                fontSize: 15,
                 fontWeight: 500,
                 color: idx === 0 ? 'var(--gold)' : 'var(--ink-4)',
                 lineHeight: 1,
@@ -389,7 +389,7 @@ export default async function HomePage() {
                   {brief.title}
                 </h2>
                 <p style={{
-                  fontSize: 13, color: 'var(--ink-3)',
+                  fontSize: 15, color: 'var(--ink-3)',
                   lineHeight: 1.65, margin: 0,
                 }}>
                   {brief.description}
@@ -428,7 +428,7 @@ export default async function HomePage() {
                 }}>
                   <div style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 9,
+                    fontSize: 10,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     color: 'var(--gold)',
@@ -484,7 +484,7 @@ export default async function HomePage() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 9, letterSpacing: '0.1em',
+                  fontSize: 10, letterSpacing: '0.1em',
                   textTransform: 'uppercase', color: 'var(--up)',
                   display: 'flex', alignItems: 'center', gap: 5,
                 }}>
@@ -504,9 +504,9 @@ export default async function HomePage() {
                   return (
                     <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--ink)', fontWeight: 500 }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
                         {price ? `₹${price.toLocaleString('en-IN', { maximumFractionDigits: 0 })}` : '—'}
-                        <span style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
+                        <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
                       </span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
                         {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
@@ -516,7 +516,7 @@ export default async function HomePage() {
                 })}
               </div>
               {/* Footer hint */}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
                 OHLC · Volume · Open Interest · 5 commodities
               </div>
             </div>
@@ -550,7 +550,7 @@ export default async function HomePage() {
                 </div>
                 <div style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 9, color: 'var(--ink-4)',
+                  fontSize: 10, color: 'var(--ink-4)',
                   letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 5,
                 }}>
                   {label}
@@ -573,7 +573,7 @@ export default async function HomePage() {
             }}>
               <div style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: 9, letterSpacing: '0.12em',
+                fontSize: 10, letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 color: 'var(--gold)',
                 marginBottom: 4,
@@ -590,7 +590,7 @@ export default async function HomePage() {
             </div>
             <div style={{ padding: '18px 20px' }}>
               <p style={{
-                fontSize: 13, color: 'var(--ink-3)',
+                fontSize: 15, color: 'var(--ink-3)',
                 lineHeight: 1.65, marginBottom: 14,
               }}>
                 Daily commodity intelligence for traders, investors and merchants. Every weekday at 9:30 AM.
@@ -608,12 +608,12 @@ export default async function HomePage() {
           }}>
             <p style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9, fontWeight: 500, letterSpacing: '0.1em',
+              fontSize: 10, fontWeight: 500, letterSpacing: '0.1em',
               textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10,
             }}>
               About BhaavBrief
             </p>
-            <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
+            <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
               Independent commodity intelligence for India's traders, investors, merchants and businesses.
               MCX energy, metals, and NCDEX agri — through a geopolitical and supply-demand lens.
             </p>

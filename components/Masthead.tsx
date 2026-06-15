@@ -20,7 +20,7 @@ export default function Masthead() {
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.025em', color: '#18180F', lineHeight: 1 }}>
               BhaavBrief
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8720A', marginTop: 4 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8720A', marginTop: 4 }}>
               India's First Commodity Intelligence · Est. 2026
             </div>
           </Link>

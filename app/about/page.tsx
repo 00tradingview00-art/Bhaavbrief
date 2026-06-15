@@ -56,7 +56,7 @@ export default function AboutPage() {
 
         {/* Header */}
         <div style={{ marginBottom: '2.25rem' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A' }}>
             About
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', margin: '0.4rem 0 1.25rem', maxWidth: 780 }}>
@@ -125,7 +125,7 @@ export default function AboutPage() {
                 ].map(p => (
                   <div key={p.badge} style={{ background: '#F3F2EC', border: '0.5px solid #DDDDD0', padding: '1rem 1.1rem' }}>
                     <span style={{
-                      display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 9,
+                      display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 10,
                       letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px',
                       border: `0.5px solid ${p.badgeBorder}`, background: p.badgeBg, color: p.badgeColor,
                       marginBottom: '0.75rem',
@@ -151,7 +151,7 @@ export default function AboutPage() {
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem', paddingBottom: '0.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
                 Inside every brief
               </h2>
-              <p style={{ fontSize: 13, color: '#8A8A7A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
+              <p style={{ fontSize: 15, color: '#8A8A7A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
                 Every edition leads with the full data context before any narrative — the numbers traders, hedgers, and investors actually use to size up the market.
               </p>
               <div className="about-ohlc-grid">
@@ -245,7 +245,7 @@ export default function AboutPage() {
                 {PRINCIPLES.map(p => (
                   <div key={p.title} style={{ paddingLeft: '1rem', borderLeft: '2px solid #C8720A' }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{p.title}</div>
-                    <div style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>{p.body}</div>
+                    <div style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>{p.body}</div>
                   </div>
                 ))}
               </div>
@@ -253,7 +253,7 @@ export default function AboutPage() {
 
             {/* Disclaimer */}
             <div style={{ background: '#18180F', padding: '1.25rem 1.5rem', color: '#FAFAF6' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
                 Important — Not SEBI registered
               </div>
               <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
@@ -295,7 +295,7 @@ export default function AboutPage() {
 
             {/* Explore links */}
             <div style={{ border: '0.5px solid #DDDDD0', padding: '1rem 1.1rem', marginBottom: '1.5rem' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                 Explore
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -315,10 +315,10 @@ export default function AboutPage() {
 
             {/* Contact */}
             <div style={{ padding: '1.25rem', border: '0.5px solid #DDDDD0' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                 Get in touch
               </div>
-              <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>
+              <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>
                 Questions, feedback, or a story tip? We read every email.
               </p>
               <a href="mailto:brief@bhaavbrief.in" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>

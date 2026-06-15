@@ -180,7 +180,7 @@ export default function SearchModal({ open, onClose }: Props) {
           {!query && !result && (
             <div style={{ padding: '16px 20px' }}>
               <p style={{
-                fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12,
               }}>
                 Try asking
@@ -193,7 +193,7 @@ export default function SearchModal({ open, onClose }: Props) {
                     style={{
                       textAlign: 'left', background: 'none', border: 'none',
                       padding: '10px 12px', borderRadius: 6, cursor: 'pointer',
-                      fontSize: 13, color: 'var(--ink-2)',
+                      fontSize: 15, color: 'var(--ink-2)',
                       transition: 'background 0.1s',
                       fontFamily: 'var(--font-sans)',
                       minHeight: 44, display: 'flex', alignItems: 'center',
@@ -254,7 +254,7 @@ export default function SearchModal({ open, onClose }: Props) {
               {result.contentMatches.length > 0 && (
                 <div>
                   <p style={{
-                    fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+                    fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
                     textTransform: 'uppercase', color: 'var(--ink-4)',
                     padding: '14px 20px 8px', margin: 0,
                   }}>
@@ -279,14 +279,14 @@ export default function SearchModal({ open, onClose }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
                           <TypePill type={item.type} />
                           <span style={{
-                            fontFamily: 'var(--font-mono)', fontSize: 9,
+                            fontFamily: 'var(--font-mono)', fontSize: 10,
                             color: 'var(--ink-4)', letterSpacing: '0.03em',
                           }}>
                             {relDate(item.date)}
                           </span>
                           {item.commodity && (
                             <span style={{
-                              fontFamily: 'var(--font-mono)', fontSize: 9,
+                              fontFamily: 'var(--font-mono)', fontSize: 10,
                               color: 'var(--ink-4)', letterSpacing: '0.03em',
                             }}>
                               · {item.commodity}
@@ -294,7 +294,7 @@ export default function SearchModal({ open, onClose }: Props) {
                           )}
                         </div>
                         <p style={{
-                          fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+                          fontSize: 15, fontWeight: 500, color: 'var(--ink)',
                           margin: '0 0 3px', lineHeight: 1.35,
                         }}>
                           {item.title}
@@ -320,7 +320,7 @@ export default function SearchModal({ open, onClose }: Props) {
                   borderTop: '1px solid var(--border)',
                 }}>
                   <p style={{
-                    fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+                    fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
                     textTransform: 'uppercase', color: 'var(--ink-4)',
                     margin: '0 0 8px',
                   }}>
@@ -367,7 +367,7 @@ export default function SearchModal({ open, onClose }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
           flexWrap: 'wrap', gap: '4px 12px',
         }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
             BhaavBrief Intelligence
           </span>
         </div>

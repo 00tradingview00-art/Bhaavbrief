@@ -110,7 +110,7 @@ function PriceCard({
             {isUp ? '▲' : '▼'} {fmtPct(data.mcxChangePct)}
           </span>
         ) : data.mcx > 0 ? (
-          <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: 'var(--surface-2)', color: 'var(--ink-4)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: 'var(--surface-2)', color: 'var(--ink-4)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
             Prev close
           </span>
         ) : null}
@@ -140,7 +140,7 @@ function PriceCard({
               { l: 'C', v: data.mcxPrevClose },
             ].map(({ l, v }) => (
               <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
-                <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--ink-4)', letterSpacing: '0.3px', minWidth: 10 }}>{l}</span>
+                <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', letterSpacing: '0.3px', minWidth: 10 }}>{l}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>{cfg.fmtP(v)}</span>
               </div>
             ))}
@@ -151,11 +151,11 @@ function PriceCard({
           {/* Volume + OI */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginBottom: 8 }}>
             <div style={{ background: 'var(--surface-2)', borderRadius: 6, padding: '5px 8px' }}>
-              <div style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Volume</div>
+              <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Volume</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxVolume)}</div>
             </div>
             <div style={{ background: 'var(--surface-2)', borderRadius: 6, padding: '5px 8px' }}>
-              <div style={{ fontSize: 9, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Open Int.</div>
+              <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Open Int.</div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxOI)}</div>
             </div>
           </div>
@@ -165,13 +165,13 @@ function PriceCard({
 
       {/* Footer — always visible */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, borderTop: '1px solid var(--border)', marginTop: hasKite ? 0 : 10 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
           {hasKite && data.mcxSymbol ? data.mcxSymbol : ''}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {hasKite && data.mcxExpiry && (
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, padding: '2px 6px', borderRadius: 3,
+              fontFamily: 'var(--font-mono)', fontSize: 10, padding: '2px 6px', borderRadius: 3,
               background: 'var(--gold-pale)', color: 'var(--gold-dark)',
             }}>
               {daysToExpiry(data.mcxExpiry)} · {shortExpiry(data.mcxExpiry)}
@@ -223,7 +223,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
             Markets
           </h1>
-          <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
             MCX live quotes · COMEX · NYMEX reference prices
           </p>
         </div>
@@ -252,7 +252,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
               <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', minHeight: 80, cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 8, display: 'block' }}>{cfg.label}</span>
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-4)' }}>—</span>
-                <span style={{ fontSize: 9, color: 'var(--ink-4)', marginTop: 4 }}>awaiting data</span>
+                <span style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 4 }}>awaiting data</span>
               </div>
             </Link>
           )
@@ -298,7 +298,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 8px', marginTop: 8 }}>
                   {[{ l: 'O', v: fx.open }, { l: 'H', v: fx.high }, { l: 'L', v: fx.low }, { l: 'C', v: fx.prevClose }].map(({ l, v }) => (
                     <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
-                      <span style={{ fontSize: 9, fontWeight: 600, color: 'var(--ink-4)', minWidth: 10 }}>{l}</span>
+                      <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', minWidth: 10 }}>{l}</span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>₹{v.toFixed(cfg.decimals)}</span>
                     </div>
                   ))}
@@ -307,7 +307,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
                 <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>{cfg.unit}</div>
               )}
               {fx?.symbol && (
-                <div style={{ fontSize: 9, fontFamily: 'var(--font-mono)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
+                <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
               )}
             </div>
           )
@@ -316,7 +316,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         {/* RBI Repo Rate */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-            <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>RBI</span>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>RBI</span>
             <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>RBI Repo</span>
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
@@ -337,7 +337,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 4 }}>
             Get the MCX morning brief — free
           </div>
-          <div style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+          <div style={{ fontSize: 15, color: 'var(--ink-3)' }}>
             Gold, crude, silver — why prices are moving, before the market opens.
           </div>
         </div>
@@ -346,7 +346,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           style={{
             display: 'inline-block', padding: '10px 20px',
             background: 'var(--ink)', color: '#fff',
-            borderRadius: 6, fontSize: 13, fontWeight: 600,
+            borderRadius: 6, fontSize: 15, fontWeight: 600,
             textDecoration: 'none', flexShrink: 0, letterSpacing: '0.02em',
           }}
         >
@@ -380,7 +380,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
               <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: exStyle.bg, color: exStyle.color }}>{exch}</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: exStyle.bg, color: exStyle.color }}>{exch}</span>
                     <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>{label}</span>
                   </div>
                   {pct !== undefined && (

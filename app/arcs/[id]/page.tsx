@@ -73,7 +73,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
           <span style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 9,
+            fontSize: 10,
             fontWeight: 700,
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
@@ -87,7 +87,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
           {arc.primaryCommodity && (
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               color: 'white',
               background: 'var(--ink-3)',
               padding: '2px 7px',
@@ -99,7 +99,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
           {arc.keyLevel && (
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 9,
+              fontSize: 10,
               color: 'var(--gold)',
               background: 'var(--gold-pale)',
               padding: '2px 7px',
@@ -192,7 +192,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
               }}>
                 <div style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: 9,
+                  fontSize: 10,
                   color: 'var(--ink-4)',
                   letterSpacing: '0.06em',
                   marginBottom: 6,

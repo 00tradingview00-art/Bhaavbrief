@@ -595,11 +595,11 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
           All MCX gold contracts settle against 995 purity LBMA-approved gold. Physical delivery is available (and compulsory if you hold to expiry without squaring off) at MCX accredited vaults in Ahmedabad, Mumbai, and Delhi.
         </p>
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link href="/commodities/gold" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+          <Link href="/commodities/gold" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Gold live price & analysis →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
-          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             All live prices
           </Link>
         </div>
@@ -638,11 +638,11 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
           <strong>Seasonal demand</strong> adds an Indian angle: silver demand spikes before Diwali (jewellery, gifting) and during large solar panel procurement cycles (India&apos;s solar installation targets require significant silver for panel contacts). Watch for these seasonal patterns in MCX Silver open interest around April–May and September–October.
         </p>
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link href="/commodities/silver" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+          <Link href="/commodities/silver" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Silver live price & analysis →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
-          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             All live prices
           </Link>
         </div>
@@ -685,15 +685,15 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
           <strong>MCX Crude vs petrol/diesel prices</strong>: MCX crude and retail fuel prices in India are linked but not directly. OMCs (BPCL, IOCL, HPCL) absorb margin compression during crude spikes before passing costs to consumers. A ₹500/bbl rise in MCX Crude does not immediately translate to a petrol price hike — but sustained crude elevation over 2–3 months typically does.
         </p>
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link href="/commodities/crude-oil" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+          <Link href="/commodities/crude-oil" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Crude Oil live price & analysis →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
-          <Link href="/commodities/natural-gas" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+          <Link href="/commodities/natural-gas" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Natural Gas →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
-          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             All live prices
           </Link>
         </div>
@@ -742,11 +742,11 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
           <strong>Zinc and Lead</strong> tend to move together — both are by-products of mining operations and share many of the same demand drivers (construction for zinc galvanising; auto battery replacement cycle for lead). Aluminium has the most direct India-specific demand angle: packaging, two-wheeler manufacturing, and infrastructure spending. When India&apos;s Union Budget announces large infra allocation, aluminium and copper are typically the first MCX base metals to react.
         </p>
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <Link href="/commodities/copper" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+          <Link href="/commodities/copper" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Copper live price & analysis →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
-          <Link href="/markets" style={{ fontSize: 13, color: 'var(--ink-3)', textDecoration: 'none' }}>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
             All live prices
           </Link>
         </div>
@@ -871,7 +871,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
                   style={{
                     display: 'block', padding: '9px 16px 9px 22px',
                     borderBottom: '1px solid var(--border)',
-                    fontSize: 13, color: 'var(--gold)', fontWeight: 500,
+                    fontSize: 15, color: 'var(--gold)', fontWeight: 500,
                     textDecoration: 'none',
                   }}
                 >
@@ -887,7 +887,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
                   display: 'block', width: '100%', textAlign: 'left' as const,
                   padding: '9px 16px 9px 22px',
                   border: 'none', borderBottom: '1px solid var(--border)',
-                  fontSize: 13,
+                  fontSize: 15,
                   color: isActive ? 'var(--ink)' : 'var(--ink-3)',
                   fontWeight: isActive ? 500 : 400,
                   background: isActive ? 'var(--surface-3)' : 'transparent',
@@ -913,7 +913,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
       <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: isMobile ? 20 : 24, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
         All MCX guides
       </h2>
-      <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '0 0 28px' }}>
+      <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: '0 0 28px' }}>
         {ARTICLES.length} articles across {SECTIONS.length} topics — read in order or jump to any guide.
       </p>
       {SECTIONS.map(section => (
@@ -969,7 +969,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
   const prevBtn = (mobile: boolean) => {
     const style = mobile
       ? { flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'left' as const }
-      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
+      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
     return (
       <button onClick={() => activeId! > 0 ? selectArticle(activeId! - 1) : goToOverview()} style={style}>
         ← {activeId! > 0 ? ARTICLES[activeId! - 1].title : 'All guides'}
@@ -981,7 +981,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
     if (activeId === null || activeId >= ARTICLES.length - 1) return <span />
     const style = mobile
       ? { flex: 1, padding: '10px 12px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 12, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)', textAlign: 'right' as const }
-      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 13, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
+      : { display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 6, border: '1px solid var(--border-2)', background: 'none', fontSize: 15, fontWeight: 500, color: 'var(--ink)', cursor: 'pointer', fontFamily: 'var(--font-sans)' }
     return (
       <button onClick={() => selectArticle(activeId + 1)} style={style}>
         {mobile ? '' : 'Next: '}{ARTICLES[activeId + 1].title} →
@@ -995,7 +995,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: isMobile ? 24 : 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
           Learn MCX Trading: Lot Sizes, Margins &amp; Taxation
         </h1>
-        <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
+        <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
           All MCX contracts &amp; lot sizes, trading mechanics, market drivers, hedging and taxation — explained clearly.
         </p>
       </div>
@@ -1009,7 +1009,7 @@ export default function LearnPage({ specs }: { specs?: ContractSpecs | null }) {
               width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               padding: '12px 16px', marginBottom: tocOpen ? 0 : 16,
               background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: tocOpen ? '10px 10px 0 0' : 10,
-              fontSize: 13, fontWeight: 500, color: 'var(--ink)',
+              fontSize: 15, fontWeight: 500, color: 'var(--ink)',
               cursor: 'pointer', fontFamily: 'var(--font-sans)',
             }}
           >

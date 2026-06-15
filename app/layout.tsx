@@ -122,7 +122,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--ink)', marginBottom: 8 }}>
             Bhaav<span style={{ color: 'var(--gold)' }}>Brief</span>
           </p>
-          <p style={{ fontSize: 13, color: 'var(--ink-4)', marginBottom: 4 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-4)', marginBottom: 4 }}>
             Independent commodity intelligence for India's traders, investors and merchants.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>

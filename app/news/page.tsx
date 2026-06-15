@@ -86,7 +86,7 @@ export default async function NewsPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
           <span style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: 9,
+            fontSize: 10,
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
             color: '#C8720A',
@@ -111,7 +111,7 @@ export default async function NewsPage() {
         </h1>
 
         <p style={{
-          fontSize: 13,
+          fontSize: 15,
           color: '#48483A',
           lineHeight: 1.7,
           margin: 0,

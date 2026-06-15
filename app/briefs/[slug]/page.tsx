@@ -167,7 +167,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
           <article itemScope itemType="https://schema.org/NewsArticle">
             <header style={{ paddingBottom: '1.5rem', marginBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '3px 8px', border: `0.5px solid ${tagStyle.borderColor}`, background: tagStyle.background as string, color: tagStyle.color as string }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '3px 8px', border: `0.5px solid ${tagStyle.borderColor}`, background: tagStyle.background as string, color: tagStyle.color as string }}>
                   {brief.tags?.[0] ?? 'Brief'}
                 </span>
                 <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
@@ -186,7 +186,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: '0.75rem' }}>
                   {brief.commodities.map(c => {
                     const page = COMMODITY_PAGE_MAP[c]
-                    const style: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }
+                    const style: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }
                     return page ? (
                       <Link key={c} href={`/commodities/${page.slug}`} itemProp="keywords" style={{ ...style, color: '#C8720A', textDecoration: 'none' }}>{c}</Link>
                     ) : (
@@ -220,7 +220,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                       <div>
                         <span style={{
                           fontFamily: 'var(--font-mono)',
-                          fontSize: 9,
+                          fontSize: 10,
                           letterSpacing: '0.1em',
                           textTransform: 'uppercase',
                           color: 'var(--gold)',
@@ -265,7 +265,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               <div>
                 {prev && (
                   <Link href={`/briefs/${prev.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
                       ← Previous edition
                     </div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
@@ -280,7 +280,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
               {/* All editions */}
               <div style={{ textAlign: 'center' }}>
-                <Link href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '0.5px solid #C8C8B8', paddingBottom: 1 }}>
+                <Link href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '0.5px solid #C8C8B8', paddingBottom: 1 }}>
                   All editions
                 </Link>
               </div>
@@ -289,7 +289,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               <div style={{ textAlign: 'right' }}>
                 {next && (
                   <Link href={`/briefs/${next.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
                       Next edition →
                     </div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
@@ -318,7 +318,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             if (pages.length === 0) return null
             return (
               <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                   Commodity Pages
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -340,7 +340,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
           {/* Learn section internal links */}
           <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
               Learn
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

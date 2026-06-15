@@ -102,17 +102,17 @@ function truncate(text: string, maxLen = 220): string {
 
 function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
   if (itemType === 'hawk-scan') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#FFF0E8', color: '#CC3300', border: '0.5px solid #CC3300', fontWeight: 600 }}>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#FFF0E8', color: '#CC3300', border: '0.5px solid #CC3300', fontWeight: 600 }}>
       ⚡ HAWK-SCAN
     </span>
   )
   if (itemType === 'flash') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#FFF7E0', color: '#996600', border: '0.5px solid #D4A830' }}>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#FFF7E0', color: '#996600', border: '0.5px solid #D4A830' }}>
       Flash
     </span>
   )
   if (itemType === 'alert') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#EAF5EE', color: '#1E6630', border: '0.5px solid #5AAA70' }}>
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#EAF5EE', color: '#1E6630', border: '0.5px solid #5AAA70' }}>
       Analysis
     </span>
   )
@@ -200,7 +200,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       {/* Last updated indicator */}
       {!loading && lastFetched && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
             ● updated {relativeTime(lastFetched.toISOString())}
           </span>
         </div>
@@ -235,7 +235,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
               {f.toUpperCase()}
               {count > 0 && (
                 <span style={{
-                  fontSize: 9,
+                  fontSize: 10,
                   background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8',
                   color: active ? '#FAFAF6' : '#8A8A7A',
                   padding: '1px 5px',
@@ -304,7 +304,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   }}>
                     {dateDividerLabel(dateKey)}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                     {dateKey}
                   </span>
                 </div>
@@ -385,13 +385,13 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Cross-asset tags */}
                 {crossAssets.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
                       Touches
                     </span>
                     {crossAssets.map(a => (
                       <span key={a} style={{
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 9,
+                        fontSize: 10,
                         letterSpacing: '0.06em',
                         padding: '2px 7px',
                         background: '#F3F2EC',

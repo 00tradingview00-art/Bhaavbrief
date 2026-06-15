@@ -22,7 +22,7 @@ export default function LearnCardsPage() {
       {Object.entries(groups).map(([section, cards]) => (
         <div key={section} style={{ marginBottom: 40 }}>
           <h2 style={{
-            fontSize: 13, fontWeight: 700, letterSpacing: 2,
+            fontSize: 15, fontWeight: 700, letterSpacing: 2,
             color: '#C8720A', marginBottom: 16, textTransform: 'uppercase',
           }}>
             {section}
@@ -45,7 +45,7 @@ export default function LearnCardsPage() {
                   download={`${card.slug}.png`}
                   style={{
                     background: '#C8720A', color: '#fff',
-                    fontSize: 13, fontWeight: 600,
+                    fontSize: 15, fontWeight: 600,
                     padding: '8px 16px', borderRadius: 6,
                     textDecoration: 'none', flexShrink: 0,
                   }}

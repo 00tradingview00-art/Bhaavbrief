@@ -102,7 +102,7 @@ export default function SeasonalPatternsSimulator() {
         {ALL_COMMODITIES.map(c => (
           <button key={c} onClick={() => { setFilter(c); setSelected(null) }} style={{
             padding: '6px 12px',
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.04em',
+            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em',
             border: `1px solid ${filter === c ? 'var(--gold)' : 'var(--border)'}`,
             background: filter === c ? 'rgba(200,114,10,0.08)' : 'var(--surface)',
             color: filter === c ? 'var(--gold)' : 'var(--ink-3)',
@@ -121,7 +121,7 @@ export default function SeasonalPatternsSimulator() {
         padding: '14px 16px',
         marginBottom: 20,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>
           Full-year seasonal map — click a month to explore
         </div>
 
@@ -194,7 +194,7 @@ export default function SeasonalPatternsSimulator() {
         padding: '12px 16px',
         marginBottom: 20,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--gold)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>
           {MONTHS[NOW_MONTH]} — active seasonal windows right now
         </div>
         {currentMonthWindows.length > 0 ? (
@@ -214,7 +214,7 @@ export default function SeasonalPatternsSimulator() {
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', fontWeight: 600 }}>
                     {w.commodity}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                     {m.label} · {w.driver}
                   </span>
                 </button>
@@ -230,7 +230,7 @@ export default function SeasonalPatternsSimulator() {
 
       {/* Seasonal windows list */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>
           All seasonal windows — click to expand
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -271,7 +271,7 @@ export default function SeasonalPatternsSimulator() {
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, color: 'var(--ink)', marginBottom: 2 }}>
                       {w.commodity}
                     </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                       {m.label} · {w.driver}
                     </div>
                   </div>
@@ -283,10 +283,10 @@ export default function SeasonalPatternsSimulator() {
                 {open && (
                   <div style={{ padding: '0 14px 14px' }}>
                     <div style={{ borderTop: `1px solid ${m.border}`, paddingTop: 12 }}>
-                      <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 12px', fontWeight: 300 }}>
+                      <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 12px', fontWeight: 300 }}>
                         {w.detail}
                       </p>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6 }}>
                         What to watch
                       </div>
                       <div style={{ borderLeft: `2px solid ${m.border}`, paddingLeft: 10 }}>
@@ -305,7 +305,7 @@ export default function SeasonalPatternsSimulator() {
 
       {/* Framework */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
           How to use seasonal patterns
         </div>
         {[
@@ -317,14 +317,14 @@ export default function SeasonalPatternsSimulator() {
         ].map((rule, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--surface)',
+              fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--surface)',
               background: 'var(--ink-3)', borderRadius: '50%',
               width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, marginTop: 1,
             }}>
               {i + 1}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
+            <span style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
           </div>
         ))}
       </div>

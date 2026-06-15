@@ -82,7 +82,7 @@ export default function SeasonalPatternsPage() {
             padding: '16px 20px',
             marginBottom: 28,
           }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
               Why India has distinctive commodity seasonals
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -149,10 +149,10 @@ export default function SeasonalPatternsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
                 Seasonal calendar — illustrative patterns
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Not real-time · Educational only
               </span>
             </div>
@@ -174,7 +174,7 @@ export default function SeasonalPatternsPage() {
             flexWrap: 'wrap',
           }}>
             <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
                 Next — Signal 5
               </div>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
@@ -193,7 +193,7 @@ export default function SeasonalPatternsPage() {
 
           {/* Disclaimer */}
           <div style={{ borderTop: '1px solid var(--border)', marginTop: 32, paddingTop: 16 }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
               Educational content only. BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser. All seasonal data is illustrative — historical tendencies, not verified backtests or forward forecasts. Past patterns are not indicative of future market behaviour. Consult a SEBI-registered RA or IA before making trading decisions.
             </p>
           </div>

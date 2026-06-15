@@ -22,13 +22,13 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
       }}>
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', marginBottom: '0.5rem' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em',
+            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em',
             textTransform: 'uppercase', padding: '3px 8px', border: '0.5px solid',
             flexShrink: 0, marginTop: 2, ...tagStyle,
           }}>
             {brief.tags?.[0] ?? 'Brief'}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.05em', color: '#8A8A7A' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.05em', color: '#8A8A7A' }}>
             {formatDate(brief.date)}
           </span>
         </div>
@@ -43,7 +43,7 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
         </h2>
 
         {brief.summary && (
-          <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>
+          <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.65, fontWeight: 300, margin: 0 }}>
             {brief.summary}
           </p>
         )}
@@ -51,7 +51,7 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
         <div style={{ marginTop: '0.5rem', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {brief.commodities?.map(c => (
             <span key={c} style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A',
+              fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A',
               background: '#F3F2EC', padding: '2px 8px',
             }}>
               {c}

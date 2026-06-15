@@ -49,7 +49,7 @@ export default async function BriefsPage() {
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
             All Briefs
           </h1>
-          <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: 0 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
             {briefs.length} editions published · Every weekday at 9:30 AM IST
           </p>
         </div>
@@ -78,7 +78,7 @@ export default async function BriefsPage() {
                 {brief.title}
               </h2>
               {brief.description && (
-                <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
+                <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
                   {brief.description}
                 </p>
               )}
@@ -90,7 +90,7 @@ export default async function BriefsPage() {
       {/* Sidebar */}
       <aside className="brief-sidebar" style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem', alignSelf: 'start' }}>
         <div style={{ border: '0.5px solid var(--border)', padding: '1.25rem' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
             Learn
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>

@@ -88,7 +88,7 @@ export default function AboutSearch() {
       }}>
         Ask BhaavBrief
       </h2>
-      <p style={{ fontSize: 13, color: '#8A8A7A', marginBottom: '1.25rem', lineHeight: 1.6, fontWeight: 300 }}>
+      <p style={{ fontSize: 15, color: '#8A8A7A', marginBottom: '1.25rem', lineHeight: 1.6, fontWeight: 300 }}>
         Search past briefs and articles, or ask anything about Indian commodity markets.
       </p>
 
@@ -112,7 +112,7 @@ export default function AboutSearch() {
           placeholder="e.g. how does rising crude affect chemical companies"
           style={{
             flex: 1, border: 'none', outline: 'none', background: 'transparent',
-            fontSize: 13, color: '#18180F', fontFamily: 'var(--font-sans)',
+            fontSize: 15, color: '#18180F', fontFamily: 'var(--font-sans)',
           }}
         />
         {loading && (
@@ -167,7 +167,7 @@ export default function AboutSearch() {
               <button
                 onClick={() => { setResult(null); setQuery(''); setAsked('') }}
                 style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A',
+                  fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: '0.06em',
                 }}
               >
@@ -188,11 +188,11 @@ export default function AboutSearch() {
                 }}>
                   Intelligence
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
                   Educational · Not investment advice
                 </span>
               </div>
-              <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
+              <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.8, margin: 0, fontWeight: 300 }}>
                 {result.answer}
               </p>
             </div>
@@ -202,7 +202,7 @@ export default function AboutSearch() {
           {result.contentMatches.length > 0 && (
             <div>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: '#8A8A7A',
                 padding: '10px 16px 6px',
               }}>
@@ -225,11 +225,11 @@ export default function AboutSearch() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                       <TypePill type={item.type} />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#8A8A7A' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
                         {relDate(item.date)}
                       </span>
                     </div>
-                    <p style={{ fontSize: 13, fontWeight: 500, color: '#18180F', margin: '0 0 2px', lineHeight: 1.3 }}>
+                    <p style={{ fontSize: 15, fontWeight: 500, color: '#18180F', margin: '0 0 2px', lineHeight: 1.3 }}>
                       {item.title}
                       <span style={{ fontSize: 11, color: '#C8720A', marginLeft: 5, fontFamily: 'var(--font-mono)' }}>→</span>
                     </p>
@@ -248,7 +248,7 @@ export default function AboutSearch() {
           {result.relatedQuestions.length > 0 && (
             <div style={{ padding: '10px 16px', borderTop: '0.5px solid #DDDDD0', background: '#FAFAF6' }}>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 8,
               }}>
                 Related

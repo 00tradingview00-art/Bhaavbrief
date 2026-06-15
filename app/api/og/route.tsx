@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
           </div>
           {date && (
             <span style={{
-              fontSize: 13, fontFamily: 'monospace',
+              fontSize: 15, fontFamily: 'monospace',
               color: '#8A8A7A', letterSpacing: '0.05em',
             }}>
               {date}

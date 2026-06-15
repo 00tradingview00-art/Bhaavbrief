@@ -131,7 +131,7 @@ export default function Page() {
   const goldRollCost    = goldContango  * 100      // per standard lot (100 units of 10g)
   const goldMiniRoll    = goldContango  * 10       // per mini lot
 
-  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 13, color: '#18180F', verticalAlign: 'top' }
+  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
   const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
@@ -264,7 +264,7 @@ export default function Page() {
         <div style={infoBox}>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Crude Oil (100 bbl) — long rollover, contango market</div>
           <div style={{ overflowX: 'auto' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2.1, color: '#18180F', minWidth: 320 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2.1, color: '#18180F', minWidth: 320 }}>
             Near-month (Jun) price:    ₹{fmt(p.crude)}/bbl<br />
             Next-month (Jul) price:    ₹{fmt(p.crude + crudeContango)}/bbl<br />
             Spread (contango):         ₹{crudeContango}/bbl<br />
@@ -289,7 +289,7 @@ export default function Page() {
         <div style={infoBox}>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Mini (100g) — long rollover</div>
           <div style={{ overflowX: 'auto' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2.1, color: '#18180F', minWidth: 320 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2.1, color: '#18180F', minWidth: 320 }}>
             Near-month price:          ₹{fmt(p.gold)}/10g<br />
             Next-month price:          ₹{fmt(p.gold + goldContango)}/10g<br />
             Spread (contango):         ₹{goldContango}/10g<br />
@@ -399,11 +399,11 @@ export default function Page() {
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
           <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <Link href="/learn" style={{ fontSize: 13, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>← Learn hub</Link>
-            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX lot sizes →</Link>
-            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Margin calculation →</Link>
-            <Link href="/commodities/crude-oil" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Crude live price →</Link>
-            <Link href="/commodities/gold" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Gold live price →</Link>
+            <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>← Learn hub</Link>
+            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX lot sizes →</Link>
+            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Margin calculation →</Link>
+            <Link href="/commodities/crude-oil" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Crude live price →</Link>
+            <Link href="/commodities/gold" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Gold live price →</Link>
           </div>
         </div>
 

@@ -256,7 +256,7 @@ export default function BasisConvergenceSimulator() {
       {/* Sliders */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 28 }}>
         <div>
-          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
             Days to expiry
             <span style={{ marginLeft: 10, fontSize: 18, fontWeight: 600, color: 'var(--ink)', verticalAlign: 'middle' }}>
               {daysToExpiry}d
@@ -272,7 +272,7 @@ export default function BasisConvergenceSimulator() {
         </div>
 
         <div>
-          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
             Current basis (futures − spot)
             <span style={{ marginLeft: 10, fontSize: 18, fontWeight: 600, color: meta.color, verticalAlign: 'middle' }}>
               {basis >= 0 ? '+' : ''}₹{basis}{d.unit}
@@ -296,7 +296,7 @@ export default function BasisConvergenceSimulator() {
         padding: '14px 16px',
         marginBottom: 20,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
           Convergence path to expiry (illustrative)
         </div>
         <ConvergenceChart
@@ -340,7 +340,7 @@ export default function BasisConvergenceSimulator() {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 5 }}>
               {m.label}
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: m.color }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: m.color }}>
               {m.value}
             </div>
           </div>
@@ -357,18 +357,18 @@ export default function BasisConvergenceSimulator() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600,
+            fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: meta.color, background: 'var(--surface)',
             padding: '3px 8px', border: `1px solid ${meta.border}`, borderRadius: 3,
           }}>
             {meta.label}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
             {meta.implication}
           </span>
         </div>
-        <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
           {meta.description}
         </p>
         <div style={{ borderTop: `1px solid ${meta.border}`, paddingTop: 10, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.6 }}>
@@ -381,7 +381,7 @@ export default function BasisConvergenceSimulator() {
         background: 'var(--surface)', border: '1px solid var(--border)',
         borderRadius: 6, padding: '12px 14px', marginBottom: 24,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginBottom: 4, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 4, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
           {commodity} — what distorts basis
         </div>
         <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
@@ -391,7 +391,7 @@ export default function BasisConvergenceSimulator() {
 
       {/* Reading rules */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
           5 rules for reading basis
         </div>
         {[
@@ -403,14 +403,14 @@ export default function BasisConvergenceSimulator() {
         ].map((rule, i) => (
           <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: 10 }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--surface)',
+              fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--surface)',
               background: 'var(--ink-3)', borderRadius: '50%',
               width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
               flexShrink: 0, marginTop: 1,
             }}>
               {i + 1}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
+            <span style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.6, fontWeight: 300 }}>{rule}</span>
           </div>
         ))}
       </div>

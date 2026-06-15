@@ -50,7 +50,7 @@ function CustomTooltip({ active, payload }: TooltipProps) {
       fontFamily: 'var(--font-mono)',
     }}>
       <div style={{ color: '#8A8A7A', marginBottom: 4, letterSpacing: '0.03em' }}>{fmtDateFull(d.date)}</div>
-      <div style={{ color: '#FAFAF6', fontSize: 13, fontWeight: 500 }}>{fmtPrice(d.price)}</div>
+      <div style={{ color: '#FAFAF6', fontSize: 15, fontWeight: 500 }}>{fmtPrice(d.price)}</div>
       {d.high !== d.low && (
         <div style={{ color: '#8A8A7A', marginTop: 3, fontSize: 10 }}>
           H {fmtPrice(d.high)} · L {fmtPrice(d.low)}
@@ -114,7 +114,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         flexWrap: 'wrap', gap: 10,
       }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
             MCX Historical · {unit}
           </div>
           {!loading && !error && data.length > 0 && (
@@ -220,7 +220,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         <div style={{
           padding: '8px 20px 12px',
           display: 'flex', justifyContent: 'space-between',
-          fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)',
+          fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)',
           borderTop: '0.5px solid var(--border)',
           letterSpacing: '0.03em',
         }}>

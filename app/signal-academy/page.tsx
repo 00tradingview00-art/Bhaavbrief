@@ -71,7 +71,7 @@ export default function SignalAcademyPage() {
 
       {/* Header */}
       <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: 20, marginBottom: 28 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 8 }}>
           BhaavBrief
         </div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(26px,4vw,36px)', fontWeight: 700, color: 'var(--ink)', margin: '0 0 10px', lineHeight: 1.2 }}>
@@ -101,7 +101,7 @@ export default function SignalAcademyPage() {
 
       {/* Signal cards */}
       <div style={{ marginBottom: 36 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
           5 signals · {unlocked ? 'all unlocked' : '1 always free · 1 unlock to access · 3 coming soon'}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -158,7 +158,7 @@ export default function SignalAcademyPage() {
                       </span>
                     )}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginBottom: 6 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 6 }}>
                     {signal.tagline} · {signal.audience}
                   </div>
                   <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0, fontWeight: 300 }}>
@@ -223,7 +223,7 @@ export default function SignalAcademyPage() {
 
       {/* Referral gate */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
           Unlock all 5 simulators — free
         </div>
         <ReferralGate

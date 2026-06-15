@@ -35,7 +35,7 @@ function BarChart({ history }: { history: EIAWeek[] }) {
     <div style={{ marginTop: 14 }}>
       <div style={{
         fontFamily: 'var(--font-mono)',
-        fontSize: 9,
+        fontSize: 10,
         color: 'var(--ink-4)',
         letterSpacing: '0.08em',
         textTransform: 'uppercase',
@@ -167,7 +167,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
         {!loading && data && !isEIAData(data) && (
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6 }}>
             Data unavailable
-            <div style={{ fontSize: 9, marginTop: 4 }}>EIA publishes Wednesdays ~8:30 PM IST</div>
+            <div style={{ fontSize: 10, marginTop: 4 }}>EIA publishes Wednesdays ~8:30 PM IST</div>
           </div>
         )}
 
@@ -189,7 +189,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
               }}>
                 {draw ? 'Draw' : 'Build'}{data.isSignificant ? ' ★' : ''}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {draw ? 'Inventories fell' : 'Inventories rose'}
               </span>
             </div>
@@ -215,7 +215,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
             </div>
 
             {/* Plain-language context */}
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.5, marginBottom: 4 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.5, marginBottom: 4 }}>
               {draw
                 ? 'Less oil in storage → supply tighter → supports crude prices'
                 : 'More oil in storage → supply building → weighs on crude prices'}
@@ -235,10 +235,10 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
               justifyContent: 'space-between',
               alignItems:     'center',
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Week ending {new Date(data.period + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {timeAgo(data.updatedAt)}
               </span>
             </div>

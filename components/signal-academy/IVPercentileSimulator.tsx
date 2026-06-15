@@ -160,7 +160,7 @@ export default function IVPercentileSimulator() {
 
       {/* IV slider */}
       <div style={{ marginBottom: 32 }}>
-        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
+        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
           Current IV (annualised)
           <span style={{ marginLeft: 12, fontSize: 20, fontWeight: 600, color: meta.color, verticalAlign: 'middle' }}>
             {clampedIV}%
@@ -187,7 +187,7 @@ export default function IVPercentileSimulator() {
         {/* Percentile gauge */}
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               IV Percentile
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: meta.color }}>
@@ -239,21 +239,21 @@ export default function IVPercentileSimulator() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600,
+              fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
               letterSpacing: '0.1em', textTransform: 'uppercase',
               color: meta.color, background: 'var(--surface)',
               padding: '3px 8px', border: `1px solid ${meta.border}`, borderRadius: 3,
             }}>
               {meta.label}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
               {meta.status}
             </span>
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginBottom: 8, letterSpacing: '0.04em' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 8, letterSpacing: '0.04em' }}>
             Strategic bias → <span style={{ color: meta.color }}>{meta.bias}</span>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
+          <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
             {meta.description}
           </p>
           <div style={{
@@ -277,7 +277,7 @@ export default function IVPercentileSimulator() {
         padding: '12px 14px',
         marginBottom: 28,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.6 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.6 }}>
           <strong style={{ color: 'var(--ink-3)' }}>SEBI note:</strong> This simulator shows illustrative IV ranges and percentile position. It does not recommend specific option strikes, contract months, or position sizes. Consult a SEBI-registered Research Analyst before acting on any options strategy.
         </div>
       </div>
@@ -290,7 +290,7 @@ export default function IVPercentileSimulator() {
         padding: '14px 16px',
         marginBottom: 24,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
           How IV percentile is calculated
         </div>
         <div style={{
@@ -312,7 +312,7 @@ export default function IVPercentileSimulator() {
 
       {/* Historical illustrative cases */}
       <div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 14 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 14 }}>
           Illustrative historical-style cases
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -345,7 +345,7 @@ export default function IVPercentileSimulator() {
             )
           })}
         </div>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 12 }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 12 }}>
           Illustrative patterns for educational purposes only. Not verified historical data or audited backtests.
         </p>
       </div>

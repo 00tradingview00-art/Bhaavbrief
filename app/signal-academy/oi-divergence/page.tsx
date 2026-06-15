@@ -56,7 +56,7 @@ export default function OIDivergencePage() {
           }}>
             SIGNAL 1 · LIVE
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
             All MCX traders
           </span>
         </div>
@@ -76,7 +76,7 @@ export default function OIDivergencePage() {
         padding: '16px 20px',
         marginBottom: 28,
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12 }}>
           The four-state matrix
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -100,7 +100,7 @@ export default function OIDivergencePage() {
                 {row.state}
               </div>
               <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>{row.note}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 3 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 3 }}>
                 Signal strength: {row.strength}
               </div>
             </div>
@@ -123,10 +123,10 @@ export default function OIDivergencePage() {
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
             Interactive simulator — illustrative data
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
             Not real-time · Educational only
           </span>
         </div>
@@ -137,7 +137,7 @@ export default function OIDivergencePage() {
 
       {/* Historical illustrative cases */}
       <div style={{ marginBottom: 32 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
           Illustrative historical-style cases
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -167,7 +167,7 @@ export default function OIDivergencePage() {
             </div>
           ))}
         </div>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 12 }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 12 }}>
           These are illustrative patterns for educational purposes. They do not represent verified historical data or audited backtests.
         </p>
       </div>
@@ -185,7 +185,7 @@ export default function OIDivergencePage() {
         flexWrap: 'wrap',
       }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
             Next — Signal 2
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
@@ -204,7 +204,7 @@ export default function OIDivergencePage() {
 
       {/* Disclaimer footer */}
       <div style={{ borderTop: '1px solid var(--border)', marginTop: 32, paddingTop: 16 }}>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
           Educational content only. BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser. All simulator data is illustrative. Past patterns are not indicative of future market behaviour. Consult a SEBI-registered RA or IA before making trading decisions.
         </p>
       </div>

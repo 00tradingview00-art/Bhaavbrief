@@ -124,7 +124,7 @@ export default async function ArticlePage({ params }: Props) {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em',
+                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em',
                 textTransform: 'uppercase', padding: '3px 10px', fontWeight: 700,
                 background: '#1A0A0A', color: '#FF4444', border: '0.5px solid #FF4444',
               }}>
@@ -175,7 +175,7 @@ export default async function ArticlePage({ params }: Props) {
             }}>
               {meta.title}
             </h1>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: 'var(--ink-4)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 15, color: 'var(--ink-4)' }}>
               <span>BhaavBrief Intelligence</span>
               <span>·</span>
               <span>{meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
@@ -219,7 +219,7 @@ export default async function ArticlePage({ params }: Props) {
         <div style={{ marginTop: 32 }}>
           <Link href="/articles" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: 13, color: 'var(--gold)', textDecoration: 'none', fontWeight: 500,
+            fontSize: 15, color: 'var(--gold)', textDecoration: 'none', fontWeight: 500,
           }}>
             ← All Flash Intelligence
           </Link>

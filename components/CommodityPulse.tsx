@@ -150,7 +150,7 @@ export default function CommodityPulse() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9,
+            fontFamily: 'var(--font-mono)', fontSize: 10,
             fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
             color: 'var(--saffron)',
           }}>

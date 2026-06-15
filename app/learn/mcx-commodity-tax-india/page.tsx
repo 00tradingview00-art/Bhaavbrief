@@ -132,7 +132,7 @@ export default function Page() {
   const traderTaxable  = traderNet - traderExpenses
   const traderTax30    = Math.round(traderTaxable * 0.30)
 
-  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 13, color: '#18180F', verticalAlign: 'top' }
+  const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
   const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
@@ -264,7 +264,7 @@ export default function Page() {
         <p style={prose}>
           Turnover for MCX trading — as per ICAI guidance — is the <strong>absolute sum of all profits and all losses</strong> across every trade during the financial year. It is not gross receipts (sell value), and it is not net profit.
         </p>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2, color: '#18180F' }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2, color: '#18180F' }}>
           Trade 1: +₹45,000 profit<br />
           Trade 2: −₹28,000 loss<br />
           Trade 3: +₹12,000 profit<br />
@@ -530,7 +530,7 @@ export default function Page() {
           Here is a complete tax calculation for a typical retail MCX trader in FY 2025-26.
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '20px 24px', fontFamily: 'var(--font-mono)', fontSize: 13, lineHeight: 2.1, color: '#18180F', minWidth: 360 }}>
+        <div style={{ background: '#F3F2EC', padding: '20px 24px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2.1, color: '#18180F', minWidth: 360 }}>
           <div style={{ marginBottom: 12, fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600 }}>Trader profile: Salaried (₹18L/year) + MCX trading on the side</div>
           <strong>Gross trading profits (all winning trades):</strong>  ₹{fmt(traderProfits)}<br />
           <strong>Gross trading losses (all losing trades):</strong>    ₹{fmt(traderLosses)}<br />
@@ -604,16 +604,16 @@ export default function Page() {
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
           <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <Link href="/learn" style={{ fontSize: 13, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
+            <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
             </Link>
-            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX lot sizes →
             </Link>
-            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX margin calculation →
             </Link>
-            <Link href="/markets" style={{ fontSize: 13, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+            <Link href="/markets" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               Live MCX prices →
             </Link>
           </div>

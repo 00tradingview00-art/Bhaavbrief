@@ -34,7 +34,7 @@ export default function PrivacyPage() {
 
         <div style={{ marginBottom: '2.5rem' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em',
+            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
             textTransform: 'uppercase', color: '#C8720A',
           }}>
             Legal

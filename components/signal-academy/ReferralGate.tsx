@@ -87,13 +87,13 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
         borderRadius: 10,
         padding: '24px',
       }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 12 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 12 }}>
           Unlock Signal Academy
         </div>
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: 17, fontWeight: 600, color: 'var(--ink)', marginBottom: 8, lineHeight: 1.35 }}>
           Share BhaavBrief with 5 people → get full access
         </div>
-        <p style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.65, marginBottom: 20 }}>
+        <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, marginBottom: 20 }}>
           Enter your subscriber email to get your referral link. When 5 people visit BhaavBrief through your link, all 5 simulators unlock permanently.
         </p>
         <form onSubmit={handleEmailSubmit} style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -109,7 +109,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
               border: '1px solid var(--border)',
               background: 'var(--surface)',
               fontFamily: 'var(--font-mono)',
-              fontSize: 13,
+              fontSize: 15,
               color: 'var(--ink)',
               outline: 'none',
               borderRadius: 4,
@@ -133,7 +133,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
             {loading ? 'Checking…' : 'Get my link →'}
           </button>
         </form>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', marginTop: 12 }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 12 }}>
           Not subscribed yet?{' '}
           <a href="/#subscribe" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Subscribe free</a>
           {' '}— then come back here.
@@ -162,7 +162,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
             Referral progress
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: visits >= UNLOCK_THRESHOLD ? 'var(--up)' : 'var(--ink)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: visits >= UNLOCK_THRESHOLD ? 'var(--up)' : 'var(--ink)' }}>
             {visits} / {UNLOCK_THRESHOLD} visits
           </span>
         </div>
@@ -184,7 +184,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
 
       {/* Ref link */}
       <div style={{ marginBottom: 16 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6 }}>
           Your referral link
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
