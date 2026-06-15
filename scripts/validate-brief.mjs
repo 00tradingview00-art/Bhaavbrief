@@ -83,7 +83,10 @@ for (const m of brief.matchAll(moneyRe)) {
   }
 }
 
-// 2. Direction check: headline words must not contradict signed changePct data.
+// 2. Direction check: a direction word DIRECTLY modifying the commodity name must
+//    not contradict signed changePct data. We use a tight 25-char window each side
+//    to avoid false positives from "Gold surges while crude falls" where "surges"
+//    is near "crude" but clearly refers to gold.
 const dirChecks = [
   { name: "gold",   inst: "MCX_GOLD"   },
   { name: "silver", inst: "MCX_SILVER" },
@@ -98,7 +101,10 @@ for (const { name, inst } of dirChecks) {
   if (pct == null) continue;
   const idx = firstBlock.indexOf(name);
   if (idx === -1) continue;
-  const ctx = firstBlock.slice(Math.max(0, idx - 40), idx + 60);
+  // Tight window: only flag if the direction word is within 25 chars of the commodity
+  // name — this ensures the word is actually modifying that commodity, not a
+  // different one mentioned nearby (e.g. "Gold surges as crude falls").
+  const ctx = firstBlock.slice(Math.max(0, idx - 25), idx + 35);
   if (pct > 0.3 && DOWN.test(ctx))
     issues.push(`DIRECTION: headline implies ${name} down, snapshot says +${pct}%`);
   if (pct < -0.3 && UP.test(ctx))
