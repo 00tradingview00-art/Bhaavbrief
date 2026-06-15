@@ -30,6 +30,26 @@
     "symbol": "NATURALGAS26JUNFUT",
     "expiry": "2026-06-25"
   },
+  "zinc": {
+    "token": 141494023,
+    "symbol": "ZINC26JUNFUT",
+    "expiry": "2026-06-30"
+  },
+  "lead": {
+    "token": 141493511,
+    "symbol": "LEAD26JUNFUT",
+    "expiry": "2026-06-30"
+  },
+  "aluminium": {
+    "token": 141492743,
+    "symbol": "ALUMINIUM26JUNFUT",
+    "expiry": "2026-06-30"
+  },
+  "nickel": {
+    "token": 141494791,
+    "symbol": "NICKEL26JUNFUT",
+    "expiry": "2026-06-17"
+  },
   "currencies": {
     "usdinr": {
       "token": 1689859,

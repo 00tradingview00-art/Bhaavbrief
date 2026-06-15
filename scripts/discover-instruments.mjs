@@ -46,32 +46,44 @@ function frontMonth(name) {
     .sort((a, b) => new Date(a.expiry) - new Date(b.expiry))[0] ?? null
 }
 
-const gold   = frontMonth('GOLD')
-const goldM  = frontMonth('GOLDM')
-const silver = frontMonth('SILVER')
-const crude  = frontMonth('CRUDEOIL')
-const copper = frontMonth('COPPER')
-const natgas = frontMonth('NATURALGAS')
+const gold      = frontMonth('GOLD')
+const goldM     = frontMonth('GOLDM')
+const silver    = frontMonth('SILVER')
+const crude     = frontMonth('CRUDEOIL')
+const copper    = frontMonth('COPPER')
+const natgas    = frontMonth('NATURALGAS')
+const zinc      = frontMonth('ZINC')
+const lead      = frontMonth('LEAD')
+const aluminium = frontMonth('ALUMINIUM')
+const nickel    = frontMonth('NICKEL')
 
 if (!gold || !silver || !crude || !copper || !natgas) {
-  console.error('Could not find all front-month contracts')
+  console.error('Could not find all core front-month contracts')
   process.exit(1)
 }
 
-console.log(`Gold:   ${gold.symbol} (${gold.token}) expiry ${gold.expiry}`)
-console.log(`Silver: ${silver.symbol} (${silver.token}) expiry ${silver.expiry}`)
-console.log(`Crude:  ${crude.symbol} (${crude.token}) expiry ${crude.expiry}`)
-console.log(`Copper: ${copper.symbol} (${copper.token}) expiry ${copper.expiry}`)
-console.log(`NatGas: ${natgas.symbol} (${natgas.token}) expiry ${natgas.expiry}`)
+console.log(`Gold:      ${gold.symbol} (${gold.token}) expiry ${gold.expiry}`)
+console.log(`Silver:    ${silver.symbol} (${silver.token}) expiry ${silver.expiry}`)
+console.log(`Crude:     ${crude.symbol} (${crude.token}) expiry ${crude.expiry}`)
+console.log(`Copper:    ${copper.symbol} (${copper.token}) expiry ${copper.expiry}`)
+console.log(`NatGas:    ${natgas.symbol} (${natgas.token}) expiry ${natgas.expiry}`)
+if (zinc)      console.log(`Zinc:      ${zinc.symbol} (${zinc.token}) expiry ${zinc.expiry}`)
+if (lead)      console.log(`Lead:      ${lead.symbol} (${lead.token}) expiry ${lead.expiry}`)
+if (aluminium) console.log(`Aluminium: ${aluminium.symbol} (${aluminium.token}) expiry ${aluminium.expiry}`)
+if (nickel)    console.log(`Nickel:    ${nickel.symbol} (${nickel.token}) expiry ${nickel.expiry}`)
 
 const tokenMap = {
   _note: 'Auto-updated by morning auth. Do not edit manually.',
-  gold:     { token: gold.token,               symbol: gold.symbol,    expiry: gold.expiry    },
-  goldMini: { token: goldM?.token ?? gold.token, symbol: goldM?.symbol ?? gold.symbol, expiry: goldM?.expiry ?? gold.expiry },
-  silver:   { token: silver.token,             symbol: silver.symbol,  expiry: silver.expiry  },
-  crude:    { token: crude.token,               symbol: crude.symbol,   expiry: crude.expiry   },
-  copper:   { token: copper.token,              symbol: copper.symbol,  expiry: copper.expiry  },
-  natgas:   { token: natgas.token,              symbol: natgas.symbol,  expiry: natgas.expiry  },
+  gold:      { token: gold.token,                  symbol: gold.symbol,       expiry: gold.expiry      },
+  goldMini:  { token: goldM?.token ?? gold.token,  symbol: goldM?.symbol ?? gold.symbol, expiry: goldM?.expiry ?? gold.expiry },
+  silver:    { token: silver.token,                symbol: silver.symbol,     expiry: silver.expiry    },
+  crude:     { token: crude.token,                 symbol: crude.symbol,      expiry: crude.expiry     },
+  copper:    { token: copper.token,                symbol: copper.symbol,     expiry: copper.expiry    },
+  natgas:    { token: natgas.token,                symbol: natgas.symbol,     expiry: natgas.expiry    },
+  ...(zinc      ? { zinc:      { token: zinc.token,      symbol: zinc.symbol,      expiry: zinc.expiry      } } : {}),
+  ...(lead      ? { lead:      { token: lead.token,      symbol: lead.symbol,      expiry: lead.expiry      } } : {}),
+  ...(aluminium ? { aluminium: { token: aluminium.token, symbol: aluminium.symbol, expiry: aluminium.expiry } } : {}),
+  ...(nickel    ? { nickel:    { token: nickel.token,    symbol: nickel.symbol,    expiry: nickel.expiry    } } : {}),
   updatedAt: new Date().toISOString(),
 }
 

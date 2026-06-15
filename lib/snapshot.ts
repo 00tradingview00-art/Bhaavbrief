@@ -132,6 +132,9 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     },
     copper:    mcxRow('MCX_COPPER'),
     natgas:    mcxRow('MCX_NATGAS'),
-    aluminium: { lme: 0, lmeChangePct: 0 },
+    ...(i.MCX_ZINC      ? { zinc:      mcxRow('MCX_ZINC')      } : {}),
+    ...(i.MCX_LEAD      ? { lead:      mcxRow('MCX_LEAD')      } : {}),
+    ...(i.MCX_ALUMINIUM ? { aluminium: mcxRow('MCX_ALUMINIUM') } : {}),
+    ...(i.MCX_NICKEL    ? { nickel:    mcxRow('MCX_NICKEL')    } : {}),
   }
 }

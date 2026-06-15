@@ -47,7 +47,7 @@ async function fetchKiteMCX() {
   const instruments = loadJSON(INSTRUMENTS_FILE)
   if (!apiKey || !accessToken || !instruments) return null
 
-  const keys = ['gold', 'silver', 'crude', 'copper', 'natgas']
+  const keys = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
   const qs = keys
     .filter(k => instruments[k]?.symbol)
     .map(k => `i=MCX:${instruments[k].symbol}`)
@@ -78,7 +78,7 @@ async function fetchKiteMCX() {
       }
     }
     const n = Object.keys(result).length
-    console.log(`  Kite: ${n}/5 instruments`)
+    console.log(`  Kite: ${n}/${keys.filter(k => instruments[k]?.symbol).length} instruments`)
     return n >= 3 ? result : null
   } catch (e) {
     console.warn(`  Kite failed: ${e.message}`)
@@ -227,6 +227,20 @@ async function main() {
   const MCX_UNITS = {
     gold: 'INR/10g', silver: 'INR/kg', crude: 'INR/bbl',
     copper: 'INR/kg', natgas: 'INR/mmBtu',
+    zinc: 'INR/kg', lead: 'INR/kg', aluminium: 'INR/kg', nickel: 'INR/kg',
+  }
+
+  // Optional minor metals — silently absent if Kite returns no data; never block pipeline
+  function optionalMCX(key, unit) {
+    const data = getMCX(key)
+    if (!data || !(data.price > 0)) return null
+    return {
+      price:     roundTo(data.price, 2),
+      prevClose: roundTo(data.prevClose, 2),
+      changePct: roundTo(data.changePct, 4),
+      unit,
+      ...(data.stale ? { stale: true } : {}),
+    }
   }
 
   const instruments = {
@@ -242,6 +256,14 @@ async function main() {
     BRENT:       buildInstrument('BRENT',       yahooMap.BRENT,    'USD/bbl'),
     HENRY_HUB:   buildInstrument('HENRY_HUB',  yahooMap.HENRY_HUB,'USD/mmBtu'),
   }
+  const zincInst      = optionalMCX('zinc',      MCX_UNITS.zinc)
+  const leadInst      = optionalMCX('lead',      MCX_UNITS.lead)
+  const aluminiumInst = optionalMCX('aluminium', MCX_UNITS.aluminium)
+  const nickelInst    = optionalMCX('nickel',    MCX_UNITS.nickel)
+  if (zincInst)      instruments.MCX_ZINC      = zincInst
+  if (leadInst)      instruments.MCX_LEAD      = leadInst
+  if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst
+  if (nickelInst)    instruments.MCX_NICKEL    = nickelInst
 
   // Derived values — computed from the same numbers shown in the brief.
   // These can never disagree with the prices next to them.

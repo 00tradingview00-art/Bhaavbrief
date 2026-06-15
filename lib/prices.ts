@@ -349,9 +349,12 @@ export interface PriceData {
   gold:   MCXData & { comex: number; comexChangePct: number }
   silver: MCXData & { comex: number; comexChangePct: number }
   crude:  MCXData & { wti: number; wtiChangePct: number; brent: number; brentChangePct: number }
-  copper: MCXData
-  natgas: MCXData
-  aluminium: { lme: number; lmeChangePct: number }
+  copper:    MCXData
+  natgas:    MCXData
+  zinc?:     MCXData
+  lead?:     MCXData
+  aluminium?: MCXData
+  nickel?:   MCXData
   currencies?: {
     usdinr: ForexData
     eurinr: ForexData
@@ -469,7 +472,6 @@ export async function getPrices(): Promise<PriceData | null> {
       },
       copper: buildMCXData(copperQ, cache?.copper ?? 0, cache?.copperPct ?? 0, instruments.copper),
       natgas: buildMCXData(natgasQ, cache?.natgas ?? 0, cache?.natgasPct ?? 0, instruments.natgas),
-      aluminium: { lme: 0, lmeChangePct: 0 },
       ...(instruments.currencies ? {
         currencies: {
           usdinr: buildForexData(kiteByToken((instruments.currencies as any).usdinr.token), (instruments.currencies as any).usdinr),
@@ -559,7 +561,10 @@ function loadFromSnapshot(): PriceData | null {
       },
       copper:    mcxData('copper', 'MCX_COPPER'),
       natgas:    mcxData('natgas', 'MCX_NATGAS'),
-      aluminium: { lme: 0, lmeChangePct: 0 },
+      ...(inst.MCX_ZINC      ? { zinc:      mcxData('zinc',      'MCX_ZINC')      } : {}),
+      ...(inst.MCX_LEAD      ? { lead:      mcxData('lead',      'MCX_LEAD')      } : {}),
+      ...(inst.MCX_ALUMINIUM ? { aluminium: mcxData('aluminium', 'MCX_ALUMINIUM') } : {}),
+      ...(inst.MCX_NICKEL    ? { nickel:    mcxData('nickel',    'MCX_NICKEL')    } : {}),
     }
   } catch { return null }
 }

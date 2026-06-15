@@ -172,7 +172,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
             height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)',
           }}>
-            Chart unavailable during off-market hours
+            Chart data unavailable
           </div>
         )}
 

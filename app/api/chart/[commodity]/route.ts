@@ -12,6 +12,10 @@ const COMMODITY_KEY: Record<string, string> = {
   'crude-oil':   'crude',
   copper:        'copper',
   'natural-gas': 'natgas',
+  zinc:          'zinc',
+  lead:          'lead',
+  aluminium:     'aluminium',
+  nickel:        'nickel',
 }
 
 // Period → days back + interval
