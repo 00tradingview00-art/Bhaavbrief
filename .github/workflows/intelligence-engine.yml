@@ -87,7 +87,14 @@ jobs:
           else
             git commit -m "chore: snapshot $(date -u '+%H:%M UTC')"
           fi
-          git push origin main
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main
+              sleep $((attempt * 3))
+            fi
+          done
 
       - name: Alert on failure
         if: failure()

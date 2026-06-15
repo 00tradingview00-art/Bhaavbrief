@@ -117,7 +117,14 @@ jobs:
           git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
-          git push origin main
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main
+              sleep $((attempt * 3))
+            fi
+          done
 
       - name: Alert on failure
         if: failure()
