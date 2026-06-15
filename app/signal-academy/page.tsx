@@ -55,7 +55,7 @@ const SIGNALS = [
     audience: 'All MCX traders',
     preview:  'When volume is 2× the 20-day average, it\'s an institutional move. Combined signal matrix shows you how to classify it.',
     live:     false,
-    ready:    false,
+    ready:    true,
   },
 ]
 
