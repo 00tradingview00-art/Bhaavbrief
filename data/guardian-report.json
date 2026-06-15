@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-06-15T18:38:47.485Z",
+  "overallStatus": "yellow",
+  "health": {
+    "status": "yellow",
+    "issues": [
+      {
+        "level": "yellow",
+        "component": "market-snapshot.json",
+        "message": "Stale: 218 min old"
+      },
+      {
+        "level": "yellow",
+        "component": "seen-articles.json",
+        "message": "Not updated in >25h — monitor may be stuck"
+      }
+    ]
+  },
+  "audit": {
+    "learnIssues": [],
+    "investIssues": [],
+    "circularImpact": []
+  }
+}

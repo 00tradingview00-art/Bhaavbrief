@@ -1,6 +1,16 @@
 import { Metadata } from 'next'
+import fs   from 'node:fs'
+import path from 'node:path'
 import SubscribeForm from '@/components/SubscribeForm'
 import AboutSearch from '@/components/AboutSearch'
+
+const siteStats = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/site-stats.json'), 'utf8'))
+  } catch {
+    return { briefCount: 22 }
+  }
+})()
 
 export const metadata: Metadata = {
   title: "About BhaavBrief — India's First Commodity Intelligence Platform",
@@ -75,7 +85,7 @@ export default function AboutPage() {
           {[
             { value: '9:30 AM', label: 'Daily delivery IST' },
             { value: '5',       label: 'Commodities tracked' },
-            { value: '22+',     label: 'Editions published' },
+            { value: `${siteStats.briefCount}+`, label: 'Editions published' },
             { value: 'Free',    label: 'No paywall, ever' },
           ].map(s => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1.1rem 1.25rem' }}>

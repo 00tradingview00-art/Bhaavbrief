@@ -5,11 +5,16 @@
     "unit": "₹ per 10g",
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
-    "typicalMargin": "₹5–7 lakh",
-    "contractValue": "~₹1 crore at ₹1,00,000/10g",
+    "typicalMargin": "₹7.7–10.7 lakh",
+    "contractValue": "~₹1.5 crore at ₹1,53,549/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
-    "keyBodies": ["World Gold Council", "London Bullion Market Association (LBMA)", "CME Group (COMEX)", "Reserve Bank of India"],
+    "keyBodies": [
+      "World Gold Council",
+      "London Bullion Market Association (LBMA)",
+      "CME Group (COMEX)",
+      "Reserve Bank of India"
+    ],
     "demandDrivers": [
       "Central bank reserve accumulation (China, Russia, India RBI buying since 2022)",
       "Indian jewellery (25% of global demand — wedding season Oct–Feb peaks)",
@@ -27,7 +32,14 @@
     ],
     "keyRisk": "MCX-COMEX spread can widen when Indian import duty changes or USD/INR moves sharply — watch basis risk.",
     "taxNote": "Gold ETF LTCG: 12.5% after 12 months (Budget 2024). Physical gold LTCG: 12.5% without indexation after 2 years. MCX futures gains: taxed as business income or STCG at slab rate. CTT 0.01% on sell side.",
-    "macroLinks": ["USD/INR", "US 10Y real yield", "COMEX Gold", "India CPI", "Central bank demand data (WGC quarterly)"]
+    "macroLinks": [
+      "USD/INR",
+      "US 10Y real yield",
+      "COMEX Gold",
+      "India CPI",
+      "Central bank demand data (WGC quarterly)"
+    ],
+    "expiryNote": "Front-month contract expires 5 Aug 2026"
   },
   "silver": {
     "name": "Silver",
@@ -35,11 +47,15 @@
     "unit": "₹ per kg",
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
-    "typicalMargin": "₹1.5–2.5 lakh",
-    "contractValue": "~₹30 lakh at ₹1,00,000/kg",
+    "typicalMargin": "₹3.8–5.3 lakh",
+    "contractValue": "~₹75.8 lakh at ₹2,52,800/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
-    "keyBodies": ["Silver Institute", "CME Group (COMEX)", "London Metal Exchange"],
+    "keyBodies": [
+      "Silver Institute",
+      "CME Group (COMEX)",
+      "London Metal Exchange"
+    ],
     "demandDrivers": [
       "Industrial use (60% of demand) — solar panels, EVs, electronics, 5G",
       "Jewellery and silverware (India is world's largest silver importer for this)",
@@ -55,7 +71,14 @@
     ],
     "keyRisk": "Silver is far more volatile than gold — easily swings 3–5% in a session. High lot value (₹30L per lot) amplifies P&L. Silver Mini (5 kg) is available for smaller capital.",
     "taxNote": "Same as gold futures — gains taxed as business income. CTT 0.01% on sell side.",
-    "macroLinks": ["Gold price", "COMEX Silver", "Gold-silver ratio", "China solar installations (quarterly)", "USD/INR"]
+    "macroLinks": [
+      "Gold price",
+      "COMEX Silver",
+      "Gold-silver ratio",
+      "China solar installations (quarterly)",
+      "USD/INR"
+    ],
+    "expiryNote": "Front-month contract expires 3 Jul 2026"
   },
   "crude": {
     "name": "Crude Oil",
@@ -63,11 +86,16 @@
     "unit": "₹ per barrel",
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
-    "typicalMargin": "₹30–45K",
-    "contractValue": "~₹6.5 lakh at ₹6,500/bbl",
+    "typicalMargin": "₹38–53K",
+    "contractValue": "~₹7.6 lakh at ₹7,615/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
-    "keyBodies": ["OPEC+ (Vienna Group)", "International Energy Agency (IEA)", "US EIA", "Indian Ministry of Petroleum"],
+    "keyBodies": [
+      "OPEC+ (Vienna Group)",
+      "International Energy Agency (IEA)",
+      "US EIA",
+      "Indian Ministry of Petroleum"
+    ],
     "demandDrivers": [
       "Transportation — aviation, shipping, road fuel (60% of global oil demand)",
       "Petrochemicals — plastics, fertilisers",
@@ -86,7 +114,15 @@
     ],
     "keyRisk": "Crude is the most geopolitically sensitive commodity. Weekend OPEC+ surprises and Middle East flare-ups cause gap opens on Monday. Retail traders should avoid holding large overnight positions before OPEC+ meetings.",
     "taxNote": "MCX crude futures gains: business income or STCG. CTT 0.01% on sell. Petrol/diesel prices in India are state-controlled and do not move with MCX crude in real time.",
-    "macroLinks": ["WTI Crude", "Brent Crude", "USD/INR", "China PMI", "EIA Weekly Inventory", "OPEC+ meeting calendar"]
+    "macroLinks": [
+      "WTI Crude",
+      "Brent Crude",
+      "USD/INR",
+      "China PMI",
+      "EIA Weekly Inventory",
+      "OPEC+ meeting calendar"
+    ],
+    "expiryNote": "Front-month contract expires 18 Jun 2026"
   },
   "copper": {
     "name": "Copper",
@@ -94,11 +130,16 @@
     "unit": "₹ per kg",
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
-    "typicalMargin": "₹1.2–1.8 lakh",
-    "contractValue": "~₹24 lakh at ₹960/kg",
+    "typicalMargin": "₹1.7–2.3 lakh",
+    "contractValue": "~₹33.5 lakh at ₹1,339.8/kg",
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
-    "keyBodies": ["London Metal Exchange (LME)", "CME Group (COMEX)", "International Copper Study Group (ICSG)", "Chilean state miner Codelco"],
+    "keyBodies": [
+      "London Metal Exchange (LME)",
+      "CME Group (COMEX)",
+      "International Copper Study Group (ICSG)",
+      "Chilean state miner Codelco"
+    ],
     "demandDrivers": [
       "China construction and infrastructure (accounts for ~55% of global copper demand)",
       "Electric vehicles — each EV uses 83kg of copper vs 22kg in ICE cars",
@@ -116,7 +157,15 @@
     ],
     "keyRisk": "Copper's large lot size (2,500 kg, ~₹24L contract value) makes it high-capital. LME price is the global benchmark; COMEX is the US proxy. MCX follows COMEX with import duty overlay. Copper is called 'Dr. Copper' because it has the best track record of predicting global economic direction.",
     "taxNote": "MCX copper futures: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["LME Copper 3M", "COMEX Copper", "China Caixin PMI", "LME warehouse stocks", "USD/INR", "China property data"]
+    "macroLinks": [
+      "LME Copper 3M",
+      "COMEX Copper",
+      "China Caixin PMI",
+      "LME warehouse stocks",
+      "USD/INR",
+      "China property data"
+    ],
+    "expiryNote": "Front-month contract expires 30 Jun 2026"
   },
   "zinc": {
     "name": "Zinc",
@@ -124,11 +173,16 @@
     "unit": "₹ per kg",
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
-    "typicalMargin": "₹7,000–14,000",
-    "contractValue": "~₹2.85 lakh at ₹285/kg",
+    "typicalMargin": "₹0.9–1.3 lakh",
+    "contractValue": "~₹18.4 lakh at ₹368.55/kg",
     "importParity": "MCX Zinc = LME Zinc ($/tonne) ÷ 1000 × USD/INR × 1.068 (Basic Customs Duty 5% + IGST ~18%)",
     "supplyControl": "China mines 31% and refines 44% of global zinc. Peru (11%) and Australia (10%) are the next largest miners. India's Hindustan Zinc (Vedanta subsidiary) is among the world's top five zinc-lead miners and supplies roughly 75% of India's primary zinc needs — making it the single most important stock to watch for MCX zinc price direction.",
-    "keyBodies": ["London Metal Exchange (LME)", "International Lead and Zinc Study Group (ILZSG)", "Hindustan Zinc Ltd", "Nyrstar (global smelter)"],
+    "keyBodies": [
+      "London Metal Exchange (LME)",
+      "International Lead and Zinc Study Group (ILZSG)",
+      "Hindustan Zinc Ltd",
+      "Nyrstar (global smelter)"
+    ],
     "demandDrivers": [
       "Galvanizing (55% of global demand) — zinc-coated steel prevents rust in construction, auto bodies, white goods",
       "Die-casting alloys for automobile parts, hardware, and electronics enclosures",
@@ -145,7 +199,14 @@
     ],
     "keyRisk": "Zinc is closely tied to the steel and construction cycle. A China property sector slowdown is the dominant bearish risk — it hit zinc prices hard in 2022–2024. Hindustan Zinc results and Vedanta group debt restructuring news are India-specific volatility triggers.",
     "taxNote": "MCX zinc futures gains: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["LME Zinc 3M", "LME zinc warehouse stocks", "China property data", "Hindustan Zinc production", "USD/INR", "Steel prices"]
+    "macroLinks": [
+      "LME Zinc 3M",
+      "LME zinc warehouse stocks",
+      "China property data",
+      "Hindustan Zinc production",
+      "USD/INR",
+      "Steel prices"
+    ]
   },
   "aluminium": {
     "name": "Aluminium",
@@ -153,11 +214,16 @@
     "unit": "₹ per kg",
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
-    "typicalMargin": "₹5,000–9,000",
-    "contractValue": "~₹2.65 lakh at ₹265/kg",
+    "typicalMargin": "₹0.9–1.3 lakh",
+    "contractValue": "~₹18.0 lakh at ₹359.85/kg",
     "importParity": "MCX Aluminium = LME Aluminium ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 7.5% + IGST)",
     "supplyControl": "China produces 58% of global primary aluminium — the highest concentration of any major metal. Russia (Rusal, 6%) and Canada (5%) are the next largest. Aluminium smelting is extremely electricity-intensive (15,000 kWh per tonne), so cheap hydropower nations (China, Russia, Iceland, Norway) dominate. Power costs determine who runs and who shuts.",
-    "keyBodies": ["London Metal Exchange (LME)", "International Aluminium Institute (IAI)", "Rusal (Russia)", "Hindalco Industries / Novelis (India/global)"],
+    "keyBodies": [
+      "London Metal Exchange (LME)",
+      "International Aluminium Institute (IAI)",
+      "Rusal (Russia)",
+      "Hindalco Industries / Novelis (India/global)"
+    ],
     "demandDrivers": [
       "Transportation (30% of demand) — aviation, auto (lightweighting for EVs), rail",
       "Construction — windows, facades, roofing, power transmission cables",
@@ -175,7 +241,14 @@
     ],
     "keyRisk": "Aluminium's price is heavily state-influenced — Chinese government subsidies to aluminium smelters (cheap power, cheap alumina) suppress the global price floor. Sudden US or EU import tariff changes cause sharp basis dislocations. Indian producers (Hindalco, Vedanta's BALCO) are large enough to influence MCX premiums.",
     "taxNote": "MCX aluminium futures gains: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["LME Aluminium 3M", "China aluminium output (monthly NBS)", "EU electricity prices", "LME aluminium stocks", "USD/INR", "Hindalco results"]
+    "macroLinks": [
+      "LME Aluminium 3M",
+      "China aluminium output (monthly NBS)",
+      "EU electricity prices",
+      "LME aluminium stocks",
+      "USD/INR",
+      "Hindalco results"
+    ]
   },
   "lead": {
     "name": "Lead",
@@ -183,11 +256,16 @@
     "unit": "₹ per kg",
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
-    "typicalMargin": "₹5,000–9,000",
-    "contractValue": "~₹1.85 lakh at ₹185/kg",
+    "typicalMargin": "₹51–72K",
+    "contractValue": "~₹10.2 lakh at ₹204.8/kg",
     "importParity": "MCX Lead = LME Lead ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST)",
     "supplyControl": "China dominates global lead smelting (45% of refined output). Australia (14%) and Peru (8%) are the top miners. India's Hindustan Zinc is also a major lead producer — lead is mined alongside zinc at Hindustan Zinc's Rajasthan operations. Secondary (recycled) lead from scrap batteries accounts for 60% of global supply — the auto scrappage cycle is critical.",
-    "keyBodies": ["London Metal Exchange (LME)", "International Lead and Zinc Study Group (ILZSG)", "Hindustan Zinc Ltd", "Exide Industries (India — major secondary smelter)"],
+    "keyBodies": [
+      "London Metal Exchange (LME)",
+      "International Lead and Zinc Study Group (ILZSG)",
+      "Hindustan Zinc Ltd",
+      "Exide Industries (India — major secondary smelter)"
+    ],
     "demandDrivers": [
       "Lead-acid batteries (80% of demand) — automotive starter batteries, inverter/UPS batteries, e-rickshaws",
       "India specifically: massive inverter and e-rickshaw market keeps Indian lead demand structurally elevated",
@@ -205,7 +283,14 @@
     ],
     "keyRisk": "Lead is the most 'India-driven' base metal on MCX because India's inverter and e-rickshaw market creates unique domestic demand patterns that can diverge from LME. Environmental regulations on secondary lead smelters (informal sector) periodically tighten supply sharply. Lead is also the most prone to seasonal moves — pre-monsoon UPS battery restocking lifts Indian prices.",
     "taxNote": "MCX lead futures gains: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["LME Lead 3M", "LME lead warehouse stocks", "India auto sales data", "Hindustan Zinc production", "USD/INR", "Exide Industries results"]
+    "macroLinks": [
+      "LME Lead 3M",
+      "LME lead warehouse stocks",
+      "India auto sales data",
+      "Hindustan Zinc production",
+      "USD/INR",
+      "Exide Industries results"
+    ]
   },
   "nickel": {
     "name": "Nickel",
@@ -213,11 +298,17 @@
     "unit": "₹ per kg",
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
-    "typicalMargin": "₹20,000–35,000",
-    "contractValue": "~₹4.1 lakh at ₹1,650/kg",
+    "typicalMargin": "₹1.3–1.8 lakh",
+    "contractValue": "~₹25.3 lakh at ₹1,689.1/kg",
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
-    "keyBodies": ["London Metal Exchange (LME)", "Nickel Institute", "Norilsk Nickel (Russia)", "PT Vale Indonesia", "Indonesian Mining Ministry (ESDM)"],
+    "keyBodies": [
+      "London Metal Exchange (LME)",
+      "Nickel Institute",
+      "Norilsk Nickel (Russia)",
+      "PT Vale Indonesia",
+      "Indonesian Mining Ministry (ESDM)"
+    ],
     "demandDrivers": [
       "Stainless steel (70% of global nickel demand) — stainless steel uses 8–12% nickel content",
       "EV batteries — lithium-nickel-manganese-cobalt oxide (NMC) cathode requires 40–80 kg nickel per EV",
@@ -235,7 +326,14 @@
     ],
     "keyRisk": "Nickel is the most volatile and 'story-driven' base metal. The 2022 LME short squeeze (price doubled in 48 hours, LME suspended trading) remains the single worst day in exchange history for a commodity. Indonesia policy risk is ever-present. MCX nickel's small lot size (250 kg) makes it accessible but leverage is still high. Battery chemistry shifts (from NMC to LFP) could structurally reduce nickel demand from EVs.",
     "taxNote": "MCX nickel futures gains: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["LME Nickel 3M", "Indonesia nickel export policy", "LME nickel warehouse stocks", "China stainless steel output", "EV battery chemistry news", "USD/INR"]
+    "macroLinks": [
+      "LME Nickel 3M",
+      "Indonesia nickel export policy",
+      "LME nickel warehouse stocks",
+      "China stainless steel output",
+      "EV battery chemistry news",
+      "USD/INR"
+    ]
   },
   "natgas": {
     "name": "Natural Gas",
@@ -243,11 +341,16 @@
     "unit": "₹ per mmBtu",
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
-    "typicalMargin": "₹20–30K",
-    "contractValue": "~₹4 lakh at ₹320/mmBtu",
+    "typicalMargin": "₹18–26K",
+    "contractValue": "~₹3.7 lakh at ₹294.5/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
-    "keyBodies": ["EIA (US Energy Information Administration)", "International Gas Union (IGU)", "Gazprom (Russia)", "QatarEnergy"],
+    "keyBodies": [
+      "EIA (US Energy Information Administration)",
+      "International Gas Union (IGU)",
+      "Gazprom (Russia)",
+      "QatarEnergy"
+    ],
     "demandDrivers": [
       "Power generation — natural gas is the marginal fuel for electricity in the US and increasingly India",
       "Winter heating demand (Northern Hemisphere — Nov–Feb is the peak demand season)",
@@ -265,6 +368,14 @@
     ],
     "keyRisk": "Natural gas is the most volatile commodity on MCX — daily moves of 5–10% are common. Prices swing on a single weather forecast update. Low margin (₹20–30K) amplifies leverage massively relative to capital. MCX NatGas tracks Henry Hub, not Indian city gas prices.",
     "taxNote": "MCX NatGas futures: business income. CTT 0.01% on sell side.",
-    "macroLinks": ["Henry Hub NatGas", "US EIA Weekly Storage", "EU TTF Gas", "USD/INR", "US weather (NOAA 6-10 day)", "LNG freight rates"]
+    "macroLinks": [
+      "Henry Hub NatGas",
+      "US EIA Weekly Storage",
+      "EU TTF Gas",
+      "USD/INR",
+      "US weather (NOAA 6-10 day)",
+      "LNG freight rates"
+    ],
+    "expiryNote": "Front-month contract expires 25 Jun 2026"
   }
 }

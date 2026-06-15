@@ -1,0 +1,99 @@
+name: Site Guardian
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Midnight UTC = 5:30 AM IST daily
+  workflow_dispatch:
+    inputs:
+      deep_audit:
+        description: 'Force deep narrative refresh of market-structure.json'
+        type: boolean
+        default: false
+
+concurrency:
+  group: site-guardian
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  guardian:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch market snapshot
+        continue-on-error: true
+        env:
+          KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/fetch-snapshot.mjs
+
+      - name: Run site guardian
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BREVO_API_KEY:     ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:      ${{ secrets.SENDER_EMAIL }}
+        run: |
+          IS_SUNDAY=$([ "$(date -u +%u)" = "7" ] && echo "true" || echo "false")
+          FORCED="${{ inputs.deep_audit }}"
+          DEEP_AUDIT="${FORCED:-$IS_SUNDAY}" node scripts/site-guardian.mjs
+
+      - name: Commit & push
+        run: |
+          git config user.name "BhaavBrief Guardian"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/guardian-report.json data/market-structure.json data/site-stats.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+          git stash
+          git pull --rebase origin main
+          git stash pop || true
+          git add data/guardian-report.json data/market-structure.json data/site-stats.json 2>/dev/null || true
+          git diff --staged --quiet && echo "Nothing after rebase" && exit 0
+          git commit -m "guardian: site health $(date -u '+%Y-%m-%d')"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            fi
+          done
+
+      - name: Alert on failure
+        if: failure()
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          REPO:          ${{ github.repository }}
+        run: |
+          DATE_IN=$(TZ=Asia/Kolkata date '+%d %b %Y')
+          TIME_IN=$(TZ=Asia/Kolkata date '+%d %b %Y, %I:%M %p IST')
+          LINK="https://github.com/${REPO}/actions/workflows/site-guardian.yml"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"sender\":{\"name\":\"BhaavBrief Bot\",\"email\":\"${SENDER_EMAIL}\"},\"to\":[{\"email\":\"00tradingview00@gmail.com\"}],\"subject\":\"ACTION REQUIRED: Site Guardian failed -- ${DATE_IN}\",\"htmlContent\":\"<p>Site Guardian workflow failed on ${TIME_IN}.</p><p><a href='${LINK}'>Re-run workflow</a></p>\"}" \
+            || true
