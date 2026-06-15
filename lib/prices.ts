@@ -283,8 +283,9 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
   const instruments = loadInstrumentTokens()
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const mcxTokens = ['gold', 'silver', 'crude', 'copper', 'natgas'].map(k => instruments[k].token)
-    const fxTokens  = instruments.currencies
+    const coreKeys   = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
+    const mcxTokens  = coreKeys.filter(k => instruments[k]?.token).map(k => instruments[k].token)
+    const fxTokens   = instruments.currencies
       ? Object.values(instruments.currencies as unknown as Record<string, InstrumentInfo>).map(c => c.token)
       : []
     return await client.getQuotes([...mcxTokens, ...fxTokens])
@@ -418,11 +419,15 @@ export async function getPrices(): Promise<PriceData | null> {
       return Object.values(kiteQuotes).find(q => q.instrument_token === token) ?? null
     }
 
-    const goldQ   = kiteByToken(instruments.gold.token)
-    const silverQ = kiteByToken(instruments.silver.token)
-    const crudeQ  = kiteByToken(instruments.crude.token)
-    const copperQ = kiteByToken(instruments.copper.token)
-    const natgasQ = kiteByToken(instruments.natgas.token)
+    const goldQ      = kiteByToken(instruments.gold.token)
+    const silverQ    = kiteByToken(instruments.silver.token)
+    const crudeQ     = kiteByToken(instruments.crude.token)
+    const copperQ    = kiteByToken(instruments.copper.token)
+    const natgasQ    = kiteByToken(instruments.natgas.token)
+    const zincQ      = instruments.zinc      ? kiteByToken(instruments.zinc.token)      : null
+    const leadQ      = instruments.lead      ? kiteByToken(instruments.lead.token)      : null
+    const aluminiumQ = instruments.aluminium ? kiteByToken(instruments.aluminium.token) : null
+    const nickelQ    = instruments.nickel    ? kiteByToken(instruments.nickel.token)    : null
 
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
@@ -472,6 +477,10 @@ export async function getPrices(): Promise<PriceData | null> {
       },
       copper: buildMCXData(copperQ, cache?.copper ?? 0, cache?.copperPct ?? 0, instruments.copper),
       natgas: buildMCXData(natgasQ, cache?.natgas ?? 0, cache?.natgasPct ?? 0, instruments.natgas),
+      ...(zincQ      ? { zinc:      buildMCXData(zincQ,      0, 0, instruments.zinc!)      } : {}),
+      ...(leadQ      ? { lead:      buildMCXData(leadQ,      0, 0, instruments.lead!)      } : {}),
+      ...(aluminiumQ ? { aluminium: buildMCXData(aluminiumQ, 0, 0, instruments.aluminium!) } : {}),
+      ...(nickelQ    ? { nickel:    buildMCXData(nickelQ,    0, 0, instruments.nickel!)    } : {}),
       ...(instruments.currencies ? {
         currencies: {
           usdinr: buildForexData(kiteByToken((instruments.currencies as any).usdinr.token), (instruments.currencies as any).usdinr),
