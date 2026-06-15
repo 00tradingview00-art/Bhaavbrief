@@ -58,8 +58,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
+    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Commodity+Tax+India+2026&tags=CTT,ITR-3,Audit+Threshold', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary' as const, title: 'MCX Commodity Tax India 2026 | BhaavBrief', description: 'ITR-3, CTT, audit threshold, loss carry forward — complete MCX trading tax guide for Indian traders.', site: '@bhaavbrief' },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Commodity Tax India 2026 | BhaavBrief', description: 'ITR-3, CTT, audit threshold, loss carry forward — complete MCX trading tax guide for Indian traders.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Commodity+Tax+India+2026&tags=CTT,ITR-3,Audit+Threshold'] },
 }
 
 const BREADCRUMB_SCHEMA = {

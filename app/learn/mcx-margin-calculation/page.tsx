@@ -83,8 +83,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
+    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Margin+Calculation+2026&tags=SPAN+Margin,Exposure+Margin,Margin+Call', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary' as const, title: 'MCX Margin Calculation 2026 | BhaavBrief', description: 'SPAN margin, exposure margin, margin calls — MCX futures margin explained with live price examples.', site: '@bhaavbrief' },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Margin Calculation 2026 | BhaavBrief', description: 'SPAN margin, exposure margin, margin calls — MCX futures margin explained with live price examples.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Margin+Calculation+2026&tags=SPAN+Margin,Exposure+Margin,Margin+Call'] },
 }
 
 const BREADCRUMB_SCHEMA = {

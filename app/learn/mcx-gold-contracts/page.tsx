@@ -72,8 +72,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
+    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Gold+Contracts+2026&tags=Gold+Mini,Gold+Guinea,Gold+Petal', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary' as const, title: 'MCX Gold Contracts 2026 — Standard, Mini, Guinea, Petal | BhaavBrief', description: 'Every MCX gold contract explained with live contract values and margin requirements.', site: '@bhaavbrief' },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Gold Contracts 2026 — Standard, Mini, Guinea, Petal | BhaavBrief', description: 'Every MCX gold contract explained with live contract values and margin requirements.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Gold+Contracts+2026&tags=Gold+Mini,Gold+Guinea,Gold+Petal'] },
 }
 
 const BREADCRUMB_SCHEMA = {

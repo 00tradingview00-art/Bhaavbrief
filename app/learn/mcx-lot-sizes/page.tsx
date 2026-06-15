@@ -101,8 +101,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
+    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Lot+Sizes+2026&tags=Gold+Mini,Silver+Mini,Crude+Mini', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary' as const, title: 'MCX Lot Sizes 2026 | BhaavBrief', description: 'Complete lot size table for every MCX futures contract — updated with live prices at each deploy.', site: '@bhaavbrief' },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Lot Sizes 2026 | BhaavBrief', description: 'Complete lot size table for every MCX futures contract — updated with live prices at each deploy.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Lot+Sizes+2026&tags=Gold+Mini,Silver+Mini,Crude+Mini'] },
 }
 
 // ── Structured data ────────────────────────────────────────────────────────

@@ -64,8 +64,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
+    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Rollover+Guide+2026&tags=Rollover+Cost,Contango,Backwardation', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary' as const, title: 'MCX Rollover Guide 2026 | BhaavBrief', description: 'When to rollover, rollover cost calculation, Crude and Gold examples — complete MCX rollover guide.', site: '@bhaavbrief' },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Rollover Guide 2026 | BhaavBrief', description: 'When to rollover, rollover cost calculation, Crude and Gold examples — complete MCX rollover guide.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Rollover+Guide+2026&tags=Rollover+Cost,Contango,Backwardation'] },
 }
 
 const BREADCRUMB_SCHEMA = {
