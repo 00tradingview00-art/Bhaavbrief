@@ -274,17 +274,25 @@ async function main() {
     zinc: 'INR/kg', lead: 'INR/kg', aluminium: 'INR/kg', nickel: 'INR/kg',
   }
 
-  // Optional minor metals — silently absent if Kite returns no data; never block pipeline
-  function optionalMCX(key, unit) {
+  // Optional minor metals — prefer live Kite data, fall back to last snapshot, never block pipeline
+  function optionalMCX(key, snapshotKey, unit) {
     const data = getMCX(key)
-    if (!data || !(data.price > 0)) return null
-    return {
-      price:     roundTo(data.price, 2),
-      prevClose: roundTo(data.prevClose, 2),
-      changePct: roundTo(data.changePct, 4),
-      unit,
-      ...(data.stale ? { stale: true } : {}),
+    if (data && data.price > 0) {
+      return {
+        price:     roundTo(data.price, 2),
+        prevClose: roundTo(data.prevClose, 2),
+        changePct: roundTo(data.changePct, 4),
+        unit,
+        ...(data.stale ? { stale: true } : {}),
+      }
     }
+    // Fall back to last snapshot value (so the card is never blank once it was ever populated)
+    const prev = existing?.instruments?.[snapshotKey]
+    if (prev && prev.price > 0) {
+      console.warn(`  ${snapshotKey}: stale — carrying last good snapshot value`)
+      return { ...prev, unit, stale: true }
+    }
+    return null
   }
 
   const instruments = {
@@ -300,10 +308,10 @@ async function main() {
     BRENT:       buildInstrument('BRENT',       yahooMap.BRENT,    'USD/bbl'),
     HENRY_HUB:   buildInstrument('HENRY_HUB',  yahooMap.HENRY_HUB,'USD/mmBtu'),
   }
-  const zincInst      = optionalMCX('zinc',      MCX_UNITS.zinc)
-  const leadInst      = optionalMCX('lead',      MCX_UNITS.lead)
-  const aluminiumInst = optionalMCX('aluminium', MCX_UNITS.aluminium)
-  const nickelInst    = optionalMCX('nickel',    MCX_UNITS.nickel)
+  const zincInst      = optionalMCX('zinc',      'MCX_ZINC',      MCX_UNITS.zinc)
+  const leadInst      = optionalMCX('lead',      'MCX_LEAD',      MCX_UNITS.lead)
+  const aluminiumInst = optionalMCX('aluminium', 'MCX_ALUMINIUM', MCX_UNITS.aluminium)
+  const nickelInst    = optionalMCX('nickel',    'MCX_NICKEL',    MCX_UNITS.nickel)
   if (zincInst)      instruments.MCX_ZINC      = zincInst
   if (leadInst)      instruments.MCX_LEAD      = leadInst
   if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst

@@ -249,7 +249,11 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           const data = p?.[cfg.key as keyof PriceData] as MCXData | undefined
           if (!data) return (
             <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
-              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', height: 80, cursor: 'pointer' }} />
+              <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', minHeight: 80, cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 8, display: 'block' }}>{cfg.label}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-4)' }}>—</span>
+                <span style={{ fontSize: 9, color: 'var(--ink-4)', marginTop: 4 }}>awaiting data</span>
+              </div>
             </Link>
           )
           return (
