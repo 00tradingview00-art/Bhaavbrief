@@ -44,11 +44,15 @@ function isMCXOpen(): boolean {
 // ── Card config ───────────────────────────────────────────────────────────────
 
 const CARDS = [
-  { key: 'gold',   label: 'MCX Gold',    unit: '/10g',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/gold'        },
-  { key: 'silver', label: 'MCX Silver',  unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/silver'      },
-  { key: 'crude',  label: 'MCX Crude',   unit: '/bbl',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/crude-oil'   },
-  { key: 'copper', label: 'MCX Copper',  unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/copper'      },
-  { key: 'natgas', label: 'MCX Nat Gas', unit: '/mmBtu', fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/natural-gas' },
+  { key: 'gold',      label: 'MCX Gold',      unit: '/10g',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/gold'        },
+  { key: 'silver',    label: 'MCX Silver',    unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/silver'      },
+  { key: 'crude',     label: 'MCX Crude',     unit: '/bbl',   fmtP: (v: number) => fmtINR(v),     href: '/commodities/crude-oil'   },
+  { key: 'copper',    label: 'MCX Copper',    unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/copper'      },
+  { key: 'natgas',    label: 'MCX Nat Gas',   unit: '/mmBtu', fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/natural-gas' },
+  { key: 'zinc',      label: 'MCX Zinc',      unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/zinc'        },
+  { key: 'lead',      label: 'MCX Lead',      unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/lead'        },
+  { key: 'aluminium', label: 'MCX Aluminium', unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/aluminium'   },
+  { key: 'nickel',    label: 'MCX Nickel',    unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/nickel'      },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────
