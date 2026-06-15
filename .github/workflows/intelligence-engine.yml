@@ -91,15 +91,23 @@ jobs:
             git push origin main && break
             if [ $attempt -lt 3 ]; then
               echo "Push attempt $attempt rejected — rebasing and retrying..."
-              git pull --rebase origin main
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
               sleep $((attempt * 3))
             fi
           done
 
       - name: Alert on failure
         if: failure()
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          REPO: ${{ github.repository }}
         run: |
+          DATE_IN=$(TZ=Asia/Kolkata date '+%d %b %Y')
+          TIME_IN=$(TZ=Asia/Kolkata date '+%d %b %Y, %I:%M %p IST')
+          LINK="https://github.com/${REPO}/actions/workflows/intelligence-engine.yml"
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
-            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
-            -d '{"sender":{"name":"BhaavBrief Bot","email":"${{ secrets.SENDER_EMAIL }}"},"to":[{"email":"00tradingview00@gmail.com"}],"subject":"ACTION REQUIRED: Intelligence Engine failed — '$(TZ=Asia/Kolkata date +'%d %b %Y')'","htmlContent":"<p><strong>Intelligence Engine</strong> workflow failed on <strong>'$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/intelligence-engine.yml\">Re-run workflow →</a></p>"}'
+            -d "{\"sender\":{\"name\":\"BhaavBrief Bot\",\"email\":\"${SENDER_EMAIL}\"},\"to\":[{\"email\":\"00tradingview00@gmail.com\"}],\"subject\":\"ACTION REQUIRED: Intelligence Engine failed -- ${DATE_IN}\",\"htmlContent\":\"<p>Intelligence Engine workflow failed on ${TIME_IN}.</p><p><a href='${LINK}'>Re-run workflow</a></p>\"}" \
+            || true

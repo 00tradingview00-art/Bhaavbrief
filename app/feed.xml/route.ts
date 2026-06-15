@@ -57,10 +57,11 @@ ${newsBlock(b.title, iso)}
     }
   })
 
-  const flashItems: FeedItem[] = flash.slice(0, 20).map(f => {
+  const flashItems: FeedItem[] = flash.slice(0, 20).flatMap(f => {
     const pub = new Date(f.date)
+    if (isNaN(pub.getTime())) return []
     const iso = pub.toISOString()
-    return {
+    return [{
       date: f.date,
       xml: `
     <item>
@@ -73,13 +74,14 @@ ${newsBlock(b.title, iso)}
 ${newsBlock(f.title, iso)}
       <author>brief@bhaavbrief.in (BhaavBrief)</author>
     </item>`,
-    }
+    }]
   })
 
-  const articleItems: FeedItem[] = articles.slice(0, 10).map(a => {
+  const articleItems: FeedItem[] = articles.slice(0, 10).flatMap(a => {
     const pub = new Date(a.date)
+    if (isNaN(pub.getTime())) return []
     const iso = pub.toISOString()
-    return {
+    return [{
       date: a.date,
       xml: `
     <item>
@@ -93,7 +95,7 @@ ${newsBlock(f.title, iso)}
 ${newsBlock(a.title, iso)}
       <author>brief@bhaavbrief.in (BhaavBrief)</author>
     </item>`,
-    }
+    }]
   })
 
   const allItems = [...briefItems, ...flashItems, ...articleItems]

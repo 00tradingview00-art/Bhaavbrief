@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import type { PriceData, MCXData, ForexData } from '@/lib/prices'
 
@@ -184,6 +184,22 @@ function PriceCard({
   )
 }
 
+// ── Section header ────────────────────────────────────────────────────────────
+
+function SectionHeader({ label, right }: { label: string; right?: React.ReactNode }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      borderBottom: '1px solid var(--border)', paddingBottom: 8, marginBottom: 14,
+    }}>
+      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+        {label}
+      </span>
+      {right}
+    </div>
+  )
+}
+
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
 export default function MarketsClient({ initialPrices }: { initialPrices: PriceData | null }) {
@@ -243,8 +259,13 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
         </div>
       </div>
 
-      {/* ── Price cards ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12, marginBottom: 28 }}>
+      {/* ── MCX Futures ── */}
+      <SectionHeader label="MCX Futures" right={
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+          {marketOpen ? 'Live · refreshed every 30s' : 'Market closed'}
+        </span>
+      } />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12, marginBottom: 32 }}>
         {CARDS.map(cfg => {
           const data = p?.[cfg.key as keyof PriceData] as MCXData | undefined
           if (!data) return (
@@ -262,8 +283,11 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             </Link>
           )
         })}
+      </div>
 
-        {/* Currency cards from Kite CDS */}
+      {/* ── Currencies & Rates ── */}
+      <SectionHeader label="Currencies & Rates" />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12, marginBottom: 32 }}>
         {([
           { key: 'usdinr', label: 'USD / INR', decimals: 4, unit: 'per USD'     },
           { key: 'eurinr', label: 'EUR / INR', decimals: 4, unit: 'per EUR'     },
@@ -315,9 +339,11 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
 
         {/* RBI Repo Rate */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: '#FFF3E0', color: '#B45309' }}>RBI</span>
-            <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>RBI Repo</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 2, background: '#FFF3E0', color: '#B45309', letterSpacing: '0.05em' }}>RBI</span>
+              <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Repo Rate</span>
+            </div>
           </div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
             5.25
@@ -356,12 +382,9 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
 
       {/* ── Global Reference ── */}
       <div style={{ marginBottom: 4 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
-            Global Reference
-          </span>
-          <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>15-min delayed</span>
-        </div>
+        <SectionHeader label="Global Reference" right={
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>15-min delayed</span>
+        } />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
           {p && ([
             { label: 'COMEX Gold',   exch: 'COMEX', price: p.comexGold,   pct: p.goldComexPct,   unit: '/oz',    fmt: (v: number) => fmtUSD(v, 0) },

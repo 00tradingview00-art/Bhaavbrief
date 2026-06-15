@@ -101,35 +101,42 @@ jobs:
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          # Note: market-snapshot.json is intentionally excluded — intelligence-engine owns it.
+          # Including it here caused rebase conflicts in the retry loop.
+          git add content/flash/ data/flash-state.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
           fi
           FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
           NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
-          cp data/market-snapshot.json /tmp/bb-snapshot.json 2>/dev/null || true
-          git checkout HEAD -- data/market-snapshot.json 2>/dev/null || true
           git stash
           git pull --rebase origin main
           git stash pop || true
-          cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
-          git add content/flash/ data/flash-state.json data/market-snapshot.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ data/flash-state.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           for attempt in 1 2 3; do
             git push origin main && break
             if [ $attempt -lt 3 ]; then
               echo "Push attempt $attempt rejected — rebasing and retrying..."
-              git pull --rebase origin main
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
               sleep $((attempt * 3))
             fi
           done
 
       - name: Alert on failure
         if: failure()
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          REPO: ${{ github.repository }}
         run: |
+          DATE_IN=$(TZ=Asia/Kolkata date '+%d %b %Y')
+          TIME_IN=$(TZ=Asia/Kolkata date '+%d %b %Y, %I:%M %p IST')
+          LINK="https://github.com/${REPO}/actions/workflows/flash-brief.yml"
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
-            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
-            -d '{"sender":{"name":"BhaavBrief Bot","email":"${{ secrets.SENDER_EMAIL }}"},"to":[{"email":"00tradingview00@gmail.com"}],"subject":"ACTION REQUIRED: Flash Intelligence failed — '$(TZ=Asia/Kolkata date +'%d %b %Y')'","htmlContent":"<p><strong>Flash Intelligence</strong> workflow failed on <strong>'$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/flash-brief.yml\">Re-run workflow →</a></p>"}'
+            -d "{\"sender\":{\"name\":\"BhaavBrief Bot\",\"email\":\"${SENDER_EMAIL}\"},\"to\":[{\"email\":\"00tradingview00@gmail.com\"}],\"subject\":\"ACTION REQUIRED: Flash Intelligence failed -- ${DATE_IN}\",\"htmlContent\":\"<p>Flash Intelligence workflow failed on ${TIME_IN}.</p><p><a href='${LINK}'>Re-run workflow</a></p>\"}" \
+            || true
