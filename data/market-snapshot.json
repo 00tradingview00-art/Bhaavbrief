@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T00:16:32.315Z",
+  "generatedAt": "2026-06-16T00:16:37.079Z",
   "generatedAtIST": "2026-06-16 05:46 IST",
   "source": "stale-cache+yahoo",
   "instruments": {
@@ -51,9 +51,9 @@
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 69.96,
+      "price": 69.98,
       "prevClose": 70.18,
-      "changePct": -0.3206,
+      "changePct": -0.285,
       "unit": "USD/oz"
     },
     "WTI": {
