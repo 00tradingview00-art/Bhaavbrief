@@ -607,17 +607,6 @@ async function main() {
     fs.writeFileSync(path.join(ROOT, 'data/brief-technicals.json'), JSON.stringify(rawTechnicals, null, 2))
   } catch (e) { console.warn('  Could not save brief-technicals.json:', e.message) }
 
-  // Write COMEX overnight prices so the validator can accept USD-denominated numbers
-  // (COMEX Gold ~$3,300/oz and WTI Crude ~$68/bbl are above the $50 ignore-floor but
-  // can never match INR snapshot values, so they need their own accepted-number pool).
-  try {
-    const comexForValidator = {}
-    for (const [key, c] of Object.entries(comex)) {
-      if (c?.price > 0) comexForValidator[key] = { price: c.price, pct: c.pct, label: c.label, unit: c.unit }
-    }
-    fs.writeFileSync(path.join(ROOT, 'data/brief-comex.json'), JSON.stringify(comexForValidator, null, 2))
-  } catch (e) { console.warn('  Could not save brief-comex.json:', e.message) }
-
   console.log(`  Technical blocks: ${technicalBlocks.length} commodities`)
 
   const narrative = buildOpeningNarrative(comex)
@@ -634,8 +623,25 @@ async function main() {
     }
   } catch (e) { console.warn('  Snapshot load failed:', e.message) }
 
+  // Prefer snapshot USDINR (from Kite/authoritative source) over external API so the brief
+  // generator and validator both use the same value — prevents Haiku flagging a 0.1% diff
+  // between Frankfurter and Kite as an "internal contradiction" in the brief.
+  const snapUsdinr = snapshot?.instruments?.USDINR?.price
+  const effectiveUsdinr = (snapUsdinr > 80 && snapUsdinr < 100) ? snapUsdinr : usdinr
+  if (effectiveUsdinr !== usdinr) console.log(`  USD/INR: overriding ₹${usdinr.toFixed(2)} → ₹${effectiveUsdinr.toFixed(2)} (snapshot)`)
+
+  // Include effective USD/INR in comex sidecar so the validator accepts it in Layer 1
+  try {
+    const comexForValidator = {}
+    for (const [key, c] of Object.entries(comex)) {
+      if (c?.price > 0) comexForValidator[key] = { price: c.price, pct: c.pct, label: c.label, unit: c.unit }
+    }
+    comexForValidator.usdinr = { price: effectiveUsdinr, label: 'USD/INR', unit: 'INR' }
+    fs.writeFileSync(path.join(ROOT, 'data/brief-comex.json'), JSON.stringify(comexForValidator, null, 2))
+  } catch (e) { console.warn('  Could not update brief-comex.json:', e.message) }
+
   console.log('\nGenerating open brief via Claude Sonnet...')
-  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot })
+  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr: effectiveUsdinr, technicalBlocks, narrative, snapshot })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
