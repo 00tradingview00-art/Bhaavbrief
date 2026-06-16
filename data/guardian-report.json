@@ -1,30 +1,12 @@
 {
-  "generatedAt": "2026-06-15T18:58:45.381Z",
-  "overallStatus": "yellow",
+  "generatedAt": "2026-06-16T18:21:13.452Z",
+  "overallStatus": "green",
   "health": {
-    "status": "yellow",
-    "issues": [
-      {
-        "level": "yellow",
-        "component": "market-snapshot.json",
-        "message": "Stale: 238 min old"
-      },
-      {
-        "level": "yellow",
-        "component": "seen-articles.json",
-        "message": "Not updated in >25h — monitor may be stuck"
-      }
-    ]
+    "status": "green",
+    "issues": []
   },
   "audit": {
-    "learnIssues": [
-      {
-        "field": "NSE Gold Futures launch date",
-        "currentValue": "launched in 2026",
-        "correctValue": "NSE Gold Futures launched in November 2023 (not 2026)",
-        "location": "FAQ Schema — 'What is the difference between NSE Gold Futures and MCX Gold?' answer"
-      }
-    ],
+    "learnIssues": [],
     "investIssues": [],
     "circularImpact": []
   }
