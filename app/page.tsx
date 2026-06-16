@@ -7,7 +7,6 @@ import SubscribeForm from '@/components/SubscribeForm'
 import CommodityPulse from '@/components/CommodityPulse'
 import EIACard from '@/components/EIACard'
 import { loadEIA } from '@/lib/eia'
-import DailyThesis from '@/components/DailyThesis'
 import { getActiveArcs } from '@/lib/arcs'
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
@@ -303,9 +302,6 @@ export default async function HomePage() {
 
       {/* ── COMMODITY PULSE ──────────────────────────────────────────────────── */}
       <CommodityPulse />
-
-      {/* ── DAILY THESIS ─────────────────────────────────────────────────────── */}
-      <DailyThesis />
 
       {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
       <div className="home-body">
