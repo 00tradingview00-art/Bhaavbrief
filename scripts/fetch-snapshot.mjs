@@ -317,15 +317,22 @@ async function main() {
   if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst
   if (nickelInst)    instruments.MCX_NICKEL    = nickelInst
 
-  // Optional CDS currency pairs — silent if Kite CDS unavailable
+  // Optional CDS currency pairs — carry forward last good value when NSE is closed
   for (const key of ['eurinr', 'gbpinr', 'jpyinr']) {
+    const snapshotKey = key.toUpperCase()
     const d = kiteCDS?.[key]
     if (d?.price > 0) {
-      instruments[key.toUpperCase()] = {
+      instruments[snapshotKey] = {
         price:     roundTo(d.price, 4),
         prevClose: roundTo(d.prevClose, 4),
         changePct: roundTo(d.changePct, 4),
         unit:      'INR',
+      }
+    } else {
+      const prev = existing?.instruments?.[snapshotKey]
+      if (prev?.price > 0) {
+        instruments[snapshotKey] = { ...prev, unit: 'INR', stale: true }
+        console.warn(`  ${snapshotKey}: stale — carrying last good value`)
       }
     }
   }
