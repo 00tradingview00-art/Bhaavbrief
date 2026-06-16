@@ -51,6 +51,12 @@ const issues = [];
 // LAYER 1 — deterministic
 // ---------------------------------------------------------------------------
 
+// Match ₹/$ figures but NOT when followed by "crore" or "lakh" (those are company impact
+// estimates like "₹555 crore", not commodity prices).
+const moneyRe = /(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)(?!\s*(?:crore|lakh|cr\b|L\b))/gi;
+const TOLERANCE    = 0.15;  // 15% — S/R bands, intraday ranges; semantic layer handles clear hallucinations
+const IGNORE_BELOW = 50;    // skip "$5" prose fragments
+
 // 1. Every ₹/$ figure in the brief body must be near a snapshot number or a known
 //    derived value (price, prevClose, or intraday delta). Catches clear hallucinations.
 
@@ -68,19 +74,26 @@ for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
   if (typeof value === "number" && value > 0)
     snapshotNumbers.push({ key: `derived.${key}`, value });
 }
-// Add OHLC-derived technical levels (day range, week/month high-low, SMAs, S/R bands)
+// Add Kite OHLC technical levels — written to brief-technicals.json by daily-open-brief.js
+// before the brief is generated. These include day range, week/month highs-lows, 20-SMA,
+// and nearest S/R bands — all real Kite historical data, not in the main snapshot.
 for (const [inst, levels] of Object.entries(briefTechnicals)) {
   for (const [field, value] of Object.entries(levels)) {
     if (typeof value === "number" && value > IGNORE_BELOW)
-      snapshotNumbers.push({ key: `${inst}.${field}`, value });
+      snapshotNumbers.push({ key: `tech.${inst}.${field}`, value });
   }
 }
-
-// Match ₹/$ figures but NOT when followed by "crore" or "lakh" (those are company impact
-// estimates like "₹555 crore", not commodity prices).
-const moneyRe = /(?:₹|Rs\.?\s?|\$)\s?([\d,]+(?:\.\d+)?)(?!\s*(?:crore|lakh|cr\b|L\b))/gi;
-const TOLERANCE    = 0.15;  // 15% — S/R bands, intraday ranges; semantic layer handles clear hallucinations
-const IGNORE_BELOW = 50;    // skip "$5" prose fragments
+// Add COMEX/NYMEX overnight prices (USD) — written to brief-comex.json by daily-open-brief.js.
+// COMEX Gold (~$3,300/oz) and WTI Crude (~$68/bbl) are above IGNORE_BELOW but can never
+// match INR snapshot values, so they need their own accepted-number pool.
+const comexPath = snapshotPath.replace("market-snapshot.json", "brief-comex.json");
+const briefComex = fs.existsSync(comexPath)
+  ? JSON.parse(fs.readFileSync(comexPath, "utf8"))
+  : {};
+for (const [key, c] of Object.entries(briefComex)) {
+  if (typeof c.price === "number" && c.price > 0)
+    snapshotNumbers.push({ key: `comex.${key}.price`, value: c.price });
+}
 
 for (const m of brief.matchAll(moneyRe)) {
   const val = parseFloat(m[1].replace(/,/g, ""));
@@ -195,12 +208,19 @@ async function semanticCheck() {
           role: "user",
           content:
             `Today's date (IST): ${istDate}\n\n` +
-            `MARKET SNAPSHOT (the only valid numbers for today):\n${JSON.stringify(snapshot.instruments, null, 2)}\n\n` +
+            `MARKET SNAPSHOT (MCX closing prices only — see scope note below):\n${JSON.stringify(snapshot.instruments, null, 2)}\n\n` +
             `DRAFT BRIEF (first 3000 chars):\n${brief.slice(0, 3000)}\n\n` +
+            "SNAPSHOT SCOPE — understand this before flagging anything:\n" +
+            "The snapshot contains ONLY: MCX last traded price, previous close, and % change for 9 MCX commodities and 4 currency pairs.\n" +
+            "The snapshot does NOT contain (these come from separate sources and are always valid):\n" +
+            "  • Intraday ranges (day high / day low) — from Kite live quotes\n" +
+            "  • 20-day SMA, weekly high/low, monthly high/low — from Kite historical OHLC\n" +
+            "  • COMEX/NYMEX USD prices: Gold $/oz, Silver $/oz, WTI Crude $/bbl, Copper $/lb, NatGas $/mmBtu\n" +
+            "  • USD/INR exchange rate\n" +
+            "Do NOT flag any of the above categories as missing from the snapshot — they are sourced separately.\n\n" +
             "RULES — read carefully before flagging anything:\n" +
             "• MCX and COMEX are DIFFERENT markets. MCX Gold % change and COMEX Gold % change WILL differ — this is never a contradiction.\n" +
             "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
-            "• COMEX Copper, LME metals, and other instruments not listed in the snapshot are fetched from separate real-time sources. Their prices and % changes are valid — do NOT flag them for being absent from the snapshot.\n" +
             "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n\n" +
             "Flag as 'block' ONLY:\n" +
@@ -209,8 +229,8 @@ async function semanticCheck() {
             "3. Headline direction word (surge/slump) directly contradicting the same instrument's data in the body\n" +
             "4. A percentage that doesn't match its own explicit from/to prices (e.g. '5% fall from $100 to $98' — 5% is wrong)\n" +
             "Flag as 'warn' only:\n" +
-            "5. Historical claims with specific numbers that are stated as fact but cannot be sourced from the snapshot\n" +
-            "Do NOT flag: MCX vs COMEX % differences, historical vs today comparisons, rounding differences ≤0.05%, style/tone.",
+            "5. A specific rupee or dollar number stated as fact that genuinely contradicts another number in the same brief\n" +
+            "Do NOT flag: MCX vs COMEX % differences, intraday ranges, moving averages, weekly/monthly highs/lows, COMEX USD prices, historical vs today comparisons, rounding differences ≤0.05%, style/tone.",
         },
       ],
     }),

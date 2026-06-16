@@ -607,6 +607,17 @@ async function main() {
     fs.writeFileSync(path.join(ROOT, 'data/brief-technicals.json'), JSON.stringify(rawTechnicals, null, 2))
   } catch (e) { console.warn('  Could not save brief-technicals.json:', e.message) }
 
+  // Write COMEX overnight prices so the validator can accept USD-denominated numbers
+  // (COMEX Gold ~$3,300/oz and WTI Crude ~$68/bbl are above the $50 ignore-floor but
+  // can never match INR snapshot values, so they need their own accepted-number pool).
+  try {
+    const comexForValidator = {}
+    for (const [key, c] of Object.entries(comex)) {
+      if (c?.price > 0) comexForValidator[key] = { price: c.price, pct: c.pct, label: c.label, unit: c.unit }
+    }
+    fs.writeFileSync(path.join(ROOT, 'data/brief-comex.json'), JSON.stringify(comexForValidator, null, 2))
+  } catch (e) { console.warn('  Could not save brief-comex.json:', e.message) }
+
   console.log(`  Technical blocks: ${technicalBlocks.length} commodities`)
 
   const narrative = buildOpeningNarrative(comex)
