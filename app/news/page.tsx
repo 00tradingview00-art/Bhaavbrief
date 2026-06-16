@@ -29,7 +29,7 @@ export const metadata = {
   twitter: { card: 'summary' as const, title: 'MCX Intelligence Feed | BhaavBrief', description: 'Why MCX gold, crude oil and silver are moving today — AI-powered commodity intelligence updated every 15 minutes.', site: '@bhaavbrief' },
 }
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 function commodityTagType(commodity: string): string {
   const c = commodity.toLowerCase()

@@ -12,7 +12,7 @@ export async function GET() {
   if (live) {
     return NextResponse.json(live, {
       headers: {
-        'Cache-Control':  'no-store, max-age=0',
+        'Cache-Control':  'public, s-maxage=15, stale-while-revalidate=5',
         'X-Price-Source': live.source,
         'X-Market-Open':  String(live.marketOpen),
       },
@@ -25,7 +25,7 @@ export async function GET() {
     const prices = snapshotToPriceData(snap)
     return NextResponse.json(prices, {
       headers: {
-        'Cache-Control':  'no-store, max-age=0',
+        'Cache-Control':  'public, s-maxage=15, stale-while-revalidate=5',
         'X-Price-Source': 'snapshot-fallback',
         'X-Market-Open':  String(prices.marketOpen),
         'X-Snapshot-Age': String(Math.round((Date.now() - new Date(snap.generatedAt).getTime()) / 60000)) + 'min',

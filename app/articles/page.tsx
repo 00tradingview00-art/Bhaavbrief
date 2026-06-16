@@ -2,8 +2,7 @@ import { getAllArticles } from '@/lib/articles'
 import Link from 'next/link'
 import Tag from '@/components/Tag'
 
-// Re-render every 60 seconds so new articles appear without a full redeploy
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export const metadata = {
   title: 'MCX Market Intelligence — Commodity Price Analysis | BhaavBrief',
