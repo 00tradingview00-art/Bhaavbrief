@@ -35,6 +35,31 @@
     "priceAtPublish": 298
   },
   {
+    "type": "brief",
+    "slug": "edition-044",
+    "href": "/briefs/edition-044",
+    "title": "MCX Open 16 Jun 2026: Gold Holds as Rupee Softens",
+    "description": "16 Jun 2026: MCX Gold ₹152827 (-0.06%), Silver ₹249784 (-0.67%), Crude ₹7641 (+0.30%) — rupee at ₹94.64 reshapes overnight COMEX signals at open.",
+    "excerpt": "COMEX Gold climbed overnight while the rupee fell hard — and those two moves are pulling MCX gold in opposite directions this morning, creating a tighter opening range than either leg alone would sugg",
+    "date": "2026-06-16",
+    "edition": "44",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
     "href": "/articles/2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
