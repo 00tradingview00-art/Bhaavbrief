@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-16T23:51:39.133Z",
+  "generatedAt": "2026-06-16T23:51:46.772Z",
   "generatedAtIST": "2026-06-17 05:21 IST",
   "source": "stale-cache+yahoo",
   "instruments": {
@@ -45,9 +45,9 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4353.8,
+      "price": 4353.6,
       "prevClose": 4328,
-      "changePct": 0.5961,
+      "changePct": 0.5915,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -125,7 +125,7 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 132433,
+    "importParityGoldINR": 132427,
     "mcxComexGoldSpreadPct": 15.27,
     "goldSilverRatio": 62.1
   }
