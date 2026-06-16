@@ -223,7 +223,7 @@ async function semanticCheck() {
             "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
             "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n" +
-            "• USD/INR and other FX rates: a discrepancy of ≤0.20 INR between the brief text and the snapshot (e.g. 94.66 vs 94.73) is normal API-source rounding — do NOT flag as block.\n\n"
+            "• USD/INR and other FX rates: a discrepancy of ≤0.20 INR between the brief text and the snapshot (e.g. 94.66 vs 94.73) is normal API-source rounding — do NOT flag as block.\n\n" +
             "Flag as 'block' ONLY:\n" +
             "1. The SAME instrument cited at two genuinely different prices within today's body text\n" +
             "2. Event timing contradictions (e.g. 'CPI due tonight' vs 'CPI tomorrow'; wrong month label)\n" +
