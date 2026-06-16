@@ -584,6 +584,7 @@ async function main() {
   console.log('Fetching Kite historical OHLC...')
   const technicalBlocks = []
 
+  const rawTechnicals = {}
   if (instruments) {
     const histResults = await Promise.all(
       keys.map(async key => {
@@ -595,11 +596,16 @@ async function main() {
         const currentPrice = kitePrices?.[key]?.ltp ?? mcxCache?.[key] ?? 0
         const levels = computeTechnicalLevels(candles, currentPrice)
         if (!levels) return null
+        rawTechnicals[key] = { currentPrice, ...levels }
         return formatTechnicalBlock(MCX_LABELS[key], MCX_UNITS[key], currentPrice, levels)
       })
     )
     technicalBlocks.push(...histResults.filter(Boolean))
   }
+  // Write OHLC-derived levels so validate-brief.mjs can accept them as legitimate numbers
+  try {
+    fs.writeFileSync(path.join(ROOT, 'data/brief-technicals.json'), JSON.stringify(rawTechnicals, null, 2))
+  } catch (e) { console.warn('  Could not save brief-technicals.json:', e.message) }
 
   console.log(`  Technical blocks: ${technicalBlocks.length} commodities`)
 

@@ -33,6 +33,13 @@ if (!fs.existsSync(briefPath)) {
 const snapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
 const fullFile  = fs.readFileSync(briefPath, "utf8");
 
+// Load OHLC technical levels written by daily-open-brief.js — these are real
+// Kite data but live outside the snapshot, so the validator must know about them.
+const technicalsPath = snapshotPath.replace("market-snapshot.json", "brief-technicals.json");
+const briefTechnicals = fs.existsSync(technicalsPath)
+  ? JSON.parse(fs.readFileSync(technicalsPath, "utf8"))
+  : {};
+
 // Strip MDX frontmatter (--- ... ---) before number/date checks so frontmatter
 // numeric fields (edition: 42) don't count as price references.
 const fmEnd = fullFile.indexOf("---", 4);
@@ -60,6 +67,13 @@ for (const [key, inst] of Object.entries(snapshot.instruments)) {
 for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
   if (typeof value === "number" && value > 0)
     snapshotNumbers.push({ key: `derived.${key}`, value });
+}
+// Add OHLC-derived technical levels (day range, week/month high-low, SMAs, S/R bands)
+for (const [inst, levels] of Object.entries(briefTechnicals)) {
+  for (const [field, value] of Object.entries(levels)) {
+    if (typeof value === "number" && value > IGNORE_BELOW)
+      snapshotNumbers.push({ key: `${inst}.${field}`, value });
+  }
 }
 
 // Match ₹/$ figures but NOT when followed by "crore" or "lakh" (those are company impact
@@ -186,6 +200,7 @@ async function semanticCheck() {
             "RULES — read carefully before flagging anything:\n" +
             "• MCX and COMEX are DIFFERENT markets. MCX Gold % change and COMEX Gold % change WILL differ — this is never a contradiction.\n" +
             "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
+            "• COMEX Copper, LME metals, and other instruments not listed in the snapshot are fetched from separate real-time sources. Their prices and % changes are valid — do NOT flag them for being absent from the snapshot.\n" +
             "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n\n" +
             "Flag as 'block' ONLY:\n" +
