@@ -1,13 +1,37 @@
 {
   "current": {
+    "date": "2026-06-16",
+    "editionRef": 44,
+    "thesis": "MCX Gold will not hold above ₹153,161 by MCX close today as rupee strength continues to offset COMEX overnight gains.",
+    "commodity": "MCX Gold",
+    "direction": "bearish",
+    "targetLevel": 153161,
+    "reasoning": "Resistance at ₹153,161 is being tested against cross-currents: while COMEX Gold rose 0.37% overnight, the rupee's 0.49% strengthening to ₹94.64 has compressed the translation gain into near-flat opening price action, signaling sellers will defend this level as the structural support from COMEX gains dissipates."
+  },
+  "yesterday": {
     "date": "2026-06-15",
     "editionRef": 42,
     "thesis": "MCX Crude will break below ₹7,610 by MCX close today as the risk-off sentiment that drove the overnight 5.56% rout remains intact with no structural support visible.",
     "commodity": "MCX Crude",
     "direction": "bearish",
     "targetLevel": 7610,
-    "reasoning": "₹7,610 is the only identified support level and the day's low; with the 20-SMA at ₹8,583 now 12.5% above price and no intermediate resistance named, a break below this level signals capitulation in the crude selloff."
+    "reasoning": "₹7,610 is the only identified support level and the day's low; with the 20-SMA at ₹8,583 now 12.5% above price and no intermediate resistance named, a break below this level signals capitulation in the crude selloff.",
+    "outcome": "WRONG",
+    "actualClose": 7617,
+    "outcomeNote": "Closed ₹7,617 — held above ₹7,610."
   },
-  "yesterday": null,
-  "history": []
+  "history": [
+    {
+      "date": "2026-06-15",
+      "editionRef": 42,
+      "thesis": "MCX Crude will break below ₹7,610 by MCX close today as the risk-off sentiment that drove the overnight 5.56% rout remains intact with no structural support visible.",
+      "commodity": "MCX Crude",
+      "direction": "bearish",
+      "targetLevel": 7610,
+      "reasoning": "₹7,610 is the only identified support level and the day's low; with the 20-SMA at ₹8,583 now 12.5% above price and no intermediate resistance named, a break below this level signals capitulation in the crude selloff.",
+      "outcome": "WRONG",
+      "actualClose": 7617,
+      "outcomeNote": "Closed ₹7,617 — held above ₹7,610."
+    }
+  ]
 }
