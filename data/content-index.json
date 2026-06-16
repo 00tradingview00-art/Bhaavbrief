@@ -1,5 +1,23 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-16-mcx-nat-gas-jumps-2-86-to-298-on-henry-hub-surge",
+    "href": "/articles/2026-06-16-mcx-nat-gas-jumps-2-86-to-298-on-henry-hub-surge",
+    "title": "MCX Nat Gas Jumps 2.86% to ₹298 on Henry Hub Surge",
+    "description": "MCX Natural Gas rises 2.86% to ₹298/mmBtu as Henry Hub climbs to $3.15. Here's what Indian LNG importers need to watch.",
+    "excerpt": "MCX Natural Gas has surged 2.86% to ₹298.20/mmBtu this morning, the standout mover in an otherwise flat MCX session. The driver is Henry Hub, where $3.15/mmBtu reflects tightening US storage builds — ",
+    "date": "2026-06-16T04:14:42.877Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 298
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
     "href": "/articles/2026-06-15-hawk-scan-mcx-crude-plunges-7-4-to-7636-key-support-at-7610",
