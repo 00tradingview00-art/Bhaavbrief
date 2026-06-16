@@ -2,9 +2,15 @@ name: BhaavBrief Intelligence Engine
 
 on:
   schedule:
-    # Every 15 min, Mon–Fri, 3:30 AM–6:00 PM UTC = 9:00 AM–11:30 PM IST
+    # MCX market hours — every 15 min
+    # 3:30 AM–6:00 PM UTC = 9:00 AM–11:30 PM IST, Mon–Fri
     - cron: '*/15 3-17 * * 1-5'   # 9 AM – 11 PM IST
     - cron: '0,15,30 18 * * 1-5'  # 11 PM – 11:30 PM IST final window
+    # Overnight — every 30 min (COMEX/WTI/global news, MCX closed)
+    # 19:00–23:30 UTC Mon–Fri = 12:30 AM–5:00 AM IST Tue–Sat
+    - cron: '0,30 19-23 * * 1-5'
+    # 00:00–02:30 UTC Tue–Sat = 5:30 AM–8:00 AM IST Tue–Sat
+    - cron: '0,30 0-2 * * 2-6'
   workflow_dispatch:               # Manual trigger anytime
 
 # Queue concurrent runs — never cancel to avoid partial commits
