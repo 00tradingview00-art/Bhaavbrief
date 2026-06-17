@@ -1,18 +1,23 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-06-10T09:04:19.100Z",
-    "lastFlashPrice": 149361,
+    "lastFlashAt": "2026-06-17T17:40:45.692Z",
+    "lastFlashPrice": 153970,
     "lastRoundBucket": 30,
     "recentFlashes": [
       {
         "at": "10 Jun, 02:34 pm IST",
         "title": "MCX Gold Drops ₹3,082 to ₹1,49,361 as COMEX Sell-Off and Softer Rupee Combine",
         "price": 149361
+      },
+      {
+        "at": "17 Jun, 11:10 pm IST",
+        "title": "MCX Gold Surges ₹4,609 to ₹1,53,970, Extending Recovery from 10 Jun Low as COMEX Leads the Charge",
+        "price": 153970
       }
     ]
   },
   "MCX_SILVER": {
-    "lastRoundBucket": 24
+    "lastRoundBucket": 25
   },
   "MCX_CRUDE": {
     "lastFlashAt": "2026-06-17T13:04:38.044Z",
@@ -40,7 +45,7 @@
     "lastRoundBucket": 26
   },
   "MCX_NATGAS": {
-    "lastRoundBucket": 12
+    "lastRoundBucket": 11
   },
   "USDINR": {
     "lastFlashAt": "2026-06-12T14:18:23.965Z",

@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-17-23-07-bny-iflow-dollar-demand-signal-pressures",
+    "title": "BNY iFlow Dollar Demand Signal Pressures ₹94.52 as Gold Holds ₹153970",
+    "summary": "BNY iFlow's institutional dollar demand reading — driven by Fed rate-hold positioning — amplifies the existing cross-asset narrative where gold and crude are rising simultaneously, pushing India's import bill higher in rupee terms. The mechanism is direct: sustained dollar buying tied to Fed outlook structurally weakens commodity currencies, and USD/INR at ₹94.52 is already embedding elevated import parity. MCX Gold at ₹153970 per 10g and MCX Crude at ₹7208 per barrel both carry this currency premium in their current pricing. The import parity chain reads: global gold firm plus rupee under institutional dollar demand equals rupee-denominated contracts holding an additional currency risk layer that pure commodity movement alone does not capture. MCX Silver at ₹251935 per kg trades in correlation, as dollar strength historically compresses silver's global price while INR weakness offsets that compression for Indian traders. The one level to watch: USD/INR at ₹95.00 — a breach there historically widens the gap between COMEX gold and MCX gold pricing materially. Tomorrow's Fed commentary tone from any scheduled Fed speaker represents the confirming or negating data point for this iFlow signal.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-17T17:37:18.901Z",
+    "pubDateIST": "17 Jun 2026, 23:07"
+  },
+  {
+    "id": "2026-06-17-23-09-mcx-silver-rises-0-73-to-251-935-kg-as-i",
+    "title": "MCX Silver Rises 0.73% to ₹251,935/kg as Inflation Signal Lifts Precious Metals Complex",
+    "summary": "The mechanism driving this move is a simultaneous bid in gold and crude — a classic imported inflation signal. When both energy and metals rise together in USD terms, the INR import cost compounds through the exchange rate channel, lifting MCX silver's theoretical floor.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-17T17:39:10.082Z",
+    "pubDateIST": "17 Jun 2026, 23:09"
+  },
+  {
+    "id": "2026-06-17-23-11-mcx-natural-gas-slides-2-97-to-297-50-as",
+    "title": "MCX Natural Gas slides 2.97% to ₹297.50 as US supply dynamics pressure Henry Hub",
+    "summary": "The mechanism driving this move is divergence within the commodity complex. While crude and gold rise together on inflationary re-pricing — lifting India's import cost basket — natural gas is responding to a separate supply-side signal: US storage builds and softer LNG export demand expectations are pressuring Henry Hub independently of the broader energy narrative.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-17T17:41:02.118Z",
+    "pubDateIST": "17 Jun 2026, 23:11"
+  },
+  {
     "id": "2026-06-17-18-31-mcx-gold-at-152657-faces-geopolitical-ri",
     "title": "MCX Gold at ₹152657 Faces Geopolitical Risk-Premium Erosion Amid NatGas-Led Weakness",
     "summary": "This session's dominant theme is NatGas leading the commodity complex lower at -1.76%, reflecting a broader risk-sentiment recalibration rather than isolated commodity weakness. Geopolitical tension easing removes the primary safe-haven bid that historically supports gold's risk premium — and MCX Gold at ₹152657 per 10g is already registering -0.28%, consistent with that unwind. The import parity chain runs as follows: softer COMEX spot gold, translated through USD/INR at ₹94.50, plus customs duty and refinery premium, anchors MCX near current levels — any further COMEX softness at this exchange rate arithmetically compresses the rupee price floor. MCX Silver at ₹248487 per kg is moving in parallel at -0.65%, historically amplifying gold directional moves due to shared safe-haven and industrial demand drivers. The cross-market correlation to watch is crude at ₹7250 (+1.05%) — crude's divergence from gold signals the session's weakness is geopolitical-premium specific, not broad dollar-driven. The level to watch for confirmation or negation of this move is COMEX gold's reaction at the $3,300 per troy ounce zone into the New York open.",
