@@ -48,14 +48,19 @@
     "lastRoundBucket": 11
   },
   "USDINR": {
-    "lastFlashAt": "2026-06-12T14:18:23.965Z",
-    "lastFlashPrice": 95.1,
+    "lastFlashAt": "2026-06-17T19:53:08.759Z",
+    "lastFlashPrice": 94.52,
     "lastRoundBucket": 189,
     "recentFlashes": [
       {
         "at": "12 Jun, 07:48 pm IST",
         "title": "Rupee Firms 54 Paise: USD/INR Slips to 95.10, Boosting MCX Precious Metals",
         "price": 95.1
+      },
+      {
+        "at": "18 Jun, 01:23 am IST",
+        "title": "Rupee Extends Rally 58 Paise: USD/INR Slides to 94.52, Capping MCX Gains Despite Firm Domestic Prices",
+        "price": 94.52
       }
     ]
   }
