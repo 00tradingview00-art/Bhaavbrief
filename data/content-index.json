@@ -1,5 +1,67 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
+    "href": "/articles/2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
+    "title": "MCX Crude Jumps 2.23% to ₹7251 as Nat Gas Slides",
+    "description": "MCX Crude surges 2.23% to ₹7251/bbl on supply cut signals. Nat Gas drops 1.60% to ₹301.70. Key levels to watch into 11:30 PM close.",
+    "excerpt": "MCX Crude surged 2.23% to ₹7,251/bbl today, pulling off the session low of ₹7,042 after WTI touched $75.86. The driver: OPEC+ accelerated its output cut timeline in a Vienna statement, tightening the ",
+    "date": "2026-06-17T13:03:39.778Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7251
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-17-mcx-crude-drops-2-61-to-7093-on-demand-fears",
+    "href": "/articles/2026-06-17-mcx-crude-drops-2-61-to-7093-on-demand-fears",
+    "title": "MCX Crude Drops 2.61% to ₹7093 on Demand Fears",
+    "description": "MCX Crude falls 2.61% to ₹7093/bbl as WTI slides to $74.25. Demand concerns weigh. Indian importers watch ₹7042 support closely.",
+    "excerpt": "MCX Crude has fallen 2.61% to ₹7093/bbl this session, with WTI at $74.25 and Brent at $77.90, making it the clear session laggard across the complex. The trigger is a combination of weaker-than-expect",
+    "date": "2026-06-17T07:20:07.099Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7093
+  },
+  {
+    "type": "brief",
+    "slug": "edition-045",
+    "href": "/briefs/edition-045",
+    "title": "MCX Open 17 Jun 2026: Crude Crash Pulls Metals Down",
+    "description": "17 Jun 2026: WTI drops to $74.74/bbl (-6.09%), MCX Crude opens ₹7109/bbl; MCX Gold holds ₹152664/10g as COMEX gold rises $4345/oz overnight.",
+    "excerpt": "Every refiner in India quietly recalculated their feedstock bill last night. WTI crude fell to $74.74 per barrel overnight, extending a move that has now shed more than $6 from Tuesday's close of $80.",
+    "date": "2026-06-17",
+    "edition": "45",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "brief",
     "slug": "edition-043",
     "href": "/briefs/edition-043",
