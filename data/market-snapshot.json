@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-17T14:40:21.705Z",
+  "generatedAt": "2026-06-17T14:40:31.382Z",
   "generatedAtIST": "2026-06-17 20:10 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -10,15 +10,15 @@
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 250222,
+      "price": 250200,
       "prevClose": 250105,
-      "changePct": 0.0468,
+      "changePct": 0.038,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7318,
+      "price": 7314,
       "prevClose": 7175,
-      "changePct": 1.993,
+      "changePct": 1.9373,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -28,9 +28,9 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 297.8,
+      "price": 297.9,
       "prevClose": 306.6,
-      "changePct": -2.8702,
+      "changePct": -2.8376,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4383.8,
+      "price": 4383.1,
       "prevClose": 4330.9,
-      "changePct": 1.2215,
+      "changePct": 1.2053,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 70.97,
+      "price": 70.93,
       "prevClose": 69.9,
-      "changePct": 1.5322,
+      "changePct": 1.475,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 76.59,
+      "price": 76.65,
       "prevClose": 76.05,
-      "changePct": 0.7101,
+      "changePct": 0.789,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 80.23,
+      "price": 80.29,
       "prevClose": 78.96,
-      "changePct": 1.6084,
+      "changePct": 1.6844,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.14,
       "prevClose": 3.24,
-      "changePct": -3.0565,
+      "changePct": -2.9639,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -113,8 +113,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 133219,
-    "mcxComexGoldSpreadPct": 15.1,
+    "importParityGoldINR": 133197,
+    "mcxComexGoldSpreadPct": 15.12,
     "goldSilverRatio": 61.8
   }
 }
