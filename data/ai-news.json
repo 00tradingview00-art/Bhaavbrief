@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-17-18-31-mcx-gold-at-152657-faces-geopolitical-ri",
+    "title": "MCX Gold at ₹152657 Faces Geopolitical Risk-Premium Erosion Amid NatGas-Led Weakness",
+    "summary": "This session's dominant theme is NatGas leading the commodity complex lower at -1.76%, reflecting a broader risk-sentiment recalibration rather than isolated commodity weakness. Geopolitical tension easing removes the primary safe-haven bid that historically supports gold's risk premium — and MCX Gold at ₹152657 per 10g is already registering -0.28%, consistent with that unwind. The import parity chain runs as follows: softer COMEX spot gold, translated through USD/INR at ₹94.50, plus customs duty and refinery premium, anchors MCX near current levels — any further COMEX softness at this exchange rate arithmetically compresses the rupee price floor. MCX Silver at ₹248487 per kg is moving in parallel at -0.65%, historically amplifying gold directional moves due to shared safe-haven and industrial demand drivers. The cross-market correlation to watch is crude at ₹7250 (+1.05%) — crude's divergence from gold signals the session's weakness is geopolitical-premium specific, not broad dollar-driven. The level to watch for confirmation or negation of this move is COMEX gold's reaction at the $3,300 per troy ounce zone into the New York open.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-17T13:01:18.159Z",
+    "pubDateIST": "17 Jun 2026, 18:31"
+  },
+  {
+    "id": "2026-06-17-18-33-mcx-crude-rises-1-05-to-7-250-bbl-as-nat",
+    "title": "MCX Crude Rises 1.05% to ₹7,250/bbl as NatGas Slumps 1.76% This Session",
+    "summary": "The mechanism here is energy complex divergence — NatGas leading losses at -1.76% (₹301.20/mmBtu) is releasing risk capital that appears to be rotating selectively into crude, rather than triggering broad energy selling. This is a relative-strength move, not a macro-driven rally.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-17T13:03:08.349Z",
+    "pubDateIST": "17 Jun 2026, 18:33"
+  },
+  {
+    "id": "2026-06-17-18-35-mcx-natural-gas-slides-1-76-to-301-20-mm",
+    "title": "MCX Natural Gas Slides 1.76% to ₹301.20/mmBtu as Session Selling Pressure Mounts",
+    "summary": "The mechanism driving this move is position unwinding in energy futures, with NatGas leading the commodity complex lower at -1.8% — the sharpest single-session mover across MCX today. Selling pressure concentrated in energy while crude simultaneously trades at +1.05% (₹7250/bbl), creating a divergence within the energy complex that historically reflects fuel-switching narratives or storage-specific supply concerns rather than broad demand destruction.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-17T13:05:00.960Z",
+    "pubDateIST": "17 Jun 2026, 18:35"
+  },
+  {
     "id": "2026-06-16-00-33-dollar-weakness-drives-mcx-gold-up-1-61",
     "title": "Dollar Weakness Drives MCX Gold Up 1.61% to ₹152,950 as Reflation Trade Accelerates",
     "summary": "The primary mechanism is dollar weakness amplifying a global reflation bid — when the dollar index softens, gold's inverse correlation historically produces outsized rupee-denominated gains, compounded today by geopolitical risk premium.",

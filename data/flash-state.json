@@ -12,18 +12,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastRoundBucket": 25
+    "lastRoundBucket": 24
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-06-15T15:00:58.189Z",
-    "lastFlashPrice": 7615,
-    "lastRoundBucket": 15,
+    "lastFlashAt": "2026-06-17T13:04:38.044Z",
+    "lastFlashPrice": 7250,
+    "lastRoundBucket": 14,
     "recentFlashes": [
-      {
-        "at": "11 Jun, 11:18 pm IST",
-        "title": "MCX Crude Reverses 4.12% to ₹8,318 as WTI Slides 3.60% and Rupee Weakens",
-        "price": 8318
-      },
       {
         "at": "13 Jun, 02:39 am IST",
         "title": "MCX Crude Extends Decline 2.73% to ₹8,091 as WTI Drops Further to $84.25",
@@ -33,6 +28,11 @@
         "at": "15 Jun, 08:30 pm IST",
         "title": "MCX Crude Extends Decline 5.88% to ₹7,615 as WTI Slides to $80.07",
         "price": 7615
+      },
+      {
+        "at": "17 Jun, 06:34 pm IST",
+        "title": "MCX Crude Extends Decline 4.79% to ₹7,250 as WTI Holds Near $75.83 and Rupee Firms",
+        "price": 7250
       }
     ]
   },
@@ -40,7 +40,7 @@
     "lastRoundBucket": 26
   },
   "MCX_NATGAS": {
-    "lastRoundBucket": 11
+    "lastRoundBucket": 12
   },
   "USDINR": {
     "lastFlashAt": "2026-06-12T14:18:23.965Z",
