@@ -1,6 +1,25 @@
 [
   {
     "type": "article",
+    "slug": "2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next",
+    "href": "/articles/2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next",
+    "title": "MCX NatGas Drops 1.36%, Silver Surges 1.24% — What's Next",
+    "description": "MCX NatGas fell to ₹298/mmBtu (-1.36%) as Henry Hub slid 2.94%. MCX Silver rose to ₹251,500/kg (+1.24%) tracking COMEX gains. Tomorrow's open decoded.",
+    "excerpt": "Henry Hub collapsed 2.94% to $3.15/mmBtu, pulling MCX NatGas down 1.36% to ₹298/mmBtu — within ₹2 of the 20-day support at ₹296. The trigger was a larger-than-expected US storage injection, signalling",
+    "date": "2026-06-17T17:36:29.504Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 298
+  },
+  {
+    "type": "article",
     "slug": "2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
     "href": "/articles/2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
     "title": "MCX Crude Jumps 2.23% to ₹7251 as Nat Gas Slides",

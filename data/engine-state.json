@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 152657,
-    "silver": 248409,
-    "crude": 7251,
-    "copper": 1338.6,
-    "natgas": 301.7,
-    "usdinr": 94.56
+    "gold": 153747,
+    "silver": 251500,
+    "crude": 7221,
+    "copper": 1338,
+    "natgas": 297.6,
+    "usdinr": 94.53
   },
-  "lastChecked": "2026-06-17T13:03:39.495Z",
+  "lastChecked": "2026-06-17T17:36:29.237Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,24 +15,26 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-06-05",
-    "value": "330"
+    "period": "2026-06-12",
+    "value": "383"
   },
   "articlesToday": [
     "2026-06-17/2026-06-17-mcx-crude-drops-2-61-to-7093-on-demand-fears",
-    "2026-06-17/2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides"
+    "2026-06-17/2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
+    "2026-06-17/2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next"
   ],
-  "lastArticleAt": "2026-06-17T13:03:51.486Z",
+  "lastArticleAt": "2026-06-17T17:36:42.858Z",
   "lastArticleTime": "2026-06-04T01:00:00.000Z",
   "lastCoveredAt": {
-    "natgas": "2026-06-17T13:03:51.486Z",
+    "natgas": "2026-06-17T17:36:42.858Z",
     "crude": "2026-06-17T13:03:51.486Z",
-    "silver": "2026-06-16T14:58:33.805Z",
+    "silver": "2026-06-17T17:36:42.858Z",
     "copper": "2026-06-10T14:39:10.473Z",
     "gold": "2026-06-15T03:49:03.761Z"
   },
   "lastGeoNews": {
     "iran": "Oil Surges After Hostilities Between Iran and Israel Escalate - The New York Tim",
-    "russia": "Trump hints US could resume oil sanctions on Russia as G7 ups pressure on Kremli"
+    "russia": "Trump hints US could resume oil sanctions on Russia as G7 ups pressure on Kremli",
+    "mideast": "Hormuz Crisis Leaves Lasting Mark on Oil Markets as Demand Slumps, IEA Says - gC"
   }
 }
