@@ -45,7 +45,16 @@
     "lastRoundBucket": 26
   },
   "MCX_NATGAS": {
-    "lastRoundBucket": 11
+    "lastFlashAt": "2026-06-17T21:19:56.194Z",
+    "lastFlashPrice": 296.6,
+    "lastRoundBucket": 11,
+    "recentFlashes": [
+      {
+        "at": "18 Jun, 02:49 am IST",
+        "title": "MCX Nat Gas Slides ₹10 to 296.6 as Henry Hub and Rupee Strength Compound Pressure",
+        "price": 296.6
+      }
+    ]
   },
   "USDINR": {
     "lastFlashAt": "2026-06-17T19:53:08.759Z",
