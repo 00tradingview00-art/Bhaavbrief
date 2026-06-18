@@ -110,6 +110,43 @@ function resolveYesterdayThesis(thesisData) {
   return updated
 }
 
+// Step B-pre — compute accuracy stats from thesis history for prompt injection
+function computeAccuracyStats(history) {
+  const resolved = history.filter(h => h.outcome === 'CORRECT' || h.outcome === 'WRONG')
+  if (resolved.length === 0) return null
+
+  const total   = resolved.length
+  const correct = resolved.filter(h => h.outcome === 'CORRECT').length
+  const winRate = Math.round((correct / total) * 100)
+
+  const byCommodity = {}
+  for (const h of resolved) {
+    const c = h.commodity ?? 'Unknown'
+    if (!byCommodity[c]) byCommodity[c] = { correct: 0, total: 0 }
+    byCommodity[c].total++
+    if (h.outcome === 'CORRECT') byCommodity[c].correct++
+  }
+  const commodityLines = Object.entries(byCommodity)
+    .filter(([, v]) => v.total >= 2)
+    .map(([c, v]) => `  ${c}: ${v.correct}/${v.total} correct (${Math.round((v.correct / v.total) * 100)}%)`)
+
+  const recent = resolved.slice(0, 5).map(h => h.outcome === 'CORRECT' ? '✓' : '✗').join(' ')
+
+  const misses = resolved.filter(h => h.outcome === 'WRONG' && h.targetLevel && h.actualClose)
+  const avgMissPct = misses.length > 0
+    ? (misses.reduce((sum, h) => sum + Math.abs(h.actualClose - h.targetLevel) / h.targetLevel * 100, 0) / misses.length).toFixed(1)
+    : null
+
+  const lines = [
+    `Last ${total} theses: ${correct} correct, ${total - correct} wrong (${winRate}% win rate)`,
+    ...commodityLines,
+    `Recent streak (last 5): ${recent}`,
+    avgMissPct ? `Average miss on wrong calls: ${avgMissPct}% away from target` : null,
+  ].filter(Boolean)
+
+  return { total, winRate, correct, summary: lines.join('\n') }
+}
+
 // Step B — extract today's thesis from generated brief body
 async function extractThesis(briefBody, editionNumber) {
   const today = todayIST()
@@ -280,7 +317,7 @@ function buildOpeningNarrative(comex) {
 }
 
 // ── Generate the open brief via Claude ───────────────────────────────────────
-async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot }) {
+async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot, accuracyStats }) {
   const today   = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
   const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
@@ -313,9 +350,14 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
     ? `\nAUTHORITATIVE MARKET SNAPSHOT (JSON) — use ONLY these numbers, never recall prices from memory:\n${JSON.stringify(snapshot.instruments, null, 2)}\nDerived: ${JSON.stringify(snapshot.derived)}\nSnapshot as of: ${snapshot.generatedAtIST}\n`
     : ''
 
+  const accuracyBlock = accuracyStats
+    ? `\nRECENT PREDICTION TRACK RECORD (calibrate today's thesis confidence against this):\n${accuracyStats.summary}\nIf win rate is below 50% or a commodity shows 2+ wrong calls in a row, write today's thesis with conditional language ("likely to test", "may struggle to hold") and name the specific reason past calls missed. If win rate ≥70%, moderate confidence is warranted.\n`
+    : ''
+
   const prompt = `You are BhaavBrief's senior market analyst. Write the MCX MARKET OPEN BRIEF for ${dateStr}.
 
 SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at the reader. Use "historically" or "in past episodes" framing when referencing price behaviour. State data, never judge it.
+${accuracyBlock}
 ${snapshotBlock}
 DATA — use these EXACT numbers, do not round or invent:
 
@@ -644,8 +686,11 @@ async function main() {
     fs.writeFileSync(path.join(ROOT, 'data/brief-comex.json'), JSON.stringify(comexForValidator, null, 2))
   } catch (e) { console.warn('  Could not update brief-comex.json:', e.message) }
 
+  const accuracyStats = computeAccuracyStats(loadThesis().history ?? [])
+  if (accuracyStats) console.log(`  Accuracy stats: ${accuracyStats.correct}/${accuracyStats.total} correct (${accuracyStats.winRate}% win rate)`)
+
   console.log('\nGenerating open brief via Claude Sonnet...')
-  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr: effectiveUsdinr, technicalBlocks, narrative, snapshot })
+  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr: effectiveUsdinr, technicalBlocks, narrative, snapshot, accuracyStats })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
