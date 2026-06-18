@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-19-02-53-dollar-bullish-break-on-fed-hike-bets-pr",
+    "title": "Dollar Bullish Break on Fed Hike Bets Pressures MCX Gold at ₹149378 While NatGas Diverges +2.02%",
+    "summary": "The dollar's bullish break on renewed Fed rate-hike expectations arrives in a session already bifurcated — NatGas leading at +2.02% while risk-sensitive commodities retreat, with MCX Copper down 1.32% and MCX Crude off 1.48% confirming the dollar-pressure transmission. A stronger dollar raises the denominator cost of USD-priced imports, historically compressing rupee-hedged commodity premiums across the MCX complex. MCX Gold at ₹149378 per 10g reflects minimal session movement at +0.05%, but the import parity chain tightens: as DXY firms, COMEX Gold faces headwinds, which at USD/INR ₹94.32 partially offsets rupee depreciation that would otherwise lift MCX prices. MCX Silver at ₹237620 per kg carries higher beta to dollar moves than Gold. The cross-market correlation to monitor is MCX Copper at ₹1320.50 — historically it tracks global growth expectations that Fed tightening signals compress. Saturday's MCX open confirmation level is whether COMEX Gold holds above the $3,300 handle overnight.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T21:23:26.319Z",
+    "pubDateIST": "19 Jun 2026, 02:53"
+  },
+  {
+    "id": "2026-06-19-02-55-dollar-one-year-high-at-94-32-pressures",
+    "title": "Dollar One-Year High at ₹94.32 Pressures MCX Metal Complex Amid NatGas Divergence",
+    "summary": "The dollar index reaching a one-year high on renewed Fed hike bets creates a structurally complex session where NatGas diverges sharply from the broader commodity complex. A stronger dollar mechanically compresses dollar-denominated commodity prices at the global level, yet the rupee at ₹94.32 partially offsets this compression for Indian importers by inflating the import parity calculation in rupee terms. MCX Copper at ₹1320.50 per kg is already reflecting this tension with a 1.32% decline, as LME copper faces dual pressure from dollar strength and softening Chinese demand signals. MCX Crude at ₹7105 per barrel mirrors this with a 1.48% decline, consistent with historical patterns where DXY strength correlates negatively with crude. MCX Gold at ₹149378 per 10g remains near flat at plus 0.05%, as rupee depreciation historically cushions gold's dollar-side weakness for domestic pricing. The cross-market correlation to observe is USD/JPY — Japan's verbal intervention warning on yen historically precedes coordinated G7 currency action that has caused abrupt dollar reversals, which unwound commodity shorts within the same session. The confirmation level for this dollar-driven narrative is the US Fed Funds futures implied rate for the September 2026 meeting; a reading above 5.50% probability of a hike sustains the dollar bid and metal pressure into Monday's MCX open.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T21:25:17.698Z",
+    "pubDateIST": "19 Jun 2026, 02:55"
+  },
+  {
+    "id": "2026-06-19-02-57-mcx-copper-slides-1-32-to-1320-50-kg-as",
+    "title": "MCX Copper slides 1.32% to ₹1320.50/kg as global session sentiment stays subdued",
+    "summary": "The mechanism here is positioning divergence. While LME base metals index touched a record — driven by aluminum supply anxiety described as a structural \"black hole\" — copper is not participating in that rally, suggesting traders are rotating within the metals complex rather than buying broadly.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T21:27:07.706Z",
+    "pubDateIST": "19 Jun 2026, 02:57"
+  },
+  {
     "id": "2026-06-19-01-01-mcx-crude-slides-1-48-to-7-105-as-natgas",
     "title": "MCX Crude Slides 1.48% to ₹7,105 as NatGas Dominates Session Narrative",
     "summary": "The mechanism here is energy complex divergence — NatGas surging +2.02% signals demand-side heat loading rather than broad crude buying interest, leaving crude without a supportive narrative. Supply-side inertia and a firm USD/INR at ₹94.32 amplify downside translation.",
