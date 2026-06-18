@@ -6,7 +6,6 @@ import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
 import TickerStrip from '@/components/TickerStrip'
-import GeoRiskTicker from '@/components/GeoRiskTicker'
 import PostHogProvider from '@/components/PostHogProvider'
 import ReferralTracker from '@/components/signal-academy/ReferralTracker'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
@@ -113,7 +112,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
         <div style={{ position: 'sticky', top: 56, zIndex: 39 }}>
           <TickerStrip initialPrices={initialPrices} />
-          <GeoRiskTicker />
         </div>
         <main style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>
           {children}
