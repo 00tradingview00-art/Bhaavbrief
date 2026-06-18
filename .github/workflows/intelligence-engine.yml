@@ -95,13 +95,15 @@ jobs:
           git add content/articles/ data/content-index.json
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
           git add data/market-snapshot.json data/story-arcs.json data/site-stats.json data/market-structure.json 2>/dev/null || true
+          # Always commit engine state — lastArticleAt + lastPrices must persist between runs
+          # Without this, each run starts from a clean checkout and the cooldown resets
+          git add data/engine-state.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Nothing to commit"
             exit 0
           fi
           HAS_ARTICLE=$(git diff --staged --name-only -- content/articles/ | grep -c '\.mdx$' || true)
           if [ "$HAS_ARTICLE" -gt 0 ]; then
-            git add data/engine-state.json
             TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
             git commit -m "⚡ Flash: ${TITLE}"
           else

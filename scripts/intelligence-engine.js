@@ -105,11 +105,11 @@ Price mechanism: ${commodityCtx.india_price_mechanism ?? ''}`)
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const MOVE_THRESHOLD        = 1.0   // % — triggers article with supporting signal
-const MOVE_THRESHOLD_HARD   = 2.0   // % — triggers article regardless
+const MOVE_THRESHOLD        = 1.0   // % — detection threshold (not trigger)
+const MOVE_THRESHOLD_HARD   = 2.0   // % — triggers article (live Kite only)
 const HAWK_SCAN_THRESHOLD   = 3.0   // % — triggers Hawk-Scan (highest urgency)
-const MAX_ARTICLES_PER_DAY  = 8
-const MIN_MINUTES_BETWEEN   = 30
+const MAX_ARTICLES_PER_DAY  = 4     // hard daily cap — quality over quantity
+const MIN_MINUTES_BETWEEN   = 90    // minimum gap between any two articles
 
 // ── MCX price cache ───────────────────────────────────────────────────────────
 // Written after every successful Kite fetch; read as prev-close fallback when Kite is down.
@@ -600,7 +600,7 @@ async function checkEIA(lastEia) {
     if (period === lastEia.period) return null
 
     const changeBarrels = value - (lastEia.value ?? 0)
-    const isSignificant = Math.abs(changeBarrels) > 1_000_000
+    const isSignificant = Math.abs(changeBarrels) > 2_000_000
 
     return {
       period, value, changeBarrels, isSignificant,
@@ -617,7 +617,7 @@ async function checkEIA(lastEia) {
 // Sacred format: structured flash intelligence for extreme market events.
 // Fires on: price move >3%, EIA significant draw/build, or multi-hotspot geo escalation.
 // Output is deliberately terse — a trader with 10 seconds can act on it.
-async function generateHawkScan({ moves, eia, prices, technicalLevels }) {
+async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents = [] }) {
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
@@ -729,7 +729,7 @@ Total body: 80–130 words across all sections. Each section: one sentence or on
 }
 
 // ── 6b. Article Generator ─────────────────────────────────────────────────────
-async function generateArticle({ moves, circulars, eia, prices, technicalLevels }) {
+async function generateArticle({ moves, circulars, eia, prices, technicalLevels, geoEvents = [] }) {
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
   const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
@@ -754,6 +754,10 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
 
   const circularBlock = circulars.length > 0
     ? `NEW REGULATORY/GOVT SIGNALS:\n${circulars.map(c => `- [${c.source}] ${c.title}`).join('\n')}`
+    : ''
+
+  const geoBlock = geoEvents.length > 0
+    ? `MACRO/GEOPOLITICAL CONTEXT (background only — do NOT write a geo article, write about the price move):\n${geoEvents.slice(0, 2).map(e => `- ${e.title}`).join('\n')}`
     : ''
 
   const eiaBlock = eia ? `EIA CRUDE DATA: ${eia.summary}` : ''
@@ -783,7 +787,7 @@ MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE KITE' : 'ESTIMATED'}, U
 ${priceBlock}
 
 CONTEXT: ${narrative}
-${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${techBlock}${impactContext}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}
 SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
@@ -1082,9 +1086,9 @@ async function main() {
   const narrative  = buildMarketNarrative(prices)
   const session    = getMarketSession()
 
-  // Per-commodity cooldown: suppress a move if we already wrote about it within 3h
+  // Per-commodity cooldown: suppress a move if we already wrote about it within 6h
   // (hawk-scan level moves always override the cooldown)
-  const COMMODITY_COOLDOWN_HOURS = 3
+  const COMMODITY_COOLDOWN_HOURS = 6
   const nowMs = Date.now()
   const moves = allMoves.filter(m => {
     if (m.absPct >= HAWK_SCAN_THRESHOLD) return true
@@ -1113,40 +1117,37 @@ async function main() {
   newGeoEvents.forEach(e => console.log(`  [${e.topic}] ${e.title.slice(0, 70)}`))
 
   // ── Trigger Logic ──────────────────────────────────────────────────────────
+  // Rule 1 — HAWK-SCAN: ≥3% move (live Kite only) or major EIA draw/build (>2M bbl)
+  // Rule 2 — FLASH: ≥2% move (live Kite only) — price speaks for itself, no signal needed
+  // Rule 3 — REGULATORY: new MCX/SEBI/RBI circular + ≥1.5% move (live Kite only)
+  //
+  // Geo events are CONTEXT only — they are injected into article prompts but NEVER
+  // trigger articles on their own. This eliminates "Rupee extends from 12 Jun"-style
+  // low-quality geo-only posts that fire whenever there's any macro headline.
   const hawkMove    = moves.some(m => m.absPct >= HAWK_SCAN_THRESHOLD)
   const hardMove    = moves.some(m => m.isHard)
-  const softMove    = moves.some(m => !m.isHard)
-  const hasSignal   = newCirculars.length > 0 || eiaData?.isSignificant
-  const hasGeoEvent = newGeoEvents.length > 0
-
-  // Hawk-Scan: price >3% (only with confirmed live Kite data) OR significant EIA event.
-  // comex-only pct uses COMEX reference prices without confirmed MCX open — never fire
-  // HAWK-SCAN on unconfirmed data (pre-market false spikes).
-  const isHawkEvent = (hawkMove && prices.priceSource === 'kite-live') || eiaData?.isSignificant
-
-  // Price-move articles (hard/soft) also require live Kite data — comex-only fallback
-  // produces false move alerts when MCX is closed or pre-market.
-  // Geo events fire standalone articles when live Kite data is available.
   const liveData    = prices.priceSource === 'kite-live'
-  const isGeoOnly   = hasGeoEvent && liveData && !hawkMove && !hardMove && !softMove
-  const shouldPublish = isHawkEvent || (hardMove && liveData) || (softMove && liveData && hasSignal) || (!liveData && hasSignal) || (hasGeoEvent && liveData)
+
+  const isHawkEvent        = (hawkMove && liveData) || eiaData?.isSignificant
+  const isPriceFlash       = hardMove && liveData
+  const isRegulatorySignal = newCirculars.length > 0 && moves.some(m => m.absPct >= 1.5) && liveData
+  const shouldPublish      = isHawkEvent || isPriceFlash || isRegulatorySignal
 
   if (!shouldPublish) {
-    if (moves.length === 0 && !hasGeoEvent) console.log('No significant price moves')
-    else if (!hasGeoEvent) console.log('Moves detected but no supporting signal — holding')
-    else console.log('Geo event detected but no live Kite data — holding')
+    if (!liveData)           console.log('No live Kite data — holding')
+    else if (!hardMove)      console.log('No qualifying price move (need ≥2%) — holding')
+    else                     console.log('No trigger condition met — holding')
     saveState(state)
     return
   }
 
-  if (isHawkEvent)                           console.log('\nHAWK-SCAN TRIGGERED')
-  else if (isGeoOnly)                        console.log('\nGEO EVENT TRIGGERED — generating article...')
-  else                                       console.log('\nTRIGGER FIRED — generating article...')
-  if (hawkMove)                              console.log('  Reason: Extreme price move >3%')
-  if (eiaData?.isSignificant)                console.log('  Reason: Significant EIA inventory event')
-  if (hardMove && !isHawkEvent)              console.log('  Reason: Hard move >2%')
-  if (softMove && hasSignal && !isHawkEvent) console.log('  Reason: Soft move + circular/EIA signal')
-  if (hasGeoEvent)                           console.log(`  Reason: Geopolitical event — ${newGeoEvents[0]?.title?.slice(0, 60)}`)
+  if (isHawkEvent)      console.log('\nHAWK-SCAN TRIGGERED')
+  else                  console.log('\nTRIGGER FIRED — generating article...')
+  if (hawkMove)         console.log('  Reason: Extreme price move >3%')
+  if (eiaData?.isSignificant) console.log('  Reason: Significant EIA inventory event (>2M bbl)')
+  if (isPriceFlash && !isHawkEvent) console.log('  Reason: Hard move >2%')
+  if (isRegulatorySignal)   console.log(`  Reason: Regulatory signal + price move — ${newCirculars[0]?.title?.slice(0, 60)}`)
+  if (newGeoEvents.length > 0) console.log(`  Context: ${newGeoEvents[0]?.title?.slice(0, 70)} (geo context injected)`)
 
   // Fetch Kite historical OHLC for the top 2 triggered commodities to get real technical levels
   const instruments = loadInstruments()
@@ -1173,11 +1174,11 @@ async function main() {
     }
   }
 
+  // Geo events are context only — passed into every article for narrative richness,
+  // but never used as a standalone article trigger
   const mdx = isHawkEvent
-    ? await generateHawkScan({ moves, eia: eiaData, prices, technicalLevels })
-    : isGeoOnly
-    ? await generateGeoArticle({ geoEvents: newGeoEvents, prices })
-    : await generateArticle({ moves, circulars: newCirculars, eia: eiaData, prices, technicalLevels })
+    ? await generateHawkScan({ moves, eia: eiaData, prices, technicalLevels, geoEvents: newGeoEvents })
+    : await generateArticle({ moves, circulars: newCirculars, eia: eiaData, prices, technicalLevels, geoEvents: newGeoEvents })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
