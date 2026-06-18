@@ -1,36 +1,36 @@
 {
+  "silver": {
+    "price": 69.04,
+    "pct": -1.2289160073820722,
+    "label": "COMEX Silver",
+    "unit": "$/oz"
+  },
   "gold": {
-    "price": 4344.1,
-    "pct": 0.3719963031423374,
+    "price": 4334.5,
+    "pct": 0.08312360017549156,
     "label": "COMEX Gold",
     "unit": "$/oz"
   },
-  "crude": {
-    "price": 80.69,
-    "pct": -0.07430340557275823,
-    "label": "WTI Crude",
-    "unit": "$/bbl"
-  },
   "natgas": {
-    "price": 3.137,
-    "pct": -0.3177629488401585,
+    "price": 3.168,
+    "pct": -2.1920345785736255,
     "label": "Henry Hub Gas",
     "unit": "$/mmBtu"
   },
   "copper": {
-    "price": 6.465,
-    "pct": -0.27764923646459655,
+    "price": 6.3695,
+    "pct": -1.8415780551702805,
     "label": "COMEX Copper",
     "unit": "$/lb"
   },
-  "silver": {
-    "price": 69.84,
-    "pct": -0.32255302143692954,
-    "label": "COMEX Silver",
-    "unit": "$/oz"
+  "crude": {
+    "price": 74.61,
+    "pct": -1.8934911242603523,
+    "label": "WTI Crude",
+    "unit": "$/bbl"
   },
   "usdinr": {
-    "price": 94.64,
+    "price": 94.7,
     "label": "USD/INR",
     "unit": "INR"
   }

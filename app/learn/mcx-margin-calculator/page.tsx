@@ -107,6 +107,20 @@ const FAQ_SCHEMA = {
   ],
 }
 
+const HOWTO_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to calculate MCX margin requirement',
+  description: 'Step-by-step guide to calculating the margin needed to trade MCX gold, silver, crude oil, or copper futures.',
+  step: [
+    { '@type': 'HowToStep', position: 1, name: 'Find the contract lot size', text: 'MCX Gold standard = 1 kg (100 units of 10g). Gold Mini = 100g. Silver = 30 kg. Crude Oil = 100 barrels. Copper = 2.5 MT.' },
+    { '@type': 'HowToStep', position: 2, name: 'Calculate contract value', text: 'Contract value = MCX price × number of units in the lot. Example: Gold at ₹1,52,000/10g × 100 units = ₹1,52,00,000 (1 kg contract value).' },
+    { '@type': 'HowToStep', position: 3, name: 'Apply SPAN margin percentage', text: 'MCX publishes SPAN margin daily (typically 4–6% for gold/silver, 5–7% for crude, 4–5% for base metals). Multiply contract value by SPAN %.' },
+    { '@type': 'HowToStep', position: 4, name: 'Add exposure margin', text: 'Brokers typically add 2–4% exposure margin on top of SPAN. Total margin = SPAN + Exposure. Use the calculator on this page for current estimates.' },
+    { '@type': 'HowToStep', position: 5, name: 'Verify with your broker', text: 'SPAN margin changes daily based on volatility. Always check the exact margin on your broker platform (Zerodha SPAN calculator, Angel One margin calculator) on the day you trade.' },
+  ],
+}
+
 export default function Page() {
   const p = loadPrices()
 
@@ -156,6 +170,7 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOWTO_SCHEMA) }} />
 
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 16px 64px' }}>
 

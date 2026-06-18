@@ -400,9 +400,20 @@ export default async function CommodityPage({ params }: Props) {
     ],
   }
 
+  const speakableSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url: pageUrl,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.commodity-price-summary'],
+    },
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }} />
 
       {/* Breadcrumb */}
       <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 24, display: 'flex', gap: 8 }}>
@@ -414,7 +425,7 @@ export default async function CommodityPage({ params }: Props) {
       </div>
 
       {/* Hero — live price */}
-      <div style={{
+      <div className="commodity-price-summary" style={{
         background: 'var(--surface-1)', border: '1px solid var(--border)',
         borderRadius: 12, padding: '28px 32px', marginBottom: 32,
         borderTop: `3px solid ${color}`,

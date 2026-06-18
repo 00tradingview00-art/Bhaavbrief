@@ -1,4 +1,5 @@
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
+import { getAllBriefs } from '@/lib/briefs'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -57,7 +58,10 @@ const COMMODITY_COLORS: Record<string, string> = {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params
-  const article = await getArticleBySlug(slug)
+  const [article, recentBriefs] = await Promise.all([
+    getArticleBySlug(slug),
+    getAllBriefs().then(b => b.slice(0, 3)),
+  ])
   if (!article) notFound()
 
   const { meta, content } = article
@@ -205,6 +209,37 @@ export default async function ArticlePage({ params }: Props) {
           </span>
           <CopyLinkButton url={`https://bhaavbrief.in/articles/${slug}`} title={meta.title} />
         </div>
+
+        {/* More from BhaavBrief — related briefs */}
+        {recentBriefs.length > 0 && (
+          <div style={{ marginTop: 36, paddingTop: 24, borderTop: '1px solid var(--border)' }}>
+            <h3 style={{
+              fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500,
+              color: 'var(--ink-3)', letterSpacing: '0.04em', textTransform: 'uppercase',
+              marginBottom: 16,
+            }}>
+              More from BhaavBrief
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {recentBriefs.map(b => (
+                <Link key={b.urlSlug} href={`/briefs/${b.urlSlug}`} style={{ textDecoration: 'none' }}>
+                  <div style={{
+                    borderLeft: '3px solid var(--gold)',
+                    paddingLeft: 14, paddingTop: 8, paddingBottom: 8,
+                    transition: 'border-color 0.15s',
+                  }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
+                      {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)', lineHeight: 1.4 }}>
+                      {b.title}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Disclaimer */}
         <div style={{

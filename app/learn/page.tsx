@@ -133,6 +133,24 @@ const MORE_GUIDES = [
     href: '/learn/mcx-commodity-tax-india',
     tag: 'Tax',
   },
+  {
+    title: 'MCX Contract Expiry Dates 2026',
+    desc: 'When do MCX gold, silver, crude oil, and copper contracts expire? DVCAL settlement, exit vs rollover timing, and what happens if you forget.',
+    href: '/learn/mcx-contract-expiry',
+    tag: 'Reference',
+  },
+  {
+    title: 'COMEX vs MCX Gold Price',
+    desc: 'Why MCX gold trades at a premium to COMEX — import parity formula, duty structure, USD/INR role, and how to convert between them.',
+    href: '/learn/comex-vs-mcx-gold',
+    tag: 'Education',
+  },
+  {
+    title: 'MCX Circuit Limits 2026',
+    desc: 'Daily price bands for gold, silver, crude oil and copper. Two-stage circuit system, when circuits trigger, and what to do when your position is frozen.',
+    href: '/learn/mcx-circuit-limits',
+    tag: 'Reference',
+  },
 ]
 
 export default function Page() {

@@ -116,6 +116,21 @@ const FAQ_SCHEMA = {
   ],
 }
 
+const HOWTO_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to rollover an MCX futures position',
+  description: 'Step-by-step guide to rolling over MCX gold, silver, crude oil, or copper positions before contract expiry.',
+  step: [
+    { '@type': 'HowToStep', position: 1, name: 'Check the expiry date', text: 'Open your trading terminal and note the MCX contract month and expiry date (shown in the contract symbol, e.g. CRUDEOILM26JUN). For Crude, expiry is 19th; for Gold/Silver, expiry is the 5th of the delivery month.' },
+    { '@type': 'HowToStep', position: 2, name: 'Start rollover 5–7 days before expiry', text: 'Begin rolling 5–7 trading days before expiry when next-month volume picks up and spreads are tightest. Avoid the last 2–3 days when near-month liquidity collapses.' },
+    { '@type': 'HowToStep', position: 3, name: 'Check the rollover cost', text: 'Note the price difference between your near-month contract and the next-month contract. If next month is higher, this is a contango cost. If next month is lower (backwardation), rolling earns you money.' },
+    { '@type': 'HowToStep', position: 4, name: 'Place a sell order for the near-month contract', text: 'Square off (exit) the expiring contract at market or limit price. This closes your current exposure.' },
+    { '@type': 'HowToStep', position: 5, name: 'Place a buy order for the next-month contract', text: 'Immediately buy the same quantity in the next contract month. On Zerodha Kite or Angel One, select the next expiry month from the same watchlist symbol.' },
+    { '@type': 'HowToStep', position: 6, name: 'Verify the rollover is complete', text: 'Confirm both legs executed: zero position in near-month, full position in next-month. Check your positions tab to verify.' },
+  ],
+}
+
 export default function Page() {
   const p = loadPrices()
 
@@ -144,6 +159,7 @@ export default function Page() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOWTO_SCHEMA) }} />
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
