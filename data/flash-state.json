@@ -2,7 +2,7 @@
   "MCX_GOLD": {
     "lastFlashAt": "2026-06-17T17:40:45.692Z",
     "lastFlashPrice": 153970,
-    "lastRoundBucket": 30,
+    "lastRoundBucket": 29,
     "recentFlashes": [
       {
         "at": "10 Jun, 02:34 pm IST",
@@ -17,7 +17,7 @@
     ]
   },
   "MCX_SILVER": {
-    "lastRoundBucket": 24
+    "lastRoundBucket": 23
   },
   "MCX_CRUDE": {
     "lastFlashAt": "2026-06-18T04:56:15.690Z",

@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-18-17-26-russian-waiver-expiry-adds-supply-tightn",
+    "title": "Russian Waiver Expiry Adds Supply Tightness Signal as MCX Crude Trades ₹7118, Down 1.30%",
+    "summary": "The cross-asset selloff dominating today's session — gold down 2.55%, silver down 4.96%, copper down 1.26% — is driven by dollar strength compressing commodity valuations globally. The Russian sanctions waiver expiry introduces a counter-signal specifically into crude: tighter available supply from a major exporter historically correlates with upward price pressure on Brent, the global benchmark feeding MCX Crude. However, the import parity chain shows MCX Crude at ₹7118 per barrel already absorbing dollar strength via USD/INR at ₹94.32 — a stronger rupee-adjusted Brent translates directly into elevated landed cost floors for Indian refiners. MCX Crude's 1.30% decline reflects the demand-deterioration narrative overriding the supply tightness signal. Cross-market correlation: MCX Natural Gas at ₹298.10 trades as a partial substitute energy complex — historically, crude supply disruption narratives have pulled gas sentiment in the same direction. The confirmation level to watch is Brent spot at the $74 handle; a close above that level would indicate the supply tightness signal is reasserting against dollar pressure. A close below would confirm demand-side narrative remains dominant into MCX evening settlement.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-18T11:56:35.570Z",
+    "pubDateIST": "18 Jun 2026, 17:26"
+  },
+  {
+    "id": "2026-06-18-17-28-mcx-gold-slides-2-55-to-149-949-as-dolla",
+    "title": "MCX Gold Slides 2.55% to ₹149,949 as Dollar Strength Compresses Commodity Complex",
+    "summary": "The transmission mechanism today is dollar appreciation — a stronger USD/INR at ₹94.32 simultaneously raises the import cost floor while suppressing global gold demand, creating cross-current pressure on MCX prices. Import parity arithmetic: spot gold near $3,180/oz × ₹94.32 × conversion × ~15% duty factor implies theoretical MCX parity near ₹152,500-153,000/10g, placing current MCX Gold at approximately ₹2,500-3,000 discount to parity — historically a compression signal rather than a floor. Key observation: MCX Silver is down 4.96% to ₹239,330/kg, a sharper decline that historically confirms broad precious metals liquidation rather than a gold-specific event. MCX Crude also declining 1.30% to ₹7,118 reinforces the demand-deterioration narrative across the complex. Watch ₹148,500 as near-term support observation and ₹152,000 as resistance. US housing and jobless claims data remain scheduled — any dollar-directional surprise carries mechanical relevance into close.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T11:58:25.940Z",
+    "pubDateIST": "18 Jun 2026, 17:28"
+  },
+  {
+    "id": "2026-06-18-17-30-mcx-silver-slides-4-96-to-239330-kg-as-d",
+    "title": "MCX Silver Slides 4.96% to ₹239330/kg as Dollar Strength Hammers Precious Metals Complex",
+    "summary": "The transmission mechanism today is dollar appreciation compressing USD-denominated commodity prices, with the INR at ₹94.32 amplifying the rupee conversion partially but insufficiently to offset the global spot decline. Silver's 4.96% drawdown outpaces gold's 2.55% fall, consistent with silver's historically higher beta to risk-off dollar moves. Import parity arithmetic: spot silver near approximately $29.50/oz translates to roughly $948/kg; multiplied by ₹94.32 and applying a ~11% duty-plus-GST factor yields theoretical parity near ₹99,300/kg — note MCX trades per kilogram at ₹239330, suggesting contract specifications and lot-adjusted pricing require trader verification against exchange-defined settlement methodology. Key observation: ₹235000 represents near-term support, ₹244000 resistance. MCX Copper at ₹1321.25 falling 1.26% simultaneously confirms broad industrial and precious demand deterioration. Watch MCX closing price relative to ₹240000 into session end.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T12:00:17.836Z",
+    "pubDateIST": "18 Jun 2026, 17:30"
+  },
+  {
     "id": "2026-06-18-13-46-mcx-crude-drops-2-14-to-7-058-bbl-as-dol",
     "title": "MCX Crude Drops 2.14% to ₹7,058/bbl as Dollar Strength Pressures Entire Commodity Complex",
     "summary": "Dollar appreciation mechanically compresses rupee-denominated commodity prices by raising the cost of holding dollar-hedged positions globally. MCX Crude at ₹7,058/bbl trades with immediate support observed near ₹6,980 and resistance around ₹7,180 based on recent consolidation zones. Import parity arithmetic: Brent near $74.50 × ₹94.22 × 1.01 duty factor = approximately ₹7,089/bbl theoretical parity, placing MCX Crude at a marginal discount of roughly ₹31 to parity. Silver's sharper decline of 3.27% confirms this is a broad risk-off, dollar-driven liquidation rather than an energy-specific move — both industrial demand proxies falling simultaneously reinforces deteriorating demand outlook concerns. Gold's 1.81% decline further validates the dollar-strength mechanism over commodity-specific fundamental shifts. Watch ₹6,980 on MCX Crude and the US weekly crude inventory release for directional confirmation.",
