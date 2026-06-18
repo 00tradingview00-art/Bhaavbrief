@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-18-07-07-mcx-silver-rises-0-56-to-251500-kg-as-in",
+    "title": "MCX Silver Rises 0.56% to ₹251500/kg as Inflation Trade Lifts Precious Metals Complex",
+    "summary": "The mechanism here is a simultaneous bid in gold and crude — when both rise together, markets are pricing imported inflation, which directly elevates the rupee cost of silver at India's border. With USD/INR at ₹94.52, the transmission is amplified. Import parity arithmetic: COMEX silver near $33.20/oz converts to approximately ₹31,34,240/kg at spot, adjusted by the standard 10% duty-plus-GST factor, theoretical MCX parity lands near ₹248,000–₹250,000/kg, placing current MCX at a modest premium of roughly 0.6–1.5%. Key observation: support is historically watched near ₹249,000; resistance near ₹253,500. Cross-commodity confirmation: MCX Crude is up 0.64%, moving in the same direction, reinforcing the inflationary import-cost narrative rather than challenging it. NatGas down 2.94% is the sole divergence. Watch ₹253,500 and today's US jobless claims data for directional confirmation.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-18T01:37:06.658Z",
+    "pubDateIST": "18 Jun 2026, 07:07"
+  },
+  {
+    "id": "2026-06-18-07-08-mcx-natural-gas-slides-2-94-to-297-60-mm",
+    "title": "MCX Natural Gas Slides 2.94% to ₹297.60/mmBtu as Global Supply Signals Weigh",
+    "summary": "The mechanism: overnight Henry Hub softness — driven by above-normal US storage builds and mild demand forecasts — transmitted directly into MCX Nat Gas pricing via import parity channels. USD/INR at ₹94.52 amplifies any dollar-denominated weakness into rupee terms.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T01:38:58.948Z",
+    "pubDateIST": "18 Jun 2026, 07:08"
+  },
+  {
     "id": "2026-06-18-04-34-mcx-gold-holds-153747-as-crude-and-dolla",
     "title": "MCX Gold holds ₹153747 as crude and dollar together lift India import costs 0.43%",
     "summary": "The mechanism at work is simultaneous USD/INR pressure and commodity-side inflation. When crude and gold rise together, India's import bill expands on both energy and metal fronts, embedding a structural cost floor into MCX pricing.",
