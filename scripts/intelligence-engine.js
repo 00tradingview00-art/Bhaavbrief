@@ -1061,11 +1061,12 @@ async function main() {
   }
 
   // Fetch prices + circulars + EIA + geo news in parallel
+  // Each source is isolated — one failing never crashes the engine
   const [prices, circularResult, eiaData, geoResult] = await Promise.all([
-    fetchPrices(),
-    checkCirculars(state.lastCirculars),
-    checkEIA(state.lastEia),
-    checkGeoNews(state.lastGeoNews ?? {}),
+    fetchPrices().catch(err => { console.warn('fetchPrices error:', err.message); return null }),
+    checkCirculars(state.lastCirculars).catch(err => { console.warn('checkCirculars error:', err.message); return { newCirculars: [], updatedLastCirculars: state.lastCirculars } }),
+    checkEIA(state.lastEia).catch(err => { console.warn('checkEIA error:', err.message); return null }),
+    checkGeoNews(state.lastGeoNews ?? {}).catch(err => { console.warn('checkGeoNews error:', err.message); return { newGeoEvents: [], updatedLastGeoNews: state.lastGeoNews ?? {} } }),
   ])
 
   state.lastCirculars = circularResult.updatedLastCirculars
@@ -1156,21 +1157,25 @@ async function main() {
 
   let technicalLevels = null
   if (instruments) {
-    const techBlocks = await Promise.all(
-      moves.slice(0, 2).map(async move => {
-        const iKey  = KEY_MAP[move.key]
-        const token = instruments[iKey]?.token
-        if (!token) return null
-        const candles = await fetchKiteHistorical(token, 22)
-        const levels  = computeTechnicalLevels(candles, move.price)
-        if (!levels) return null
-        return formatTechnicalBlock(move.label, MCX_UNITS[move.key] ?? '', move.price, levels)
-      })
-    )
-    const validBlocks = techBlocks.filter(Boolean)
-    if (validBlocks.length > 0) {
-      technicalLevels = `TECHNICAL LEVELS (Kite MCX 20-day OHLC — use these exact numbers, do not invent levels):\n${validBlocks.join('\n')}`
-      console.log(`  Technical levels fetched for: ${moves.slice(0, 2).map(m => m.label).join(', ')}`)
+    try {
+      const techBlocks = await Promise.all(
+        moves.slice(0, 2).map(async move => {
+          const iKey  = KEY_MAP[move.key]
+          const token = instruments[iKey]?.token
+          if (!token) return null
+          const candles = await fetchKiteHistorical(token, 22)
+          const levels  = computeTechnicalLevels(candles, move.price)
+          if (!levels) return null
+          return formatTechnicalBlock(move.label, MCX_UNITS[move.key] ?? '', move.price, levels)
+        })
+      )
+      const validBlocks = techBlocks.filter(Boolean)
+      if (validBlocks.length > 0) {
+        technicalLevels = `TECHNICAL LEVELS (Kite MCX 20-day OHLC — use these exact numbers, do not invent levels):\n${validBlocks.join('\n')}`
+        console.log(`  Technical levels fetched for: ${moves.slice(0, 2).map(m => m.label).join(', ')}`)
+      }
+    } catch (err) {
+      console.warn('Technical levels fetch failed — article will proceed without them:', err.message)
     }
   }
 
@@ -1196,9 +1201,12 @@ async function main() {
   state.articlesToday.push(`${today}/${result.slug}`)
   state.lastArticleAt = new Date().toISOString()
 
-  // Record cooldown timestamp for each commodity covered
+  // Record cooldown only for the commodity that actually triggered this article
   state.lastCoveredAt = state.lastCoveredAt ?? {}
-  moves.forEach(m => { state.lastCoveredAt[m.key] = state.lastArticleAt })
+  const triggeringKey = moves.find(m => m.absPct >= HAWK_SCAN_THRESHOLD)?.key
+                     ?? moves.find(m => m.absPct >= MOVE_THRESHOLD_HARD)?.key
+                     ?? moves[0]?.key
+  if (triggeringKey) state.lastCoveredAt[triggeringKey] = state.lastArticleAt
 
   saveState(state)
 
