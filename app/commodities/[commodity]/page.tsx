@@ -233,7 +233,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!entry) return {}
 
   const meta = COMMODITY_META[entry.key]
-  const title       = meta ? meta.title : `MCX ${entry.key} Price Today — Live Price & Analysis`
+  const todayStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })
+  const baseTitle   = meta ? meta.title : `MCX ${entry.key} Price Today — Live Price & Analysis`
+  const title       = `${baseTitle} | ${todayStr}`
   const description = meta?.description ?? `Live MCX ${entry.key} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
   const keywords    = meta?.keywords ?? []
 

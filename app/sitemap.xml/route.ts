@@ -19,6 +19,9 @@ const STATIC_PAGES = [
   { url: `${BASE}/learn/mcx-commodity-tax-india`,   priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-rollover`,              priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/gold-etf-vs-mcx-gold`,     priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-margin-calculator`,     priority: '0.8', changefreq: 'daily'   },
+  { url: `${BASE}/learn/best-time-to-trade-mcx`,   priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/why-usdinr-affects-mcx-gold`, priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },
   { url: `${BASE}/privacy`,         priority: '0.2', changefreq: 'yearly'  },
@@ -27,6 +30,16 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/crude-oil`,   priority: '0.9', changefreq: 'hourly' },
   { url: `${BASE}/commodities/copper`,      priority: '0.8', changefreq: 'hourly' },
   { url: `${BASE}/commodities/natural-gas`, priority: '0.8', changefreq: 'hourly' },
+  { url: `${BASE}/commodities/zinc`,        priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/commodities/aluminium`,   priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/commodities/lead`,        priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/signal-academy`,                          priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/signal-academy/oi-divergence`,            priority: '0.6', changefreq: 'monthly' },
+  { url: `${BASE}/signal-academy/iv-percentile`,            priority: '0.6', changefreq: 'monthly' },
+  { url: `${BASE}/signal-academy/basis-convergence`,        priority: '0.6', changefreq: 'monthly' },
+  { url: `${BASE}/signal-academy/seasonal-patterns`,        priority: '0.6', changefreq: 'monthly' },
+  { url: `${BASE}/signal-academy/volume-anomaly`,           priority: '0.6', changefreq: 'monthly' },
 ]
 
 function entry(url: string, lastmod: string, changefreq: string, priority: string): string {

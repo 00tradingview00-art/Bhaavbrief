@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import Link from 'next/link'
 import LearnPage from '@/components/LearnPage'
 import type { ContractSpecs } from '@/components/LearnPage'
 
@@ -95,12 +96,82 @@ const FAQ_SCHEMA = {
   ],
 }
 
+const MORE_GUIDES = [
+  {
+    title: 'MCX Margin Calculator 2026',
+    desc: 'Exact SPAN margin for every MCX contract — Gold, Silver, Crude, Copper, Zinc and more. Updated daily with live prices.',
+    href: '/learn/mcx-margin-calculator',
+    tag: 'Tool',
+  },
+  {
+    title: 'Best Time to Trade MCX in India',
+    desc: 'Morning vs evening session, COMEX overlap window, EIA timing, and when NOT to trade — a complete timing guide.',
+    href: '/learn/best-time-to-trade-mcx',
+    tag: 'Strategy',
+  },
+  {
+    title: 'Why USD/INR Moves MCX Gold Price',
+    desc: 'The rupee-dollar link explained with the import parity formula, live worked examples, and how to use it as a trading signal.',
+    href: '/learn/why-usdinr-affects-mcx-gold',
+    tag: 'Education',
+  },
+  {
+    title: 'MCX Lot Sizes & All Contracts',
+    desc: 'Every MCX contract: lot sizes, tick sizes, contract values and margins for Gold, Silver, Crude, Copper, Zinc, Lead, Nickel.',
+    href: '/learn/mcx-lot-sizes',
+    tag: 'Reference',
+  },
+  {
+    title: 'MCX Futures Rollover Guide',
+    desc: 'When to rollover, how to calculate rollover cost, worked examples for Crude and Gold, and common mistakes.',
+    href: '/learn/mcx-rollover',
+    tag: 'Trading',
+  },
+  {
+    title: 'MCX Commodity Tax Guide',
+    desc: 'Complete India tax guide: income slab on profits, CTT, ITR-3 filing, loss carry-forward, and what brokers don\'t tell you.',
+    href: '/learn/mcx-commodity-tax-india',
+    tag: 'Tax',
+  },
+]
+
 export default function Page() {
   const specs = loadContractSpecs()
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
       <LearnPage specs={specs} />
+
+      {/* Deep-dive guides index */}
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 16px 64px' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: 'var(--ink)', marginBottom: 6 }}>
+          In-Depth MCX Guides
+        </h2>
+        <p style={{ fontSize: 14, color: 'var(--ink-4)', marginBottom: 24 }}>
+          Detailed guides for every stage of your MCX trading journey.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
+          {MORE_GUIDES.map(g => (
+            <Link key={g.href} href={g.href} style={{ textDecoration: 'none' }}>
+              <div style={{
+                background: 'var(--surface-1)', border: '1px solid var(--border)',
+                borderRadius: 6, padding: '18px 20px', height: '100%',
+                transition: 'border-color 0.15s',
+              }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 8 }}>
+                  {g.tag}
+                </div>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: 'var(--ink)', marginBottom: 8, lineHeight: 1.3 }}>
+                  {g.title}
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--ink-4)', lineHeight: 1.6 }}>
+                  {g.desc}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
     </>
   )
 }
