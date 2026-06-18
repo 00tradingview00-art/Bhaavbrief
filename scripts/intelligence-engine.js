@@ -111,6 +111,22 @@ const HAWK_SCAN_THRESHOLD   = 3.0   // % — triggers Hawk-Scan (highest urgency
 const MAX_ARTICLES_PER_DAY  = 4     // hard daily cap — quality over quantity
 const MIN_MINUTES_BETWEEN   = 90    // minimum gap between any two articles
 
+// ── News Source Whitelist ─────────────────────────────────────────────────────
+// Only these publishers can trigger regulatory or geo articles.
+// Google News RSS items carry <source url="..."> with the original publisher domain.
+const CREDIBLE_DOMAINS = [
+  'reuters.com', 'apnews.com', 'bloomberg.com', 'afp.com',
+  'economictimes.indiatimes.com', 'livemint.com', 'business-standard.com',
+  'thehindubusinessline.com', 'moneycontrol.com', 'financialexpress.com',
+  'ndtv.com', 'cnbctv18.com', 'zeebiz.com',
+  'sebi.gov.in', 'mcxindia.com', 'rbi.org.in', 'ppac.gov.in',
+  'ft.com', 'wsj.com', 'oilprice.com',
+]
+function isCredibleSource(itemXml) {
+  const m = itemXml.match(/<source[^>]+url="([^"]+)"/)
+  return m ? CREDIBLE_DOMAINS.some(d => m[1].includes(d)) : false
+}
+
 // ── MCX price cache ───────────────────────────────────────────────────────────
 // Written after every successful Kite fetch; read as prev-close fallback when Kite is down.
 function loadMCXCache() {
@@ -443,23 +459,27 @@ async function checkCirculars(lastCirculars) {
         }
       )
       const xml = await res.text()
-      // Extract first item title + pubDate from RSS
-      const titleM = xml.match(/<item[^>]*>[\s\S]*?<title><!\[CDATA\[(.+?)\]\]><\/title>|<item[^>]*>[\s\S]*?<title>([^<]{10,200})<\/title>/)
-      const dateM  = xml.match(/<pubDate>([^<]+)<\/pubDate>/)
-      if (titleM) {
+      const source = q.includes('SEBI') ? 'SEBI' : 'MCX'
+      const stateKey = source.toLowerCase()
+      // Parse first 3 items, only accept credible publishers
+      const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 3)
+      for (const [, itemXml] of items) {
+        if (!isCredibleSource(itemXml)) continue
+        const titleM = itemXml.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>|<title>([^<]{10,200})<\/title>/)
+        const dateM  = itemXml.match(/<pubDate>([^<]+)<\/pubDate>/)
+        if (!titleM) continue
         const title = (titleM[1] ?? titleM[2] ?? '').trim()
-        const id    = title.slice(0, 80)
-        const source = q.includes('SEBI') ? 'SEBI' : 'MCX'
-        const stateKey = source.toLowerCase()
-        // Only surface if published within last 2 hours to avoid stale signals
+        if (!title) continue
         if (dateM) {
           const age = Date.now() - new Date(dateM[1]).getTime()
           if (age > 2 * 3600 * 1000) continue
         }
+        const id = title.slice(0, 80)
         if (id !== lastCirculars[stateKey]) {
           newCirculars.push({ source, title, url: source === 'MCX' ? 'https://mcxindia.com' : 'https://sebi.gov.in' })
           lastCirculars[stateKey] = id
         }
+        break
       }
     }
   } catch (err) {
@@ -473,13 +493,17 @@ async function checkCirculars(lastCirculars) {
       { headers: { 'User-Agent': 'Mozilla/5.0' }, signal: AbortSignal.timeout(8000) }
     )
     const html = await res.text()
-    const match = html.match(/class="TableText"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/s)
-    if (match) {
-      const title = match[1].trim()
+    const RBI_KEYWORDS = ['rupee', 'exchange rate', 'repo rate', 'monetary', 'inflation', 'forex', 'foreign exchange', 'liquidity', 'mpc']
+    const rbiMatches = [...html.matchAll(/class="TableText"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/gs)].slice(0, 3)
+    for (const m of rbiMatches) {
+      const title = m[1].trim()
+      const lc = title.toLowerCase()
+      if (!RBI_KEYWORDS.some(kw => lc.includes(kw))) continue
       const id = title.slice(0, 80)
       if (id !== lastCirculars.rbi) {
         newCirculars.push({ source: 'RBI', title, url: 'https://rbi.org.in' })
         lastCirculars.rbi = id
+        break
       }
     }
   } catch (err) {
@@ -542,6 +566,7 @@ async function checkGeoNews(lastGeoNews) {
           const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 5)
 
           for (const [, itemXml] of items) {
+            if (!isCredibleSource(itemXml)) continue
             const titleM = itemXml.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>|<title>([^<]{10,200})<\/title>/)
             const dateM  = itemXml.match(/<pubDate>([^<]+)<\/pubDate>/)
             if (!titleM) continue
@@ -602,10 +627,32 @@ async function checkEIA(lastEia) {
     const changeBarrels = value - (lastEia.value ?? 0)
     const isSignificant = Math.abs(changeBarrels) > 2_000_000
 
+    let natGas = null
+    try {
+      const ngUrl = `https://api.eia.gov/v2/natural-gas/stor/wkly/data/?api_key=${process.env.EIA_API_KEY}&frequency=weekly&data[0]=value&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=2`
+      const ngRes = await fetch(ngUrl, { signal: AbortSignal.timeout(10000) })
+      const ngData = await ngRes.json()
+      const ngLatest = ngData?.response?.data?.[0]
+      const ngPrev   = ngData?.response?.data?.[1]
+      if (ngLatest && ngPrev) {
+        const changeBcf = ngLatest.value - ngPrev.value
+        natGas = {
+          period: ngLatest.period,
+          changeBcf,
+          isSignificant: Math.abs(changeBcf) > 80,
+          direction: changeBcf < 0 ? 'draw' : 'build',
+          summary: `EIA nat gas storage: ${changeBcf < 0 ? 'draw' : 'build'} of ${Math.abs(changeBcf).toFixed(0)} Bcf for week of ${ngLatest.period}`,
+        }
+      }
+    } catch (err) {
+      console.warn('EIA nat gas fetch failed:', err.message)
+    }
+
     return {
       period, value, changeBarrels, isSignificant,
       direction: changeBarrels < 0 ? 'draw' : 'build',
       summary: `EIA weekly crude inventory: ${changeBarrels < 0 ? 'draw' : 'build'} of ${Math.abs(changeBarrels / 1_000_000).toFixed(1)}M barrels for week of ${period}`,
+      natGas,
     }
   } catch (err) {
     console.warn('EIA fetch failed:', err.message)
@@ -640,7 +687,7 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents
   }
   priceLines.push(`USD/INR: ₹${prices.usdinr?.toFixed(2)}`)
 
-  const eiaBlock = eia ? `\nEIA DATA: ${eia.summary}\nSIGNIFICANT: ${eia.isSignificant ? 'YES (>1M bbls)' : 'no'} | Direction: ${eia.direction.toUpperCase()}` : ''
+  const eiaBlock = eia ? `\nEIA DATA: ${eia.summary}\nSIGNIFICANT: ${eia.isSignificant ? 'YES (>1M bbls)' : 'no'} | Direction: ${eia.direction.toUpperCase()}${eia.natGas ? `\nNAT GAS STORAGE: ${eia.natGas.summary} | Significant: ${eia.natGas.isSignificant ? 'YES (>80 Bcf)' : 'no'}` : ''}` : ''
   const techBlock = technicalLevels ? `\n${technicalLevels}` : ''
   const moveBlock = moves.slice(0, 3).map(m => `${m.label}: ${m.directionShort}${m.absPct.toFixed(2)}% → ₹${m.price.toFixed(m.key === 'copper' ? 2 : 0)}${m.per}`).join('\n')
 
@@ -760,7 +807,7 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
     ? `MACRO/GEOPOLITICAL CONTEXT (background only — do NOT write a geo article, write about the price move):\n${geoEvents.slice(0, 2).map(e => `- ${e.title}`).join('\n')}`
     : ''
 
-  const eiaBlock = eia ? `EIA CRUDE DATA: ${eia.summary}` : ''
+  const eiaBlock = eia ? `EIA CRUDE DATA: ${eia.summary}${eia.natGas ? ` | NAT GAS: ${eia.natGas.summary}` : ''}` : ''
 
   // Technical levels for the primary triggered commodity
   const techBlock = technicalLevels
@@ -942,6 +989,16 @@ slug: "[url-slug-max-8-words]"
   })
 
   return response.content[0].type === 'text' ? response.content[0].text : null
+}
+
+// ── 8. Compliance Scan ────────────────────────────────────────────────────────
+const COMPLIANCE_BANNED = [
+  'buy', 'sell', 'accumulate', 'avoid', 'exit', 'enter position',
+  'book profits', 'stop loss', 'target price', 'price target',
+]
+function complianceScan(mdx) {
+  const body = mdx.split('---').slice(2).join('---').toLowerCase()
+  return COMPLIANCE_BANNED.filter(w => new RegExp(`\\b${w.replace(/ /g, '\\s+')}\\b`).test(body))
 }
 
 // ── 8. Save Article as MDX ────────────────────────────────────────────────────
@@ -1187,6 +1244,13 @@ async function main() {
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
+    saveState(state)
+    return
+  }
+
+  const bannedHits = complianceScan(mdx)
+  if (bannedHits.length > 0) {
+    console.error(`Compliance scan failed — article suppressed. Found: [${bannedHits.join(', ')}]`)
     saveState(state)
     return
   }
