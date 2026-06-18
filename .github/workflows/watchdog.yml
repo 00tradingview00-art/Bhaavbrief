@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 jobs:
   watchdog:
@@ -72,14 +73,24 @@ jobs:
             echo "✓ Engine articles today: $COUNT"
           fi
 
-      - name: Alert — brief missing
+      - name: Auto-recover — trigger generate-brief
+        if: steps.brief_check.outputs.brief_ok == 'false'
+        run: |
+          curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/generate-brief.yml/dispatches" \
+            -d '{"ref":"main"}'
+          echo "Auto-triggered generate-brief at $(TZ=Asia/Kolkata date +'%I:%M %p IST')"
+
+      - name: Notify — brief auto-recovered
         if: steps.brief_check.outputs.brief_ok == 'false'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
         run: |
           DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
-          RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/daily-open-brief.yml"
+          RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/generate-brief.yml"
 
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${BREVO_API_KEY}" \
@@ -87,12 +98,11 @@ jobs:
             -d "{
               \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
               \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
-              \"subject\": \"⚠️ Morning brief MISSING — ${DATE_LABEL}\",
-              \"htmlContent\": \"<p>The MCX Open Brief for <strong>${DATE_LABEL}</strong> was not found in <code>content/briefs/</code> by 9:45 AM IST.</p><p>The brief may have been silently skipped — holiday guard, double-publish guard, or script error.</p><p><a href='${RUN_URL}'>Trigger the brief manually →</a></p>\"
+              \"subject\": \"Brief missing at 9:30 AM — auto-triggered at 9:45 AM | ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The morning brief was not found by 9:45 AM IST on <strong>${DATE_LABEL}</strong>.</p><p><strong>Auto-recovery triggered.</strong> generate-brief has been dispatched and should publish within 5–10 minutes. No action needed unless this email is followed by a failure alert.</p><p><a href='${RUN_URL}'>Monitor workflow →</a></p>\"
             }"
 
-          echo "Alert sent for missing brief"
-          exit 1
+          echo "Recovery notification sent"
 
       - name: Alert — engine silent
         if: steps.engine_check.outputs.engine_ok == 'false'
