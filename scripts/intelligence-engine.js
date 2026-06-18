@@ -59,6 +59,81 @@ function loadImpactMap() {
   return _impactMap
 }
 
+// ── Analyst KB — structural knowledge base ────────────────────────────────────
+const ANALYST_KB_FILE = path.join(ROOT, 'data/analyst-kb.json')
+let _analystKb = null
+function loadAnalystKb() {
+  if (_analystKb) return _analystKb
+  try { _analystKb = JSON.parse(fs.readFileSync(ANALYST_KB_FILE, 'utf8')) }
+  catch { _analystKb = {} }
+  return _analystKb
+}
+
+function getAnalystContext(commodityKey, geoTopics = []) {
+  const kb = loadAnalystKb()
+  if (!kb || Object.keys(kb).length === 0) return ''
+
+  const sections = []
+
+  // Map engine commodity keys to KB keys
+  const commodityMap = { crude: 'crude', gold: 'gold', silver: 'silver', copper: 'copper', natgas: 'natgas' }
+  const kbKey = commodityMap[commodityKey]
+
+  if (kbKey && kb[kbKey]) {
+    const c = kb[kbKey]
+    const lines = []
+    // Flatten all nested string values from the commodity section
+    for (const [section, content] of Object.entries(c)) {
+      if (typeof content === 'object') {
+        for (const [, val] of Object.entries(content)) {
+          if (typeof val === 'string') lines.push(val)
+        }
+      } else if (typeof content === 'string') {
+        lines.push(content)
+      }
+    }
+    if (lines.length > 0) sections.push(`${kbKey.toUpperCase()} STRUCTURAL KNOWLEDGE:\n${lines.join('\n')}`)
+  }
+
+  // Geopolitical playbook — matched to detected geo topics
+  const geoPlaybooks = kb.geopolitical_playbooks ?? {}
+  const topicMap = { iran: 'iran_hormuz', opec: 'opec_discipline', russia: 'russia_ukraine', mideast: 'iran_hormuz', red_sea: 'red_sea_suez' }
+  const injectedPlaybooks = new Set()
+  for (const topic of geoTopics) {
+    const playbookKey = topicMap[topic]
+    if (playbookKey && geoPlaybooks[playbookKey] && !injectedPlaybooks.has(playbookKey)) {
+      const pb = geoPlaybooks[playbookKey]
+      const lines = Object.values(pb).filter(v => typeof v === 'string')
+      if (lines.length > 0) sections.push(`GEOPOLITICAL PLAYBOOK — ${playbookKey.replace(/_/g, ' ').toUpperCase()}:\n${lines.join('\n')}`)
+      injectedPlaybooks.add(playbookKey)
+    }
+  }
+
+  // Always inject macro regime context
+  const macro = kb.macro_regimes
+  if (macro) {
+    const macroLines = [
+      macro.current_regime,
+      macro.regime_signal_checklist,
+      macro.india_overlay,
+    ].filter(Boolean)
+    if (macroLines.length > 0) sections.push(`MACRO REGIME CONTEXT:\n${macroLines.join('\n')}`)
+  }
+
+  // Correlation regime for the commodity
+  const corrMap = { gold: 'gold_dollar', silver: 'gold_silver', copper: 'copper_china', crude: 'crude_real_rates', natgas: 'crude_real_rates' }
+  const corrKey = corrMap[commodityKey]
+  const corrRegimes = kb.correlation_regimes ?? {}
+  if (corrKey && corrRegimes[corrKey]) {
+    const cr = corrRegimes[corrKey]
+    const lines = Object.values(cr).filter(v => typeof v === 'string')
+    if (lines.length > 0) sections.push(`CORRELATION REGIME — ${corrKey.replace(/_/g, '-').toUpperCase()}:\n${lines.join('\n')}`)
+  }
+
+  if (sections.length === 0) return ''
+  return `\nANALYST STRUCTURAL KNOWLEDGE (connect dots — use specific facts, not generic language):\n${sections.join('\n\n')}\n`
+}
+
 function getEventContext(headlines, commodityKey) {
   const map = loadImpactMap()
   const text = (Array.isArray(headlines) ? headlines.join(' ') : headlines).toLowerCase()
@@ -705,6 +780,7 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents
     [hawkTrigger, eia?.summary ?? ''].join(' '),
     primaryMove?.key ?? 'crude'
   )
+  const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
   const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
@@ -718,7 +794,7 @@ ${moveBlock}
 
 CURRENT PRICES [${dataLabel}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
 ${priceLines.join('\n')}
-${eiaBlock}${techBlock}${impactContext}
+${eiaBlock}${techBlock}${impactContext}${analystContext}
 SEBI COMPLIANCE — NON-NEGOTIABLE:
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, act
 - No price targets. Historical patterns only: "In past supply shocks, crude rose 8–12%" ✓
@@ -821,6 +897,7 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
     [narrative, circularBlock, eiaBlock].filter(Boolean).join(' '),
     primaryMove?.key ?? 'crude'
   )
+  const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
   const prompt = `You are BhaavBrief's market reporter. Write a flash intelligence article for Indian commodity traders and merchants.
 
@@ -834,7 +911,7 @@ MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE KITE' : 'ESTIMATED'}, U
 ${priceBlock}
 
 CONTEXT: ${narrative}
-${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}${analystContext}
 SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
@@ -922,6 +999,7 @@ async function generateGeoArticle({ geoEvents, prices }) {
   const primaryPrice = { gold: prices.mcxGold, crude: prices.mcxCrude, copper: prices.mcxCopper }[primaryKey] ?? 0
 
   const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey)
+  const analystContext = getAnalystContext(primaryKey, geoEvents.map(e => e.topic))
 
   const prompt = `You are BhaavBrief's market reporter. Write a macro-context intelligence article for Indian commodity traders.
 
@@ -931,7 +1009,7 @@ TIME: ${timeStr} IST, ${dateStr}
 
 BREAKING NEWS HEADLINES:
 ${headlines}
-${impactContext}
+${impactContext}${analystContext}
 
 ${priceBlock}
 

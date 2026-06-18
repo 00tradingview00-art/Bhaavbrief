@@ -40,6 +40,49 @@ const BRIEFS_DIR   = path.join(ROOT, 'content/briefs')
 const STATE_FILE   = path.join(ROOT, 'data/daily-brief-state.json')
 const THESIS_FILE  = path.join(ROOT, 'data/thesis-tracker.json')
 
+// ── Analyst KB ────────────────────────────────────────────────────────────────
+let _analystKb = null
+function loadAnalystKb() {
+  if (_analystKb) return _analystKb
+  try { _analystKb = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/analyst-kb.json'), 'utf8')) }
+  catch { _analystKb = {} }
+  return _analystKb
+}
+
+function getAnalystBlock(dominantKey) {
+  const kb = loadAnalystKb()
+  if (!kb || Object.keys(kb).length === 0) return ''
+
+  const keyMap = { crude: 'crude', gold: 'gold', silver: 'silver', copper: 'copper', natgas: 'natgas' }
+  const kbKey = keyMap[dominantKey]
+  const sections = []
+
+  if (kbKey && kb[kbKey]) {
+    const c = kb[kbKey]
+    const lines = []
+    for (const [, content] of Object.entries(c)) {
+      if (typeof content === 'object') {
+        for (const [, val] of Object.entries(content)) {
+          if (typeof val === 'string') lines.push(val)
+        }
+      } else if (typeof content === 'string') {
+        lines.push(content)
+      }
+    }
+    if (lines.length > 0) sections.push(`${kbKey.toUpperCase()} STRUCTURAL KNOWLEDGE:\n${lines.join('\n')}`)
+  }
+
+  // Always include macro regime
+  const macro = kb.macro_regimes
+  if (macro) {
+    const macroLines = [macro.current_regime, macro.regime_signal_checklist, macro.india_overlay].filter(Boolean)
+    if (macroLines.length > 0) sections.push(`MACRO REGIME:\n${macroLines.join('\n')}`)
+  }
+
+  if (sections.length === 0) return ''
+  return `\nANALYST STRUCTURAL KNOWLEDGE (use specific facts from here in Historical Context and What Kills It sections):\n${sections.join('\n\n')}\n`
+}
+
 // ── Thesis helpers ────────────────────────────────────────────────────────────
 function loadThesis() {
   try { return JSON.parse(fs.readFileSync(THESIS_FILE, 'utf8')) }
@@ -317,7 +360,7 @@ function buildOpeningNarrative(comex) {
 }
 
 // ── Generate the open brief via Claude ───────────────────────────────────────
-async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot, accuracyStats }) {
+async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, narrative, snapshot, accuracyStats, dominantKey }) {
   const today   = new Date()
   const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
   const timeStr = today.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
@@ -354,10 +397,12 @@ async function generateOpenBrief({ comex, kitePrices, usdinr, technicalBlocks, n
     ? `\nRECENT PREDICTION TRACK RECORD (calibrate today's thesis confidence against this):\n${accuracyStats.summary}\nIf win rate is below 50% or a commodity shows 2+ wrong calls in a row, write today's thesis with conditional language ("likely to test", "may struggle to hold") and name the specific reason past calls missed. If win rate ≥70%, moderate confidence is warranted.\n`
     : ''
 
+  const analystBlock = getAnalystBlock(dominantKey ?? 'crude')
+
   const prompt = `You are BhaavBrief's senior market analyst. Write the MCX MARKET OPEN BRIEF for ${dateStr}.
 
 SEBI COMPLIANCE: BhaavBrief is unregistered — educational content only. No buy/sell/accumulate/avoid/exit/enter calls directed at the reader. Use "historically" or "in past episodes" framing when referencing price behaviour. State data, never judge it.
-${accuracyBlock}
+${accuracyBlock}${analystBlock}
 ${snapshotBlock}
 DATA — use these EXACT numbers, do not round or invent:
 
@@ -689,8 +734,14 @@ async function main() {
   const accuracyStats = computeAccuracyStats(loadThesis().history ?? [])
   if (accuracyStats) console.log(`  Accuracy stats: ${accuracyStats.correct}/${accuracyStats.total} correct (${accuracyStats.winRate}% win rate)`)
 
+  // Identify dominant commodity (biggest absolute COMEX move) for analyst KB injection
+  const comexKeyMap = { gold: 'gold', silver: 'silver', crude: 'crude', copper: 'copper', natgas: 'natgas' }
+  const dominantKey = Object.entries(comex)
+    .filter(([k]) => comexKeyMap[k])
+    .sort(([, a], [, b]) => Math.abs(b?.pct ?? 0) - Math.abs(a?.pct ?? 0))[0]?.[0] ?? 'crude'
+
   console.log('\nGenerating open brief via Claude Sonnet...')
-  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr: effectiveUsdinr, technicalBlocks, narrative, snapshot, accuracyStats })
+  const mdx = await generateOpenBrief({ comex, kitePrices, usdinr: effectiveUsdinr, technicalBlocks, narrative, snapshot, accuracyStats, dominantKey })
 
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
