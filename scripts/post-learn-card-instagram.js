@@ -76,39 +76,47 @@ Follow @bhaavbrief — free daily MCX intelligence at 9:47 AM.
 
 #MCX #CommodityMarkets #IndianMarkets #BhaavBrief #TradingEducation #MCXGold #MCXCrude #SEBI #Commodities #StockMarket #MCXTrader`,
 
-  'margin-leverage': `₹60,000 to control ₹10 lakh of gold.
+  'margin-leverage': `The most common reason MCX traders lose money isn't the market.
 
-That's MCX Gold Mini — and most traders don't know how to read it.
+It's forced squareoff.
 
-Here's what a 1% move actually means in rupees 👇
+On a volatile day, your broker closes your position — before you even get a chance to react.
 
-Gold (1 kg) — Value: ~₹1 crore
-Margin needed: ~₹6 lakh
-A 1% move = ₹1,00,000 P&L swing
+Here's why it happens 👇
 
-Gold Mini (100g) — Value: ~₹10 lakh
-Margin needed: ~₹60,000
-A 1% move = ₹10,000 P&L swing
+When you trade MCX, you only put up a fraction of the contract value (called margin).
 
-Silver (30 kg) — Value: ~₹30 lakh
-Margin needed: ~₹1.8 lakh
+MCX Gold Mini (100g):
+Contract value: ~₹10 lakh
+You pay: ~₹60,000
+A 1% move = ₹10,000 P&L swing — on ₹60K margin
+
+MCX Silver (30 kg):
+Contract value: ~₹30 lakh
+You pay: ~₹1.8 lakh
 A 1% move = ₹30,000 P&L swing
 
-Crude Oil (100 bbl) — Value: ~₹6.5 lakh
-Margin needed: ~₹39,000
+MCX Crude (100 bbl):
+Contract value: ~₹6.5 lakh
+You pay: ~₹39,000
 A 1% move = ₹6,500 P&L swing
 
-⚠️ Key rule: Always keep 20–30% buffer above minimum margin.
-Forced squareoff happens fast when volatility spikes.
+This is leverage. Every 1% market move hits your margin hard.
 
-MTM = your P&L is settled to cash every evening.
-Profits available next morning. Losses deducted overnight.
+If your account balance falls below the minimum margin — your broker squares off your position. No warning. No waiting.
 
-This is leverage. Respect it.
+The rule most traders learn only after getting burned:
 
-More at bhaavbrief.in/learn
+Always keep 20–30% buffer above minimum margin.
 
-#MCX #MCXGold #Leverage #CommodityTrading #BhaavBrief #TradingEducation #MCXTrader #IndianMarkets #Margin #GoldTrading`,
+MTM (Mark to Market) = your P&L settles to cash every evening.
+Losses are deducted overnight. Not at expiry. Every. Single. Day.
+
+Save this before your next trade 📌
+
+Full MCX education at bhaavbrief.in/learn
+
+#MCX #MCXGold #MCXCrude #MCXSilver #Margin #ForcedSquareoff #CommodityTrading #BhaavBrief #TradingEducation #MCXTrader #IndianMarkets #Leverage`,
 
   'gold-contracts': `Most people know gold is traded on MCX.
 
