@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-18-23-50-india-lifts-wheat-msp-procurement-15-as",
+    "title": "India Lifts Wheat MSP Procurement 15% as NatGas Leads Commodity Session at +2.02%",
+    "summary": "In a session where NatGas dominates at +2.02% and crude softens to ₹7105/bbl (-1.48%), wheat MSP procurement expansion introduces an agriculture-side fiscal signal into an otherwise energy-driven cross-asset narrative. Wheat procurement at elevated MSP volumes increases government food subsidy outflows, historically correlating with tighter fiscal headroom and rupee sensitivity — the USD/INR at ₹94.32 is the transmission point. Direct MCX exposure is limited as wheat is not an active MCX contract; however, broader agri-commodity sentiment feeds into MCX Gold (₹149378/10g), which historically absorbs domestic inflation expectations linked to food price support mechanisms. The cross-market read: crude at -1.48% compresses transport and input costs for grain logistics, partially offsetting procurement-side fiscal pressure. The data point to monitor is India's CPI food component release, which will either confirm or negate inflationary pass-through from expanded MSP procurement into broader commodity pricing.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-18T18:20:02.537Z",
+    "pubDateIST": "18 Jun 2026, 23:50"
+  },
+  {
+    "id": "2026-06-18-23-51-mcx-copper-slides-1-32-to-1320-50-kg-as",
+    "title": "MCX Copper slides 1.32% to ₹1320.50/kg as global base metals narrative diverges sharply",
+    "summary": "The divergence mechanism here is critical. LME base metals index reaching record highs — driven by aluminum supply fears — is masking copper-specific selling pressure in the US/EU session. Copper is correcting independently while aluminum carries the headline.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T18:21:54.629Z",
+    "pubDateIST": "18 Jun 2026, 23:51"
+  },
+  {
+    "id": "2026-06-18-23-53-mcx-natural-gas-surges-2-02-to-303-30-mm",
+    "title": "MCX Natural Gas surges 2.02% to ₹303.30/mmBtu as US session demand signals dominate",
+    "summary": "The mechanism driving this session is US natural gas futures strength, likely reflecting storage draw expectations or LNG export demand signals, pulling MCX NatGas 2.02% higher to ₹303.30/mmBtu. Observational support sits near ₹293, with resistance historically noted around ₹312.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-18T18:23:47.781Z",
+    "pubDateIST": "18 Jun 2026, 23:53"
+  },
+  {
     "id": "2026-06-18-21-17-russian-oil-waiver-expiry-collides-with",
     "title": "Russian Oil Waiver Expiry Collides With Iran Deal as MCX Crude Slides to ₹7034",
     "summary": "The expiry of Washington's Russian oil sanctions waiver arrives precisely as the MCX commodity complex is selling off across the board, with crude at ₹7034 per barrel already down 2.47% this session. The structural tension here is direct: the Iran nuclear deal has unlocked an estimated 1.3–1.5 million additional barrels per day of potential supply into global markets, and that supply expansion is dominating the price signal over any tightening effect the Russian waiver expiry might otherwise generate. On the import parity chain, Brent crude softness transmits to MCX through the USD/INR rate at ₹94.32 — a firmer rupee would arithmetically compress the INR-denominated crude contract further, compounding the dollar-side weakness. The cross-market correlation to watch is MCX Copper at ₹1323.90, also falling, confirming this is a demand-outlook deterioration narrative rather than a supply-side crude-specific story. The price level that will confirm or negate this supply-versus-demand framing is the Brent crude settlement relative to the $72 per barrel area, which historically has demarcated demand-driven from supply-driven bear phases.",
