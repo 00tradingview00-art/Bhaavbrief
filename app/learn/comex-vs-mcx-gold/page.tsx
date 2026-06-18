@@ -112,8 +112,15 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           COMEX vs MCX Gold Price: Why They Differ & How to Convert
         </h1>
-        <p style={{ fontSize: 15, color: '#8A8A7A', marginBottom: 32, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 15, color: '#8A8A7A', marginBottom: 20, lineHeight: 1.6 }}>
           The import parity formula, duty structure, and the role of USD/INR — explained for Indian commodity traders.
+        </p>
+
+        <p style={{ fontSize: 14, color: '#48483A', marginBottom: 28, padding: '12px 16px', background: '#F8F7F2', borderRadius: 4, lineHeight: 1.7 }}>
+          <strong>New to COMEX?</strong> COMEX (Commodity Exchange, New York) is the world exchange where gold&apos;s global price is set in US dollars — MCX in India derives its price from it.{' '}
+          <Link href="/learn/what-is-comex" style={{ color: '#C8720A', textDecoration: 'none', fontWeight: 500 }}>
+            Read: What is COMEX? →
+          </Link>
         </p>
 
         <div style={infoBox}>

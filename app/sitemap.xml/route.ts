@@ -22,6 +22,7 @@ const STATIC_PAGES = [
   { url: `${BASE}/learn/mcx-margin-calculator`,     priority: '0.8', changefreq: 'daily'   },
   { url: `${BASE}/learn/best-time-to-trade-mcx`,   priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/why-usdinr-affects-mcx-gold`, priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/what-is-comex`,                 priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-contract-expiry`,          priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/comex-vs-mcx-gold`,            priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-circuit-limits`,           priority: '0.7', changefreq: 'monthly' },

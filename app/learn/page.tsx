@@ -134,6 +134,12 @@ const MORE_GUIDES = [
     tag: 'Tax',
   },
   {
+    title: 'What is COMEX? Explained for MCX Traders',
+    desc: 'COMEX is where world gold prices are set in New York. Learn what COMEX is, why it controls MCX gold, COMEX trading hours in IST, and how to track it from India — starting from zero.',
+    href: '/learn/what-is-comex',
+    tag: 'Beginner',
+  },
+  {
     title: 'MCX Contract Expiry Dates 2026',
     desc: 'When do MCX gold, silver, crude oil, and copper contracts expire? DVCAL settlement, exit vs rollover timing, and what happens if you forget.',
     href: '/learn/mcx-contract-expiry',
