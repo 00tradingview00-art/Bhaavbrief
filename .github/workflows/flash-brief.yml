@@ -40,6 +40,13 @@ jobs:
 
       # continue-on-error on every content step so one API failure doesn't kill
       # the workflow and cause GitHub to disable the cron schedule.
+      #
+      # One flash per run: mark run start, then each monitor skips if a flash
+      # article was already written during this run. Prevents batch-publishing
+      # when GitHub drops several consecutive 15-min crons and fires one catch-up run.
+
+      - name: Mark run start
+        run: touch /tmp/flash-run-start
 
       - name: Fetch market snapshot
         continue-on-error: true
@@ -50,7 +57,12 @@ jobs:
 
       - name: Flash monitor (event-driven)
         continue-on-error: true
-        run: node scripts/flash-monitor.mjs
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping flash-monitor"
+            exit 0
+          fi
+          node scripts/flash-monitor.mjs
         env:
           ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
 
@@ -66,35 +78,60 @@ jobs:
 
       - name: Monitor MCX/SEBI circulars
         continue-on-error: true
-        run: node scripts/monitor-mcx-circulars.js
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping circulars"
+            exit 0
+          fi
+          node scripts/monitor-mcx-circulars.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor geopolitical signals
         continue-on-error: true
-        run: node scripts/monitor-geopolitical-signals.js
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping geopolitical"
+            exit 0
+          fi
+          node scripts/monitor-geopolitical-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor India policy signals
         continue-on-error: true
-        run: node scripts/monitor-india-policy-signals.js
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping India policy"
+            exit 0
+          fi
+          node scripts/monitor-india-policy-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor NCDEX agri signals
         continue-on-error: true
-        run: node scripts/monitor-ncdex-agri.js
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping agri"
+            exit 0
+          fi
+          node scripts/monitor-ncdex-agri.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor macro economy signals
         continue-on-error: true
-        run: node scripts/monitor-macro-economy.js
+        run: |
+          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
+            echo "Flash already published this run — skipping macro"
+            exit 0
+          fi
+          node scripts/monitor-macro-economy.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
