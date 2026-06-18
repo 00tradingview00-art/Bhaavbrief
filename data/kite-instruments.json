@@ -46,9 +46,9 @@
     "expiry": "2026-06-30"
   },
   "nickel": {
-    "token": 141494791,
-    "symbol": "NICKEL26JUNFUT",
-    "expiry": "2026-06-17"
+    "token": 143885063,
+    "symbol": "NICKEL26JULFUT",
+    "expiry": "2026-07-15"
   },
   "currencies": {
     "usdinr": {
@@ -72,5 +72,5 @@
       "expiry": "2026-06-25"
     }
   },
-  "updatedAt": "2026-06-17T02:31:25.007Z"
+  "updatedAt": "2026-06-18T03:16:10.510Z"
 }
