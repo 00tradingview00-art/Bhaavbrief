@@ -221,6 +221,8 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
   }, [])
 
   useEffect(() => {
+    // Fetch immediately on mount so live prices replace the server snapshot right away
+    refresh()
     function schedule() {
       const delay = isMCXOpen() ? 30_000 : 300_000
       timerRef.current = setTimeout(async () => { await refresh(); schedule() }, delay)
@@ -253,7 +255,11 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             {marketOpen ? '● MCX Open' : '○ MCX Closed'}
           </span>
           <span style={{ fontSize: 11, color: prices?.snapshotStale ? '#C87000' : 'var(--ink-4)' }}>
-            {prices?.generatedAtIST ? `as of ${prices.generatedAtIST}` : '—'}
+            {prices?.generatedAtIST
+              ? `as of ${prices.generatedAtIST}`
+              : prices?.updatedAt
+              ? `as of ${new Date(prices.updatedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: false })} IST`
+              : '—'}
             {prices?.snapshotStale && ' · data delayed'}
           </span>
         </div>
