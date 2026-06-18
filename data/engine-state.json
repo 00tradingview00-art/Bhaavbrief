@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 153747,
-    "silver": 251500,
-    "crude": 7221,
-    "copper": 1338,
-    "natgas": 297.6,
+    "gold": 151814,
+    "silver": 245675,
+    "crude": 7126,
+    "copper": 1330.2,
+    "natgas": 297.4,
     "usdinr": 94.53
   },
-  "lastChecked": "2026-06-17T17:36:29.237Z",
+  "lastChecked": "2026-06-18T07:23:52.296Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,18 +19,16 @@
     "value": "383"
   },
   "articlesToday": [
-    "2026-06-17/2026-06-17-mcx-crude-drops-2-61-to-7093-on-demand-fears",
-    "2026-06-17/2026-06-17-mcx-crude-jumps-2-23-to-7251-as-nat-gas-slides",
-    "2026-06-17/2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next"
+    "2026-06-18/2026-06-18-mcx-silver-drops-2-32-as-broad-commodity-selloff-deepens"
   ],
-  "lastArticleAt": "2026-06-17T17:36:42.858Z",
+  "lastArticleAt": "2026-06-18T07:24:03.727Z",
   "lastArticleTime": "2026-06-04T01:00:00.000Z",
   "lastCoveredAt": {
     "natgas": "2026-06-17T17:36:42.858Z",
-    "crude": "2026-06-17T13:03:51.486Z",
-    "silver": "2026-06-17T17:36:42.858Z",
+    "crude": "2026-06-18T07:24:03.727Z",
+    "silver": "2026-06-18T07:24:03.727Z",
     "copper": "2026-06-10T14:39:10.473Z",
-    "gold": "2026-06-15T03:49:03.761Z"
+    "gold": "2026-06-18T07:24:03.727Z"
   },
   "lastGeoNews": {
     "iran": "Oil Surges After Hostilities Between Iran and Israel Escalate - The New York Tim",

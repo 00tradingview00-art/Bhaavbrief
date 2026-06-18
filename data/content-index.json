@@ -1,6 +1,51 @@
 [
   {
     "type": "article",
+    "slug": "2026-06-18-mcx-silver-drops-2-32-as-broad-commodity-selloff-deepens",
+    "href": "/articles/2026-06-18-mcx-silver-drops-2-32-as-broad-commodity-selloff-deepens",
+    "title": "MCX Silver Drops 2.32% as Broad Commodity Selloff Deepens",
+    "description": "MCX Silver falls 2.32% to ₹245675/kg, gold slides 1.26%, crude drops 1.32% — dollar strengthens on Fed hawkishness. Key levels in focus.",
+    "excerpt": "MCX Silver has dropped 2.32% to ₹245,675/kg this session, leading a broad selloff where MCX Gold fell 1.26% to ₹151,814/10g and MCX Crude declined 1.32% to ₹7,126/bbl. The driver is a stronger US doll",
+    "date": "2026-06-18T07:23:52.562Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 245675
+  },
+  {
+    "type": "brief",
+    "slug": "edition-046",
+    "href": "/briefs/edition-046",
+    "title": "MCX Open 18 Jun 2026: Crude Leads Broad Selloff",
+    "description": "18 Jun 2026: WTI at $74.61/bbl (-1.89%) and MCX Silver at ₹247142/kg (-1.85%) drag commodities lower at open; gold holds relatively firm.",
+    "excerpt": "Every barrel of crude that HPCL imports today costs roughly ₹75 less than it did 48 hours ago — and that single fact is repricing the entire MCX complex at the open. Overnight, WTI crude settled at $7",
+    "date": "2026-06-18",
+    "edition": "46",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Crude Oil",
+      "Silver"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "article",
     "slug": "2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next",
     "href": "/articles/2026-06-17-mcx-natgas-drops-1-36-silver-surges-1-24-what-s-next",
     "title": "MCX NatGas Drops 1.36%, Silver Surges 1.24% — What's Next",
