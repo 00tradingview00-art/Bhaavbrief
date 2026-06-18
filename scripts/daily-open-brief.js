@@ -670,8 +670,19 @@ async function main() {
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
     console.log(`\nDone in ${elapsed}s — "${result.title}"`)
-    // Output filepath for workflow newsletter step
     console.log(`BRIEF_FILE=content/briefs/${result.slug}.mdx`)
+
+    // Refresh market snapshot immediately after brief — ensures live prices are
+    // deployed alongside the brief rather than waiting for the next cron run
+    console.log('\nRefreshing market snapshot...')
+    try {
+      const { execFileSync } = await import('child_process')
+      execFileSync('node', ['scripts/fetch-snapshot.mjs'], {
+        cwd: ROOT, stdio: 'inherit', timeout: 30_000,
+      })
+    } catch (e) {
+      console.warn('  Snapshot refresh failed (non-fatal):', e.message)
+    }
   }
 }
 
