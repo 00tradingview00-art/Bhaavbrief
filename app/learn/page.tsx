@@ -157,6 +157,24 @@ const MORE_GUIDES = [
     href: '/learn/mcx-circuit-limits',
     tag: 'Reference',
   },
+  {
+    title: 'How Much Money to Start MCX Trading?',
+    desc: 'Exact capital needed for every MCX contract: ₹8,000–15,000 for Crude Mini, ₹1,00,000–1,25,000 for Gold Mini. Why margin alone is never enough.',
+    href: '/learn/how-much-money-to-start-mcx-trading',
+    tag: 'Beginner',
+  },
+  {
+    title: 'MCX Gold vs Physical Gold India',
+    desc: 'MCX gold is a futures contract, not real gold. Learn the difference, minimum investment, delivery process, and who should use each.',
+    href: '/learn/mcx-gold-vs-physical-gold',
+    tag: 'Beginner',
+  },
+  {
+    title: 'Which MCX Commodity Should I Trade?',
+    desc: 'Crude Mini for under ₹50,000. Gold Mini for ₹1–1.5 lakh. Full decision matrix: capital, risk, screen time, and best trading hours for every MCX commodity.',
+    href: '/learn/which-mcx-commodity-to-trade',
+    tag: 'Beginner',
+  },
 ]
 
 export default function Page() {
