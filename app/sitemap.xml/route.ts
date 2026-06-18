@@ -29,6 +29,8 @@ const STATIC_PAGES = [
   { url: `${BASE}/learn/how-much-money-to-start-mcx-trading`, priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-gold-vs-physical-gold`,   priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/learn/which-mcx-commodity-to-trade`, priority: '0.8', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-trading-hours`,            priority: '0.8', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-order-types`,              priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },
   { url: `${BASE}/privacy`,         priority: '0.2', changefreq: 'yearly'  },

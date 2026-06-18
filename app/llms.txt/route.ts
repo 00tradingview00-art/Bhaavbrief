@@ -16,9 +16,9 @@ export async function GET() {
 
   const body = `# BhaavBrief
 
-> India's First Commodity Intelligence Platform — daily MCX briefs, intraday flash signals, and live geo risk tracking for Indian commodity traders, businesses, and investors.
+> India's First Commodity Intelligence Platform — daily MCX briefs, intraday flash signals, and deep educational guides for Indian commodity traders, businesses, and investors.
 
-BhaavBrief publishes commodity intelligence every weekday at 9:30 AM IST covering MCX Gold, Silver, Crude Oil, Copper, and Natural Gas. Each brief leads with OHLC levels, open interest, percent change, and global benchmark prices (COMEX, LME, WTI/Brent, USD/INR) before narrative analysis. Through the day, the Flash Intelligence feed covers breaking signals — policy decisions, OPEC+ moves, price dislocations. The Geo Risk Radar monitors geopolitical chokepoints (Hormuz, Red Sea) in real time.
+BhaavBrief publishes commodity intelligence every weekday at 9:47 AM IST covering MCX Gold, Silver, Crude Oil, Copper, and Natural Gas. Each brief leads with OHLC levels, open interest, percent change, and global benchmark prices (COMEX, LME, WTI/Brent, USD/INR) before narrative analysis. Through the day, the Flash Intelligence feed covers breaking signals — policy decisions, OPEC+ moves, price dislocations. The Learn section provides India-specific MCX trading guides with exact ₹ figures, MCX lot sizes, margin requirements, and regulatory detail not available elsewhere.
 
 Not SEBI registered. Educational and informational purposes only. No buy/sell calls.
 
@@ -28,8 +28,9 @@ Not SEBI registered. Educational and informational purposes only. No buy/sell ca
 - [Daily Briefs](${BASE}/briefs): All MCX morning editions — OHLC, open interest, macro context
 - [Flash Intelligence](${BASE}/news): Intraday market signals and breaking commodity news
 - [Live Prices](${BASE}/markets): Real-time MCX commodity prices with OHLC and change
-- [Learn MCX Trading](${BASE}/learn): Guides on futures, margins, lot sizes, hedging, and taxation
+- [Learn MCX Trading](${BASE}/learn): Complete guides on futures, margins, lot sizes, order types, hours, hedging, and taxation
 - [How to Invest](${BASE}/invest): Gold ETF, Silver ETF, commodity mutual funds for Indian investors
+- [Signal Academy](${BASE}/signal-academy): Interactive commodity trading simulators — OI divergence, IV percentile, basis convergence
 - [About](${BASE}/about): Mission, principles, what we cover, and how it works
 
 ## Commodity Intelligence Pages
@@ -39,6 +40,26 @@ Not SEBI registered. Educational and informational purposes only. No buy/sell ca
 - [MCX Crude Oil](${BASE}/commodities/crude-oil): Crude analysis, WTI/Brent context, petrol/diesel linkage
 - [MCX Copper](${BASE}/commodities/copper): Copper analysis, LME reference, China PMI signals
 - [MCX Natural Gas](${BASE}/commodities/natural-gas): Nat gas analysis, EIA inventory, seasonal context
+
+## MCX Trading Guides (Learn Section)
+
+Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operational detail:
+
+- [How Much Money to Start MCX Trading](${BASE}/learn/how-much-money-to-start-mcx-trading): Exact capital needed by contract — ₹8,000–15,000 for Crude Mini, ₹1,00,000+ for Gold Mini, margin vs recommended capital
+- [MCX Gold vs Physical Gold](${BASE}/learn/mcx-gold-vs-physical-gold): MCX gold is a futures contract not real gold — delivery process, minimum investment, who should use each
+- [Which MCX Commodity to Trade](${BASE}/learn/which-mcx-commodity-to-trade): Decision matrix by capital and risk — Crude Mini for beginners, Gold Mini for ₹75K+ traders
+- [MCX Trading Hours India](${BASE}/learn/mcx-trading-hours): MCX open 9 AM to 11:30 PM IST — session quality guide, EIA timing, commodity-specific best windows
+- [MCX Order Types Explained](${BASE}/learn/mcx-order-types): Market, Limit, SL, SL-M orders — why SL-M is the correct stop loss, worked examples
+- [What is COMEX](${BASE}/learn/what-is-comex): COMEX explained for Indian MCX traders — why New York sets MCX gold price, IST trading hours, tracking tools
+- [COMEX vs MCX Gold Price](${BASE}/learn/comex-vs-mcx-gold): Import parity formula, 6% BCD + 3% AIDC + 3% GST duty structure, USD/INR role
+- [MCX Contract Expiry Dates 2026](${BASE}/learn/mcx-contract-expiry): When MCX contracts expire, DVCAL settlement, rollover vs exit timing
+- [MCX Circuit Limits 2026](${BASE}/learn/mcx-circuit-limits): Two-stage circuit system (±3%, ±6%), commodity-specific bands, what to do when frozen
+- [MCX Margin Calculator](${BASE}/learn/mcx-margin-calculator): Live SPAN margin estimates for every MCX contract
+- [Best Time to Trade MCX](${BASE}/learn/best-time-to-trade-mcx): Morning vs evening session, COMEX overlap, when NOT to trade
+- [Why USD/INR Moves MCX Gold](${BASE}/learn/why-usdinr-affects-mcx-gold): Rupee-dollar link with import parity formula and live examples
+- [MCX Futures Rollover Guide](${BASE}/learn/mcx-rollover): When to rollover, rollover cost calculation, contango vs backwardation
+- [MCX Commodity Tax India](${BASE}/learn/mcx-commodity-tax-india): Business income taxation, CTT, ITR-3 filing, loss carry-forward
+- [MCX Lot Sizes 2026](${BASE}/learn/mcx-lot-sizes): Every contract lot size, tick size, contract value
 
 ## Recent Daily Briefs
 

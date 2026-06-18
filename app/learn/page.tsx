@@ -175,6 +175,18 @@ const MORE_GUIDES = [
     href: '/learn/which-mcx-commodity-to-trade',
     tag: 'Beginner',
   },
+  {
+    title: 'MCX Trading Hours India 2026',
+    desc: 'MCX is open 9:00 AM to 11:30 PM IST — not 5 PM like the stock market. Session quality guide, best windows by commodity, EIA timing, and when NOT to trade.',
+    href: '/learn/mcx-trading-hours',
+    tag: 'Beginner',
+  },
+  {
+    title: 'MCX Order Types — Limit, SL, SL-M Explained',
+    desc: 'Market order, Limit order, SL, and SL-M explained for MCX India. The stop loss mistake most beginners make — and how to place the right order for every situation.',
+    href: '/learn/mcx-order-types',
+    tag: 'Beginner',
+  },
 ]
 
 export default function Page() {
