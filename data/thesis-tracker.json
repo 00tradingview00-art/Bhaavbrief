@@ -1,26 +1,38 @@
 {
   "current": {
+    "date": "2026-06-18",
+    "editionRef": 46,
+    "thesis": "MCX Crude will break and close below ₹7,000/bbl by end of session as US demand softness and inventory strength extend overnight's 1.89% WTI selloff",
+    "commodity": "MCX Crude",
+    "direction": "bearish",
+    "targetLevel": 7000,
+    "reasoning": "Support at ₹7,133 and ₹7,098 is already being tested; a close sub-₹7,000 would mark the month's first such print and confirm the demand-shock momentum carrying from overnight's risk-off across NYMEX into MCX's session."
+  },
+  "yesterday": {
     "date": "2026-06-17",
     "editionRef": 45,
     "thesis": "MCX Crude will break below ₹7,050 support by MCX close today, unable to hold as OPEC supply fears persist.",
     "commodity": "MCX Crude",
     "direction": "bearish",
     "targetLevel": 7050,
-    "reasoning": "₹7,050 is the only meaningful intraday floor before the psychologically critical ₹7,000 handle; breach signals continuation of the ₹1,300 gap below the 20-SMA, confirming OPEC production-hike repricing."
-  },
-  "yesterday": {
-    "date": "2026-06-16",
-    "editionRef": 44,
-    "thesis": "MCX Gold will not hold above ₹153,161 by MCX close today as rupee strength continues to offset COMEX overnight gains.",
-    "commodity": "MCX Gold",
-    "direction": "bearish",
-    "targetLevel": 153161,
-    "reasoning": "Resistance at ₹153,161 is being tested against cross-currents: while COMEX Gold rose 0.37% overnight, the rupee's 0.49% strengthening to ₹94.64 has compressed the translation gain into near-flat opening price action, signaling sellers will defend this level as the structural support from COMEX gains dissipates.",
-    "outcome": "CORRECT",
-    "actualClose": 152650,
-    "outcomeNote": "Closed ₹1,52,650 — fell below ₹1,53,161."
+    "reasoning": "₹7,050 is the only meaningful intraday floor before the psychologically critical ₹7,000 handle; breach signals continuation of the ₹1,300 gap below the 20-SMA, confirming OPEC production-hike repricing.",
+    "outcome": "WRONG",
+    "actualClose": 7221,
+    "outcomeNote": "Closed ₹7,221 — held above ₹7,050."
   },
   "history": [
+    {
+      "date": "2026-06-17",
+      "editionRef": 45,
+      "thesis": "MCX Crude will break below ₹7,050 support by MCX close today, unable to hold as OPEC supply fears persist.",
+      "commodity": "MCX Crude",
+      "direction": "bearish",
+      "targetLevel": 7050,
+      "reasoning": "₹7,050 is the only meaningful intraday floor before the psychologically critical ₹7,000 handle; breach signals continuation of the ₹1,300 gap below the 20-SMA, confirming OPEC production-hike repricing.",
+      "outcome": "WRONG",
+      "actualClose": 7221,
+      "outcomeNote": "Closed ₹7,221 — held above ₹7,050."
+    },
     {
       "date": "2026-06-16",
       "editionRef": 44,
