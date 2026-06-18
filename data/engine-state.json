@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 149821,
-    "silver": 238321,
-    "crude": 6982,
-    "copper": 1323.6,
-    "natgas": 297.9,
+    "gold": 149516,
+    "silver": 237850,
+    "crude": 7024,
+    "copper": 1324.1,
+    "natgas": 302.2,
     "usdinr": 94.34
   },
-  "lastChecked": "2026-06-18T14:49:34.397Z",
+  "lastChecked": "2026-06-18T15:31:23.053Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -33,6 +33,6 @@
   "lastGeoNews": {
     "iran": "Oil Surges After Hostilities Between Iran and Israel Escalate - The New York Tim",
     "russia": "Trump hints US could resume oil sanctions on Russia as G7 ups pressure on Kremli",
-    "mideast": "Hormuz Crisis Leaves Lasting Mark on Oil Markets as Demand Slumps, IEA Says - gC"
+    "mideast": "Three Saudi-flagged supertankers sail through Hormuz after Iran deal signed, dat"
   }
 }
