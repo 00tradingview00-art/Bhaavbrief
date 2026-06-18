@@ -381,13 +381,17 @@ WRITING RULES:
 - Total length: 420–520 words
 
 SEO:
-- Title: "MCX Open ${dateLabel}: [thematic headline]" — under 65 chars total
+- Title: Write a headline, not a dateline. Lead with the dominant commodity move and the reason. Include % move if ≥1%. Under 70 chars. Examples of good format:
+  - "MCX Crude Crashes 4% as OPEC Signals Supply Surge — Gold Holds"
+  - "Why MCX Gold Is Rising Despite a Strong Dollar — Silver Diverges"
+  - "MCX Crude and Silver Both Fall — But for Completely Different Reasons"
+  Do NOT start with "MCX Open" or "MCX Close". Do NOT include the date in the title — it is already in the URL and frontmatter.
 - Description: under 155 chars — include today's date and the 2 biggest moves with exact prices
 
 RETURN ONLY valid MDX frontmatter + article body. No code fences. No markdown code blocks.
 
 ---
-title: "MCX Open ${dateLabel}: [thematic headline under 65 chars total]"
+title: "[headline — lead with dominant move + reason, no date, no 'MCX Open']"
 description: "[under 155 chars — date + 2 biggest moves with exact prices]"
 date: "${today.toISOString()}"
 time: "${timeStr}"
