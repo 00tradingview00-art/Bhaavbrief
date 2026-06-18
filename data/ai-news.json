@@ -1,5 +1,6 @@
 [
   {
+<<<<<<< Updated upstream
     "id": "2026-06-18-20-17-mcx-copper-slides-1-05-to-1324-kg-as-bro",
     "title": "MCX Copper slides 1.05% to ₹1324/kg as broad dollar-led commodity selloff deepens",
     "summary": "The mechanism driving this session is dollar strength compressing USD-denominated commodity prices across the complex — when the dollar rises, it takes fewer dollars to buy the same tonnage, and that repricing transmits directly into MCX rupee levels. MCX Copper sits at ₹1324.10/kg. Support is observed at ₹1310; resistance at ₹1345. Import parity arithmetic: LME Copper near ~$9,820/tonne ($9.82/kg) × ₹94.32 × 1.0 duty-adjusted factor approximates ₹925.90/kg at base — after BCD, IGST and handling (~1.35 factor), theoretical parity lands near ₹1310–1320, placing MCX at a marginal premium to parity. Cross-commodity confirmation: MCX Crude is down 3.19% simultaneously — both industrial and energy demand signals deteriorating together historically reinforces the macro-demand-concern narrative rather than a supply-side event. Watch ₹1310 support into close.",
@@ -8,6 +9,16 @@
     "impact": "bearish",
     "pubDate": "2026-06-18T14:47:23.255Z",
     "pubDateIST": "18 Jun 2026, 20:17"
+=======
+    "id": "2026-06-18-20-18-mcx-copper-slides-1-09-to-1323-50-kg-as",
+    "title": "MCX Copper slides 1.09% to ₹1323.50/kg as dollar strength pressures base metals complex",
+    "summary": "The operative mechanism today is dollar appreciation compressing commodity valuations across the board — a stronger USD raises the effective cost for non-dollar buyers, systematically reducing demand bids. MCX Copper sits at ₹1323.50/kg; traders historically observe ₹1310 as near-term support and ₹1340 as session resistance.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-18T14:48:18.463Z",
+    "pubDateIST": "18 Jun 2026, 20:18"
+>>>>>>> Stashed changes
   },
   {
     "id": "2026-06-18-17-26-russian-waiver-expiry-adds-supply-tightn",
