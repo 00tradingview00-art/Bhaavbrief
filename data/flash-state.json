@@ -25,15 +25,10 @@
     "lastRoundBucket": 23
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-06-18T04:56:15.690Z",
-    "lastFlashPrice": 7081,
+    "lastFlashAt": "2026-06-19T12:37:45.697Z",
+    "lastFlashPrice": 7251,
     "lastRoundBucket": 14,
     "recentFlashes": [
-      {
-        "at": "15 Jun, 08:30 pm IST",
-        "title": "MCX Crude Extends Decline 5.88% to ₹7,615 as WTI Slides to $80.07",
-        "price": 7615
-      },
       {
         "at": "17 Jun, 06:34 pm IST",
         "title": "MCX Crude Extends Decline 4.79% to ₹7,250 as WTI Holds Near $75.83 and Rupee Firms",
@@ -43,6 +38,11 @@
         "at": "18 Jun, 10:26 am IST",
         "title": "MCX Crude Extends Decline 2.33% to ₹7,081 as WTI Slides to $74.12 and Rupee Firms",
         "price": 7081
+      },
+      {
+        "at": "19 Jun, 06:07 pm IST",
+        "title": "MCX Crude Rebounds 2.40% to ₹7,251, Reversing Recent Decline as Brent Firms Above $80",
+        "price": 7251
       }
     ]
   },

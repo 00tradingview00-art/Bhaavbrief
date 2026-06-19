@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-19-18-06-mcx-silver-slides-2-21-to-232323-kg-as-c",
+    "title": "MCX Silver slides 2.21% to ₹232323/kg as crude surge redirects session risk flows",
+    "summary": "The mechanism here is capital rotation, not fundamental silver weakness. Crude's +2.79% surge absorbs speculative positioning, pulling liquidity away from precious metals. Silver at ₹232323/kg faces immediate resistance near ₹237000/kg, with session support observed around ₹229500/kg. On import parity arithmetic: LBMA silver near approximately $29.50/oz translates to roughly ₹32,250/kg at spot, multiplied by 32.15 (oz-to-kg), adjusted for 15% duty and GST factor of approximately 1.18, yields a theoretical parity near ₹240000/kg — placing MCX Silver at a notable discount to parity this session. Cross-commodity confirmation: MCX Gold declining 1.61% simultaneously indicates broad precious metals pressure, not silver-specific selling. This parallel move historically reflects dollar-strength or risk-rotation episodes rather than metal-specific supply events. Watch ₹229500/kg into close.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T12:36:08.350Z",
+    "pubDateIST": "19 Jun 2026, 18:06"
+  },
+  {
+    "id": "2026-06-19-18-08-mcx-crude-surges-2-79-to-7251-bbl-as-ene",
+    "title": "MCX Crude surges 2.79% to ₹7251/bbl as energy leads commodity complex higher",
+    "summary": "The mechanism driving this session is energy-sector rotation — crude's outperformance at +2.79% is pulling capital away from metals, evidenced by Gold at ₹146907 (-1.61%) and Silver at ₹232323 (-2.21%). This is a classic risk-rotation dynamic where energy strength competes with safe-haven positioning.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-19T12:38:01.020Z",
+    "pubDateIST": "19 Jun 2026, 18:08"
+  },
+  {
     "id": "2026-06-19-14-05-crude-leads-mcx-complex-at-1-97-to-7193",
     "title": "Crude Leads MCX Complex at +1.97% to ₹7193 as EIA-OPEC Signals Sharpen",
     "summary": "This session's cross-asset narrative is anchored squarely in crude's outperformance, with MCX Crude July at ₹7193 per barrel posting +1.97% — the sole meaningful gainer across the entire MCX complex while gold, silver, and copper trade in the red. The EIA-OPEC signal cluster matters precisely here: EIA inventory draws historically correlate with immediate front-month price response on MCX, while OPEC supply posture sets the medium-term floor that traders price into the forward curve. The import parity chain runs as follows — a $1 move in Brent at USD/INR ₹94.47 translates to approximately ₹94-95 on MCX crude before customs duty and refinery premium adjustments. The cross-market correlation to watch is MCX NatGas at ₹302.80, which historically tracks energy-complex sentiment during supply-shock narratives, though it is flat this session, indicating the bid remains crude-specific rather than broad energy. The confirmatory data point is the next weekly EIA crude inventory release — a draw above consensus would sustain the current spread between crude and the broader subdued commodity complex; a build would test ₹7100 as an observed support zone.",
