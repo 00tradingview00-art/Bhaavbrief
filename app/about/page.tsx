@@ -243,6 +243,51 @@ export default function AboutPage() {
               </div>
             </section>
 
+            {/* Why I built BhaavBrief */}
+            <section style={{ marginBottom: '2.5rem' }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.25rem', paddingBottom: '0.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
+                Why I built BhaavBrief
+              </h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: 14, color: '#48483A', lineHeight: 1.8, fontWeight: 300 }}>
+                <p>
+                  My job inside an asset management company was sales — moving NFOs, PMS, AIF, and mutual fund products to hit targets. That role didn't teach me research. What it taught me was something more useful for building this: how clients actually think, and how easily that gets used against them.
+                </p>
+                <p>
+                  I sat through years of fund manager calls and noticed the same pattern every time: generic commentary built on twenty years of market history, repeated almost word for word regardless of what was actually happening that quarter. Products got sold because there was a target to hit, not because anyone had checked if it fit the client sitting across the table. So I started doing my own work — tracking markets, building my own frameworks, reading the actual macro drivers instead of repeating the desk's talking points. That's where the real understanding came from.
+                </p>
+                <p>
+                  The gap I kept running into wasn't just "nobody explains why gold moved today." It was bigger than that. Someone trying to understand commodities in India needs different things depending on where they're starting from — what a lot size even is, what's actually moving the market right now, how to tell a real signal from noise, and eventually, how to get exposure to it at all. Almost none of that exists in one place, built for an Indian trader instead of copy-pasted from a US market structure.
+                </p>
+                <p style={{ marginBottom: 0 }}>
+                  That's what BhaavBrief is built to be — not a single product, but three layers stacked on top of each other:
+                </p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', marginTop: '1.1rem' }}>
+                {[
+                  {
+                    label: 'Know what\'s happening',
+                    body: 'A daily brief that explains what moved in MCX gold, silver, crude, copper, and natural gas, and why — not a price ticker dressed up as analysis. A live terminal tracking all nine MCX commodities alongside INR cross-rates, COMEX and NYMEX benchmarks, and a running geopolitical risk watch — Hormuz, Red Sea, OPEC+, Iran, Russia/Ukraine — because half of what moves Indian commodity prices isn\'t domestic at all.',
+                  },
+                  {
+                    label: 'Build the capability',
+                    body: 'A Learn library covering the mechanics nobody bothers to explain simply — lot sizes, margin, rollover, taxation, hedging — for someone starting from zero. Then Signal Academy, where instead of being told what a signal means, you learn to read it yourself: open interest, implied volatility, basis, seasonality, volume.',
+                  },
+                  {
+                    label: 'Act on it',
+                    body: 'An Invest map of every actual way to get exposure to commodities from India — gold and silver ETFs, commodity mutual funds, listed mining and energy stocks, and global instruments — once you understand what you\'re looking at, not before.',
+                  },
+                ].map(item => (
+                  <div key={item.label} style={{ paddingLeft: '1rem', borderLeft: '2px solid #C8720A' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{item.label}</div>
+                    <div style={{ fontSize: 14, color: '#48483A', lineHeight: 1.75, fontWeight: 300 }}>{item.body}</div>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: 13, color: '#8A8A7A', marginTop: '1.5rem', fontWeight: 300 }}>
+                — Prabal Kapoor, Founder
+              </p>
+            </section>
+
             {/* Universal search */}
             <AboutSearch />
 
