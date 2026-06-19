@@ -34,16 +34,6 @@ const COMMODITIES = [
   { name: 'Natural Gas', symbol: 'NG',  desc: 'MCX nat gas, EIA inventory data, seasonal demand and global context' },
 ]
 
-const OHLC_FIELDS = [
-  { label: 'Open',         sub: 'First print of the session',    color: '#48483A' },
-  { label: 'High',         sub: 'Upper extreme traded',          color: '#166534' },
-  { label: 'Low',          sub: 'Lower extreme traded',          color: '#9B1C1C' },
-  { label: 'Close',        sub: 'Previous session settle',       color: '#1E40AF' },
-  { label: '% Change',     sub: 'vs prior close',                color: '#C8720A' },
-  { label: 'Open Interest',sub: 'Total positions outstanding',   color: '#4A1D96' },
-  { label: 'Volume',       sub: 'Contracts traded',              color: '#065F46' },
-  { label: 'USD / INR',    sub: 'Currency impact on MCX prices', color: '#78350F' },
-]
 
 const PRINCIPLES = [
   { title: 'Open access', body: 'No subscription fee, no paywalled content. Commodity intelligence should be accessible to everyone who needs it — futures traders, portfolio investors, jewellers, fuel dealers, agri merchants. Not just institutional desks.' },
@@ -153,33 +143,6 @@ export default function AboutPage() {
                     </a>
                   </div>
                 ))}
-              </div>
-            </section>
-
-            {/* OHLC */}
-            <section style={{ marginBottom: '2.5rem' }}>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, marginBottom: '0.5rem', paddingBottom: '0.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
-                Inside every brief
-              </h2>
-              <p style={{ fontSize: 15, color: '#8A8A7A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
-                Every edition leads with the full data context before any narrative — the numbers traders, hedgers, and investors actually use to size up the market.
-              </p>
-              <div className="about-ohlc-grid">
-                {OHLC_FIELDS.map(f => (
-                  <div key={f.label} style={{ background: '#FAFAF6', border: '0.5px solid #DDDDD0', padding: '0.7rem 0.9rem' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, color: f.color, marginBottom: 3, letterSpacing: '0.02em' }}>
-                      {f.label}
-                    </div>
-                    <div style={{ fontSize: 11, color: '#8A8A7A', lineHeight: 1.4 }}>
-                      {f.sub}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginTop: 8, padding: '0.7rem 1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.02em' }}>
-                  + COMEX / LME global reference · Import parity price · Key support & resistance levels · Macro cross-context
-                </span>
               </div>
             </section>
 
