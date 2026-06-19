@@ -225,7 +225,7 @@ async function semanticCheck() {
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n" +
             "• USD/INR and other FX rates: a discrepancy of ≤0.20 INR between the brief text and the snapshot (e.g. 94.66 vs 94.73) is normal API-source rounding — do NOT flag as block.\n\n" +
             "Flag as 'block' ONLY:\n" +
-            "1. The SAME instrument cited at two genuinely different prices within today's body text\n" +
+            "1. The SAME instrument cited at two genuinely different prices within today's body text — EXCEPT: rounding differences of ≤$1 for gold/silver (e.g. $4,176.90 vs $4,177 are the same price rounded differently — NOT a block), ≤$0.10 for crude oil, ≤$0.01 for copper/natgas\n" +
             "2. Event timing contradictions (e.g. 'CPI due tonight' vs 'CPI tomorrow'; wrong month label)\n" +
             "3. Headline direction word (surge/slump) directly contradicting the same instrument's data in the body\n" +
             "4. A percentage that doesn't match its own explicit from/to prices (e.g. '5% fall from $100 to $98' — 5% is wrong)\n" +
