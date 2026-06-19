@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-06-19T17:46:20.211Z",
-  "generatedAtIST": "2026-06-19 23:16 IST",
+  "generatedAt": "2026-06-19T18:14:56.673Z",
+  "generatedAtIST": "2026-06-19 23:44 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 147137,
+      "price": 147239,
       "prevClose": 149309,
-      "changePct": -1.4547,
+      "changePct": -1.3864,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 233299,
+      "price": 232736,
       "prevClose": 237572,
-      "changePct": -1.7986,
+      "changePct": -2.0356,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7263,
+      "price": 7282,
       "prevClose": 7054,
-      "changePct": 2.9629,
+      "changePct": 3.2322,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1310.2,
+      "price": 1309.1,
       "prevClose": 1321.8,
-      "changePct": -0.8776,
+      "changePct": -0.9608,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 302.5,
+      "price": 301.6,
       "prevClose": 303.2,
-      "changePct": -0.2309,
+      "changePct": -0.5277,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -70,9 +70,9 @@
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 366.6,
+      "price": 366.15,
       "prevClose": 370.7,
-      "changePct": -1.106,
+      "changePct": -1.2274,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
@@ -82,15 +82,15 @@
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 357.8,
+      "price": 357.85,
       "prevClose": 356.9,
-      "changePct": 0.2522,
+      "changePct": 0.2662,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1695.5,
+      "price": 1696.6,
       "prevClose": 1706,
-      "changePct": -0.6155,
+      "changePct": -0.551,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -114,7 +114,7 @@
   },
   "derived": {
     "importParityGoldINR": 126528,
-    "mcxComexGoldSpreadPct": 16.29,
+    "mcxComexGoldSpreadPct": 16.37,
     "goldSilverRatio": 64.3
   }
 }
