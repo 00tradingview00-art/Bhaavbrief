@@ -22,7 +22,16 @@
     ]
   },
   "MCX_SILVER": {
-    "lastRoundBucket": 23
+    "lastFlashAt": "2026-06-19T15:54:54.612Z",
+    "lastFlashPrice": 232577,
+    "lastRoundBucket": 23,
+    "recentFlashes": [
+      {
+        "at": "19 Jun, 09:24 pm IST",
+        "title": "MCX Silver Drops 2.1% to ₹2,32,577/kg as COMEX Silver Craters 8.6%",
+        "price": 232577
+      }
+    ]
   },
   "MCX_CRUDE": {
     "lastFlashAt": "2026-06-19T12:37:45.697Z",

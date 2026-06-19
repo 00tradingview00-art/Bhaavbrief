@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-19-21-21-rbi-mpc-tightening-signal-hits-gold-at-1",
+    "title": "RBI MPC Tightening Signal Hits Gold at ₹147008 as Crude Surges 2.81%",
+    "summary": "Today's session is already split at the cross-asset level — crude commanding the narrative at +2.81% to ₹7252/bbl while gold, silver, and copper bleed. The RBI MPC minutes signalling a pivot toward policy tightening land directly into this fracture. A tighter RBI stance mechanically supports the rupee by raising the cost of carry for short-INR positions. USD/INR at ₹94.31 is the live transmission point: rupee appreciation compresses the import parity calculation, since MCX gold pricing embeds the exchange rate as a direct cost multiplier. At ₹147008 per 10g, gold is already down 1.54% this session. Silver at ₹232577/kg carries the same rupee-sensitivity amplified by its industrial demand linkage to copper, which itself is off 0.90%. The cross-market correlation to watch is the 10-year Indian government bond yield — historically, tightening signals that lift bond yields have coincided with rupee strengthening episodes that mechanically dragged MCX gold below import parity support levels. The confirmation or negation of this tightening narrative rests on the next CPI print: a reading above 5.5% sustains the tightening case; a miss negates it and removes the rupee-support argument entirely.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T15:51:27.263Z",
+    "pubDateIST": "19 Jun 2026, 21:21"
+  },
+  {
+    "id": "2026-06-19-21-23-mcx-silver-slides-2-10-to-232577-kg-as-c",
+    "title": "MCX Silver slides 2.10% to ₹232577/kg as crude rally shifts session risk appetite",
+    "summary": "The mechanism here is risk rotation, not a silver-specific catalyst. Crude's +2.81% surge is absorbing speculative capital and compressing precious metals demand within the session. Gold at ₹147008 confirms the direction — silver is not moving in isolation.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T15:53:17.518Z",
+    "pubDateIST": "19 Jun 2026, 21:23"
+  },
+  {
+    "id": "2026-06-19-21-25-mcx-crude-surges-2-81-to-7252-bbl-as-ene",
+    "title": "MCX Crude surges 2.81% to ₹7252/bbl as energy leads commodity complex higher",
+    "summary": "The mechanism behind this session's move is a demand-side re-pricing in crude, pulling energy values higher while metals trade defensively. At ₹7252/bbl, watch ₹7100 as immediate session support and ₹7380 as resistance where prior congestion historically stalled rallies.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-19T15:55:10.207Z",
+    "pubDateIST": "19 Jun 2026, 21:25"
+  },
+  {
     "id": "2026-06-19-18-06-mcx-silver-slides-2-21-to-232323-kg-as-c",
     "title": "MCX Silver slides 2.21% to ₹232323/kg as crude surge redirects session risk flows",
     "summary": "The mechanism here is capital rotation, not fundamental silver weakness. Crude's +2.79% surge absorbs speculative positioning, pulling liquidity away from precious metals. Silver at ₹232323/kg faces immediate resistance near ₹237000/kg, with session support observed around ₹229500/kg. On import parity arithmetic: LBMA silver near approximately $29.50/oz translates to roughly ₹32,250/kg at spot, multiplied by 32.15 (oz-to-kg), adjusted for 15% duty and GST factor of approximately 1.18, yields a theoretical parity near ₹240000/kg — placing MCX Silver at a notable discount to parity this session. Cross-commodity confirmation: MCX Gold declining 1.61% simultaneously indicates broad precious metals pressure, not silver-specific selling. This parallel move historically reflects dollar-strength or risk-rotation episodes rather than metal-specific supply events. Watch ₹229500/kg into close.",
