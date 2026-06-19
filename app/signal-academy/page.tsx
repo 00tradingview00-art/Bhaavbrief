@@ -94,7 +94,7 @@ export default function SignalAcademyPage() {
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
           Educational content only — SEBI compliance notice
         </div>
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, margin: 0 }}>
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', lineHeight: 1.75, margin: 0 }}>
           {DISCLAIMER}
         </p>
       </div>
@@ -102,7 +102,7 @@ export default function SignalAcademyPage() {
       {/* Signal cards */}
       <div style={{ marginBottom: 36 }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 16 }}>
-          5 signals · {unlocked ? 'all unlocked' : '1 always free · 1 unlock to access · 3 coming soon'}
+          5 signals · {unlocked ? 'all unlocked' : '1 always free · 4 unlock to access'}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {SIGNALS.map(signal => {
@@ -158,7 +158,7 @@ export default function SignalAcademyPage() {
                       </span>
                     )}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginBottom: 6 }}>
+                  <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 6 }}>
                     {signal.tagline} · {signal.audience}
                   </div>
                   <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0, fontWeight: 300 }}>
