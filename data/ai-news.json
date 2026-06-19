@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-19-23-32-south-indian-bank-fcnr-rate-hits-6-5-as",
+    "title": "South Indian Bank FCNR Rate Hits 6.5% as Crude Surges 3.23% to ₹7282",
+    "summary": "The FCNR rate hike to 6.5% via RBI swap mechanism arrives in a session where crude oil is the dominant cross-asset driver, up 3.23% to ₹7282 per barrel on MCX. The FCNR signal matters here because elevated NRI deposit rates structurally attract foreign currency inflows, which exert appreciation pressure on the rupee — currently anchored at ₹94.31 per USD. A firmer rupee, if sustained, mechanically compresses the import parity buffer on USD-denominated commodities: at ₹94.31, each rupee of appreciation against the dollar reduces MCX crude's landed cost by approximately ₹75-80 per barrel at current global price levels, partially offsetting crude's rupee-denominated rally. MCX Gold at ₹147239 per 10g and MCX Copper at ₹1309.10 per kg face the same currency arithmetic. The cross-market correlation to watch is USD/INR against MCX crude — historically, rupee strength has capped crude's INR gains even when dollar-crude rises. The confirmatory data point is Monday's RBI reference rate fixing; a move below ₹94.00 would quantify the FCNR-driven flow impact on commodity import parity calculations.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-19T18:02:34.776Z",
+    "pubDateIST": "19 Jun 2026, 23:32"
+  },
+  {
+    "id": "2026-06-19-23-34-mcx-nat-gas-slips-0-53-to-301-60-mmbtu-a",
+    "title": "MCX Nat Gas slips 0.53% to ₹301.60/mmBtu as crude surge fails to lift gas complex",
+    "summary": "The mechanism here is divergence, not correlation. Crude's +3.23% rally — likely supply-disruption driven — has pulled trader attention and capital toward oil, leaving natural gas without a narrative catalyst this session. Gas and crude share infrastructure but not always price direction; this session confirms that decoupling.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T18:04:26.075Z",
+    "pubDateIST": "19 Jun 2026, 23:34"
+  },
+  {
+    "id": "2026-06-19-23-36-mcx-copper-slides-0-96-to-1309-kg-as-cru",
+    "title": "MCX Copper slides 0.96% to ₹1309/kg as crude surge redirects risk flows",
+    "summary": "The mechanism here is capital rotation, not fundamental copper weakness. Crude's +3.23% surge this session absorbs risk appetite into energy, pulling discretionary flows away from base metals. Copper at ₹1309.10/kg reflects this pressure. Support observed at ₹1295, resistance at ₹1325.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T18:06:18.379Z",
+    "pubDateIST": "19 Jun 2026, 23:36"
+  },
+  {
     "id": "2026-06-19-21-21-rbi-mpc-tightening-signal-hits-gold-at-1",
     "title": "RBI MPC Tightening Signal Hits Gold at ₹147008 as Crude Surges 2.81%",
     "summary": "Today's session is already split at the cross-asset level — crude commanding the narrative at +2.81% to ₹7252/bbl while gold, silver, and copper bleed. The RBI MPC minutes signalling a pivot toward policy tightening land directly into this fracture. A tighter RBI stance mechanically supports the rupee by raising the cost of carry for short-INR positions. USD/INR at ₹94.31 is the live transmission point: rupee appreciation compresses the import parity calculation, since MCX gold pricing embeds the exchange rate as a direct cost multiplier. At ₹147008 per 10g, gold is already down 1.54% this session. Silver at ₹232577/kg carries the same rupee-sensitivity amplified by its industrial demand linkage to copper, which itself is off 0.90%. The cross-market correlation to watch is the 10-year Indian government bond yield — historically, tightening signals that lift bond yields have coincided with rupee strengthening episodes that mechanically dragged MCX gold below import parity support levels. The confirmation or negation of this tightening narrative rests on the next CPI print: a reading above 5.5% sustains the tightening case; a miss negates it and removes the rupee-support argument entirely.",
