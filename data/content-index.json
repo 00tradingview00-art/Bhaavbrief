@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-06-19-hawk-scan-mcx-silver-plunges-3-11-trades-near-2-30-041-kg",
+    "href": "/articles/2026-06-19-hawk-scan-mcx-silver-plunges-3-11-trades-near-2-30-041-kg",
+    "title": "MCX Silver Plunges 3.11% — Trades Near ₹2,30,041/kg",
+    "description": "MCX Silver crashed 3.11% to ₹2,30,041/kg, breaching key psychological levels as COMEX silver fell 3.17% in the same session.",
+    "excerpt": "TRIGGER — MCX Silver has fallen 3.11% to ₹2,30,041/kg — breaching the Hawk-Scan threshold — as COMEX silver collapsed 3.17% to $64.19/oz in today's session. PRICE — ₹2,30,041/kg · ▼3.11% · PLUNGING SI",
+    "date": "2026-06-19T04:31:20.570Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Copper"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 230041
+  },
+  {
     "type": "brief",
     "slug": "edition-047",
     "href": "/briefs/edition-047",
