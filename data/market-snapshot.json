@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-06-19T17:31:20.195Z",
-  "generatedAtIST": "2026-06-19 23:01 IST",
+  "generatedAt": "2026-06-19T17:46:20.211Z",
+  "generatedAtIST": "2026-06-19 23:16 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 147226,
+      "price": 147137,
       "prevClose": 149309,
-      "changePct": -1.3951,
+      "changePct": -1.4547,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 232960,
+      "price": 233299,
       "prevClose": 237572,
-      "changePct": -1.9413,
+      "changePct": -1.7986,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7247,
+      "price": 7263,
       "prevClose": 7054,
-      "changePct": 2.736,
+      "changePct": 2.9629,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1310.9,
+      "price": 1310.2,
       "prevClose": 1321.8,
-      "changePct": -0.8246,
+      "changePct": -0.8776,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 302.6,
+      "price": 302.5,
       "prevClose": 303.2,
-      "changePct": -0.1979,
+      "changePct": -0.2309,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -70,9 +70,9 @@
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 366.5,
+      "price": 366.6,
       "prevClose": 370.7,
-      "changePct": -1.133,
+      "changePct": -1.106,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
@@ -82,15 +82,15 @@
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 357.55,
+      "price": 357.8,
       "prevClose": 356.9,
-      "changePct": 0.1821,
+      "changePct": 0.2522,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1699,
+      "price": 1695.5,
       "prevClose": 1706,
-      "changePct": -0.4103,
+      "changePct": -0.6155,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -114,7 +114,7 @@
   },
   "derived": {
     "importParityGoldINR": 126528,
-    "mcxComexGoldSpreadPct": 16.36,
+    "mcxComexGoldSpreadPct": 16.29,
     "goldSilverRatio": 64.3
   }
 }
