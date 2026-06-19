@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-19-14-05-crude-leads-mcx-complex-at-1-97-to-7193",
+    "title": "Crude Leads MCX Complex at +1.97% to ₹7193 as EIA-OPEC Signals Sharpen",
+    "summary": "This session's cross-asset narrative is anchored squarely in crude's outperformance, with MCX Crude July at ₹7193 per barrel posting +1.97% — the sole meaningful gainer across the entire MCX complex while gold, silver, and copper trade in the red. The EIA-OPEC signal cluster matters precisely here: EIA inventory draws historically correlate with immediate front-month price response on MCX, while OPEC supply posture sets the medium-term floor that traders price into the forward curve. The import parity chain runs as follows — a $1 move in Brent at USD/INR ₹94.47 translates to approximately ₹94-95 on MCX crude before customs duty and refinery premium adjustments. The cross-market correlation to watch is MCX NatGas at ₹302.80, which historically tracks energy-complex sentiment during supply-shock narratives, though it is flat this session, indicating the bid remains crude-specific rather than broad energy. The confirmatory data point is the next weekly EIA crude inventory release — a draw above consensus would sustain the current spread between crude and the broader subdued commodity complex; a build would test ₹7100 as an observed support zone.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-19T08:35:28.716Z",
+    "pubDateIST": "19 Jun 2026, 14:05"
+  },
+  {
+    "id": "2026-06-19-14-07-mcx-silver-slides-1-07-to-235-023-kg-as",
+    "title": "MCX Silver slides 1.07% to ₹235,023/kg as crude rally draws capital away from metals",
+    "summary": "The mechanism here is rotational capital flow. Crude's +1.97% surge signals reflationary positioning, pulling speculative money toward energy and away from safe-haven metals. Silver, carrying both monetary and industrial characteristics, is absorbing dual pressure — gold's -1.01% decline confirms the monetary metal complex is broadly offered this session. At ₹235,023/kg, immediate support is observed near ₹233,500 and resistance around ₹237,800 based on recent session structure.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T08:37:19.479Z",
+    "pubDateIST": "19 Jun 2026, 14:07"
+  },
+  {
+    "id": "2026-06-19-14-09-mcx-crude-surges-1-97-to-7193-bbl-as-ene",
+    "title": "MCX Crude surges +1.97% to ₹7193/bbl as energy leads commodity complex higher",
+    "summary": "The mechanism here is risk-appetite rotation — crude's +2.0% move is pulling capital toward energy and away from defensive metals. When energy leads without broad commodity participation, it typically signals supply-side catalyst rather than demand-driven inflation, leaving gold and silver without a follow-through bid.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-19T08:39:11.957Z",
+    "pubDateIST": "19 Jun 2026, 14:09"
+  },
+  {
     "id": "2026-06-19-10-46-mcx-crude-surges-2-34-to-7219-even-as-ho",
     "title": "MCX Crude Surges 2.34% to ₹7219 Even as Hormuz Supply Risk Eases",
     "summary": "The Iran war pact signal arrives into a session already defined by broad commodity selling, with Silver down 3.83% and Gold down 2.27% pointing to risk-off or dollar-strength dynamics rather than geopolitical fear premium. MCX Crude Oil at ₹7219 per barrel is currently trading up 2.34% on the session, which creates a direct tension with the Hormuz supply normalization narrative — the live price action has not yet absorbed the full bearish implication of restored passage. The import parity chain runs: global Brent softening on Hormuz reopening, translated through USD/INR at ₹94.46, where a stronger rupee would further compress MCX crude realizations. Historically, Hormuz supply restoration events compress the geopolitical risk premium embedded in crude within one to three sessions. MCX Copper at ₹1301.25 is also declining 1.55%, consistent with the broader demand-side softness narrative. The Brent front-month settlement at or below $74 per barrel would serve as the confirming data point for downside pressure on MCX Crude to reflect the Hormuz normalization.",
