@@ -40,13 +40,6 @@ jobs:
 
       # continue-on-error on every content step so one API failure doesn't kill
       # the workflow and cause GitHub to disable the cron schedule.
-      #
-      # One flash per run: mark run start, then each monitor skips if a flash
-      # article was already written during this run. Prevents batch-publishing
-      # when GitHub drops several consecutive 15-min crons and fires one catch-up run.
-
-      - name: Mark run start
-        run: touch /tmp/flash-run-start
 
       - name: Fetch market snapshot
         continue-on-error: true
@@ -54,17 +47,6 @@ jobs:
         env:
           KITE_API_KEY:        ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
-
-      - name: Flash monitor (event-driven)
-        continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping flash-monitor"
-            exit 0
-          fi
-          node scripts/flash-monitor.mjs
-        env:
-          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Generate AI news feed
         continue-on-error: true
@@ -78,60 +60,35 @@ jobs:
 
       - name: Monitor MCX/SEBI circulars
         continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping circulars"
-            exit 0
-          fi
-          node scripts/monitor-mcx-circulars.js
+        run: node scripts/monitor-mcx-circulars.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor geopolitical signals
         continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping geopolitical"
-            exit 0
-          fi
-          node scripts/monitor-geopolitical-signals.js
+        run: node scripts/monitor-geopolitical-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor India policy signals
         continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping India policy"
-            exit 0
-          fi
-          node scripts/monitor-india-policy-signals.js
+        run: node scripts/monitor-india-policy-signals.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor NCDEX agri signals
         continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping agri"
-            exit 0
-          fi
-          node scripts/monitor-ncdex-agri.js
+        run: node scripts/monitor-ncdex-agri.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor macro economy signals
         continue-on-error: true
-        run: |
-          if find content/flash -newer /tmp/flash-run-start -name "*.mdx" 2>/dev/null | grep -q .; then
-            echo "Flash already published this run — skipping macro"
-            exit 0
-          fi
-          node scripts/monitor-macro-economy.js
+        run: node scripts/monitor-macro-economy.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
@@ -142,7 +99,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Note: market-snapshot.json is intentionally excluded — intelligence-engine owns it.
           # Including it here caused rebase conflicts in the retry loop.
-          git add content/flash/ data/flash-state.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
@@ -152,7 +109,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ data/flash-state.json scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           for attempt in 1 2 3; do
