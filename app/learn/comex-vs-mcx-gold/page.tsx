@@ -240,6 +240,12 @@ export default function Page() {
           <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → MCX gold contracts — lot sizes & specs
           </Link>
+          <Link href="/learn/mcx-gold-vs-physical-gold" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX gold vs physical gold
+          </Link>
+          <Link href="/learn/how-much-money-to-start-mcx-trading" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → How much capital to start MCX gold trading?
+          </Link>
           <Link href="/commodities/gold" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Live MCX gold price & analysis
           </Link>

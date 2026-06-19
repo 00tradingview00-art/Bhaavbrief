@@ -418,6 +418,9 @@ export default function Page() {
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>← Learn hub</Link>
             <Link href="/learn/mcx-lot-sizes" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX lot sizes →</Link>
             <Link href="/learn/mcx-margin-calculation" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Margin calculation →</Link>
+            <Link href="/learn/mcx-contract-expiry" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX contract expiry →</Link>
+            <Link href="/learn/mcx-order-types" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX order types →</Link>
+            <Link href="/learn/how-much-money-to-start-mcx-trading" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>How much capital for MCX? →</Link>
             <Link href="/commodities/crude-oil" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Crude live price →</Link>
             <Link href="/commodities/gold" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>Gold live price →</Link>
           </div>

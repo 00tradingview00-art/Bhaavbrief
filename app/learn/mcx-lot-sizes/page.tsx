@@ -456,6 +456,15 @@ export default function Page() {
             <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               MCX Gold contracts in detail →
             </Link>
+            <Link href="/learn/how-much-money-to-start-mcx-trading" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+              How much capital for MCX? →
+            </Link>
+            <Link href="/learn/which-mcx-commodity-to-trade" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+              Which commodity to trade? →
+            </Link>
+            <Link href="/learn/mcx-order-types" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
+              MCX order types →
+            </Link>
             <Link href="/commodities/gold" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>
               Gold live price & analysis →
             </Link>

@@ -232,6 +232,12 @@ export default function Page() {
           <Link href="/learn/best-time-to-trade-mcx" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Best time to trade MCX
           </Link>
+          <Link href="/learn/mcx-order-types" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX order types (close positions before expiry)
+          </Link>
+          <Link href="/learn/mcx-trading-hours" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX trading hours 2026
+          </Link>
           <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → All MCX guides
           </Link>

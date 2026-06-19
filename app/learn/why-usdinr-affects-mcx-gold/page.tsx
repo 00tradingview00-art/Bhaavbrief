@@ -276,8 +276,17 @@ export default function Page() {
           <Link href="/learn/mcx-margin-calculator" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → MCX margin calculator
           </Link>
+          <Link href="/learn/comex-vs-mcx-gold" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → COMEX vs MCX gold price formula
+          </Link>
+          <Link href="/learn/mcx-gold-vs-physical-gold" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX gold vs physical gold
+          </Link>
           <Link href="/briefs" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Daily 9:30 AM MCX brief
+          </Link>
+          <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → All MCX guides
           </Link>
         </div>
 

@@ -312,6 +312,12 @@ export default function Page() {
           <Link href="/learn/best-time-to-trade-mcx" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Best time to trade MCX (COMEX overlap)
           </Link>
+          <Link href="/learn/which-mcx-commodity-to-trade" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → Which MCX commodity should I trade?
+          </Link>
+          <Link href="/learn/how-much-money-to-start-mcx-trading" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → How much capital do I need for MCX?
+          </Link>
           <Link href="/commodities/gold" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Live MCX gold price & analysis
           </Link>

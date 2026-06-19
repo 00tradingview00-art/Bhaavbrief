@@ -249,6 +249,15 @@ export default function Page() {
           <Link href="/learn/mcx-rollover" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → How to rollover MCX futures
           </Link>
+          <Link href="/learn/mcx-trading-hours" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX trading hours (full session guide)
+          </Link>
+          <Link href="/learn/which-mcx-commodity-to-trade" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → Which MCX commodity to trade?
+          </Link>
+          <Link href="/learn/mcx-order-types" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX order types
+          </Link>
           <Link href="/briefs" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → Daily 9:30 AM MCX brief
           </Link>

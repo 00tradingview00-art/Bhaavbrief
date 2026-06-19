@@ -230,6 +230,12 @@ export default function Page() {
           <Link href="/learn/mcx-contract-expiry" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → MCX contract expiry guide
           </Link>
+          <Link href="/learn/mcx-order-types" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → MCX order types (SL-M for gap protection)
+          </Link>
+          <Link href="/learn/which-mcx-commodity-to-trade" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
+            → Which MCX commodity should I trade?
+          </Link>
           <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none' }}>
             → All MCX guides
           </Link>
