@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-19-10-46-mcx-crude-surges-2-34-to-7219-even-as-ho",
+    "title": "MCX Crude Surges 2.34% to ₹7219 Even as Hormuz Supply Risk Eases",
+    "summary": "The Iran war pact signal arrives into a session already defined by broad commodity selling, with Silver down 3.83% and Gold down 2.27% pointing to risk-off or dollar-strength dynamics rather than geopolitical fear premium. MCX Crude Oil at ₹7219 per barrel is currently trading up 2.34% on the session, which creates a direct tension with the Hormuz supply normalization narrative — the live price action has not yet absorbed the full bearish implication of restored passage. The import parity chain runs: global Brent softening on Hormuz reopening, translated through USD/INR at ₹94.46, where a stronger rupee would further compress MCX crude realizations. Historically, Hormuz supply restoration events compress the geopolitical risk premium embedded in crude within one to three sessions. MCX Copper at ₹1301.25 is also declining 1.55%, consistent with the broader demand-side softness narrative. The Brent front-month settlement at or below $74 per barrel would serve as the confirming data point for downside pressure on MCX Crude to reflect the Hormuz normalization.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T05:16:11.439Z",
+    "pubDateIST": "19 Jun 2026, 10:46"
+  },
+  {
+    "id": "2026-06-19-10-48-mcx-crude-surges-2-34-to-7219-bbl-as-sil",
+    "title": "MCX Crude surges 2.34% to ₹7219/bbl as silver rout drives complex divergence",
+    "summary": "The mechanism here is sector rotation and risk-repricing. Silver's sharp -3.83% decline signals industrial demand anxiety, yet crude's +2.34% gain reflects a separate supply-side impulse — likely OPEC-linked production signals or inventory drawdown data — decoupling energy from the broader metals selloff this session.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-19T05:18:02.574Z",
+    "pubDateIST": "19 Jun 2026, 10:48"
+  },
+  {
+    "id": "2026-06-19-10-49-mcx-silver-crashes-3-83-to-228-468-kg-as",
+    "title": "MCX Silver Crashes 3.83% to ₹228,468/kg as Precious Metals Complex Faces Broad Selling",
+    "summary": "The mechanism driving this session: risk-off deleveraging or a strength-driven rotation out of precious metals is compressing silver simultaneously across global and domestic markets. MCX Silver at ₹228,468/kg finds immediate observed support near ₹225,000 and resistance at ₹233,500 based on recent consolidation structure.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-19T05:19:55.140Z",
+    "pubDateIST": "19 Jun 2026, 10:49"
+  },
+  {
     "id": "2026-06-19-07-49-mcx-nat-gas-surges-2-12-to-303-60-mmbtu",
     "title": "MCX Nat Gas surges 2.12% to ₹303.60/mmBtu as broader commodity complex sells off",
     "summary": "The mechanism here is divergence. While dollar strength is compressing gold, silver, and crude simultaneously, natural gas trades on a supply-demand logic largely decoupled from dollar-sensitive demand cycles. The 2.12% move in MCX Nat Gas to ₹303.60/mmBtu reflects this structural separation.",
