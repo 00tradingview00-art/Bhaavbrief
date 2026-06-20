@@ -78,8 +78,7 @@ Respond ONLY with valid JSON — no markdown, no explanation:
   const client = new Anthropic({ apiKey })
 
   const models = [
-    { id: 'claude-sonnet-4-6',        label: 'Sonnet' },
-    { id: 'claude-haiku-4-5-20251001', label: 'Haiku'  },
+    { id: 'claude-haiku-4-5-20251001', label: 'Haiku' },
   ]
 
   for (const { id, label } of models) {

@@ -541,7 +541,7 @@ Market signal: ${signal.title}. ${signal.desc}`
       'Content-Type':      'application/json',
     },
     body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
+      model:      'claude-haiku-4-5-20251001',
       max_tokens: 450,
       messages:   [{ role: 'user', content: prompt }],
     }),
@@ -692,7 +692,7 @@ BODY: [115-130 words]`
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-6', max_tokens: 450, messages: [{ role: 'user', content: prompt }] }),
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 450, messages: [{ role: 'user', content: prompt }] }),
   })
 
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
