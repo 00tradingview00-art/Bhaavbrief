@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-20-10-03-rbi-usd-inr-swap-facility-pressures-rupe",
+    "title": "RBI USD-INR Swap Facility Pressures Rupee Complex as Crude Surges 3.2% at ₹7282",
+    "summary": "The RBI's dual USD-INR swap facility enters a session already defined by rupee stress, where crude's 3.23% surge to ₹7282/bbl is the dominant cross-asset narrative. Swap facilities structurally inject rupee liquidity while absorbing dollars, which historically keeps USD/INR elevated near current ₹94.31 levels before normalization. The import parity chain is direct: crude at elevated global levels, translated through ₹94.31, amplifies the landed cost of every barrel India imports, sustaining MCX Crude's upside momentum. Gold at ₹147239/10g and Silver at ₹232736/kg are already trading negative 1.39% and 2.04% respectively, consistent with a session where rupee-softness fears are secondary to risk-off flows out of metals. Copper at ₹1309.10/kg mirrors this subdued complex. The confirmation level to monitor is USD/INR holding above ₹94.00 through the afternoon fix, which would validate sustained import-cost pressure across the energy complex.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-20T04:33:17.598Z",
+    "pubDateIST": "20 Jun 2026, 10:03"
+  },
+  {
+    "id": "2026-06-20-10-05-mcx-silver-slides-2-04-to-232736-kg-as-c",
+    "title": "MCX Silver Slides 2.04% to ₹232736/kg as Crude-Led Risk Rotation Pressures Precious Metals",
+    "summary": "The mechanism here is sector rotation, not broad commodity weakness. Crude's 3.23% surge at ₹7282/bbl is absorbing speculative capital, pulling flow away from precious metals. Silver, carrying industrial and monetary characteristics, is doubly exposed — softer risk appetite hits its monetary premium while no fresh industrial demand catalyst offsets the selling.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-20T04:35:09.972Z",
+    "pubDateIST": "20 Jun 2026, 10:05"
+  },
+  {
+    "id": "2026-06-20-10-07-mcx-crude-surges-3-23-to-7282-bbl-as-ene",
+    "title": "MCX Crude surges 3.23% to ₹7282/bbl as energy complex diverges from subdued metals",
+    "summary": "The 3.23% crude advance reflects a risk-premium insertion mechanism — energy markets are repricing supply disruption probability faster than metals can absorb the dollar-strength signal. When crude leads without broad commodity confirmation, the move typically reflects geopolitical or supply-side impulse rather than demand-driven reflation.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-20T04:37:01.330Z",
+    "pubDateIST": "20 Jun 2026, 10:07"
+  },
+  {
     "id": "2026-06-20-05-12-mcx-gold-slides-1-39-to-147-239-as-crude",
     "title": "MCX Gold slides 1.39% to ₹147,239 as crude surge redirects capital away from metals",
     "summary": "The mechanism here is risk-rotation, not safe-haven demand collapse. Crude's 3.23% rally at ₹7,282/bbl signals a supply-shock or geopolitical risk premium being priced into energy — capital that might otherwise park in gold is flowing toward energy-linked trades this session.",
