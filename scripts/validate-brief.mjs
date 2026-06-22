@@ -95,9 +95,25 @@ for (const [key, c] of Object.entries(briefComex)) {
     snapshotNumbers.push({ key: `comex.${key}.price`, value: c.price });
 }
 
+// Pre-build a set of text positions that follow a historical-delta phrase
+// (e.g. "₹2,834 decline", "fell ₹602", "down ₹1,200"). These are change amounts,
+// not price levels, so they don't need to match a snapshot value.
+const DELTA_PREFIX = /(?:fell|dropped|declined?|gained?|rose|climbed|slid|lost|up|down|change(?:d)?\s*(?:by)?|move(?:d)?\s*(?:by)?|(?:yesterday'?s?|prior|last session'?s?)\s+\w*)\s*(?:by\s*)?$/i;
+const DELTA_SUFFIX = /^\s*(?:decline|fall|drop|gain|rise|move|selloff|correction|recovery|change|appreciation|depreciation)/i;
+const historicalDeltaPositions = new Set();
+for (const m of brief.matchAll(moneyRe)) {
+  const before = brief.slice(Math.max(0, m.index - 60), m.index);
+  const after  = brief.slice(m.index + m[0].length, m.index + m[0].length + 40);
+  if (DELTA_PREFIX.test(before) || DELTA_SUFFIX.test(after)) {
+    historicalDeltaPositions.add(m.index);
+  }
+}
+
 for (const m of brief.matchAll(moneyRe)) {
   const val = parseFloat(m[1].replace(/,/g, ""));
   if (!Number.isFinite(val) || val < IGNORE_BELOW) continue;
+  // Skip numbers that are historical delta amounts (change values, not price levels)
+  if (historicalDeltaPositions.has(m.index)) continue;
   const near = snapshotNumbers.some(
     (s) => Math.abs(val - s.value) / s.value <= TOLERANCE
   );
