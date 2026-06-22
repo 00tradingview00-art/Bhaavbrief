@@ -27,12 +27,15 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
       })
       const data = await res.json()
       if (data.success) {
+        document.cookie = 'bb_sub=1; max-age=31536000; path=/; SameSite=Lax'
         setStatus('success')
         setMessage(data.message ?? 'You\'re in! First brief at 9:30 AM.')
         setEmail('')
         ph?.capture('subscribe_success', { location: loc })
         ph?.identify(email.trim())
         trackSubscribe(loc)
+        // Reload so the server reads the cookie and serves the full brief
+        if (loc === 'brief_gate') setTimeout(() => window.location.reload(), 1200)
       } else {
         setStatus('error')
         setMessage(data.error ?? 'Something went wrong. Try again.')

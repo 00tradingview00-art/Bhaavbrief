@@ -1,4 +1,5 @@
 import { notFound, redirect } from 'next/navigation'
+import { cookies }            from 'next/headers'
 import { Metadata }           from 'next'
 import Link                   from 'next/link'
 import { MDXRemote }          from 'next-mdx-remote/rsc'
@@ -16,7 +17,7 @@ const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Natural Gas': { slug: 'natural-gas', label: 'MCX Natural Gas' },
 }
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://bhaavbrief.in'
 
@@ -104,7 +105,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
 
   const { prev, next } = getPrevNextBriefs(brief.urlSlug)
-  const { free: freeContent, hasGate } = splitBriefContent(brief.content)
+  const cookieStore = await cookies()
+  const isSubscriber = cookieStore.get('bb_sub')?.value === '1'
+  const { free: freeContent, hasGate: rawHasGate } = splitBriefContent(brief.content)
+  const hasGate = rawHasGate && !isSubscriber
 
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
