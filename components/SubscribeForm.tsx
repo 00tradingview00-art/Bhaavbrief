@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { trackSubscribe, trackEvent } from '@/lib/analytics'
 
-export default function SubscribeForm({ compact = false, location }: { compact?: boolean; location?: string }) {
+export default function SubscribeForm({ compact = false, location, onSuccess }: { compact?: boolean; location?: string; onSuccess?: () => void }) {
   const [email,   setEmail]   = useState('')
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
@@ -34,8 +34,7 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
         ph?.capture('subscribe_success', { location: loc })
         ph?.identify(email.trim())
         trackSubscribe(loc)
-        // Reload so the server reads the cookie and serves the full brief
-        if (loc === 'brief_gate') setTimeout(() => window.location.reload(), 1200)
+        onSuccess?.()
       } else {
         setStatus('error')
         setMessage(data.error ?? 'Something went wrong. Try again.')

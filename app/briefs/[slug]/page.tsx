@@ -1,10 +1,10 @@
 import { notFound, redirect } from 'next/navigation'
-import { cookies }            from 'next/headers'
 import { Metadata }           from 'next'
 import Link                   from 'next/link'
 import { MDXRemote }          from 'next-mdx-remote/rsc'
 import remarkGfm              from 'remark-gfm'
 import SubscribeForm          from '@/components/SubscribeForm'
+import BriefGate             from '@/components/BriefGate'
 import CopyLinkButton         from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 import { getBriefArcs } from '@/lib/arcs'
@@ -17,7 +17,7 @@ const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Natural Gas': { slug: 'natural-gas', label: 'MCX Natural Gas' },
 }
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 const BASE_URL = 'https://bhaavbrief.in'
 
@@ -76,16 +76,20 @@ export async function generateStaticParams() {
   })
 }
 
-function splitBriefContent(content: string): { free: string; hasGate: boolean } {
+function splitBriefContent(content: string): { free: string; locked: string; hasGate: boolean } {
   const lines = content.split('\n')
   let h2Count = 0
   for (let i = 0; i < lines.length; i++) {
     if (/^## /.test(lines[i])) {
       h2Count++
-      if (h2Count === 3) return { free: lines.slice(0, i).join('\n'), hasGate: true }
+      if (h2Count === 3) return {
+        free:    lines.slice(0, i).join('\n'),
+        locked:  lines.slice(i).join('\n'),
+        hasGate: true,
+      }
     }
   }
-  return { free: content, hasGate: false }
+  return { free: content, locked: '', hasGate: false }
 }
 
 const TAG_STYLES: Record<string, React.CSSProperties> = {
@@ -105,10 +109,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
 
   const { prev, next } = getPrevNextBriefs(brief.urlSlug)
-  const cookieStore = await cookies()
-  const isSubscriber = cookieStore.get('bb_sub')?.value === '1'
-  const { free: freeContent, hasGate: rawHasGate } = splitBriefContent(brief.content)
-  const hasGate = rawHasGate && !isSubscriber
+  const { free: freeContent, locked: lockedContent, hasGate } = splitBriefContent(brief.content)
 
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
@@ -270,7 +271,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <MDXRemote source={freeContent} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
               </div>
               {hasGate && (
-                <div aria-hidden style={{
+                <div id="brief-fade" aria-hidden style={{
                   position: 'absolute', bottom: 0, left: 0, right: 0,
                   height: 110,
                   background: 'linear-gradient(transparent, #FAFAF6)',
@@ -279,36 +280,11 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               )}
             </div>
 
+            {hasGate && <BriefGate />}
+
             {hasGate && (
-              <div style={{
-                margin: '1.5rem 0 2rem',
-                border: '1px solid rgba(181,134,42,0.35)',
-                borderLeft: '3px solid var(--gold)',
-                background: 'var(--gold-pale)',
-                borderRadius: '0 4px 4px 0',
-                padding: '1.5rem 1.75rem',
-              }}>
-                <div style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 10,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: 'var(--gold)', fontWeight: 700, marginBottom: 10,
-                }}>
-                  Subscriber exclusive
-                </div>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
-                  fontWeight: 700, lineHeight: 1.25,
-                  color: 'var(--ink)', margin: '0 0 0.5rem',
-                }}>
-                  Get the full analysis before 9:30 AM market open
-                </h3>
-                <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.65, margin: '0 0 1.25rem' }}>
-                  The rest of this brief — what the market is actually saying, historical context, what kills the trade, and who is affected — lands in your inbox before MCX opens. Not on this page.
-                </p>
-                <div style={{ maxWidth: 380 }}>
-                  <SubscribeForm compact location="brief_gate" />
-                </div>
+              <div id="brief-locked" className="brief-prose" style={{ display: 'none' }}>
+                <MDXRemote source={lockedContent} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
               </div>
             )}
 
