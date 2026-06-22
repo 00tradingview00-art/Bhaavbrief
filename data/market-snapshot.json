@@ -1,120 +1,132 @@
 {
-  "generatedAt": "2026-06-22T21:33:40.586Z",
-  "generatedAtIST": "2026-06-23 03:03 IST",
-  "source": "kite+yahoo",
+  "generatedAt": "2026-06-22T23:25:05.108Z",
+  "generatedAtIST": "2026-06-23 04:55 IST",
+  "source": "stale-cache+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 148182,
+      "price": 148256,
       "prevClose": 147203,
-      "changePct": 0.6651,
-      "unit": "INR/10g"
+      "changePct": 0.7153,
+      "unit": "INR/10g",
+      "stale": true
     },
     "MCX_SILVER": {
-      "price": 234465,
+      "price": 234891,
       "prevClose": 233185,
-      "changePct": 0.5489,
-      "unit": "INR/kg"
+      "changePct": 0.7316,
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_CRUDE": {
-      "price": 6971,
-      "prevClose": 6983,
-      "changePct": -0.1718,
-      "unit": "INR/bbl"
+      "price": 6991,
+      "prevClose": 7262,
+      "changePct": -3.7318,
+      "unit": "INR/bbl",
+      "stale": true
     },
     "MCX_COPPER": {
-      "price": 1316,
+      "price": 1315.1,
       "prevClose": 1309.6,
-      "changePct": 0.4887,
-      "unit": "INR/kg"
+      "changePct": 0.42,
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_NATGAS": {
-      "price": 309.9,
-      "prevClose": 310,
-      "changePct": -0.0323,
-      "unit": "INR/mmBtu"
+      "price": 310.4,
+      "prevClose": 302.1,
+      "changePct": 2.7474,
+      "unit": "INR/mmBtu",
+      "stale": true
     },
     "USDINR": {
       "price": 94.67,
-      "prevClose": 94.34,
-      "changePct": 0.3478,
+      "prevClose": 94.33,
+      "changePct": 0.358,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4172.9,
-      "prevClose": 4245.9,
-      "changePct": -1.7193,
+      "price": 4209.2,
+      "prevClose": 4202.7,
+      "changePct": 0.1547,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 64.91,
-      "prevClose": 66.32,
-      "changePct": -2.1246,
+      "price": 65.12,
+      "prevClose": 65.58,
+      "changePct": -0.706,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 76.54,
-      "prevClose": 75.85,
-      "changePct": 0.9097,
+      "price": 74.17,
+      "prevClose": 73.86,
+      "changePct": 0.4197,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 80.59,
-      "prevClose": 79.85,
-      "changePct": 0.9267,
+      "price": 78.15,
+      "prevClose": 77.9,
+      "changePct": 0.3209,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
-      "price": 3.25,
+      "price": 3.27,
       "prevClose": 3.28,
-      "changePct": -0.8852,
+      "changePct": -0.427,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
       "price": 370.15,
       "prevClose": 366.5,
       "changePct": 0.9959,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_LEAD": {
       "price": 204.05,
       "prevClose": 203.8,
       "changePct": 0.1227,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_ALUMINIUM": {
       "price": 354.4,
       "prevClose": 357.85,
       "changePct": -0.9641,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_NICKEL": {
       "price": 1707,
       "prevClose": 1696.9,
       "changePct": 0.5952,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "EURINR": {
       "price": 108.5,
       "prevClose": 108.44,
       "changePct": 0.0553,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     },
     "GBPINR": {
       "price": 125.28,
       "prevClose": 125.04,
       "changePct": 0.1919,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     },
     "JPYINR": {
       "price": 58.65,
       "prevClose": 59.055,
       "changePct": -0.6858,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     }
   },
   "derived": {
-    "importParityGoldINR": 127011,
-    "mcxComexGoldSpreadPct": 16.67,
-    "goldSilverRatio": 64.3
+    "importParityGoldINR": 128116,
+    "mcxComexGoldSpreadPct": 15.72,
+    "goldSilverRatio": 64.6
   }
 }
