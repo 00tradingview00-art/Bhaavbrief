@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-22T09:25:15.203Z",
+  "generatedAt": "2026-06-22T09:25:16.438Z",
   "generatedAtIST": "2026-06-22 14:55 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -22,9 +22,9 @@
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1319.7,
+      "price": 1320,
       "prevClose": 1309.6,
-      "changePct": 0.7712,
+      "changePct": 0.7941,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
@@ -40,9 +40,9 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4224.2,
+      "price": 4224.1,
       "prevClose": 4245.9,
-      "changePct": -0.5111,
+      "changePct": -0.5134,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -113,7 +113,7 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 128613,
+    "importParityGoldINR": 128610,
     "mcxComexGoldSpreadPct": 15.81,
     "goldSilverRatio": 63.6
   }
