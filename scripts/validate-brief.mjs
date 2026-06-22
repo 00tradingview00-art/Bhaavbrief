@@ -225,13 +225,13 @@ async function semanticCheck() {
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n" +
             "• USD/INR and other FX rates: a discrepancy of ≤0.20 INR between the brief text and the snapshot (e.g. 94.66 vs 94.73) is normal API-source rounding — do NOT flag as block.\n\n" +
             "Flag as 'block' ONLY:\n" +
-            "1. The SAME instrument cited at two genuinely different prices within today's body text — EXCEPT: rounding differences of ≤$1 for gold/silver (e.g. $4,176.90 vs $4,177 are the same price rounded differently — NOT a block), ≤$0.10 for crude oil, ≤$0.01 for copper/natgas\n" +
+            "1. The SAME instrument cited at two genuinely different CURRENT prices within today's body text — EXCEPT: (a) rounding differences of ≤$1 for gold/silver, ≤$0.10 for crude oil, ≤$0.01 for copper/natgas; (b) one price is the current market price and the other is explicitly labelled as a support level, resistance level, target, or price 'to watch' — a support level differing from the current price by up to 5% is legitimate technical analysis, NOT a contradiction\n" +
             "2. Event timing contradictions (e.g. 'CPI due tonight' vs 'CPI tomorrow'; wrong month label)\n" +
             "3. Headline direction word (surge/slump) directly contradicting the same instrument's data in the body\n" +
             "4. A percentage that doesn't match its own explicit from/to prices (e.g. '5% fall from $100 to $98' — 5% is wrong)\n" +
             "Flag as 'warn' only:\n" +
             "5. A specific rupee or dollar number stated as fact that genuinely contradicts another number in the same brief\n" +
-            "Do NOT flag: MCX vs COMEX % differences, intraday ranges, moving averages, weekly/monthly highs/lows, COMEX USD prices, historical vs today comparisons, rounding differences ≤0.05%, style/tone.",
+            "Do NOT flag: MCX vs COMEX % differences, intraday ranges, moving averages, weekly/monthly highs/lows, COMEX USD prices, historical vs today comparisons, rounding differences ≤0.05%, support/resistance levels that differ from the current price by ≤5%, style/tone.",
         },
       ],
     }),
