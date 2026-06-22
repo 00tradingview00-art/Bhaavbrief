@@ -95,11 +95,22 @@ for (const [key, c] of Object.entries(briefComex)) {
     snapshotNumbers.push({ key: `comex.${key}.price`, value: c.price });
 }
 
+// Add derived spread/premium values to the acceptable pool — the AI often calculates
+// MCX Gold premium over import parity (MCX Gold - importParityGoldINR) and similar
+// cross-commodity spreads. These are real values not in the raw snapshot.
+const mcxGold = snapshot.instruments.MCX_GOLD?.price ?? 0;
+const importParity = snapshot.derived?.importParityGoldINR ?? 0;
+if (mcxGold > 0 && importParity > 0) {
+  const premium = Math.abs(mcxGold - importParity);
+  if (premium > IGNORE_BELOW)
+    snapshotNumbers.push({ key: "derived.mcxGoldImportPremium", value: premium });
+}
+
 // Pre-build a set of text positions that follow a historical-delta phrase
-// (e.g. "₹2,834 decline", "fell ₹602", "down ₹1,200"). These are change amounts,
-// not price levels, so they don't need to match a snapshot value.
-const DELTA_PREFIX = /(?:fell|dropped|declined?|gained?|rose|climbed|slid|lost|up|down|change(?:d)?\s*(?:by)?|move(?:d)?\s*(?:by)?|(?:yesterday'?s?|prior|last session'?s?)\s+\w*)\s*(?:by\s*)?$/i;
-const DELTA_SUFFIX = /^\s*(?:decline|fall|drop|gain|rise|move|selloff|correction|recovery|change|appreciation|depreciation)/i;
+// (e.g. "₹2,834 decline", "fell ₹602", "down ₹1,200", "from ₹2,834", "after ₹500 gain").
+// These are change amounts, not price levels, so they don't need to match a snapshot value.
+const DELTA_PREFIX = /(?:fell|dropped|declined?|gained?|rose|climbed|slid|lost|up|down|from|after|since|following|over|change(?:d)?\s*(?:by)?|move(?:d)?\s*(?:by)?|(?:yesterday'?s?|prior|last.session'?s?|previous.session'?s?|prior.session'?s?)\s+\w*)\s*(?:by\s*)?$/i;
+const DELTA_SUFFIX = /^\s*(?:decline|fall|drop|gain|rise|move|selloff|correction|recovery|change|appreciation|depreciation|revaluation|cushion|premium|spread|above|below)/i;
 const historicalDeltaPositions = new Set();
 for (const m of brief.matchAll(moneyRe)) {
   const before = brief.slice(Math.max(0, m.index - 60), m.index);
