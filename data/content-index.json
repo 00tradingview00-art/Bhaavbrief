@@ -1,5 +1,24 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-22-mcx-nat-gas-jumps-2-65-to-310-crude-slides",
+    "href": "/articles/2026-06-22-mcx-nat-gas-jumps-2-65-to-310-crude-slides",
+    "title": "MCX Nat Gas Jumps 2.65% to ₹310; Crude Slides",
+    "description": "MCX Natural Gas surges 2.65% to ₹310/mmBtu as Henry Hub climbs to $3.29. MCX Crude drops 1.09% to ₹7183/bbl. Morning session divergence explained.",
+    "excerpt": "MCX Natural Gas is the clear session leader, up 2.65% to ₹310.10/mmBtu, while MCX Crude retreats 1.09% to ₹7,183/bbl — two energy contracts moving in opposite directions in the same session. Henry Hub",
+    "date": "2026-06-22T03:31:18.546Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 310
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-06-19-hawk-scan-mcx-silver-plunges-3-11-trades-near-2-30-041-kg",
     "href": "/articles/2026-06-19-hawk-scan-mcx-silver-plunges-3-11-trades-near-2-30-041-kg",
