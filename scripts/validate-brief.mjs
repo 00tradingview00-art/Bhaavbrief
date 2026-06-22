@@ -223,7 +223,7 @@ async function semanticCheck() {
             "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
             "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n" +
-            "• USD/INR and other FX rates: a discrepancy of ≤0.20 INR between the brief text and the snapshot (e.g. 94.66 vs 94.73) is normal API-source rounding — do NOT flag as block.\n\n" +
+            "• USD/INR and other FX rates: ANY discrepancy of ≤0.20 INR between the brief and the snapshot is acceptable — this applies regardless of whether the value is labeled 'Friday close', 'prior session', 'prevClose', 'yesterday', etc. A difference of ₹0.03 or ₹0.05 or ₹0.10 is NEVER a block for FX. Only flag FX as block if discrepancy exceeds ₹0.20.\n\n" +
             "Flag as 'block' ONLY:\n" +
             "1. The SAME instrument cited at two genuinely different CURRENT prices within today's body text — EXCEPT: (a) rounding differences of ≤$1 for gold/silver, ≤$0.10 for crude oil, ≤$0.01 for copper/natgas; (b) one price is the current market price and the other is explicitly labelled as a support level, resistance level, target, or price 'to watch' — a support level differing from the current price by up to 5% is legitimate technical analysis, NOT a contradiction\n" +
             "2. Event timing contradictions (e.g. 'CPI due tonight' vs 'CPI tomorrow'; wrong month label)\n" +
