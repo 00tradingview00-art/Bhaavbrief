@@ -76,10 +76,10 @@ export default function SubscribeForm({ compact = false, location }: { compact?:
             Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
-            Know your bhaav. Every morning.
+            Get the call before 9:30 AM market open
           </div>
           <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
-            Join traders, investors and merchants who track Indian commodity markets. Every weekday at 9:30 AM.
+            Full MCX analysis — gold, crude, silver, what to watch — in your inbox before market opens. Every weekday.
           </p>
         </>
       )}

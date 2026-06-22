@@ -75,6 +75,18 @@ export async function generateStaticParams() {
   })
 }
 
+function splitBriefContent(content: string): { free: string; hasGate: boolean } {
+  const lines = content.split('\n')
+  let h2Count = 0
+  for (let i = 0; i < lines.length; i++) {
+    if (/^## /.test(lines[i])) {
+      h2Count++
+      if (h2Count === 3) return { free: lines.slice(0, i).join('\n'), hasGate: true }
+    }
+  }
+  return { free: content, hasGate: false }
+}
+
 const TAG_STYLES: Record<string, React.CSSProperties> = {
   energy:  { background: '#FFF7E0', color: '#996600', borderColor: '#D4A830' },
   metals:  { background: '#EAF5EE', color: '#1E6630', borderColor: '#5AAA70' },
@@ -92,6 +104,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
 
   const { prev, next } = getPrevNextBriefs(brief.urlSlug)
+  const { free: freeContent, hasGate } = splitBriefContent(brief.content)
 
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
@@ -248,11 +261,54 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               </div>
             )}
 
-            <div className="brief-prose" itemProp="articleBody">
-              <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+            <div style={{ position: 'relative' }}>
+              <div className="brief-prose" itemProp="articleBody">
+                <MDXRemote source={freeContent} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+              </div>
+              {hasGate && (
+                <div aria-hidden style={{
+                  position: 'absolute', bottom: 0, left: 0, right: 0,
+                  height: 110,
+                  background: 'linear-gradient(transparent, #FAFAF6)',
+                  pointerEvents: 'none',
+                }} />
+              )}
             </div>
 
-            <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            {hasGate && (
+              <div style={{
+                margin: '1.5rem 0 2rem',
+                border: '1px solid rgba(181,134,42,0.35)',
+                borderLeft: '3px solid var(--gold)',
+                background: 'var(--gold-pale)',
+                borderRadius: '0 4px 4px 0',
+                padding: '1.5rem 1.75rem',
+              }}>
+                <div style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 10,
+                  letterSpacing: '0.1em', textTransform: 'uppercase',
+                  color: 'var(--gold)', fontWeight: 700, marginBottom: 10,
+                }}>
+                  Subscriber exclusive
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)',
+                  fontWeight: 700, lineHeight: 1.25,
+                  color: 'var(--ink)', margin: '0 0 0.5rem',
+                }}>
+                  Get the full analysis before 9:30 AM market open
+                </h3>
+                <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.65, margin: '0 0 1.25rem' }}>
+                  The rest of this brief — what the market is actually saying, historical context, what kills the trade, and who is affected — lands in your inbox before MCX opens. Not on this page.
+                </p>
+                <div style={{ maxWidth: 380 }}>
+                  <SubscribeForm compact location="brief_gate" />
+                </div>
+              </div>
+            )}
+
+            <div style={{ marginTop: hasGate ? 0 : '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
               <CopyLinkButton url={url} title={brief.title} />
             </div>

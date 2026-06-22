@@ -581,7 +581,7 @@ export default async function HomePage() {
                 fontSize: 16, fontWeight: 500,
                 color: '#fff', margin: 0, lineHeight: 1.35,
               }}>
-                Know your bhaav. Every morning.
+                Get today&apos;s call before market open.
               </p>
             </div>
             <div style={{ padding: '18px 20px' }}>
@@ -589,7 +589,7 @@ export default async function HomePage() {
                 fontSize: 15, color: 'var(--ink-3)',
                 lineHeight: 1.65, marginBottom: 14,
               }}>
-                Daily commodity intelligence for traders, investors and merchants. Every weekday at 9:30 AM.
+                Full MCX analysis — gold, crude, silver — in your inbox by 9:30 AM. Not waiting on the site.
               </p>
               <SubscribeForm compact location="footer" />
             </div>
