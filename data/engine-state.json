@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 148467,
-    "silver": 237986,
-    "crude": 7141,
-    "copper": 1316.5,
-    "natgas": 309.9,
+    "gold": 148710,
+    "silver": 238396,
+    "crude": 7164,
+    "copper": 1318.35,
+    "natgas": 312.1,
     "usdinr": 94.33
   },
-  "lastChecked": "2026-06-22T06:31:29.331Z",
+  "lastChecked": "2026-06-22T07:19:35.787Z",
   "lastCirculars": {
     "sebi": "SEBI eases margin burden for commodity traders through Early Pay-in clarificatio",
     "mcx": null,
