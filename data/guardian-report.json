@@ -1,15 +1,9 @@
 {
-  "generatedAt": "2026-06-22T04:04:07.328Z",
-  "overallStatus": "yellow",
+  "generatedAt": "2026-06-23T03:25:47.493Z",
+  "overallStatus": "green",
   "health": {
-    "status": "yellow",
-    "issues": [
-      {
-        "level": "yellow",
-        "component": "content/briefs",
-        "message": "No brief dated 2026-06-22 or 2026-06-21"
-      }
-    ]
+    "status": "green",
+    "issues": []
   },
   "audit": {
     "learnIssues": [],
