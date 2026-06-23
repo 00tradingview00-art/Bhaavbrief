@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 146569,
-    "silver": 226993,
-    "crude": 6922,
-    "copper": 1291.15,
-    "natgas": 302.2,
+    "gold": 146571,
+    "silver": 227000,
+    "crude": 6955,
+    "copper": 1288.75,
+    "natgas": 303,
     "usdinr": 94.74
   },
-  "lastChecked": "2026-06-23T14:31:27.075Z",
+  "lastChecked": "2026-06-23T15:31:06.066Z",
   "lastCirculars": {
     "sebi": "SEBI eases margin burden for commodity traders through Early Pay-in clarificatio",
     "mcx": null,
@@ -33,6 +33,6 @@
   "lastGeoNews": {
     "iran": "Oil Surges After Hostilities Between Iran and Israel Escalate - The New York Tim",
     "russia": "Trump hints US could resume oil sanctions on Russia as G7 ups pressure on Kremli",
-    "mideast": "Three Saudi-flagged supertankers sail through Hormuz after Iran deal signed, dat"
+    "mideast": "Gulf oil tanker rates nearly double as Middle East producers ramp up exports - R"
   }
 }
