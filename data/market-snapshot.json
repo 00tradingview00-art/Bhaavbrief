@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-23T07:01:40.544Z",
+  "generatedAt": "2026-06-23T07:01:38.356Z",
   "generatedAtIST": "2026-06-23 12:31 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -10,9 +10,9 @@
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 226303,
+      "price": 226296,
       "prevClose": 234310,
-      "changePct": -3.4173,
+      "changePct": -3.4203,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
