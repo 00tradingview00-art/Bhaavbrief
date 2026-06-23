@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-23-mcx-silver-drops-2-84-to-228230-gold-follows",
+    "href": "/articles/2026-06-23-mcx-silver-drops-2-84-to-228230-gold-follows",
+    "title": "MCX Silver Drops 2.84% to ₹228230 — Gold Follows",
+    "description": "MCX Silver crashes 2.84% to ₹228230/kg at 09:49 am IST. Gold falls 1.02% to ₹146750/10g. What's driving the morning session selloff.",
+    "excerpt": "MCX Silver is the session's sharpest mover — down 2.84% to ₹228,230/kg at 09:49 am IST, with COMEX silver off 2.59% at $63.12/oz. The selloff follows overnight risk-off positioning as COMEX speculativ",
+    "date": "2026-06-23T04:19:01.894Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Nat Gas",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 228230
+  },
+  {
     "type": "brief",
     "slug": "edition-049",
     "href": "/briefs/edition-049",
