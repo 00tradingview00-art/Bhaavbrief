@@ -1,47 +1,24 @@
 {
   "lastPrices": {
-    "gold": 146571,
-    "silver": 227000,
-<<<<<<< Updated upstream
-    "crude": 6955,
-    "copper": 1288.75,
-    "natgas": 303,
+    "gold": 146655,
+    "silver": 227219,
+    "crude": 6963,
+    "copper": 1288.8,
+    "natgas": 302.3,
     "usdinr": 94.74
   },
-  "lastChecked": "2026-06-23T15:31:06.066Z",
-=======
-    "crude": 6956,
-    "copper": 1288.45,
-    "natgas": 303,
-    "usdinr": 94.74
-  },
-  "lastChecked": "2026-06-23T15:31:37.171Z",
->>>>>>> Stashed changes
+  "lastChecked": "2026-06-23T16:08:14.256Z",
   "lastCirculars": {
-    "sebi": "SEBI eases margin burden for commodity traders through Early Pay-in clarificatio",
+    "sebi": null,
     "mcx": null,
     "rbi": null,
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-06-12",
-    "value": "383"
+    "period": null,
+    "value": null
   },
-  "articlesToday": [
-    "2026-06-23/2026-06-23-mcx-silver-drops-2-84-to-228230-gold-follows"
-  ],
-  "lastArticleAt": "2026-06-23T04:19:15.318Z",
-  "lastArticleTime": "2026-06-04T01:00:00.000Z",
-  "lastCoveredAt": {
-    "natgas": "2026-06-22T03:31:30.837Z",
-    "crude": "2026-06-18T07:24:03.727Z",
-    "silver": "2026-06-23T04:19:15.318Z",
-    "copper": "2026-06-10T14:39:10.473Z",
-    "gold": "2026-06-18T07:24:03.727Z"
-  },
-  "lastGeoNews": {
-    "iran": "Oil Surges After Hostilities Between Iran and Israel Escalate - The New York Tim",
-    "russia": "Trump hints US could resume oil sanctions on Russia as G7 ups pressure on Kremli",
-    "mideast": "Gulf oil tanker rates nearly double as Middle East producers ramp up exports - R"
-  }
+  "lastGeoNews": {},
+  "articlesToday": [],
+  "lastArticleAt": null
 }
