@@ -1,13 +1,24 @@
 {
+<<<<<<< Updated upstream
   "ts": "2026-06-23T15:31:02.940Z",
+=======
+  "ts": "2026-06-23T15:31:34.619Z",
+>>>>>>> Stashed changes
   "gold": 146571,
   "goldPct": -1.0444375430400086,
   "silver": 227000,
   "silverPct": -3.1197985574666043,
+<<<<<<< Updated upstream
   "crude": 6955,
   "crudePct": -0.4009737934984964,
   "copper": 1288.75,
   "copperPct": -2.0185509009351446,
+=======
+  "crude": 6956,
+  "crudePct": -0.38665330087355004,
+  "copper": 1288.45,
+  "copperPct": -2.0413593856914702,
+>>>>>>> Stashed changes
   "natgas": 303,
   "natgasPct": -2.258064516129032
 }

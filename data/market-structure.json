@@ -87,7 +87,11 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹35–49K",
+<<<<<<< Updated upstream
     "contractValue": "~₹7.0 lakh at ₹6,955/bbl",
+=======
+    "contractValue": "~₹7.0 lakh at ₹6,956/bbl",
+>>>>>>> Stashed changes
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -131,7 +135,11 @@
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
     "typicalMargin": "₹1.6–2.3 lakh",
+<<<<<<< Updated upstream
     "contractValue": "~₹32.2 lakh at ₹1,288.75/kg",
+=======
+    "contractValue": "~₹32.2 lakh at ₹1,288.5/kg",
+>>>>>>> Stashed changes
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
     "keyBodies": [
@@ -298,8 +306,13 @@
     "unit": "₹ per kg",
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
+<<<<<<< Updated upstream
     "typicalMargin": "₹1.2–1.7 lakh",
     "contractValue": "~₹25.0 lakh at ₹1,666.6/kg",
+=======
+    "typicalMargin": "₹1.3–1.8 lakh",
+    "contractValue": "~₹25.0 lakh at ₹1,666.8/kg",
+>>>>>>> Stashed changes
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
     "keyBodies": [

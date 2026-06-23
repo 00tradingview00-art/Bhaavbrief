@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-23T15:31:02.349Z",
+  "generatedAt": "2026-06-23T15:31:32.840Z",
   "generatedAtIST": "2026-06-23 21:01 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,15 +16,15 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 6955,
+      "price": 6956,
       "prevClose": 6983,
-      "changePct": -0.401,
+      "changePct": -0.3867,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1288.75,
+      "price": 1288.5,
       "prevClose": 1315.3,
-      "changePct": -2.0186,
+      "changePct": -2.0376,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4146.4,
+      "price": 4144.8,
       "prevClose": 4181.9,
-      "changePct": -0.8489,
+      "changePct": -0.8872,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
       "price": 62.01,
       "prevClose": 65.53,
-      "changePct": -5.3673,
+      "changePct": -5.3749,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 73.17,
+      "price": 73.19,
       "prevClose": 74.82,
-      "changePct": -2.2053,
+      "changePct": -2.1786,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 76.86,
+      "price": 76.89,
       "prevClose": 77.9,
-      "changePct": -1.335,
+      "changePct": -1.2965,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.23,
       "prevClose": 3.25,
-      "changePct": -0.6763,
+      "changePct": -0.7378,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -88,9 +88,9 @@
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1666.6,
+      "price": 1666.8,
       "prevClose": 1705,
-      "changePct": -2.2522,
+      "changePct": -2.2405,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -113,8 +113,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 126284,
-    "mcxComexGoldSpreadPct": 16.06,
-    "goldSilverRatio": 66.9
+    "importParityGoldINR": 126236,
+    "mcxComexGoldSpreadPct": 16.11,
+    "goldSilverRatio": 66.8
   }
 }
