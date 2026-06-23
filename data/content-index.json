@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
+    "href": "/articles/2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
+    "title": "MCX Close 24 Jun 2026: Silver Leads Broad Selloff",
+    "description": "MCX Evening Brief 24 Jun 2026: Silver crashed -3.86% to ₹225260/kg, NatGas fell -3.58%. COMEX silver extends losses at -5.91% in US session.",
+    "excerpt": "title: \"MCX Close 24 Jun 2026: Silver Leads Broad Selloff\" <<<<<<< Updated upstream description: \"MCX Evening Brief 24 Jun 2026 — Silver crashed -3.86% to ₹225260/kg as COMEX fades -5.89%; metals and ",
+    "date": "2026-06-24T20:24:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-06-23-mcx-silver-drops-2-84-to-228230-gold-follows",
     "href": "/articles/2026-06-23-mcx-silver-drops-2-84-to-228230-gold-follows",
     "title": "MCX Silver Drops 2.84% to ₹228230 — Gold Follows",
