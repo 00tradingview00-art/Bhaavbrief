@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-23-09-42-iranian-crude-waiver-signals-demand-reli",
+    "title": "Iranian crude waiver signals demand relief; MCX crude steady at 7011 despite geopolitical premium unwind",
+    "summary": "US sanctions waiver on Iranian oil to Indian refiners removes a supply constraint that has been pricing geopolitical risk into the crude complex. MCX Crude Oil at 7011/bbl reflects muted immediate reaction because Indian refiners have already been accessing Iranian barrels through secondary channels; the waiver merely formalizes existing flows and reduces premium paid for sanctions-circumvention logistics.",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-23T04:12:44.939Z",
+    "pubDateIST": "23 Jun 2026, 09:42"
+  },
+  {
+    "id": "2026-06-23-09-44-mcx-nat-gas-1-23-at-306-mmbtu-as-cross-a",
+    "title": "MCX Nat Gas -1.23% at ₹306/mmBtu as cross-asset weakness spreads across complex",
+    "summary": "Silver's -2.6% sell-off is cascading into energy contracts via deleveraging mechanics. Risk-off sentiment is forcing commodity funds to reduce broad exposures, pulling Natural Gas lower despite seasonal summer demand strength. MCX Nat Gas at ₹306.20/mmBtu faces support near ₹302 (recent session lows) and resistance at ₹312 (52-week average band).",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-23T04:14:40.482Z",
+    "pubDateIST": "23 Jun 2026, 09:44"
+  },
+  {
+    "id": "2026-06-23-09-46-mcx-silver-crashes-2-59-to-228250-kg-glo",
+    "title": "MCX Silver crashes 2.59% to ₹228250/kg—global softness overwhelms domestic support",
+    "summary": "Silver's -2.59% retreat anchors today's commodity weakness. The mechanism: global silver futures have softened overnight, pressuring MCX import parity downward despite INR stability at ₹94.67. With international spot around USD 28.50/oz, import parity calculates to approximately ₹227000 (28.50 × 94.67 × 0.95 duty factor), placing MCX silver at a modest premium—suggesting local liquidation rather than fresh demand.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-23T04:16:35.869Z",
+    "pubDateIST": "23 Jun 2026, 09:46"
+  },
+  {
     "id": "2026-06-23-05-47-mcx-silver-0-73-to-234-891-kg-as-crude-c",
     "title": "MCX Silver +0.73% to ₹234,891/kg as crude collapses—safe-haven bid reshaping risk appetite",
     "summary": "Dollar weakness and broad risk-off positioning are driving the cross-asset narrative: crude collapsed -3.7%, triggering safe-haven demand into gold and silver simultaneously. This is a classic reflation + de-risking cocktail—not inflation panic, but portfolio rebalancing away from energy.",
