@@ -90,7 +90,14 @@ jobs:
           git checkout HEAD -- data/market-snapshot.json 2>/dev/null || true
           git stash
           git pull --rebase origin main
-          git stash pop || true
+          git stash pop || {
+            echo "Stash pop conflict — auto-resolving data JSON files with our version..."
+            git diff --name-only --diff-filter=U | grep '^data/.*\.json$' | while read f; do
+              git checkout --theirs "$f" 2>/dev/null || true
+              git add "$f" 2>/dev/null || true
+            done
+            git stash drop 2>/dev/null || true
+          }
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ data/content-index.json
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true

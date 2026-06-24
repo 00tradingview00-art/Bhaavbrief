@@ -62,7 +62,14 @@ function fmtMargin(low, high) {
 let snapshot, specs, structure
 try { snapshot  = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'))  } catch { console.log('No snapshot — skipping'); process.exit(0) }
 try { specs     = JSON.parse(fs.readFileSync(SPECS_FILE, 'utf8'))     } catch { specs = {} }
-try { structure = JSON.parse(fs.readFileSync(STRUCTURE_FILE, 'utf8')) } catch { console.log('No market-structure.json'); process.exit(0) }
+try {
+  const raw = fs.readFileSync(STRUCTURE_FILE, 'utf8')
+  if (raw.includes('<<<<<<<')) {
+    console.log('market-structure.json has unresolved git conflicts — skipping to avoid corruption')
+    process.exit(0)
+  }
+  structure = JSON.parse(raw)
+} catch { console.log('No market-structure.json'); process.exit(0) }
 
 let updated = 0
 
@@ -107,7 +114,11 @@ for (const [key, map] of Object.entries(COMMODITY_MAP)) {
 }
 
 if (updated > 0) {
-  fs.writeFileSync(STRUCTURE_FILE, JSON.stringify(structure, null, 2), 'utf8')
+  const output = JSON.stringify(structure, null, 2)
+  JSON.parse(output) // validate before touching disk
+  const tmpFile = STRUCTURE_FILE + '.tmp'
+  fs.writeFileSync(tmpFile, output, 'utf8')
+  fs.renameSync(tmpFile, STRUCTURE_FILE) // atomic on same filesystem
   console.log(`Synced ${updated} commodity/ies in market-structure.json`)
 } else {
   console.log('Market prices in sync — no update needed')
