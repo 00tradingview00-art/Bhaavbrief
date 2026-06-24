@@ -45,11 +45,12 @@ const SLUG       = `edition-${String(EDITION).padStart(3, '0')}`
 const OUT_DIR    = join(process.cwd(), 'public/instagram/carousel')
 const BRIEFS_DIR = join(process.cwd(), 'content/briefs')
 
-// Load system fonts
-const FONT_DIRS = ['/usr/share/fonts/truetype/noto', '/usr/share/fonts/', '/System/Library/Fonts']
-for (const dir of FONT_DIRS) {
-  if (existsSync(dir)) { try { GlobalFonts.loadFontsFromDir(dir) } catch {} }
-}
+// Load bundled Inter fonts — Inter has full ₹ glyph (U+20B9) support.
+const BUNDLED_FONTS = join(process.cwd(), 'public/fonts')
+;[
+  [join(BUNDLED_FONTS, 'Inter-Regular.ttf'), 'Inter'],
+  [join(BUNDLED_FONTS, 'Inter-Bold.ttf'),    'Inter'],
+].forEach(([p, fam]) => { if (existsSync(p)) try { GlobalFonts.registerFromPath(p, fam) } catch {} })
 
 // ── Design tokens (same palette as generate-instagram-card.js) ──────────────
 const CREAM  = '#FAFAF6'
@@ -62,9 +63,9 @@ const GREEN  = '#166534'
 const RED    = '#991818'
 const W = 1080, H = 1080, PAD = 72
 
-function serif(size, weight = 'normal') { return `${weight} ${size}px "Noto Serif", Georgia, serif` }
-function sans(size, weight = 'normal')  { return `${weight} ${size}px "Noto Sans", "DM Sans", Arial, sans-serif` }
-function mono(size)                     { return `${size}px "Noto Sans Mono", "Courier New", monospace` }
+function serif(size, weight = 'normal') { return `${weight} ${size}px Inter, Georgia, serif` }
+function sans(size, weight = 'normal')  { return `${weight} ${size}px Inter, Arial, sans-serif` }
+function mono(size)                     { return `${size}px Inter, "Courier New", monospace` }
 
 function wrapText(ctx, text, maxWidth) {
   const words = text.split(' ')
