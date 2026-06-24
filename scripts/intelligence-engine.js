@@ -1079,6 +1079,33 @@ function complianceScan(mdx) {
   return COMPLIANCE_BANNED.filter(w => new RegExp(`\\b${w.replace(/ /g, '\\s+')}\\b`).test(body))
 }
 
+// ── 8b. Ratio Sanity Check ────────────────────────────────────────────────────
+// Catches AI hallucinated ratio values (e.g. stating GSR=84x when COMEX data gives 65x).
+// Non-blocking — logs warnings but does not suppress the article.
+function ratioSanityCheck(mdx, prices) {
+  const warnings = []
+  const body = mdx.split('---').slice(2).join('---')
+
+  if (prices.comexGold > 0 && prices.comexSilver > 0) {
+    const actualGSR = prices.comexGold / prices.comexSilver
+
+    // Match "84x", "~84x", "84:1", "ratio sits near 84", "GSR at 84"
+    const gsrRe = /(?:gold[- ](?:to[- ])?silver\s+ratio|GSR|ratio)[^.]{0,40}?[\s~≈(](\d{2,3}(?:\.\d+)?)\s*[x:×]/gi
+    let m
+    while ((m = gsrRe.exec(body)) !== null) {
+      const stated = parseFloat(m[1])
+      if (Math.abs(stated - actualGSR) > 5) {
+        warnings.push(
+          `GSR stated as ~${stated.toFixed(0)}x but COMEX data gives ${actualGSR.toFixed(1)}x` +
+          ` ($${prices.comexGold?.toFixed(0) ?? '?'}/$${prices.comexSilver?.toFixed(2) ?? '?'})`
+        )
+      }
+    }
+  }
+
+  return warnings
+}
+
 // ── 8. Save Article as MDX ────────────────────────────────────────────────────
 function saveArticle(mdx) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
@@ -1331,6 +1358,12 @@ async function main() {
     console.error(`Compliance scan failed — article suppressed. Found: [${bannedHits.join(', ')}]`)
     saveState(state)
     return
+  }
+
+  const ratioWarnings = ratioSanityCheck(mdx, prices)
+  if (ratioWarnings.length > 0) {
+    console.warn('Ratio sanity warnings (article published — review manually):')
+    ratioWarnings.forEach(w => console.warn(`  ⚠ ${w}`))
   }
 
   const result = saveArticle(mdx)
