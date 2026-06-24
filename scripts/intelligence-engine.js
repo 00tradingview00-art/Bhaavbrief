@@ -821,13 +821,15 @@ GOOD: "MCX Crude has fallen **3.4%** to **₹8,430/bbl** as OPEC+ announced a su
 
 PRICE — ₹[exact level] · [exact % change] · [one word: SURGING / PLUNGING / SPIKING]
 
-SIGNAL — One sentence. Name the specific real-world cause — the policy decision, the data print, the supply event, the geopolitical trigger. Not "dollar strength" alone — say what drove the dollar.
+SIGNAL — One sentence. Name the specific real-world cause — the policy decision, the data print, the supply event, the geopolitical trigger. Not "dollar strength" alone — say what drove the dollar. Not "risk-off" — say what the risk actually is.
 BAD: "The move is driven by global macro headwinds and risk-off positioning."
-GOOD: "The US Federal Reserve signalled rates will stay high for longer after CPI came in at 3.4% vs 3.1% expected."
+GOOD: "The US Federal Reserve signalled rates will stay high for longer after CPI came in at **3.4%** vs **3.1%** expected, cutting rate-cut bets from 2 to 1 for 2025."
 
-TWIST — One sentence. The single most important contrarian signal or the thing most people are getting wrong about this move. Historical framing only (SEBI).
-Example: "The twist: gold is falling into an escalation — historically the precious metal holds or rises in the first 48 hours of geopolitical shock; a sustained breakdown signals institutional rebalancing rather than fear receding."
-Example: "The twist: OPEC spare capacity at 3.2mb/d — historically, crude rallies above $95 trigger member quota cheating within 6–8 weeks, capping the move."
+TWIST — One sentence contrarian signal. Historical framing only (SEBI). Do NOT start with "The twist:" — the section label already says TWIST; starting the sentence with it doubles the label.
+BAD: "The twist: gold is falling into an escalation — historically..."
+GOOD: "Gold is falling INTO a live escalation — historically, the metal holds or rises in the first 48 hours of geopolitical shock; a breakdown here signals institutional rebalancing, not receding fear."
+BAD: "The twist: OPEC spare capacity at 3.2mb/d historically caps rallies."
+GOOD: "OPEC spare capacity at **3.2mb/d** has historically triggered member quota cheating within 6–8 weeks whenever crude has sustained above **$95** — every prior spike above this level since 2022 reversed within two months."
 
 CROSS-ASSET — One sentence. Name at least two other assets and their exact moves right now. Show the direction and magnitude.
 BAD: "Other commodities are also under pressure amid broad risk-off sentiment."
@@ -917,30 +919,41 @@ SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment adv
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
 - Technical levels are observations: "Gold has held ₹74,000 four times" ✓ | "Strong support, consider buying" ✗
 
-WRITE EXACTLY THIS STRUCTURE — 4 sentences + 1 Watch line:
+WRITE 5 sentences + 1 Watch line. No headers. No labels. No "The twist:" — if there's a contrarian angle, fold it into the sentence naturally.
 
-Sentence 1 — THE FACT: What moved and the exact number that proves it. Include the ₹ price and the % change.
-Sentence 2 — THE CAUSE: Why it happened. Name the specific real-world event (policy decision, macro data, geopolitical trigger, supply figure). Do not say "dollar strength" alone — say what drove the dollar.
-Sentence 3 — THE TWIST: The one thing most people are getting wrong about this move, OR the contrarian signal an informed analyst would notice. Frame as historical observation (SEBI).
-  Example: "The twist: gold is falling INTO a war — historically, the first 48 hours of escalation see gold hold or rise; a breakdown here suggests institutional rebalancing, not receding fear."
-  Example: "The twist: copper is rising despite weak China PMI — the bad news was already priced in, and the base metals market is beginning to look through the slowdown."
-Sentence 4 — THE CHAIN: What else moved as a result, and how does USD/INR at ₹${prices.usdinr?.toFixed(2)} amplify this for Indian importers specifically.
-Sentence 5 — THE IMPACT: One named Indian company and one concrete consequence in ₹ crore terms if possible. Not "cable manufacturers face higher costs" — "Hindalco's copper procurement cost rises by an estimated ₹X crore per day at this LME level."
-Watch: [one specific price level OR one data release in the next 48 hours that confirms or negates this move]
+The test for each sentence: does it add information a trader could not get from a price ticker? If a sentence only restates the number, delete it and say something real instead.
 
-TOTAL: 100–130 words. One idea per sentence. Break any sentence over 20 words.
+Sentence 1 — Open with the insight that makes this move worth reading about. The price and % must appear here, but they are evidence for the insight, not the lead. Show what the move reveals, not just what it is.
+  ✗ "MCX Silver is the session's sharpest mover — down 2.84% to ₹228,230/kg."
+  ✓ "Silver is selling off twice as hard as gold — **MCX Silver down 2.84% to ₹228,230/kg** while gold lost half that — which means the market is liquidating silver-specific positions, not fleeing commodities broadly."
+
+Sentence 2 — Name the specific real-world cause. Not "dollar strength" — say what moved the dollar. Not "risk-off" — say what triggered it. One named event, data release, or decision.
+  ✗ "The selloff follows overnight risk-off positioning."
+  ✓ "The trigger was Friday's US PCE print coming in at **2.8%**, above the **2.6%** consensus, resetting Fed rate-cut timelines from September to December."
+
+Sentence 3 — What does the rest of the complex say about this? Name 1–2 other commodities and what their moves confirm or contradict. Then tell us what USD/INR at ₹${prices.usdinr?.toFixed(2)} does to this for Indian buyers — specifically, not generically.
+  ✗ "MCX Gold fell 1.02% and USD/INR amplifies the impact for Indian importers."
+  ✓ "MCX Gold's milder **-1.02%** drop alongside silver's **-2.84%** confirms a precious-metals spread trade unwinding, not a safe-haven rout; at USD/INR **₹${prices.usdinr?.toFixed(2)}**, every dollar decline in COMEX silver adds roughly **₹3,200/kg** to the import parity gap for Indian silver buyers."
+
+Sentence 4 — One named Indian company or sector. Not a cost-calculation — a consequence. What decision does this force, delay, or change for them?
+  ✗ "Waaree Energies, a large silver consumer, sees input cost relief of approximately ₹X crore."
+  ✓ "Waaree Energies, which locks in silver-paste procurement quarterly, faces a decision: at ₹228,230/kg, forward contracts placed at last quarter's ₹247,000 now look expensive — but locking in fresh contracts this week means betting the selloff continues."
+
+Sentence 5 — The thing that is not obvious in the price. A historical parallel, a structural observation, or what would have to be true for this move to reverse. One sentence that makes the reader think.
+
+Watch: One specific price level OR one upcoming data event — and exactly why it matters here, not just that it exists.
+  ✗ "Watch: COMEX silver $62/oz support."
+  ✓ "Watch: COMEX silver **$62/oz** — the last time it closed below this level in Jan 2026, MCX silver followed with a 5-session, 8% decline; a close above tonight keeps the selloff as a one-day event."
+
+TOTAL: 110–140 words. One idea per sentence. Cut any sentence over 22 words in half.
 Use **bold** only for key numbers (prices, percentages, thresholds). Never bold whole sentences.
 
 WHAT BAD WRITING LOOKS LIKE — never do this:
-✗ "The hardening of deposit and lending rates in Indian credit markets, despite RBI's policy rate pause, lands directly inside a global commodity complex already under synchronized selling pressure."
-✗ "The dominant narrative pointing to dollar strength compressing demand expectations globally."
-✗ "MCX Gold at ₹152,551 per 10g, MCX Copper at ₹1,334.95 per kg, and MCX Crude at ₹8,613 per barrel have each sold off between 2.05% and 3.01% this session..."
-
-WHAT GOOD WRITING LOOKS LIKE — do this:
-✓ "RBI held rates at **5.25%** today while MCX Gold fell **2.05% to ₹1,52,551/10g** and Copper dropped **3.01% to ₹1,334.95/kg**."
-✓ "The driver is a stronger US dollar — it rose after better-than-expected US jobs data reduced expectations of a Fed rate cut."
-✓ "A stronger dollar raises the rupee cost of every import: at USD/INR ₹94.95, MCX prices track COMEX higher even without a change in the underlying commodity."
-✓ "Cable manufacturers using copper as raw material will see input costs under pressure — a 3% drop in copper narrows their margin by an estimated ₹40–60/kg."
+✗ Restating the price move as the lead: "MCX Crude fell 2.3% to ₹7,093/bbl this session..."
+✗ Generic cause: "The dominant narrative pointing to dollar strength compressing demand expectations globally."
+✗ The twist as a label: "The twist: copper is rising despite weak China PMI..."
+✗ Cost math as impact: "Hindalco faces higher copper costs of an estimated ₹45 crore per day."
+✗ Vague watch: "Watch whether crude holds ₹7,000 support."
 
 SEO:
 - Title: commodity + specific action + key reason (under 65 chars, include "MCX")
