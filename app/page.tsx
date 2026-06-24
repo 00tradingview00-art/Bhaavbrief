@@ -121,62 +121,13 @@ export default async function HomePage() {
   return (
     <div>
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
-      <div style={{ marginBottom: 32, position: 'relative', overflow: 'hidden', minHeight: 220 }}>
-
-        {/* B monogram watermark */}
-        <div aria-hidden style={{
-          position: 'absolute',
-          top: 0, bottom: 0, right: 0,
-          display: 'flex',
-          alignItems: 'center',
-          pointerEvents: 'none',
-          userSelect: 'none',
+      <div style={{ marginBottom: 16 }}>
+        <div style={{
+          fontFamily: 'var(--font-mono)', fontSize: 10,
+          letterSpacing: '0.14em', textTransform: 'uppercase',
+          color: 'var(--gold)',
         }}>
-          <span style={{
-            fontFamily: 'Georgia, serif',
-            fontSize: 'clamp(120px, 15vw, 200px)',
-            fontWeight: 700,
-            color: 'var(--gold)',
-            opacity: 0.06,
-            lineHeight: 1,
-            letterSpacing: '-0.05em',
-            transform: 'translateX(16px)',
-          }}>B</span>
-        </div>
-
-        {/* Content */}
-        <div style={{ position: 'relative' }}>
-          <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10,
-            letterSpacing: '0.14em', textTransform: 'uppercase',
-            color: 'var(--gold)', marginBottom: 10,
-          }}>
-            BhaavBrief — India's First Commodity Intelligence
-          </div>
-          <p style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: 'clamp(22px, 3vw, 30px)',
-            fontWeight: 500, lineHeight: 1.25,
-            letterSpacing: '-0.3px',
-            color: 'var(--ink)',
-            margin: '0 0 10px',
-          }}>
-            Commodity prices move markets.<br />Know them first.
-          </p>
-          <p style={{
-            fontSize: 14, color: 'var(--ink-3)',
-            lineHeight: 1.75, margin: '0 0 20px',
-            maxWidth: 560, fontWeight: 300,
-          }}>
-            Daily intelligence for India's traders, investors, merchants and businesses —
-            gold, crude, silver, copper and natural gas, every weekday at 9:30 AM.
-          </p>
-
-          {/* Subscribe CTA — above the fold on all devices */}
-          <div style={{ maxWidth: 400 }}>
-            <SubscribeForm compact location="hero" />
-          </div>
-
+          BhaavBrief — India&apos;s Daily Commodity Intelligence
         </div>
       </div>
 
@@ -255,7 +206,7 @@ export default async function HomePage() {
                 ))}
               </div>
 
-              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 28 }}>
                 <Link
                   href={`/briefs/${latest.slug}`}
                   style={{
@@ -280,6 +231,14 @@ export default async function HomePage() {
                 >
                   All briefs
                 </Link>
+              </div>
+
+              {/* Subscribe — after value proof, not before */}
+              <div style={{ maxWidth: 400, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+                  Get it in your inbox · Every weekday at 9:30 AM
+                </div>
+                <SubscribeForm compact location="hero" />
               </div>
             </div>
 
