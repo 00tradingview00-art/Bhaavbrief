@@ -5,8 +5,8 @@
     "unit": "₹ per 10g",
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
-    "typicalMargin": "₹7.2–10.1 lakh",
-    "contractValue": "~₹1.4 crore at ₹1,43,840/10g",
+    "typicalMargin": "₹7.2–10.0 lakh",
+    "contractValue": "~₹1.4 crore at ₹1,43,546/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.3–4.7 lakh",
-    "contractValue": "~₹66.6 lakh at ₹2,22,010/kg",
+    "contractValue": "~₹66.5 lakh at ₹2,21,661/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -87,7 +87,7 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹34–48K",
-    "contractValue": "~₹6.8 lakh at ₹6,820/bbl",
+    "contractValue": "~₹6.8 lakh at ₹6,792/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -131,7 +131,7 @@
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
     "typicalMargin": "₹1.6–2.2 lakh",
-    "contractValue": "~₹31.5 lakh at ₹1,258.9/kg",
+    "contractValue": "~₹31.5 lakh at ₹1,259.7/kg",
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
     "keyBodies": [
@@ -174,7 +174,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹0.9–1.2 lakh",
-    "contractValue": "~₹17.7 lakh at ₹354.5/kg",
+    "contractValue": "~₹17.7 lakh at ₹354.7/kg",
     "importParity": "MCX Zinc = LME Zinc ($/tonne) ÷ 1000 × USD/INR × 1.068 (Basic Customs Duty 5% + IGST ~18%)",
     "supplyControl": "China mines 31% and refines 44% of global zinc. Peru (11%) and Australia (10%) are the next largest miners. India's Hindustan Zinc (Vedanta subsidiary) is among the world's top five zinc-lead miners and supplies roughly 75% of India's primary zinc needs — making it the single most important stock to watch for MCX zinc price direction.",
     "keyBodies": [
@@ -215,7 +215,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹0.8–1.2 lakh",
-    "contractValue": "~₹16.7 lakh at ₹334.95/kg",
+    "contractValue": "~₹16.7 lakh at ₹334.9/kg",
     "importParity": "MCX Aluminium = LME Aluminium ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 7.5% + IGST)",
     "supplyControl": "China produces 58% of global primary aluminium — the highest concentration of any major metal. Russia (Rusal, 6%) and Canada (5%) are the next largest. Aluminium smelting is extremely electricity-intensive (15,000 kWh per tonne), so cheap hydropower nations (China, Russia, Iceland, Norway) dominate. Power costs determine who runs and who shuts.",
     "keyBodies": [
@@ -299,7 +299,7 @@
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
     "typicalMargin": "₹1.2–1.7 lakh",
-    "contractValue": "~₹24.4 lakh at ₹1,625/kg",
+    "contractValue": "~₹24.4 lakh at ₹1,630/kg",
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
     "keyBodies": [
@@ -342,7 +342,7 @@
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
     "typicalMargin": "₹19–26K",
-    "contractValue": "~₹3.8 lakh at ₹300.1/mmBtu",
+    "contractValue": "~₹3.8 lakh at ₹301.1/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
