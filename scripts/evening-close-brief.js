@@ -296,6 +296,34 @@ slug: "[mcx-close-DDMMMYYYY-theme]"
   return { mdx: text, sessionDate }
 }
 
+function applyBodyBold(mdx) {
+  const fmEnd = mdx.indexOf('\n---\n', mdx.indexOf('---') + 3)
+  if (fmEnd === -1) return mdx
+  const frontmatter = mdx.slice(0, fmEnd + 5)
+  const body        = mdx.slice(fmEnd + 5)
+  const boldedBody = body.split('\n').map(line => {
+    if (line.startsWith('#') || line.startsWith('|') || line.startsWith('*BhaavBrief') ||
+        line.startsWith('```') || line.trim() === '' || line.startsWith('---')) return line
+    const result = []
+    const boldRe = /\*\*[^*]+\*\*/g
+    let last = 0, m
+    while ((m = boldRe.exec(line)) !== null) {
+      if (m.index > last) result.push({ raw: line.slice(last, m.index), process: true })
+      result.push({ raw: m[0], process: false })
+      last = m.index + m[0].length
+    }
+    if (last < line.length) result.push({ raw: line.slice(last), process: true })
+    return result.map(seg => {
+      if (!seg.process) return seg.raw
+      return seg.raw
+        .replace(/₹[\d,]+(?:\.\d+)?(?:\/(?:10g|kg|bbl|mmBtu|oz|lb))?/g, '**$&**')
+        .replace(/\$[\d,]+(?:\.\d+)?(?:\/(?:oz|bbl|lb|mmBtu|barrel))?/g, '**$&**')
+        .replace(/[+-]?\d+\.\d+%/g, '**$&**')
+    }).join('')
+  }).join('\n')
+  return frontmatter + boldedBody
+}
+
 function saveArticle(mdx, sessionDate) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
 
@@ -312,12 +340,14 @@ function saveArticle(mdx, sessionDate) {
     return null
   }
 
-  const cleanMdx = mdx
-    .replace(/^```(?:mdx|markdown)?\s*\n?/m, '')
-    .replace(/\n?```\s*$/m, '')
-    .replace(/^slug:.*$/m, '')
-    .replace(/^date:.*$/m, `date: "${sessionDate}"`)  // stamp canonical date — Claude can't override it
-    .trim()
+  const cleanMdx = applyBodyBold(
+    mdx
+      .replace(/^```(?:mdx|markdown)?\s*\n?/m, '')
+      .replace(/\n?```\s*$/m, '')
+      .replace(/^slug:.*$/m, '')
+      .replace(/^date:.*$/m, `date: "${sessionDate}"`)  // stamp canonical date — Claude can't override it
+      .trim()
+  )
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
   console.log(`Saved: content/articles/${slug}.mdx`)
   console.log(`BRIEF_FILE=content/articles/${slug}.mdx`)

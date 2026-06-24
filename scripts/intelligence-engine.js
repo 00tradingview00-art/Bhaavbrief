@@ -1119,6 +1119,42 @@ function ratioSanityCheck(mdx, prices) {
   return warnings
 }
 
+// ── Bold post-processor (mirrors generate-brief.js) ──────────────────────────
+function applyBodyBold(mdx) {
+  const fmEnd = mdx.indexOf('\n---\n', mdx.indexOf('---') + 3)
+  if (fmEnd === -1) return mdx
+  const frontmatter = mdx.slice(0, fmEnd + 5)
+  const body        = mdx.slice(fmEnd + 5)
+
+  const boldedBody = body.split('\n').map(line => {
+    if (
+      line.startsWith('#') || line.startsWith('|') ||
+      line.startsWith('*BhaavBrief') || line.startsWith('```') ||
+      line.trim() === '' || line.startsWith('---')
+    ) return line
+
+    const result = []
+    const boldRe = /\*\*[^*]+\*\*/g
+    let last = 0, m
+    while ((m = boldRe.exec(line)) !== null) {
+      if (m.index > last) result.push({ raw: line.slice(last, m.index), process: true })
+      result.push({ raw: m[0], process: false })
+      last = m.index + m[0].length
+    }
+    if (last < line.length) result.push({ raw: line.slice(last), process: true })
+
+    return result.map(seg => {
+      if (!seg.process) return seg.raw
+      return seg.raw
+        .replace(/₹[\d,]+(?:\.\d+)?(?:\/(?:10g|kg|bbl|mmBtu|oz|lb))?/g, '**$&**')
+        .replace(/\$[\d,]+(?:\.\d+)?(?:\/(?:oz|bbl|lb|mmBtu|barrel))?/g, '**$&**')
+        .replace(/[+-]?\d+\.\d+%/g, '**$&**')
+    }).join('')
+  }).join('\n')
+
+  return frontmatter + boldedBody
+}
+
 // ── 8. Save Article as MDX ────────────────────────────────────────────────────
 function saveArticle(mdx) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
@@ -1144,13 +1180,15 @@ function saveArticle(mdx) {
     return null
   }
 
-  const cleanMdx = mdx
-    .replace(/^```[a-z]*\n/m, '')       // strip any leading code fence (```yaml, ```mdx, etc.)
-    .replace(/\n```\s*$/, '')           // strip trailing code fence
-    .replace(/^```\s*$/gm, '')          // strip bare ``` lines anywhere in body
-    .replace(/^slug:.*$/m, '')
-    .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
-    .trim()
+  const cleanMdx = applyBodyBold(
+    mdx
+      .replace(/^```[a-z]*\n/m, '')       // strip any leading code fence (```yaml, ```mdx, etc.)
+      .replace(/\n```\s*$/, '')           // strip trailing code fence
+      .replace(/^```\s*$/gm, '')          // strip bare ``` lines anywhere in body
+      .replace(/^slug:.*$/m, '')
+      .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
+      .trim()
+  )
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
 
   const title = titleMatch?.[1] ?? 'Market Update'
