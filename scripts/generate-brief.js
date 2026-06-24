@@ -152,6 +152,56 @@ const DISCLAIMER = `---
 
 *BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information.*`
 
+// ── Bold post-processor ───────────────────────────────────────────────────────
+// Ensures all price figures (₹/$ with numbers) and percentages are bolded in
+// body paragraphs. Skips: frontmatter, ## headers, table rows, disclaimer line,
+// and text already inside **...**.
+function applyBodyBold(mdx) {
+  // Split at the second --- to separate frontmatter from body
+  const fmEnd = mdx.indexOf('\n---\n', mdx.indexOf('---') + 3)
+  if (fmEnd === -1) return mdx
+  const frontmatter = mdx.slice(0, fmEnd + 5)   // up to and including closing ---\n
+  const body        = mdx.slice(fmEnd + 5)
+
+  const boldedBody = body.split('\n').map(line => {
+    // Skip headers, table rows, blank lines, disclaimer, code fences
+    if (
+      line.startsWith('#') ||
+      line.startsWith('|') ||
+      line.startsWith('*BhaavBrief') ||
+      line.startsWith('```') ||
+      line.trim() === '' ||
+      line.startsWith('---')
+    ) return line
+
+    // Split into alternating [non-bold, bold, non-bold, bold, ...] segments
+    // so we never double-bold text already inside **...**
+    const result = []
+    const boldRe  = /\*\*[^*]+\*\*/g
+    let last = 0
+    let m
+    while ((m = boldRe.exec(line)) !== null) {
+      if (m.index > last) result.push({ raw: line.slice(last, m.index), process: true })
+      result.push({ raw: m[0], process: false })
+      last = m.index + m[0].length
+    }
+    if (last < line.length) result.push({ raw: line.slice(last), process: true })
+
+    return result.map(seg => {
+      if (!seg.process) return seg.raw
+      return seg.raw
+        // INR prices: ₹1,23,456 or ₹94.66 or ₹141100/10g
+        .replace(/₹[\d,]+(?:\.\d+)?(?:\/(?:10g|kg|bbl|mmBtu|oz|lb))?/g, '**$&**')
+        // USD prices: $4,000 or $56.69 or $3.25/mmBtu
+        .replace(/\$[\d,]+(?:\.\d+)?(?:\/(?:oz|bbl|lb|mmBtu|barrel))?/g, '**$&**')
+        // Percentages: -3.71% or +1.17% or 8.6%
+        .replace(/[+-]?\d+(?:\.\d+)?%/g, '**$&**')
+    }).join('')
+  }).join('\n')
+
+  return frontmatter + boldedBody
+}
+
 // ── Generate ──────────────────────────────────────────────────────────────────
 
 async function generate(prices, news, recentBriefs, snapshot) {
@@ -253,6 +303,7 @@ WRITING RULES
 - CONTRACTS: MCX uses rolling near-month contracts. NEVER mention specific calendar months for MCX contracts (e.g., "June contract", "Feb-Mar expiry"). The price in the snapshot IS the active front-month price. Expired contract months from memory are wrong.
 - CRITICAL — TITLE PRICE RULE: If the title contains a price or level (e.g. "$90", "₹1,55,000"), that exact number MUST appear verbatim in the price data above. Never round up, never pick a dramatic threshold, never extrapolate. If WTI is $89.73, the title may say "toward $90" only if you write it as an approximation — never "$100" or any invented milestone.
 - Sharp, specific, factual — no waffle, no filler, no hedging.
+- FORMATTING — MANDATORY: Use **bold** (double asterisks) for EVERY specific price figure and percentage in body paragraphs. This means every ₹ amount, every $ amount, and every X.XX% change must be wrapped in **...**. Examples: "Gold at **₹141,100** per 10g is down **3.71%**", "COMEX silver at **$56.69** per ounce is down **8.6%**". Also bold key analytical phrases that carry the core insight (max 3-5 words), like "**institutional repositioning**" or "**war premium**". Headers, tables, and the disclaimer are exempt.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
 - End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences.
@@ -413,6 +464,9 @@ async function main() {
 
   // Append disclaimer footer
   mdx = mdx.trimEnd() + '\n\n' + DISCLAIMER
+
+  // Bold prices and percentages in body text (safety net — Claude may miss some)
+  mdx = applyBodyBold(mdx)
 
   // Inject urlSlug derived from date + title for SEO-friendly URLs
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
