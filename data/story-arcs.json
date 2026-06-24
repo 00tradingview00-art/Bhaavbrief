@@ -26,6 +26,27 @@
       ],
       "endDate": "2026-06-15",
       "outcome": "MCX Crude retreated from the ₹9,000 key level back to ₹7,615 as the geopolitical supply premium from Iran-Israel tensions dissipated and market participants unwound their bullish exposure."
+    },
+    {
+      "id": "iran-us-peace-negotiations-collapse",
+      "title": "Iran-US Peace Talks Collapse: Safe-Haven Gold Rebounds",
+      "startDate": "2026-06-24",
+      "status": "closed",
+      "editions": [
+        51
+      ],
+      "latestDay": 1,
+      "summary": "Iran publicly rejects key US peace conditions, reversing diplomatic optimism and triggering a flight-to-safety rally in gold while crude remains under pressure.",
+      "primaryCommodity": "MCX Gold",
+      "keyLevel": "₹141,100",
+      "tags": [
+        "Iran",
+        "MCX Gold",
+        "Geopolitics",
+        "MCX Crude",
+        "Safe-Haven Assets"
+      ],
+      "endDate": "2026-06-24"
     }
   ]
 }

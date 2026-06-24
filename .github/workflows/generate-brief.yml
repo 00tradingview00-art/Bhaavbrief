@@ -128,6 +128,27 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js
 
+      - name: Generate brief reel
+        if: steps.commit.outputs.published == 'true'
+        continue-on-error: true
+        env:
+          EDITION:              ${{ steps.edition.outputs.number }}
+          ANTHROPIC_API_KEY:    ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY:   ${{ secrets.ELEVENLABS_API_KEY }}
+          KITE_API_KEY:         ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:    ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/generate-brief-reel.mjs
+
+      - name: Post reel to Instagram
+        if: steps.commit.outputs.published == 'true'
+        continue-on-error: true
+        env:
+          EDITION:                ${{ steps.edition.outputs.number }}
+          REEL_FILE:              public/reels/brief-edition-${{ steps.edition.outputs.number }}.mp4
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/post-reel-instagram.mjs
+
       - name: Alert on failure
         # Only alert if generation or commit failed — not if validate blocked a bad brief.
         # Validate failures are quality control, not infrastructure failures.

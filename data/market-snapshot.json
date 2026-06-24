@@ -5,26 +5,26 @@
   "instruments": {
     "MCX_GOLD": {
       "price": 141100,
-      "prevClose": 141270,
-      "changePct": -0.1203,
+      "prevClose": 146529,
+      "changePct": -3.7052,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
       "price": 212697,
-      "prevClose": 213075,
-      "changePct": -0.1774,
+      "prevClose": 225834,
+      "changePct": -5.8165,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
       "price": 6682,
-      "prevClose": 6669,
-      "changePct": 0.1949,
+      "prevClose": 6964,
+      "changePct": -4.0482,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
       "price": 1223,
-      "prevClose": 1223.3,
-      "changePct": -0.0245,
+      "prevClose": 1281.8,
+      "changePct": -4.5877,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
@@ -83,8 +83,8 @@
     },
     "MCX_ALUMINIUM": {
       "price": 330.15,
-      "prevClose": 330.5,
-      "changePct": -0.1059,
+      "prevClose": 345.25,
+      "changePct": -4.3734,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {

@@ -350,7 +350,7 @@ async function main() {
     if (files.length > 0) {
       const lastContent = fs.readFileSync(path.join(BRIEFS_DIR, files[files.length - 1]), 'utf8')
       const dateMatch   = lastContent.match(/^date:\s*"?(\d{4}-\d{2}-\d{2})/m)
-      if (dateMatch && dateMatch[1] === today) {
+      if (dateMatch && dateMatch[1] === today && !process.env.FORCE) {
         console.log(`Brief for ${today} already published (${files[files.length - 1]}) — skipping`)
         process.exit(0)
       }

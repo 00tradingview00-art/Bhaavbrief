@@ -1,6 +1,23 @@
 [
   {
     "type": "brief",
+    "slug": "edition-051",
+    "href": "/briefs/edition-051",
+    "title": "Peace Deal Accelerates: Gold Drops to ₹141100 as Fear Premium Collapses",
+    "description": "Iran-US diplomatic progress deepens into a broad commodity selloff, with gold, crude, and copper all pricing out the war risk simultaneously.",
+    "excerpt": "MCX Gold ₹141100 | Crude ₹6682 | USDINR ₹94.66 — Gold -3.71% | Crude -4.05% | Silver -5.82% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-06-24T18:29:51.145Z",
+    "edition": "51",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-050",
     "href": "/briefs/edition-050",
     "title": "Peace Dividend Deepens: Gold at ₹144335 as Fear Premium Keeps Draining",
