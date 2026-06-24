@@ -220,6 +220,9 @@ async function generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayA
   const now     = new Date()
   const dateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
   const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
+  // Use IST session date at 18:00 UTC (= 11:30 PM IST) so the article always
+  // groups under the session date even when published after midnight IST.
+  const sessionDate = `${todayIST()}T18:00:00.000Z`
 
   const mcxBlock   = buildDayMoverSummary(kitePrices)
   const comexBlock = Object.values(comex).filter(c => c.price > 0)
@@ -272,7 +275,7 @@ RETURN ONLY valid MDX frontmatter + article body. No code fences. No markdown co
 ---
 title: "[under 65 chars — MCX Close + dominant theme]"
 description: "[under 155 chars — date + top mover + what happened]"
-date: "${now.toISOString()}"
+date: "${sessionDate}"
 time: "${timeStr}"
 edition: "evening-brief"
 commodity: "multi"
