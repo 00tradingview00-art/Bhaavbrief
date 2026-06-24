@@ -7,19 +7,11 @@ import matter from 'gray-matter'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-let playfairFontCache: ArrayBuffer | null = null
-
-async function getPlayfairFont(): Promise<ArrayBuffer | null> {
-  if (playfairFontCache) return playfairFontCache
+function getInterFont(weight: 'regular' | 'bold'): ArrayBuffer | null {
   try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700',
-      { headers: { 'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Pixel 3)' } }
-    ).then(r => r.text())
-    const url = css.match(/url\((https:\/\/[^)]+)\)/)?.[1]
-    if (!url) return null
-    playfairFontCache = await fetch(url).then(r => r.arrayBuffer())
-    return playfairFontCache
+    const file = weight === 'bold' ? 'Inter-Bold.ttf' : 'Inter-Regular.ttf'
+    const buf = fs.readFileSync(path.join(process.cwd(), 'public/fonts', file))
+    return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer
   } catch { return null }
 }
 
@@ -61,7 +53,12 @@ export async function GET(
     ? new Date(data.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
     : ''
 
-  const [font, prices] = await Promise.all([getPlayfairFont(), fetchPrices()])
+  const [interRegular, interBold, prices] = await Promise.all([
+    Promise.resolve(getInterFont('regular')),
+    Promise.resolve(getInterFont('bold')),
+    fetchPrices(),
+  ])
+  const font = interBold  // keep alias for title usage
 
   const cols = [
     { label: 'MCX GOLD',   d: prices?.gold   },
@@ -102,7 +99,7 @@ export async function GET(
           fontSize: (title.length > 65 ? 46 : title.length > 45 ? 52 : 58) * S,
           fontWeight: 700, color: '#18180F',
           lineHeight: 1.22, marginBottom: 28*S,
-          fontFamily: font ? 'Playfair Display' : 'Georgia, serif',
+          fontFamily: 'Inter, Georgia, serif',
           flex: '0 0 auto',
         }}>
           {title}
@@ -149,7 +146,10 @@ export async function GET(
     ),
     {
       width: 1080*S, height: 1080*S,
-      fonts: font ? [{ name: 'Playfair Display', data: font, weight: 700, style: 'normal' }] : [],
+      fonts: [
+        ...(interRegular ? [{ name: 'Inter', data: interRegular, weight: 400 as const, style: 'normal' as const }] : []),
+        ...(interBold    ? [{ name: 'Inter', data: interBold,    weight: 700 as const, style: 'normal' as const }] : []),
+      ],
     }
   )
 }

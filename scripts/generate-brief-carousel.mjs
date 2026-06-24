@@ -515,6 +515,9 @@ async function postCarousel(imageUrls, caption) {
   const carouselId = carouselD.id
   console.log(`  Carousel container: ${carouselId}`)
 
+  // Wait for carousel container to finish processing before publishing
+  await checkStatus(carouselId)
+
   // Step 3 — Publish
   console.log('  Publishing...')
   const publishR = await fetch(`https://graph.facebook.com/v22.0/${IG_USER}/media_publish`, {
