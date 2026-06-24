@@ -220,9 +220,10 @@ async function generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayA
   const now     = new Date()
   const dateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
   const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
-  // Use IST session date at 18:00 UTC (= 11:30 PM IST) so the article always
-  // groups under the session date even when published after midnight IST.
-  const sessionDate = `${todayIST()}T18:00:00.000Z`
+  // Anchor to midnight IST on the session date (= 18:30 UTC previous UTC day).
+  // This groups the article under the correct IST date AND sorts it below all
+  // intraday flash articles (midnight < 9 AM in descending time sort).
+  const sessionDate = new Date(todayIST() + 'T00:00:00+05:30').toISOString()
 
   const mcxBlock   = buildDayMoverSummary(kitePrices)
   const comexBlock = Object.values(comex).filter(c => c.price > 0)
