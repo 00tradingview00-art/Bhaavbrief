@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-25-00-42-rbi-holds-rates-steady-natgas-1-2-signal",
+    "title": "RBI holds rates steady; NatGas +1.2% signals inflation vigilance, rupee stability at ₹94.66 intact",
+    "summary": "RBI's June 2026 MPC decision to hold the repo rate anchors the cross-asset narrative currently dominated by NatGas strength. The \"no change\" stance removes monetary tightening risk, allowing USD/INR to stabilize at ₹94.66—critical for import parity mechanics. NatGas's +1.17% MCX move at ₹302.50/mmBtu reflects global LNG pricing holding firm amid inflation monitoring; steady RBI guidance protects rupee carry, narrowing arbitrage gaps for energy imports. Gold (₹141100/10g, -0.12%) and Silver (₹212697/kg, -0.18%) remain subdued—rate hold removes deflation hedging urgency. For MCX open tomorrow, steady monetary policy plus stable rupee means energy commodity premiums compress. Crude (₹6682/bbl, +0.19%) and Copper (₹1223/kg) face no fresh rate-driven volatility, but NatGas's resilience signals producers pricing in persistent global demand. FD rate stability preserves carry-trade dynamics.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-24T19:12:40.463Z",
+    "pubDateIST": "25 Jun 2026, 00:42"
+  },
+  {
+    "id": "2026-06-25-00-44-rbi-holds-repo-at-5-25-amid-global-uncer",
+    "title": "RBI holds repo at 5.25% amid global uncertainty; NatGas +1.2% signals inflation expectations stable, rupee anchored",
+    "summary": "The RBI's unchanged repo rate at 5.25% removes immediate INR depreciation pressure, which is the critical mechanic for import parity on all MCX commodities. With USD/INR at 94.66, the rate hold signals the central bank is not tightening defensively despite global uncertainties — this anchors rupee volatility and prevents sharp commodity repricing through currency transmission. NatGas leading at +1.2% reflects this stability: without rupee weakness fear, energy complex can respond to supply fundamentals rather than FX shocks. MCX NatGas at 302.50/mmBtu and MCX Crude at 6682/bbl both benefit from the policy signal — a held rate removes the cost escalation that would otherwise pass through domestic energy prices. This explains muted moves elsewhere (Gold -0.12%, Silver -0.18%): no inflation surprise means no safe-haven bid. For tomorrow's MCX open, watch if NatGas momentum sustains above 303.00/mmBtu, which would confirm traders are pricing stable carry conditions into the session.",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-24T19:14:35.881Z",
+    "pubDateIST": "25 Jun 2026, 00:44"
+  },
+  {
+    "id": "2026-06-25-00-46-mcx-natgas-1-17-at-303-mmbtu-us-supply-t",
+    "title": "MCX NatGas +1.17% at ₹303/mmBtu — US supply tightness drives energy complex",
+    "summary": "NatGas strength (+1.2% cross-asset lead) reflects US production disruptions and storage draws tighter than seasonal norms. MCX NatGas ₹302.50/mmBtu trades within a 48-week range; support sits near ₹295/mmBtu, resistance ₹310/mmBtu.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-24T19:16:31.840Z",
+    "pubDateIST": "25 Jun 2026, 00:46"
+  },
+  {
     "id": "2026-06-24-23-01-mcx-nat-gas-0-97-at-302-mmbtu-bucks-broa",
     "title": "MCX Nat Gas +0.97% at ₹302/mmBtu bucks broad selloff; metals crater on dollar strength",
     "summary": "While MCX silver (-5.17%), copper (-4.51%), crude (-4.26%), and gold (-3.56%) collapse on synchronized USD strength and deteriorating demand outlook, nat gas bucked the complex—gaining 0.97% to ₹301.90/mmBtu. The mechanism: dollar appreciation typically pressures commodities priced in USD globally, but nat gas benefits from seasonal summer cooling demand offsetting macro headwinds.",
