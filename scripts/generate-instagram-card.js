@@ -18,11 +18,12 @@ const EDITION   = parseInt(process.env.EDITION ?? '1')
 const BRIEFS_DIR = join(process.cwd(), 'content/briefs')
 const OUT_DIR    = join(process.cwd(), 'public/instagram')
 
-// Load system fonts (installed via apt in CI; macOS uses system fonts automatically)
-const FONT_DIRS = ['/usr/share/fonts/truetype/noto', '/usr/share/fonts/', '/System/Library/Fonts']
-for (const dir of FONT_DIRS) {
-  if (existsSync(dir)) { try { GlobalFonts.loadFontsFromDir(dir) } catch {} }
-}
+// Load bundled Inter fonts — Inter has full ₹ glyph (U+20B9) support.
+const BUNDLED_FONTS = join(process.cwd(), 'public/fonts')
+;[
+  [join(BUNDLED_FONTS, 'Inter-Regular.ttf'), 'Inter'],
+  [join(BUNDLED_FONTS, 'Inter-Bold.ttf'),    'Inter'],
+].forEach(([p, fam]) => { if (existsSync(p)) try { GlobalFonts.registerFromPath(p, fam) } catch {} })
 
 // Design tokens
 const CREAM  = '#FAFAF6'
@@ -54,13 +55,13 @@ function wrapText(ctx, text, maxWidth) {
 }
 
 function serif(size, weight = 'normal') {
-  return `${weight} ${size}px "Noto Serif", "Georgia", serif`
+  return `${weight} ${size}px Inter, Georgia, serif`
 }
 function sans(size, weight = 'normal') {
-  return `${weight} ${size}px "Noto Sans", "DM Sans", "Arial", sans-serif`
+  return `${weight} ${size}px Inter, Arial, sans-serif`
 }
 function mono(size) {
-  return `${size}px "Noto Sans Mono", "Noto Mono", "Courier New", monospace`
+  return `${size}px Inter, "Courier New", monospace`
 }
 
 async function fetchPrices() {
