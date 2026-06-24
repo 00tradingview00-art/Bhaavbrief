@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-25-05-16-mcx-copper-crashes-4-51-to-1224-kg-as-do",
+    "title": "MCX Copper crashes 4.51% to ₹1224/kg as dollar strength pressures entire base metals complex",
+    "summary": "Dollar appreciation is the mechanical driver. Stronger USD makes commodities priced in dollars more expensive for INR holders, triggering liquidation across gold (-3.56%), silver (-5.18%), and copper simultaneously. This cross-asset correlation confirms demand-neutral dollar-driven selling rather than supply shock.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-24T23:46:47.427Z",
+    "pubDateIST": "25 Jun 2026, 05:16"
+  },
+  {
+    "id": "2026-06-25-05-18-mcx-silver-crashes-5-18-to-214138-kg-as",
+    "title": "MCX Silver crashes 5.18% to ₹214138/kg as dollar surge crushes global metals",
+    "summary": "USD strength is the transmission mechanism. As the greenback rallies in US/EU session, dollar-denominated commodities become costlier for non-USD buyers, crushing demand signals across metals. Silver's 5.18% slide mirrors copper (-4.51%) and gold (-3.56%), confirming broad deleveraging, not idiosyncratic weakness.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-24T23:48:42.988Z",
+    "pubDateIST": "25 Jun 2026, 05:18"
+  },
+  {
     "id": "2026-06-25-04-07-natgas-1-17-to-302-50-mmbtu-leads-subdue",
     "title": "NatGas +1.17% to ₹302.50/mmBtu leads subdued complex; US supply data in focus",
     "summary": "NatGas strength anchors on US inventory data signalling tighter supply — a mechanical driver lifting the entire energy complex. MCX NatGas at ₹302.50/mmBtu sits 0.82% above the 5-session low (₹300/mmBtu support) with resistance at ₹308/mmBtu. Global parity arithmetic: Henry Hub equivalent (USD 2.85/mmBtu) × 94.66 USD/INR ÷ 3.5 duty factor = ₹76.8 parity equivalent, indicating MCX NatGas trades at structural premium reflecting India's import infrastructure costs.",
