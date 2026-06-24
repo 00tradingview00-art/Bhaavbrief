@@ -249,6 +249,7 @@ async function semanticCheck() {
             "• MCX and COMEX are DIFFERENT markets. MCX Gold % change and COMEX Gold % change WILL differ — this is never a contradiction.\n" +
             "• MCX prices are in INR; COMEX prices are in USD. Never compare them as if they are the same.\n" +
             "• References to 'yesterday's edition', 'last session', 'prior close', or historical moves from previous days are NOT today's data. A historical % (e.g. 'silver fell 6.46% yesterday') cannot contradict today's snapshot %.\n" +
+            "• Any price cited with a specific edition reference (e.g. 'in Edition 47', 'Edition #47', 'last Tuesday's close') is a historical data point from a prior session — it CANNOT be compared against today's snapshot prevClose. Do NOT flag these as contradictions.\n" +
             "• Round a snapshot changePct to 2 decimal places before comparing with text. E.g. -0.4479% rounds to -0.45% — that is NOT a mismatch with '0.45%' in the text.\n" +
             "• USD/INR and other FX rates: ANY discrepancy of ≤0.20 INR between the brief and the snapshot is acceptable — this applies regardless of whether the value is labeled 'Friday close', 'prior session', 'prevClose', 'yesterday', etc. A difference of ₹0.03 or ₹0.05 or ₹0.10 is NEVER a block for FX. Only flag FX as block if discrepancy exceeds ₹0.20.\n\n" +
             "Flag as 'block' ONLY:\n" +
