@@ -1,26 +1,5 @@
 [
   {
-    "type": "article",
-    "slug": "2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
-    "href": "/articles/2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
-    "title": "MCX Close 24 Jun 2026: Silver Leads Broad Selloff",
-    "description": "MCX Evening Brief 24 Jun 2026: Silver crashed -3.86% to ₹225260/kg, NatGas fell -3.58%. COMEX silver extends losses at -5.91% in US session.",
-    "excerpt": "*Educational market summary. BhaavBrief is unregistered. No buy/sell/hold recommendation is made or implied.* --- Wednesday's MCX session saw broad-based selling pressure across the metals and energy ",
-    "date": "2026-06-24T18:00:00.000Z",
-    "edition": "evening-brief",
-    "tags": [
-      "MCX Close",
-      "Evening Brief",
-      "Day Recap",
-      "Overnight Watch"
-    ],
-    "commodity": "multi",
-    "commodities": [
-      "multi"
-    ],
-    "priceAtPublish": 0
-  },
-  {
     "type": "brief",
     "slug": "edition-050",
     "href": "/briefs/edition-050",
@@ -36,6 +15,48 @@
     ],
     "commodities": [],
     "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
+    "href": "/articles/2026-06-23-mcx-close-24-un2026-silver-leads-broad-selloff",
+    "title": "MCX Close 24 Jun 2026: Silver Leads Broad Selloff",
+    "description": "MCX Evening Brief 24 Jun 2026: Silver crashed -3.86% to ₹225260/kg, NatGas fell -3.58%. COMEX silver extends losses at -5.91% in US session.",
+    "excerpt": "*Educational market summary. BhaavBrief is unregistered. No buy/sell/hold recommendation is made or implied.* --- Wednesday's MCX session saw broad-based selling pressure across the metals and energy ",
+    "date": "2026-06-23T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-06-24-mcx-close-24jun2026-metals-slide-comex-rout",
+    "href": "/articles/2026-06-24-mcx-close-24jun2026-metals-slide-comex-rout",
+    "title": "MCX Close 24 Jun 2026: Metals Slide on COMEX Rout",
+    "description": "MCX Evening Brief 24 Jun 2026 — COMEX Gold down 2.77%, Silver crashes 6.14% as broad commodity selloff dominates Wednesday's session.",
+    "excerpt": "*MCX session data unavailable via live feed tonight. The following recap is reconstructed from COMEX pricing, USD/INR cross-rate, and intraday flow signals. All figures are observational and education",
+    "date": "2026-06-23T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
   },
   {
     "type": "article",
