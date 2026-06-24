@@ -194,8 +194,9 @@ function applyBodyBold(mdx) {
         .replace(/₹[\d,]+(?:\.\d+)?(?:\/(?:10g|kg|bbl|mmBtu|oz|lb))?/g, '**$&**')
         // USD prices: $4,000 or $56.69 or $3.25/mmBtu
         .replace(/\$[\d,]+(?:\.\d+)?(?:\/(?:oz|bbl|lb|mmBtu|barrel))?/g, '**$&**')
-        // Percentages: -3.71% or +1.17% or 8.6%
-        .replace(/[+-]?\d+(?:\.\d+)?%/g, '**$&**')
+        // Percentages: only those with decimal places (-3.71%, 8.6%, 1.5%)
+        // Deliberately excludes round numbers (10%, 5%, 16%) used in historical ranges
+        .replace(/[+-]?\d+\.\d+%/g, '**$&**')
     }).join('')
   }).join('\n')
 
@@ -303,7 +304,7 @@ WRITING RULES
 - CONTRACTS: MCX uses rolling near-month contracts. NEVER mention specific calendar months for MCX contracts (e.g., "June contract", "Feb-Mar expiry"). The price in the snapshot IS the active front-month price. Expired contract months from memory are wrong.
 - CRITICAL — TITLE PRICE RULE: If the title contains a price or level (e.g. "$90", "₹1,55,000"), that exact number MUST appear verbatim in the price data above. Never round up, never pick a dramatic threshold, never extrapolate. If WTI is $89.73, the title may say "toward $90" only if you write it as an approximation — never "$100" or any invented milestone.
 - Sharp, specific, factual — no waffle, no filler, no hedging.
-- FORMATTING — MANDATORY: Use **bold** (double asterisks) for EVERY specific price figure and percentage in body paragraphs. This means every ₹ amount, every $ amount, and every X.XX% change must be wrapped in **...**. Examples: "Gold at **₹141,100** per 10g is down **3.71%**", "COMEX silver at **$56.69** per ounce is down **8.6%**". Also bold key analytical phrases that carry the core insight (max 3-5 words), like "**institutional repositioning**" or "**war premium**". Headers, tables, and the disclaimer are exempt.
+- FORMATTING: Use **bold** for specific price figures (₹ and $ amounts) and precise percentage changes (those with decimal places, e.g. **-3.71%**, **8.6%**) in body paragraphs. Do NOT bold round numbers used in historical ranges (e.g. "6-10%" or "3-5%"), general terms, or every sentence. Sparse bold = high signal. Headers, tables, and the disclaimer are exempt.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
 - End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences.
