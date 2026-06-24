@@ -267,7 +267,7 @@ SEO RULES:
 - Title: "MCX Close [date]: [dominant theme]" — under 65 chars
 - Description: under 155 chars, include today's top mover and % move
 
-RETURN ONLY valid MDX frontmatter + article body:
+RETURN ONLY valid MDX frontmatter + article body. No code fences. No markdown code blocks. Do not wrap output in \`\`\`mdx or \`\`\`.
 
 ---
 title: "[under 65 chars — MCX Close + dominant theme]"
@@ -307,7 +307,11 @@ function saveArticle(mdx) {
     return null
   }
 
-  const cleanMdx = mdx.replace(/^slug:.*$/m, '').trim()
+  const cleanMdx = mdx
+    .replace(/^```(?:mdx|markdown)?\s*\n?/m, '')
+    .replace(/\n?```\s*$/m, '')
+    .replace(/^slug:.*$/m, '')
+    .trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
   console.log(`Saved: content/articles/${slug}.mdx`)
   console.log(`BRIEF_FILE=content/articles/${slug}.mdx`)
