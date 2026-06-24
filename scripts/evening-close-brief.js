@@ -276,7 +276,7 @@ RETURN ONLY valid MDX frontmatter + article body. No code fences. No markdown co
 ---
 title: "[under 65 chars — MCX Close + dominant theme]"
 description: "[under 155 chars — date + top mover + what happened]"
-date: "${sessionDate}"
+date: "DATE_PLACEHOLDER"
 time: "${timeStr}"
 edition: "evening-brief"
 commodity: "multi"
@@ -292,10 +292,11 @@ slug: "[mcx-close-DDMMMYYYY-theme]"
     messages: [{ role: 'user', content: prompt }],
   })
 
-  return response.content[0].type === 'text' ? response.content[0].text : null
+  const text = response.content[0].type === 'text' ? response.content[0].text : null
+  return { mdx: text, sessionDate }
 }
 
-function saveArticle(mdx) {
+function saveArticle(mdx, sessionDate) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
 
   const slugMatch  = mdx.match(/^slug:\s*"?([^"\n]+)"?/m)
@@ -315,6 +316,7 @@ function saveArticle(mdx) {
     .replace(/^```(?:mdx|markdown)?\s*\n?/m, '')
     .replace(/\n?```\s*$/m, '')
     .replace(/^slug:.*$/m, '')
+    .replace(/^date:.*$/m, `date: "${sessionDate}"`)  // stamp canonical date — Claude can't override it
     .trim()
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
   console.log(`Saved: content/articles/${slug}.mdx`)
@@ -406,11 +408,11 @@ async function main() {
   }
 
   console.log('\nGenerating evening close brief...')
-  const mdx = await generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary })
+  const { mdx, sessionDate } = await generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary })
 
   if (!mdx) throw new Error('Claude returned empty response')
 
-  const result = saveArticle(mdx)
+  const result = saveArticle(mdx, sessionDate)
   if (!result) {
     console.log('Evening brief already saved — nothing to do')
     return
