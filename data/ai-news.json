@@ -1,5 +1,35 @@
 [
   {
+    "id": "2026-06-24-20-49-rbi-rate-hike-talk-deemed-premature-inr",
+    "title": "RBI Rate Hike Talk Deemed Premature; INR Weakens to 94.29, Crude Extends 4.88% Selloff",
+    "summary": "RBI's dovish messaging directly contradicts the rate hike pricing already embedded in USD/INR strength at 94.29. This signal reinforces rupee weakness — a core driver of today's broad commodity selloff across gold, crude, and copper. Weaker INR typically lifts import costs in rupee terms, but current mechanics are inverted: dollar strength is overpowering any INR depreciation support. MCX Crude at 6624 per barrel reflects both global demand deterioration and the imported inflation tax of a 94.29 rupee rate. RBI's premature language signals no near-term rate support, keeping INR vulnerable. This extends the correlation chain: RBI dovishness → weaker INR → higher commodity import parity → but offset by global oversupply narrative crushing absolute prices. Copper (1236.90) and silver (217870) follow the same mechanics. Confirmation level: any RBI forward guidance or next policy outcome will reset INR expectations and repricing risk.",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "bearish",
+    "pubDate": "2026-06-24T15:19:31.545Z",
+    "pubDateIST": "24 Jun 2026, 20:49"
+  },
+  {
+    "id": "2026-06-24-20-51-mcx-gold-142259-down-2-91-dollar-strengt",
+    "title": "MCX Gold ₹142259 down 2.91% — dollar strength driving broad metal selloff",
+    "summary": "USD/INR at ₹94.29 is anchoring this session's cross-asset decline. Stronger rupee against dollar mechanics: when USD appreciates, rupee weakens, raising MCX rupee prices for dollar-denominated commodities — yet gold, silver, copper all falling. This inversion signals demand deterioration, not currency mechanics alone. MCX Gold support sits near ₹138,500; resistance ₹145,200. Import parity arithmetic: spot gold ~$2,620/oz × 94.29 × 1.035 duty factor = ₹253,850/oz nominal — MCX at ₹142,259/10g (~₹442,200/oz equivalent) trades at significant premium, suggesting local demand weakness despite rupee headwinds. Correlation confirmation: MCX Crude -4.88% and Copper -3.50% falling identically confirms demand narrative over currency. Watch crude's ₹6,400 support into evening close for conviction confirmation.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bearish",
+    "pubDate": "2026-06-24T15:21:27.661Z",
+    "pubDateIST": "24 Jun 2026, 20:51"
+  },
+  {
+    "id": "2026-06-24-20-53-mcx-crude-collapses-4-88-to-6624-bbl-dol",
+    "title": "MCX Crude Collapses 4.88% to ₹6624/bbl — Dollar Strength Drives Cross-Asset Selloff",
+    "summary": "Dollar appreciation is the primary mechanism compressing crude, gold, and copper simultaneously. Stronger USD raises hedging costs for importers and reduces commodity attractiveness as alternative assets. MCX Crude at ₹6624/bbl sits below typical import parity (Brent ~$62/bbl × 94.29 USD/INR ≈ ₹5,851 + transport/duty ≈ ₹6,200–6,400 parity range), suggesting MCX trades at a modest premium reflecting local supply tightness.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-24T15:23:22.715Z",
+    "pubDateIST": "24 Jun 2026, 20:53"
+  },
+  {
     "id": "2026-06-24-18-01-india-growth-downgrade-pressures-rupee-s",
     "title": "India growth downgrade pressures rupee strength, lifting MCX precious metals import parity into evening close",
     "summary": "S&P Global's 110-basis-point downgrade to India's growth trajectory is a demand signal, not a supply shock. Slower domestic growth typically dampens commodity import appetite and strengthens currency expectations. However, the live USD/INR at 94.67 shows rupee stability holding despite the signal. MCX Gold at 142433/10g and Silver at 217493/kg are down 2.80% and 3.69% respectively—consistent with the cross-asset selloff narrative (broad dollar strength or demand deterioration). The growth downgrade reinforces demand concerns already priced into crude's 3.26% drop to 6737/bbl. For Indian traders, slower GDP growth reduces domestic physical offtake across metals, extending evening session weakness. Watch whether RBI commentary or overnight global yields confirm or reverse this demand destruction signal through Friday close.",
