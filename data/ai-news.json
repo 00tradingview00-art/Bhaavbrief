@@ -1,5 +1,15 @@
 [
   {
+    "id": "2026-06-25-23-03-mcx-nat-gas-2-45-to-310-mmbtu-as-global",
+    "title": "MCX Nat Gas +2.45% to ₹310/mmBtu as global energy complex surges on supply tightness",
+    "summary": "Dollar weakness is lifting the entire commodity complex, but nat gas is accelerating specifically on supply concern — US/EU session crude +1.8% and nat gas +2.4% together signal energy sector repricing, not just currency drift. MCX Nat Gas at ₹309.80/mmBtu is testing resistance around ₹312 (recent swing high); support sits at ₹302. Historical parity arithmetic: Henry Hub ~$2.65/mmBtu × USD/INR 94.39 × 1.08 import markup = ₹269 theoretical fair value. MCX trades 15% premium to parity — typical of supply premium pricing. Cross-commodity confirmation: silver +3.00% moving alongside energy suggests reflation narrative (rising input costs, not deflation). Watch: US EIA natural gas inventory release tomorrow morning (IST 2100) — historically triggers 80+ bps volatility in MCX nat gas within 30 minutes.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-25T17:33:39.254Z",
+    "pubDateIST": "25 Jun 2026, 23:03"
+  },
+  {
     "id": "2026-06-25-21-01-mcx-nat-gas-2-51-at-310-mmbtu-energy-sup",
     "title": "MCX Nat Gas +2.51% at ₹310/mmBtu — energy supply concerns drive reflation complex higher",
     "summary": "Dollar weakness across USD/INR (₹94.39) is triggering broad reflation trade, with crude (+1.44%) and nat gas (+2.51%) advancing together on genuine supply anxiety, not mere currency mechanics. This co-movement confirms the narrative: tightening global energy inventories, not just rupee depreciation, are anchoring the rally.",
@@ -1038,35 +1048,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-18T18:23:47.781Z",
     "pubDateIST": "18 Jun 2026, 23:53"
-  },
-  {
-    "id": "2026-06-18-21-17-russian-oil-waiver-expiry-collides-with",
-    "title": "Russian Oil Waiver Expiry Collides With Iran Deal as MCX Crude Slides to ₹7034",
-    "summary": "The expiry of Washington's Russian oil sanctions waiver arrives precisely as the MCX commodity complex is selling off across the board, with crude at ₹7034 per barrel already down 2.47% this session. The structural tension here is direct: the Iran nuclear deal has unlocked an estimated 1.3–1.5 million additional barrels per day of potential supply into global markets, and that supply expansion is dominating the price signal over any tightening effect the Russian waiver expiry might otherwise generate. On the import parity chain, Brent crude softness transmits to MCX through the USD/INR rate at ₹94.32 — a firmer rupee would arithmetically compress the INR-denominated crude contract further, compounding the dollar-side weakness. The cross-market correlation to watch is MCX Copper at ₹1323.90, also falling, confirming this is a demand-outlook deterioration narrative rather than a supply-side crude-specific story. The price level that will confirm or negate this supply-versus-demand framing is the Brent crude settlement relative to the $72 per barrel area, which historically has demarcated demand-driven from supply-driven bear phases.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T15:47:23.302Z",
-    "pubDateIST": "18 Jun 2026, 21:17"
-  },
-  {
-    "id": "2026-06-18-21-19-rbi-holds-repo-rate-unchanged-as-mcx-gol",
-    "title": "RBI Holds Repo Rate Unchanged as MCX Gold Slides 2.98% to ₹149296",
-    "summary": "The RBI rate hold arrives precisely as the broader commodity complex is under coordinated selling pressure, with gold at ₹149296 per 10g, silver down 5.70% to ₹237465 per kg, and crude off 2.47% at ₹7034 per barrel. The unchanged repo stance removes any near-term INR support catalyst from monetary easing, keeping USD/INR elevated at ₹94.32. At this rupee level, the import parity chain for gold translates each dollar of COMEX weakness directly into amplified MCX losses — dollar strength compounds the global spot decline into a steeper domestic price fall. The 6.9% GDP projection signals stable physical demand fundamentals for base metals, partially cushioning copper at ₹1323.90. The cross-market correlation to watch is crude versus rupee: historically, sustained crude weakness at these levels has coincided with INR stabilisation, which would reduce the currency-amplification effect on MCX precious metals. The specific level to monitor for directional confirmation is COMEX gold at the $3,300 per troy ounce threshold — a hold or breach there into the MCX evening close will indicate whether domestic losses deepen further.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-18T15:49:15.083Z",
-    "pubDateIST": "18 Jun 2026, 21:19"
-  },
-  {
-    "id": "2026-06-18-21-20-mcx-silver-slides-5-70-to-237465-kg-as-d",
-    "title": "MCX Silver Slides 5.70% to ₹237465/kg as Dollar Strength Compresses Precious Metals Complex",
-    "summary": "The transmission mechanism today is dollar-driven margin compression — a stronger USD raises the effective cost of holding USD-denominated assets, accelerating liquidation across precious metals. MCX Silver at ₹237465/kg reflects this pressure directly. Key observation: support historically clusters near ₹233000/kg; resistance reference sits around ₹244000/kg.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T15:50:58.478Z",
-    "pubDateIST": "18 Jun 2026, 21:20"
   }
 ]
