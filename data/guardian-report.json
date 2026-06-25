@@ -1,19 +1,12 @@
 {
-  "generatedAt": "2026-06-24T03:27:49.529Z",
-  "overallStatus": "yellow",
+  "generatedAt": "2026-06-25T03:25:11.818Z",
+  "overallStatus": "green",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [
-      {
-        "field": "MCX Gold lot size description",
-        "currentValue": "The MCX Gold standard contract lot size is 1 kg (1,000 grams), quoted in ₹ per 10 grams. There is also a Gold Mini contract with a 100g lot size",
-        "correctValue": "According to contract-specs.json, the current active Gold contract (GOLD26AUGFUT) is 1 kg lot size quoted per 10 grams. No Gold Mini contract specifications are provided in the authoritative data source.",
-        "location": "FAQ_SCHEMA - 'What is the MCX Gold lot size in 2026?' answer"
-      }
-    ],
+    "learnIssues": [],
     "investIssues": [],
     "circularImpact": []
   }
