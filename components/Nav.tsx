@@ -108,33 +108,38 @@ export default function Nav() {
               marginLeft: 'auto',
               display: 'flex',
               alignItems: 'center',
-              gap: 6,
-              background: 'transparent',
-              border: 'none',
-              borderLeft: '1px solid var(--border)',
-              padding: '0 16px',
+              gap: 7,
+              background: 'var(--surface-2, #F3F2EC)',
+              border: '1px solid var(--border)',
+              borderRadius: 6,
+              padding: '5px 12px',
               cursor: 'pointer',
               flexShrink: 0,
               color: 'var(--ink-3)',
+              transition: 'border-color 0.15s, background 0.15s',
+              marginRight: 12,
             }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--ink-3)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)' }}
             aria-label="Search"
           >
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.4"/>
-              <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.5 }}>
+              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em' }}
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em', color: 'var(--ink-4)' }}
               className="nav-search-label">
               Search
             </span>
             <kbd style={{
               fontFamily: 'var(--font-mono)', fontSize: 10,
               color: 'var(--ink-4)',
-              background: 'var(--surface-2)',
+              background: '#fff',
               border: '1px solid var(--border)',
-              borderRadius: 3,
+              borderRadius: 4,
               padding: '1px 5px',
-              lineHeight: 1.4,
+              lineHeight: 1.5,
+              boxShadow: '0 1px 0 var(--border)',
             }}
               className="nav-search-kbd">
               ⌘K
