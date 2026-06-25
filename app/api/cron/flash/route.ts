@@ -8,8 +8,7 @@ const WORKFLOW = 'flash-brief.yml'
 export async function GET(req: Request) {
   const secret = process.env.CRON_SECRET
   const headerAuth = req.headers.get('authorization')
-  const querySecret = new URL(req.url).searchParams.get('secret')
-  const valid = secret && (headerAuth === `Bearer ${secret}` || querySecret === secret)
+  const valid = secret && headerAuth === `Bearer ${secret}`
   if (!valid) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
