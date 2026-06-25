@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-25-09-47-nat-gas-0-99-to-305-40-mmbtu-as-crude-we",
+    "title": "Nat Gas +0.99% to ₹305.40/mmBtu as crude weakness decouples energy complex",
+    "summary": "MCX Natural Gas is outperforming crude by 260bps this session—a structural decoupling driven by independent supply dynamics rather than global energy correlation. Crude's -1.66% retreat reflects demand softness, yet nat gas holds ₹305.40, suggesting domestic storage replenishment and monsoon-delayed LNG import schedules are supporting the contract independently.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-25T04:17:38.533Z",
+    "pubDateIST": "25 Jun 2026, 09:47"
+  },
+  {
+    "id": "2026-06-25-09-49-crude-weakness-bleeds-into-energy-comple",
+    "title": "Crude weakness bleeds into energy complex; MCX Crude -1.66% at ₹6558/bbl leads selloff",
+    "summary": "Global crude weakness is the transmission mechanism: MCX Crude has broken lower at ₹6558/bbl (-1.66%), dragging the broader energy complex. Support forms at ₹6480; resistance at ₹6650. Import parity for crude: USD 65/bbl × ₹94.18 × 1.02 duty = ₹6,240 MCX equivalent—current levels trade at 5% premium to parity, leaving room for further downside if global momentum persists.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bearish",
+    "pubDate": "2026-06-25T04:19:33.894Z",
+    "pubDateIST": "25 Jun 2026, 09:49"
+  },
+  {
     "id": "2026-06-25-05-16-mcx-copper-crashes-4-51-to-1224-kg-as-do",
     "title": "MCX Copper crashes 4.51% to ₹1224/kg as dollar strength pressures entire base metals complex",
     "summary": "Dollar appreciation is the mechanical driver. Stronger USD makes commodities priced in dollars more expensive for INR holders, triggering liquidation across gold (-3.56%), silver (-5.18%), and copper simultaneously. This cross-asset correlation confirms demand-neutral dollar-driven selling rather than supply shock.",
