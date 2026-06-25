@@ -15,19 +15,19 @@ const FILTER_KEYWORDS: Record<string, string[]> = {
   Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'red sea', 'war', 'geopolit'],
 }
 
-const ASSET_DETECTORS: { label: string; re: RegExp }[] = [
-  { label: 'Gold',      re: /\bgold\b/i },
-  { label: 'Silver',    re: /\bsilver\b/i },
-  { label: 'Crude',     re: /\bcrude|brent\b/i },
-  { label: 'Copper',    re: /\bcopper\b/i },
+const ASSET_DETECTORS: { label: string; re: RegExp; href?: string }[] = [
+  { label: 'Gold',      re: /\bgold\b/i,                          href: '/commodities/gold' },
+  { label: 'Silver',    re: /\bsilver\b/i,                        href: '/commodities/silver' },
+  { label: 'Crude',     re: /\bcrude|brent\b/i,                   href: '/commodities/crude-oil' },
+  { label: 'Copper',    re: /\bcopper\b/i,                        href: '/commodities/copper' },
   { label: 'Nat Gas',   re: /natural.gas|nat.gas|\blng\b/i },
-  { label: 'Rupee',     re: /\brupee\b|usdinr/i },
+  { label: 'Rupee',     re: /\brupee\b|usdinr/i,                  href: '/markets' },
   { label: 'DXY',       re: /\bdollar.index\b|\bdxy\b/i },
   { label: 'Fed',       re: /federal.reserve|fomc|\bfed\b/i },
   { label: 'RBI',       re: /\brbi\b|repo.rate/i },
   { label: 'OPEC',      re: /\bopec\b/i },
   { label: 'China',     re: /\bchina\b/i },
-  { label: 'MCX',       re: /\bmcx\b/i },
+  { label: 'MCX',       re: /\bmcx\b/i,                           href: '/markets' },
 ]
 
 export interface NewsItem {
@@ -385,8 +385,9 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Cross-asset tags */}
                 {crossAssets.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                    {crossAssets.map(a => (
-                      <span key={a} style={{
+                    {crossAssets.map(a => {
+                      const detector = ASSET_DETECTORS.find(d => d.label === a)
+                      const tagStyle = {
                         fontFamily: 'var(--font-mono)',
                         fontSize: 10,
                         letterSpacing: '0.06em',
@@ -394,10 +395,17 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                         background: '#F3F2EC',
                         color: '#48483A',
                         border: '0.5px solid #DDDDD0',
-                      }}>
-                        {a.toUpperCase()}
-                      </span>
-                    ))}
+                        textDecoration: 'none',
+                        display: 'inline-block',
+                      }
+                      return detector?.href ? (
+                        <Link key={a} href={detector.href} style={{ ...tagStyle, color: '#48483A' }}>
+                          {a.toUpperCase()}
+                        </Link>
+                      ) : (
+                        <span key={a} style={tagStyle}>{a.toUpperCase()}</span>
+                      )
+                    })}
                   </div>
                 )}
               </div>
