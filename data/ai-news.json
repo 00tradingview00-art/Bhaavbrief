@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-26-01-48-mcx-gold-1-37-at-143200-10g-as-dollar-we",
+    "title": "MCX Gold +1.37% at ₹143200/10g as dollar weakness fuels broad commodity reflation",
+    "summary": "Dollar weakness is the mechanism driving today's cross-asset rally. Gold, silver, copper, crude and nat gas all advancing simultaneously signals reflation trade dominance over safe-haven demand. MCX Gold at ₹143200/10g sits above its 20-day support near ₹141800 and below resistance at ₹144500. Global spot gold around $2385/oz × USD/INR 94.39 × 1.08 duty factor yields parity of ₹141200—MCX trades 1.4% premium, consistent with import cost advantage. Silver's +1.2% move alongside gold confirms metal complex strength, not individual gold momentum. Copper's +1.53% gain validates reflation narrative over deflationary concerns. Monitor US PCE inflation print (due next week) and USD/INR stability below 94.50 for directional confirmation at Monday MCX open.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-25T20:18:52.290Z",
+    "pubDateIST": "26 Jun 2026, 01:48"
+  },
+  {
+    "id": "2026-06-26-01-50-mcx-copper-rallies-1-53-to-1242-kg-on-re",
+    "title": "MCX Copper rallies 1.53% to ₹1242/kg on reflation-driven dollar weakness",
+    "summary": "Dollar weakness across US/EU session is the primary mechanism: broad commodity complex rally (gold +1.37%, silver, crude +2.10%) signals reflation trade unwinding USD strength. MCX Copper ₹1242/kg sits above key support at ₹1225 but faces resistance at ₹1260.",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "bullish",
+    "pubDate": "2026-06-25T20:20:48.560Z",
+    "pubDateIST": "26 Jun 2026, 01:50"
+  },
+  {
     "id": "2026-06-26-00-57-mcx-crude-rally-anchored-in-energy-suppl",
     "title": "MCX Crude Rally Anchored in Energy Supply Anxiety; Natgas Outperforming at ₹313.90/mmBtu",
     "summary": "Dollar weakness underpinning broad commodity reflation is secondary here. Primary driver: energy supply concern—crude +2.10% to ₹6809/bbl, natgas +3.80% to ₹313.90/mmBtu signals coordinated upstream constraint, not just macro liquidity. MCX crude support sits ₹6720/bbl; resistance ₹6900/bbl. Global WTI ~$78/bbl × ₹94.39 USD/INR × 0.98 duty factor = theoretical parity ₹7240/bbl—MCX trading ₹430/bbl discount, typical arbitrage space. Cross-commodity confirmation: copper +1.53% alongside crude contradicts pure supply story, suggests reflation bid. Gold's marginal slip (-0.03%) despite dollar weakness reveals selective risk repricing. Watch Monday MCX open for crude hold above ₹6750/bbl—signals whether supply fears persist or profit-taking dominates.",
@@ -1028,15 +1048,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-18T21:27:07.706Z",
     "pubDateIST": "19 Jun 2026, 02:57"
-  },
-  {
-    "id": "2026-06-19-01-01-mcx-crude-slides-1-48-to-7-105-as-natgas",
-    "title": "MCX Crude Slides 1.48% to ₹7,105 as NatGas Dominates Session Narrative",
-    "summary": "The mechanism here is energy complex divergence — NatGas surging +2.02% signals demand-side heat loading rather than broad crude buying interest, leaving crude without a supportive narrative. Supply-side inertia and a firm USD/INR at ₹94.32 amplify downside translation.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T19:31:35.561Z",
-    "pubDateIST": "19 Jun 2026, 01:01"
   }
 ]
