@@ -385,9 +385,6 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Cross-asset tags */}
                 {crossAssets.length > 0 && (
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: 2 }}>
-                      Touches
-                    </span>
                     {crossAssets.map(a => (
                       <span key={a} style={{
                         fontFamily: 'var(--font-mono)',
