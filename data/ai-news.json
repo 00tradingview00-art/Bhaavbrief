@@ -1,5 +1,25 @@
 [
   {
+    "id": "2026-06-26-04-10-mcx-crude-6809-bbl-2-10-energy-rally-sig",
+    "title": "MCX Crude ₹6809/bbl +2.10% — Energy Rally Signals Supply Tension, Dollar Weakness Confirmed",
+    "summary": "Dollar weakness is the mechanism driving this session's broad commodity rally. USD/INR at ₹94.39 reflects depreciation pressure, making rupee-denominated MCX contracts cheaper for foreign buyers and lifting all hard assets. Energy complex leading: crude +2.10%, natgas +3.80% together signal supply-side concern, not demand destruction. MCX Crude ₹6809 trades above 21-day moving average. Support: ₹6650/bbl; Resistance: ₹6950/bbl. Parity check: WTI ~$76 × 94.39 × 1.0 duty factor = ₹7,174 theoretical; MCX at ₹6809 indicates ~5% discount to import parity — unusual given strong global crude, suggesting local selling pressure. Copper +1.53% confirms reflation narrative — inverse dollar move driving base metals higher. Watch: US PCE inflation data Tuesday and OPEC+ production guidance Tuesday — either could trigger sharp repricing of energy supply expectations into Monday MCX open.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "bullish",
+    "pubDate": "2026-06-25T22:40:25.751Z",
+    "pubDateIST": "26 Jun 2026, 04:10"
+  },
+  {
+    "id": "2026-06-26-04-12-mcx-natgas-surges-3-80-to-313-90-mmbtu-o",
+    "title": "MCX Natgas surges 3.80% to ₹313.90/mmBtu on global energy supply anxiety",
+    "summary": "Dollar weakness combined with geopolitical supply concerns is anchoring the cross-asset rally. US natgas futures advanced overnight on production disruption signals; MCX Natgas tracking that momentum at ₹313.90/mmBtu. Support established at ₹305/mmBtu (recent swing low); resistance resides at ₹325/mmBtu (4-week highs).",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-25T22:42:21.623Z",
+    "pubDateIST": "26 Jun 2026, 04:12"
+  },
+  {
     "id": "2026-06-26-02-31-mcx-silver-0-58-to-220940-kg-on-broad-re",
     "title": "MCX Silver +0.58% to ₹220940/kg on broad reflation trade; energy surge confirms demand thesis",
     "summary": "Dollar weakness anchoring the cross-asset rally — gold, silver, and copper advancing together signal reflation positioning rather than safe-haven demand. Energy complex surge (crude +2.1%, natgas +3.8%) confirms underlying demand narrative: supply concerns lifting all risk assets.",
@@ -1028,35 +1048,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-18T23:22:45.292Z",
     "pubDateIST": "19 Jun 2026, 04:52"
-  },
-  {
-    "id": "2026-06-19-02-53-dollar-bullish-break-on-fed-hike-bets-pr",
-    "title": "Dollar Bullish Break on Fed Hike Bets Pressures MCX Gold at ₹149378 While NatGas Diverges +2.02%",
-    "summary": "The dollar's bullish break on renewed Fed rate-hike expectations arrives in a session already bifurcated — NatGas leading at +2.02% while risk-sensitive commodities retreat, with MCX Copper down 1.32% and MCX Crude off 1.48% confirming the dollar-pressure transmission. A stronger dollar raises the denominator cost of USD-priced imports, historically compressing rupee-hedged commodity premiums across the MCX complex. MCX Gold at ₹149378 per 10g reflects minimal session movement at +0.05%, but the import parity chain tightens: as DXY firms, COMEX Gold faces headwinds, which at USD/INR ₹94.32 partially offsets rupee depreciation that would otherwise lift MCX prices. MCX Silver at ₹237620 per kg carries higher beta to dollar moves than Gold. The cross-market correlation to monitor is MCX Copper at ₹1320.50 — historically it tracks global growth expectations that Fed tightening signals compress. Saturday's MCX open confirmation level is whether COMEX Gold holds above the $3,300 handle overnight.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T21:23:26.319Z",
-    "pubDateIST": "19 Jun 2026, 02:53"
-  },
-  {
-    "id": "2026-06-19-02-55-dollar-one-year-high-at-94-32-pressures",
-    "title": "Dollar One-Year High at ₹94.32 Pressures MCX Metal Complex Amid NatGas Divergence",
-    "summary": "The dollar index reaching a one-year high on renewed Fed hike bets creates a structurally complex session where NatGas diverges sharply from the broader commodity complex. A stronger dollar mechanically compresses dollar-denominated commodity prices at the global level, yet the rupee at ₹94.32 partially offsets this compression for Indian importers by inflating the import parity calculation in rupee terms. MCX Copper at ₹1320.50 per kg is already reflecting this tension with a 1.32% decline, as LME copper faces dual pressure from dollar strength and softening Chinese demand signals. MCX Crude at ₹7105 per barrel mirrors this with a 1.48% decline, consistent with historical patterns where DXY strength correlates negatively with crude. MCX Gold at ₹149378 per 10g remains near flat at plus 0.05%, as rupee depreciation historically cushions gold's dollar-side weakness for domestic pricing. The cross-market correlation to observe is USD/JPY — Japan's verbal intervention warning on yen historically precedes coordinated G7 currency action that has caused abrupt dollar reversals, which unwound commodity shorts within the same session. The confirmation level for this dollar-driven narrative is the US Fed Funds futures implied rate for the September 2026 meeting; a reading above 5.50% probability of a hike sustains the dollar bid and metal pressure into Monday's MCX open.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T21:25:17.698Z",
-    "pubDateIST": "19 Jun 2026, 02:55"
-  },
-  {
-    "id": "2026-06-19-02-57-mcx-copper-slides-1-32-to-1320-50-kg-as",
-    "title": "MCX Copper slides 1.32% to ₹1320.50/kg as global session sentiment stays subdued",
-    "summary": "The mechanism here is positioning divergence. While LME base metals index touched a record — driven by aluminum supply anxiety described as a structural \"black hole\" — copper is not participating in that rally, suggesting traders are rotating within the metals complex rather than buying broadly.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-18T21:27:07.706Z",
-    "pubDateIST": "19 Jun 2026, 02:57"
   }
 ]
