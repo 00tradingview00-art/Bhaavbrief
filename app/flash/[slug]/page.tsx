@@ -150,7 +150,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
             </div>
           )}
 
-          <div className="brief-prose">
+          <div className="brief-prose flash-labels">
             <MDXRemote source={flash.content} />
           </div>
         </article>
