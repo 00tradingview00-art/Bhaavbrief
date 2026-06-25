@@ -273,6 +273,21 @@ export default async function ArticlePage({ params }: Props) {
           color: var(--ink);
           font-weight: 600;
         }
+        /* Section label: paragraph whose only content is a bold element (e.g. **WHAT HAPPENED**) */
+        .article-body p > strong:only-child {
+          display: block;
+          font-family: var(--font-mono);
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--saffron);
+          margin-bottom: 6px;
+          margin-top: 1.75rem;
+        }
+        .article-body p:first-of-type > strong:only-child {
+          margin-top: 0;
+        }
         .article-body p {
           margin-bottom: 16px;
         }

@@ -919,48 +919,37 @@ SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment adv
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
 - Technical levels are observations: "Gold has held ₹74,000 four times" ✓ | "Strong support, consider buying" ✗
 
-WRITE 5 sentences + 1 Watch line. No headers. No labels. No "The twist:" — if there's a contrarian angle, fold it into the sentence naturally.
+WRITE IN THIS EXACT STRUCTURE with 5 bold-header sections. Each section must have substance — 2–3 sentences minimum per section:
 
-The test for each sentence: does it add information a trader could not get from a price ticker? If a sentence only restates the number, delete it and say something real instead.
+**WHAT HAPPENED**
+2–3 sentences. Open with the insight this move reveals — the price and % are evidence, not the lead. Name the specific real-world catalyst (named event, data print, policy decision). Never "macro headwinds" or "risk-off" without naming the exact cause.
+BAD: "MCX Silver is down 2.84% to ₹228,230/kg following global macro weakness."
+GOOD: "Silver is selling off twice as hard as gold — **MCX Silver down 2.84% to ₹228,230/kg** while gold lost half that — which means the market is liquidating silver-specific industrial positions, not fleeing commodities broadly. The trigger was Friday's US PCE print at **2.8%** vs **2.6%** expected, resetting Fed rate-cut timelines from September to December."
 
-Sentence 1 — Open with the insight that makes this move worth reading about. The price and % must appear here, but they are evidence for the insight, not the lead. Show what the move reveals, not just what it is.
-  ✗ "MCX Silver is the session's sharpest mover — down 2.84% to ₹228,230/kg."
-  ✓ "Silver is selling off twice as hard as gold — **MCX Silver down 2.84% to ₹228,230/kg** while gold lost half that — which means the market is liquidating silver-specific positions, not fleeing commodities broadly."
+**WHAT IT MEANS**
+2–3 sentences. Explain the transmission mechanism from the global trigger to MCX prices. Include import parity arithmetic where relevant (COMEX price × USD/INR × duty factor = MCX parity). What does the rest of the commodity complex confirm or contradict about this move?
 
-Sentence 2 — Name the specific real-world cause. Not "dollar strength" — say what moved the dollar. Not "risk-off" — say what triggered it. One named event, data release, or decision.
-  ✗ "The selloff follows overnight risk-off positioning."
-  ✓ "The trigger was Friday's US PCE print coming in at **2.8%**, above the **2.6%** consensus, resetting Fed rate-cut timelines from September to December."
+**WHO IS AFFECTED**
+2–3 sentences. Name at least one specific Indian company, sector, or market participant and the concrete operational consequence — what decision does this force, delay, or change for them? Not a cost calculation in crores — a business or procurement decision.
+BAD: "Waaree Energies faces higher input costs of approximately ₹X crore."
+GOOD: "Waaree Energies, which locks in silver-paste procurement quarterly, faces a decision: at ₹228,230/kg, fresh forward contracts this week mean betting the selloff continues, while waiting risks locking in at higher levels if silver recovers."
 
-Sentence 3 — What does the rest of the complex say about this? Name 1–2 other commodities and what their moves confirm or contradict. Then tell us what USD/INR at ₹${prices.usdinr?.toFixed(2)} does to this for Indian buyers — specifically, not generically.
-  ✗ "MCX Gold fell 1.02% and USD/INR amplifies the impact for Indian importers."
-  ✓ "MCX Gold's milder **-1.02%** drop alongside silver's **-2.84%** confirms a precious-metals spread trade unwinding, not a safe-haven rout; at USD/INR **₹${prices.usdinr?.toFixed(2)}**, every dollar decline in COMEX silver adds roughly **₹3,200/kg** to the import parity gap for Indian silver buyers."
+**BOTTOM LINE**
+1–2 sentences. The single most important structural takeaway — what changed that wasn't true yesterday? Not what moved, but what the move tells us about the market regime or an underlying trend.
 
-Sentence 4 — One named Indian company or sector. Not a cost-calculation — a consequence. What decision does this force, delay, or change for them?
-  ✗ "Waaree Energies, a large silver consumer, sees input cost relief of approximately ₹X crore."
-  ✓ "Waaree Energies, which locks in silver-paste procurement quarterly, faces a decision: at ₹228,230/kg, forward contracts placed at last quarter's ₹247,000 now look expensive — but locking in fresh contracts this week means betting the selloff continues."
+**WHAT TO WATCH**
+1–2 sentences. One specific price level OR one upcoming data release (name the exact event, exact timing in IST) — and precisely why it confirms or negates this particular move.
+BAD: "Watch ₹74,000 support on MCX Gold."
+GOOD: "Watch COMEX silver **$62/oz** — the last time it closed below this level in Jan 2026, MCX silver followed with a 5-session, 8% decline; a close above tonight keeps this as a one-day event."
 
-Sentence 5 — The thing that is not obvious in the price. A historical parallel, a structural observation, or what would have to be true for this move to reverse. One sentence that makes the reader think.
-
-Watch: One specific price level OR one upcoming data event — and exactly why it matters here, not just that it exists.
-  ✗ "Watch: COMEX silver $62/oz support."
-  ✓ "Watch: COMEX silver **$62/oz** — the last time it closed below this level in Jan 2026, MCX silver followed with a 5-session, 8% decline; a close above tonight keeps the selloff as a one-day event."
-
-TOTAL: 110–140 words. One idea per sentence. Cut any sentence over 22 words in half.
-Use **bold** only for key numbers (prices, percentages, thresholds). Never bold whole sentences.
-
-WHAT BAD WRITING LOOKS LIKE — never do this:
-✗ Restating the price move as the lead: "MCX Crude fell 2.3% to ₹7,093/bbl this session..."
-✗ Generic cause: "The dominant narrative pointing to dollar strength compressing demand expectations globally."
-✗ The twist as a label: "The twist: copper is rising despite weak China PMI..."
-✗ Cost math as impact: "Hindalco faces higher copper costs of an estimated ₹45 crore per day."
-✗ Vague watch: "Watch whether crude holds ₹7,000 support."
+TOTAL: 270–380 words across all sections. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers themselves (they already render bold from the **).
 
 SEO:
 - Title: commodity + specific action + key reason (under 65 chars, include "MCX")
 - Description: under 155 chars, ₹ price + key reason
 - Slug: lowercase hyphens, max 8 words
 
-RETURN ONLY valid MDX frontmatter + article body:
+RETURN ONLY valid MDX frontmatter + article body with the 5 sections:
 
 ---
 title: "[under 65 chars]"
@@ -972,13 +961,29 @@ commodity: "${primaryMove?.label ?? 'macro'}"
 tags: ["${tags}"]
 priceAtPublish: ${Math.round(primaryMove?.price ?? 0)}
 slug: "[url-slug-max-8-words]"
+source: "BhaavBrief Intelligence"
 ---
 
-[5 sentences + Watch line. Nothing else.]`
+**WHAT HAPPENED**
+[content]
+
+**WHAT IT MEANS**
+[content]
+
+**WHO IS AFFECTED**
+[content]
+
+**BOTTOM LINE**
+[content]
+
+**WHAT TO WATCH**
+[content]
+
+Source: BhaavBrief Intelligence | bhaavbrief.in`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 800,
+    max_tokens: 1400,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -1031,33 +1036,34 @@ SEBI COMPLIANCE — NON-NEGOTIABLE:
 - No price targets. Historical precedents only: "In past Iran escalations, crude rose 4–8% over 3 sessions" ✓
 - Technical levels are observations only: "Crude is testing ₹9,000 resistance" ✓ | "Strong support, accumulate" ✗
 
-WRITE EXACTLY THIS STRUCTURE — 5 sentences + 1 Watch line:
+WRITE IN THIS EXACT STRUCTURE with 5 bold-header sections. Each section must have substance — 2–3 sentences minimum per section:
 
-Sentence 1 — THE EVENT: State the geopolitical/macro event precisely. What happened, where, when. This must be a hook — not a price recap. Use drama or stakes to open.
-  GOOD: "Iran launched strikes on Israeli energy infrastructure on Monday, raising the first credible Hormuz blockade threat since 2019."
-  BAD: "MCX Crude opened at ₹9,022, up 4.74%, following geopolitical developments in the Middle East."
+**WHAT HAPPENED**
+2–3 sentences. State the geopolitical/macro event precisely — what, where, when. This must be a hook with stakes or consequences, not a price recap.
+GOOD: "Iran launched drone strikes on Iraqi Kurdish oil fields late Tuesday, raising the first credible supply disruption threat in the Basra corridor since 2022."
+BAD: "MCX Crude opened at ₹9,022, up 4.74%, following geopolitical developments in the Middle East."
 
-Sentence 2 — THE MECHANISM: Explain exactly how this transmits to MCX prices — Hormuz risk for crude, safe-haven bid for gold, demand outlook for copper. Be specific about the supply/demand channel.
+**WHAT IT MEANS**
+2–3 sentences. Explain the specific transmission mechanism — how this event moves through to MCX prices (Hormuz risk → crude premium; safe-haven bid → gold; demand outlook → copper). Include what the rest of the commodity complex confirms or contradicts. State the historical precedent range: "In past Hormuz threats, crude has risen 4–8% over 3 sessions before fading."
 
-Sentence 3 — THE TWIST: The contrarian view — what the other side of this trade argues, or why this move might be a head-fake. Historical framing only.
-  Example: "The twist: Hormuz has been threatened 14 times since 1984 and blocked zero times — historically, the war premium fades within 5 sessions if no physical disruption occurs."
+**WHO IS AFFECTED**
+2–3 sentences. Name specific Indian companies, refiners, airlines, jewellers, or merchants and the concrete consequence — what operational decision does this force or delay? Not a cost calculation in crores — a procurement, hedging, or pricing decision.
+GOOD: "HPCL's refining margin desk faces a choice between locking in forward crude purchases at current elevated prices or waiting on the assumption that geopolitical premium fades — at ₹9,000+/bbl, every week of delay risks a fortnightly fuel price revision."
 
-Sentence 4 — THE MCX NUMBER: Current MCX price and session move. Connect the event to the price with the ₹ crore consequence for one named Indian company.
-  Example: "MCX Crude has surged **5.2% to ₹9,062/bbl** — at this level, HPCL's daily crude import bill rises by an estimated **₹180 crore**, raising the probability of a retail fuel price revision at the next fortnightly cycle."
+**BOTTOM LINE**
+1–2 sentences. The single most important structural takeaway — what the event reveals about the supply/demand balance or policy environment that wasn't visible yesterday.
 
-Sentence 5 — THE INDIA IMPACT: One specific consumer group or downstream industry, their exposure, and the timeline for it to reach them.
+**WHAT TO WATCH**
+1–2 sentences. One specific trigger — a ceasefire signal, a price level breach, or a named scheduled data release — that would reverse or confirm this move. Include exact timing where possible.
 
-Watch: [one specific trigger — a ceasefire signal, a key price level breach, or a scheduled data release — that would reverse or confirm this move]
-
-TOTAL: 100–130 words. One idea per sentence.
-Use **bold** only for key numbers (₹ prices, percentages, crore figures). Never bold whole sentences.
+TOTAL: 270–380 words. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers.
 
 SEO:
 - Title: event + commodity + MCX implication (under 65 chars, include "MCX")
 - Description: under 155 chars, include the event name and price impact
 - Slug: lowercase hyphens, max 8 words, include the event keyword (e.g. iran-strike, opec-cut)
 
-RETURN ONLY valid MDX frontmatter + article body:
+RETURN ONLY valid MDX frontmatter + article body with the 5 sections:
 
 ---
 title: "[under 65 chars]"
@@ -1069,13 +1075,29 @@ commodity: "${primaryLabel}"
 tags: ["Geopolitical", "${primaryLabel}", "MCX"]
 priceAtPublish: ${Math.round(primaryPrice)}
 slug: "[url-slug-max-8-words]"
+source: "BhaavBrief Intelligence"
 ---
 
-[5 sentences + Watch line. Nothing else.]`
+**WHAT HAPPENED**
+[content]
+
+**WHAT IT MEANS**
+[content]
+
+**WHO IS AFFECTED**
+[content]
+
+**BOTTOM LINE**
+[content]
+
+**WHAT TO WATCH**
+[content]
+
+Source: BhaavBrief Intelligence | bhaavbrief.in`
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 900,
+    max_tokens: 1400,
     messages: [{ role: 'user', content: prompt }],
   })
 
