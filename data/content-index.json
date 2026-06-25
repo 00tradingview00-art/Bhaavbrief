@@ -1,6 +1,25 @@
 [
   {
     "type": "brief",
+    "slug": "edition-052",
+    "href": "/briefs/edition-052",
+    "title": "Peace Dividend Holds, But Rupee Surge Cushions MCX Gold at ₹141912",
+    "description": "Global gold and crude fall sharply on peace optimism, but a strengthening rupee absorbs the blow for Indian commodity traders.",
+    "excerpt": "MCX Gold ₹141912 | Crude ₹6567 | USDINR ₹94.29 — Gold +0.45% | Crude -1.53% | Silver +1.07% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-06-25T03:57:42.884Z",
+    "edition": "52",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "USD/INR",
+      "Macro",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-051",
     "href": "/briefs/edition-051",
     "title": "Peace Deal Accelerates: Gold Drops to ₹141100 as Fear Premium Collapses",
