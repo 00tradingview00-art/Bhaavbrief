@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141311,
-    "silver": 214138,
-    "crude": 6667,
-    "copper": 1223.95,
-    "natgas": 301.9,
+    "gold": 140811,
+    "silver": 211799,
+    "crude": 6561,
+    "copper": 1231,
+    "natgas": 305.7,
     "usdinr": 94.67
   },
-  "lastChecked": "2026-06-24T17:31:32.061Z",
+  "lastChecked": "2026-06-25T03:31:16.445Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-06-12",
-    "value": "383"
+    "period": "2026-06-19",
+    "value": "451"
   },
   "lastGeoNews": {
     "mideast": "Gulf oil tanker rates nearly double as Middle East producers ramp up exports - R"
