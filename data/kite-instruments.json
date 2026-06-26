@@ -26,9 +26,9 @@
     "expiry": "2026-06-30"
   },
   "natgas": {
-    "token": 129091847,
-    "symbol": "NATURALGAS26JUNFUT",
-    "expiry": "2026-06-25"
+    "token": 137903367,
+    "symbol": "NATURALGAS26JULFUT",
+    "expiry": "2026-07-28"
   },
   "zinc": {
     "token": 141494023,
@@ -52,25 +52,25 @@
   },
   "currencies": {
     "usdinr": {
-      "token": 1689859,
-      "symbol": "USDINR26JUNFUT",
-      "expiry": "2026-06-25"
+      "token": 323843,
+      "symbol": "USDINR26JULFUT",
+      "expiry": "2026-07-29"
     },
     "eurinr": {
-      "token": 1682435,
-      "symbol": "EURINR26JUNFUT",
-      "expiry": "2026-06-25"
+      "token": 298243,
+      "symbol": "EURINR26JULFUT",
+      "expiry": "2026-07-29"
     },
     "gbpinr": {
-      "token": 1689091,
-      "symbol": "GBPINR26JUNFUT",
-      "expiry": "2026-06-25"
+      "token": 303107,
+      "symbol": "GBPINR26JULFUT",
+      "expiry": "2026-07-29"
     },
     "jpyinr": {
-      "token": 1689603,
-      "symbol": "JPYINR26JUNFUT",
-      "expiry": "2026-06-25"
+      "token": 322563,
+      "symbol": "JPYINR26JULFUT",
+      "expiry": "2026-07-29"
     }
   },
-  "updatedAt": "2026-06-25T03:15:27.894Z"
+  "updatedAt": "2026-06-26T01:00:47.307Z"
 }
