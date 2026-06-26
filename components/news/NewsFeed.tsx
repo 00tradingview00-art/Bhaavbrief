@@ -171,12 +171,19 @@ export default function NewsFeed({ serverItems = [] }: Props) {
     return () => clearInterval(id)
   }, [fetchNews])
 
-  // Merge server items (flash + articles) with live API items, dedup by id
+  // Merge server items (flash + articles) with live API items, dedup by id and href
   // Hawk-scan items always float to the top, then sort newest first within each tier
   const allItems = useMemo(() => {
-    const seen = new Set<string>()
+    const seenIds  = new Set<string>()
+    const seenHrefs = new Set<string>()
     return [...serverItems, ...news]
-      .filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
+      .filter(item => {
+        if (seenIds.has(item.id)) return false
+        if (item.href && seenHrefs.has(item.href)) return false
+        seenIds.add(item.id)
+        if (item.href) seenHrefs.add(item.href)
+        return true
+      })
       .sort((a, b) => {
         // Use IST dates — same grouping logic as the date dividers
         const aDate = toISTDateKey(a.pubDate)
