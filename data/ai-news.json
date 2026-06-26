@@ -968,35 +968,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-19T22:12:40.673Z",
     "pubDateIST": "20 Jun 2026, 03:42"
-  },
-  {
-    "id": "2026-06-20-01-31-mcx-natural-gas-slips-0-53-to-301-60-mmb",
-    "title": "MCX Natural Gas slips 0.53% to ₹301.60/mmBtu as crude surge dominates session flow",
-    "summary": "Crude oil's +3.23% surge is concentrating capital and trader attention within the energy complex, leaving natural gas sidelined rather than supported. When crude rallies on supply-shock mechanics, gas does not automatically follow — the two serve distinct demand pathways, and this session's divergence confirms that dynamic.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T20:01:46.541Z",
-    "pubDateIST": "20 Jun 2026, 01:31"
-  },
-  {
-    "id": "2026-06-20-00-59-mcx-gold-slides-1-39-to-147-239-as-crude",
-    "title": "MCX Gold slides 1.39% to ₹147,239 as crude surge redirects risk appetite away from metals",
-    "summary": "The mechanism here is capital rotation. Crude's 3.23% rally absorbs speculative flows, lifting energy-linked inflation expectations while simultaneously strengthening the dollar narrative — a historically negative combination for non-yielding metals. Gold at ₹147,239 finds observed support near ₹145,800 and faces resistance around ₹149,200 based on recent consolidation structure.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T19:29:37.341Z",
-    "pubDateIST": "20 Jun 2026, 00:59"
-  },
-  {
-    "id": "2026-06-20-01-01-mcx-silver-slides-2-04-to-232736-kg-as-c",
-    "title": "MCX Silver slides 2.04% to ₹232736/kg as crude surge pulls liquidity toward energy",
-    "summary": "The mechanism here is capital rotation, not fundamental silver weakness. When crude rallies 3.23% in a single session, margin capital concentrates in energy contracts, reducing speculative positioning across the metals complex. MCX Gold at ₹147239 confirms the pattern, falling 1.39% simultaneously.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T19:31:29.487Z",
-    "pubDateIST": "20 Jun 2026, 01:01"
   }
 ]
