@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-26-20-43-mcx-copper-holds-1244-as-lme-supply-fear",
+    "title": "MCX Copper holds ₹1244 as LME supply fears override crude crash",
+    "summary": "MCX Copper extended gains to ₹1244.45/kg (+0.27% this session) as LME base metals index hit record highs on supply concerns. Meanwhile, crude collapsed -3.93% to ₹6523/bbl, triggering a classic risk-off rotation where go",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T15:13:15.025Z",
+    "pubDateIST": "26 Jun 2026, 20:43",
+    "href": "/flash/2026-06-26-15-15-mcx-copper-holds-1244-as-lme-supply-fears-override-crud",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-26-20-45-gold-rallies-144-300-as-crude-plunges-3",
+    "title": "Gold rallies ₹144,300 as crude plunges 3.93%—rupee shields MCX",
+    "summary": "MCX Gold rallied ₹144,300/10g (+0.82%) this afternoon session as crude oil collapsed -3.93% to ₹6,523/bbl, triggering a textbook risk-off rotation into safe-haven metals. Silver followed with a +1.16% gain to ₹222,231/kg",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T15:15:08.239Z",
+    "pubDateIST": "26 Jun 2026, 20:45",
+    "href": "/flash/2026-06-26-15-15-gold-rallies-144-300-as-crude-plunges-3-93-rupee-shield",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-26-17-59-crude-crashes-2-7-as-stronger-rupee-pres",
     "title": "Crude crashes 2.7% as stronger rupee pressures MCX import parity",
     "summary": "# BHAAVBRIEF INTELLIGENCE FLASH MCX Crude Oil crashed -2.70% to ₹6,607/bbl in afternoon trade, marking the sharpest single-session decline among commodity peers. A stronger US Dollar (tracking USD/INR at ₹94.39) has pres",
@@ -998,25 +1022,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-19T15:55:10.207Z",
     "pubDateIST": "19 Jun 2026, 21:25"
-  },
-  {
-    "id": "2026-06-19-18-06-mcx-silver-slides-2-21-to-232323-kg-as-c",
-    "title": "MCX Silver slides 2.21% to ₹232323/kg as crude surge redirects session risk flows",
-    "summary": "The mechanism here is capital rotation, not fundamental silver weakness. Crude's +2.79% surge absorbs speculative positioning, pulling liquidity away from precious metals. Silver at ₹232323/kg faces immediate resistance near ₹237000/kg, with session support observed around ₹229500/kg. On import parity arithmetic: LBMA silver near approximately $29.50/oz translates to roughly ₹32,250/kg at spot, multiplied by 32.15 (oz-to-kg), adjusted for 15% duty and GST factor of approximately 1.18, yields a theoretical parity near ₹240000/kg — placing MCX Silver at a notable discount to parity this session. Cross-commodity confirmation: MCX Gold declining 1.61% simultaneously indicates broad precious metals pressure, not silver-specific selling. This parallel move historically reflects dollar-strength or risk-rotation episodes rather than metal-specific supply events. Watch ₹229500/kg into close.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T12:36:08.350Z",
-    "pubDateIST": "19 Jun 2026, 18:06"
-  },
-  {
-    "id": "2026-06-19-18-08-mcx-crude-surges-2-79-to-7251-bbl-as-ene",
-    "title": "MCX Crude surges 2.79% to ₹7251/bbl as energy leads commodity complex higher",
-    "summary": "The mechanism driving this session is energy-sector rotation — crude's outperformance at +2.79% is pulling capital away from metals, evidenced by Gold at ₹146907 (-1.61%) and Silver at ₹232323 (-2.21%). This is a classic risk-rotation dynamic where energy strength competes with safe-haven positioning.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-19T12:38:01.020Z",
-    "pubDateIST": "19 Jun 2026, 18:08"
   }
 ]
