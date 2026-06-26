@@ -1,13 +1,5 @@
 {
-  "current": {
-    "date": "2026-06-18",
-    "editionRef": 46,
-    "thesis": "MCX Crude will break and close below ₹7,000/bbl by end of session as US demand softness and inventory strength extend overnight's 1.89% WTI selloff",
-    "commodity": "MCX Crude",
-    "direction": "bearish",
-    "targetLevel": 7000,
-    "reasoning": "Support at ₹7,133 and ₹7,098 is already being tested; a close sub-₹7,000 would mark the month's first such print and confirm the demand-shock momentum carrying from overnight's risk-off across NYMEX into MCX's session."
-  },
+  "current": null,
   "yesterday": {
     "date": "2026-06-17",
     "editionRef": 45,
