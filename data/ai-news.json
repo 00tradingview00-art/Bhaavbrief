@@ -1018,25 +1018,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-19T05:19:55.140Z",
     "pubDateIST": "19 Jun 2026, 10:49"
-  },
-  {
-    "id": "2026-06-19-07-49-mcx-nat-gas-surges-2-12-to-303-60-mmbtu",
-    "title": "MCX Nat Gas surges 2.12% to ₹303.60/mmBtu as broader commodity complex sells off",
-    "summary": "The mechanism here is divergence. While dollar strength is compressing gold, silver, and crude simultaneously, natural gas trades on a supply-demand logic largely decoupled from dollar-sensitive demand cycles. The 2.12% move in MCX Nat Gas to ₹303.60/mmBtu reflects this structural separation.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-19T02:19:32.046Z",
-    "pubDateIST": "19 Jun 2026, 07:49"
-  },
-  {
-    "id": "2026-06-19-07-51-mcx-gold-drops-2-99-to-149284-as-dollar",
-    "title": "MCX Gold Drops 2.99% to ₹149284 as Dollar Strength Compresses Precious Metals Complex",
-    "summary": "Dollar appreciation is mechanically reducing gold's purchasing power for non-USD holders while simultaneously elevating import costs — a contradictory pressure that historically compresses MCX premium. At ₹149284/10g, key support observes near ₹147800 with resistance at ₹151200. Import parity arithmetic: COMEX spot approximately $3100/oz × ₹94.32 × 1.155 duty factor = theoretical MCX parity near ₹152400/10g, placing MCX at an approximate ₹3116 discount to parity — a structural observation traders historically note during sharp COMEX drawdowns. MCX Silver's steeper decline of 5.72% to ₹237416/kg confirms broad precious metals liquidation, consistent with risk-off dollar flows rather than isolated gold positioning. MCX Crude's concurrent 1.29% decline corroborates deteriorating demand-side sentiment across the commodity complex. Watch USD/INR at ₹94.50 — sustained breach historically amplifies import parity compression for all metal contracts.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T02:21:23.777Z",
-    "pubDateIST": "19 Jun 2026, 07:51"
   }
 ]
