@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-06-26-12-31-rbi-trade-caution-caps-rupee-mcx-gold-ar",
+    "title": "RBI Trade Caution Caps Rupee; MCX Gold Arbitrage Locked at ₹143K",
+    "summary": "USD/INR opened at ₹94.39 this morning, showing marginal strength as the rupee stabilizes near multi-month highs. Societe Generale's fresh commentary highlights that RBI's policy stance and lingering trade risks are cappi",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T07:01:28.207Z",
+    "pubDateIST": "26 Jun 2026, 12:31",
+    "href": "/flash/2026-06-26-07-01-rbi-trade-caution-caps-rupee-mcx-gold-arbitrage-locked-",
+    "coverImage": "https://images.pexels.com/photos/10396412/pexels-photo-10396412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-26-05-49-mcx-copper-1-57-at-1243-kg-dollar-weakne",
     "title": "MCX Copper +1.57% at ₹1243/kg — dollar weakness amplifies broad reflation trade",
     "summary": "Dollar weakness is the primary mechanism. With USD/INR at ₹94.39, the greenback's retreat makes rupee-denominated metals cheaper for foreign buyers while reducing import friction. This mirrors synchronized strength across gold (+2.8%), silver (+3.02%), and energy (crude +1.78%, natgas +2.51%) — textbook reflation narrative where commodity supply constraints override demand concerns.",
@@ -988,35 +1000,5 @@
     "impact": "neutral",
     "pubDate": "2026-06-19T08:39:11.957Z",
     "pubDateIST": "19 Jun 2026, 14:09"
-  },
-  {
-    "id": "2026-06-19-10-46-mcx-crude-surges-2-34-to-7219-even-as-ho",
-    "title": "MCX Crude Surges 2.34% to ₹7219 Even as Hormuz Supply Risk Eases",
-    "summary": "The Iran war pact signal arrives into a session already defined by broad commodity selling, with Silver down 3.83% and Gold down 2.27% pointing to risk-off or dollar-strength dynamics rather than geopolitical fear premium. MCX Crude Oil at ₹7219 per barrel is currently trading up 2.34% on the session, which creates a direct tension with the Hormuz supply normalization narrative — the live price action has not yet absorbed the full bearish implication of restored passage. The import parity chain runs: global Brent softening on Hormuz reopening, translated through USD/INR at ₹94.46, where a stronger rupee would further compress MCX crude realizations. Historically, Hormuz supply restoration events compress the geopolitical risk premium embedded in crude within one to three sessions. MCX Copper at ₹1301.25 is also declining 1.55%, consistent with the broader demand-side softness narrative. The Brent front-month settlement at or below $74 per barrel would serve as the confirming data point for downside pressure on MCX Crude to reflect the Hormuz normalization.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T05:16:11.439Z",
-    "pubDateIST": "19 Jun 2026, 10:46"
-  },
-  {
-    "id": "2026-06-19-10-48-mcx-crude-surges-2-34-to-7219-bbl-as-sil",
-    "title": "MCX Crude surges 2.34% to ₹7219/bbl as silver rout drives complex divergence",
-    "summary": "The mechanism here is sector rotation and risk-repricing. Silver's sharp -3.83% decline signals industrial demand anxiety, yet crude's +2.34% gain reflects a separate supply-side impulse — likely OPEC-linked production signals or inventory drawdown data — decoupling energy from the broader metals selloff this session.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-19T05:18:02.574Z",
-    "pubDateIST": "19 Jun 2026, 10:48"
-  },
-  {
-    "id": "2026-06-19-10-49-mcx-silver-crashes-3-83-to-228-468-kg-as",
-    "title": "MCX Silver Crashes 3.83% to ₹228,468/kg as Precious Metals Complex Faces Broad Selling",
-    "summary": "The mechanism driving this session: risk-off deleveraging or a strength-driven rotation out of precious metals is compressing silver simultaneously across global and domestic markets. MCX Silver at ₹228,468/kg finds immediate observed support near ₹225,000 and resistance at ₹233,500 based on recent consolidation structure.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T05:19:55.140Z",
-    "pubDateIST": "19 Jun 2026, 10:49"
   }
 ]
