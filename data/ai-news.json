@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-06-26-15-57-rupee-strength-caps-crude-and-copper-gol",
+    "title": "Rupee strength caps crude and copper; gold holds ground at ₹143,127",
+    "summary": "# BhaavBrief Flash Intelligence | 26 June 2026, 15:45 IST USD/INR has strengthened to ₹94.39, a level last seen in late May, while MCX crude softens to ₹6790/bbl and precious metals show resilience—gold holding ₹143,127/",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T10:27:38.851Z",
+    "pubDateIST": "26 Jun 2026, 15:57",
+    "href": "/flash/2026-06-26-10-27-rupee-strength-caps-crude-and-copper-gold-holds-ground-",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-26-12-31-rbi-trade-caution-caps-rupee-mcx-gold-ar",
     "title": "RBI Trade Caution Caps Rupee; MCX Gold Arbitrage Locked at ₹143K",
     "summary": "USD/INR opened at ₹94.39 this morning, showing marginal strength as the rupee stabilizes near multi-month highs. Societe Generale's fresh commentary highlights that RBI's policy stance and lingering trade risks are cappi",
@@ -970,35 +982,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-19T12:38:01.020Z",
     "pubDateIST": "19 Jun 2026, 18:08"
-  },
-  {
-    "id": "2026-06-19-14-05-crude-leads-mcx-complex-at-1-97-to-7193",
-    "title": "Crude Leads MCX Complex at +1.97% to ₹7193 as EIA-OPEC Signals Sharpen",
-    "summary": "This session's cross-asset narrative is anchored squarely in crude's outperformance, with MCX Crude July at ₹7193 per barrel posting +1.97% — the sole meaningful gainer across the entire MCX complex while gold, silver, and copper trade in the red. The EIA-OPEC signal cluster matters precisely here: EIA inventory draws historically correlate with immediate front-month price response on MCX, while OPEC supply posture sets the medium-term floor that traders price into the forward curve. The import parity chain runs as follows — a $1 move in Brent at USD/INR ₹94.47 translates to approximately ₹94-95 on MCX crude before customs duty and refinery premium adjustments. The cross-market correlation to watch is MCX NatGas at ₹302.80, which historically tracks energy-complex sentiment during supply-shock narratives, though it is flat this session, indicating the bid remains crude-specific rather than broad energy. The confirmatory data point is the next weekly EIA crude inventory release — a draw above consensus would sustain the current spread between crude and the broader subdued commodity complex; a build would test ₹7100 as an observed support zone.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-19T08:35:28.716Z",
-    "pubDateIST": "19 Jun 2026, 14:05"
-  },
-  {
-    "id": "2026-06-19-14-07-mcx-silver-slides-1-07-to-235-023-kg-as",
-    "title": "MCX Silver slides 1.07% to ₹235,023/kg as crude rally draws capital away from metals",
-    "summary": "The mechanism here is rotational capital flow. Crude's +1.97% surge signals reflationary positioning, pulling speculative money toward energy and away from safe-haven metals. Silver, carrying both monetary and industrial characteristics, is absorbing dual pressure — gold's -1.01% decline confirms the monetary metal complex is broadly offered this session. At ₹235,023/kg, immediate support is observed near ₹233,500 and resistance around ₹237,800 based on recent session structure.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T08:37:19.479Z",
-    "pubDateIST": "19 Jun 2026, 14:07"
-  },
-  {
-    "id": "2026-06-19-14-09-mcx-crude-surges-1-97-to-7193-bbl-as-ene",
-    "title": "MCX Crude surges +1.97% to ₹7193/bbl as energy leads commodity complex higher",
-    "summary": "The mechanism here is risk-appetite rotation — crude's +2.0% move is pulling capital toward energy and away from defensive metals. When energy leads without broad commodity participation, it typically signals supply-side catalyst rather than demand-driven inflation, leaving gold and silver without a follow-through bid.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-19T08:39:11.957Z",
-    "pubDateIST": "19 Jun 2026, 14:09"
   }
 ]
