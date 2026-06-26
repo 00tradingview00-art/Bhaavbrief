@@ -22,9 +22,28 @@ const ROOT      = path.join(__dirname, '..')
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
 const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
 const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
+const FLASH_DIR         = path.join(ROOT, 'content/flash')
 const MAX_STORED        = 300
 const MAX_PER_RUN       = 6      // one per major category (Metals, Energy, Policy, Macro, Agri, Geopolitics)
 const FRESHNESS_HOURS   = 8      // skip articles older than 8h — commodity news stales fast
+
+const CATEGORY_TO_FLASH = {
+  'Metals':      'metals',
+  'Energy':      'energy',
+  'Policy':      'policy',
+  'Macro':       'macro',
+  'Agri':        'agri',
+  'Geopolitics': 'geopolitical',
+}
+
+const CATEGORY_IMAGES = {
+  'Metals':      'https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  'Energy':      'https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  'Macro':       'https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  'Geopolitics': 'https://images.pexels.com/photos/37510660/pexels-photo-37510660.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  'Agri':        'https://images.pexels.com/photos/29215512/pexels-photo-29215512.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  'Policy':      'https://images.pexels.com/photos/10396412/pexels-photo-10396412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+}
 
 const FEEDS = [
   // ── Metals — specific price queries (NOT "MCX commodity" which returns MCX stock articles) ───
@@ -488,7 +507,7 @@ function buildMarketNarrative(movers) {
 
 // ── Claude generation ─────────────────────────────────────────────────────────
 
-async function generateNewsItem(signal, prices) {
+async function generateFlashArticle(signal, prices) {
   const ctx       = priceContext(prices)
   const movers    = prices.movers ?? {}
   const session   = getMarketSession()
@@ -496,42 +515,60 @@ async function generateNewsItem(signal, prices) {
   const istDate   = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
     .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
-  // Top movers with direction labels
-  const moverLines = Object.entries(movers)
+  const moverContext = Object.entries(movers)
+    .filter(([, p]) => Math.abs(p) > 0.15)
     .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
     .slice(0, 4)
-    .map(([k, pct]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%`)
+    .map(([k, p]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${p >= 0 ? '+' : ''}${p.toFixed(2)}%`)
     .join(' | ')
 
-  const prompt = `You are BhaavBrief Intelligence — India's real-time commodity intelligence desk for professional MCX traders.
+  let signalText
+  if (signal.type === 'price-action') {
+    const direction = signal.pct > 0 ? 'up' : 'down'
+    const absPct    = Math.abs(signal.pct).toFixed(2)
+    const priceStr  = signal.price != null ? `₹${Math.round(signal.price)}${signal.unit.replace('₹', '')}` : 'price N/A'
+    signalText = `PRICE ACTION: ${signal.label} is ${direction} ${absPct}% at ${priceStr} this session.`
+    if (signal.contextTitle) signalText += `\nMarket context: ${signal.contextTitle}. ${signal.contextDesc}`
+    else signalText += '\n(No specific news catalyst — explain based on cross-asset context above.)'
+  } else {
+    signalText = `NEWS SIGNAL: ${signal.title}. ${signal.desc}`
+  }
+
+  const prompt = `You are BhaavBrief Intelligence — India's real-time MCX commodity intelligence desk.
 
 Today: ${istDate} (IST) | Session: ${session.toUpperCase()}
 ${SESSION_FOCUS[session]}
 
-CROSS-ASSET MARKET NARRATIVE (the dominant theme driving the commodity complex right now):
-${narrative}
+Live MCX prices: ${ctx}
+${moverContext ? `Session movers: ${moverContext}` : ''}
+Cross-asset narrative: ${narrative}
 
-Live prices: ${ctx}
-${moverLines ? `Session movers: ${moverLines}` : 'No significant moves this session'}
+${signalText}
 
-Write an institutional-grade intelligence brief. This is NOT a news summary — it is cross-asset analysis that connects the incoming signal to what is ACTUALLY HAPPENING in the market right now.
+Write a flash intelligence article for Indian MCX commodity traders in EXACTLY this structure:
 
-MANDATORY STRUCTURE:
-1. OPEN by explicitly linking this signal to the MARKET NARRATIVE above. Show the connection — why does this signal matter given the current cross-asset picture?
-2. Name the SPECIFIC MCX contract(s) affected and cite the EXACT current price from live data above.
-3. Show the IMPORT PARITY CHAIN: global price → USD/INR rate → customs/premium → MCX impact in ₹.
-4. Name ONE cross-market correlation: what else is moving alongside this, and why does it matter for Indian traders?
-5. Close with ONE specific price level or data release that will confirm or negate this move.
+**WHAT HAPPENED**
+2-3 sentences. State what happened precisely. Include specific MCX price(s) from live data above.
 
-SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. No predictive framing ("will reach X"). State data, never judge it. Historical patterns must use "historically" framing. Technical levels are observations not triggers.
-Rules: No opinions. Only facts, mechanics, and levels.
+**WHAT IT MEANS**
+2-3 sentences. Explain the transmission mechanism to MCX prices. Include import parity arithmetic if applicable (global price × USD/INR × duty = MCX level).
 
-Format as plain text only (no markdown, no headers, no asterisks, no bullets):
+**WHO IS AFFECTED**
+2-3 sentences. Name specific Indian companies, merchants, or sectors with concrete exposure — a specific procurement, hedging, or pricing decision (not generic "higher costs").
+
+**BOTTOM LINE**
+1-2 sentences. The single most important structural takeaway for MCX traders.
+
+**WHAT TO WATCH**
+1-2 sentences. One specific price level or upcoming data release (name, exact timing if known) that confirms or negates this.
+
+SEBI COMPLIANCE: No buy/sell/accumulate/exit/enter directed at reader. No price targets. Historical patterns use "historically" framing. State data, never judge.
+
+Total: 200-270 words. Bold key numbers (₹ prices, %, thresholds) with **value**.
+
+After the article write:
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
-IMPACT: [bearish / bullish / neutral]
-BODY: [110-130 words]
-
-Market signal: ${signal.title}. ${signal.desc}`
+IMPACT: [bearish / bullish / neutral]`
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method:  'POST',
@@ -542,33 +579,74 @@ Market signal: ${signal.title}. ${signal.desc}`
     },
     body: JSON.stringify({
       model:      'claude-haiku-4-5-20251001',
-      max_tokens: 450,
+      max_tokens: 700,
       messages:   [{ role: 'user', content: prompt }],
     }),
   })
 
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
-  // Strip markdown headers and leading asterisks Claude sometimes adds
-  const raw  = (await res.json()).content?.[0]?.text?.trim() ?? ''
-  const text = raw
-    .replace(/^#+\s+[^\n]*\n+/gm, '')   // remove # Heading lines
-    .replace(/^\*{1,2}(HEADLINE|IMPACT|BODY):\*{0,2}/gim, '$1:')  // **HEADLINE:** → HEADLINE:
+  const raw = (await res.json()).content?.[0]?.text?.trim() ?? ''
+
+  const headlineM = raw.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
+  const impactM   = raw.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
+
+  // Body is everything before HEADLINE:
+  const body = raw.replace(/\nHEADLINE:.*$/is, '').trim()
+
+  if (!headlineM || body.length < 80) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
+
+  const title  = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
+  const impact = (impactM?.[1] ?? 'neutral').toLowerCase()
+
+  // Plain-text excerpt from WHAT HAPPENED section (for JSON feed preview)
+  const excerpt = body
+    .replace(/\*\*WHAT HAPPENED\*\*/i, '')
+    .replace(/\n\n\*\*[\s\S]*/s, '')
+    .replace(/\*\*/g, '')
+    .replace(/\n+/g, ' ')
     .trim()
+    .slice(0, 220)
 
-  const headlineM = text.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
-  const impactM   = text.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
-  const bodyM     = text.match(/BODY:\s*([\s\S]+)/i)
-
-  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
-
-  const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
-  const summary = bodyM[1].replace(/^\*+\s*/, '').replace(/\n\n[\s\S]*/,'').trim()
-  const impact  = (impactM?.[1] ?? 'neutral').toLowerCase()
-
-  if (title.length < 10 || title === '**' || summary.length < 40)
+  if (title.length < 10 || body.length < 80)
     throw new Error(`Malformed response — title: "${title.slice(0, 40)}"`)
 
-  return { title, summary, impact }
+  return { title, excerpt, body, impact }
+}
+
+function saveFlashMdx({ title, body, category, date }) {
+  try {
+    const dateStr  = date.toISOString().split('T')[0]
+    const timeStr  = date.toISOString().slice(11, 16).replace(':', '-')
+    const slug     = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 55)
+    const filename = `${dateStr}-${timeStr}-${slug}.mdx`
+    const filepath = path.join(FLASH_DIR, filename)
+    if (fs.existsSync(filepath)) return null
+
+    const flashSlug  = `${dateStr}-${timeStr}-${slug}`
+    const flashCat   = CATEGORY_TO_FLASH[category] || 'macro'
+    const coverImage = CATEGORY_IMAGES[category] || CATEGORY_IMAGES['Macro']
+    const safeTitle  = title.replace(/"/g, "'")
+
+    const mdx = `---
+title: "${safeTitle}"
+date: "${date.toISOString()}"
+source: "BhaavBrief Intelligence"
+category: "${flashCat}"
+published: true
+coverImage: "${coverImage}"
+---
+
+${body}
+
+Source: BhaavBrief Intelligence | bhaavbrief.in`
+
+    fs.writeFileSync(filepath, mdx, 'utf8')
+    console.log(`  → Saved: content/flash/${filename}`)
+    return flashSlug
+  } catch (e) {
+    console.warn(`  saveFlashMdx failed: ${e.message}`)
+    return null
+  }
 }
 
 // ── Price-action first: signals driven by what IS moving, not what RSS published ──
@@ -634,86 +712,7 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
   return signals.sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct))
 }
 
-/**
- * Generate a brief that STARTS with the price move, not a news article.
- * RSS context is optional supporting evidence; price action is the anchor.
- */
-async function generatePriceActionBrief(signal, prices) {
-  const ctx       = priceContext(prices)
-  const movers    = prices.movers ?? {}
-  const session   = getMarketSession()
-  const narrative = buildMarketNarrative(movers)
-  const istDate   = new Date(Date.now() + 5.5 * 60 * 60 * 1000)
-    .toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
-
-  const direction = signal.pct > 0 ? 'up' : 'down'
-  const absPct    = Math.abs(signal.pct).toFixed(2)
-  const priceStr  = signal.price != null ? `₹${Math.round(signal.price)}${signal.unit.replace('₹', '')}` : 'price N/A'
-
-  const moverContext = Object.entries(movers)
-    .filter(([, p]) => Math.abs(p) > 0.15)
-    .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
-    .slice(0, 4)
-    .map(([k, p]) => `MCX ${k.charAt(0).toUpperCase() + k.slice(1)}: ${p >= 0 ? '+' : ''}${p.toFixed(2)}%`)
-    .join(' | ')
-
-  const prompt = `You are BhaavBrief Intelligence — India's real-time MCX commodity intelligence desk for professional traders.
-
-Today: ${istDate} (IST) | Session: ${session.toUpperCase()}
-${SESSION_FOCUS[session]}
-
-CROSS-ASSET NARRATIVE (what's driving the ENTIRE commodity complex this session):
-${narrative}
-
-PRICE ACTION (the anchor of this brief):
-${signal.label} is ${direction} ${absPct}% at ${priceStr} this session.
-${signal.contextTitle ? `\nSupporting context from market: ${signal.contextTitle}. ${signal.contextDesc}` : '\n(No specific news catalyst identified — this is a pure price move. Explain based on the cross-asset context above.)'}
-
-All live prices: ${ctx}
-Session movers: ${moverContext || 'no significant moves'}
-
-Write a 115-130 word intelligence brief. Price action is the anchor — you are explaining WHY the market is moving and what it means for MCX traders. NOT summarising news.
-
-MANDATORY:
-1. Lead with the CAUSE: given the cross-asset narrative, what mechanism is driving this move?
-2. Name the EXACT MCX price (from the price data above) and two key levels: one support, one resistance.
-3. Show the IMPORT PARITY ARITHMETIC: for metals/energy — global price × USD/INR × duty factor = MCX theoretical parity. Identify whether MCX is at premium or discount to parity.
-4. Name ONE cross-commodity correlation: what else is moving in the same direction, and why does that confirm or challenge this move?
-5. End with one specific price level or scheduled data release to watch.
-
-SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/enter directed at reader. No predictive price targets — use "historically" framing for patterns. Technical levels are observations not triggers. State data, never judge it.
-Facts and mechanics only. No opinions.
-
-Format (plain text, no markdown):
-HEADLINE: [12-16 words — include exact % move and MCX price level]
-IMPACT: [bearish / bullish / neutral]
-BODY: [115-130 words]`
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'x-api-key': ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 450, messages: [{ role: 'user', content: prompt }] }),
-  })
-
-  if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
-  const raw  = (await res.json()).content?.[0]?.text?.trim() ?? ''
-  const text = raw.replace(/^#+\s+[^\n]*\n+/gm, '').replace(/^\*{1,2}(HEADLINE|IMPACT|BODY):\*{0,2}/gim, '$1:').trim()
-
-  const headlineM = text.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
-  const impactM   = text.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
-  const bodyM     = text.match(/BODY:\s*([\s\S]+)/i)
-
-  if (!headlineM || !bodyM) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
-
-  const title   = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
-  const summary = bodyM[1].replace(/^\*+\s*/, '').replace(/\n\n[\s\S]*/, '').trim()
-  const impact  = (impactM?.[1] ?? 'neutral').toLowerCase()
-
-  if (title.length < 10 || summary.length < 40)
-    throw new Error(`Malformed response — title: "${title.slice(0, 40)}"`)
-
-  return { title, summary, impact }
-}
+// generatePriceActionBrief merged into generateFlashArticle above
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
@@ -798,12 +797,15 @@ async function main() {
   const newSeen = [...seen]
   let processed = 0
 
-  function makeEntry(title, summary, category, tagType, impact, offsetMins = 0) {
+  function makeEntry(title, summary, category, tagType, impact, offsetMins = 0, href = undefined, coverImage = undefined) {
     const now    = new Date(Date.now() - offsetMins * 60 * 1000)
     const ist    = new Date(now.getTime() + 5.5 * 60 * 60 * 1000)
     const istStr = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata',
       day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
-    return { id: toId(title, ist), title, summary, category, tagType, impact, pubDate: now.toISOString(), pubDateIST: istStr }
+    const entry = { id: toId(title, ist), title, summary, category, tagType, impact, pubDate: now.toISOString(), pubDateIST: istStr }
+    if (href)        entry.href        = href
+    if (coverImage)  entry.coverImage  = coverImage
+    return entry
   }
 
   // Price-action items first (up to 2, max 1 per commodity)
@@ -812,12 +814,15 @@ async function main() {
     if (processed >= MAX_PER_RUN) break
     try {
       console.log(`  [price-action] ${signal.label} ${signal.pct >= 0 ? '+' : ''}${signal.pct.toFixed(2)}%`)
-      const { title, summary, impact } = await generatePriceActionBrief(signal, prices)
+      const { title, excerpt, body, impact } = await generateFlashArticle(signal, prices)
       if (currentRunTitles.some(rt => similarity(title, rt) > 0.45)) {
         console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
         continue
       }
-      existing.unshift(makeEntry(title, summary, signal.category, signal.tagType, impact, processed * 2))
+      const flashSlug  = saveFlashMdx({ title, body, category: signal.category, date: new Date() })
+      const href       = flashSlug ? `/flash/${flashSlug}` : undefined
+      const coverImage = CATEGORY_IMAGES[signal.category]
+      existing.unshift(makeEntry(title, excerpt, signal.category, signal.tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
       processed++
@@ -831,14 +836,17 @@ async function main() {
     if (processed >= MAX_PER_RUN) break
     try {
       console.log(`  [rss] ${signal.title.slice(0, 65)}`)
-      const { title, summary, impact } = await generateNewsItem(signal, prices)
+      const { title, excerpt, body, impact } = await generateFlashArticle(signal, prices)
       if (currentRunTitles.some(rt => similarity(title, rt) > 0.45)) {
         console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
         newSeen.push(signal.url)
         continue
       }
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
-      existing.unshift(makeEntry(title, summary, category, tagType, impact, processed * 2))
+      const flashSlug  = saveFlashMdx({ title, body, category, date: new Date() })
+      const href       = flashSlug ? `/flash/${flashSlug}` : undefined
+      const coverImage = CATEGORY_IMAGES[category]
+      existing.unshift(makeEntry(title, excerpt, category, tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
       newSeen.push(signal.url)
       processed++
