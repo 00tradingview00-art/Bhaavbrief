@@ -195,8 +195,8 @@ async function runDeepRefresh(client) {
     `CURRENT market-structure.json:\n${JSON.stringify(structure, null, 2).slice(0, 14000)}`
 
   const res = await client.messages.create({
-    model:      'claude-sonnet-4-6',
-    max_tokens: 8000,
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 3000,
     messages:   [{ role: 'user', content: prompt }],
   })
 

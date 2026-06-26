@@ -845,7 +845,7 @@ WATCH — One specific price level OR one data release in the next 48 hours that
 Total body: 80–130 words across all sections. Each section: one sentence or one line only.`
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: 'claude-haiku-4-5-20251001',
     max_tokens: 800,
     messages: [{ role: 'user', content: prompt }],
   })
@@ -982,8 +982,8 @@ source: "BhaavBrief Intelligence"
 Source: BhaavBrief Intelligence | bhaavbrief.in`
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1400,
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1100,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -1096,8 +1096,8 @@ source: "BhaavBrief Intelligence"
 Source: BhaavBrief Intelligence | bhaavbrief.in`
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1400,
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 1100,
     messages: [{ role: 'user', content: prompt }],
   })
 
