@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-06-27-00-42-mcx-copper-hits-session-high-as-dollar-w",
+    "title": "MCX Copper hits session high as dollar weakness fuels broad metal rally; ₹1250/kg critical",
+    "summary": "MCX Copper advanced ₹1249.90/kg (+0.70%) during today's global session, extending a broad-based commodity rally alongside gold (+0.75%) and silver (+1.11%). LME base metals index hit record highs overnight, driven by alu",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T19:12:57.285Z",
+    "pubDateIST": "27 Jun 2026, 00:42",
+    "href": "/flash/2026-06-26-19-12-mcx-copper-hits-session-high-as-dollar-weakness-fuels-b",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-26-22-40-silver-surges-221k-on-risk-off-bid-as-cr",
     "title": "Silver surges ₹221K on risk-off bid as crude tumbles 3.5% on MCX",
     "summary": "# BhaavBrief Flash: Silver Advances as Safe-Haven Demand Overrides Global Softness MCX Silver rallied ₹221,106/kg (+0.65%) this afternoon session, tracking a broad precious metals bid despite reported softness in global ",
@@ -986,35 +998,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-19T19:31:29.487Z",
     "pubDateIST": "20 Jun 2026, 01:01"
-  },
-  {
-    "id": "2026-06-19-23-32-south-indian-bank-fcnr-rate-hits-6-5-as",
-    "title": "South Indian Bank FCNR Rate Hits 6.5% as Crude Surges 3.23% to ₹7282",
-    "summary": "The FCNR rate hike to 6.5% via RBI swap mechanism arrives in a session where crude oil is the dominant cross-asset driver, up 3.23% to ₹7282 per barrel on MCX. The FCNR signal matters here because elevated NRI deposit rates structurally attract foreign currency inflows, which exert appreciation pressure on the rupee — currently anchored at ₹94.31 per USD. A firmer rupee, if sustained, mechanically compresses the import parity buffer on USD-denominated commodities: at ₹94.31, each rupee of appreciation against the dollar reduces MCX crude's landed cost by approximately ₹75-80 per barrel at current global price levels, partially offsetting crude's rupee-denominated rally. MCX Gold at ₹147239 per 10g and MCX Copper at ₹1309.10 per kg face the same currency arithmetic. The cross-market correlation to watch is USD/INR against MCX crude — historically, rupee strength has capped crude's INR gains even when dollar-crude rises. The confirmatory data point is Monday's RBI reference rate fixing; a move below ₹94.00 would quantify the FCNR-driven flow impact on commodity import parity calculations.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-19T18:02:34.776Z",
-    "pubDateIST": "19 Jun 2026, 23:32"
-  },
-  {
-    "id": "2026-06-19-23-34-mcx-nat-gas-slips-0-53-to-301-60-mmbtu-a",
-    "title": "MCX Nat Gas slips 0.53% to ₹301.60/mmBtu as crude surge fails to lift gas complex",
-    "summary": "The mechanism here is divergence, not correlation. Crude's +3.23% rally — likely supply-disruption driven — has pulled trader attention and capital toward oil, leaving natural gas without a narrative catalyst this session. Gas and crude share infrastructure but not always price direction; this session confirms that decoupling.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T18:04:26.075Z",
-    "pubDateIST": "19 Jun 2026, 23:34"
-  },
-  {
-    "id": "2026-06-19-23-36-mcx-copper-slides-0-96-to-1309-kg-as-cru",
-    "title": "MCX Copper slides 0.96% to ₹1309/kg as crude surge redirects risk flows",
-    "summary": "The mechanism here is capital rotation, not fundamental copper weakness. Crude's +3.23% surge this session absorbs risk appetite into energy, pulling discretionary flows away from base metals. Copper at ₹1309.10/kg reflects this pressure. Support observed at ₹1295, resistance at ₹1325.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T18:06:18.379Z",
-    "pubDateIST": "19 Jun 2026, 23:36"
   }
 ]
