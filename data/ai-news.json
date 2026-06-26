@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-27-05-13-mcx-crude-hits-6-788-as-energy-rally-dec",
+    "title": "MCX crude hits ₹6,788 as energy rally decouples gold; stagflation signal emerges",
+    "summary": "# BHAAVBRIEF FLASH | MCX COMMODITY INTELLIGENCE Saturday, 27 June 2026 | 14:35 IST --- ## WHAT HAPPENED MCX crude surged ₹6,788/bbl (+1.78%) while silver rallied +3.02% and natural gas climbed +2.51% during the US/EU ses",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T23:43:56.978Z",
+    "pubDateIST": "27 Jun 2026, 05:13",
+    "href": "/flash/2026-06-26-23-45-mcx-crude-hits-6-788-as-energy-rally-decouples-gold-sta",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-27-05-15-energy-complex-rallies-on-iran-tensions",
+    "title": "Energy complex rallies on Iran tensions; MCX nat gas +2.51%, crude +1.78% overnight",
+    "summary": "# BhaavBrief Flash Intelligence | 27 June 2026, 18:45 IST MCX energy complex surged overnight on US/EU session strength: natural gas jumped +2.51% to ₹310/mmBtu while crude oil advanced +1.78% to ₹6,788/bbl. Simultaneous",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-26T23:45:49.040Z",
+    "pubDateIST": "27 Jun 2026, 05:15",
+    "href": "/flash/2026-06-26-23-45-energy-complex-rallies-on-iran-tensions-mcx-nat-gas-2-5",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-27-02-20-gold-silver-surge-on-mcx-amid-dollar-wea",
     "title": "Gold, Silver Surge on MCX Amid Dollar Weakness; ₹144K Bullish Signal",
     "summary": "# BHAAVBRIEF FLASH | 27 June 2026 | 22:15 IST MCX precious metals surged during the global session: Gold rose 0.75% to ₹144,199/10g while Silver jumped 1.11%, and Copper gained 0.70% to ₹1,249.90/kg. The three-metal rall",
@@ -962,25 +986,5 @@
     "impact": "neutral",
     "pubDate": "2026-06-20T04:37:01.330Z",
     "pubDateIST": "20 Jun 2026, 10:07"
-  },
-  {
-    "id": "2026-06-20-05-12-mcx-gold-slides-1-39-to-147-239-as-crude",
-    "title": "MCX Gold slides 1.39% to ₹147,239 as crude surge redirects capital away from metals",
-    "summary": "The mechanism here is risk-rotation, not safe-haven demand collapse. Crude's 3.23% rally at ₹7,282/bbl signals a supply-shock or geopolitical risk premium being priced into energy — capital that might otherwise park in gold is flowing toward energy-linked trades this session.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T23:42:33.714Z",
-    "pubDateIST": "20 Jun 2026, 05:12"
-  },
-  {
-    "id": "2026-06-20-05-14-mcx-silver-slides-2-04-to-232736-kg-as-c",
-    "title": "MCX Silver Slides 2.04% to ₹232736/kg as Crude-Led Rally Bypasses Precious Metals",
-    "summary": "The mechanism here is risk rotation. Crude's +3.23% surge is absorbing speculative capital into energy, pulling flow away from silver's dual role as monetary and industrial metal. When crude rallies on supply-shock narrative rather than broad reflation, silver historically underperforms gold — confirmed today as gold also drops 1.39%, eliminating the gold-silver ratio as a unique silver signal.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-19T23:44:25.580Z",
-    "pubDateIST": "20 Jun 2026, 05:14"
   }
 ]
