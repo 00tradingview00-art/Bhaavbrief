@@ -106,11 +106,7 @@ function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
       ⚡ HAWK-SCAN
     </span>
   )
-  if (itemType === 'flash') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#FFF7E0', color: '#996600', border: '0.5px solid #D4A830' }}>
-      Flash
-    </span>
-  )
+  if (itemType === 'flash') return null
   if (itemType === 'alert') return (
     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#EAF5EE', color: '#1E6630', border: '0.5px solid #5AAA70' }}>
       Analysis
