@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Use — BhaavBrief',
-  description: 'Terms of use for BhaavBrief — India\'s first commodity intelligence platform.',
+  description: 'Terms of use for BhaavBrief — MCX commodity intelligence platform.',
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://bhaavbrief.in/terms' },
 }

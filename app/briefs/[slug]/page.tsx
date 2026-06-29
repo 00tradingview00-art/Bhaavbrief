@@ -4,7 +4,6 @@ import Link                   from 'next/link'
 import { MDXRemote }          from 'next-mdx-remote/rsc'
 import remarkGfm              from 'remark-gfm'
 import SubscribeForm          from '@/components/SubscribeForm'
-import BriefGate             from '@/components/BriefGate'
 import CopyLinkButton         from '@/components/CopyLinkButton'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 import { getBriefArcs } from '@/lib/arcs'
@@ -76,21 +75,6 @@ export async function generateStaticParams() {
   })
 }
 
-function splitBriefContent(content: string): { free: string; locked: string; hasGate: boolean } {
-  const lines = content.split('\n')
-  let h2Count = 0
-  for (let i = 0; i < lines.length; i++) {
-    if (/^## /.test(lines[i])) {
-      h2Count++
-      if (h2Count === 3) return {
-        free:    lines.slice(0, i).join('\n'),
-        locked:  lines.slice(i).join('\n'),
-        hasGate: true,
-      }
-    }
-  }
-  return { free: content, locked: '', hasGate: false }
-}
 
 const TAG_STYLES: Record<string, React.CSSProperties> = {
   energy:  { background: '#FFF7E0', color: '#996600', borderColor: '#D4A830' },
@@ -109,7 +93,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
 
   const { prev, next } = getPrevNextBriefs(brief.urlSlug)
-  const { free: freeContent, locked: lockedContent, hasGate } = splitBriefContent(brief.content)
+
 
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
@@ -266,29 +250,11 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               </div>
             )}
 
-            <div style={{ position: 'relative' }}>
-              <div className="brief-prose" itemProp="articleBody">
-                <MDXRemote source={freeContent} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
-              </div>
-              {hasGate && (
-                <div id="brief-fade" aria-hidden style={{
-                  position: 'absolute', bottom: 0, left: 0, right: 0,
-                  height: 110,
-                  background: 'linear-gradient(transparent, #FAFAF6)',
-                  pointerEvents: 'none',
-                }} />
-              )}
+            <div className="brief-prose" itemProp="articleBody">
+              <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
             </div>
 
-            {hasGate && <BriefGate />}
-
-            {hasGate && (
-              <div id="brief-locked" className="brief-prose" style={{ display: 'none' }}>
-                <MDXRemote source={lockedContent} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
-              </div>
-            )}
-
-            <div style={{ marginTop: hasGate ? 0 : '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
               <CopyLinkButton url={url} title={brief.title} />
             </div>

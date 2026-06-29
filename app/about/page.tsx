@@ -1,23 +1,16 @@
 import { Metadata } from 'next'
-import fs   from 'node:fs'
-import path from 'node:path'
 import SubscribeForm from '@/components/SubscribeForm'
 import AboutSearch from '@/components/AboutSearch'
+import { getAllBriefs } from '@/lib/briefs'
 
-const siteStats = (() => {
-  try {
-    return JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/site-stats.json'), 'utf8'))
-  } catch {
-    return { briefCount: 22 }
-  }
-})()
+export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: "About BhaavBrief — India's First Commodity Intelligence Platform",
-  description: "BhaavBrief is India's first commodity intelligence platform — daily briefs at 9:30 AM, intraday flash signals, and live geo risk tracking for MCX traders, commodity businesses, and investors.",
+  title: "About BhaavBrief — MCX Commodity Intelligence, Daily at 9:30 AM",
+  description: "BhaavBrief publishes daily MCX commodity briefs at 9:30 AM — gold, silver, crude, copper, natgas — with global context, open interest, and what moves each price.",
   alternates: { canonical: 'https://bhaavbrief.in/about' },
   openGraph: {
-    title: "About BhaavBrief — India's First Commodity Intelligence",
+    title: "About BhaavBrief — MCX Commodity Intelligence",
     description: 'Daily OHLC context, open interest, global benchmarks, flash intelligence and live geo risk — built for MCX traders, commodity businesses, and investors.',
     url: 'https://bhaavbrief.in/about',
     siteName: 'BhaavBrief',
@@ -49,7 +42,8 @@ const AUDIENCES = [
   { icon: '○', label: 'Analysts & Students',   desc: 'Learning futures, options, and commodity economics through real MCX market context every weekday.' },
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const briefs = await getAllBriefs()
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '3rem 1.25rem 4rem' }}>
@@ -75,7 +69,7 @@ export default function AboutPage() {
           {[
             { value: '9:30 AM', label: 'Daily delivery IST' },
             { value: '5',       label: 'Commodities tracked' },
-            { value: `${siteStats.briefCount}+`, label: 'Editions published' },
+            { value: `${briefs.length}+`, label: 'Editions published' },
             { value: 'Free',    label: 'No paywall, ever' },
           ].map(s => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1.1rem 1.25rem' }}>

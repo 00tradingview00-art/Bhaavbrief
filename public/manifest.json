@@ -1,7 +1,7 @@
 {
-  "name":             "BhaavBrief — India's First Commodity Intelligence",
+  "name":             "BhaavBrief — MCX Commodity Intelligence",
   "short_name":       "BhaavBrief",
-  "description":      "India's first commodity intelligence platform. MCX Gold, Silver, Crude, Copper and Natural Gas — daily at 9:30 AM IST. Free.",
+  "description":      "MCX commodity intelligence, daily at 9:30 AM IST. Gold, Silver, Crude, Copper and Natural Gas — prices, context, and what moves them. Free.",
   "start_url":        "/",
   "display":          "standalone",
   "background_color": "#FAFAF6",
