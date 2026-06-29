@@ -473,8 +473,10 @@ async function main() {
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
   const dateVal    = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
   if (titleMatch?.[1]) {
-    const urlSlug = dateVal + '-' + titleMatch[1]
-      .toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 55)
+    const raw = titleMatch[1]
+      .toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')
+    const titlePart = raw.length > 75 ? raw.slice(0, 76).replace(/-[^-]*$/, '') : raw
+    const urlSlug = dateVal + '-' + titlePart
     mdx = mdx.replace(/^(---\n)/, `$1urlSlug: "${urlSlug}"\n`)
   }
 

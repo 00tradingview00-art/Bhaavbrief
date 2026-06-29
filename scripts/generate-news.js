@@ -165,7 +165,8 @@ function getISTNow() {
 }
 
 function toId(title, ts) {
-  const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40).replace(/-+$/, '')
+  const rawId = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '')
+  const slug  = rawId.length > 60 ? rawId.slice(0, 61).replace(/-[^-]*$/, '') : rawId
   const t    = ts.toISOString().slice(0, 16).replace(/[T:]/g, '-')
   return `${t}-${slug}`
 }
@@ -617,7 +618,8 @@ function saveFlashMdx({ title, body, category, date }) {
   try {
     const dateStr  = date.toISOString().split('T')[0]
     const timeStr  = date.toISOString().slice(11, 16).replace(':', '-')
-    const slug     = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 55)
+    const rawSlug  = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+    const slug     = rawSlug.length > 75 ? rawSlug.slice(0, 76).replace(/-[^-]*$/, '') : rawSlug
     const filename = `${dateStr}-${timeStr}-${slug}.mdx`
     const filepath = path.join(FLASH_DIR, filename)
     if (fs.existsSync(filepath)) return null

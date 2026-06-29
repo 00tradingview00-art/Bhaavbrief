@@ -16,13 +16,13 @@ function computeUrlSlug(date: string, title: string, frontmatterSlug?: string, f
   if (frontmatterSlug) return frontmatterSlug
   // Derive from date + title
   if (date && title) {
-    const titlePart = title
+    const raw = title
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .replace(/^-|-$/g, '')
-      .slice(0, 55)
+    const titlePart = raw.length > 75 ? raw.slice(0, 76).replace(/-[^-]*$/, '') : raw
     return `${date}-${titlePart}`
   }
   // Fallback to filename slug
