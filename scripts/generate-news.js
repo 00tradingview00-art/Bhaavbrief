@@ -549,19 +549,28 @@ ${signalText}
 Write a flash intelligence article for Indian MCX commodity traders in EXACTLY this structure:
 
 **WHAT HAPPENED**
-2-3 sentences. State what happened precisely. Include specific MCX price(s) from live data above.
+2-3 sentences. State what happened precisely. Include specific MCX price(s) from live data above. One idea per sentence — no em-dash stacking.
 
 **WHAT IT MEANS**
-2-3 sentences. Explain the transmission mechanism to MCX prices. Include import parity arithmetic if applicable (global price × USD/INR × duty = MCX level).
+2-3 sentences. Explain the transmission mechanism to MCX prices. If showing import parity arithmetic (global price × USD/INR × duty = MCX level), spread it across two sentences — one for the arithmetic, one for what it means. Max two hard numbers per sentence.
 
 **WHO IS AFFECTED**
-2-3 sentences. Name specific Indian companies, merchants, or sectors with concrete exposure — a specific procurement, hedging, or pricing decision (not generic "higher costs").
+2-3 sentences. Use a labeled industry category ("a cable producer", "a jewellery manufacturer", "an oil marketing company") rather than a named company with an invented figure. If naming a specific company, only include a crore or volume figure traceable to a public filing — never calculate one from assumed volumes. Describe the specific procurement, hedging, or pricing decision affected. Never write "businesses face higher costs."
 
 **BOTTOM LINE**
-1-2 sentences. The single most important structural takeaway for MCX traders.
+1-2 sentences. The single most important structural takeaway for MCX traders. Every interpretive claim must have its supporting number in the same sentence — if you cannot name the number, cut the claim.
 
 **WHAT TO WATCH**
 1-2 sentences. One specific price level or upcoming data release (name, exact timing if known) that confirms or negates this.
+
+COMMODITY LENS — apply regardless of the day's cross-asset narrative:
+COPPER → industrial-demand lens only. If copper contradicts the narrative, say so as a divergence.
+GOLD → safe-haven + real-yield lens.
+SILVER → dual lens every time: safe-haven component + industrial (solar/semiconductor). Name which half is driving the move.
+CRUDE → separate geopolitical premium from fundamental demand — these are two different signals.
+NAT GAS → standalone. Does not carry Middle East geopolitical premium.
+
+BANNED CONSTRUCTIONS: "that is not X, it is Y" without a number in the same sentence. Verb-escalation metaphors ("not drifting, it is sprinting"). "Actually a warning flag" without naming the specific threshold crossed.
 
 SEBI COMPLIANCE: No buy/sell/accumulate/exit/enter directed at reader. No price targets. Historical patterns use "historically" framing. State data, never judge.
 
