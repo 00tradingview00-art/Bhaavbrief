@@ -47,6 +47,26 @@
         "Safe-Haven Assets"
       ],
       "endDate": "2026-06-24"
+    },
+    {
+      "id": "iran-us-peace-deal-gold-crude-reset",
+      "title": "Iran-US Peace Deal: Fear Premium Unwind",
+      "startDate": "2026-06-25",
+      "status": "active",
+      "editions": [
+        52
+      ],
+      "latestDay": 1,
+      "summary": "Iran-US peace negotiations advance to draft-text stage with July signing expected, triggering simultaneous collapse in geopolitical risk premiums across gold (-3.71%), crude (-4.05%), and silver (-5.82%).",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹6682",
+      "tags": [
+        "Iran",
+        "MCX Crude",
+        "MCX Gold",
+        "Geopolitics",
+        "Peace Deal"
+      ]
     }
   ]
 }
