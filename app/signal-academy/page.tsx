@@ -78,7 +78,7 @@ export default function SignalAcademyPage() {
           Signal Academy
         </h1>
         <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0, fontWeight: 300, maxWidth: 540 }}>
-          Five interactive simulators that teach you how to read the signals beneath MCX price moves — open interest, implied volatility, basis, seasonal demand, and volume anomalies.
+          Five simulators. OI divergence, IV, basis, seasonals, volume — the signals beneath every MCX price move.
         </p>
       </div>
 

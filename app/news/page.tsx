@@ -107,7 +107,7 @@ export default async function NewsPage() {
           margin: '0 0 12px',
           lineHeight: 1.1,
         }}>
-          Intelligence Feed
+          Market Intelligence
         </h1>
 
         <p style={{
@@ -118,7 +118,7 @@ export default async function NewsPage() {
           fontWeight: 300,
           maxWidth: 560,
         }}>
-          Cross-asset commodity intelligence for India's traders, investors and businesses.
+          What's moving MCX today — gold, crude, silver, copper. Updated every 15 minutes.
         </p>
       </div>
 

@@ -60,13 +60,13 @@ export default function AboutPage() {
             About
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', margin: '0.4rem 0 1.25rem', maxWidth: 780 }}>
-            India's first commodity intelligence platform
+            MCX commodity intelligence, every weekday at 9:30 AM
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300, maxWidth: 760 }}>
-            BhaavBrief delivers commodity intelligence every weekday at 9:30 AM IST — OHLC context,
-            open interest, global benchmarks, and intraday flash signals through the day. Built for
-            MCX traders, commodity businesses, and anyone whose decisions are touched by commodity prices.
-            No buy/sell calls. No noise.
+            BhaavBrief publishes a daily open brief before MCX session start — OHLC levels, open interest,
+            global benchmarks, and what they mean for Indian traders. Flash articles go out through the
+            day as prices move. Built for MCX traders, commodity businesses, and anyone whose P&amp;L
+            is touched by gold, crude, silver, or copper.
           </p>
         </div>
 
@@ -97,28 +97,28 @@ export default function AboutPage() {
             {/* Three products */}
             <section style={{ marginBottom: '2.5rem' }}>
               <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.25rem', paddingBottom: '0.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
-                What we publish
+                What BhaavBrief publishes
               </h2>
               <div className="about-products-grid">
                 {[
                   {
                     badge: 'Daily Brief',
                     badgeBg: '#F3F0E8', badgeColor: '#7A7668', badgeBorder: '#C8C8B8',
-                    title: 'Morning intelligence',
+                    title: 'Daily open brief',
                     desc: 'Delivered at 9:30 AM IST every weekday. OHLC levels, open interest, percent change, and global reference prices — contextualised for MCX traders before the session opens.',
                     link: '/briefs', linkText: 'Read latest brief',
                   },
                   {
                     badge: 'Flash',
                     badgeBg: '#EEF2FF', badgeColor: '#3730A3', badgeBorder: '#818CF8',
-                    title: 'Intraday signals',
+                    title: 'Flash articles',
                     desc: 'Breaking market intelligence published as it happens. Policy decisions, OPEC+ moves, RBI actions, sharp price dislocations — context within minutes, not hours.',
                     link: '/news', linkText: 'Intelligence feed',
                   },
                   {
                     badge: 'Geo Risk',
                     badgeBg: '#FFF7E0', badgeColor: '#996600', badgeBorder: '#D4A830',
-                    title: 'Live risk radar',
+                    title: 'Geo risk monitor',
                     desc: 'Continuous monitoring of geopolitical chokepoints — Strait of Hormuz, Red Sea, Brent supply routes. ELEVATED or STABLE for each corridor, updated every 15 minutes.',
                     link: '/news', linkText: 'Live feed',
                   },

@@ -548,7 +548,7 @@ export default async function HomePage() {
                 fontSize: 15, color: 'var(--ink-3)',
                 lineHeight: 1.65, marginBottom: 14,
               }}>
-                Full MCX analysis — gold, crude, silver — in your inbox by 9:30 AM. Not waiting on the site.
+                Full MCX analysis — gold, crude, silver — in your inbox by 9:30 AM IST, every weekday.
               </p>
               <SubscribeForm compact location="footer" />
             </div>
@@ -570,7 +570,7 @@ export default async function HomePage() {
             </p>
             <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
               Independent commodity intelligence for India's traders, investors, merchants and businesses.
-              MCX energy, metals, and NCDEX agri — through a geopolitical and supply-demand lens.
+              MCX energy, metals, and NCDEX agri — prices, context, and what moves them.
             </p>
           </div>
         </div>

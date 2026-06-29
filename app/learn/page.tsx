@@ -202,7 +202,7 @@ export default function Page() {
           In-Depth MCX Guides
         </h2>
         <p style={{ fontSize: 14, color: 'var(--ink-4)', marginBottom: 24 }}>
-          Detailed guides for every stage of your MCX trading journey.
+          How MCX works — contracts, margins, lot sizes, and how global prices become Indian prices.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
           {MORE_GUIDES.map(g => (
