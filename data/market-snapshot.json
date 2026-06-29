@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T08:28:41.198Z",
+  "generatedAt": "2026-06-29T08:28:44.079Z",
   "generatedAtIST": "2026-06-29 13:58 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -28,9 +28,9 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 308.4,
+      "price": 308.2,
       "prevClose": 312.9,
-      "changePct": -1.4382,
+      "changePct": -1.5021,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
