@@ -1,5 +1,13 @@
 {
-  "current": null,
+  "current": {
+    "date": "2026-06-29",
+    "editionRef": 53,
+    "thesis": "MCX Silver will break below ₹218,620 support by MCX close today as industrial repricing and profit-taking ahead of US Independence Day accelerates the selloff.",
+    "commodity": "MCX Silver",
+    "direction": "bearish",
+    "targetLevel": 218620,
+    "reasoning": "Silver is trading 7% below its 20-day SMA, the gold-silver ratio has expanded to 69.5x (upper end of reflationary range), semiconductor fab utilization is softening, and overnight COMEX broke below $59.00 — this technical breakdown combined with cyclical industrial weakness makes the ₹218,620 support level the critical pivot for today's session."
+  },
   "yesterday": {
     "date": "2026-06-17",
     "editionRef": 45,
