@@ -1,5 +1,51 @@
 [
   {
+    "type": "article",
+    "slug": "2026-06-29-mcx-crude-breaks-below-6615-monsoon-demand-fade-accelerates",
+    "href": "/articles/2026-06-29-mcx-crude-breaks-below-6615-monsoon-demand-fade-accelerates",
+    "title": "MCX Crude Breaks Below ₹6615, Monsoon Demand Fade Accelerates",
+    "description": "MCX Crude plunges 2.55% to ₹6615/bbl as Indian monsoon demand weakens and WTI holds $69.77. Watch ₹6500 support.",
+    "excerpt": "WHAT HAPPENED MCX Crude collapsed 2.55% to ₹6615/bbl in morning trade, breaking below the 20-day support band at ₹6604 and signalling structural weakness rather than a technical bounce. WTI itself is ",
+    "date": "2026-06-29T06:21:49.916Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "Energy",
+      "Monsoon Demand"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 6615
+  },
+  {
+    "type": "brief",
+    "slug": "edition-053",
+    "href": "/briefs/edition-053",
+    "title": "Silver Slides 2.5% as Gold-Silver Ratio Widens — Crude Steadies on Supply Caution",
+    "description": "29 Jun 2026: MCX Silver ₹218,750/kg (-1.20%), MCX Gold ₹143,025/10g (-0.79%). COMEX Silver down 2.46% overnight; gold-silver ratio expands to 69.5x.",
+    "excerpt": "COMEX Silver crashed 2.46% overnight to $58.20/oz while COMEX Gold fell only 1.03% to $4,054/oz — the single largest relative weakness in silver against gold in three weeks. This divergence rippled in",
+    "date": "2026-06-29",
+    "edition": "53",
+    "tags": [
+      "MCX Open",
+      "Daily Brief",
+      "Gold",
+      "Silver",
+      "Crude Oil",
+      "Copper"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "brief",
     "slug": "edition-052",
     "href": "/briefs/edition-052",
