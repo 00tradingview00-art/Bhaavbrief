@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-06-30-05-12-crude-rallies-2-3-on-geopolitical-premium-precious-metals",
+    "title": "Crude rallies 2.3% on geopolitical premium; precious metals surrender to real-yield pressure ahead of MCX open",
+    "summary": "MCX Crude rallied +2.30% to ₹6,728/bbl in today's global session, bucking weakness across the precious metals complex where Gold fell 1.21% and Silver declined 0.78%. Natural Gas slumped 3.10%, the session's largest move",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-29T23:42:01.523Z",
+    "pubDateIST": "30 Jun 2026, 05:12",
+    "href": "/flash/2026-06-29-23-42-crude-rallies-2-3-on-geopolitical-premium-precious-metals-surrender-to-real",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-03-46-silver-slips-0-78-as-natgas-rout-signals-industrial-demand",
     "title": "Silver slips 0.78% as natgas rout signals industrial demand chill in US-EU",
     "summary": "MCX Silver fell ₹219,670/kg (−0.78%) in today's session as gold slipped ₹142,413/10g (−1.21%), both pressured by renewed US inflation concerns and geopolitical risk premium in the US-Iran theatre. Natural gas led the bro",
@@ -1026,25 +1038,5 @@
     "impact": "neutral",
     "pubDate": "2026-06-23T00:19:43.756Z",
     "pubDateIST": "23 Jun 2026, 05:49"
-  },
-  {
-    "id": "2026-06-23-04-34-mcx-nat-gas-2-75-at-310-40-safe-haven-bi",
-    "title": "MCX Nat Gas +2.75% at ₹310.40 — Safe-Haven Bid Offsets Energy Weakness",
-    "summary": "Crude's -3.7% collapse (risk-off, demand fears) is depressing broad energy. Yet MCX Nat Gas rallies 2.75% to ₹310.40/mmBtu — signalling supply-side tightness or monsoon-driven power demand insulating gas from oil's selloff. This decoupling matters.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-22T23:04:14.585Z",
-    "pubDateIST": "23 Jun 2026, 04:34"
-  },
-  {
-    "id": "2026-06-23-04-36-crude-collapse-3-73-to-6991-bbl-signals",
-    "title": "Crude collapse -3.73% to ₹6991/bbl signals broad risk-off; safe-haven metals hold gains",
-    "summary": "Global crude's -3.7% sell-off is the session's dominant mechanic — triggering classic risk-off bid into gold and silver while equity volatility rises. MCX Crude at ₹6991/bbl sits near 6-week lows; support lies at ₹6850 (21-day MA), resistance at ₹7150.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-22T23:06:09.753Z",
-    "pubDateIST": "23 Jun 2026, 04:36"
   }
 ]
