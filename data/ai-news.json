@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-29-21-59-crude-surges-2-2-to-6-722-on-geopolitical-premium-amid",
+    "title": "Crude surges 2.2% to ₹6,722 on geopolitical premium amid NatGas weakness",
+    "summary": "MCX Crude rallied 2.20% to ₹6,722/bbl in this afternoon session, bucking a subdued cross-asset environment where Gold fell 1.28% to ₹142,318/10g and Silver dropped 1.24%. Natural Gas led losses at -3.32%, while Copper he",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-29T16:29:08.233Z",
+    "pubDateIST": "29 Jun 2026, 21:59",
+    "href": "/flash/2026-06-29-16-31-crude-surges-2-2-to-6-722-on-geopolitical-premium-amid-natgas-weakness",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-29-22-01-mcx-natgas-crashes-3-32-on-summer-demand-softness-crude",
+    "title": "MCX NatGas crashes 3.32% on summer demand softness; Crude holds firm at ₹6,722/bbl",
+    "summary": "MCX Natural Gas collapsed 3.32% to ₹302.50/mmBtu in afternoon trade, leading the commodity complex lower. Crude Oil bucked the trend, rising 2.20% to ₹6,722/bbl, while precious metals retreated modestly with Gold down 1.",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-29T16:31:01.535Z",
+    "pubDateIST": "29 Jun 2026, 22:01",
+    "href": "/flash/2026-06-29-16-31-mcx-natgas-crashes-3-32-on-summer-demand-softness-crude-holds-firm-at-6-722",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-29-18-16-mcx-natural-gas-crashes-2-5-as-monsoon-demand-ebbs-crude",
     "title": "MCX Natural Gas crashes 2.5% as monsoon demand ebbs; crude diverges higher",
     "summary": "MCX Natural Gas collapsed 2.52% to ₹305.00/mmBtu in the afternoon session, leading today's cross-asset selloff. Gold slipped 0.79% to ₹143,017/10g, while crude recovered 0.97% to ₹6,641/bbl, creating a divergence within ",
@@ -990,25 +1014,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-22T18:53:07.862Z",
     "pubDateIST": "23 Jun 2026, 00:23"
-  },
-  {
-    "id": "2026-06-22-20-31-mcx-nat-gas-3-08-to-311-40-mmbtu-as-crud",
-    "title": "MCX Nat Gas +3.08% to ₹311.40/mmBtu as crude collapse triggers energy volatility divergence",
-    "summary": "Safe-haven rotation is fragmenting energy markets. Crude's -3.46% collapse (₹7011/bbl) signals demand destruction fears; natural gas decouples via supply-side tightness and monsoon-driven power demand in India. MCX Nat Gas ₹311.40 trades above 20-session support near ₹305 and faces resistance at ₹318. Global LNG parity (NYMEX $3.10/mmBtu × 94.67 × 1.08 import tax factor) suggests MCX premium of ~₹8/mmBtu—structural tightness pricing.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-22T15:01:27.233Z",
-    "pubDateIST": "22 Jun 2026, 20:31"
-  },
-  {
-    "id": "2026-06-22-20-33-mcx-crude-collapses-3-46-to-7011-bbl-as",
-    "title": "MCX Crude collapses 3.46% to ₹7011/bbl as risk-off dollar weakness floods complex",
-    "summary": "Safe-haven demand is the mechanism: crude's -3.5% collapse reflects broad dollar weakness triggering reflation trade rotation into metals. MCX Crude at ₹7011/bbl sits below the ₹7100 technical resistance; support holds at ₹6950/bbl. Import parity check: WTI ~$74/bbl × ₹94.67 USD/INR × 1.08 duty = ₹7,546/bbl theoretical. MCX trades at -7.1% discount to parity — suggesting global crude remains cheaper onshore, constraining further downside without geopolitical shock.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-22T15:03:22.675Z",
-    "pubDateIST": "22 Jun 2026, 20:33"
   }
 ]
