@@ -265,9 +265,16 @@ Step 2: Assess its TRAJECTORY vs yesterday:
 - WEAKENING — narrative losing grip, positioning unwinding
 - REVERSING — narrative flipping, traders caught offside
 
-Step 3: Show how this ONE narrative explains ALL commodity moves today.
-Why is gold up/down? Why is crude diverging? Why is copper ignoring the rest?
-Everything flows from the narrative — not commodity-by-commodity.
+Step 3: Read each commodity through its FIXED interpretive lens — not the day's dominant narrative.
+Each commodity has one lens that never changes regardless of direction:
+
+COPPER   → industrial-demand lens only. Up = strengthening manufacturing/construction expectations. Down = softening. NEVER relabel a copper move as a "growth positive" or "warning flag" to match the day's geopolitical or macro narrative.
+GOLD     → safe-haven + real-yield lens. Moves explained by risk appetite and rate expectations — not by the narrative of the day.
+SILVER   → dual lens, stated every time: safe-haven component + industrial (solar/semiconductor) component. When silver and gold diverge, attribute the gap to the industrial half specifically — not "sentiment."
+CRUDE    → supply/demand + geopolitical premium. Always separate "how much of this move is geopolitical premium" from "how much is fundamental demand" — these are two different signals.
+NAT GAS  → standalone. Explicitly note it does NOT carry Middle East geopolitical premium. Do not force it into the day's main narrative.
+
+If a commodity's lens CONTRADICTS the dominant narrative, report the divergence explicitly — "Copper fell while the peace narrative would predict a rally — this is the signal worth watching" — rather than reinterpreting the commodity to agree with the narrative. A divergence is a finding, not a problem.
 
 Step 4: What would KILL this narrative? (the trigger traders must watch)
 
@@ -307,6 +314,17 @@ WRITING RULES
 - FORMATTING: Use **bold** for specific price figures (₹ and $ amounts) and precise percentage changes (those with decimal places, e.g. **-3.71%**, **8.6%**) in body paragraphs. Do NOT bold round numbers used in historical ranges (e.g. "6-10%" or "3-5%"), general terms, or every sentence. Sparse bold = high signal. Headers, tables, and the disclaimer are exempt.
 - 450-600 words total.
 - Every sentence must earn its place. No filler, no "it's worth noting".
+
+- BANNED CONSTRUCTIONS — check every sentence before finalizing:
+  "that is not X, it is Y" (e.g. "that is not a correction, it is repositioning") → banned unless the specific number that earns the claim appears in the same sentence.
+  Verb-escalation metaphors used as a substitute for data: "is not drifting, it is sprinting" → banned.
+  "is actually a warning flag" / "is actually a [label]" → banned unless the specific threshold crossed is named in the same sentence.
+  Rule: every interpretive claim must have the number that earns it in the same sentence or the one immediately after. If you cannot point to that number, cut the claim.
+
+- ONE IDEA PER SENTENCE, MAX ONE SUBORDINATE CLAUSE. Self-test before finalizing: remove every em-dash and colon — is each result still one grammatically complete sentence carrying one claim? If not, split it.
+
+- MAX TWO HARD NUMBERS PER SENTENCE (price figures, precise percentages, ratios). Three or more precise figures back to back reads as a spreadsheet. State a number, say what it means, then introduce the next one. The Price Bridge table is exempt.
+
 - End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences.
   Example: "Tomorrow: US CPI at 6:00 PM IST — above 3.5% makes the Iran crude premium look cheap and upgrades the bullish thesis; below 3.0% and the entire energy rally looks borrowed."
 
@@ -350,7 +368,7 @@ Include specific price levels from the data above.]
 
 ## Who Is Affected
 3 sentences — one each, specific and concrete:
-- **Businesses:** Translate the price move into ₹ crore impact on ONE named company. Use the formula: daily import volume × price move = ₹ crore. Examples: "HPCL's daily crude import bill changes by approximately ₹X crore at this price level — sustained above ₹9,000/bbl through the fortnightly revision window, the next retail fuel price increase becomes inevitable." or "Titan Company's gold inventory revaluation shifts by an estimated ₹X crore at this COMEX move." Never say "businesses face higher costs" — always name the company and the crore figure.
+- **Businesses:** Describe the ₹ impact using a labeled industry estimate. Use a category ("an oil marketing company", "a jewellery manufacturer", "a cable producer") rather than naming a specific company — UNLESS the figure is derivable from that company's publicly disclosed volumes. Never invent a crore calculation for a named company. Example: "An oil marketing company importing at typical daily volumes faces a crude bill roughly ₹X crore higher at this price level — sustained through the fortnightly revision window, retail fuel prices follow." If you name a company (e.g., HPCL, Titan), state only the qualitative impact or use a range drawn from publicly reported data — never a single invented figure. Never say "businesses face higher costs" — always state the type of business and the direction of impact in concrete terms.
 - **Investors:** name one MCX contract and the directional signal. Never say "investors should watch".
 - **Consumers:** name one product and whether prices will rise or fall at the pump or shop. Never say "consumers may see higher prices".
 
