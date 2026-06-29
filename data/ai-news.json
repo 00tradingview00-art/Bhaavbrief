@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-29-18-16-mcx-natural-gas-crashes-2-5-as-monsoon-demand-ebbs-crude",
+    "title": "MCX Natural Gas crashes 2.5% as monsoon demand ebbs; crude diverges higher",
+    "summary": "MCX Natural Gas collapsed 2.52% to ₹305.00/mmBtu in the afternoon session, leading today's cross-asset selloff. Gold slipped 0.79% to ₹143,017/10g, while crude recovered 0.97% to ₹6,641/bbl, creating a divergence within ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-29T12:46:12.809Z",
+    "pubDateIST": "29 Jun 2026, 18:16",
+    "href": "/flash/2026-06-29-12-48-mcx-natural-gas-crashes-2-5-as-monsoon-demand-ebbs-crude-diverges-higher",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-29-18-18-natural-gas-drops-2-52-as-geopolitical-premium-unwinds-crude",
+    "title": "Natural Gas Drops 2.52% as Geopolitical Premium Unwinds; Crude Holds Firm",
+    "summary": "# BHAAVBRIEF FLASH: NAT GAS LEADS SELLOFF AS GEOPOLITICAL PREMIUM UNWINDS MCX Natural Gas fell 2.52% to ₹305/mmBtu in the afternoon session, marking the sharpest move across the commodity complex today. Gold slipped 0.79",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-29T12:48:05.558Z",
+    "pubDateIST": "29 Jun 2026, 18:18",
+    "href": "/flash/2026-06-29-12-48-natural-gas-drops-2-52-as-geopolitical-premium-unwinds-crude-holds-firm",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-29-13-49-mcx-natgas-crashes-1-47-as-geopolitical",
     "title": "MCX NatGas crashes 1.47% as geopolitical premium deflates; crude holds ₹6639",
     "summary": "MCX NatGas collapsed -1.47% to ₹308.30/mmBtu in Monday morning trade, leading a mixed commodity session. Crude oil bucked the trend with a +0.94% gain to ₹6639/bbl, while gold and silver retreated on easing geopolitical ",
@@ -986,35 +1010,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-22T15:03:22.675Z",
     "pubDateIST": "22 Jun 2026, 20:33"
-  },
-  {
-    "id": "2026-06-22-14-45-rbi-holds-5-25-repo-amid-west-asia-cease",
-    "title": "RBI holds 5.25% repo amid West Asia ceasefire; gold ₹149000 extends safe-haven bid",
-    "summary": "RBI's unchanged stance removes immediate rate-cut tailwind that might have compressed gold's real yield advantage. However, the cross-asset signal today reveals the dominant driver: West Asia ceasefire removing geopolitical premium from crude (down 1.35% to ₹7164/bbl), freeing capital into traditional safe-havens. MCX Gold at ₹149000 (up 1.22%) and Silver at ₹237867 (up 2.01%) are advancing not because of Indian monetary easing but because USD weakness (INR ₹94.69) and global risk-off are pulling bullion higher. The repo hold eliminates future headwinds to gold but does not explain today's move. The real story: crude's fall signals geopolitical risk abating, yet traders are rotating into gold anyway—indicating either structural inflation concerns or genuine USD depreciation. Natgas +3.71% alongside suggests reflation narrative dominance over pure risk-off.",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "bullish",
-    "pubDate": "2026-06-22T09:15:50.023Z",
-    "pubDateIST": "22 Jun 2026, 14:45"
-  },
-  {
-    "id": "2026-06-22-14-47-mcx-silver-2-01-to-237867-kg-as-dollar-w",
-    "title": "MCX Silver +2.01% to ₹237867/kg as dollar weakness triggers safe-haven metal rotation",
-    "summary": "Dollar weakness is the operative mechanism: USD/INR at ₹94.69 (softer) is reducing rupee-denominated import costs, allowing MCX silver to decouple upward from global softness. Risk-off sentiment driving gold +1.2% simultaneously confirms safe-haven bid, not demand fundamentals. Silver is trading at support near ₹236500/kg; resistance lies at ₹240000/kg. Import parity arithmetic: spot silver ~$28.50/oz × 94.69 × 1.08 duty = ₹238200 theoretical parity — MCX sits at slight discount, offering arbitrage appeal. Gold's +1.2% co-movement validates the rupee-depreciation thesis: both metals benefit identically from currency weakness. Natural gas's +3.71% surge contradicts pure safe-haven logic, suggesting reflation undercurrent. Monitor RBI commentary or USD/INR break below ₹94.50 for parity reset.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-22T09:17:45.582Z",
-    "pubDateIST": "22 Jun 2026, 14:47"
-  },
-  {
-    "id": "2026-06-22-14-49-mcx-natgas-3-71-at-313-mmbtu-as-risk-off",
-    "title": "MCX Natgas +3.71% at ₹313/mmBtu as risk-off safe haven bid extends",
-    "summary": "Dollar weakness paired with safe-haven inflows into precious metals is triggering broad commodity strength. Gold (+1.2%) and silver (+2.01%) advancing confirms reflation narrative; natgas +3.71% at ₹313.30/mmBtu follows as energy complex reprices amid lower crude (-1.35% at ₹7164/bbl). This counter-directional move—energy up while crude falls—signals demand-side rotation rather than supply shock.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-22T09:19:41.842Z",
-    "pubDateIST": "22 Jun 2026, 14:49"
   }
 ]
