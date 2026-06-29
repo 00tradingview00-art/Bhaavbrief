@@ -83,9 +83,10 @@ async function main() {
   console.log(`\nPosting carousel: ${TOPIC} (${config.slides} slides)\n`)
 
   // Step 1 — Create child media containers for each slide
+  // Uses static JPEG files (served from /instagram/) — Instagram requires JPEG for carousel items
   const childIds = []
   for (let i = 1; i <= config.slides; i++) {
-    const url = `${BASE_URL}/api/instagram-carousel/${TOPIC}/${i}?v=${Date.now()}`
+    const url = `${BASE_URL}/instagram/carousel-${TOPIC}-slide-${i}.jpg?v=${Date.now()}`
     console.log(`Creating child container for slide ${i}: ${url}`)
     const id = await createChildContainer(url)
     console.log(`  → Child container: ${id}`)
