@@ -52,7 +52,7 @@
       "id": "iran-us-peace-deal-gold-crude-reset",
       "title": "Iran-US Peace Deal: Fear Premium Unwind",
       "startDate": "2026-06-25",
-      "status": "active",
+      "status": "closed",
       "editions": [
         52
       ],
@@ -66,7 +66,9 @@
         "MCX Gold",
         "Geopolitics",
         "Peace Deal"
-      ]
+      ],
+      "endDate": "2026-06-30",
+      "outcome": "Arc went 5 days without a new edition — narrative faded"
     }
   ]
 }
