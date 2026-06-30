@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T07:06:07.529Z",
+  "generatedAt": "2026-06-30T07:06:12.769Z",
   "generatedAtIST": "2026-06-30 12:36 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,9 +16,9 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 6673,
+      "price": 6677,
       "prevClose": 6728,
-      "changePct": -0.8175,
+      "changePct": -0.758,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -28,15 +28,15 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 304,
+      "price": 303.8,
       "prevClose": 303,
-      "changePct": 0.33,
+      "changePct": 0.264,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
       "price": 94.65,
       "prevClose": 94.36,
-      "changePct": 0.307,
+      "changePct": 0.3097,
       "unit": "INR"
     },
     "COMEX_GOLD": {
@@ -46,15 +46,15 @@
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 59.4,
+      "price": 59.44,
       "prevClose": 58.18,
-      "changePct": 2.1057,
+      "changePct": 2.1659,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 70.14,
+      "price": 70.13,
       "prevClose": 70.75,
-      "changePct": -0.8622,
+      "changePct": -0.8763,
       "unit": "USD/bbl"
     },
     "BRENT": {
