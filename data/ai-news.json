@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-30-18-00-copper-crude-rally-powered-by-demand-not-rupee-weakness-gold",
+    "title": "Copper-crude rally powered by demand, not rupee weakness; gold diverges at ₹1,60,000",
+    "summary": "MCX crude advanced 0.42% to ₹6,756/bbl in afternoon trade, while copper climbed 1.16% and natural gas surged 3.14% — a coordinated move across industrial and energy commodities. Gold, by contrast, slipped 0.03% to ₹1,60,",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T12:30:05.674Z",
+    "pubDateIST": "30 Jun 2026, 18:00",
+    "href": "/flash/2026-06-30-12-32-copper-crude-rally-powered-by-demand-not-rupee-weakness-gold-diverges-at-1",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-18-01-natural-gas-spikes-3-14-on-import-parity-rupee-weakness-at",
+    "title": "Natural Gas Spikes 3.14% on Import Parity; Rupee Weakness at ₹94.66 Drives MCX",
+    "summary": "MCX Natural Gas surged 3.14% to ₹312.50/mmBtu in afternoon trade, marking the session's strongest mover across energy and metals. Silver gained 2.48% to ₹224,850/kg amid safe-haven demand, while copper advanced 1.16% to ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T12:31:57.681Z",
+    "pubDateIST": "30 Jun 2026, 18:01",
+    "href": "/flash/2026-06-30-12-31-natural-gas-spikes-3-14-on-import-parity-rupee-weakness-at-94-66-drives-mcx",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-16-01-silver-leads-mcx-on-safe-haven-bid-as-rupee-weakens-to-94-66",
     "title": "Silver Leads MCX on Safe-Haven Bid as Rupee Weakens to ₹94.66",
     "summary": "MCX Silver surged ₹223,851/kg (+2.03%) in afternoon trade, leading a subdued commodity complex where Copper gained 1.16% and Natural Gas rose 1.12%. The Indian Rupee weakened to ₹94.66/USD, signaling dollar strength ahea",
@@ -1012,25 +1036,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T13:32:44.647Z",
     "pubDateIST": "23 Jun 2026, 19:02"
-  },
-  {
-    "id": "2026-06-23-16-09-silver-weakness-spreads-across-mcx-compl",
-    "title": "Silver weakness spreads across MCX complex; crude holds gains despite risk-off tone",
-    "summary": "Silver's -3.03% collapse is the session's transmission mechanism. Broader risk-off sentiment is depressing precious metals demand while USD/INR strength at 94.74 imports headwinds into rupee-priced contracts. MCX Crude at ₹7024/bbl (+0.59%) is an outlier—energy typically underperforms in risk-off moves, suggesting local supply tightness or inventory draws are offsetting global weakness.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T10:39:57.952Z",
-    "pubDateIST": "23 Jun 2026, 16:09"
-  },
-  {
-    "id": "2026-06-23-16-11-mcx-natgas-1-35-at-305-80-mmbtu-as-silve",
-    "title": "MCX Natgas -1.35% at ₹305.80/mmBtu as Silver Rout Triggers Cross-Commodity Selloff",
-    "summary": "Silver's -3.0% collapse is the session's anchor, triggering broad-based deleveraging across energy and metals. Natgas follows at -1.35%, settling near ₹305.80/mmBtu — suggesting risk-off positioning and potential margin calls in leveraged energy trades.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T10:41:53.130Z",
-    "pubDateIST": "23 Jun 2026, 16:11"
   }
 ]
