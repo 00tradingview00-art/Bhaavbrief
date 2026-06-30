@@ -56,10 +56,12 @@ const FEEDS = [
   { url: 'https://news.google.com/rss/search?q=crude+oil+price+india+brent+wti+today&hl=en-IN&gl=IN&ceid=IN:en',      source: 'Google News', category: 'Energy'      },
   { url: 'https://news.google.com/rss/search?q=OPEC+crude+oil+supply+production+cut&hl=en&gl=US&ceid=US:en',           source: 'Google News', category: 'Energy'      },
   { url: 'https://news.google.com/rss/search?q=natural+gas+LNG+price+india+demand&hl=en-IN&gl=IN&ceid=IN:en',         source: 'Google News', category: 'Energy'      },
+  { url: 'https://news.google.com/rss/search?q=india+heatwave+power+demand+electricity+natural+gas&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Energy' },
 
   // ── Agri ─────────────────────────────────────────────────────────────────────
   { url: 'https://news.google.com/rss/search?q=india+agri+ncdex+monsoon+crop+wheat+soybean&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'       },
   { url: 'https://news.google.com/rss/search?q=india+monsoon+forecast+kharif+rabi+agriculture&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri'   },
+  { url: 'https://news.google.com/rss/search?q=india+heatwave+crop+damage+wheat+soybean+harvest&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Agri' },
 
   // ── Policy ────────────────────────────────────────────────────────────────────
   { url: 'https://news.google.com/rss/search?q=india+import+duty+customs+tariff+commodity&hl=en-IN&gl=IN&ceid=IN:en', source: 'Google News', category: 'Policy'     },
