@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-30-12-29-silver-surges-2-73-on-rupee-weakness-gold-flat-shows-real",
+    "title": "Silver surges +2.73% on rupee weakness; Gold flat shows real-yield ceiling on MCX",
+    "summary": "MCX Silver surged +2.73% this morning session while Gold slipped −0.03% to ₹160,000/10g, creating a divergence within the precious metals complex. Crude Oil declined −0.79% to ₹6,675/bbl as geopolitical premium compresse",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T06:59:51.170Z",
+    "pubDateIST": "30 Jun 2026, 12:29",
+    "href": "/flash/2026-06-30-07-01-silver-surges-2-73-on-rupee-weakness-gold-flat-shows-real-yield-ceiling-on",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-12-31-silver-hits-225-400-on-geopolitical-fears-crude-diverges-on",
+    "title": "Silver hits ₹225,400 on geopolitical fears; crude diverges on demand weakness",
+    "summary": "MCX Silver surged 2.73% to ₹225,400/kg in this morning's session, outpacing all other major commodities as gold and broader metals faced headwinds. Crude Oil declined 0.79% to ₹6,675/bbl, signalling demand weakness despi",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T07:01:42.991Z",
+    "pubDateIST": "30 Jun 2026, 12:31",
+    "href": "/flash/2026-06-30-07-01-silver-hits-225-400-on-geopolitical-fears-crude-diverges-on-demand-weakness",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-09-49-mcx-nat-gas-slides-on-demand-softness-defies-geopolitical",
     "title": "MCX Nat Gas slides on demand softness, defies geopolitical premium at ₹301/mmBtu",
     "summary": "MCX Natural Gas fell 0.63% to ₹301.10/mmBtu in this morning's session, extending weakness alongside a broader commodity sell-off led by gold's 1.07% decline to ₹140,885/10g. Nat Gas weakness appears disconnected from Mid",
@@ -992,25 +1016,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T08:31:29.766Z",
     "pubDateIST": "23 Jun 2026, 14:01"
-  },
-  {
-    "id": "2026-06-23-12-26-iran-oil-sanctions-lift-signals-crude-su",
-    "title": "Iran oil sanctions lift signals crude supply surge; MCX Crude ₹6947/bbl falls 0.52% in demand-destruction selloff",
-    "summary": "The Iran sanctions lift enters a market already executing a broad multi-asset selloff driven by deteriorating demand outlook and USD strength (₹94.73). MCX Crude Oil (₹6947/bbl) is declining alongside gold (−1.29%) and silver (−3.23%), confirming demand destruction thesis rather than supply disruption. Additional Iranian crude supply to global markets would normalize Brent/WTI downward, compressing the arbitrage that sustains elevated MCX crude valuations. Import parity mechanics: if global crude falls USD/bbl due to Iran supply, and USD/INR holds above ₹94.70, the ₹-denominated MCX contract compresses further. The correlation signal: crude and copper both falling together (copper −1.09%) indicates macro demand concerns override supply-side relief. Confirmation level: Watch Brent crude close below USD 72/bbl; if it holds, MCX crude extends lower toward ₹6850 support.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T06:56:04.497Z",
-    "pubDateIST": "23 Jun 2026, 12:26"
-  },
-  {
-    "id": "2026-06-23-12-27-mcx-gold-1-29-at-146212-10g-dollar-stren",
-    "title": "MCX Gold -1.29% at ₹146212/10g; Dollar Strength Crushes Cross-Asset Complex",
-    "summary": "Dollar strength is the transmission mechanism. As USD/INR rallies to 94.73, rupee weakness typically supports INR-priced commodities—yet gold is falling 1.29%, indicating the global gold selloff (driven by demand deterioration or rising real yields) is overwhelming the rupee cushion. Support sits at ₹145,200; resistance at ₹147,500. Global spot gold (approximately $2,040/oz) × 94.73 × import duty (~12.5%) yields MCX parity near ₹145,800—gold trades at a modest premium, suggesting local demand remains intact despite global weakness.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T06:57:54.783Z",
-    "pubDateIST": "23 Jun 2026, 12:27"
   }
 ]
