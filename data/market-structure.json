@@ -6,7 +6,7 @@
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹7.1–10.0 lakh",
-    "contractValue": "~₹1.4 crore at ₹1,42,771/10g",
+    "contractValue": "~₹1.4 crore at ₹1,42,250/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.4–4.7 lakh",
-    "contractValue": "~₹67.8 lakh at ₹2,25,950/kg",
+    "contractValue": "~₹67.5 lakh at ₹2,24,850/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -87,7 +87,7 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹34–47K",
-    "contractValue": "~₹6.7 lakh at ₹6,733/bbl",
+    "contractValue": "~₹6.8 lakh at ₹6,761/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -341,8 +341,8 @@
     "unit": "₹ per mmBtu",
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
-    "typicalMargin": "₹19–27K",
-    "contractValue": "~₹3.8 lakh at ₹307/mmBtu",
+    "typicalMargin": "₹20–27K",
+    "contractValue": "~₹3.9 lakh at ₹312/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
