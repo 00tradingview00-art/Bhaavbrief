@@ -978,45 +978,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-24T04:20:21.444Z",
     "pubDateIST": "24 Jun 2026, 09:50"
-  },
-  {
-    "id": "2026-06-24-05-08-silver-crash-3-86-drags-gold-lower-mcx-g",
-    "title": "Silver crash (-3.86%) drags gold lower; MCX Gold ₹146443 tests support amid USD strength",
-    "summary": "Silver's -3.9% collapse across global markets signals broad risk-off positioning, pulling gold into correction despite historical safe-haven demand. MCX Gold at ₹146443/10g reflects this contagion: down 1.13% on USD/INR strength at 94.73, compressing import parity margins.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T23:38:12.298Z",
-    "pubDateIST": "24 Jun 2026, 05:08"
-  },
-  {
-    "id": "2026-06-24-05-10-mcx-copper-slides-2-72-to-1279-50-kg-as",
-    "title": "MCX Copper slides 2.72% to ₹1279.50/kg as silver leads broad metal selloff",
-    "summary": "Silver's -3.9% rout is triggering risk-off deleveraging across the base metals complex. Copper, as the industrial proxy, is following — down 2.72% — signalling demand anxiety despite LME's sustainability premium messaging. Current MCX Copper level ₹1279.50/kg sits below psychological ₹1285 resistance; support holds at ₹1270.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T23:40:08.294Z",
-    "pubDateIST": "24 Jun 2026, 05:10"
-  },
-  {
-    "id": "2026-06-24-04-04-silver-selloff-cascades-through-complex",
-    "title": "Silver Selloff Cascades Through Complex — MCX NatGas ₹298.90 Pressured 3.58%",
-    "summary": "Silver's -3.9% lead is triggering broad risk-off across energy. MCX NatGas ₹298.90/mmBtu breaks below ₹300 psychological support; resistance now ₹309. Global LNG pricing (Henry Hub parity: ~$2.85/mmBtu × 94.73 INR/USD × import duty = ₹268 theoretical floor) sits ~11% below MCX. The premium reflects India's supply tightness, but silver weakness signals liquidity contraction—institutions rotating from precious metals into cash, compressing energy leverage simultaneously.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T22:34:59.112Z",
-    "pubDateIST": "24 Jun 2026, 04:04"
-  },
-  {
-    "id": "2026-06-24-04-06-mcx-silver-crashes-3-86-to-225260-kg-glo",
-    "title": "MCX Silver crashes 3.86% to ₹225260/kg — global liquidation signal spreads across complex",
-    "summary": "Silver's -3.9% lead in the cross-asset sell-off reflects risk-off positioning in US/EU sessions, triggering mechanical deleveraging across precious metals. MCX Silver at ₹225260/kg sits below import parity: spot silver ~$29.50/oz × ₹94.73 × 1.05 duty factor = ₹237400/kg theoretical. The ₹12140 discount signals arbitrage pressure — MCX trades at premium absorption but lacks demand support. Key support: ₹223000/kg (20-day lows). Resistance: ₹230500/kg (session highs).",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T22:36:54.595Z",
-    "pubDateIST": "24 Jun 2026, 04:06"
   }
 ]
