@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-06-30-16-01-silver-leads-mcx-on-safe-haven-bid-as-rupee-weakens-to-94-66",
+    "title": "Silver Leads MCX on Safe-Haven Bid as Rupee Weakens to ₹94.66",
+    "summary": "MCX Silver surged ₹223,851/kg (+2.03%) in afternoon trade, leading a subdued commodity complex where Copper gained 1.16% and Natural Gas rose 1.12%. The Indian Rupee weakened to ₹94.66/USD, signaling dollar strength ahea",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T10:31:26.098Z",
+    "pubDateIST": "30 Jun 2026, 16:01",
+    "href": "/flash/2026-06-30-10-35-silver-leads-mcx-on-safe-haven-bid-as-rupee-weakens-to-94-66",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-16-03-mcx-copper-rallies-1-16-on-lme-record-high-industrial",
+    "title": "MCX Copper Rallies 1.16% on LME Record High; Industrial Tightness Confirmed",
+    "summary": "MCX Copper rallied ₹1259/kg, gaining 1.16% in afternoon trade, as global LME base metals pushed to record highs on supply constraints in aluminium markets. Silver outpaced copper with a +2.03% gain, signalling a divergen",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T10:33:19.632Z",
+    "pubDateIST": "30 Jun 2026, 16:03",
+    "href": "/flash/2026-06-30-10-35-mcx-copper-rallies-1-16-on-lme-record-high-industrial-tightness-confirmed",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-16-05-mcx-silver-rallies-2-03-on-industrial-repricing-gold",
+    "title": "MCX Silver rallies 2.03% on industrial repricing; gold weakness signals safe-haven stall",
+    "summary": "MCX Silver surged 2.03% to ₹223,851/kg in afternoon trade, outpacing a subdued broader complex where gold and crude remained under pressure. The rally arrived despite headline inflation concerns and escalating US-Iran ge",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T10:35:12.504Z",
+    "pubDateIST": "30 Jun 2026, 16:05",
+    "href": "/flash/2026-06-30-10-35-mcx-silver-rallies-2-03-on-industrial-repricing-gold-weakness-signals-safe",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-12-29-silver-surges-2-73-on-rupee-weakness-gold-flat-shows-real",
     "title": "Silver surges +2.73% on rupee weakness; Gold flat shows real-yield ceiling on MCX",
     "summary": "MCX Silver surged +2.73% this morning session while Gold slipped −0.03% to ₹160,000/10g, creating a divergence within the precious metals complex. Crude Oil declined −0.79% to ₹6,675/bbl as geopolitical premium compresse",
@@ -996,25 +1032,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T10:41:53.130Z",
     "pubDateIST": "23 Jun 2026, 16:11"
-  },
-  {
-    "id": "2026-06-23-13-59-mcx-copper-slides-1-44-to-1296-kg-amid-b",
-    "title": "MCX Copper slides 1.44% to ₹1296/kg amid broad precious metals selloff",
-    "summary": "Silver's -3.52% collapse is triggering cross-asset deleveraging across the entire MCX complex this session. Copper at ₹1296.30/kg reflects contagion from risk-off positioning in precious metals rather than copper-specific fundamentals. LME's sustainability framework announcement signals tighter future premium structures, creating uncertainty around near-term base metal spreads.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T08:29:33.423Z",
-    "pubDateIST": "23 Jun 2026, 13:59"
-  },
-  {
-    "id": "2026-06-23-14-01-silver-crashes-3-52-to-226060-kg-gold-fo",
-    "title": "Silver crashes 3.52% to ₹226060/kg; gold follows softer on USD strength",
-    "summary": "Silver's 3.52% selloff anchors today's complex weakness. Mechanism: USD/INR at 94.74 has strengthened intraday, raising rupee-denominated import parity for precious metals. Global silver softening compounds local selling pressure. MCX Silver ₹226060/kg now tests support near ₹224500/kg; resistance at ₹229800/kg. Import parity check (spot silver ~$28.50/oz × 94.74 × 1.08 duty) yields theoretical MCX ~₹231200—silver currently trades at 2.2% discount to parity, suggesting export headroom absent. Gold follows (-1.63% to ₹145699/10g) in correlated weakness, confirming precious metals complex repricing. Copper (-1.44%) and crude (flat) show selective pressure on EM-sensitive commodities. Monitor USD/INR move past 94.90 and FOMC speakers tonight for fresh directional cues.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T08:31:29.766Z",
-    "pubDateIST": "23 Jun 2026, 14:01"
   }
 ]
