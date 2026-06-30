@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 142413,
-    "silver": 219670,
-    "crude": 6728,
-    "copper": 1247,
-    "natgas": 303.2,
+    "gold": 140513,
+    "silver": 219406,
+    "crude": 6706,
+    "copper": 1244.55,
+    "natgas": 301.3,
     "usdinr": 94.55
   },
-  "lastChecked": "2026-06-29T18:21:08.760Z",
+  "lastChecked": "2026-06-30T03:31:14.933Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,9 +22,7 @@
     "mideast": "Gulf oil tanker rates nearly double as Middle East producers ramp up exports - R",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-06-29/2026-06-29-mcx-crude-breaks-below-6615-monsoon-demand-fade-accelerates"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-06-29T06:22:05.442Z",
   "lastCoveredAt": {
     "crude": "2026-06-29T06:22:05.442Z"
