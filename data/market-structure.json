@@ -6,7 +6,7 @@
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹7.1–10.0 lakh",
-    "contractValue": "~₹1.4 crore at ₹1,42,150/10g",
+    "contractValue": "~₹1.4 crore at ₹1,42,334/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -87,7 +87,7 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹33–46K",
-    "contractValue": "~₹6.6 lakh at ₹6,629/bbl",
+    "contractValue": "~₹6.6 lakh at ₹6,610/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -299,7 +299,7 @@
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
     "typicalMargin": "₹1.2–1.7 lakh",
-    "contractValue": "~₹24.0 lakh at ₹1,598.8/kg",
+    "contractValue": "~₹24.0 lakh at ₹1,601.9/kg",
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
     "keyBodies": [
@@ -341,8 +341,8 @@
     "unit": "₹ per mmBtu",
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
-    "typicalMargin": "₹20–27K",
-    "contractValue": "~₹3.9 lakh at ₹312.9/mmBtu",
+    "typicalMargin": "₹19–27K",
+    "contractValue": "~₹3.9 lakh at ₹311.9/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
