@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-30-09-49-mcx-nat-gas-slides-on-demand-softness-defies-geopolitical",
+    "title": "MCX Nat Gas slides on demand softness, defies geopolitical premium at ₹301/mmBtu",
+    "summary": "MCX Natural Gas fell 0.63% to ₹301.10/mmBtu in this morning's session, extending weakness alongside a broader commodity sell-off led by gold's 1.07% decline to ₹140,885/10g. Nat Gas weakness appears disconnected from Mid",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T04:19:14.348Z",
+    "pubDateIST": "30 Jun 2026, 09:49",
+    "href": "/flash/2026-06-30-04-21-mcx-nat-gas-slides-on-demand-softness-defies-geopolitical-premium-at-301",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-09-51-mcx-gold-tumbles-1-507-as-real-yield-repricing-overwhelms",
+    "title": "MCX Gold Tumbles ₹1,507 as Real-Yield Repricing Overwhelms Geopolitical Premium",
+    "summary": "MCX Gold collapsed ₹1,507 intraday to ₹140,885/10g, marking a -1.07% session loss and leading the commodity complex lower. Silver and crude followed with softer declines of -0.55% and -0.52% respectively. The selloff arr",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T04:21:07.769Z",
+    "pubDateIST": "30 Jun 2026, 09:51",
+    "href": "/flash/2026-06-30-04-21-mcx-gold-tumbles-1-507-as-real-yield-repricing-overwhelms-geopolitical",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-05-12-crude-rallies-2-3-on-geopolitical-premium-precious-metals",
     "title": "Crude rallies 2.3% on geopolitical premium; precious metals surrender to real-yield pressure ahead of MCX open",
     "summary": "MCX Crude rallied +2.30% to ₹6,728/bbl in today's global session, bucking weakness across the precious metals complex where Gold fell 1.21% and Silver declined 0.78%. Natural Gas slumped 3.10%, the session's largest move",
@@ -988,55 +1012,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T06:57:54.783Z",
     "pubDateIST": "23 Jun 2026, 12:27"
-  },
-  {
-    "id": "2026-06-23-09-42-iranian-crude-waiver-signals-demand-reli",
-    "title": "Iranian crude waiver signals demand relief; MCX crude steady at 7011 despite geopolitical premium unwind",
-    "summary": "US sanctions waiver on Iranian oil to Indian refiners removes a supply constraint that has been pricing geopolitical risk into the crude complex. MCX Crude Oil at 7011/bbl reflects muted immediate reaction because Indian refiners have already been accessing Iranian barrels through secondary channels; the waiver merely formalizes existing flows and reduces premium paid for sanctions-circumvention logistics.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T04:12:44.939Z",
-    "pubDateIST": "23 Jun 2026, 09:42"
-  },
-  {
-    "id": "2026-06-23-09-44-mcx-nat-gas-1-23-at-306-mmbtu-as-cross-a",
-    "title": "MCX Nat Gas -1.23% at ₹306/mmBtu as cross-asset weakness spreads across complex",
-    "summary": "Silver's -2.6% sell-off is cascading into energy contracts via deleveraging mechanics. Risk-off sentiment is forcing commodity funds to reduce broad exposures, pulling Natural Gas lower despite seasonal summer demand strength. MCX Nat Gas at ₹306.20/mmBtu faces support near ₹302 (recent session lows) and resistance at ₹312 (52-week average band).",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T04:14:40.482Z",
-    "pubDateIST": "23 Jun 2026, 09:44"
-  },
-  {
-    "id": "2026-06-23-09-46-mcx-silver-crashes-2-59-to-228250-kg-glo",
-    "title": "MCX Silver crashes 2.59% to ₹228250/kg—global softness overwhelms domestic support",
-    "summary": "Silver's -2.59% retreat anchors today's commodity weakness. The mechanism: global silver futures have softened overnight, pressuring MCX import parity downward despite INR stability at ₹94.67. With international spot around USD 28.50/oz, import parity calculates to approximately ₹227000 (28.50 × 94.67 × 0.95 duty factor), placing MCX silver at a modest premium—suggesting local liquidation rather than fresh demand.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T04:16:35.869Z",
-    "pubDateIST": "23 Jun 2026, 09:46"
-  },
-  {
-    "id": "2026-06-23-05-47-mcx-silver-0-73-to-234-891-kg-as-crude-c",
-    "title": "MCX Silver +0.73% to ₹234,891/kg as crude collapses—safe-haven bid reshaping risk appetite",
-    "summary": "Dollar weakness and broad risk-off positioning are driving the cross-asset narrative: crude collapsed -3.7%, triggering safe-haven demand into gold and silver simultaneously. This is a classic reflation + de-risking cocktail—not inflation panic, but portfolio rebalancing away from energy.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-23T00:17:50.189Z",
-    "pubDateIST": "23 Jun 2026, 05:47"
-  },
-  {
-    "id": "2026-06-23-05-49-mcx-natgas-2-75-to-310-40-as-crude-colla",
-    "title": "MCX Natgas +2.75% to ₹310.40 as crude collapse triggers energy volatility reset",
-    "summary": "Crude's -3.7% collapse—driven by risk-off deleveraging in US/EU sessions—has fragmented the energy complex. While oil sells off on demand destruction fears, natgas decouples upward, pricing in supply tightness and seasonal cooling demand. MCX Natgas ₹310.40 sits between support at ₹305 and resistance at ₹318. Against Henry Hub parity (USD 2.85/mmBtu × 94.67 USD/INR ÷ 1.08 duty factor ≈ ₹248), MCX trades at 25% premium—justified by India's LNG import scarcity window. Silver's +0.73% move alongside natgas confirms reflation bid trumping immediate recession fears. Watch: US API crude inventory release (23:30 IST) for fresh directional cues on Wednesday MCX open. Premium sustainability hinges on LNG spot tightness data.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-23T00:19:43.756Z",
-    "pubDateIST": "23 Jun 2026, 05:49"
   }
 ]
