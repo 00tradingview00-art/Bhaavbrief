@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-01-00-45-copper-rallies-amid-demand-signal-crude-slides-on-demand",
+    "title": "Copper rallies amid demand signal; crude slides on demand pessimism",
+    "summary": "MCX Copper rallied ₹1259/kg (+1.16%) as London Metal Exchange base metals surged to record highs, driven by aluminum supply-side anxiety and industrial demand revival signals from the US session. Crude Oil fell 1.59% to ",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T19:15:33.197Z",
+    "pubDateIST": "01 Jul 2026, 00:45",
+    "href": "/flash/2026-06-30-19-15-copper-rallies-amid-demand-signal-crude-slides-on-demand-pessimism",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-22-47-mcx-crude-slips-1-49-on-asia-demand-weakness-silver-rallies",
     "title": "MCX Crude slips 1.49% on Asia demand weakness; Silver rallies 3.44%",
     "summary": "MCX Crude fell 1.49% to ₹6,628/bbl in the afternoon session, breaking a three-day hold above ₹6,700 support. Simultaneously, MCX Gold slipped 0.03% to near ₹1,60,000/10g, showing weakness despite a +3.44% surge in Silver",
@@ -1012,25 +1024,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T19:31:33.824Z",
     "pubDateIST": "24 Jun 2026, 01:01"
-  },
-  {
-    "id": "2026-06-23-23-45-mcx-gold-1-13-at-146443-10g-as-silver-co",
-    "title": "MCX Gold -1.13% at ₹146443/10g as Silver Collapse Triggers Risk-Off Across Metals",
-    "summary": "Silver's 3.86% decline is signalling broad de-risking in the precious metals complex. This isn't a gold-specific move—it's cross-asset contagion. When silver (higher beta, industrial demand proxy) falls harder than gold, it indicates liquidation pressure rather than safe-haven demand. MCX Gold at ₹146443/10g trades at a 1.2% discount to import parity (COMEX ~$2350/oz × ₹94.73 FX × 12.5% duty premium ≈ ₹148100).",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T18:15:55.921Z",
-    "pubDateIST": "23 Jun 2026, 23:45"
-  },
-  {
-    "id": "2026-06-23-23-47-mcx-copper-slides-2-72-to-1280-kg-as-sil",
-    "title": "MCX Copper slides 2.72% to ₹1280/kg as silver weakness spreads across base metals",
-    "summary": "Silver's -3.9% decline is cascading into copper, signalling broad-based deleveraging across precious and base metals. The mechanism: risk-off sentiment reducing safe-haven demand and simultaneously pressuring industrial metals as growth expectations soften.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T18:17:51.118Z",
-    "pubDateIST": "23 Jun 2026, 23:47"
   }
 ]
