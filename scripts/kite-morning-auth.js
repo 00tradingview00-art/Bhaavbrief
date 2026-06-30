@@ -103,6 +103,10 @@ async function syncAll(token) {
   const ghOk = await updateGitHubSecret(token)
   console.log(ghOk ? ' ✅' : ' ⚠️   gh CLI failed — set manually')
 
+  process.stdout.write('📰  Brief dispatch..')
+  const briefOk = await dispatchGenerateBrief()
+  console.log(briefOk ? ' ✅  (generate-brief.yml queued)' : ' ⚠️   dispatch failed — GITHUB_TOKEN needed in .env.local')
+
   process.stdout.write('🔺  Vercel env......')
   const vOk = await updateVercelEnv(token)
   console.log(vOk ? ' ✅' : ' ⚠️   VERCEL_TOKEN not set')
@@ -148,6 +152,36 @@ async function updateGitHubSecret(token) {
     return true
   } catch (err) {
     console.error('\n   gh error:', err.stderr?.toString().trim() ?? err.message)
+    return false
+  }
+}
+
+async function dispatchGenerateBrief() {
+  try {
+    // Prefer explicit GITHUB_TOKEN; fall back to gh CLI's token
+    let ghToken = process.env.GITHUB_TOKEN ?? ''
+    if (!ghToken) {
+      try { ghToken = execFileSync('gh', ['auth', 'token'], { stdio: 'pipe' }).toString().trim() } catch { /* no gh token */ }
+    }
+    if (!ghToken) return false
+
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/generate-brief.yml/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `token ${ghToken}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main' }),
+        signal: AbortSignal.timeout(15000),
+      }
+    )
+    // 204 = accepted
+    return res.status === 204
+  } catch (err) {
+    console.error('\n   GitHub dispatch error:', err.message)
     return false
   }
 }
