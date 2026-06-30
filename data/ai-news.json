@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-06-30-22-47-mcx-crude-slips-1-49-on-asia-demand-weakness-silver-rallies",
+    "title": "MCX Crude slips 1.49% on Asia demand weakness; Silver rallies 3.44%",
+    "summary": "MCX Crude fell 1.49% to ₹6,628/bbl in the afternoon session, breaking a three-day hold above ₹6,700 support. Simultaneously, MCX Gold slipped 0.03% to near ₹1,60,000/10g, showing weakness despite a +3.44% surge in Silver",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T17:17:51.479Z",
+    "pubDateIST": "30 Jun 2026, 22:47",
+    "href": "/flash/2026-06-30-17-19-mcx-crude-slips-1-49-on-asia-demand-weakness-silver-rallies-3-44",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-06-30-22-49-natural-gas-breaks-session-highs-on-monsoon-demand-crude",
+    "title": "Natural Gas Breaks Session Highs on Monsoon Demand; Crude Slides 1.49%",
+    "summary": "MCX Natural Gas surged 3.40% to ₹313.30/mmBtu in the afternoon session, outpacing a subdued broader commodity complex where crude fell 1.49% and gold remained anchored. Silver's 3.44% rally—the session's strongest mover—",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T17:19:44.255Z",
+    "pubDateIST": "30 Jun 2026, 22:49",
+    "href": "/flash/2026-06-30-17-19-natural-gas-breaks-session-highs-on-monsoon-demand-crude-slides-1-49",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-06-30-20-47-silver-rallies-4-on-iran-tension-safe-haven-bid-dominates",
     "title": "Silver rallies 4% on Iran tension; safe-haven bid dominates MCX",
     "summary": "MCX Silver surged ₹228,182/kg, gaining 4.00% in the afternoon session as precious metals rallied on renewed inflation concerns tied to escalating US-Iran tensions. Gold held near ₹143,025/10g while Copper advanced 1.16% ",
@@ -1008,15 +1032,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T18:17:51.118Z",
     "pubDateIST": "23 Jun 2026, 23:47"
-  },
-  {
-    "id": "2026-06-23-21-43-mcx-natural-gas-down-2-55-at-302-mmbtu-a",
-    "title": "MCX Natural Gas down 2.55% at ₹302/mmBtu as silver weakness spreads across complex",
-    "summary": "Silver's -3.0% lead is triggering broad de-risking across the commodity complex. Natural gas at ₹302.10/mmBtu reflects this cross-asset liquidation mechanism rather than gas-specific supply or demand shock. Support sits at ₹298 (20-session moving average); resistance at ₹307 (intraday high).",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T16:13:45.849Z",
-    "pubDateIST": "23 Jun 2026, 21:43"
   }
 ]
