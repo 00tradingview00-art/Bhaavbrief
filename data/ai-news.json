@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-01-03-52-copper-hits-record-parity-as-aluminum-supply-fears-override",
+    "title": "Copper hits record parity as aluminum supply fears override crude weakness",
+    "summary": "MCX Copper rallied 1.16% to ₹1,259/kg on Wednesday's global session, driven by LME base metals index reaching record highs amid aluminum supply concerns. MCX Crude collapsed 1.59% to ₹6,621/bbl, creating a divergence whe",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T22:22:04.999Z",
+    "pubDateIST": "01 Jul 2026, 03:52",
+    "href": "/flash/2026-06-30-22-24-copper-hits-record-parity-as-aluminum-supply-fears-override-crude-weakness",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-03-53-mcx-crude-slides-1-59-on-demand-fears-copper-diverges-with-1",
+    "title": "MCX Crude slides 1.59% on demand fears; copper diverges with +1.16% gain",
+    "summary": "MCX Crude fell 1.59% to ₹6,621/bbl in today's session, extending pressure from US oil weakness overnight. Gold slipped 0.03% to ₹1,60,000/10g, weighed by a strengthening USD/INR at ₹94.65, which raises the rupee cost of ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-06-30T22:23:57.624Z",
+    "pubDateIST": "01 Jul 2026, 03:53",
+    "href": "/flash/2026-06-30-22-23-mcx-crude-slides-1-59-on-demand-fears-copper-diverges-with-1-16-gain",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-01-00-45-copper-rallies-amid-demand-signal-crude-slides-on-demand",
     "title": "Copper rallies amid demand signal; crude slides on demand pessimism",
     "summary": "MCX Copper rallied ₹1259/kg (+1.16%) as London Metal Exchange base metals surged to record highs, driven by aluminum supply-side anxiety and industrial demand revival signals from the US session. Crude Oil fell 1.59% to ",
@@ -994,15 +1018,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-23T22:36:54.595Z",
     "pubDateIST": "24 Jun 2026, 04:06"
-  },
-  {
-    "id": "2026-06-24-02-36-iran-sanctions-waiver-signals-supply-rel",
-    "title": "Iran sanctions waiver signals supply relief; crude ₹6960/bbl steadies as geopolitical premium compresses",
-    "summary": "The Iranian sanctions waiver narrative directly contradicts the silver-led selloff dominating today's session. This is critical: silver's -3.9% decline reflects risk-off positioning (safe-haven unwind), while crude at ₹6960/bbl shows structural geopolitical premium compression. These moves are NOT aligned. If Iran sanctions ease, crude supply increases, reducing energy-input costs across the complex. MCX Crude ₹6960/bbl sits near support. Silver weakness at ₹225260/kg alongside potential crude stabilization suggests traders are pricing two competing narratives: near-term growth caution (silver) versus medium-term inflation relief (Iran supply). The USD/INR rate at ₹94.73 will determine import parity impact on precious metals relative to crude stability. Confirmation level: Brent crude holding above USD 73/bbl tomorrow would validate that Iran waiver is already priced in; breakdown below signals broader demand destruction.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-23T21:06:13.808Z",
-    "pubDateIST": "24 Jun 2026, 02:36"
   }
 ]
