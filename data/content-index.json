@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-01-mcx-silver-crashes-2-63-industrial-liquidation-outpaces-gold",
+    "href": "/articles/2026-07-01-mcx-silver-crashes-2-63-industrial-liquidation-outpaces-gold",
+    "title": "MCX Silver Crashes 2.63% — Industrial Liquidation Outpaces Gold",
+    "description": "MCX Silver plunges to ₹221,000/kg, down 2.63% in morning trade. Gold falls half as much, signaling industrial demand retreat over safe-haven flows.",
+    "excerpt": "WHAT HAPPENED Silver is selling off at twice the speed of gold — MCX Silver down 2.63% to ₹221,000/kg while MCX Gold lost 1.22% to ₹140,800/10g — which reveals industrial positioning unwind, not blank",
+    "date": "2026-07-01T12:31:21.998Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Nat Gas",
+      "MCX Gold",
+      "Industrial Metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 221000
+  },
+  {
     "type": "brief",
     "slug": "edition-055",
     "href": "/briefs/edition-055",
