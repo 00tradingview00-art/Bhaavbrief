@@ -670,8 +670,6 @@ Source: BhaavBrief Intelligence | bhaavbrief.in`
 
 // ── Price-action first: signals driven by what IS moving, not what RSS published ──
 
-const PRICE_ACTION_COOLDOWN_MS = 3 * 60 * 60 * 1000  // 3 hours — one brief per commodity per session block
-
 /**
  * For commodities moving > threshold, create a brief signal regardless of whether
  * there's a matching RSS article. RSS is optional supporting context, not the trigger.
@@ -688,6 +686,9 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
     { key: 'natgas', label: 'MCX Nat Gas', category: 'Energy', tagType: 'energy', unit: '₹/mmBtu', kws: ['natural gas', 'natgas', 'lng', 'henry hub']     },
   ]
 
+  // Today's date in IST — one price-action article per commodity per trading day
+  const todayIST = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })
+
   const signals = []
 
   for (const { key, label, category, tagType, unit, kws } of COMMODITY_MAP) {
@@ -696,11 +697,10 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
 
     const price = prices[key]  // Kite live price (INR) or Stooq COMEX price
 
-    // Skip if we already published a brief for this commodity within the cooldown window.
-    // This prevents the same commodity from being briefed every 15-minute run all session.
+    // One price-action article per commodity per IST calendar day.
     const alreadyCovered = existing.some(item => {
-      const age = Date.now() - new Date(item.pubDate).getTime()
-      if (age > PRICE_ACTION_COOLDOWN_MS) return false
+      const itemDateIST = new Date(item.pubDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })
+      if (itemDateIST !== todayIST) return false
       const t = item.title.toLowerCase()
       return kws.some(kw => t.includes(kw))
     })
