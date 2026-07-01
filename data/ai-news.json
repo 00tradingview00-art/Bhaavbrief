@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-01-16-20-silver-tumbles-1-67-amid-geopolitical-premium-unwind-gold",
+    "title": "Silver tumbles 1.67% amid geopolitical-premium unwind; gold holds ₹141,985 support",
+    "summary": "Silver crashed 1.67% to ₹223,255/kg in the evening session, leading MCX's broad selloff as renewed US-Iran conflict rhetoric triggered a rotation out of safe-haven metals. Gold held firmer at ₹141,985/10g despite the geo",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T10:50:33.810Z",
+    "pubDateIST": "01 Jul 2026, 16:20",
+    "href": "/flash/2026-07-01-10-52-silver-tumbles-1-67-amid-geopolitical-premium-unwind-gold-holds-141-985",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-16-22-silver-tumbles-1-67-to-223-255-kg-industrial-demand-weakens",
+    "title": "Silver tumbles 1.67% to ₹223,255/kg; industrial demand weakens amid Gold stability",
+    "summary": "MCX Silver dropped 1.67% to ₹223,255/kg in the afternoon session, leading declines across the commodity complex. Gold held steadier at ₹141,985/10g, while Crude, Copper, and Natural Gas each fell less than 1%. Silver's o",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T10:52:26.359Z",
+    "pubDateIST": "01 Jul 2026, 16:22",
+    "href": "/flash/2026-07-01-10-52-silver-tumbles-1-67-to-223-255-kg-industrial-demand-weakens-amid-gold",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-01-12-47-mcx-copper-slips-0-90-as-demand-caution-outweighs-lme",
     "title": "MCX Copper slips 0.90% as demand caution outweighs LME strength",
     "summary": "MCX Copper declined 0.90% to ₹1259/kg in this morning's session, tracking a broader softening across base metals despite the LME copper complex posting record highs on aluminum supply concerns. Silver's steeper 2.66% dro",
@@ -946,45 +970,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-24T12:35:51.493Z",
     "pubDateIST": "24 Jun 2026, 18:05"
-  },
-  {
-    "id": "2026-06-24-15-51-rbi-holds-steady-amid-geopolitical-fog-i",
-    "title": "RBI holds steady amid geopolitical fog; INR softness supports crude weakness across MCX complex",
-    "summary": "RBI's rate hold and explicit rejection of hike talk directly reinforces the cross-asset selloff unfolding in this session. A held policy rate in an environment of geopolitical uncertainty typically signals defensive monetary positioning — this removes rate-support for INR strength and allows USD/INR to drift higher (currently 94.67). The import parity chain operates mechanically: as INR weakens, global commodity prices already falling on demand concerns become relatively more expensive in rupee terms on conversion, yet demand destruction outweighs any INR benefit. MCX Crude at 6845/bbl (down 1.71%) and MCX Gold at 144252/10g (down 1.55%) both reflect the combined weight of global price pressure plus INR depreciation acting as a secondary headwind. RBI's geopolitical language signals patience — not urgency to defend currency or support growth through monetary loosening. This stance validates the selloff mechanics already visible across gold, crude, and copper.",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T10:21:41.692Z",
-    "pubDateIST": "24 Jun 2026, 15:51"
-  },
-  {
-    "id": "2026-06-24-15-53-rbi-rate-hold-signal-extends-rupee-stren",
-    "title": "RBI rate hold signal extends rupee strength to 94.67, pressuring gold and crude across MCX",
-    "summary": "The RBI governor's rate hold commentary reinforces the nominal interest rate differential favoring USD carry, sustaining rupee appreciation at 94.67 versus the 95.50+ levels seen earlier this month. Stronger INR mechanically compresses rupee-denominated MCX contract valuations through the import parity chain: global spot gold at approximately USD 2,445 converts to lower rupee equivalents when USD/INR weakens. This explains MCX Gold at 144,252 per 10g down 1.55 percent and MCX Crude at 6,845 per barrel down 1.71 percent. The RBI's dovish hold stance, extending pause duration expectations, removes the historical bid from real rate expectations that typically support commodity hedging demand. MCX Copper at 1,264.90 per kg mirrors this deflation, declining 1.32 percent. Cross-asset correlation shows USD/INR weakness moving inversely to crude demand narrative; weakening rupee typically signals capital outflows and rupee depreciation risk, yet here rupee strength itself is the depressant. Watch RBI policy communications on 7 August for any shift in rate trajectory language; that data will reset the rate differential and rupee trajectory.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T10:23:37.134Z",
-    "pubDateIST": "24 Jun 2026, 15:53"
-  },
-  {
-    "id": "2026-06-24-15-55-mcx-gold-slides-1-55-to-144-252-10g-amid",
-    "title": "MCX Gold slides 1.55% to ₹144,252/10g amid broad dollar strength selloff",
-    "summary": "Dollar strength is the mechanical driver across the commodity complex. As USD/INR appreciates (₹94.67), rupee-denominated metals become relatively expensive for overseas buyers, triggering liquidation across gold, silver, copper and crude simultaneously. MCX Gold at ₹144,252 sits below historical parity levels; import parity math: global spot (~$2,380/oz) × 94.67 × 1.03 duty factor = ~₹234,000/10g notional, suggesting MCX trades at a structural discount—typical for rupee weakness periods.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T10:25:32.660Z",
-    "pubDateIST": "24 Jun 2026, 15:55"
-  },
-  {
-    "id": "2026-06-24-15-57-mcx-crude-slides-1-71-to-6845-bbl-as-dol",
-    "title": "MCX Crude slides 1.71% to ₹6845/bbl as dollar strength crushes broad commodity complex",
-    "summary": "Dollar appreciation is the primary transmission mechanism driving today's cross-asset selloff. Crude, gold, copper and silver all moving in tandem downward signals demand weakness or carry-cost repricing rather than supply shock. MCX Crude at ₹6845/bbl sits approximately 3.2% below import parity (Brent ~$82/bbl × 94.67 INR/USD × 1.02 duty factor = ~₹7,070/bbl). The metal trades at discount, indicating either futures contango or hedger positioning ahead of inventory data.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T10:27:28.529Z",
-    "pubDateIST": "24 Jun 2026, 15:57"
   }
 ]
