@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-01-12-47-mcx-copper-slips-0-90-as-demand-caution-outweighs-lme",
+    "title": "MCX Copper slips 0.90% as demand caution outweighs LME strength",
+    "summary": "MCX Copper declined 0.90% to ₹1259/kg in this morning's session, tracking a broader softening across base metals despite the LME copper complex posting record highs on aluminum supply concerns. Silver's steeper 2.66% dro",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T07:17:08.998Z",
+    "pubDateIST": "01 Jul 2026, 12:47",
+    "href": "/flash/2026-07-01-07-19-mcx-copper-slips-0-90-as-demand-caution-outweighs-lme-strength",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-12-49-mcx-silver-crashes-2-66-as-industrial-liquidation-overwhelms",
+    "title": "MCX Silver Crashes 2.66% as Industrial Liquidation Overwhelms Safe-Haven Flows",
+    "summary": "MCX silver crashed -2.66% to ₹221,000/kg this morning, leading a broad commodity selloff that included gold at -1.18% (₹140,845/10g) and natural gas at -1.19% (₹308.30/mmBtu). The silver decline outpaced other precious m",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T07:19:01.008Z",
+    "pubDateIST": "01 Jul 2026, 12:49",
+    "href": "/flash/2026-07-01-07-19-mcx-silver-crashes-2-66-as-industrial-liquidation-overwhelms-safe-haven",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-01-10-17-silver-crashes-2-47-on-inflation-fears-gold-holds-ground-at",
     "title": "Silver crashes 2.47% on inflation fears; Gold holds ground at ₹141,115",
     "summary": "MCX Silver crashed 2.47% this morning, the session's sharpest mover, while MCX Gold eased 0.99% to ₹141,115/10g on renewed inflation anxiety and escalating US-Iran geopolitical tensions. Copper and Natural Gas followed w",
@@ -962,25 +986,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-24T10:27:28.529Z",
     "pubDateIST": "24 Jun 2026, 15:57"
-  },
-  {
-    "id": "2026-06-24-12-23-mcx-copper-down-0-36-at-1277-kg-as-gold",
-    "title": "MCX Copper down 0.36% at ₹1277/kg as gold weakness spills across complex",
-    "summary": "Gold's -0.9% retreat this session is functioning as a de-risking trigger across the commodity complex, pulling copper lower despite no metal-specific headwinds. The LME's sustainability premium framework announcement provides structural context but hasn't offset the immediate flight-to-safety mechanics driving intraday selling. MCX Copper trades at ₹1277.15/kg with support building near ₹1271 and resistance capped at ₹1282. Import parity arithmetic: LME copper ~$9,100/tonne × 94.69 USD/INR ÷ 1000 × 1.10 duty factor = ₹945 theoretical parity—suggesting MCX trades at a 35% premium, typical for physical contract liquidity. Silver's +0.17% divergence contradicts the broader selloff, signalling selective safe-haven demand. Watch RBI liquidity data release (2pm IST) for rupee direction confirmation.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-24T06:53:32.097Z",
-    "pubDateIST": "24 Jun 2026, 12:23"
-  },
-  {
-    "id": "2026-06-24-12-25-mcx-crude-slides-0-80-to-6908-bbl-as-gol",
-    "title": "MCX Crude slides 0.80% to ₹6908/bbl as gold weakness signals broad risk-off",
-    "summary": "Gold's -0.87% decline (₹145261/10g) is anchoring a cross-asset risk-off sentiment this session, pressuring crude alongside it. Crude at ₹6908/bbl sits between support at ₹6880 and resistance at ₹6950.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T06:55:28.100Z",
-    "pubDateIST": "24 Jun 2026, 12:25"
   }
 ]
