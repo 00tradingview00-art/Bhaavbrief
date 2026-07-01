@@ -2,7 +2,7 @@ import { getAllBriefs }   from '@/lib/briefs'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 1800 // news sitemap: rebuild every 30 min
 
 const BASE = 'https://bhaavbrief.in'
 
