@@ -19,13 +19,17 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
-const OUTPUT_FILE       = path.join(ROOT, 'data/ai-news.json')
-const SEEN_FILE         = path.join(__dirname, 'seen-news.json')
-const FLASH_DIR         = path.join(ROOT, 'content/flash')
-const MAX_STORED        = 300
-const MAX_PER_RUN       = 6      // one per major category (Metals, Energy, Policy, Macro, Agri, Geopolitics)
-const FRESHNESS_HOURS   = 8      // skip articles older than 8h — commodity news stales fast
+const ANTHROPIC_API_KEY    = process.env.ANTHROPIC_API_KEY
+const OUTPUT_FILE          = path.join(ROOT, 'data/ai-news.json')
+const SEEN_FILE            = path.join(__dirname, 'seen-news.json')
+const FLASH_DIR            = path.join(ROOT, 'content/flash')
+const COMMODITY_STATE_FILE = path.join(ROOT, 'data/commodity-price-state.json')
+const MAX_STORED           = 300
+const MAX_PER_RUN          = 6      // one per major category (Metals, Energy, Policy, Macro, Agri, Geopolitics)
+const FRESHNESS_HOURS      = 8      // skip articles older than 8h — commodity news stales fast
+const MIN_COOLDOWN_MS      = 2 * 60 * 60 * 1000   // 2h hard floor between same-commodity articles
+const SESSION_RESET_MS     = 8 * 60 * 60 * 1000   // 8h — treat as new session, always allow
+const ESCALATION_PCT       = 1.5                   // move must deepen by ≥1.5% to qualify as new story
 
 const CATEGORY_TO_FLASH = {
   'Metals':      'metals',
@@ -130,6 +134,14 @@ function saveSeen(urls) {
 function loadExisting() {
   try { return JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf8')) }
   catch { return [] }
+}
+
+function loadCommodityState() {
+  try { return JSON.parse(fs.readFileSync(COMMODITY_STATE_FILE, 'utf8')) }
+  catch { return {} }
+}
+function saveCommodityState(state) {
+  fs.writeFileSync(COMMODITY_STATE_FILE, JSON.stringify(state, null, 2), 'utf8')
 }
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
@@ -674,7 +686,7 @@ Source: BhaavBrief Intelligence | bhaavbrief.in`
  * For commodities moving > threshold, create a brief signal regardless of whether
  * there's a matching RSS article. RSS is optional supporting context, not the trigger.
  */
-function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
+function buildPriceActionSignals(prices, allItems, recentTitles) {
   const movers = prices.movers ?? {}
   const THRESHOLD = 0.2  // % — minimum move to warrant a price-action brief
 
@@ -686,9 +698,7 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
     { key: 'natgas', label: 'MCX Nat Gas', category: 'Energy', tagType: 'energy', unit: '₹/mmBtu', kws: ['natural gas', 'natgas', 'lng', 'henry hub']     },
   ]
 
-  // Today's date in IST — one price-action article per commodity per trading day
-  const todayIST = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })
-
+  const state   = loadCommodityState()
   const signals = []
 
   for (const { key, label, category, tagType, unit, kws } of COMMODITY_MAP) {
@@ -697,14 +707,23 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
 
     const price = prices[key]  // Kite live price (INR) or Stooq COMEX price
 
-    // One price-action article per commodity per IST calendar day.
-    const alreadyCovered = existing.some(item => {
-      const itemDateIST = new Date(item.pubDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })
-      if (itemDateIST !== todayIST) return false
-      const t = item.title.toLowerCase()
-      return kws.some(kw => t.includes(kw))
-    })
-    if (alreadyCovered) continue
+    // 3-tier content gate:
+    // Tier 1 (<2h): hard floor — always block, prevents back-to-back rewrites
+    // Tier 2 (2–8h): content gate — allow only if direction reversed OR move escalated ≥1.5%
+    // Tier 3 (>8h): new session — always allow
+    const last = state[key]
+    if (last?.pubDate) {
+      const age = Date.now() - new Date(last.pubDate).getTime()
+      if (age < MIN_COOLDOWN_MS) continue
+      if (age < SESSION_RESET_MS) {
+        const reversed  = Math.sign(pct) !== Math.sign(last.pct)
+        const escalated = Math.abs(pct) > Math.abs(last.pct) + ESCALATION_PCT
+        if (!reversed && !escalated) {
+          console.log(`  Skipped [${key}] — same story (last: ${last.pct?.toFixed(2)}%, now: ${pct.toFixed(2)}%, age: ${(age/3600000).toFixed(1)}h)`)
+          continue
+        }
+      }
+    }
 
     // Find the most informative RSS context article (longest description = most context for Claude)
     const context = allItems
@@ -728,7 +747,8 @@ function buildPriceActionSignals(prices, allItems, recentTitles, existing) {
   }
 
   // Sort: biggest absolute move first
-  return signals.sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct))
+  signals.sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct))
+  return { signals, state }
 }
 
 // generatePriceActionBrief merged into generateFlashArticle above
@@ -760,7 +780,7 @@ async function main() {
   // ── PART 1: Price-action signals ─────────────────────────────────────────────
   // These are always generated when commodities are moving — no RSS article required.
   // Metals & Energy: price-action first.
-  const priceSignals = buildPriceActionSignals(prices, allItems, recentTitles, existing)
+  const { signals: priceSignals, state: commodityState } = buildPriceActionSignals(prices, allItems, recentTitles)
   console.log(`Price-action signals: ${priceSignals.length} (${priceSignals.map(s => `${s.label} ${s.pct >= 0 ? '+' : ''}${s.pct.toFixed(1)}%`).join(', ') || 'none moving'})`)
 
   // ── PART 2: RSS signals ───────────────────────────────────────────────────────
@@ -846,6 +866,8 @@ async function main() {
       existing.unshift(makeEntry(title, excerpt, signal.category, signal.tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
       for (const kw of (signal.kws ?? [])) coveredCommodityKws.add(kw.toLowerCase())
+      commodityState[signal.key] = { pubDate: new Date().toISOString(), pct: signal.pct }
+      saveCommodityState(commodityState)
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
       if (reelWorthy) console.log(`  🎬  Reel-worthy (${signal.pct.toFixed(2)}%)`)
       processed++

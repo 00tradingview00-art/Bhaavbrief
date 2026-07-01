@@ -99,7 +99,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           # Note: market-snapshot.json is intentionally excluded — intelligence-engine owns it.
           # Including it here caused rebase conflicts in the retry loop.
-          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json data/commodity-price-state.json scripts/seen-news.json
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
@@ -109,7 +109,7 @@ jobs:
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json data/commodity-price-state.json scripts/seen-news.json
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
           for attempt in 1 2 3; do
