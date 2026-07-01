@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-07-01-18-59-gold-rallies-on-crude-rout-rbi-usd-cap-holds-mcx-parity",
+    "title": "Gold rallies on crude rout; RBI USD cap holds MCX parity stable",
+    "summary": "MCX Gold rallied ₹143,600/10g (+0.75%) into afternoon close as equities-sensitive crude slid 0.63% to ₹6,575/bbl, triggering a classic risk-off rotation. Silver fell 0.31% to ₹226,347/kg despite gold's strength, signalin",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T13:29:59.780Z",
+    "pubDateIST": "01 Jul 2026, 18:59",
+    "href": "/flash/2026-07-01-13-33-gold-rallies-on-crude-rout-rbi-usd-cap-holds-mcx-parity-stable",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-19-01-gold-rallies-amid-crude-weakness-mcx-risk-off-divergence-at",
+    "title": "Gold rallies amid crude weakness; MCX risk-off divergence at ₹143,600",
+    "summary": "MCX crude fell 0.63% to ₹6,575/bbl in afternoon trade, while gold rallied 0.75% to ₹143,600/10g, creating a classic risk-off divergence. USD/INR steadied at ₹95.24, offering no tailwind to rupee-denominated commodity pri",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T13:31:51.899Z",
+    "pubDateIST": "01 Jul 2026, 19:01",
+    "href": "/flash/2026-07-01-13-33-gold-rallies-amid-crude-weakness-mcx-risk-off-divergence-at-143-600",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-19-03-gold-rises-on-risk-off-crude-falls-as-growth-fears-grip-mcx",
+    "title": "Gold Rises on Risk-Off; Crude Falls as Growth Fears Grip MCX",
+    "summary": "MCX Gold rallied ₹143,600/10g, gaining +0.75% this afternoon session as safe-haven demand dominated cross-asset price action. Crude Oil slipped ₹6,575/bbl (down -0.63%), extending weakness as geopolitical risk appetite d",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T13:33:43.950Z",
+    "pubDateIST": "01 Jul 2026, 19:03",
+    "href": "/flash/2026-07-01-13-33-gold-rises-on-risk-off-crude-falls-as-growth-fears-grip-mcx",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-01-16-20-silver-tumbles-1-67-amid-geopolitical-premium-unwind-gold",
     "title": "Silver tumbles 1.67% amid geopolitical-premium unwind; gold holds ₹141,985 support",
     "summary": "Silver crashed 1.67% to ₹223,255/kg in the evening session, leading MCX's broad selloff as renewed US-Iran conflict rhetoric triggered a rotation out of safe-haven metals. Gold held firmer at ₹141,985/10g despite the geo",
@@ -940,35 +976,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-24T15:23:22.715Z",
     "pubDateIST": "24 Jun 2026, 20:53"
-  },
-  {
-    "id": "2026-06-24-18-01-india-growth-downgrade-pressures-rupee-s",
-    "title": "India growth downgrade pressures rupee strength, lifting MCX precious metals import parity into evening close",
-    "summary": "S&P Global's 110-basis-point downgrade to India's growth trajectory is a demand signal, not a supply shock. Slower domestic growth typically dampens commodity import appetite and strengthens currency expectations. However, the live USD/INR at 94.67 shows rupee stability holding despite the signal. MCX Gold at 142433/10g and Silver at 217493/kg are down 2.80% and 3.69% respectively—consistent with the cross-asset selloff narrative (broad dollar strength or demand deterioration). The growth downgrade reinforces demand concerns already priced into crude's 3.26% drop to 6737/bbl. For Indian traders, slower GDP growth reduces domestic physical offtake across metals, extending evening session weakness. Watch whether RBI commentary or overnight global yields confirm or reverse this demand destruction signal through Friday close.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T12:31:59.895Z",
-    "pubDateIST": "24 Jun 2026, 18:01"
-  },
-  {
-    "id": "2026-06-24-18-03-mcx-copper-slides-2-34-to-1251-85-kg-ami",
-    "title": "MCX Copper slides 2.34% to ₹1251.85/kg amid broad dollar strength selloff",
-    "summary": "Dollar strength is the primary transmission mechanism driving copper lower across all venues. USD/INR at 94.67 compresses rupee-denominated import parity — LME copper converting into INR loses attractiveness on FX headwinds. Cross-asset weakness (silver -3.69%, crude -3.26%, gold -2.80%) confirms demand-side deterioration, not supply shock.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T12:33:55.967Z",
-    "pubDateIST": "24 Jun 2026, 18:03"
-  },
-  {
-    "id": "2026-06-24-18-05-mcx-silver-plunges-3-69-to-217493-kg-dol",
-    "title": "MCX Silver plunges 3.69% to ₹217493/kg — dollar strength crushes precious metal complex",
-    "summary": "USD strength is the operating mechanism. A firming dollar (₹94.67/USD) renders rupee-priced metals less competitive globally and raises import costs, depressing local demand sentiment. Silver's 3.69% fall confirms broader precious metal weakness alongside crude (-3.26%) and copper (-2.34%), signalling demand-side deterioration or portfolio deleveraging, not supply shock.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T12:35:51.493Z",
-    "pubDateIST": "24 Jun 2026, 18:05"
   }
 ]
