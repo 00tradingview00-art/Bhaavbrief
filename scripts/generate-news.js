@@ -560,7 +560,7 @@ Write a flash intelligence article for Indian MCX commodity traders in EXACTLY t
 2-3 sentences. Use a labeled industry category ("a cable producer", "a jewellery manufacturer", "an oil marketing company") rather than a named company with an invented figure. If naming a specific company, only include a crore or volume figure traceable to a public filing — never calculate one from assumed volumes. Describe the specific procurement, hedging, or pricing decision affected. Never write "businesses face higher costs."
 
 **BOTTOM LINE**
-1-2 sentences. The single most important structural takeaway for MCX traders. Every interpretive claim must have its supporting number in the same sentence — if you cannot name the number, cut the claim.
+1-2 sentences. The single most important structural observation from today's data. Every interpretive claim must have its supporting number in the same sentence — if you cannot name the number, cut the claim. State what the data shows — not what a reader should do with it.
 
 **WHAT TO WATCH**
 1-2 sentences. One specific price level or upcoming data release (name, exact timing if known) that confirms or negates this.
@@ -580,7 +580,7 @@ Total: 200-270 words. Bold key numbers (₹ prices, %, thresholds) with **value*
 
 After the article write:
 HEADLINE: [12-16 words — include a specific price or % and the primary market]
-IMPACT: [bearish / bullish / neutral]`
+DIRECTION: [falling / rising / mixed]`
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method:  'POST',
@@ -599,16 +599,18 @@ IMPACT: [bearish / bullish / neutral]`
   if (!res.ok) throw new Error(`Claude ${res.status}: ${JSON.stringify(await res.json())}`)
   const raw = (await res.json()).content?.[0]?.text?.trim() ?? ''
 
-  const headlineM = raw.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
-  const impactM   = raw.match(/IMPACT:\s*(bearish|bullish|neutral)(?:\n|$)/i)
+  const headlineM   = raw.match(/HEADLINE:\s*(.+?)(?:\n|$)/i)
+  const directionM  = raw.match(/DIRECTION:\s*(falling|rising|mixed)(?:\n|$)/i)
 
   // Body is everything before HEADLINE:
   const body = raw.replace(/\nHEADLINE:.*$/is, '').trim()
 
   if (!headlineM || body.length < 80) throw new Error(`Unexpected format: ${raw.slice(0, 120)}`)
 
-  const title  = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
-  const impact = (impactM?.[1] ?? 'neutral').toLowerCase()
+  const title = headlineM[1].replace(/^\*+|\*+$/g, '').trim()
+  // Map direction → internal impact for music/color (never shown to users as text)
+  const dirMap = { rising: 'bullish', falling: 'bearish', mixed: 'neutral' }
+  const impact = dirMap[directionM?.[1]?.toLowerCase()] ?? 'neutral'
 
   // Plain-text excerpt from WHAT HAPPENED section (for JSON feed preview)
   const excerpt = body
@@ -640,6 +642,9 @@ function saveFlashMdx({ title, body, category, date, reelWorthy = false }) {
     const coverImage = CATEGORY_IMAGES[category] || CATEGORY_IMAGES['Macro']
     const safeTitle  = title.replace(/"/g, "'")
 
+    // Strip any IMPACT:/DIRECTION: lines from body — these are internal pipeline tags, not user content
+    const cleanBody = body.replace(/^\*?\*?(?:IMPACT|DIRECTION):\*?\*?\s*(bullish|bearish|neutral|rising|falling|mixed)[^\n]*/im, '').trim()
+
     const mdx = `---
 title: "${safeTitle}"
 date: "${date.toISOString()}"
@@ -650,7 +655,7 @@ reelWorthy: ${reelWorthy}
 coverImage: "${coverImage}"
 ---
 
-${body}
+${cleanBody}
 
 Source: BhaavBrief Intelligence | bhaavbrief.in`
 

@@ -45,29 +45,29 @@ function classify(multiplier: number, price: PriceDir, oi: OIDir): Classificatio
 
   if (price === 'up' && oi === 'up') {
     return {
-      label:       extreme ? 'Institutional accumulation (extreme)' : 'Institutional accumulation',
-      tag:         extreme ? 'EXTREME — HIGHEST CONVICTION BULL' : 'HIGH ANOMALY — BULLISH',
+      label:       extreme ? 'Large participation (extreme volume)' : 'Rising participation',
+      tag:         extreme ? 'Extreme volume surge (rising price)' : 'High volume surge (rising price)',
       color:       'var(--up)',
       bg:          'rgba(34,197,94,0.06)',
       border:      'rgba(34,197,94,0.3)',
-      description: `Price up, OI up, volume ${extreme ? 'extreme (3×+)' : 'high (2–3×)'}: new money is entering the market in large size on the long side. This is the highest-conviction bullish signal combination in the matrix. Both fresh buying AND price appreciation — not short covering, not unwinding.`,
+      description: `Price up, OI up, volume ${extreme ? 'extreme (3×+)' : 'high (2–3×)'}: new positions are being built on the long side alongside rising prices. Both fresh buying and price appreciation together — historically, this combination has been associated with sustained moves rather than short covering or position unwinding.`,
       action:      extreme
-        ? 'Strongest possible signal. Extreme volume (3×+) often marks a significant breakout or the beginning of a new trend leg. But also watch for exhaustion — extreme spikes can mark blow-off tops in extended trends.'
-        : 'Actionable long setup. Confirm with basis direction (Signal 3) and check if we are within a seasonal tailwind (Signal 4) for higher conviction.',
+        ? 'Extreme volume (3×+) with rising price and OI has historically marked the beginning of significant moves — but also, in extended trends, exhaustion tops. Cross-reference basis direction (Signal 3) and seasonals (Signal 4) for context.'
+        : 'Volume surge with rising price and OI: historically associated with sustained upward momentum. Refer to OI divergence (Signal 1) and basis direction (Signal 3) for fuller context.',
     }
   }
 
   if (price === 'down' && oi === 'up') {
     return {
-      label:       extreme ? 'Institutional distribution (extreme)' : 'Institutional distribution',
-      tag:         extreme ? 'EXTREME — HIGHEST CONVICTION BEAR' : 'HIGH ANOMALY — BEARISH',
+      label:       extreme ? 'Large participation (extreme volume)' : 'Falling participation',
+      tag:         extreme ? 'Extreme volume surge (falling price)' : 'High volume surge (falling price)',
       color:       'var(--down)',
       bg:          'rgba(239,68,68,0.06)',
       border:      'rgba(239,68,68,0.3)',
-      description: `Price down, OI up, volume ${extreme ? 'extreme (3×+)' : 'high (2–3×)'}: large participants are aggressively building short positions. Fresh short selling into a declining price — not panic exits from longs, but deliberate institutional short entry. The bear case is being funded with new money.`,
+      description: `Price down, OI up, volume ${extreme ? 'extreme (3×+)' : 'high (2–3×)'}: new positions are being built on the short side alongside falling prices. Fresh short entry into declining price — not panic exits from longs. Historically, this combination has been associated with sustained downward moves funded by new positioning rather than position unwinding.`,
       action:      extreme
-        ? 'Strongest possible bearish signal. Typically follows a catalyst — macro data, policy announcement, or supply shock. Extreme distribution volume often marks capitulation or the start of a sharp trend move down.'
-        : 'Actionable short or exit-long setup. Combine with OI divergence signal (Signal 1) to confirm the quadrant.',
+        ? 'Extreme volume (3×+) with falling price and rising OI has historically followed macro catalysts — data releases, policy announcements, supply shocks. Cross-reference OI divergence (Signal 1) for confirmation.'
+        : 'Volume surge with falling price and rising OI: historically associated with sustained downward momentum. Cross-reference OI divergence for confirmation.',
     }
   }
 

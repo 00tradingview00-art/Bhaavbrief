@@ -80,7 +80,7 @@ export default function SentimentPanel() {
                 fontFamily: 'var(--font-mono)', fontSize: 10,
                 color: 'var(--ink-4)', letterSpacing: '0.04em',
               }}>
-                {count} signal{count !== 1 ? 's' : ''}
+                {count} article{count !== 1 ? 's' : ''}
               </span>
             </div>
             <div style={{ height: 3, borderRadius: 2, background: 'var(--surface-3)', overflow: 'hidden' }}>

@@ -12,51 +12,51 @@ const BASE_DATA: Record<string, { price: string; oi: string; unit: string }> = {
   'MCX Copper':      { price: '₹784',    oi: '67,000 lots',    unit: '/kg' },
 }
 
-type State = 'bullish' | 'weak' | 'bearish' | 'unwinding'
+type State = 'longs_building' | 'weak' | 'shorts_building' | 'unwinding'
 
 function getState(pricePct: number, oiPct: number): State {
-  if (pricePct >= 0 && oiPct >= 0) return 'bullish'
+  if (pricePct >= 0 && oiPct >= 0) return 'longs_building'
   if (pricePct >= 0 && oiPct < 0)  return 'weak'
-  if (pricePct < 0  && oiPct >= 0) return 'bearish'
+  if (pricePct < 0  && oiPct >= 0) return 'shorts_building'
   return 'unwinding'
 }
 
 const STATE_META: Record<State, { label: string; strength: string; color: string; bg: string; border: string; description: string; action: string }> = {
-  bullish: {
-    label: 'Bullish confirmation',
-    strength: 'High conviction',
+  longs_building: {
+    label: 'Long positioning building',
+    strength: 'High participation',
     color: 'var(--up)',
     bg: 'rgba(34,197,94,0.06)',
     border: 'rgba(34,197,94,0.3)',
-    description: 'New longs are entering the market. Fresh capital is driving the price up — this is not short covering. The move has conviction behind it.',
-    action: 'Watch for follow-through over the next 1–3 sessions. High OI expansion (+10%+) over multiple sessions is stronger than a single-day spike.',
+    description: 'New longs are entering the market. Fresh capital is entering alongside rising prices — this is not short covering. Price and OI rising together historically indicates broader participation rather than technical short squeezes.',
+    action: 'Watch for follow-through over the next 1–3 sessions. OI expansion of 10%+ over multiple sessions is a stronger signal than a single-day spike.',
   },
   weak: {
-    label: 'Weak rally',
-    strength: 'Low conviction',
+    label: 'Short covering move',
+    strength: 'Low participation',
     color: '#D4A830',
     bg: 'rgba(212,168,48,0.06)',
     border: 'rgba(212,168,48,0.3)',
-    description: 'Price is rising but open interest is falling — shorts are covering, not new longs entering. When short covering exhausts, the rally typically stalls or reverses.',
-    action: 'Treat this rally with caution. Short covering rallies frequently retrace once the covering is done. Requires fresh buying to sustain.',
+    description: 'Price is rising but open interest is falling — existing shorts are exiting, not new longs entering. Historically, short-covering moves have stalled once the short overhang is cleared, as there are no fresh longs sustaining the move.',
+    action: 'Short-covering moves historically exhaust themselves when the squeeze is done. Fresh buying would be needed to extend the move — watch OI for signs of that shift.',
   },
-  bearish: {
-    label: 'Bearish confirmation',
-    strength: 'High conviction',
+  shorts_building: {
+    label: 'Short positioning building',
+    strength: 'High participation',
     color: 'var(--down)',
     bg: 'rgba(239,68,68,0.06)',
     border: 'rgba(239,68,68,0.3)',
-    description: 'New shorts are entering as price falls. This is conviction selling — participants are actively building bearish positions, not just old longs exiting.',
-    action: 'The decline has structural support. Watch for OI to keep expanding on further down moves. If OI starts falling as price falls, the narrative shifts to long unwinding.',
+    description: 'New short positions are being built as price falls. Price and OI falling and rising respectively together — historically indicates active short entry rather than existing longs exiting.',
+    action: 'Watch OI on further down moves. If OI continues expanding alongside falling price, the short-building pattern is persisting. If OI begins falling as price falls, it shifts toward long unwinding.',
   },
   unwinding: {
     label: 'Long unwinding',
-    strength: 'Medium — limited downside',
+    strength: 'Medium participation',
     color: 'var(--ink-3)',
     bg: 'var(--surface)',
     border: 'var(--border)',
-    description: 'Price is falling and OI is also falling — existing longs are exiting, not new shorts entering. This is position liquidation, not fresh bearish conviction.',
-    action: 'Downside is typically limited once long unwinding runs its course. No fresh shorts means the selling pressure self-exhausts. Watch for price stabilisation as OI bottoms.',
+    description: 'Price is falling and OI is also falling — existing longs are exiting, not new short positions being built. Historically, pure long-unwinding episodes have self-limited once the long overhang cleared, as there is no fresh short conviction driving the move.',
+    action: 'Watch for price stabilisation as OI bottoms — historically this has indicated the unwinding is running its course. If OI begins rising as price continues falling, the pattern is shifting toward short-building.',
   },
 }
 
@@ -193,9 +193,9 @@ export default function OIDivergenceSimulator() {
             <line x1={0} y1={80} x2={160} y2={80} stroke="var(--border)" strokeWidth={1} />
 
             {/* Quadrant labels */}
-            <text x={40} y={20}  textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(239,68,68,0.7)">Bearish</text>
+            <text x={40} y={20}  textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(239,68,68,0.7)">Shorts building</text>
             <text x={40} y={30}  textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(239,68,68,0.7)">confirm</text>
-            <text x={120} y={20} textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(34,197,94,0.8)">Bullish</text>
+            <text x={120} y={20} textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(34,197,94,0.8)">Longs building</text>
             <text x={120} y={30} textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(34,197,94,0.8)">confirm</text>
             <text x={40} y={108} textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(120,120,120,0.7)">Long</text>
             <text x={40} y={118} textAnchor="middle" fontFamily="monospace" fontSize={7} fill="rgba(120,120,120,0.7)">unwind</text>

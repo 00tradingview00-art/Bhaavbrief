@@ -6,11 +6,11 @@ import OIDivergenceSimulator from '@/components/signal-academy/OIDivergenceSimul
 
 const HISTORICAL_CASES = [
   {
-    tag: 'Bullish confirmation',
+    tag: 'Long positioning building',
     tagColor: 'var(--up)',
     tagBg: 'rgba(34,197,94,0.08)',
     event: 'MCX Gold — pre-Dhanteras accumulation',
-    detail: 'Price +2.8%, OI +18% over 12 sessions. Illustrative of how institutional pre-festival accumulation looks: sustained OI expansion as price grinds higher, no single-day spike.',
+    detail: 'Price +2.8%, OI +18% over 12 sessions. Illustrative of sustained long-building: OI expanded consistently as price rose, no single-day spike — historically associated with broader participation rather than a technical short squeeze.',
   },
   {
     tag: 'Weak rally',
@@ -24,7 +24,7 @@ const HISTORICAL_CASES = [
     tagColor: 'var(--ink-3)',
     tagBg: 'var(--surface)',
     event: 'MCX Natural Gas — post-winter liquidation',
-    detail: 'Price −5.5%, OI −19% over 8 sessions. Classic long unwinding as heating season ended — longs exited but no new shorts entered. Illustrative: price found support earlier than a bearish-confirmation pattern would have.',
+    detail: 'Price −5.5%, OI −19% over 8 sessions. Classic long unwinding as heating season ended — longs exited but no new shorts entered. Historically, pure long-unwinding episodes have found support earlier than short-building patterns.',
   },
 ]
 
@@ -81,9 +81,9 @@ export default function OIDivergencePage() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
           {[
-            { price: '↑', oi: '↑', state: 'Bullish confirmation', note: 'New longs entering', strength: 'High', color: 'var(--up)' },
+            { price: '↑', oi: '↑', state: 'Long positioning building', note: 'New longs entering', strength: 'High', color: 'var(--up)' },
             { price: '↑', oi: '↓', state: 'Weak rally', note: 'Short covering only', strength: 'Low', color: '#D4A830' },
-            { price: '↓', oi: '↑', state: 'Bearish confirmation', note: 'New shorts entering', strength: 'High', color: 'var(--down)' },
+            { price: '↓', oi: '↑', state: 'Short positioning building', note: 'New shorts entering', strength: 'High', color: 'var(--down)' },
             { price: '↓', oi: '↓', state: 'Long unwinding', note: 'Longs exiting', strength: 'Medium', color: 'var(--ink-3)' },
           ].map(row => (
             <div key={row.state} style={{

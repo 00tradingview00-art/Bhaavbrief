@@ -540,7 +540,7 @@ export default async function HomePage() {
                 fontSize: 16, fontWeight: 500,
                 color: '#fff', margin: 0, lineHeight: 1.35,
               }}>
-                Get today&apos;s call before market open.
+                Get today&apos;s brief before market open.
               </p>
             </div>
             <div style={{ padding: '18px 20px' }}>

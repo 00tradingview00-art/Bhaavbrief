@@ -264,6 +264,10 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           </span>
         </div>
       </div>
+      {/* SEBI disclaimer */}
+      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '-12px 0 24px', lineHeight: 1.6 }}>
+        BhaavBrief is not a SEBI-registered investment advisor. Prices are for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
+      </p>
 
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={

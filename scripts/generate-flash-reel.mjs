@@ -126,11 +126,11 @@ Return ONLY this JSON:
   "hook_label": "What that number is. Max 5 words. Example: 'MCX Crude today' or 'Silver move, session'",
 
   "beat1": "WHAT HAPPENED compressed to ONE punchy sentence. Lead with the number. Under 22 words. No passive voice.",
-  "beat2": "WHAT IT MEANS — the non-obvious angle. ONE sentence. Under 22 words. This is the edge — what most people miss.",
+  "beat2": "The non-obvious structural context behind this move — what it reveals about the market. ONE sentence. Under 22 words. No directional instruction.",
 
-  "watch_level": "The specific price level or data point from WHAT TO WATCH. Under 20 words. Must include a number or level.",
+  "watch_level": "The observable price level or data event the market is focused on and what it represents. Under 20 words. Must include a number.",
 
-  "payoff": "The one line they screenshot. Under 12 words. Should cut — the truth about what this signal means for Indian commodity traders.",
+  "payoff": "One sentence capturing the most unusual or non-obvious thing about today's data. Under 12 words. An observation — not a directional instruction.",
 
   "voiceover": "Spoken word, not a script. 5 sentences, each under 9 words. Contractions only. First sentence = the number and what moved. Second = what caused it. Third = the non-obvious impact. Fourth = the specific watch level. Fifth = 'BhaavBrief.' — pause before it, said like a signature. No filler, no hedge words."
 }`,
@@ -149,16 +149,16 @@ Return ONLY this JSON:
 // ── Music ─────────────────────────────────────────────────────────────────────
 const MUSIC_BASE = 'https://archive.org/download/Incompetech/mp3-royaltyfree'
 const TRACKS = {
-  BULLISH:  { file: 'public/reels/music/bullish.mp3',  url: `${MUSIC_BASE}/Back%20on%20Track.mp3` },
-  BEARISH:  { file: 'public/reels/music/bearish.mp3',  url: `${MUSIC_BASE}/An%20Upsetting%20Theme.mp3` },
+  UPBEAT:   { file: 'public/reels/music/upbeat.mp3',  url: `${MUSIC_BASE}/Back%20on%20Track.mp3` },
+  DOWNBEAT: { file: 'public/reels/music/downbeat.mp3', url: `${MUSIC_BASE}/An%20Upsetting%20Theme.mp3` },
   VOLATILE: { file: 'public/reels/music/volatile.mp3', url: `${MUSIC_BASE}/Anxiety.mp3` },
   CALM:     { file: 'public/reels/music/calm.mp3',     url: null },
 }
 
 function classifyMood(flash) {
   const impact = flash.impact
-  if (impact === 'bullish')  return 'BULLISH'
-  if (impact === 'bearish')  return 'BEARISH'
+  if (impact === 'bullish')  return 'UPBEAT'
+  if (impact === 'bearish')  return 'DOWNBEAT'
   if (impact === 'volatile') return 'VOLATILE'
   return 'CALM'
 }
@@ -265,7 +265,7 @@ function drawHook(ctx, t, copy, flash, mood) {
   ctx.font        = 'bold 22px "Inter", sans-serif'
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '8px'
-  ctx.fillText('MCX SIGNAL', W/2, 72)
+  ctx.fillText('MCX UPDATE', W/2, 72)
   ctx.letterSpacing = '0px'
 
   // Instrument label
@@ -574,7 +574,7 @@ const caption = [
   copy.beat2, '',
   `Watch: ${copy.watch_level}`, '',
   `Full analysis → bhaavbrief.in/news 👇`, '',
-  '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #MCXSignal',
+  '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #MCXIntelligence',
 ].join('\n')
 
 writeFileSync(CAP_FILE, caption, 'utf8')

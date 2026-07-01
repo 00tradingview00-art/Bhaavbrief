@@ -94,10 +94,10 @@ Return ONLY this JSON:
   "stat_line": "The single most striking number from today — written as a visual headline. Max 6 words. Example: 'Gold sheds ₹2,194 in one session'",
 
   "beat1": "What happened. ONE sentence. Specific price or %. Under 20 words. No passive voice. Hit the number first.",
-  "beat2": "Why this matters to a trader, importer, or manufacturer. ONE sentence. Under 20 words. The non-obvious angle — what most people miss.",
-  "beat3": "Exactly what level to watch and why that level is the line. Under 18 words. Specific enough to set an alert.",
+  "beat2": "The non-obvious structural context behind this move — what the number reveals about the market. ONE sentence. Under 20 words. No directional instruction.",
+  "beat3": "The observable price level or data event the market is focused on, and what it represents. Under 18 words.",
 
-  "payoff": "The line they'll screenshot and share. Under 12 words. Should feel true and slightly uncomfortable — like something they knew but hadn't said.",
+  "payoff": "One sentence capturing the most unusual or non-obvious thing about today's data. Under 12 words. An observation — not a directional instruction.",
 
   "voiceover": "Write this as spoken word — not a script, not bullet points. 5 short sentences, each under 9 words. Natural pauses. Contractions only. Use 'just', 'already', 'quietly' for recency. The fourth sentence is the non-obvious truth. End with 'BhaavBrief.' — pause before it, said like a signature. Example: 'Silver just led gold by three percent. That hasn't happened in eight months. Solar demand is the part nobody's watching. At sixty-seven times gold, the ratio says industrial. BhaavBrief.'"
 }`,
@@ -118,8 +118,8 @@ const MUSIC_BASE = 'https://archive.org/download/Incompetech/mp3-royaltyfree'
 const TRACKS = {
   CALM:     { file: 'public/reels/music/calm.mp3',     url: null },
   FEAR:     { file: 'public/reels/music/fear.mp3',     url: `${MUSIC_BASE}/Apprehension.mp3` },
-  BEARISH:  { file: 'public/reels/music/bearish.mp3',  url: `${MUSIC_BASE}/An%20Upsetting%20Theme.mp3` },
-  BULLISH:  { file: 'public/reels/music/bullish.mp3',  url: `${MUSIC_BASE}/Back%20on%20Track.mp3` },
+  DOWNBEAT: { file: 'public/reels/music/downbeat.mp3', url: `${MUSIC_BASE}/An%20Upsetting%20Theme.mp3` },
+  UPBEAT:   { file: 'public/reels/music/upbeat.mp3',  url: `${MUSIC_BASE}/Back%20on%20Track.mp3` },
   VOLATILE: { file: 'public/reels/music/volatile.mp3', url: `${MUSIC_BASE}/Anxiety.mp3` },
 }
 
@@ -129,8 +129,8 @@ function classifyMood(data, snapshot) {
   const crudePct = snapshot?.instruments?.MCX_CRUDE?.changePct ?? 0
   const isGeo    = tags.some(t => ['Geopolitics','War','OPEC','Fed','RBI','Macro'].includes(t))
   if (isGeo && goldPct > 1.5)           return 'FEAR'
-  if (goldPct < -1 && crudePct < -0.8)  return 'BEARISH'
-  if (goldPct > 1 && crudePct > 0.5)    return 'BULLISH'
+  if (goldPct < -1 && crudePct < -0.8)  return 'DOWNBEAT'
+  if (goldPct > 1 && crudePct > 0.5)    return 'UPBEAT'
   if (Math.abs(goldPct) > 1.2 || isGeo) return 'VOLATILE'
   return 'CALM'
 }

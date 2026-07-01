@@ -261,9 +261,9 @@ Examples: "Middle East supply shock", "Dollar strength trade", "China demand rec
 "OPEC discipline holding", "Global slowdown fears", "Peace deal unwind"
 
 Step 2: Assess its TRAJECTORY vs yesterday:
-- STRENGTHENING — narrative gaining market conviction
-- WEAKENING — narrative losing grip, positioning unwinding
-- REVERSING — narrative flipping, traders caught offside
+- BUILDING — narrative gaining market participation
+- FADING — narrative losing grip, positioning unwinding
+- SHIFTING — narrative flipping, prior positioning challenged
 
 Step 3: Read each commodity through its FIXED interpretive lens — not the day's dominant narrative.
 Each commodity has one lens that never changes regardless of direction:
@@ -351,7 +351,7 @@ Sentence 1: The single overnight global event that matters most (name it specifi
 Sentence 2: The direct MCX implication — which commodity, in which direction, and the mechanism.
 Sentence 3: The one thing to watch today that will confirm or kill that implication.
 
-## [NARRATIVE NAME] — [STRENGTHENING / WEAKENING / REVERSING]
+## [NARRATIVE NAME] — [BUILDING / FADING / SHIFTING]
 [2-3 punchy sentences on what the narrative IS and why it's dominating today's market. Include one sentence on what's CHANGED vs yesterday.]
 
 ## The Market Is Saying
@@ -369,12 +369,12 @@ Include specific price levels from the data above.]
 ## Who Is Affected
 3 sentences — one each, specific and concrete:
 - **Businesses:** Describe the ₹ impact using a labeled industry estimate. Use a category ("an oil marketing company", "a jewellery manufacturer", "a cable producer") rather than naming a specific company — UNLESS the figure is derivable from that company's publicly disclosed volumes. Never invent a crore calculation for a named company. Example: "An oil marketing company importing at typical daily volumes faces a crude bill roughly ₹X crore higher at this price level — sustained through the fortnightly revision window, retail fuel prices follow." If you name a company (e.g., HPCL, Titan), state only the qualitative impact or use a range drawn from publicly reported data — never a single invented figure. Never say "businesses face higher costs" — always state the type of business and the direction of impact in concrete terms.
-- **Investors:** name one MCX contract and the directional signal. Never say "investors should watch".
+- **Investors:** identify which MCX market participants are most exposed to this move, the specific contract, and at what observable price level the market is focused. Do not characterise direction — state the level and what it represents.
 - **Consumers:** name one product and whether prices will rise or fall at the pump or shop. Never say "consumers may see higher prices".
 
 **Edge of the Day:** [The single most important price level to monitor today, or the scheduled data release that will confirm or negate this narrative. An observation — never a buy/sell call.]
 
-**Tomorrow:** [One sentence. Name the next data release or market event in the next 24 hours, the exact time IST, and the two conditions: "if X, the narrative strengthens/upgrades to Y; if Z, it reverses/fades." This is what creates a reason to read tomorrow's brief. Example: "Tomorrow: EIA crude inventory data at 8:00 PM IST — a draw above 3 million barrels confirms the supply-tight thesis and would take WTI toward $97; a surprise build above 2 million barrels unwinding the Iran premium entirely."]
+**Tomorrow:** [One sentence. Name the next data release or market event in the next 24 hours, the exact time IST, and the two observable outcomes: "if X, the thesis holds; if Z, it is challenged." Never name a specific future price level as an outcome. Example: "Tomorrow: EIA crude inventory data at 8:00 PM IST — a draw above 3 million barrels keeps the supply-tight thesis intact; a surprise build above 2 million barrels challenges it."]
 
 ═══════════════════════════════════════════
 TAGS — pick the 1-3 most relevant (not always Gold):

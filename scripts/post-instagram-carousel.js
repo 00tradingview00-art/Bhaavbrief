@@ -27,7 +27,7 @@ const CAROUSEL_CONFIG = {
     caption: [
       '5 MCX Commodities — What Moves Each One 📊',
       '',
-      'Every weekday at 9:30 AM, BhaavBrief breaks down what moved overnight and why it matters for your MCX positions.',
+      'Every weekday at 9:30 AM, BhaavBrief breaks down what moved overnight and why it matters for MCX markets.',
       '',
       'Swipe through to understand the drivers behind Gold, Silver, Crude, Copper, and NatGas — the 5 contracts that define the Indian commodity market.',
       '',

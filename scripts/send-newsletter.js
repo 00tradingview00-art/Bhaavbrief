@@ -69,8 +69,8 @@ function parseFrontmatter(raw) {
 function mdxToHtml(content, title, edition, date) {
   const body = content
     .replace(/^## \[(\w+)\] (.+)$/gm, (_, tag, heading) => {
-      const colors = { WATCH: '#996600', BULLISH: '#1E6630', BEARISH: '#991818', NEUTRAL: '#48483A' }
-      const bgs    = { WATCH: '#FFF7E0', BULLISH: '#EAF5EE', BEARISH: '#FDF0F0', NEUTRAL: '#F3F2EC' }
+      const colors = { WATCH: '#996600', NEUTRAL: '#48483A' }
+      const bgs    = { WATCH: '#FFF7E0', NEUTRAL: '#F3F2EC' }
       const c = colors[tag] ?? '#48483A'
       const b = bgs[tag]    ?? '#F3F2EC'
       return `<div style="margin:24px 0 8px"><span style="font-size:9px;font-family:monospace;padding:2px 8px;background:${b};color:${c};border:0.5px solid ${c};text-transform:uppercase;letter-spacing:0.08em">${tag}</span><h2 style="font-family:Georgia,serif;font-size:18px;font-weight:700;margin:6px 0 0;border-left:3px solid #C8720A;padding-left:12px">${heading}</h2></div>`

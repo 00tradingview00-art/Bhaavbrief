@@ -416,13 +416,17 @@ export default async function CommodityPage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }} />
 
       {/* Breadcrumb */}
-      <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 24, display: 'flex', gap: 8 }}>
+      <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 12, display: 'flex', gap: 8 }}>
         <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
         <span>›</span>
         <span style={{ color: 'var(--ink-3)' }}>Commodities</span>
         <span>›</span>
         <span style={{ color: 'var(--ink-2)' }}>{info.name}</span>
       </div>
+      {/* SEBI disclaimer */}
+      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '0 0 20px', lineHeight: 1.6 }}>
+        BhaavBrief is not a SEBI-registered investment advisor. Prices and analysis are for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
+      </p>
 
       {/* Hero — live price */}
       <div className="commodity-price-summary" style={{
