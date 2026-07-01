@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-01-10-17-silver-crashes-2-47-on-inflation-fears-gold-holds-ground-at",
+    "title": "Silver crashes 2.47% on inflation fears; Gold holds ground at ₹141,115",
+    "summary": "MCX Silver crashed 2.47% this morning, the session's sharpest mover, while MCX Gold eased 0.99% to ₹141,115/10g on renewed inflation anxiety and escalating US-Iran geopolitical tensions. Copper and Natural Gas followed w",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T04:47:03.459Z",
+    "pubDateIST": "01 Jul 2026, 10:17",
+    "href": "/flash/2026-07-01-04-49-silver-crashes-2-47-on-inflation-fears-gold-holds-ground-at-141-115",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-01-10-18-mcx-silver-crashes-2-47-as-usd-inr-capture-geopolitical",
+    "title": "MCX Silver crashes 2.47% as USD/INR capture geopolitical premium over bullion",
+    "summary": "MCX Silver crashed ₹221431/kg, down 2.47% in this morning session, extending a three-day weakness as geopolitical tensions in the US-Iran theatre sparked renewed safe-haven demand for currency hedges over hard assets. Go",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-01T04:48:56.295Z",
+    "pubDateIST": "01 Jul 2026, 10:18",
+    "href": "/flash/2026-07-01-04-48-mcx-silver-crashes-2-47-as-usd-inr-capture-geopolitical-premium-over",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-01-03-52-copper-hits-record-parity-as-aluminum-supply-fears-override",
     "title": "Copper hits record parity as aluminum supply fears override crude weakness",
     "summary": "MCX Copper rallied 1.16% to ₹1,259/kg on Wednesday's global session, driven by LME base metals index reaching record highs amid aluminum supply concerns. MCX Crude collapsed 1.59% to ₹6,621/bbl, creating a divergence whe",
@@ -958,25 +982,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-24T06:55:28.100Z",
     "pubDateIST": "24 Jun 2026, 12:25"
-  },
-  {
-    "id": "2026-06-24-09-48-gold-down-1-62-to-144-148-10g-silver-wea",
-    "title": "Gold down 1.62% to ₹144,148/10g; silver weakness across complex triggers risk-off",
-    "summary": "Silver's -1.77% lead signals risk-off momentum across MCX metals. Gold following at -1.62% (₹144,148/10g) reflects identical causation: USD strength and equities recovery globally narrowing safe-haven bid. Support establishes at ₹142,800/10g; resistance now ₹145,600/10g.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T04:18:29.466Z",
-    "pubDateIST": "24 Jun 2026, 09:48"
-  },
-  {
-    "id": "2026-06-24-09-50-silver-leads-metals-selloff-at-1-77-to-2",
-    "title": "Silver leads metals selloff at -1.77% to ₹221840/kg; gold tracking lower",
-    "summary": "Silver's 1.77% decline anchors today's commodity weakness, driven by USD strength (₹94.84/USD) pressuring rupee-denominated futures despite global price softening. Intraday support lies at ₹220200/kg; resistance at ₹223500/kg.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T04:20:21.444Z",
-    "pubDateIST": "24 Jun 2026, 09:50"
   }
 ]
