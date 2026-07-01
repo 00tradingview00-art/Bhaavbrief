@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 144444,
+    "gold": 144389,
     "silver": 228615,
-    "crude": 6538,
-    "copper": 1273.4,
-    "natgas": 306.4,
+    "crude": 6527,
+    "copper": 1271.8,
+    "natgas": 306.5,
     "usdinr": 95.25
   },
-  "lastChecked": "2026-07-01T17:31:23.111Z",
+  "lastChecked": "2026-07-01T18:14:31.473Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-06-19",
-    "value": "451"
+    "period": "2026-06-26",
+    "value": "284"
   },
   "lastGeoNews": {
     "mideast": "Hormuz half-open: tanker fleet prices in recovery hope - Reuters",
