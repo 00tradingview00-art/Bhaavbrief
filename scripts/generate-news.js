@@ -829,6 +829,7 @@ async function main() {
 
   // Price-action items first (up to 2, max 1 per commodity)
   const currentRunTitles = []
+  const coveredCommodityKws = new Set() // keywords of commodities already written this run
   for (const signal of priceSignals.slice(0, 2)) {
     if (processed >= MAX_PER_RUN) break
     try {
@@ -844,6 +845,7 @@ async function main() {
       const coverImage = CATEGORY_IMAGES[signal.category]
       existing.unshift(makeEntry(title, excerpt, signal.category, signal.tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
+      for (const kw of (signal.kws ?? [])) coveredCommodityKws.add(kw.toLowerCase())
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
       if (reelWorthy) console.log(`  🎬  Reel-worthy (${signal.pct.toFixed(2)}%)`)
       processed++
@@ -856,6 +858,14 @@ async function main() {
   for (const signal of rssSignals) {
     if (processed >= MAX_PER_RUN) break
     try {
+      // Skip if this RSS article is primarily about a commodity already covered by price-action
+      // this run — prevents a geopolitics-angle Silver article doubling up on a price-action Silver article
+      const rssText = `${signal.title} ${signal.desc ?? ''}`.toLowerCase()
+      if (coveredCommodityKws.size > 0 && [...coveredCommodityKws].some(kw => rssText.includes(kw))) {
+        console.log(`  Skipped RSS (commodity already covered by price-action): ${signal.title.slice(0, 60)}`)
+        newSeen.push(signal.url)
+        continue
+      }
       console.log(`  [rss] ${signal.title.slice(0, 65)}`)
       const { title, excerpt, body, impact } = await generateFlashArticle(signal, prices)
       if (currentRunTitles.some(rt => similarity(title, rt) > 0.45)) {
