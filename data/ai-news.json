@@ -940,35 +940,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-24T19:16:31.840Z",
     "pubDateIST": "25 Jun 2026, 00:46"
-  },
-  {
-    "id": "2026-06-24-23-01-mcx-nat-gas-0-97-at-302-mmbtu-bucks-broa",
-    "title": "MCX Nat Gas +0.97% at ₹302/mmBtu bucks broad selloff; metals crater on dollar strength",
-    "summary": "While MCX silver (-5.17%), copper (-4.51%), crude (-4.26%), and gold (-3.56%) collapse on synchronized USD strength and deteriorating demand outlook, nat gas bucked the complex—gaining 0.97% to ₹301.90/mmBtu. The mechanism: dollar appreciation typically pressures commodities priced in USD globally, but nat gas benefits from seasonal summer cooling demand offsetting macro headwinds.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T17:31:24.376Z",
-    "pubDateIST": "24 Jun 2026, 23:01"
-  },
-  {
-    "id": "2026-06-24-22-58-rbi-low-rate-signal-triggers-cross-asset",
-    "title": "RBI low-rate signal triggers cross-asset selloff; silver down 5.43%, copper -4.51% on demand concerns",
-    "summary": "RBI Governor Malhotra's medium-to-long-term low-rate guidance signals monetary accommodation ahead, typically supportive of growth and inflation. However, this signal arrives during an active cross-asset selloff—gold -3.48%, crude -4.39%, copper -4.51%, silver -5.43%—indicating markets are pricing simultaneous demand deterioration and dollar strength, not accommodative policy alone. The narrative is not \"rates falling helps commodities\" but rather \"growth outlook weakening despite policy ease.\" USD/INR at 94.29 reflects dollar strength overriding Indian monetary signals. MCX Silver at 213,568/kg and MCX Copper at 1223.95/kg are contracting on global demand repricing, not domestic rate cuts. Low domestic rates cannot offset weakening external demand or forex headwinds. The RBI signal is being read as reactive, not preventive. Tomorrow's MCX open will likely reflect overnight US demand signals and dollar momentum, not the domestic rate narrative.",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T17:28:19.862Z",
-    "pubDateIST": "24 Jun 2026, 22:58"
-  },
-  {
-    "id": "2026-06-24-23-00-mcx-silver-crashes-5-43-to-213-568-kg-on",
-    "title": "MCX Silver crashes 5.43% to ₹213,568/kg on broad dollar strength, metals selloff",
-    "summary": "Dollar strength is the mechanical driver: stronger USD makes rupee-denominated futures less competitive globally and raises real yields, triggering metal liquidation across gold (-3.48%), copper (-4.51%), and crude (-4.39%) simultaneously. This cross-asset correlation confirms demand-neutral dollar rally, not supply shock.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T17:30:10.983Z",
-    "pubDateIST": "24 Jun 2026, 23:00"
   }
 ]
