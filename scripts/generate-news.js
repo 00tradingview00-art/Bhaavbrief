@@ -625,7 +625,7 @@ IMPACT: [bearish / bullish / neutral]`
   return { title, excerpt, body, impact }
 }
 
-function saveFlashMdx({ title, body, category, date }) {
+function saveFlashMdx({ title, body, category, date, reelWorthy = false }) {
   try {
     const dateStr  = date.toISOString().split('T')[0]
     const timeStr  = date.toISOString().slice(11, 16).replace(':', '-')
@@ -646,6 +646,7 @@ date: "${date.toISOString()}"
 source: "BhaavBrief Intelligence"
 category: "${flashCat}"
 published: true
+reelWorthy: ${reelWorthy}
 coverImage: "${coverImage}"
 ---
 
@@ -832,12 +833,14 @@ async function main() {
         console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
         continue
       }
-      const flashSlug  = saveFlashMdx({ title, body, category: signal.category, date: new Date() })
+      const reelWorthy = Math.abs(signal.pct) >= 1.5
+      const flashSlug  = saveFlashMdx({ title, body, category: signal.category, date: new Date(), reelWorthy })
       const href       = flashSlug ? `/flash/${flashSlug}` : undefined
       const coverImage = CATEGORY_IMAGES[signal.category]
       existing.unshift(makeEntry(title, excerpt, signal.category, signal.tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
       if (signal.url && !signal.url.startsWith('pa:')) newSeen.push(signal.url)
+      if (reelWorthy) console.log(`  🎬  Reel-worthy (${signal.pct.toFixed(2)}%)`)
       processed++
     } catch (e) {
       console.warn(`  Skipped price-action [${signal.key}]: ${e.message}`)
@@ -856,12 +859,14 @@ async function main() {
         continue
       }
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
-      const flashSlug  = saveFlashMdx({ title, body, category, date: new Date() })
+      const reelWorthy = impact !== 'neutral' && ['Geopolitics', 'Policy'].includes(category)
+      const flashSlug  = saveFlashMdx({ title, body, category, date: new Date(), reelWorthy })
       const href       = flashSlug ? `/flash/${flashSlug}` : undefined
       const coverImage = CATEGORY_IMAGES[category]
       existing.unshift(makeEntry(title, excerpt, category, tagType, impact, processed * 2, href, coverImage))
       currentRunTitles.push(title)
       newSeen.push(signal.url)
+      if (reelWorthy) console.log(`  🎬  Reel-worthy (${category}, ${impact})`)
       processed++
     } catch (e) {
       console.warn(`  Skipped RSS: ${e.message}`)
