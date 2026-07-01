@@ -208,8 +208,8 @@ async function main() {
 
   // ── Save ─────────────────────────────────────────────────────────────────────
   if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
-  const outPath = join(OUT_DIR, `${slug}.png`)
-  writeFileSync(outPath, canvas.toBuffer('image/png'))
+  const outPath = join(OUT_DIR, `${slug}.jpg`)
+  writeFileSync(outPath, canvas.toBuffer('image/jpeg', { quality: 95 }))
   console.log(`Instagram card saved: ${outPath}`)
 }
 
