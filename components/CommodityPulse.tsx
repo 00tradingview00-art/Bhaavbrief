@@ -30,10 +30,10 @@ function PulseRowItem({ row }: { row: PulseRow }) {
   return (
     <div className="pulse-grid" style={{
       display: 'grid',
-      gridTemplateColumns: '88px 1fr 60px 90px',
+      gridTemplateColumns: '100px 1fr 68px 100px',
       alignItems: 'center',
       gap: '0 12px',
-      padding: '10px 16px',
+      padding: '11px 16px',
       background: colors.bg,
       borderBottom: '1px solid var(--border)',
       transition: 'background 0.2s',
@@ -42,15 +42,15 @@ function PulseRowItem({ row }: { row: PulseRow }) {
       {/* Commodity name */}
       <div>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 10,
-          fontWeight: 600, letterSpacing: '0.1em',
+          fontFamily: 'var(--font-mono)', fontSize: 13,
+          fontWeight: 600, letterSpacing: '0.06em',
           color: 'var(--ink)', marginBottom: 2,
         }}>
           {row.name}
         </div>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 8,
-          color: 'var(--ink-4)', letterSpacing: '0.05em',
+          fontFamily: 'var(--font-mono)', fontSize: 10,
+          color: 'var(--ink-4)', letterSpacing: '0.04em',
         }}>
           MCX {row.unit}
         </div>
@@ -59,7 +59,7 @@ function PulseRowItem({ row }: { row: PulseRow }) {
       {/* Driver + bar — hidden on mobile */}
       <div className="pulse-driver">
         <div style={{
-          fontFamily: 'var(--font-sans)', fontSize: 11,
+          fontFamily: 'var(--font-sans)', fontSize: 13,
           color: 'var(--ink-3)', fontWeight: 400,
           marginBottom: 5, lineHeight: 1.3,
           whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
@@ -78,8 +78,8 @@ function PulseRowItem({ row }: { row: PulseRow }) {
 
       {/* % change */}
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: 12,
-        fontWeight: 600, color: colors.text,
+        fontFamily: 'var(--font-mono)', fontSize: 14,
+        fontWeight: 700, color: colors.text,
         textAlign: 'right', letterSpacing: '-0.02em',
       }}>
         {colors.arrow}{Math.abs(row.pct).toFixed(2)}%
@@ -87,8 +87,8 @@ function PulseRowItem({ row }: { row: PulseRow }) {
 
       {/* Price */}
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: 12,
-        fontWeight: 500, color: 'var(--ink)',
+        fontFamily: 'var(--font-mono)', fontSize: 14,
+        fontWeight: 600, color: 'var(--ink)',
         textAlign: 'right', letterSpacing: '-0.02em',
       }}>
         {row.price}
@@ -108,8 +108,8 @@ function PulseSkeleton() {
     }}>
       {[...Array(6)].map((_, i) => (
         <div key={i} className="pulse-grid" style={{
-          display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px', // overridden on mobile via .pulse-grid
-          gap: '0 12px', padding: '10px 16px',
+          display: 'grid', gridTemplateColumns: '100px 1fr 68px 100px', // overridden on mobile via .pulse-grid
+          gap: '0 12px', padding: '11px 16px',
           borderBottom: '1px solid var(--border)',
           alignItems: 'center',
         }}>
@@ -150,21 +150,21 @@ export default function CommodityPulse() {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10,
-            fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase',
+            fontFamily: 'var(--font-mono)', fontSize: 12,
+            fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
             color: 'var(--saffron)',
           }}>
             India Commodity Pulse
           </span>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 8,
+            fontFamily: 'var(--font-mono)', fontSize: 9,
             color: 'var(--ink-4)', letterSpacing: '0.06em',
           }}>
             MCX live
           </span>
         </div>
         {data?.generatedAt && (
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)' }}>
             {fmtTime(data.generatedAt)}
           </span>
         )}
@@ -181,14 +181,14 @@ export default function CommodityPulse() {
 
           {/* Column headers */}
           <div className="pulse-grid" style={{
-            display: 'grid', gridTemplateColumns: '88px 1fr 60px 90px', // overridden on mobile via .pulse-grid
-            gap: '0 12px', padding: '7px 16px',
+            display: 'grid', gridTemplateColumns: '100px 1fr 68px 100px', // overridden on mobile via .pulse-grid
+            gap: '0 12px', padding: '8px 16px',
             borderBottom: '2px solid var(--border)',
             background: 'var(--paper2)',
           }}>
             {['COMMODITY', 'DRIVER', 'CHG %', 'PRICE'].map((h, i) => (
               <div key={h} className={h === 'DRIVER' ? 'pulse-driver' : ''} style={{
-                fontFamily: 'var(--font-mono)', fontSize: 7.5,
+                fontFamily: 'var(--font-mono)', fontSize: 9,
                 letterSpacing: '0.1em', textTransform: 'uppercase',
                 color: 'var(--ink-4)',
                 textAlign: i >= 2 ? 'right' : 'left',
@@ -211,14 +211,14 @@ export default function CommodityPulse() {
             display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap',
           }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 8,
+              fontFamily: 'var(--font-mono)', fontSize: 9,
               fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
               color: 'var(--saffron)', flexShrink: 0,
             }}>
               Today&apos;s Theme
             </span>
             <span style={{
-              fontFamily: 'var(--font-sans)', fontSize: 12,
+              fontFamily: 'var(--font-sans)', fontSize: 13,
               color: 'var(--ink-2)', fontWeight: 400,
               fontStyle: 'italic', lineHeight: 1.5,
             }}>
@@ -230,7 +230,7 @@ export default function CommodityPulse() {
 
       <style>{`
         @media (max-width: 480px) {
-          .pulse-grid { grid-template-columns: 80px 52px 80px !important; }
+          .pulse-grid { grid-template-columns: 90px 60px 90px !important; }
           .pulse-driver { display: none !important; }
         }
       `}</style>
