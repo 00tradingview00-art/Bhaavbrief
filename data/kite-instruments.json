@@ -21,9 +21,9 @@
     "expiry": "2026-07-20"
   },
   "copper": {
-    "token": 141493255,
-    "symbol": "COPPER26JUNFUT",
-    "expiry": "2026-06-30"
+    "token": 143884295,
+    "symbol": "COPPER26JULFUT",
+    "expiry": "2026-07-31"
   },
   "natgas": {
     "token": 137903367,
@@ -31,19 +31,19 @@
     "expiry": "2026-07-28"
   },
   "zinc": {
-    "token": 141494023,
-    "symbol": "ZINC26JUNFUT",
-    "expiry": "2026-06-30"
+    "token": 143885575,
+    "symbol": "ZINC26JULFUT",
+    "expiry": "2026-07-31"
   },
   "lead": {
-    "token": 141493511,
-    "symbol": "LEAD26JUNFUT",
-    "expiry": "2026-06-30"
+    "token": 143884551,
+    "symbol": "LEAD26JULFUT",
+    "expiry": "2026-07-31"
   },
   "aluminium": {
-    "token": 141492743,
-    "symbol": "ALUMINIUM26JUNFUT",
-    "expiry": "2026-06-30"
+    "token": 143884039,
+    "symbol": "ALUMINIUM26JULFUT",
+    "expiry": "2026-07-31"
   },
   "nickel": {
     "token": 143885063,
@@ -72,5 +72,5 @@
       "expiry": "2026-07-29"
     }
   },
-  "updatedAt": "2026-06-30T02:45:27.390Z"
+  "updatedAt": "2026-07-01T03:32:47.152Z"
 }
