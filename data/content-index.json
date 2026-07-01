@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-055",
+    "href": "/briefs/edition-055",
+    "title": "Silver Surges 3.47% as Gold-Silver Ratio Compresses to 67x",
+    "description": "Silver's industrial demand signal is overpowering gold's safe-haven move — the ratio compression tells the deeper story.",
+    "excerpt": "MCX Gold ₹142856 | Crude ₹6639 | USDINR ₹94.57 — Gold +0.32% | Crude -1.32% | Silver +3.47% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-01T03:42:08.701Z",
+    "edition": "55",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX NatGas",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-054",
     "href": "/briefs/edition-054",
     "title": "Crude Rebounds to $70 as Gold Slips — Two Narratives, One Winner",
