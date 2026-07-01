@@ -18,6 +18,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-01-dollar-index-mcx-gold-india",
+    "href": "/articles/2026-07-01-dollar-index-mcx-gold-india",
+    "title": "How the Dollar Index (DXY) Affects MCX Gold Prices in India",
+    "description": "Understand how the dollar index affects MCX gold in India — from DXY moves to COMEX pricing, rupee conversion, import duty, and final ₹/10g impact.",
+    "excerpt": "Understanding how the dollar index affects MCX gold India prices is essential for any trader or merchant who hedges or prices physical gold in rupees. When the DXY rises or falls, the effect transmits",
+    "date": "2026-07-01",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-054",
     "href": "/briefs/edition-054",
