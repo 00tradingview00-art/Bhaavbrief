@@ -1,6 +1,9 @@
 import { CARD_ORDER } from '@/lib/learn-cards'
 
-export const metadata = { title: 'Learn Cards — Instagram Downloads | BhaavBrief' }
+export const metadata = {
+  title: 'Learn Cards — Instagram Downloads | BhaavBrief',
+  alternates: { canonical: 'https://bhaavbrief.in/learn-cards' },
+}
 
 export default function LearnCardsPage() {
   // Group by highlight section

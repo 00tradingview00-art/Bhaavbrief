@@ -12,6 +12,10 @@ import { getActiveArcs } from '@/lib/arcs'
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
 
+export const metadata = {
+  alternates: { canonical: 'https://bhaavbrief.in' },
+}
+
 // ── Market Snapshot ───────────────────────────────────────────────────────────
 
 function fmtINR(n: number) {

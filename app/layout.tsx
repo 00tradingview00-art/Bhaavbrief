@@ -55,7 +55,8 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 } },
   alternates: {
-    canonical: BASE,
+    // No canonical here — each page sets its own to avoid root layout leaking
+    // https://bhaavbrief.in canonical into all child routes (causes GSC duplicate issue)
     types: { 'application/rss+xml': `${BASE}/feed.xml` },
   },
   openGraph: {
