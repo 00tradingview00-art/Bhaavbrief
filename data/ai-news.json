@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-02-15-23-mcx-copper-diverges-from-lme-records-as-india-demand-stays",
+    "title": "MCX Copper Diverges from LME Records as India Demand Stays Muted at ₹1,270",
+    "summary": "MCX Copper declined 0.21% to ₹1,269.55/kg in afternoon trade, underperforming a broader base metals rally on the London Metal Exchange where copper hit record highs. The weakness arrived despite LME copper reaching fresh",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T09:53:05.692Z",
+    "pubDateIST": "02 Jul 2026, 15:23",
+    "href": "/flash/2026-07-02-09-53-mcx-copper-diverges-from-lme-records-as-india-demand-stays-muted-at-1-270",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-12-17-mcx-silver-slides-0-36-as-industrial-demand-signals-fade",
     "title": "MCX Silver slides 0.36% as industrial demand signals fade despite rupee stability",
     "summary": "MCX Silver declined 0.36% to ₹227,400/kg in this morning session, underperforming the broader precious metals complex where Gold remains relatively steadier at ₹144,577/10g. The weakness in Silver emerged alongside a sha",
@@ -902,25 +914,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-25T10:20:06.916Z",
     "pubDateIST": "25 Jun 2026, 15:50"
-  },
-  {
-    "id": "2026-06-25-12-23-mcx-copper-0-65-to-1231-kg-natgas-streng",
-    "title": "MCX Copper +0.65% to ₹1231/kg — NatGas strength drives selective metal bid",
-    "summary": "NatGas leading the commodity complex at +1.39% is injecting energy-sector tailwinds into base metals, creating a selective bid in copper despite subdued global macro. MCX Copper at ₹1231.20/kg sits 0.8% above its intraday support near ₹1220/kg; resistance watches ₹1240/kg.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T06:53:09.516Z",
-    "pubDateIST": "25 Jun 2026, 12:23"
-  },
-  {
-    "id": "2026-06-25-12-25-natgas-surge-at-306-60-leads-subdued-com",
-    "title": "NatGas surge at ₹306.60 leads subdued complex; +1.39% amid energy demand tailwind",
-    "summary": "Natural gas leads the MCX complex this session—a rare leadership divergence from crude, which slides -1.06%. The mechanism: Northern Hemisphere demand normalization post-monsoon uncertainty has renewed heating/power utility bids, creating immediate buy-side pressure in NatGas futures.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-25T06:55:05.991Z",
-    "pubDateIST": "25 Jun 2026, 12:25"
   }
 ]
