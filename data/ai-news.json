@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-03-02-06-gold-rallies-0-90-on-real-yield-compression-silver-safe",
+    "title": "Gold Rallies +0.90% on Real-Yield Compression; Silver Safe-Haven Bid Outpaces Industrial Demand",
+    "summary": "MCX Gold surged +0.90% to trade near ₹145,723/10g during today's global session, while Silver followed at +0.64% to ₹229,691/kg. Copper and Crude posted subdued gains of +0.18% and +0.37% respectively, signalling diverge",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T20:36:40.784Z",
+    "pubDateIST": "03 Jul 2026, 02:06",
+    "href": "/flash/2026-07-02-20-36-gold-rallies-0-90-on-real-yield-compression-silver-safe-haven-bid-outpaces",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-03-01-17-gold-rallies-0-90-as-crude-stalls-demand-destruction",
     "title": "Gold rallies 0.90% as crude stalls—demand destruction outpaces geopolitical premium on MCX",
     "summary": "MCX gold rallied +0.90% to ₹145,723/10g, leading a muted commodity session where crude edged up 0.37% to ₹6,549/bbl and copper gained only 0.18%. The divergence is sharp: precious metals are absorbing demand signals that",
@@ -888,25 +900,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-25T21:01:55.223Z",
     "pubDateIST": "26 Jun 2026, 02:31"
-  },
-  {
-    "id": "2026-06-26-01-48-mcx-gold-1-37-at-143200-10g-as-dollar-we",
-    "title": "MCX Gold +1.37% at ₹143200/10g as dollar weakness fuels broad commodity reflation",
-    "summary": "Dollar weakness is the mechanism driving today's cross-asset rally. Gold, silver, copper, crude and nat gas all advancing simultaneously signals reflation trade dominance over safe-haven demand. MCX Gold at ₹143200/10g sits above its 20-day support near ₹141800 and below resistance at ₹144500. Global spot gold around $2385/oz × USD/INR 94.39 × 1.08 duty factor yields parity of ₹141200—MCX trades 1.4% premium, consistent with import cost advantage. Silver's +1.2% move alongside gold confirms metal complex strength, not individual gold momentum. Copper's +1.53% gain validates reflation narrative over deflationary concerns. Monitor US PCE inflation print (due next week) and USD/INR stability below 94.50 for directional confirmation at Monday MCX open.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T20:18:52.290Z",
-    "pubDateIST": "26 Jun 2026, 01:48"
-  },
-  {
-    "id": "2026-06-26-01-50-mcx-copper-rallies-1-53-to-1242-kg-on-re",
-    "title": "MCX Copper rallies 1.53% to ₹1242/kg on reflation-driven dollar weakness",
-    "summary": "Dollar weakness across US/EU session is the primary mechanism: broad commodity complex rally (gold +1.37%, silver, crude +2.10%) signals reflation trade unwinding USD strength. MCX Copper ₹1242/kg sits above key support at ₹1225 but faces resistance at ₹1260.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T20:20:48.560Z",
-    "pubDateIST": "26 Jun 2026, 01:50"
   }
 ]
