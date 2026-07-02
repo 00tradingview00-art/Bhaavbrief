@@ -19,6 +19,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-07-02-rupee-depreciation-mcx-gold",
+    "href": "/articles/2026-07-02-rupee-depreciation-mcx-gold",
+    "title": "Why a Falling Rupee Pushes MCX Gold Higher in India",
+    "description": "Understand why rupee depreciation increases MCX gold price even when COMEX is flat, through India's import parity formula and duty structure.",
+    "excerpt": "Rupee depreciation increases MCX gold price because India prices gold in rupees after converting dollar-denominated COMEX rates at the prevailing USD/INR exchange rate. Even when international gold pr",
+    "date": "2026-07-02",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-07-01-mcx-silver-crashes-2-63-industrial-liquidation-outpaces-gold",
     "href": "/articles/2026-07-01-mcx-silver-crashes-2-63-industrial-liquidation-outpaces-gold",
     "title": "MCX Silver Crashes 2.63% — Industrial Liquidation Outpaces Gold",
