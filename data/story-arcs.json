@@ -54,10 +54,11 @@
       "startDate": "2026-06-25",
       "status": "closed",
       "editions": [
-        52
+        52,
+        54
       ],
-      "latestDay": 1,
-      "summary": "Iran-US peace negotiations advance to draft-text stage with July signing expected, triggering simultaneous collapse in geopolitical risk premiums across gold (-3.71%), crude (-4.05%), and silver (-5.82%).",
+      "latestDay": 6,
+      "summary": "Iran-US peace negotiations continue at reduced tempo while Middle East tensions re-escalate, reversing crude's fear-premium unwind as WTI rebounds to $70.02/bbl while gold remains under pressure.",
       "primaryCommodity": "MCX Crude",
       "keyLevel": "₹6682",
       "tags": [
@@ -69,6 +70,46 @@
       ],
       "endDate": "2026-06-30",
       "outcome": "Arc went 5 days without a new edition — narrative faded"
+    },
+    {
+      "id": "us-summer-cooling-demand-natgas-surge",
+      "title": "US Summer Cooling Demand Drives Natural Gas Spike",
+      "startDate": "2026-07-01",
+      "status": "active",
+      "editions": [
+        55
+      ],
+      "latestDay": 1,
+      "summary": "Henry Hub natural gas futures surged 4.31% overnight on above-normal summer cooling demand forecasts across the US South and revised LNG export terminal throughput estimates, with spillover impact on MCX NatGas (+3.80%).",
+      "primaryCommodity": "MCX NatGas",
+      "keyLevel": "₹314.5/mmBtu",
+      "tags": [
+        "MCX NatGas",
+        "Henry Hub",
+        "US Summer Demand",
+        "Macro"
+      ]
+    },
+    {
+      "id": "precious-metals-safe-haven-unwind-fomc-hawkish",
+      "title": "Precious Metals Unwind as FOMC Hawkish Stance & Middle East Easing Reduce Safe-Haven Demand",
+      "startDate": "2026-07-02",
+      "status": "active",
+      "editions": [
+        56
+      ],
+      "latestDay": 1,
+      "summary": "Gold and silver fell sharply on reduced safe-haven demand driven by Middle East diplomatic activity and FOMC reinforcement of higher-for-longer rates, with the gold-silver ratio widening to 68.4x as silver bears the brunt of the selloff.",
+      "primaryCommodity": "MCX Gold",
+      "keyLevel": "₹141506/10g",
+      "tags": [
+        "MCX Gold",
+        "MCX Silver",
+        "Safe-Haven Unwind",
+        "FOMC",
+        "Middle East Diplomacy",
+        "Macro"
+      ]
     }
   ]
 }
