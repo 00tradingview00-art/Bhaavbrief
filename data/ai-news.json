@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-02-21-58-mcx-crude-breaks-reflation-rally-gold-silver-copper-advance",
+    "title": "MCX Crude Breaks Reflation Rally; Gold, Silver, Copper Advance on Dollar Weakness",
+    "summary": "MCX crude slipped 0.25% to ₹6,509/bbl this afternoon session, breaking from the broader commodity rally that saw gold up 1.06% and copper up 0.46%. The crude decline occurred even as USD/INR weakened to ₹95.38, a tailwin",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T16:28:11.952Z",
+    "pubDateIST": "02 Jul 2026, 21:58",
+    "href": "/flash/2026-07-02-16-28-mcx-crude-breaks-reflation-rally-gold-silver-copper-advance-on-dollar",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-20-05-copper-breaks-higher-on-lme-aluminum-scares-mcx-1-278-kg",
     "title": "Copper breaks higher on LME aluminum scares; MCX ₹1,278/kg signals industrial demand",
     "summary": "MCX Copper rose ₹1,278.10/kg (+0.46%) this afternoon session, extending a broader base metals rally alongside gold's +1.17% surge to ₹146,124/10g. The LME copper complex climbed to record highs on aluminum supply concern",
@@ -902,25 +914,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-25T17:33:39.254Z",
     "pubDateIST": "25 Jun 2026, 23:03"
-  },
-  {
-    "id": "2026-06-25-21-01-mcx-nat-gas-2-51-at-310-mmbtu-energy-sup",
-    "title": "MCX Nat Gas +2.51% at ₹310/mmBtu — energy supply concerns drive reflation complex higher",
-    "summary": "Dollar weakness across USD/INR (₹94.39) is triggering broad reflation trade, with crude (+1.44%) and nat gas (+2.51%) advancing together on genuine supply anxiety, not mere currency mechanics. This co-movement confirms the narrative: tightening global energy inventories, not just rupee depreciation, are anchoring the rally.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T15:31:37.278Z",
-    "pubDateIST": "25 Jun 2026, 21:01"
-  },
-  {
-    "id": "2026-06-25-21-03-mcx-silver-3-76-to-221085-kg-dollar-weak",
-    "title": "MCX Silver +3.76% to ₹221085/kg — dollar weakness fuels broad reflation trade",
-    "summary": "Dollar softness is the transmission mechanism. Broad commodity rally — gold, silver, copper all advancing simultaneously — reflects USD depreciation reducing hedging costs for INR-based traders. MCX Silver at ₹221085/kg trades above historical parity: spot silver ~$28/oz × 94.39 USD/INR × 1.08 duty factor yields ~₹213,500/kg theoretical parity. Current MCX level sits ~3.7% premium to calculated parity, signalling domestic demand strength and rupee weakness acting as dual bullish anchor.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T15:33:33.370Z",
-    "pubDateIST": "25 Jun 2026, 21:03"
   }
 ]
