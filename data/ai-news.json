@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-02-12-17-mcx-silver-slides-0-36-as-industrial-demand-signals-fade",
+    "title": "MCX Silver slides 0.36% as industrial demand signals fade despite rupee stability",
+    "summary": "MCX Silver declined 0.36% to ₹227,400/kg in this morning session, underperforming the broader precious metals complex where Gold remains relatively steadier at ₹144,577/10g. The weakness in Silver emerged alongside a sha",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T06:47:32.746Z",
+    "pubDateIST": "02 Jul 2026, 12:17",
+    "href": "/flash/2026-07-02-06-49-mcx-silver-slides-0-36-as-industrial-demand-signals-fade-despite-rupee",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-02-12-19-mcx-crude-slides-0-72-to-6478-demand-weakness-not",
+    "title": "MCX Crude slides 0.72% to ₹6478—demand weakness, not geopolitical risk",
+    "summary": "MCX Crude fell ₹6478/bbl, marking a -0.72% decline in this morning's session and leading all commodity movers. MCX Natural Gas and Silver followed with softer moves of -0.68% and -0.36% respectively. Gold remained nearly",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T06:49:25.779Z",
+    "pubDateIST": "02 Jul 2026, 12:19",
+    "href": "/flash/2026-07-02-06-49-mcx-crude-slides-0-72-to-6478-demand-weakness-not-geopolitical-risk",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-09-44-iran-diplomacy-peels-geopolitical-premium-from-mcx-crude-at",
     "title": "Iran Diplomacy Peels Geopolitical Premium from MCX Crude at ₹6,470",
     "summary": "MCX Crude Oil slipped 0.84% to ₹6,470/bbl this morning on diplomatic optimism around Iran nuclear negotiations, reducing immediate geopolitical supply-risk premium. Silver bucked the energy weakness, rising 0.50% to ₹229",
@@ -898,25 +922,5 @@
     "impact": "neutral",
     "pubDate": "2026-06-25T06:55:05.991Z",
     "pubDateIST": "25 Jun 2026, 12:25"
-  },
-  {
-    "id": "2026-06-25-09-47-nat-gas-0-99-to-305-40-mmbtu-as-crude-we",
-    "title": "Nat Gas +0.99% to ₹305.40/mmBtu as crude weakness decouples energy complex",
-    "summary": "MCX Natural Gas is outperforming crude by 260bps this session—a structural decoupling driven by independent supply dynamics rather than global energy correlation. Crude's -1.66% retreat reflects demand softness, yet nat gas holds ₹305.40, suggesting domestic storage replenishment and monsoon-delayed LNG import schedules are supporting the contract independently.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-25T04:17:38.533Z",
-    "pubDateIST": "25 Jun 2026, 09:47"
-  },
-  {
-    "id": "2026-06-25-09-49-crude-weakness-bleeds-into-energy-comple",
-    "title": "Crude weakness bleeds into energy complex; MCX Crude -1.66% at ₹6558/bbl leads selloff",
-    "summary": "Global crude weakness is the transmission mechanism: MCX Crude has broken lower at ₹6558/bbl (-1.66%), dragging the broader energy complex. Support forms at ₹6480; resistance at ₹6650. Import parity for crude: USD 65/bbl × ₹94.18 × 1.02 duty = ₹6,240 MCX equivalent—current levels trade at 5% premium to parity, leaving room for further downside if global momentum persists.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-25T04:19:33.894Z",
-    "pubDateIST": "25 Jun 2026, 09:49"
   }
 ]
