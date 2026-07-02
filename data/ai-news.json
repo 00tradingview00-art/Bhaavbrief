@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-02-20-05-copper-breaks-higher-on-lme-aluminum-scares-mcx-1-278-kg",
+    "title": "Copper breaks higher on LME aluminum scares; MCX ₹1,278/kg signals industrial demand",
+    "summary": "MCX Copper rose ₹1,278.10/kg (+0.46%) this afternoon session, extending a broader base metals rally alongside gold's +1.17% surge to ₹146,124/10g. The LME copper complex climbed to record highs on aluminum supply concern",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T14:35:18.650Z",
+    "pubDateIST": "02 Jul 2026, 20:05",
+    "href": "/flash/2026-07-02-14-37-copper-breaks-higher-on-lme-aluminum-scares-mcx-1-278-kg-signals-industrial",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-02-20-07-gold-rallies-to-146-124-on-safe-haven-demand-as-crude",
+    "title": "Gold Rallies to ₹146,124 on Safe-Haven Demand as Crude Retreats",
+    "summary": "MCX Gold surged ₹146,124/10g, gaining 1.17% in the afternoon session as safe-haven demand accelerated. Silver followed with a 0.64% climb to ₹229,690/kg, while crude oil weakened 0.78% to ₹6,474/bbl, signaling a clear ri",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T14:37:11.772Z",
+    "pubDateIST": "02 Jul 2026, 20:07",
+    "href": "/flash/2026-07-02-14-37-gold-rallies-to-146-124-on-safe-haven-demand-as-crude-retreats",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-17-48-silver-holds-steady-at-228-900-kg-as-crude-tumbles-demand",
     "title": "Silver holds steady at ₹228,900/kg as crude tumbles; demand bifurcation emerges",
     "summary": "MCX Silver edged higher by +0.30% to ₹228,900/kg during the afternoon session, bucking the broader commodity weakness driven by crude's −1.38% slide to ₹6,435/bbl. Gold remained anchored at ₹144,527/10g, showing price re",
@@ -898,25 +922,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-25T15:33:33.370Z",
     "pubDateIST": "25 Jun 2026, 21:03"
-  },
-  {
-    "id": "2026-06-25-18-04-mcx-crude-slides-0-85-to-6612-bbl-as-ris",
-    "title": "MCX Crude slides 0.85% to ₹6612/bbl as risk-off flows favour safe havens",
-    "summary": "Dollar weakness is repricing the commodity complex into a reflation trade. Crude's 0.85% decline reflects demand destruction concerns as equities weaken globally—classic risk-off. Simultaneously, gold and silver advance (+0.5% and +2.27% respectively), confirming capital rotating into safer assets. MCX Crude at ₹6612/bbl sits near session lows; support historically holds around ₹6550, resistance at ₹6700.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bearish",
-    "pubDate": "2026-06-25T12:34:57.476Z",
-    "pubDateIST": "25 Jun 2026, 18:04"
-  },
-  {
-    "id": "2026-06-25-18-06-mcx-copper-1-57-at-1243-kg-as-dollar-wea",
-    "title": "MCX Copper +1.57% at ₹1243/kg as dollar weakness fuels broad safe-haven rally",
-    "summary": "Dollar depreciation (USD/INR ₹94.40) is the primary mechanism driving copper strength this session. Weaker US currency makes rupee-priced metals cheaper for overseas buyers and mechanically boosts INR-denominated commodity quotes. This narrative is confirmed across the complex: silver +2.27%, natgas +2.71% — all benefiting from currency tailwinds rather than supply-side tightness.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T12:36:50.298Z",
-    "pubDateIST": "25 Jun 2026, 18:06"
   }
 ]
