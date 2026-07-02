@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-02-23-48-gold-0-90-leads-mcx-copper-stalls-as-industrial-demand-stays",
+    "title": "Gold +0.90% Leads MCX; Copper Stalls as Industrial Demand Stays Dormant",
+    "summary": "MCX Gold rallied +0.90% to ₹145,723/10g while Silver gained +0.64% as global risk-off sentiment drove safe-haven demand during the US/EU session. Crude Oil edged higher +0.37% to ₹6,549/bbl on steady demand, but Copper's",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T18:18:28.432Z",
+    "pubDateIST": "02 Jul 2026, 23:48",
+    "href": "/flash/2026-07-02-18-18-gold-0-90-leads-mcx-copper-stalls-as-industrial-demand-stays-dormant",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-21-58-mcx-crude-breaks-reflation-rally-gold-silver-copper-advance",
     "title": "MCX Crude Breaks Reflation Rally; Gold, Silver, Copper Advance on Dollar Weakness",
     "summary": "MCX crude slipped 0.25% to ₹6,509/bbl this afternoon session, breaking from the broader commodity rally that saw gold up 1.06% and copper up 0.46%. The crude decline occurred even as USD/INR weakened to ₹95.38, a tailwin",
@@ -904,15 +916,5 @@
     "impact": "bullish",
     "pubDate": "2026-06-25T19:29:40.922Z",
     "pubDateIST": "26 Jun 2026, 00:59"
-  },
-  {
-    "id": "2026-06-25-23-03-mcx-nat-gas-2-45-to-310-mmbtu-as-global",
-    "title": "MCX Nat Gas +2.45% to ₹310/mmBtu as global energy complex surges on supply tightness",
-    "summary": "Dollar weakness is lifting the entire commodity complex, but nat gas is accelerating specifically on supply concern — US/EU session crude +1.8% and nat gas +2.4% together signal energy sector repricing, not just currency drift. MCX Nat Gas at ₹309.80/mmBtu is testing resistance around ₹312 (recent swing high); support sits at ₹302. Historical parity arithmetic: Henry Hub ~$2.65/mmBtu × USD/INR 94.39 × 1.08 import markup = ₹269 theoretical fair value. MCX trades 15% premium to parity — typical of supply premium pricing. Cross-commodity confirmation: silver +3.00% moving alongside energy suggests reflation narrative (rising input costs, not deflation). Watch: US EIA natural gas inventory release tomorrow morning (IST 2100) — historically triggers 80+ bps volatility in MCX nat gas within 30 minutes.",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "bullish",
-    "pubDate": "2026-06-25T17:33:39.254Z",
-    "pubDateIST": "25 Jun 2026, 23:03"
   }
 ]
