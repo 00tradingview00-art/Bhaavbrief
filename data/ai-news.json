@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-02-05-48-silver-gains-0-69-as-safe-haven-bid-outpaces-industrial",
+    "title": "Silver gains 0.69% as safe-haven bid outpaces industrial demand recovery",
+    "summary": "MCX Silver rose 0.69% to ₹228,615/kg in today's session, extending a safe-haven bid that has lifted precious metals across the board. Gold climbed 1.30%, while crude fell 1.36% to ₹6,527/bbl, signalling a clear flight-to",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-02T00:18:30.192Z",
+    "pubDateIST": "02 Jul 2026, 05:48",
+    "href": "/flash/2026-07-02-00-18-silver-gains-0-69-as-safe-haven-bid-outpaces-industrial-demand-recovery",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-02-04-06-gold-hits-144-389-as-crude-falls-risk-off-bid-dominates-mcx",
     "title": "Gold hits ₹144,389 as crude falls—risk-off bid dominates MCX ahead of US yields data",
     "summary": "MCX gold surged ₹144,389/10g (+1.30%) while crude fell ₹6,527/bbl (−1.36%), signalling a sharp rotation into safe-haven demand. Silver followed gold higher at +0.69%, though with notably smaller magnitude, while natural ",
@@ -906,25 +918,5 @@
     "impact": "bearish",
     "pubDate": "2026-06-25T04:19:33.894Z",
     "pubDateIST": "25 Jun 2026, 09:49"
-  },
-  {
-    "id": "2026-06-25-05-16-mcx-copper-crashes-4-51-to-1224-kg-as-do",
-    "title": "MCX Copper crashes 4.51% to ₹1224/kg as dollar strength pressures entire base metals complex",
-    "summary": "Dollar appreciation is the mechanical driver. Stronger USD makes commodities priced in dollars more expensive for INR holders, triggering liquidation across gold (-3.56%), silver (-5.18%), and copper simultaneously. This cross-asset correlation confirms demand-neutral dollar-driven selling rather than supply shock.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T23:46:47.427Z",
-    "pubDateIST": "25 Jun 2026, 05:16"
-  },
-  {
-    "id": "2026-06-25-05-18-mcx-silver-crashes-5-18-to-214138-kg-as",
-    "title": "MCX Silver crashes 5.18% to ₹214138/kg as dollar surge crushes global metals",
-    "summary": "USD strength is the transmission mechanism. As the greenback rallies in US/EU session, dollar-denominated commodities become costlier for non-USD buyers, crushing demand signals across metals. Silver's 5.18% slide mirrors copper (-4.51%) and gold (-3.56%), confirming broad deleveraging, not idiosyncratic weakness.",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "bearish",
-    "pubDate": "2026-06-24T23:48:42.988Z",
-    "pubDateIST": "25 Jun 2026, 05:18"
   }
 ]
