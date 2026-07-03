@@ -13,8 +13,8 @@
   },
   "silver": {
     "name": "SILVER",
-    "tradingsymbol": "SILVER26JULFUT",
-    "expiry": "2026-07-03",
+    "tradingsymbol": "SILVER26SEPFUT",
+    "expiry": "2026-09-04",
     "contractSize": 30,
     "contractSizeStr": "30 kg",
     "priceQuote": "per kg",
