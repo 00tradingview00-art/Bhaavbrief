@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-07-03-15-13-silver-surges-1-73-to-233k-as-heatwave-fuels-indian",
+    "title": "Silver surges 1.73% to ₹233k as heatwave fuels Indian commodity rally",
+    "summary": "MCX precious metals surged in Friday afternoon trade with silver climbing +1.73% to ₹233,200/kg and gold advancing +1.26% to ₹147,590/10g, tracking a broad dollar weakness narrative across commodities. Copper extended ga",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T09:43:33.313Z",
+    "pubDateIST": "03 Jul 2026, 15:13",
+    "href": "/flash/2026-07-03-09-47-silver-surges-1-73-to-233k-as-heatwave-fuels-indian-commodity-rally",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-03-15-15-silver-surges-1-73-as-rupee-weakens-mcx-metals-follow",
+    "title": "Silver surges 1.73% as rupee weakens; MCX metals follow currency, not demand",
+    "summary": "MCX precious metals surged in afternoon trade with silver climbing +1.73% to ₹233,200/kg and gold advancing +1.26% to ₹147,590/10g, while copper gained +0.81% at ₹1,285.35/kg. The rally coincides with USD/INR weakness at",
+    "category": "Agri",
+    "tagType": "agri",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T09:45:25.461Z",
+    "pubDateIST": "03 Jul 2026, 15:15",
+    "href": "/flash/2026-07-03-09-47-silver-surges-1-73-as-rupee-weakens-mcx-metals-follow-currency-not-demand",
+    "coverImage": "https://images.pexels.com/photos/29215512/pexels-photo-29215512.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-03-15-17-gold-rallies-1-850-as-rupee-weakens-copper-gains-suggest",
+    "title": "Gold Rallies ₹1,850 as Rupee Weakens; Copper Gains Suggest Reflation, Not Safe-Haven",
+    "summary": "MCX Gold rallied ₹1,850 per 10g to ₹147,590 in today's afternoon session, a +1.26% move matching gains in Silver (+1.73%) and Copper (+0.81%). The USD/INR weakened to ₹95.24, removing the currency headwind that typically",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T09:47:18.109Z",
+    "pubDateIST": "03 Jul 2026, 15:17",
+    "href": "/flash/2026-07-03-09-47-gold-rallies-1-850-as-rupee-weakens-copper-gains-suggest-reflation-not-safe",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-03-12-07-mcx-natural-gas-rallies-1-41-to-310-usd-weakness-supports",
     "title": "MCX Natural Gas rallies 1.41% to ₹310; USD weakness supports import parity",
     "summary": "MCX Natural Gas surged ₹310.30/mmBtu, up 1.41% in the morning session, joining a broad commodity rally that lifted silver +1.86% and gold +1.31%. USD/INR weakened to ₹95.24, reducing rupee hedging costs for domestic comm",
@@ -898,17 +934,5 @@
     "pubDateIST": "26 Jun 2026, 15:57",
     "href": "/flash/2026-06-26-10-27-rupee-strength-caps-crude-and-copper-gold-holds-ground-",
     "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-12-31-rbi-trade-caution-caps-rupee-mcx-gold-ar",
-    "title": "RBI Trade Caution Caps Rupee; MCX Gold Arbitrage Locked at ₹143K",
-    "summary": "USD/INR opened at ₹94.39 this morning, showing marginal strength as the rupee stabilizes near multi-month highs. Societe Generale's fresh commentary highlights that RBI's policy stance and lingering trade risks are cappi",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T07:01:28.207Z",
-    "pubDateIST": "26 Jun 2026, 12:31",
-    "href": "/flash/2026-06-26-07-01-rbi-trade-caution-caps-rupee-mcx-gold-arbitrage-locked-",
-    "coverImage": "https://images.pexels.com/photos/10396412/pexels-photo-10396412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
