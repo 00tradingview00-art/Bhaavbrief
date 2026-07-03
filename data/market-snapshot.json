@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-03T02:05:12.884Z",
-  "generatedAtIST": "2026-07-03 07:35 IST",
+  "generatedAt": "2026-07-03T03:31:20.611Z",
+  "generatedAtIST": "2026-07-03 09:01 IST",
   "source": "stale-cache+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -39,39 +39,39 @@
       "stale": true
     },
     "USDINR": {
-      "price": 95.38,
+      "price": 95.24,
       "prevClose": 95.42,
-      "changePct": -0.0393,
+      "changePct": -0.186,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4192.3,
+      "price": 4195.6,
       "prevClose": 4068.3,
-      "changePct": 3.048,
+      "changePct": 3.1291,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 62.6,
+      "price": 62.81,
       "prevClose": 60.09,
-      "changePct": 4.1857,
+      "changePct": 4.5352,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 68.82,
+      "price": 69.08,
       "prevClose": 68.58,
-      "changePct": 0.35,
+      "changePct": 0.7291,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 71.97,
+      "price": 72.24,
       "prevClose": 71.57,
-      "changePct": 0.5589,
+      "changePct": 0.9361,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.21,
       "prevClose": 3.22,
-      "changePct": -0.1863,
+      "changePct": -0.3106,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -125,8 +125,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 128558,
-    "mcxComexGoldSpreadPct": 13.35,
-    "goldSilverRatio": 67
+    "importParityGoldINR": 128471,
+    "mcxComexGoldSpreadPct": 13.43,
+    "goldSilverRatio": 66.8
   }
 }
