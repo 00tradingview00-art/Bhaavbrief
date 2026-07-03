@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-057",
+    "href": "/briefs/edition-057",
+    "title": "COMEX Gold Hits $4196 as Safe-Haven Demand Overwhelms Rate Caution",
+    "description": "Gold surges 3.13% overnight on COMEX while silver lags — the divergence reveals exactly how much of this move is fear, not growth.",
+    "excerpt": "MCX Gold ₹147584 | Crude ₹6589 | USDINR ₹95.19 — Gold +1.25% | Crude +0.75% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4196/oz (COM",
+    "date": "2026-07-03T03:43:30.018Z",
+    "edition": "57",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro",
+      "Fed"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-056",
     "href": "/briefs/edition-056",
     "title": "Silver Snaps Back 2.1% as Gold-Silver Ratio Widens Again to 68.4x",
