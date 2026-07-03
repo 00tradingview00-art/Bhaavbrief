@@ -39,6 +39,72 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-07-03-mcx-bhavcopy",
+    "href": "/articles/2026-07-03-mcx-bhavcopy",
+    "title": "MCX Bhavcopy: What It Is, What It Contains, and How to Use It",
+    "description": "MCX bhavcopy is the official end-of-day price bulletin for all commodity futures traded on the exchange. Learn what data it contains and how traders use it.",
+    "excerpt": "MCX bhavcopy is the official end-of-day price report published by the Multi Commodity Exchange of India after each trading session. The word \"bhavcopy\" combines two Hindi words — *bhaav* (price) and *",
+    "date": "2026-07-03",
+    "edition": "keyword-brief",
+    "tags": [
+      "mcx",
+      "bhavcopy",
+      "settlement",
+      "commodities",
+      "data"
+    ],
+    "commodity": "mcx",
+    "commodities": [
+      "mcx"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-07-03-mcx-copper-margin",
+    "href": "/articles/2026-07-03-mcx-copper-margin",
+    "title": "MCX Copper Margin: SPAN, Exposure, and What Determines Your Requirement",
+    "description": "Understand how MCX copper margin is calculated, what SPAN and exposure margins mean, and what moves your margin requirement before you take a position.",
+    "excerpt": "MCX copper margin is the minimum deposit you must maintain with your broker to hold one lot of MCX Copper futures. It is not a fee — it is a performance bond that the exchange holds to cover potential",
+    "date": "2026-07-03",
+    "edition": "keyword-brief",
+    "tags": [
+      "copper",
+      "mcx",
+      "margin",
+      "futures",
+      "metals"
+    ],
+    "commodity": "copper",
+    "commodities": [
+      "copper"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-07-03-what-is-mcx-gold",
+    "href": "/articles/2026-07-03-what-is-mcx-gold",
+    "title": "What Is MCX Gold? Contract Specs, Pricing, and How It Works",
+    "description": "MCX Gold is India's most liquid commodity futures contract. Learn how it is priced, what determines its rate, and how it differs from buying physical gold.",
+    "excerpt": "MCX Gold is a futures contract traded on the Multi Commodity Exchange of India that lets buyers and sellers agree today on a price for gold to be delivered or settled at a future date. It is India's m",
+    "date": "2026-07-03",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals",
+      "futures"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-056",
     "href": "/briefs/edition-056",
