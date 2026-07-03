@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-03-19-57-silver-extends-gains-on-rupee-weakness-usd-inr-slides-to-95",
+    "title": "Silver extends gains on rupee weakness; USD/INR slides to 95.20",
+    "summary": "# FLASH INTELLIGENCE | MCX Evening Session MCX silver surged +2.03% to ₹233,892/kg, leading a broad precious metals rally alongside gold at +0.89% and copper at +0.60%. USD/INR weakened to ₹95.20, reducing rupee hedging ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T14:27:36.932Z",
+    "pubDateIST": "03 Jul 2026, 19:57",
+    "href": "/flash/2026-07-03-14-29-silver-extends-gains-on-rupee-weakness-usd-inr-slides-to-95-20",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-03-19-59-mcx-copper-steady-at-1283-kg-as-industrial-demand-drives",
+    "title": "MCX Copper Steady at ₹1283/kg as Industrial Demand Drives Base Metals Record",
+    "summary": "MCX Copper rose ₹1283/kg (+0.60%) in afternoon trade, tracking a broader base metals rally led by record highs on the LME index. Silver gained +2.03% and gold +0.89%, signalling synchronized strength across precious and ",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T14:29:29.768Z",
+    "pubDateIST": "03 Jul 2026, 19:59",
+    "href": "/flash/2026-07-03-14-29-mcx-copper-steady-at-1283-kg-as-industrial-demand-drives-base-metals-record",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-03-17-27-silver-rallies-2-08-as-dollar-weakness-reflation-trade-drive",
     "title": "Silver Rallies 2.08% as Dollar Weakness, Reflation Trade Drive MCX Metals Higher",
     "summary": "MCX Silver surged +2.08% to ₹234,000/kg in afternoon trade, with Gold advancing +1.31% to ₹147,664/10g and Copper gaining +0.76% to ₹1,284.75/kg. The USD/INR weakened to ₹95.20, underpinning a broad commodity rally acros",
@@ -898,41 +922,5 @@
     "pubDateIST": "26 Jun 2026, 20:45",
     "href": "/flash/2026-06-26-15-15-gold-rallies-144-300-as-crude-plunges-3-93-rupee-shield",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-17-59-crude-crashes-2-7-as-stronger-rupee-pres",
-    "title": "Crude crashes 2.7% as stronger rupee pressures MCX import parity",
-    "summary": "# BHAAVBRIEF INTELLIGENCE FLASH MCX Crude Oil crashed -2.70% to ₹6,607/bbl in afternoon trade, marking the sharpest single-session decline among commodity peers. A stronger US Dollar (tracking USD/INR at ₹94.39) has pres",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T12:29:16.770Z",
-    "pubDateIST": "26 Jun 2026, 17:59",
-    "href": "/flash/2026-06-26-12-33-crude-crashes-2-7-as-stronger-rupee-pressures-mcx-impor",
-    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-18-01-mcx-silver-bounces-on-rupee-crude-s-2-7",
-    "title": "MCX Silver Bounces on Rupee; Crude's -2.7% Plunge Dominates Risk",
-    "summary": "# BHAAVBRIEF FLASH: MCX SILVER RIDES GLOBAL SOFTNESS; CRUDE COLLAPSE DOMINATES AFTERNOON TRADE MCX Silver rallied +0.76% to ₹221,351/kg in this afternoon session despite gold and silver futures softening in global market",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T12:31:09.337Z",
-    "pubDateIST": "26 Jun 2026, 18:01",
-    "href": "/flash/2026-06-26-12-33-mcx-silver-bounces-on-rupee-crude-s-2-7-plunge-dominate",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-18-03-natural-gas-rallies-on-iran-tensions-whi",
-    "title": "Natural Gas rallies on Iran tensions while crude dumps; watch ₹315 support",
-    "summary": "# BhaavBrief Intelligence Flash Report MCX Natural Gas surged ₹318/mmBtu (+2.02%) this afternoon session, outperforming a broadly subdued commodity complex where crude collapsed -2.70% to ₹6,607/bbl. Gold held gains abov",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T12:33:01.511Z",
-    "pubDateIST": "26 Jun 2026, 18:03",
-    "href": "/flash/2026-06-26-12-33-natural-gas-rallies-on-iran-tensions-while-crude-dumps-",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
