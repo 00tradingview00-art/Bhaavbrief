@@ -1,0 +1,63 @@
+---
+title: "MCX Copper Margin: SPAN, Exposure, and What Determines Your Requirement"
+description: "Understand how MCX copper margin is calculated, what SPAN and exposure margins mean, and what moves your margin requirement before you take a position."
+date: "2026-07-03"
+commodity: copper
+tags: ["copper", "mcx", "margin", "futures", "metals"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["copper margin mcx"]
+---
+
+## Introduction
+
+MCX copper margin is the minimum deposit you must maintain with your broker to hold one lot of MCX Copper futures. It is not a fee — it is a performance bond that the exchange holds to cover potential one-day losses. The margin is collected upfront, adjusted daily through mark-to-market, and returned when you close the position.
+
+Knowing your copper margin requirement before you trade matters for two reasons: it determines how much capital you are tying up per lot, and it can change overnight without warning when MCX or SEBI revises margin parameters.
+
+## The Two Components of MCX Copper Margin
+
+MCX copper margin consists of two parts that are always collected together.
+
+**SPAN margin** (Standard Portfolio Analysis of Risk) is the core component. It is calculated by a risk algorithm — the same SPAN system used by CME and most global exchanges — that simulates how much a position could lose under the worst-case scenario across a range of price and volatility outcomes. For MCX Copper, SPAN evaluates 16 different price-move and volatility-shift scenarios and sets the margin to the largest potential one-day loss among them. When copper prices are volatile or implied volatility rises, SPAN margin rises automatically even without any manual intervention.
+
+**Exposure margin** is an additional buffer set by SEBI and MCX on top of SPAN. For base metals including copper, it is currently set at 5% of the contract value. This component does not fluctuate with daily price moves in the same way SPAN does — it is a percentage of current price times lot size.
+
+Your **total initial margin** is SPAN + Exposure. This is what your broker debits when you initiate a position.
+
+## MCX Copper Contract Specifications
+
+Understanding the margin requires knowing the contract unit:
+
+- **Lot size**: 2,500 kg (2.5 metric tonnes) for the standard contract; 250 kg for the mini contract (COPPERM)
+- **Price quote**: INR per kg
+- **Tick size**: ₹0.05 per kg (₹125 per tick on the standard lot)
+- **Daily circuit limit**: ±6% of the previous day's settlement price
+
+At a copper price of ₹900/kg, one standard lot has a contract value of ₹22,50,000. The exposure margin at 5% on this would be approximately ₹1,12,500. SPAN would add further based on current volatility — total initial margin typically runs in the range of ₹1,40,000–₹2,00,000 per lot depending on market conditions, though this can move substantially during high-volatility periods.
+
+## What Moves Copper Margin
+
+**LME copper price volatility** is the primary driver of SPAN changes. MCX copper settles against LME copper prices converted at the USD/INR rate, so sharp moves on LME — driven by China demand data, US manufacturing PMI, or supply disruptions from major mines — directly push MCX SPAN margins higher.
+
+**USD/INR rate** amplifies the effect. A weaker rupee raises the INR value of the same LME price move, which can push contract values — and therefore exposure margin — higher even when LME is flat.
+
+**MCX or SEBI circulars** can revise exposure margin percentages with one business day's notice. These revisions typically happen ahead of periods of expected volatility: budget days, US Fed decisions, or China economic data releases.
+
+**Open interest concentration** at near-expiry contracts sometimes triggers additional margin hikes as MCX manages delivery risk for contracts approaching settlement.
+
+## Maintenance Margin and MTM
+
+After initiating the trade, the **maintenance margin** (also called the minimum margin) is the floor below which your margin account cannot fall. If daily mark-to-market losses erode your account below this level, your broker issues a margin call requiring you to top up to the initial margin level — typically within the same trading day or by the start of the next session.
+
+The mark-to-market settlement uses the closing settlement price from the MCX bhavcopy — not your entry price, and not the last traded price if it differs from the official settlement price.
+
+## What to Watch
+
+- **SEBI/MCX margin circulars** — published on the MCX website; effective next trading day
+- **LME copper 3-month price** — the global benchmark; MCX tracks it with a rupee conversion overlay
+- **USD/INR spot rate** — affects both the contract value and the rupee-equivalent of any LME move
+- **China Caixin Manufacturing PMI** — the single most watched demand indicator for copper
+- **Comex copper spread vs. LME** — unusual spreads signal supply tightness that can spike volatility
+- **MCX copper OI** — rising OI into near expiry can precede exchange-initiated margin hikes
+- **Your broker's margin policy** — most brokers collect a buffer above the exchange minimum; check their specific rates before sizing positions

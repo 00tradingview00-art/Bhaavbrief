@@ -1,0 +1,63 @@
+---
+title: "MCX Bhavcopy: What It Is, What It Contains, and How to Use It"
+description: "MCX bhavcopy is the official end-of-day price bulletin for all commodity futures traded on the exchange. Learn what data it contains and how traders use it."
+date: "2026-07-03"
+commodity: mcx
+tags: ["mcx", "bhavcopy", "settlement", "commodities", "data"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["mcx bhavcopy"]
+---
+
+## Introduction
+
+MCX bhavcopy is the official end-of-day price report published by the Multi Commodity Exchange of India after each trading session. The word "bhavcopy" combines two Hindi words — *bhaav* (price) and *copy* (record) — and the term has been part of Indian market vocabulary since the BSE first published paper bhavcopy sheets in the pre-digital era. For MCX, it is now a downloadable data file that lists the closing settlement price, traded volume, and open interest for every active commodity futures contract on that day.
+
+If you are a commodity trader, broker, or analyst working with MCX data, the bhavcopy is the authoritative source for end-of-day figures. All other sources — apps, terminals, aggregators — ultimately derive their closing prices from the same MCX bhavcopy data.
+
+## What MCX Bhavcopy Contains
+
+Each row in the MCX bhavcopy corresponds to one active contract. The standard columns are:
+
+- **Instrument Type** — futures (FUTCOM) or options (OPTFUT)
+- **Symbol** — the commodity code (GOLD, SILVER, CRUDEOIL, COPPER, NATURALGAS, ZINC, LEAD, ALUMINIUM, NICKEL, COTTON, etc.)
+- **Expiry Date** — the contract month, typically in DD-MMM-YYYY format
+- **Open** — the session's opening price in INR per the contract unit
+- **High / Low** — the intraday range
+- **Close** — the official settlement price used for daily mark-to-market
+- **Previous Close** — the prior session's settlement price
+- **Volume** — number of lots traded in that session
+- **Open Interest (OI)** — the number of outstanding contracts yet to be settled
+- **OI Change** — the net change in open interest from the previous session
+- **Value** — total traded value in INR lakhs
+
+The settlement price in the bhavcopy is not always the same as the last traded price. MCX uses a volume-weighted average of the last 30 minutes of trading to calculate the daily settlement price, which is what gets used for mark-to-market margining across all broker accounts overnight.
+
+## How to Access MCX Bhavcopy
+
+MCX publishes bhavcopy data on its official website under the Market Data section. The file is available as a CSV download typically within 30–45 minutes of the 11:30 PM IST market close. The historical archive goes back several years and allows date-range downloads.
+
+The data is free to access and does not require a login. Third-party platforms including NSE-affiliated data feeds, broker terminals, and financial data aggregators also redistribute the same file, often in processed or cleaned formats.
+
+For systematic use — backtesting strategies, building OI trackers, or logging settlement prices — the raw CSV from MCX is the cleanest source since it avoids any reformatting errors introduced downstream.
+
+## How Traders Use It
+
+**Mark-to-market reconciliation.** The closing settlement price in the bhavcopy is what your broker uses to compute daily MTM profit or loss. If your terminal shows a different closing price, the bhavcopy figure overrides it — this is the number that affects your margin account.
+
+**Open interest tracking.** OI change is one of the most watched signals in MCX commodity analysis. Rising OI alongside rising prices suggests fresh long positions entering the market, a bullish confirmation. Falling OI on a price rally suggests short covering rather than new buying — a structurally weaker signal. The bhavcopy gives you this data for every commodity and every active expiry simultaneously.
+
+**Spread and roll analysis.** Traders monitoring the spread between near-month and far-month contracts — to decide when to roll positions — can track both contract rows in the same bhavcopy file. The bhavcopy shows all active expiries for each commodity, making spread calculations straightforward.
+
+**Historical backtesting.** Quants and systematic traders use the daily bhavcopy archive to build price series for commodities. Since MCX does not publish a single continuous-price series natively, most commodity databases are constructed by stitching together successive bhavcopy files, rolling over contracts at expiry.
+
+**Circuit and limit checks.** For volatile sessions, the bhavcopy confirms whether a contract hit its daily circuit limit (typically ±4% or ±6% depending on the commodity), which affects the validity of any orders placed near those levels.
+
+## What to Watch
+
+- **MCX market close time** — 11:30 PM IST on weekdays; bhavcopy uploads follow within the hour
+- **Settlement price vs. last traded price** — discrepancies flag thin end-of-session liquidity
+- **OI build in far-month contracts** — signals institutional position-taking ahead of expected macro moves
+- **Unusual volume spikes on near expiry** — can indicate forced liquidation or delivery-related unwinding
+- **MCX holiday calendar** — no bhavcopy on exchange holidays; the next session's OI carries forward
+- **SEBI circulars on position limits** — changes to lot sizes or position limits alter what OI numbers mean in absolute terms
