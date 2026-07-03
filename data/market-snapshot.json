@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-03T17:31:18.415Z",
-  "generatedAtIST": "2026-07-03 23:01 IST",
+  "generatedAt": "2026-07-03T17:56:33.260Z",
+  "generatedAtIST": "2026-07-03 23:26 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 147311,
+      "price": 147376,
       "prevClose": 145758,
-      "changePct": 1.0655,
+      "changePct": 1.1101,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
@@ -16,21 +16,21 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 6566,
+      "price": 6570,
       "prevClose": 6540,
-      "changePct": 0.3976,
+      "changePct": 0.4587,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1283.9,
+      "price": 1284.8,
       "prevClose": 1275,
-      "changePct": 0.698,
+      "changePct": 0.7686,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 310.1,
+      "price": 310.4,
       "prevClose": 306,
-      "changePct": 1.3399,
+      "changePct": 1.4379,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -70,27 +70,27 @@
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 366.35,
+      "price": 366.85,
       "prevClose": 359.75,
-      "changePct": 1.8346,
+      "changePct": 1.9736,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 198.7,
+      "price": 199.4,
       "prevClose": 197.2,
-      "changePct": 0.7606,
+      "changePct": 1.1156,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 330.35,
+      "price": 330.15,
       "prevClose": 328.2,
-      "changePct": 0.6551,
+      "changePct": 0.5941,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1574.2,
+      "price": 1579,
       "prevClose": 1563.4,
-      "changePct": 0.6908,
+      "changePct": 0.9978,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -114,7 +114,7 @@
   },
   "derived": {
     "importParityGoldINR": 128163,
-    "mcxComexGoldSpreadPct": 14.94,
+    "mcxComexGoldSpreadPct": 14.99,
     "goldSilverRatio": 66.7
   }
 }
