@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-03-23-23-silver-rallies-2-11-to-lead-commodity-strength-copper",
+    "title": "Silver rallies 2.11% to lead commodity strength; copper follows at ₹1,285/kg",
+    "summary": "MCX silver surged +2.11% today, leading a broad precious-metals rally alongside gold's +1.13% gain to ₹147,400/10g. Copper advanced +0.80% to ₹1,285.25/kg, extending the cross-commodity strength into industrial metals. T",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-03T17:53:52.831Z",
+    "pubDateIST": "03 Jul 2026, 23:23",
+    "href": "/flash/2026-07-03-17-53-silver-rallies-2-11-to-lead-commodity-strength-copper-follows-at-1-285-kg",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-03-21-38-mcx-natural-gas-1-21-on-dollar-weakness-reflation-bid-drives",
     "title": "MCX Natural Gas +1.21% on Dollar Weakness; Reflation Bid Drives Metals Rally",
     "summary": "MCX Natural Gas rallied 1.21% to ₹309.70/mmBtu in the afternoon session, extending broader commodity strength alongside gold (+0.96% to ₹147,157/10g) and silver (+2.25% to ₹234,400/kg). The rally occurred as USD/INR weak",
@@ -898,29 +910,5 @@
     "pubDateIST": "27 Jun 2026, 00:42",
     "href": "/flash/2026-06-26-19-12-mcx-copper-hits-session-high-as-dollar-weakness-fuels-b",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-22-40-silver-surges-221k-on-risk-off-bid-as-cr",
-    "title": "Silver surges ₹221K on risk-off bid as crude tumbles 3.5% on MCX",
-    "summary": "# BhaavBrief Flash: Silver Advances as Safe-Haven Demand Overrides Global Softness MCX Silver rallied ₹221,106/kg (+0.65%) this afternoon session, tracking a broad precious metals bid despite reported softness in global ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T17:10:49.721Z",
-    "pubDateIST": "26 Jun 2026, 22:40",
-    "href": "/flash/2026-06-26-17-12-silver-surges-221k-on-risk-off-bid-as-crude-tumbles-3-5",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-26-22-42-crude-crashes-3-5-as-gold-surges-on-us-i",
-    "title": "Crude Crashes 3.5% as Gold Surges on US-Iran Risk; Safe Havens Dominate",
-    "summary": "# BhaavBrief Flash Intelligence MCX Crude Oil collapsed -3.49% to ₹6,553/bbl this afternoon session, while safe-haven demand lifted MCX Gold +0.78% to ₹144,248/10g and MCX Silver advancing alongside. Natural Gas posted a",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-26T17:12:42.923Z",
-    "pubDateIST": "26 Jun 2026, 22:42",
-    "href": "/flash/2026-06-26-17-12-crude-crashes-3-5-as-gold-surges-on-us-iran-risk-safe-h",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
