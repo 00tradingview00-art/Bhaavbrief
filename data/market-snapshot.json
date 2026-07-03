@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-03T17:56:33.260Z",
-  "generatedAtIST": "2026-07-03 23:26 IST",
+  "generatedAt": "2026-07-03T18:31:23.284Z",
+  "generatedAtIST": "2026-07-04 00:01 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 147376,
+      "price": 147365,
       "prevClose": 145758,
-      "changePct": 1.1101,
+      "changePct": 1.1025,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
@@ -16,21 +16,21 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 6570,
+      "price": 6572,
       "prevClose": 6540,
-      "changePct": 0.4587,
+      "changePct": 0.4893,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1284.8,
+      "price": 1284.4,
       "prevClose": 1275,
-      "changePct": 0.7686,
+      "changePct": 0.7373,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 310.4,
+      "price": 310.9,
       "prevClose": 306,
-      "changePct": 1.4379,
+      "changePct": 1.6013,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -70,27 +70,27 @@
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 366.85,
+      "price": 366.9,
       "prevClose": 359.75,
-      "changePct": 1.9736,
+      "changePct": 1.9875,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 199.4,
+      "price": 198.9,
       "prevClose": 197.2,
-      "changePct": 1.1156,
+      "changePct": 0.8621,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 330.15,
+      "price": 330.3,
       "prevClose": 328.2,
-      "changePct": 0.5941,
+      "changePct": 0.6399,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1579,
+      "price": 1570,
       "prevClose": 1563.4,
-      "changePct": 0.9978,
+      "changePct": 0.4222,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -114,7 +114,7 @@
   },
   "derived": {
     "importParityGoldINR": 128163,
-    "mcxComexGoldSpreadPct": 14.99,
+    "mcxComexGoldSpreadPct": 14.98,
     "goldSilverRatio": 66.7
   }
 }
