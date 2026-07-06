@@ -98,10 +98,11 @@
       "startDate": "2026-07-02",
       "status": "active",
       "editions": [
-        56
+        56,
+        58
       ],
-      "latestDay": 1,
-      "summary": "Gold and silver fell sharply on reduced safe-haven demand driven by Middle East diplomatic activity and FOMC reinforcement of higher-for-longer rates, with the gold-silver ratio widening to 68.4x as silver bears the brunt of the selloff.",
+      "latestDay": 5,
+      "summary": "Gold and silver rally sharply as weaker US non-farm payrolls data trigger FOMC rate-cut reassessment, reversing the safe-haven unwind and reducing the opportunity cost of holding non-yielding precious metals.",
       "primaryCommodity": "MCX Gold",
       "keyLevel": "₹141506/10g",
       "tags": [
