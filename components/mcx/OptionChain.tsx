@@ -132,24 +132,24 @@ function OIBar({ oi, max, side }: { oi: number; max: number; side: 'CE'|'PE' }) 
 function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   const top = [...chain]
     .sort((a, b) => (b.CE.oi + b.PE.oi) - (a.CE.oi + a.PE.oi))
-    .slice(0, 8)
+    .slice(0, 6)
     .sort((a, b) => a.strike - b.strike)
   const max = Math.max(...top.flatMap(r => [r.CE.oi, r.PE.oi]), 1)
 
   if (!top.length) return null
 
   return (
-    <div style={{ padding: '12px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
-          OI Concentration — top strikes
+    <div style={{ padding: '8px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+        <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
+          OI Concentration
         </span>
-        <div style={{ display: 'flex', gap: 14, fontSize: 10, color: C.ink3, fontFamily: C.sans }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ display: 'inline-block', width: 8, height: 8, background: C.dn, borderRadius: 2 }} />Calls
+        <div style={{ display: 'flex', gap: 10, fontSize: 9, color: C.ink3, fontFamily: C.sans }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+            <span style={{ display: 'inline-block', width: 6, height: 6, background: C.dn, borderRadius: 1 }} />Calls
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <span style={{ display: 'inline-block', width: 8, height: 8, background: C.up, borderRadius: 2 }} />Puts
+          <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+            <span style={{ display: 'inline-block', width: 6, height: 6, background: C.up, borderRadius: 1 }} />Puts
           </span>
         </div>
       </div>
@@ -160,22 +160,22 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
           <div
             key={row.strike}
             title={`${row.strike.toLocaleString('en-IN')} — CE OI ${row.CE.oi.toLocaleString('en-IN')} · PE OI ${row.PE.oi.toLocaleString('en-IN')}`}
-            style={{ display: 'grid', gridTemplateColumns: '1fr 74px 1fr', alignItems: 'center', gap: 6, padding: '3px 0' }}
+            style={{ display: 'grid', gridTemplateColumns: '1fr 62px 1fr', alignItems: 'center', gap: 4, padding: '1px 0' }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, minWidth: 0 }}>
-              <span style={{ fontSize: 10, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.CE.oi)}</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4, minWidth: 0 }}>
+              <span style={{ fontSize: 9, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.CE.oi)}</span>
               <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', minWidth: 0 }}>
-                <div style={{ height: 10, width: `${cePct}%`, background: C.dn, borderRadius: '3px 0 0 3px', opacity: row.isATM ? 1 : 0.75 }} />
+                <div style={{ height: 6, width: `${cePct}%`, background: C.dn, borderRadius: '2px 0 0 2px', opacity: row.isATM ? 1 : 0.7 }} />
               </div>
             </div>
-            <div style={{ textAlign: 'center', fontSize: 11, fontWeight: row.isATM ? 700 : 600, color: row.isATM ? C.gold : C.ink2, ...numStyle }}>
+            <div style={{ textAlign: 'center', fontSize: 10, fontWeight: row.isATM ? 700 : 600, color: row.isATM ? C.gold : C.ink2, ...numStyle }}>
               {row.strike.toLocaleString('en-IN')}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, minWidth: 0 }}>
               <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', minWidth: 0 }}>
-                <div style={{ height: 10, width: `${pePct}%`, background: C.up, borderRadius: '0 3px 3px 0', opacity: row.isATM ? 1 : 0.75 }} />
+                <div style={{ height: 6, width: `${pePct}%`, background: C.up, borderRadius: '0 2px 2px 0', opacity: row.isATM ? 1 : 0.7 }} />
               </div>
-              <span style={{ fontSize: 10, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.PE.oi)}</span>
+              <span style={{ fontSize: 9, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.PE.oi)}</span>
             </div>
           </div>
         )
