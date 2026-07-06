@@ -1,6 +1,24 @@
 [
   {
     "type": "brief",
+    "slug": "edition-058",
+    "href": "/briefs/edition-058",
+    "title": "COMEX Gold at $4185 as Safe-Haven Bid Holds but Silver Leads",
+    "description": "Weak US jobs data keeps safe-haven demand for gold alive while silver's industrial component pushes it to a fresh outperformance at $62.44/oz.",
+    "excerpt": "MCX Gold ₹147378 | Crude ₹6568 | USDINR ₹95.20 — Silver +2.11% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4185/oz (COMEX) | ₹95.20 ",
+    "date": "2026-07-06T02:59:00.143Z",
+    "edition": "58",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Fed",
+      "Macro"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-057",
     "href": "/briefs/edition-057",
     "title": "COMEX Gold Hits $4196 as Safe-Haven Demand Overwhelms Rate Caution",
