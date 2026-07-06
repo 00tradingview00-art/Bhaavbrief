@@ -2,11 +2,11 @@
 /**
  * scripts/generate-brief-reel.mjs
  *
- * BhaavBrief — 14-second 1080×1920 Reel generator.
- * Creator-first design: one idea per beat, bold typography, kinetic text.
+ * BhaavBrief — 35-second 1080×1920 Reel generator.
+ * Broader framing, genuine motion, one idea per screen.
  *
  * Usage:
- *   EDITION=50 node scripts/generate-brief-reel.mjs
+ *   EDITION=58 node scripts/generate-brief-reel.mjs
  *   node scripts/generate-brief-reel.mjs   ← latest edition
  */
 
@@ -47,7 +47,7 @@ function readSnapshot() {
   return existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : null
 }
 
-// ── Copy extraction — creator voice ──────────────────────────────────────────
+// ── Copy extraction — broader voice ──────────────────────────────────────────
 async function extractReelCopy(brief, snapshot) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
@@ -55,23 +55,23 @@ async function extractReelCopy(brief, snapshot) {
     `MCX Gold  ₹${Math.round(snapshot.instruments.MCX_GOLD?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_GOLD?.changePct?.toFixed(2) ?? '?'}%)`,
     `MCX Crude ₹${Math.round(snapshot.instruments.MCX_CRUDE?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_CRUDE?.changePct?.toFixed(2) ?? '?'}%)`,
     `MCX Silver ₹${Math.round(snapshot.instruments.MCX_SILVER?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_SILVER?.changePct?.toFixed(2) ?? '?'}%)`,
-    `USD/INR ₹${snapshot.instruments.USDINR?.price ?? '?'}`,
+    `USD/INR ₹${snapshot.instruments.USDINR?.price ?? '?'}  (${snapshot.instruments.USDINR?.changePct?.toFixed(2) ?? '?'}%)`,
   ].join('\n') : ''
 
   const excerpt = brief.content
     .replace(/^---[\s\S]*?---/, '')
     .replace(/## Price Bridge[\s\S]*?##/, '##')
     .replace(/\*BhaavBrief is not.*$/s, '')
-    .trim().slice(0, 900)
+    .trim().slice(0, 1000)
 
   const msg = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 600,
+    max_tokens: 700,
     messages: [{
       role:    'user',
-      content: `You are the head of content for BhaavBrief — India's only daily MCX commodity intelligence brand. You have 6 years building finance reels that actual traders and importers watch every morning.
+      content: `You are the head of content for BhaavBrief — India's daily MCX commodity intelligence brand. You write Instagram Reels that retail investors, importers, business owners, and curious Indians share — not just professional traders.
 
-This is a 14-second Instagram Reel. The audience already knows what MCX is. They don't need education — they need the signal.
+This is a 35-second Instagram Reel. Frame every insight in terms everyday people can feel — jewellery buyers, importers, business owners, anyone watching their rupee. Lead with the human impact, then explain the structural reason.
 
 Brief: "${brief.data.title}"
 Market data:
@@ -81,25 +81,27 @@ Excerpt:
 ${excerpt}
 
 Rules:
-- NEVER start with a question ("did you know?", "what if?")
-- NEVER use jargon that needs explaining
-- EVERY sentence must earn its place — if it doesn't change what a trader does, cut it
-- Numbers make it real. Use them.
-- Tone: sharp, direct, like a trusted colleague tapping you on the shoulder
+- NEVER start with a question
+- Frame the move in rupees people feel: "Your gold costs ₹2,200 more per 10g today" beats "Gold up 1.5%"
+- Numbers make it real — use them
+- Tone: sharp, direct, like a smart friend who tracks markets for a living
+- Each beat is ONE complete thought — no "and also"
 
 Return ONLY this JSON:
 {
   "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
 
-  "stat_line": "The single most striking number from today — written as a visual headline. Max 6 words. Example: 'Gold sheds ₹2,194 in one session'",
+  "hook_caption": "First line of Instagram caption. Relatable to anyone, not just traders. Under 12 words. Frame in rupee impact or everyday terms. No jargon. This is what makes someone stop scrolling.",
 
-  "beat1": "What happened. ONE sentence. Specific price or %. Under 20 words. No passive voice. Hit the number first.",
-  "beat2": "The non-obvious structural context behind this move — what the number reveals about the market. ONE sentence. Under 20 words. No directional instruction.",
-  "beat3": "The observable price level or data event the market is focused on, and what it represents. Under 18 words.",
+  "stat_line": "The single most striking number from today — written as a visual headline. Max 6 words. Example: 'Gold costs ₹2,194 more today'",
 
-  "payoff": "One sentence capturing the most unusual or non-obvious thing about today's data. Under 12 words. An observation — not a directional instruction.",
+  "beat1": "What happened in everyday terms. ONE sentence. Specific rupee amount or %. Under 18 words. Hit the human impact first, then the % move.",
+  "beat2": "The structural reason behind this move — what force caused it. ONE sentence. Under 18 words. Name the force (Fed, dollar, OPEC, monsoon, etc.) and what it did.",
+  "beat3": "The price level or event traders are watching, and what it would mean if hit. Under 16 words. Specific number.",
 
-  "voiceover": "Write this as spoken word — not a script, not bullet points. 5 short sentences, each under 9 words. Natural pauses. Contractions only. Use 'just', 'already', 'quietly' for recency. The fourth sentence is the non-obvious truth. End with 'BhaavBrief.' — pause before it, said like a signature. Example: 'Silver just led gold by three percent. That hasn't happened in eight months. Solar demand is the part nobody's watching. At sixty-seven times gold, the ratio says industrial. BhaavBrief.'"
+  "payoff": "The most surprising or counter-intuitive fact from today's data. Under 12 words. An observation that makes people think — not a directional call.",
+
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm, like you're talking to a smart friend. Contractions only. Use 'just', 'already', 'quietly' for recency. Sentences 1-2 frame the everyday impact. Sentences 3-4 explain the structural cause. Sentence 5 is the non-obvious truth. Sentence 6 is what to watch. End with 'BhaavBrief.' — pause before it, said like a signature. Example: 'Gold just added two thousand rupees in one session. That's more than most people earn in a day. The US jobs number came in weak. Weak jobs means rate cuts stay on the table. Central banks bought more gold last month than any time in five years. Watch ninety-five on dollar-rupee — that's the hinge. BhaavBrief.'"
 }`,
     }],
   })
@@ -155,7 +157,7 @@ async function ensureMusic(mood) {
 // ── ElevenLabs voiceover ──────────────────────────────────────────────────────
 async function generateVoiceover(script, outputPath) {
   const apiKey  = process.env.ELEVENLABS_API_KEY
-  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'pNInz6obpgDQGcFmaJgB' // Adam
+  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'pNInz6obpgDQGcFmaJgB'
 
   if (!apiKey) { console.warn('  ⚠️  ELEVENLABS_API_KEY not set — skipping voiceover'); return null }
 
@@ -181,19 +183,32 @@ async function generateVoiceover(script, outputPath) {
 }
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
-const W = 1080, H = 1920, FPS = 30, TOTAL_FRAMES = 22 * FPS
+const W = 1080, H = 1920, FPS = 30
 
-// Phase boundaries (in frames)
-const HOOK_END    = Math.round(2.5 * FPS)   // 0–2.5s
-const BEAT1_END   = Math.round(7.0 * FPS)   // 2.5–7s
-const BEAT2_END   = Math.round(12.5 * FPS)  // 7–12.5s
-const BEAT3_END   = Math.round(17.0 * FPS)  // 12.5–17s
-const PAYOFF_END  = TOTAL_FRAMES             // 17–22s
+// Timing in seconds
+const HOOK_DUR   = 3.0
+const BEAT1_DUR  = 8.0
+const BEAT2_DUR  = 8.0
+const BEAT3_DUR  = 7.0
+const PAYOFF_DUR = 5.0
+const CTA_DUR    = 4.0
+const TOTAL_DUR  = HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
+
+// Frame boundaries
+const HOOK_END   = Math.round(HOOK_DUR   * FPS)
+const BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
+const BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
+const BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
+const PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
+const CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
+const TOTAL_FRAMES = CTA_END
 
 // Palette
 const CREAM  = '#FAFAF6'
+const CREAM2 = '#F2F2EC'
 const INK    = '#18180F'
 const INK_2  = '#2C2C22'
+const INK_3  = '#4A4A3A'
 const INK_4  = '#8A8A7A'
 const INK_6  = '#BCBCAA'
 const GOLD   = '#C8720A'
@@ -201,13 +216,11 @@ const RED    = '#C0392B'
 const GREEN  = '#1A7A4A'
 const BORDER = '#E0DFD5'
 
-// Mood → accent colour
-const MOOD_COLOR = { FEAR: '#7B1A1A', BEARISH: '#2C1F1F', BULLISH: '#1A2C1F', VOLATILE: '#1F1F2C', CALM: INK_2 }
+const MOOD_BG = { FEAR: '#1A0A0A', DOWNBEAT: '#0F0F18', UPBEAT: '#0A1A10', VOLATILE: '#0F0A1A', CALM: '#18180F' }
 
 const clamp   = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
-const easeOut = t => 1 - Math.pow(1 - t, 3)
-const easeIn  = t => t * t * t
-const spring  = t => { const c = clamp(t, 0, 1); return 1 - (1 - c) * (1 - c) * (1 - c) }
+const easeOut = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3)
+const spring  = t => { const c = clamp(t, 0, 1); return 1 - (1-c)*(1-c)*(1-c) }
 
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath()
@@ -230,275 +243,310 @@ function wrapText(ctx, text, maxW) {
   return lines
 }
 
-// preferLabel: Haiku's dominant_instrument ("MCX GOLD" etc) takes priority over raw % change
 function dominantMover(snapshot, preferLabel) {
   const cands = [
     { label: 'MCX GOLD',   key: 'MCX_GOLD',   fmtDelta: v => `₹${Math.abs(Math.round(v)).toLocaleString('en-IN')}` },
     { label: 'MCX CRUDE',  key: 'MCX_CRUDE',  fmtDelta: v => `₹${Math.abs(Math.round(v)).toLocaleString('en-IN')}` },
-    { label: 'MCX SILVER', key: 'MCX_SILVER', fmtDelta: v => `₹${Math.abs(Math.round(v/1000))}K` },
+    { label: 'MCX SILVER', key: 'MCX_SILVER', fmtDelta: v => `₹${(Math.abs(v/1000)).toFixed(1)}K` },
     { label: 'USD/INR',    key: 'USDINR',     fmtDelta: v => `₹${Math.abs(v).toFixed(2)}` },
   ]
-  // If Haiku named a specific instrument, use that — it chose it for editorial reasons
   if (preferLabel) {
     const preferred = cands.find(c => c.label === preferLabel)
     if (preferred) {
       const instr = snapshot?.instruments?.[preferred.key]
       if (instr) {
         const delta = (instr.price??0) - (instr.prevClose??instr.price??0)
-        return { ...preferred, pct: Math.abs(instr.changePct??0), delta, changePct: instr.changePct??0 }
+        return { ...preferred, pct: Math.abs(instr.changePct??0), delta, changePct: instr.changePct??0, price: instr.price??0 }
       }
     }
   }
-  // Fallback: largest absolute % change
-  let best = { pct: 0, label: 'MCX GOLD', delta: 0, changePct: 0, fmtDelta: v => String(v) }
+  let best = { pct: 0, label: 'MCX GOLD', delta: 0, changePct: 0, price: 0, fmtDelta: v => String(v) }
   for (const c of cands) {
     const instr = snapshot?.instruments?.[c.key]
     if (!instr) continue
     const pct = Math.abs(instr.changePct ?? 0)
-    if (pct > best.pct) best = { ...c, pct, delta: (instr.price??0)-(instr.prevClose??instr.price??0), changePct: instr.changePct??0 }
+    if (pct > best.pct) best = { ...c, pct, delta: (instr.price??0)-(instr.prevClose??instr.price??0), changePct: instr.changePct??0, price: instr.price??0 }
   }
   return best
 }
 
-// ── Phase 1: HOOK — the number IS the hook ───────────────────────────────────
-// Dark bg, ONE massive stat, hook line below. Nothing else.
-function drawHook(ctx, t, copy, data, snapshot, mood) {
-  const bgColor = MOOD_COLOR[mood] ?? INK_2
-  ctx.fillStyle = bgColor
-  ctx.fillRect(0, 0, W, H)
-
-  // Gold edge bar at top
+// ── Shared header (wordmark + price strip) ────────────────────────────────────
+function drawHeader(ctx, snapshot, mood) {
+  const PAD = 60
+  // Gold top bar
   ctx.fillStyle = GOLD
-  ctx.fillRect(0, 0, W, 8)
-
-  // BHAAVBRIEF wordmark — small, top-centre
-  ctx.globalAlpha = clamp(t * 12, 0, 1)
-  ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 26px "Inter", sans-serif'
-  ctx.textAlign   = 'center'
-  ctx.letterSpacing = '7px'
-  ctx.fillText('BHAAVBRIEF', W/2, 72)
-  ctx.letterSpacing = '0px'
-
-  const mover = dominantMover(snapshot, copy?.dominant_instrument)
-  const isUp  = mover.changePct >= 0
-  const moveColor = isUp ? GREEN : RED
-
-  // Instrument label
-  ctx.globalAlpha = clamp(t * 8, 0, 1)
-  ctx.fillStyle   = INK_6
-  ctx.font        = 'bold 30px "Inter", sans-serif'
-  ctx.letterSpacing = '3px'
-  ctx.fillText(mover.label, W/2, 520)
-  ctx.letterSpacing = '0px'
-
-  // THE BIG NUMBER — slams in
-  const numA = easeOut(clamp(t * 4, 0, 1))
-  const numScale = 1 + 0.06 * (1 - numA)           // slight scale-down on entry
-  ctx.save()
-  ctx.translate(W/2, 660)
-  ctx.scale(numScale, numScale)
-  ctx.globalAlpha = numA
-  ctx.fillStyle   = moveColor
-  ctx.font        = 'bold 110px "Inter", sans-serif'
-  ctx.textAlign   = 'center'
-  const arrow     = isUp ? '▲' : '▼'
-  ctx.fillText(`${arrow} ${mover.fmtDelta(mover.delta)}`, 0, 0)
-  ctx.restore()
-
-  // % change — smaller, same colour, below
-  ctx.globalAlpha = clamp((t - 0.12) * 7, 0, 1)
-  ctx.fillStyle   = moveColor
-  ctx.font        = '42px "Inter", sans-serif'
-  ctx.fillText(`${isUp ? '+' : ''}${mover.changePct.toFixed(2)}%  today`, W/2, 752)
-
-  // Thin divider
-  ctx.globalAlpha = clamp((t - 0.2) * 6, 0, 1)
-  ctx.strokeStyle = '#FFFFFF18'
-  ctx.lineWidth   = 1
-  ctx.beginPath(); ctx.moveTo(120, 800); ctx.lineTo(W-120, 800); ctx.stroke()
-
-  // Hook / stat line — what it means in one punch
-  ctx.globalAlpha = clamp((t - 0.28) * 5, 0, 1)
-  ctx.fillStyle   = CREAM
-  ctx.font        = 'bold 54px "Inter", sans-serif'
-  const hookLines = wrapText(ctx, copy.stat_line ?? copy.hook, W - 160)
-  let hy = 880
-  for (const l of hookLines.slice(0, 2)) { ctx.fillText(l, W/2, hy); hy += 72 }
-
-  // Edition chip — bottom, subtle
-  ctx.globalAlpha = clamp((t - 0.5) * 5, 0, 1)
-  ctx.fillStyle   = '#FFFFFF10'
-  roundRect(ctx, W/2 - 78, H - 110, 156, 38, 19); ctx.fill()
-  ctx.fillStyle   = INK_6
-  ctx.font        = '20px "Inter", sans-serif'
-  ctx.fillText(`Edition #${data.edition}`, W/2, H - 84)
-
-  ctx.globalAlpha = 1
-}
-
-// ── Phase 2–4: BEATS — kinetic text, one idea at a time ──────────────────────
-// Cream bg. Each beat fades in and stays. Price strip at top for context.
-function drawBeat(ctx, beatIndex, beatT, copy, data, snapshot) {
-  // beatIndex: 1, 2, or 3
-  // beatT: 0→1 progress through that beat
-
-  ctx.fillStyle = CREAM
-  ctx.fillRect(0, 0, W, H)
-
-  // Top bar
-  ctx.fillStyle = GOLD
-  ctx.fillRect(0, 0, W, 8)
+  ctx.fillRect(0, 0, W, 6)
 
   // Wordmark
-  ctx.fillStyle = GOLD
-  ctx.font = 'bold 24px "Inter", sans-serif'
-  ctx.textAlign = 'center'
-  ctx.letterSpacing = '6px'
-  ctx.fillText('BHAAVBRIEF', W/2, 70)
+  ctx.fillStyle   = GOLD
+  ctx.font        = 'bold 22px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'left'
+  ctx.letterSpacing = '5px'
+  ctx.fillText('BHAAVBRIEF', PAD, 56)
   ctx.letterSpacing = '0px'
 
+  // Thin separator
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(60, 90); ctx.lineTo(W-60, 90); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, 72); ctx.lineTo(W-PAD, 72); ctx.stroke()
 
-  // Compact price strip — 4 instruments in a row
+  // Price strip — 4 instruments in one row
   const instruments = [
     { label: 'GOLD',   key: 'MCX_GOLD',   fmt: v => `₹${Math.round(v).toLocaleString('en-IN')}` },
     { label: 'CRUDE',  key: 'MCX_CRUDE',  fmt: v => `₹${Math.round(v)}` },
     { label: 'SILVER', key: 'MCX_SILVER', fmt: v => `₹${Math.round(v/1000)}K` },
     { label: '$/₹',    key: 'USDINR',     fmt: v => `${v.toFixed(2)}` },
   ]
-  const stripW = (W - 120) / 4
+  const stripW = (W - PAD*2) / 4
   instruments.forEach((inst, i) => {
     const instr = snapshot?.instruments?.[inst.key]
-    const px    = 60 + i * stripW
     const pct   = instr?.changePct ?? 0
     const isUp  = pct >= 0
+    const px    = PAD + i * stripW
 
-    ctx.fillStyle = INK_4
-    ctx.font = 'bold 16px "Inter", sans-serif'
-    ctx.textAlign = 'left'
+    ctx.fillStyle   = INK_4
+    ctx.font        = 'bold 14px "NotoSans", "Inter", sans-serif'
+    ctx.textAlign   = 'left'
     ctx.letterSpacing = '1px'
-    ctx.fillText(inst.label, px + 4, 118)
+    ctx.fillText(inst.label, px, 100)
     ctx.letterSpacing = '0px'
 
     ctx.fillStyle = INK
-    ctx.font = 'bold 22px "Inter", sans-serif'
-    ctx.fillText(instr ? inst.fmt(instr.price) : '—', px + 4, 144)
+    ctx.font      = 'bold 20px "NotoSans", "Inter", sans-serif'
+    ctx.fillText(instr ? inst.fmt(instr.price) : '—', px, 126)
 
     ctx.fillStyle = isUp ? GREEN : RED
-    ctx.font = '18px "Inter", sans-serif'
-    ctx.fillText(`${isUp ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`, px + 4, 166)
+    ctx.font      = '16px "NotoSans", "Inter", sans-serif'
+    ctx.fillText(`${isUp ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`, px, 148)
   })
 
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(60, 186); ctx.lineTo(W-60, 186); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, 164); ctx.lineTo(W-PAD, 164); ctx.stroke()
+}
 
-  // ── Beat content ──────────────────────────────────────────────────────────
-  // Beats build cumulatively. Positions spread across the 200→1820 content area.
-  // Beat 1 = upper third, Beat 2 = middle, Beat 3 card anchored near bottom.
-  const beats = [copy.beat1, copy.beat2, copy.beat3]
-  const yPositions = [440, 900, 1340]               // vertically distributed across 1920
+// ── Phase 1: HOOK ─────────────────────────────────────────────────────────────
+function drawHook(ctx, t, copy, snapshot, mood, edition) {
+  const bg = MOOD_BG[mood] ?? '#18180F'
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
 
-  for (let b = 0; b < beatIndex; b++) {
-    const isCurrentBeat = (b === beatIndex - 1)
-    const entryT        = isCurrentBeat ? clamp(beatT * 4, 0, 1) : 1
-    const yOffset       = isCurrentBeat ? 22 * (1 - spring(clamp(beatT * 3, 0, 1))) : 0
+  // Gold top bar
+  ctx.fillStyle = GOLD
+  ctx.fillRect(0, 0, W, 6)
 
-    ctx.globalAlpha = easeOut(entryT)
+  // Wordmark — fades in
+  ctx.globalAlpha = easeOut(t * 10)
+  ctx.fillStyle   = GOLD
+  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.letterSpacing = '7px'
+  ctx.fillText('BHAAVBRIEF', W/2, 68)
+  ctx.letterSpacing = '0px'
 
-    if (b < 2) {
-      // Beats 1 & 2: large body text
-      ctx.fillStyle = (b === 0) ? INK : INK_2
-      ctx.font = `${b === 0 ? 'bold ' : ''}${46 - b * 4}px "Inter", sans-serif`
-      ctx.textAlign = 'left'
-      const lines = wrapText(ctx, beats[b], W - 120)
-      let ty = yPositions[b] + yOffset
-      for (const l of lines.slice(0, 3)) { ctx.fillText(l, 60, ty); ty += 62 - b * 4 }
-    } else {
-      // Beat 3: WHAT TO WATCH — accent card, slides up
-      const cardY = yPositions[2] + yOffset
-      roundRect(ctx, 60, cardY, W-120, 230, 16)
-      ctx.fillStyle = '#F0EDDF'; ctx.fill()
-      ctx.strokeStyle = GOLD; ctx.lineWidth = 2; ctx.stroke()
+  const mover  = dominantMover(snapshot, copy?.dominant_instrument)
+  const isUp   = mover.changePct >= 0
+  const moveColor = isUp ? '#2ECC71' : '#E74C3C'
 
-      ctx.fillStyle = GOLD
-      ctx.font = 'bold 20px "Inter", sans-serif'
-      ctx.textAlign = 'left'
-      ctx.letterSpacing = '3px'
-      ctx.fillText('WATCH', 88, cardY + 46)
-      ctx.letterSpacing = '0px'
+  // Instrument label
+  ctx.globalAlpha = easeOut(t * 7)
+  ctx.fillStyle   = INK_6
+  ctx.font        = 'bold 28px "NotoSans", "Inter", sans-serif'
+  ctx.letterSpacing = '3px'
+  ctx.fillText(mover.label, W/2, 500)
+  ctx.letterSpacing = '0px'
 
-      ctx.fillStyle = INK
-      ctx.font = 'bold 32px "Inter", sans-serif'
-      const edgeLines = wrapText(ctx, beats[2], W - 176)
-      let ey = cardY + 96
-      for (const l of edgeLines.slice(0, 3)) { ctx.fillText(l, 88, ey); ey += 46 }
-    }
-  }
+  // THE BIG NUMBER — counts up from 0 to full delta
+  const countT    = easeOut(Math.min(1, t * 2.5))
+  const animDelta  = mover.delta * countT
+  const animPct    = mover.changePct * countT
+  const numScale   = 1 + 0.08 * (1 - easeOut(Math.min(1, t * 4)))
+
+  ctx.save()
+  ctx.translate(W/2, 660)
+  ctx.scale(numScale, numScale)
+  ctx.globalAlpha = easeOut(Math.min(1, t * 5))
+  ctx.fillStyle   = moveColor
+  ctx.font        = 'bold 108px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.fillText(`${isUp ? '▲' : '▼'} ${mover.fmtDelta(animDelta)}`, 0, 0)
+  ctx.restore()
+
+  // % change
+  ctx.globalAlpha = easeOut(Math.max(0, t * 6 - 0.5))
+  ctx.fillStyle   = moveColor
+  ctx.font        = '40px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.fillText(`${isUp ? '+' : ''}${animPct.toFixed(2)}% today`, W/2, 752)
+
+  // Divider
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.8))
+  ctx.strokeStyle = '#FFFFFF18'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(120, 810); ctx.lineTo(W-120, 810); ctx.stroke()
+
+  // Stat line — the punchline
+  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.0))
+  ctx.fillStyle   = CREAM
+  ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
+  const hookLines = wrapText(ctx, copy?.stat_line ?? '', W - 160)
+  let hy = 890
+  for (const l of hookLines.slice(0, 2)) { ctx.fillText(l, W/2, hy); hy += 70 }
+
+  // Edition chip
+  ctx.globalAlpha = easeOut(Math.max(0, t * 3 - 1.5))
+  ctx.fillStyle   = '#FFFFFF0C'
+  roundRect(ctx, W/2 - 80, H - 120, 160, 42, 21); ctx.fill()
+  ctx.fillStyle   = INK_6
+  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
+  ctx.fillText(`Edition #${edition}`, W/2, H - 90)
 
   ctx.globalAlpha = 1
+}
 
-  // Beat progress dots — 3 dots above footer, filled = seen
-  const dotR = 7, dotGap = 26, dotY = H - 108
-  const dotsX = W/2 - (3 * dotGap) / 2 + dotR
-  for (let d = 0; d < 3; d++) {
-    ctx.beginPath()
-    ctx.arc(dotsX + d * dotGap, dotY, dotR, 0, Math.PI * 2)
-    ctx.fillStyle = d < beatIndex ? GOLD : BORDER
-    ctx.fill()
-  }
+// ── Phase 2-4: BEAT screens — one idea per screen, lines animate in ───────────
+function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
+  const PAD = 68
+
+  ctx.fillStyle = CREAM
+  ctx.fillRect(0, 0, W, H)
+
+  // Shared header
+  drawHeader(ctx, snapshot, mood)
+
+  // Beat index label — e.g. "01 / 03"
+  ctx.fillStyle   = INK_4
+  ctx.font        = 'bold 16px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'right'
+  ctx.letterSpacing = '1px'
+  ctx.fillText(`0${beatIndex} / 03`, W - PAD, 56)
+  ctx.letterSpacing = '0px'
+
+  // Progress bar at bottom
+  const barY = H - 48, barH = 4, barX = PAD, barW = W - PAD * 2
+  ctx.fillStyle = BORDER
+  roundRect(ctx, barX, barY, barW, barH, 2); ctx.fill()
+  const fill = ((beatIndex - 1) / 3 + t / 3) * barW
+  ctx.fillStyle = GOLD
+  roundRect(ctx, barX, barY, Math.max(0, fill), barH, 2); ctx.fill()
 
   // Footer
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(60, H-70); ctx.lineTo(W-60, H-70); ctx.stroke()
-  ctx.fillStyle = INK_4; ctx.font = '20px "Inter", sans-serif'; ctx.textAlign = 'left'
-  ctx.fillText('bhaavbrief.in', 60, H-38)
-  ctx.fillStyle = GOLD; ctx.font = 'bold 20px "Inter", sans-serif'; ctx.textAlign = 'right'
-  ctx.fillText('MCX Intelligence · Daily', W-60, H-38)
+  ctx.beginPath(); ctx.moveTo(PAD, H - 70); ctx.lineTo(W - PAD, H - 70); ctx.stroke()
+  ctx.fillStyle = INK_4; ctx.font = '18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'left'
+  ctx.fillText('bhaavbrief.in', PAD, H - 40)
+  ctx.fillStyle = GOLD; ctx.font = 'bold 18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'right'
+  ctx.fillText('Daily MCX Intelligence', W - PAD, H - 40)
+
+  // Main text — large, vertically centered, lines animate in sequentially
+  ctx.font = 'bold 56px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign = 'left'
+  const lines = wrapText(ctx, text, W - PAD * 2)
+  const lineHeight = 76
+  const totalTextH = lines.length * lineHeight
+  const contentTop = 164  // below header
+  const contentBot = H - 90 // above footer
+  const startY = contentTop + (contentBot - contentTop - totalTextH) / 2 + lineHeight
+
+  lines.forEach((line, i) => {
+    // Each line appears at t = i/lines.length * 0.55, fully visible by t=0.7
+    const lineStartT = (i / Math.max(lines.length, 1)) * 0.55
+    const lineT      = Math.max(0, (t - lineStartT) / 0.18)
+    const alpha      = easeOut(Math.min(1, lineT))
+    const yShift     = (1 - spring(Math.min(1, lineT))) * 28
+
+    ctx.globalAlpha = alpha
+    ctx.fillStyle   = i === 0 ? INK : INK_2
+    ctx.fillText(line, PAD, startY + i * lineHeight - yShift)
+  })
+
+  ctx.globalAlpha = 1
 }
 
-// ── Phase 5: PAYOFF — dark, punchy close ─────────────────────────────────────
+// ── Phase 5: PAYOFF ───────────────────────────────────────────────────────────
 function drawPayoff(ctx, t, copy, mood) {
-  const bgColor = MOOD_COLOR[mood] ?? INK_2
-  ctx.fillStyle = bgColor
+  const bg = MOOD_BG[mood] ?? '#18180F'
+  ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
   ctx.fillStyle = GOLD
-  ctx.fillRect(0, 0, W, 8)
+  ctx.fillRect(0, 0, W, 6)
 
   // Wordmark
-  ctx.globalAlpha = clamp(t * 8, 0, 1)
+  ctx.globalAlpha = easeOut(t * 8)
   ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 26px "Inter", sans-serif'
+  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
-  ctx.fillText('BHAAVBRIEF', W/2, 100)
+  ctx.fillText('BHAAVBRIEF', W/2, 90)
   ctx.letterSpacing = '0px'
 
-  // The payoff line — the one they screenshot
-  const payA = easeOut(clamp(t * 5, 0, 1))
-  ctx.globalAlpha = payA
-  ctx.fillStyle   = CREAM
-  ctx.font        = 'bold 68px "Inter", sans-serif'
-  const payLines  = wrapText(ctx, copy.payoff, W - 140)
-  let py = 800
-  for (const l of payLines.slice(0, 3)) { ctx.fillText(l, W/2, py); py += 88 }
+  // Thin rule
+  ctx.globalAlpha = easeOut(Math.max(0, t * 6 - 0.3))
+  ctx.strokeStyle = '#FFFFFF15'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(140, 120); ctx.lineTo(W-140, 120); ctx.stroke()
 
-  // Separator
-  ctx.globalAlpha = clamp((t - 0.2) / 0.3, 0, 1)
-  ctx.strokeStyle = '#FFFFFF18'
-  ctx.lineWidth   = 1
-  ctx.beginPath(); ctx.moveTo(140, py + 28); ctx.lineTo(W-140, py + 28); ctx.stroke()
+  // Payoff text — the line people screenshot
+  const payLines = wrapText(ctx, copy.payoff ?? '', W - 140)
+  const lineH    = 90
+  const startY   = H / 2 - (payLines.length * lineH) / 2
 
-  // CTA
-  ctx.globalAlpha = clamp((t - 0.35) / 0.4, 0, 1)
-  ctx.fillStyle   = INK_6
-  ctx.font        = '32px "Inter", sans-serif'
-  ctx.fillText('Follow for daily MCX intelligence', W/2, py + 82)
+  payLines.forEach((line, i) => {
+    const lineT  = Math.max(0, (t - i * 0.12) * 6)
+    const alpha  = easeOut(Math.min(1, lineT))
+    const yShift = (1 - spring(Math.min(1, lineT))) * 32
+    ctx.globalAlpha = alpha
+    ctx.fillStyle   = CREAM
+    ctx.font        = `${i === 0 ? 'bold ' : ''}68px "NotoSans", "Inter", sans-serif`
+    ctx.textAlign   = 'center'
+    ctx.fillText(line, W/2, startY + i * lineH - yShift)
+  })
 
+  ctx.globalAlpha = 1
+}
+
+// ── Phase 6: CTA ──────────────────────────────────────────────────────────────
+function drawCTA(ctx, t, mood, edition) {
+  const bg = MOOD_BG[mood] ?? '#18180F'
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+  ctx.fillStyle = GOLD
+  ctx.fillRect(0, 0, W, 6)
+
+  const PAD = 80
+
+  // Large BHAAVBRIEF wordmark — the brand moment
+  ctx.globalAlpha = easeOut(t * 6)
   ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 36px "Inter", sans-serif'
-  ctx.fillText('@bhaavbrief  ·  bhaavbrief.in', W/2, py + 136)
+  ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.letterSpacing = '10px'
+  ctx.fillText('BHAAVBRIEF', W/2, H/2 - 120)
+  ctx.letterSpacing = '0px'
+
+  // Tagline
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.4))
+  ctx.fillStyle   = INK_6
+  ctx.font        = '32px "NotoSans", "Inter", sans-serif'
+  ctx.fillText('Daily MCX Intelligence', W/2, H/2 - 56)
+
+  // Rule
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.6))
+  ctx.strokeStyle = '#FFFFFF12'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(PAD, H/2 - 16); ctx.lineTo(W - PAD, H/2 - 16); ctx.stroke()
+
+  // Follow CTA
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.8))
+  ctx.fillStyle   = CREAM
+  ctx.font        = 'bold 34px "NotoSans", "Inter", sans-serif'
+  ctx.fillText('Follow for your daily edge', W/2, H/2 + 40)
+
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 1.0))
+  ctx.fillStyle   = GOLD
+  ctx.font        = '28px "NotoSans", "Inter", sans-serif'
+  ctx.fillText('@bhaavbrief  ·  bhaavbrief.in', W/2, H/2 + 90)
+
+  // Edition
+  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.2))
+  ctx.fillStyle   = INK_4
+  ctx.font        = '20px "NotoSans", "Inter", sans-serif'
+  ctx.fillText(`Edition #${edition}`, W/2, H/2 + 150)
 
   ctx.globalAlpha = 1
 }
@@ -507,25 +555,35 @@ function drawPayoff(ctx, t, copy, mood) {
 function renderFrame(frame, copy, data, snapshot, mood) {
   const canvas = createCanvas(W, H)
   const ctx    = canvas.getContext('2d')
+  const edition = data.edition ?? '?'
 
   if (frame < HOOK_END) {
-    drawHook(ctx, frame / HOOK_END, copy, data, snapshot, mood)
+    drawHook(ctx, frame / HOOK_END, copy, snapshot, mood, edition)
   } else if (frame < BEAT1_END) {
-    drawBeat(ctx, 1, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy, data, snapshot)
+    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood)
   } else if (frame < BEAT2_END) {
-    drawBeat(ctx, 2, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy, data, snapshot)
+    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood)
   } else if (frame < BEAT3_END) {
-    drawBeat(ctx, 3, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy, data, snapshot)
-  } else {
+    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood)
+  } else if (frame < PAYOFF_END) {
     drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood)
+  } else {
+    drawCTA(ctx, (frame - PAYOFF_END) / (CTA_END - PAYOFF_END), mood, edition)
   }
 
   return canvas.toBuffer('image/png')
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-const fontPath = join(ROOT, 'public/fonts/Inter-Bold.ttf')
-if (existsSync(fontPath)) GlobalFonts.registerFromPath(fontPath, 'Inter')
+// Register fonts — prefer NotoSans (better canvas rendering), fall back to Inter
+const notoB = join(ROOT, 'public/fonts/NotoSans-Bold.ttf')
+const notoR = join(ROOT, 'public/fonts/NotoSans-Regular.ttf')
+const interV = join(ROOT, 'public/fonts/Inter-Variable.ttf')
+const interB = join(ROOT, 'public/fonts/Inter-Bold.ttf')
+if (existsSync(notoB)) GlobalFonts.registerFromPath(notoB, 'NotoSans')
+if (existsSync(notoR)) GlobalFonts.registerFromPath(notoR, 'NotoSans')
+if (existsSync(interV)) GlobalFonts.registerFromPath(interV, 'Inter')
+if (existsSync(interB)) GlobalFonts.registerFromPath(interB, 'Inter')
 
 let edition = process.env.EDITION ? parseInt(process.env.EDITION) : null
 if (!edition) {
@@ -536,7 +594,7 @@ if (!edition) {
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  BhaavBrief — Reel Generator`)
-console.log(`  Edition #${edition}`)
+console.log(`  Edition #${edition}  (${TOTAL_DUR}s / ${TOTAL_FRAMES} frames)`)
 console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`)
 
 const { data, content, padded } = readBrief(edition)
@@ -552,12 +610,13 @@ console.log(`  → ${musicPath.split('/').slice(-2).join('/')}\n`)
 
 console.log('🤖  Extracting copy via Haiku...')
 const copy = await extractReelCopy({ data, content }, snapshot)
-console.log(`  stat:    "${copy.stat_line}"`)
-console.log(`  beat1:   "${copy.beat1}"`)
-console.log(`  beat2:   "${copy.beat2}"`)
-console.log(`  beat3:   "${copy.beat3}"`)
-console.log(`  payoff:  "${copy.payoff}"`)
-console.log(`  voice:   "${copy.voiceover}"\n`)
+console.log(`  hook_caption: "${copy.hook_caption}"`)
+console.log(`  stat:         "${copy.stat_line}"`)
+console.log(`  beat1:        "${copy.beat1}"`)
+console.log(`  beat2:        "${copy.beat2}"`)
+console.log(`  beat3:        "${copy.beat3}"`)
+console.log(`  payoff:       "${copy.payoff}"`)
+console.log(`  voice:        "${copy.voiceover}"\n`)
 
 const VO_FILE = join(ROOT, `.reel-vo-${padded}.mp3`)
 console.log('🎙️   Generating voiceover...')
@@ -580,25 +639,25 @@ for (let f = 0; f < TOTAL_FRAMES; f++) {
     join(FRAMES_DIR, `f${String(f).padStart(4,'0')}.png`),
     renderFrame(f, copy, data, snapshot, mood)
   )
-  if (f % 60 === 0) process.stdout.write(`  ${f}/${TOTAL_FRAMES}\n`)
+  if (f % 100 === 0) process.stdout.write(`  ${f}/${TOTAL_FRAMES}\n`)
 }
 console.log(`  ${TOTAL_FRAMES}/${TOTAL_FRAMES} — ${((Date.now()-t0)/1000).toFixed(1)}s\n`)
 
 console.log(`⚙️   Encoding (${mood}${voiceoverPath ? ' + voice' : ''})...`)
-const DUR = TOTAL_FRAMES / FPS
+const DUR  = TOTAL_FRAMES / FPS
 const args = ['-y', '-framerate', String(FPS), '-i', join(FRAMES_DIR, 'f%04d.png')]
 
 if (voiceoverPath) {
   args.push('-i', musicPath, '-i', voiceoverPath,
     '-filter_complex',
-    `[1:a]atrim=0:${DUR},afade=t=out:st=${DUR-2.0}:d=2.0,asetpts=PTS-STARTPTS,volume=0.18[music];` +
+    `[1:a]atrim=0:${DUR},afade=t=out:st=${DUR-2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
     `[2:a]atrim=0:${DUR-1.5},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
     `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
     '-map', '0:v', '-map', '[aout]'
   )
 } else {
   args.push('-i', musicPath,
-    '-af', `atrim=0:${DUR},afade=t=out:st=${DUR-1.5}:d=1.5,asetpts=PTS-STARTPTS`
+    '-af', `atrim=0:${DUR},afade=t=out:st=${DUR-2.0}:d=2.0,asetpts=PTS-STARTPTS`
   )
 }
 
@@ -609,7 +668,7 @@ execFileSync('ffmpeg', args, { stdio: 'pipe' })
 rmSync(FRAMES_DIR, { recursive: true })
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
-// Caption sidecar
+// Caption — hook_caption as first line (the scroll-stopper)
 const TAG_MAP = {
   'MCX Gold':'#MCXGold','MCX Silver':'#MCXSilver','MCX Crude':'#MCXCrude',
   'MCX Copper':'#MCXCopper','MCX NatGas':'#MCXNatGas','Macro':'#MacroEconomics',
@@ -623,12 +682,15 @@ const hashtags = [
 
 const slug    = data.urlSlug ?? `edition-${padded}`
 const caption = [
-  copy.stat_line ?? data.title, '',
+  copy.hook_caption ?? copy.stat_line ?? data.title,
+  '',
   copy.beat1,
-  copy.beat2, '',
-  `Watch: ${copy.beat3}`, '',
-  `Full brief → bhaavbrief.in/briefs/${slug} 👇`, '',
-  'Music: Kevin MacLeod (incompetech.com) CC-BY 4.0', '',
+  copy.beat2,
+  '',
+  `Watch: ${copy.beat3}`,
+  '',
+  `Full brief → bhaavbrief.in/briefs/${slug} 👇`,
+  '',
   hashtags,
 ].join('\n')
 
