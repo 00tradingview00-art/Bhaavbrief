@@ -33,6 +33,8 @@ interface OptionsData {
 
 // ── Formatters ────────────────────────────────────────────────────────────────
 
+const numStyle: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums' }
+
 const fmtINR = (n: number|null|undefined, dec = 0) =>
   n == null || isNaN(n) ? '·' : '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
 
@@ -42,126 +44,111 @@ const fmtN = (n: number|null|undefined, dec = 2) =>
 const fmtOI = (n: number) =>
   !n ? '·' : n >= 100000 ? (n / 100000).toFixed(1) + 'L' : n >= 1000 ? (n / 1000).toFixed(1) + 'K' : String(n)
 
-// ── Design tokens (matching bhaav.css) ────────────────────────────────────────
+const fmtChng = (n: number) =>
+  n > 0 ? `+${fmtN(n)}` : n < 0 ? fmtN(n) : '·'
 
-const T = {
-  ink:       'var(--ink)',
-  ink2:      'var(--ink-2)',
-  ink3:      'var(--ink-3)',
-  ink4:      'var(--ink-4)',
-  surface:   'var(--surface)',
-  surface2:  'var(--surface-2)',
-  surface3:  'var(--surface-3)',
-  border:    'var(--border)',
-  border2:   'var(--border-2)',
-  gold:      'var(--gold)',
-  goldPale:  'var(--gold-pale)',
-  up:        'var(--up)',
-  upBg:      'var(--up-bg)',
-  down:      'var(--down)',
-  downBg:    'var(--down-bg)',
-  mono:      'var(--font-sans)',
-  sans:      'var(--font-sans)',
+const fmtOIChng = (n: number) =>
+  n > 0 ? `+${fmtOI(n)}` : n < 0 ? `-${fmtOI(Math.abs(n))}` : '·'
+
+// ── Design tokens ─────────────────────────────────────────────────────────────
+
+const C = {
+  ink:     'var(--ink)',
+  ink2:    'var(--ink-2)',
+  ink3:    'var(--ink-3)',
+  ink4:    'var(--ink-4)',
+  surf:    'var(--surface)',
+  surf2:   'var(--surface-2)',
+  surf3:   'var(--surface-3)',
+  bdr:     'var(--border)',
+  bdr2:    'var(--border-2)',
+  gold:    'var(--gold)',
+  goldPl:  'var(--gold-pale)',
+  up:      'var(--up)',
+  upBg:    'var(--up-bg)',
+  dn:      'var(--down)',
+  dnBg:    'var(--down-bg)',
+  sans:    'var(--font-sans)',
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// ── Shared cell padding ───────────────────────────────────────────────────────
 
-function OIBar({ oi, max, side }: { oi: number; max: number; side: 'CE'|'PE' }) {
-  const pct = max > 0 ? Math.min((oi / max) * 100, 100) : 0
-  return (
-    <div style={{ height: 2, background: T.border, borderRadius: 1, marginTop: 4, overflow: 'hidden', position: 'relative' }}>
-      <div style={{
-        position: 'absolute', top: 0, height: '100%', width: `${pct}%`,
-        background: side === 'CE' ? T.down : T.up, borderRadius: 1,
-        [side === 'CE' ? 'right' : 'left']: 0,
-      }} />
-    </div>
-  )
-}
+const PAD: React.CSSProperties = { padding: '6px 8px' }
+const ITM_BG = C.goldPl
 
-function MetricPill({ label, value, color, onClick, expand }: { label: string; value: React.ReactNode; color?: string; onClick?: () => void; expand?: boolean }) {
-  return (
-    <div onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column', gap: 1, padding: '5px 14px', borderRight: `1px solid ${T.border}` }}>
-      <span style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: T.ink4, fontFamily: T.sans, fontWeight: 500 }}>
-        {label}{expand != null && <span style={{ marginLeft: 4 }}>{expand ? '▲' : '▼'}</span>}
-      </span>
-      <span style={{ fontSize: 13, fontWeight: 600, color: color ?? T.ink, fontFamily: T.mono, lineHeight: 1.2 }}>{value}</span>
-    </div>
-  )
-}
+// ── Column header ─────────────────────────────────────────────────────────────
 
-function PCRChip({ pcr }: { pcr: number }) {
-  const label = pcr > 1.2 ? 'Bullish' : pcr < 0.8 ? 'Bearish' : 'Neutral'
-  const color = pcr > 1.2 ? T.up : pcr < 0.8 ? T.down : 'var(--saffron)'
-  const bg    = pcr > 1.2 ? T.upBg : pcr < 0.8 ? T.downBg : T.goldPale
-  return (
-    <div style={{ padding: '5px 14px', borderRight: `1px solid ${T.border}`, display: 'flex', flexDirection: 'column', gap: 1 }}>
-      <span style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: T.ink4, fontFamily: T.sans, fontWeight: 500 }}>PCR</span>
-      <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: T.ink, fontFamily: T.mono }}>{pcr}</span>
-        <span style={{ fontSize: 10, fontWeight: 600, color, background: bg, padding: '1px 6px', borderRadius: 3 }}>{label}</span>
-      </span>
-    </div>
-  )
-}
-
-function LTPCell({ ltp, chng, itm, align }: { ltp: number; chng: number; itm: boolean; align: 'left'|'right' }) {
-  const itmBg = itm ? T.goldPale : 'transparent'
-  const numStyle: React.CSSProperties = { fontFamily: T.mono, fontVariantNumeric: 'tabular-nums' }
-  if (!ltp) return <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, color: T.ink4, ...numStyle, fontSize: 12 }}>·</td>
-  const chngColor = chng > 0 ? T.up : chng < 0 ? T.down : T.ink3
-  const chngStr   = chng > 0 ? `+${fmtN(chng)}` : chng < 0 ? fmtN(chng) : null
-  return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itmBg }}>
-      <div style={{ fontWeight: 600, fontSize: 12, color: T.ink, ...numStyle }}>{fmtN(ltp)}</div>
-      {chngStr && <div style={{ fontSize: 10, color: chngColor, ...numStyle, marginTop: 1 }}>{chngStr}</div>}
-    </td>
-  )
-}
-
-function OICell({ oi, oiChange, max, side, itm, align }: { oi: number; oiChange: number; max: number; side: 'CE'|'PE'; itm: boolean; align: 'left'|'right' }) {
-  const itmBg     = itm ? T.goldPale : 'transparent'
-  const chngColor = oiChange > 0 ? T.up : oiChange < 0 ? T.down : T.ink4
-  const chngStr   = oiChange !== 0 ? (oiChange > 0 ? '+' : '') + fmtOI(Math.abs(oiChange)) : null
-  const numStyle: React.CSSProperties = { fontFamily: T.mono, fontVariantNumeric: 'tabular-nums' }
-  return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, minWidth: 62 }}>
-      <div style={{ fontSize: 12, color: T.ink2, ...numStyle }}>{fmtOI(oi)}</div>
-      {chngStr && <div style={{ fontSize: 10, color: chngColor, ...numStyle, marginTop: 1 }}>{chngStr}</div>}
-      <OIBar oi={oi} max={max} side={side} />
-    </td>
-  )
-}
-
-function GreekCell({ value, itm, align }: { value: number|null; itm: boolean; align: 'left'|'right' }) {
-  return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 11 }}>
-      {value != null ? fmtN(value, 3) : '·'}
-    </td>
-  )
-}
-
-function IVCell({ iv, itm, align }: { iv: number|null; itm: boolean; align: 'left'|'right' }) {
-  return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 11 }}>
-      {iv != null ? iv + '%' : '·'}
-    </td>
-  )
-}
-
-// Column header helper
-function TH({ children, align = 'right', style }: { children: React.ReactNode; align?: 'left'|'right'|'center'; style?: React.CSSProperties }) {
+function TH({ children, align = 'right', extra }: { children: React.ReactNode; align?: 'left'|'right'|'center'; extra?: React.CSSProperties }) {
   return (
     <th style={{
-      padding: '5px 10px', textAlign: align, fontSize: 10, fontWeight: 500,
-      color: T.ink3, whiteSpace: 'nowrap', fontFamily: T.sans,
-      letterSpacing: '0.03em', borderBottom: `1px solid ${T.border}`,
-      background: T.surface2, ...style
+      ...PAD, textAlign: align, fontSize: 10, fontWeight: 500, color: C.ink3,
+      fontFamily: C.sans, letterSpacing: '0.02em', whiteSpace: 'nowrap',
+      background: C.surf2, borderBottom: `1px solid ${C.bdr}`, ...extra,
     }}>{children}</th>
   )
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// ── Data cells ────────────────────────────────────────────────────────────────
+
+function Td({ children, align = 'right', bg, bold, color, small }: {
+  children: React.ReactNode; align?: 'left'|'right'|'center'
+  bg?: string; bold?: boolean; color?: string; small?: boolean
+}) {
+  return (
+    <td style={{
+      ...PAD, textAlign: align, background: bg ?? 'transparent',
+      ...numStyle, fontSize: small ? 11 : 12,
+      fontWeight: bold ? 600 : 400,
+      color: color ?? C.ink2,
+    }}>{children}</td>
+  )
+}
+
+// ── OI bar ────────────────────────────────────────────────────────────────────
+
+function OIBar({ oi, max, side }: { oi: number; max: number; side: 'CE'|'PE' }) {
+  const pct = max > 0 ? Math.min((oi / max) * 100, 100) : 0
+  return (
+    <div style={{ height: 2, background: C.bdr, borderRadius: 1, marginTop: 3, overflow: 'hidden', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, height: '100%', width: `${pct}%`, background: side === 'CE' ? C.dn : C.up, borderRadius: 1, [side === 'CE' ? 'right' : 'left']: 0 }} />
+    </div>
+  )
+}
+
+// ── Metric pill in analytics bar ──────────────────────────────────────────────
+
+function Pill({ label, value, color, onClick, expand }: {
+  label: string; value: React.ReactNode; color?: string; onClick?: () => void; expand?: boolean
+}) {
+  return (
+    <div onClick={onClick} style={{
+      cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column',
+      gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0,
+    }}>
+      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>
+        {label}{expand != null && <span style={{ marginLeft: 4 }}>{expand ? '▲' : '▼'}</span>}
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: color ?? C.ink, fontFamily: C.sans, ...numStyle, lineHeight: 1.2 }}>{value}</span>
+    </div>
+  )
+}
+
+function PCRPill({ pcr }: { pcr: number }) {
+  const label = pcr > 1.2 ? 'Bullish' : pcr < 0.8 ? 'Bearish' : 'Neutral'
+  const color = pcr > 1.2 ? C.up : pcr < 0.8 ? C.dn : 'var(--saffron)'
+  const bg    = pcr > 1.2 ? C.upBg : pcr < 0.8 ? C.dnBg : C.goldPl
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0 }}>
+      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>PCR</span>
+      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: C.ink, fontFamily: C.sans, ...numStyle }}>{pcr}</span>
+        <span style={{ fontSize: 10, fontWeight: 600, color, background: bg, padding: '1px 6px', borderRadius: 3, fontFamily: C.sans }}>{label}</span>
+      </span>
+    </div>
+  )
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function OptionChain({ isPro }: { isPro: boolean }) {
   const [instrument, setInstrument] = useState('GOLD')
@@ -191,21 +178,25 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
   if (!isPro) {
     return (
-      <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: `1px solid ${T.border}` }}>
-        <div style={{ filter: 'blur(5px)', opacity: 0.4, pointerEvents: 'none', maxHeight: 180, overflow: 'hidden', background: T.surface, padding: 24 }}>
+      <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: `1px solid ${C.bdr}` }}>
+        <div style={{ filter: 'blur(5px)', opacity: 0.4, pointerEvents: 'none', maxHeight: 180, overflow: 'hidden', background: C.surf, padding: 24 }}>
           {[116500, 117000, 117500, 118000].map(s => (
-            <div key={s} style={{ display: 'flex', gap: 40, padding: '5px 0', borderBottom: `1px solid ${T.border}`, fontFamily: T.mono, fontSize: 12 }}>
-              <span style={{ color: T.down }}>28{(116500 - s) / 100 + 28}</span>
-              <span style={{ color: T.ink, fontWeight: 600 }}>{s.toLocaleString('en-IN')}</span>
-              <span style={{ color: T.up }}>1.{(s - 116000) / 500}</span>
+            <div key={s} style={{ display: 'flex', gap: 24, padding: '5px 0', borderBottom: `1px solid ${C.bdr}`, fontFamily: C.sans, fontSize: 12, ...numStyle }}>
+              <span style={{ color: C.dn, width: 60, textAlign: 'right' }}>28,000</span>
+              <span style={{ color: C.dn, width: 50, textAlign: 'right' }}>-500</span>
+              <span style={{ color: C.ink3, width: 40, textAlign: 'right' }}>24%</span>
+              <span style={{ color: C.ink, fontWeight: 700, width: 80, textAlign: 'center' }}>{s.toLocaleString('en-IN')}</span>
+              <span style={{ color: C.up, width: 60 }}>1,200</span>
+              <span style={{ color: C.up, width: 50 }}>+300</span>
+              <span style={{ color: C.ink3, width: 40 }}>22%</span>
             </div>
           ))}
         </div>
         <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.88)' }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: T.sans, fontSize: 16, fontWeight: 600, color: T.ink, marginBottom: 6 }}>BhaavBrief Pro</div>
-            <div style={{ fontFamily: T.sans, fontSize: 13, color: T.ink3, marginBottom: 20 }}>Live MCX option chain — Greeks, iVIX, Max Pain, PCR</div>
-            <a href="/pro" style={{ display: 'inline-block', background: T.gold, color: '#fff', fontFamily: T.sans, fontWeight: 600, fontSize: 13, padding: '9px 22px', borderRadius: 5, textDecoration: 'none' }}>Upgrade to Pro →</a>
+            <div style={{ fontFamily: C.sans, fontSize: 16, fontWeight: 600, color: C.ink, marginBottom: 6 }}>BhaavBrief Pro</div>
+            <div style={{ fontFamily: C.sans, fontSize: 13, color: C.ink3, marginBottom: 20 }}>Live MCX option chain — Greeks, iVIX, Max Pain, PCR</div>
+            <a href="/pro" style={{ display: 'inline-block', background: C.gold, color: '#fff', fontFamily: C.sans, fontWeight: 600, fontSize: 13, padding: '9px 22px', borderRadius: 5, textDecoration: 'none' }}>Upgrade to Pro →</a>
           </div>
         </div>
       </div>
@@ -214,61 +205,43 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
   const maxCEOI = data?.chain?.length ? Math.max(...data.chain.map(r => r.CE.oi), 1) : 1
   const maxPEOI = data?.chain?.length ? Math.max(...data.chain.map(r => r.PE.oi), 1) : 1
+  const vpColor = data?.volPremium == null ? C.ink3 : data.volPremium > 2 ? 'var(--saffron)' : data.volPremium < -2 ? C.up : C.ink3
+  const vpStr   = data?.volPremium != null ? (data.volPremium > 0 ? '+' : '') + data.volPremium : '·'
 
-  const vpColor = data?.volPremium == null ? T.ink3
-    : data.volPremium > 2 ? 'var(--saffron)'
-    : data.volPremium < -2 ? T.up : T.ink3
-
-  const vpStr = data?.volPremium != null
-    ? (data.volPremium > 0 ? '+' : '') + data.volPremium
-    : '—'
+  // Default columns: OI | Chng OI | Vol | LTP | Chng | IV%  (6 per side)
+  // Greeks adds: Delta | Theta                               (2 more per side)
+  const ceCols = showGreeks ? 8 : 6
+  const peCols = showGreeks ? 8 : 6
 
   return (
-    <div style={{ background: T.surface, borderRadius: 8, border: `1px solid ${T.border}`, overflow: 'hidden', fontFamily: T.sans, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+    <div style={{ background: C.surf, borderRadius: 8, border: `1px solid ${C.bdr}`, overflow: 'hidden', fontFamily: C.sans, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
 
       {/* ── Controls ── */}
-      <div style={{ padding: '10px 14px', borderBottom: `1px solid ${T.border}`, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: T.surface2 }}>
+      <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: C.surf2 }}>
         <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           {INSTRUMENTS.map(({ key, label }) => (
             <button key={key} onClick={() => setInstrument(key)} style={{
-              padding: '5px 12px', fontSize: 12, fontWeight: 500, borderRadius: 5,
-              cursor: 'pointer', fontFamily: T.sans, letterSpacing: '0.01em',
-              border: instrument === key ? `1px solid ${T.gold}` : `1px solid ${T.border}`,
-              background: instrument === key ? T.gold : 'transparent',
-              color: instrument === key ? '#fff' : T.ink3,
-              transition: 'all .15s',
+              padding: '5px 12px', fontSize: 12, fontWeight: 500, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+              border: instrument === key ? `1px solid ${C.gold}` : `1px solid ${C.bdr}`,
+              background: instrument === key ? C.gold : 'transparent',
+              color: instrument === key ? '#fff' : C.ink3,
             }}>{label}</button>
           ))}
         </div>
-
         {data?.expiries && (
-          <select value={expiry || data.expiry} onChange={e => setExpiry(e.target.value)} style={{
-            background: T.surface, color: T.ink2, border: `1px solid ${T.border}`,
-            borderRadius: 5, padding: '5px 8px', fontSize: 12, fontFamily: T.sans,
-          }}>
+          <select value={expiry || data.expiry} onChange={e => setExpiry(e.target.value)}
+            style={{ background: C.surf, color: C.ink2, border: `1px solid ${C.bdr}`, borderRadius: 5, padding: '5px 8px', fontSize: 12, fontFamily: C.sans }}>
             {data.expiries.map(e => <option key={e} value={e}>{e}</option>)}
           </select>
         )}
-
         <button onClick={() => setShowGreeks(g => !g)} style={{
-          padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer',
-          fontFamily: T.sans, border: `1px solid ${T.border}`,
-          background: showGreeks ? T.goldPale : 'transparent',
-          color: showGreeks ? T.gold : T.ink3,
-        }}>
-          Greeks {showGreeks ? '▲' : '▼'}
-        </button>
-
+          padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+          border: `1px solid ${C.bdr}`, background: showGreeks ? C.goldPl : 'transparent',
+          color: showGreeks ? C.gold : C.ink3,
+        }}>Greeks {showGreeks ? '▲' : '▼'}</button>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
-          {lastRefresh && (
-            <span style={{ fontSize: 11, color: T.ink4, fontFamily: T.mono }}>
-              {lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST
-            </span>
-          )}
-          <button onClick={fetchData} disabled={loading} style={{
-            background: 'none', border: `1px solid ${T.border}`, borderRadius: 4,
-            color: T.ink3, fontSize: 11, cursor: 'pointer', padding: '3px 8px', fontFamily: T.sans,
-          }}>
+          {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
+          <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: '3px 8px', fontFamily: C.sans }}>
             {loading ? 'Loading…' : '↻ Refresh'}
           </button>
         </div>
@@ -276,84 +249,73 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
       {/* ── Analytics strip ── */}
       {data && (
-        <div style={{ borderBottom: `1px solid ${T.border}`, display: 'flex', overflowX: 'auto', background: T.surface }}>
-          <MetricPill label="Underlying" value={fmtINR(data.futurePrice)} />
-          <MetricPill label="Max Pain" value={fmtINR(data.maxPain)} color={T.gold} />
-          <PCRChip pcr={data.pcr} />
-          {data.ivix != null && <MetricPill label="iVIX" value={data.ivix} color="#6941c6" />}
-          {data.aav['20d'] != null && (
-            <MetricPill label="AAV 20d" value={data.aav['20d']} color="#0369a1"
-              onClick={() => setShowAAV(v => !v)} expand={showAAV} />
-          )}
-          {data.volPremium != null && <MetricPill label="Vol Premium" value={vpStr} color={vpColor} />}
-          <div style={{ padding: '5px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1, marginLeft: 'auto' }}>
-            <span style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: T.ink4, fontFamily: T.sans, fontWeight: 500 }}>Status</span>
-            <span style={{ fontSize: 12, fontWeight: 600, fontFamily: T.mono, color: data.marketOpen ? T.up : T.ink4 }}>
-              ● {data.marketOpen ? 'Live' : 'Closed'}
-            </span>
+        <div style={{ borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none' }}>
+          <Pill label="Underlying" value={fmtINR(data.futurePrice)} />
+          <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold} />
+          <PCRPill pcr={data.pcr} />
+          {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6" />}
+          {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV} />}
+          {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor} />}
+          <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
+            <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>Status</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: data.marketOpen ? C.up : C.ink4, ...numStyle }}>● {data.marketOpen ? 'Live' : 'Closed'}</span>
           </div>
         </div>
       )}
 
       {/* ── AAV breakdown ── */}
       {data && showAAV && (
-        <div style={{ padding: '8px 14px', borderBottom: `1px solid ${T.border}`, display: 'flex', flexWrap: 'wrap', gap: '4px 24px', alignItems: 'center', background: T.surface2 }}>
-          <span style={{ fontSize: 10, color: T.ink4, fontFamily: T.sans, letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>Annualized Actual Vol</span>
+        <div style={{ padding: '7px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', flexWrap: 'wrap', gap: '4px 24px', alignItems: 'center', background: C.surf2 }}>
+          <span style={{ fontSize: 10, color: C.ink4, fontFamily: C.sans, letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>Annualized Actual Volatility</span>
           {(['5d','10d','20d','40d','60d'] as const).map(w => (
-            <span key={w} style={{ fontFamily: T.mono, fontSize: 12 }}>
-              <span style={{ color: T.ink4, fontSize: 10 }}>{w} </span>
-              <span style={{ color: w === '20d' ? '#0369a1' : T.ink2, fontWeight: 600 }}>{data.aav[w] ?? '—'}</span>
+            <span key={w} style={{ fontSize: 12, ...numStyle }}>
+              <span style={{ color: C.ink4, fontSize: 10 }}>{w} </span>
+              <span style={{ color: w === '20d' ? '#0369a1' : C.ink2, fontWeight: 600 }}>{data.aav[w] ?? '·'}</span>
             </span>
           ))}
         </div>
       )}
 
-      {error && <div style={{ padding: '10px 14px', color: T.down, fontSize: 12, fontFamily: T.sans }}>{error}</div>}
+      {error && <div style={{ padding: '10px 14px', color: C.dn, fontSize: 12, fontFamily: C.sans }}>{error}</div>}
 
       {/* ── ITM note ── */}
       {data?.chain && (
-        <div style={{ padding: '5px 14px', borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: T.ink4, fontFamily: T.sans, background: T.surface2 }}>
-          <span style={{ display: 'inline-block', width: 10, height: 10, background: T.goldPale, border: `1px solid ${T.gold}`, borderRadius: 2, opacity: 0.7 }} />
-          Highlighted rows are in-the-money
+        <div style={{ padding: '4px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: C.ink4, fontFamily: C.sans, background: C.surf2 }}>
+          <span style={{ display: 'inline-block', width: 10, height: 10, background: ITM_BG, border: `1px solid ${C.gold}`, borderRadius: 2, opacity: 0.7 }} />
+          Highlighted rows are in-the-money · ATM = nearest to futures price · MAX PAIN = max option writer profit
         </div>
       )}
 
       {/* ── Table ── */}
       {data?.chain && (
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: T.sans }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
             <thead>
-              {/* CALLS / PUTS section header */}
+              {/* Section headers */}
               <tr>
-                <th colSpan={showGreeks ? 5 : 3} style={{
-                  padding: '6px 10px', textAlign: 'center', fontSize: 9,
-                  fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
-                  color: T.down, background: T.downBg, borderBottom: `1px solid ${T.border}`,
-                  borderRight: `2px solid ${T.border2}`,
-                }}>Calls</th>
-                <th style={{
-                  padding: '6px 10px', fontSize: 9, fontWeight: 600,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: T.ink3, background: T.surface2, borderBottom: `1px solid ${T.border}`,
-                  textAlign: 'center',
-                }}>Strike</th>
-                <th colSpan={showGreeks ? 5 : 3} style={{
-                  padding: '6px 10px', textAlign: 'center', fontSize: 9,
-                  fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase',
-                  color: T.up, background: T.upBg, borderBottom: `1px solid ${T.border}`,
-                  borderLeft: `2px solid ${T.border2}`,
-                }}>Puts</th>
+                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
+                <th style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
+                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
               </tr>
               {/* Column names */}
               <tr>
+                {/* CE columns */}
                 <TH align="right">OI</TH>
+                <TH align="right">Chng OI</TH>
                 <TH align="right">Vol</TH>
-                <TH align="right" style={{ borderRight: `2px solid ${T.border2}` }}>LTP</TH>
-                {showGreeks && <><TH align="right">IV</TH><TH align="right" style={{ borderRight: `2px solid ${T.border2}` }}>Delta</TH></>}
-                <TH align="center" style={{ color: T.ink2, fontWeight: 600, minWidth: 90 }}>Price</TH>
-                {showGreeks && <><TH align="left" style={{ borderLeft: `2px solid ${T.border2}` }}>Delta</TH><TH align="left">IV</TH></>}
-                <TH align="left" style={{ borderLeft: `2px solid ${T.border2}` }}>LTP</TH>
+                <TH align="right">LTP</TH>
+                <TH align="right">Chng</TH>
+                <TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>IV%</TH>
+                {showGreeks && <><TH align="right">Delta</TH><TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>Theta</TH></>}
+                {/* Strike */}
+                <TH align="center" extra={{ color: C.ink2, fontWeight: 600, minWidth: 90 }}>Price</TH>
+                {/* PE columns */}
+                {showGreeks && <><TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>Delta</TH><TH align="left">Theta</TH></>}
+                <TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>IV%</TH>
+                <TH align="left">Chng</TH>
+                <TH align="left">LTP</TH>
                 <TH align="left">Vol</TH>
+                <TH align="left">Chng OI</TH>
                 <TH align="left">OI</TH>
               </tr>
             </thead>
@@ -361,47 +323,83 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
               {data.chain.map(row => {
                 const { isATM, isITM_CE, isITM_PE } = row
                 const isMP  = row.strike === data.maxPain
-                const itmBg = T.goldPale
+                const ceBg  = isITM_CE ? ITM_BG : 'transparent'
+                const peBg  = isITM_PE ? ITM_BG : 'transparent'
+                const sBg   = isATM ? C.goldPl : isMP ? '#f5f3ff' : (isITM_CE || isITM_PE) ? ITM_BG : 'transparent'
+                const sCol  = isATM ? C.gold : isMP ? '#6941c6' : C.ink
+                const atmBT = isATM ? `2px solid ${C.gold}` : undefined
 
-                const strikeBg    = isATM ? T.goldPale : isMP ? '#f5f3ff' : 'transparent'
-                const strikeColor = isATM ? T.gold : isMP ? '#6941c6' : T.ink
-                const atmBorderTop = isATM ? `2px solid ${T.gold}` : undefined
+                const ceChngColor = row.CE.absChng > 0 ? C.up : row.CE.absChng < 0 ? C.dn : C.ink4
+                const peChngColor = row.PE.absChng > 0 ? C.up : row.PE.absChng < 0 ? C.dn : C.ink4
+                const ceOIColor   = row.CE.oiChange > 0 ? C.up : row.CE.oiChange < 0 ? C.dn : C.ink4
+                const peOIColor   = row.PE.oiChange > 0 ? C.up : row.PE.oiChange < 0 ? C.dn : C.ink4
 
                 return (
-                  <tr key={row.strike} style={{ borderBottom: `1px solid ${T.border}`, borderTop: atmBorderTop }}>
-                    {/* CE side */}
-                    <OICell oi={row.CE.oi} oiChange={row.CE.oiChange} max={maxCEOI} side="CE" itm={isITM_CE} align="right" />
-                    <td style={{ padding: '7px 10px', textAlign: 'right', background: isITM_CE ? itmBg : 'transparent', color: T.ink2, fontFamily: T.mono }}>{fmtOI(row.CE.volume)}</td>
-                    <LTPCell ltp={row.CE.ltp} chng={row.CE.absChng} itm={isITM_CE} align="right" />
+                  <tr key={row.strike} style={{ borderBottom: `1px solid ${C.bdr}`, borderTop: atmBT }}>
+                    {/* ── CE side ── */}
+                    {/* OI */}
+                    <td style={{ ...PAD, textAlign: 'right', background: ceBg, minWidth: 56 }}>
+                      <div style={{ ...numStyle, fontSize: 12, color: C.ink2 }}>{fmtOI(row.CE.oi)}</div>
+                      <OIBar oi={row.CE.oi} max={maxCEOI} side="CE" />
+                    </td>
+                    {/* Chng OI */}
+                    <Td align="right" bg={ceBg} color={ceOIColor} small>{fmtOIChng(row.CE.oiChange)}</Td>
+                    {/* Vol */}
+                    <Td align="right" bg={ceBg} color={C.ink3}>{fmtOI(row.CE.volume)}</Td>
+                    {/* LTP */}
+                    <Td align="right" bg={ceBg} bold color={row.CE.ltp ? C.ink : C.ink4}>{row.CE.ltp ? fmtN(row.CE.ltp) : '·'}</Td>
+                    {/* Chng */}
+                    <Td align="right" bg={ceBg} color={ceChngColor} small>{fmtChng(row.CE.absChng)}</Td>
+                    {/* IV% */}
+                    <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                      {row.CE.iv != null ? row.CE.iv + '%' : '·'}
+                    </td>
+                    {/* Greeks */}
                     {showGreeks && (
                       <>
-                        <IVCell iv={row.CE.iv} itm={isITM_CE} align="right" />
-                        <GreekCell value={row.CE.delta} itm={isITM_CE} align="right" />
+                        <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.delta != null ? fmtN(row.CE.delta, 3) : '·'}</Td>
+                        <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                          {row.CE.theta != null ? fmtN(row.CE.theta, 3) : '·'}
+                        </td>
                       </>
                     )}
 
-                    {/* Strike */}
-                    <td style={{
-                      padding: '7px 12px', textAlign: 'center', background: strikeBg,
-                      borderLeft: `2px solid ${T.border2}`, borderRight: `2px solid ${T.border2}`,
-                    }}>
-                      <span style={{ fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 13, fontWeight: 700, color: strikeColor }}>
+                    {/* ── Strike ── */}
+                    <td style={{ ...PAD, textAlign: 'center', background: sBg, borderLeft: `2px solid ${C.bdr2}`, borderRight: `2px solid ${C.bdr2}` }}>
+                      <span style={{ ...numStyle, fontSize: 13, fontWeight: 700, color: sCol }}>
                         {Number(row.strike).toLocaleString('en-IN')}
                       </span>
-                      {isATM && <div style={{ fontSize: 9, fontFamily: T.sans, fontWeight: 600, color: T.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
-                      {isMP  && !isATM && <div style={{ fontSize: 9, fontFamily: T.sans, fontWeight: 600, color: '#6941c6', letterSpacing: '0.06em', marginTop: 2 }}>MAX PAIN</div>}
+                      {isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: C.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
+                      {isMP && !isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: '#6941c6', letterSpacing: '0.06em', marginTop: 2 }}>MAX PAIN</div>}
                     </td>
 
-                    {/* PE side */}
+                    {/* ── PE side ── */}
+                    {/* Greeks */}
                     {showGreeks && (
                       <>
-                        <GreekCell value={row.PE.delta} itm={isITM_PE} align="left" />
-                        <IVCell iv={row.PE.iv} itm={isITM_PE} align="left" />
+                        <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                          {row.PE.delta != null ? fmtN(row.PE.delta, 3) : '·'}
+                        </td>
+                        <Td align="left" bg={peBg} color={C.ink3} small>{row.PE.theta != null ? fmtN(row.PE.theta, 3) : '·'}</Td>
                       </>
                     )}
-                    <LTPCell ltp={row.PE.ltp} chng={row.PE.absChng} itm={isITM_PE} align="left" />
-                    <td style={{ padding: '7px 10px', textAlign: 'left', background: isITM_PE ? itmBg : 'transparent', color: T.ink2, fontFamily: T.mono }}>{fmtOI(row.PE.volume)}</td>
-                    <OICell oi={row.PE.oi} oiChange={row.PE.oiChange} max={maxPEOI} side="PE" itm={isITM_PE} align="left" />
+                    {/* IV% */}
+                    <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                      {row.PE.iv != null ? row.PE.iv + '%' : '·'}
+                    </td>
+                    {/* Chng */}
+                    <Td align="left" bg={peBg} color={peChngColor} small>{fmtChng(row.PE.absChng)}</Td>
+                    {/* LTP */}
+                    <Td align="left" bg={peBg} bold color={row.PE.ltp ? C.ink : C.ink4}>{row.PE.ltp ? fmtN(row.PE.ltp) : '·'}</Td>
+                    {/* Vol */}
+                    <Td align="left" bg={peBg} color={C.ink3}>{fmtOI(row.PE.volume)}</Td>
+                    {/* Chng OI */}
+                    <Td align="left" bg={peBg} color={peOIColor} small>{fmtOIChng(row.PE.oiChange)}</Td>
+                    {/* OI */}
+                    <td style={{ ...PAD, textAlign: 'left', background: peBg, minWidth: 56 }}>
+                      <div style={{ ...numStyle, fontSize: 12, color: C.ink2 }}>{fmtOI(row.PE.oi)}</div>
+                      <OIBar oi={row.PE.oi} max={maxPEOI} side="PE" />
+                    </td>
                   </tr>
                 )
               })}
@@ -411,7 +409,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       )}
 
       {/* ── Footer ── */}
-      <div style={{ padding: '8px 14px', borderTop: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: T.ink4, background: T.surface2, fontFamily: T.sans }}>
+      <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
         <span>Black-76 · 6.5% risk-free rate · 30s cache</span>
         <span>Not investment advice</span>
       </div>
