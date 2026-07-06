@@ -159,6 +159,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date|null>(null)
+  const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
 
   const fetchData = useCallback(async () => {
     setLoading(true); setError(null)
@@ -174,7 +175,8 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   }, [instrument, expiry])
 
   useEffect(() => { fetchData(); const t = setInterval(fetchData, 3 * 60 * 1000); return () => clearInterval(t) }, [fetchData])
-  useEffect(() => { setExpiry(null) }, [instrument])
+  useEffect(() => { setExpiry(null); setPage('main') }, [instrument])
+  useEffect(() => { setPage('main') }, [expiry])
 
   if (!isPro) {
     return (
@@ -203,8 +205,16 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
     )
   }
 
-  const maxCEOI = data?.chain?.length ? Math.max(...data.chain.map(r => r.CE.oi), 1) : 1
-  const maxPEOI = data?.chain?.length ? Math.max(...data.chain.map(r => r.PE.oi), 1) : 1
+  // ── Pagination: ±10% of futures price ────────────────────────────────────
+  const lo = data ? data.futurePrice * 0.90 : 0
+  const hi = data ? data.futurePrice * 1.10 : Infinity
+  const lowerPage = data?.chain.filter(r => r.strike < lo)  ?? []
+  const mainPage  = data?.chain.filter(r => r.strike >= lo && r.strike <= hi) ?? []
+  const upperPage = data?.chain.filter(r => r.strike > hi)  ?? []
+  const visibleChain = page === 'lower' ? lowerPage : page === 'upper' ? upperPage : mainPage
+
+  const maxCEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.CE.oi), 1) : 1
+  const maxPEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.PE.oi), 1) : 1
   const vpColor = data?.volPremium == null ? C.ink3 : data.volPremium > 2 ? 'var(--saffron)' : data.volPremium < -2 ? C.up : C.ink3
   const vpStr   = data?.volPremium != null ? (data.volPremium > 0 ? '+' : '') + data.volPremium : '·'
 
@@ -289,6 +299,23 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       {/* ── Table ── */}
       {data?.chain && (
         <div style={{ overflowX: 'auto' }}>
+          {/* Prev page nav */}
+          {lowerPage.length > 0 && (
+            <button
+              onClick={() => setPage(p => p === 'lower' ? 'main' : 'lower')}
+              style={{
+                display: 'block', width: '100%', padding: '8px 14px', textAlign: 'center',
+                background: page === 'lower' ? C.surf3 : C.surf2,
+                border: 'none', borderBottom: `1px solid ${C.bdr}`,
+                color: page === 'lower' ? C.ink2 : C.ink3, fontFamily: C.sans,
+                fontSize: 12, cursor: 'pointer', fontWeight: 500,
+              }}>
+              {page === 'lower'
+                ? `↑ Back to ATM zone (±10%)`
+                : `↑ ${lowerPage.length} lower strikes below ${fmtINR(lo)} — Deep ITM Calls / Far OTM Puts`}
+            </button>
+          )}
+
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
             <thead>
               {/* Section headers */}
@@ -320,7 +347,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
               </tr>
             </thead>
             <tbody>
-              {data.chain.map(row => {
+              {visibleChain.map(row => {
                 const { isATM, isITM_CE, isITM_PE } = row
                 const isMP  = row.strike === data.maxPain
                 const ceBg  = isITM_CE ? ITM_BG : 'transparent'
@@ -405,6 +432,23 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
               })}
             </tbody>
           </table>
+
+          {/* Next page nav */}
+          {upperPage.length > 0 && (
+            <button
+              onClick={() => setPage(p => p === 'upper' ? 'main' : 'upper')}
+              style={{
+                display: 'block', width: '100%', padding: '8px 14px', textAlign: 'center',
+                background: page === 'upper' ? C.surf3 : C.surf2,
+                border: 'none', borderTop: `1px solid ${C.bdr}`,
+                color: page === 'upper' ? C.ink2 : C.ink3, fontFamily: C.sans,
+                fontSize: 12, cursor: 'pointer', fontWeight: 500,
+              }}>
+              {page === 'upper'
+                ? `↓ Back to ATM zone (±10%)`
+                : `↓ ${upperPage.length} higher strikes above ${fmtINR(hi)} — Far OTM Calls / Deep ITM Puts`}
+            </button>
+          )}
         </div>
       )}
 
