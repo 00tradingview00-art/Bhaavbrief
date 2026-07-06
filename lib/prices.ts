@@ -407,8 +407,9 @@ export interface PriceData {
 
 function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: number, info: InstrumentInfo): MCXData {
   const hasLive = !!(q && q.last_price > 0)
+  const prevClose = q?.ohlc?.close ?? 0
   return {
-    mcx:          hasLive ? q!.last_price            : fallbackPrice,
+    mcx:          hasLive ? q!.last_price            : (prevClose > 0 ? prevClose : fallbackPrice),
     mcxChangePct: hasLive ? KiteClient.changePct(q!) : fallbackPct,
     mcxChange:    hasLive ? q!.net_change            : 0,
     mcxOpen:      hasLive ? (q!.ohlc?.open   ?? 0)  : 0,
