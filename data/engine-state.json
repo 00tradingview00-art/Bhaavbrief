@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 147376,
-    "silver": 234081,
-    "crude": 6570,
-    "copper": 1284.8,
-    "natgas": 310.4,
+    "gold": 147251,
+    "silver": 0,
+    "crude": 6553,
+    "copper": 1285.8,
+    "natgas": 304,
     "usdinr": 95.21
   },
-  "lastChecked": "2026-07-03T17:56:36.627Z",
+  "lastChecked": "2026-07-06T03:31:38.298Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,10 +22,13 @@
     "mideast": "Hormuz half-open: tanker fleet prices in recovery hope - Reuters",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-07-01T07:01:38.810Z",
+  "articlesToday": [
+    "2026-07-06/2026-07-06-mcx-nat-gas-falls-2-06-as-henry-hub-weakens-on-storage-surpl"
+  ],
+  "lastArticleAt": "2026-07-06T03:31:50.436Z",
   "lastCoveredAt": {
     "crude": "2026-06-29T06:22:05.442Z",
-    "silver": "2026-07-01T07:01:38.810Z"
+    "silver": "2026-07-01T07:01:38.810Z",
+    "natgas": "2026-07-06T03:31:50.436Z"
   }
 }

@@ -75,7 +75,7 @@
       "id": "us-summer-cooling-demand-natgas-surge",
       "title": "US Summer Cooling Demand Drives Natural Gas Spike",
       "startDate": "2026-07-01",
-      "status": "active",
+      "status": "closed",
       "editions": [
         55
       ],
@@ -88,7 +88,9 @@
         "Henry Hub",
         "US Summer Demand",
         "Macro"
-      ]
+      ],
+      "endDate": "2026-07-06",
+      "outcome": "The natural gas spike faded without reaching the ₹314.5/mmBtu key level, leaving MCX NatGas at ₹304 as the cooling demand narrative lost traction after five days."
     },
     {
       "id": "precious-metals-safe-haven-unwind-fomc-hawkish",
