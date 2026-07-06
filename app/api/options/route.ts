@@ -111,6 +111,7 @@ export async function GET(request: Request) {
           CE: {
             symbol:   ceOpt?.tradingsymbol ?? null,
             ltp:      ceLTP,
+            absChng:  ceQ ? parseFloat((ceLTP - (ceQ.ohlc?.close ?? ceLTP)).toFixed(2)) : 0,
             oi:       ceQ?.oi ?? 0,
             oiChange: ceQ ? (ceQ.oi - (ceQ.oi_day_low ?? ceQ.oi)) : 0,
             volume:   ceQ?.volume ?? 0,
@@ -123,6 +124,7 @@ export async function GET(request: Request) {
           PE: {
             symbol:   peOpt?.tradingsymbol ?? null,
             ltp:      peLTP,
+            absChng:  peQ ? parseFloat((peLTP - (peQ.ohlc?.close ?? peLTP)).toFixed(2)) : 0,
             oi:       peQ?.oi ?? 0,
             oiChange: peQ ? (peQ.oi - (peQ.oi_day_low ?? peQ.oi)) : 0,
             volume:   peQ?.volume ?? 0,
