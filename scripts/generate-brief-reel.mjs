@@ -47,8 +47,32 @@ function readSnapshot() {
   return existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : null
 }
 
-// ── Copy extraction — broader voice ──────────────────────────────────────────
-async function extractReelCopy(brief, snapshot) {
+// ── Reel history ──────────────────────────────────────────────────────────────
+const HISTORY_FILE = join(ROOT, 'data/reel-history.json')
+
+function readHistory() {
+  if (!existsSync(HISTORY_FILE)) return []
+  try { return JSON.parse(readFileSync(HISTORY_FILE, 'utf8')) } catch { return [] }
+}
+
+function appendHistory(entry) {
+  const history = readHistory()
+  history.unshift(entry)
+  if (history.length > 300) history.splice(300)
+  writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
+}
+
+function historyContext(history) {
+  if (!history.length) return ''
+  return `\nPast reels — avoid repeating these hooks, angles, or payoffs:\n${
+    history.slice(0, 8).map((r, i) =>
+      `${i+1}. [${r.content_type ?? 'unknown'}] Hook: "${r.hook_caption}" | Payoff: "${r.payoff}"`
+    ).join('\n')
+  }\n`
+}
+
+// ── Copy extraction — brief mode ──────────────────────────────────────────────
+async function extractReelCopy(brief, snapshot, history = []) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
   const prices = snapshot ? [
@@ -66,7 +90,7 @@ async function extractReelCopy(brief, snapshot) {
 
   const msg = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 800,
     messages: [{
       role:    'user',
       content: `You are the head of content for BhaavBrief — India's daily MCX commodity intelligence brand. You write Instagram Reels that retail investors, importers, business owners, and curious Indians share — not just professional traders.
@@ -79,29 +103,32 @@ ${prices}
 
 Excerpt:
 ${excerpt}
-
+${historyContext(history)}
 Rules:
 - NEVER start with a question
 - Frame the move in rupees people feel: "Your gold costs ₹2,200 more per 10g today" beats "Gold up 1.5%"
 - Numbers make it real — use them
 - Tone: sharp, direct, like a smart friend who tracks markets for a living
 - Each beat is ONE complete thought — no "and also"
+- Vary your hook structure from past reels
 
 Return ONLY this JSON:
 {
+  "content_type": "price_move (specific price change with rupee delta to show) | explainer (how/why education, no single delta) | macro_trend (broader force or trend) | breaking (urgent, fast-moving news)",
+
   "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
 
   "hook_caption": "First line of Instagram caption. Relatable to anyone, not just traders. Under 12 words. Frame in rupee impact or everyday terms. No jargon. This is what makes someone stop scrolling.",
 
-  "stat_line": "The single most striking number from today — written as a visual headline. Max 6 words. Example: 'Gold costs ₹2,194 more today'",
+  "stat_line": "The single most striking number or concept — written as a visual headline. Max 7 words.",
 
-  "beat1": "What happened in everyday terms. ONE sentence. Specific rupee amount or %. Under 18 words. Hit the human impact first, then the % move.",
-  "beat2": "The structural reason behind this move — what force caused it. ONE sentence. Under 18 words. Name the force (Fed, dollar, OPEC, monsoon, etc.) and what it did.",
-  "beat3": "The price level or event traders are watching, and what it would mean if hit. Under 16 words. Specific number.",
+  "beat1": "What happened in everyday terms. ONE sentence. Specific rupee amount or %. Under 18 words.",
+  "beat2": "The structural reason behind this move. ONE sentence. Under 18 words. Name the force.",
+  "beat3": "The price level or event to watch, and what it means. Under 16 words. Specific number.",
 
-  "payoff": "The most surprising or counter-intuitive fact from today's data. Under 12 words. An observation that makes people think — not a directional call.",
+  "payoff": "The most surprising or counter-intuitive fact. Under 12 words. Makes people think.",
 
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm, like you're talking to a smart friend. Contractions only. Use 'just', 'already', 'quietly' for recency. Sentences 1-2 frame the everyday impact. Sentences 3-4 explain the structural cause. Sentence 5 is the non-obvious truth. Sentence 6 is what to watch. End with 'BhaavBrief.' — pause before it, said like a signature. Example: 'Gold just added two thousand rupees in one session. That's more than most people earn in a day. The US jobs number came in weak. Weak jobs means rate cuts stay on the table. Central banks bought more gold last month than any time in five years. Watch ninety-five on dollar-rupee — that's the hinge. BhaavBrief.'"
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm. Contractions only. Sentences 1-2: everyday impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
 }`,
     }],
   })
@@ -116,7 +143,7 @@ Return ONLY this JSON:
 }
 
 // ── Copy extraction — news / trend mode ──────────────────────────────────────
-async function extractNewsReelCopy(topic, context, snapshot) {
+async function extractNewsReelCopy(topic, context, snapshot, history = []) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
   const prices = snapshot ? [
@@ -128,7 +155,7 @@ async function extractNewsReelCopy(topic, context, snapshot) {
 
   const msg = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
-    max_tokens: 700,
+    max_tokens: 800,
     messages: [{
       role:    'user',
       content: `You are BhaavBrief's head of content — India's MCX commodity intelligence brand. You write Instagram Reels that jewellery buyers, importers, business owners, and everyday Indians stop to watch.
@@ -137,31 +164,33 @@ Topic: "${topic}"${context ? `\nContext: ${context}` : ''}
 
 Live market data:
 ${prices}
-
-This is a 35-second reel explaining this trend or news story. Make it feel urgent and relevant to anyone watching their rupee — not just traders.
+${historyContext(history)}
+This is a 35-second reel. Make it feel urgent and relevant to anyone watching their rupee — not just traders.
 
 Rules:
 - NEVER start with a question
 - Frame in rupees or everyday human terms — not % jargon
 - Tone: sharp, direct, like a smart friend who tracks markets for a living
 - Each beat is ONE complete thought
-- Use today's live prices where relevant
+- Vary your hook and payoff angle from past reels listed above
 
 Return ONLY this JSON:
 {
+  "content_type": "price_move (specific price change with a clear rupee delta) | explainer (education — how or why something works) | macro_trend (broader structural force or trend) | breaking (urgent fast-moving news)",
+
   "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
 
-  "hook_caption": "First line of Instagram caption. Relatable to anyone. Under 12 words. Frame the news in rupee impact or everyday terms. This stops the scroll.",
+  "hook_caption": "First line of Instagram caption. Relatable to anyone. Under 12 words. Frame in rupee impact or everyday terms. Stops the scroll.",
 
-  "stat_line": "The single most striking number or fact. Max 6 words. Punchy headline.",
+  "stat_line": "The single most striking number or concept. Max 7 words. Punchy visual headline.",
 
-  "beat1": "What this news means in everyday terms. ONE sentence. Human impact first. Under 18 words.",
+  "beat1": "What this means in everyday terms. ONE sentence. Human impact first. Under 18 words.",
   "beat2": "The structural reason or force driving this. ONE sentence. Name it specifically. Under 18 words.",
-  "beat3": "The level or event to watch next, and what it means if hit. Under 16 words. Specific number.",
+  "beat3": "The level or event to watch next, and what it means. Under 16 words. Specific number.",
 
-  "payoff": "The most counter-intuitive or surprising angle on this story. Under 12 words. Makes people think.",
+  "payoff": "The most counter-intuitive or surprising angle. Under 12 words. Makes people think.",
 
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: the structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
 }`,
     }],
   })
@@ -428,7 +457,83 @@ function drawCover(ctx, copy, mood, edition) {
   ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W / 2, midY + 86)
 }
 
-// ── Phase 1: HOOK ─────────────────────────────────────────────────────────────
+// ── Phase 1a: HOOK — concept / explainer / trend / breaking ──────────────────
+function drawHookConcept(ctx, t, copy, mood, edition) {
+  const isBreaking = copy.content_type === 'breaking'
+  const accentColor = isBreaking ? '#E74C3C' : GOLD
+  const bg = isBreaking ? '#1A0505' : (MOOD_BG[mood] ?? '#18180F')
+
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+  ctx.fillStyle = accentColor
+  ctx.fillRect(0, 0, W, 6)
+
+  // Wordmark
+  ctx.globalAlpha = easeOut(t * 10)
+  ctx.fillStyle   = accentColor
+  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.letterSpacing = '7px'
+  ctx.fillText('BHAAVBRIEF', W / 2, TOP_SAFE + 24)
+  ctx.letterSpacing = '0px'
+
+  // "BREAKING" badge for breaking news
+  if (isBreaking) {
+    ctx.globalAlpha = easeOut(Math.min(1, t * 12))
+    const bw = 180, bh = 40, bx = W / 2 - bw / 2, by = TOP_SAFE + 44
+    ctx.fillStyle = '#E74C3C'
+    roundRect(ctx, bx, by, bw, bh, 6); ctx.fill()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = 'bold 19px "NotoSans", "Inter", sans-serif'
+    ctx.letterSpacing = '4px'
+    ctx.fillText('BREAKING', W / 2, by + 28)
+    ctx.letterSpacing = '0px'
+  } else {
+    ctx.globalAlpha = easeOut(Math.max(0, t * 8 - 0.3))
+    ctx.strokeStyle = '#FFFFFF15'; ctx.lineWidth = 1
+    ctx.beginPath(); ctx.moveTo(120, TOP_SAFE + 46); ctx.lineTo(W - 120, TOP_SAFE + 46); ctx.stroke()
+  }
+
+  // Main concept text — large, centered in safe zone
+  const midY = TOP_SAFE + (BOT_SAFE - TOP_SAFE) / 2
+  ctx.font = 'bold 62px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign = 'center'
+  const conceptLines = wrapText(ctx, copy.stat_line ?? '', W - 160)
+  const lineH = 84
+  const blockH = conceptLines.length * lineH
+  const startY = midY - blockH / 2
+
+  conceptLines.forEach((line, i) => {
+    const lineT = Math.max(0, (t - i * 0.15) * 5)
+    const alpha = easeOut(Math.min(1, lineT))
+    const yShift = (1 - spring(Math.min(1, lineT))) * 32
+    ctx.globalAlpha = alpha
+    ctx.fillStyle   = CREAM
+    ctx.fillText(line, W / 2, startY + i * lineH - yShift)
+  })
+
+  // Hook sub-line below
+  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 0.8))
+  ctx.fillStyle   = INK_6
+  ctx.font        = '34px "NotoSans", "Inter", sans-serif'
+  const subLines = wrapText(ctx, copy.hook_caption ?? '', W - 200)
+  const subStartY = midY + blockH / 2 + 60
+  subLines.slice(0, 2).forEach((line, i) => {
+    ctx.fillText(line, W / 2, subStartY + i * 48)
+  })
+
+  // Edition / mode chip
+  ctx.globalAlpha = easeOut(Math.max(0, t * 3 - 1.5))
+  ctx.fillStyle   = '#FFFFFF0C'
+  roundRect(ctx, W / 2 - 90, BOT_SAFE - 56, 180, 42, 21); ctx.fill()
+  ctx.fillStyle   = INK_6
+  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
+  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W / 2, BOT_SAFE - 26)
+
+  ctx.globalAlpha = 1
+}
+
+// ── Phase 1b: HOOK — price move (animated delta count-up) ────────────────────
 function drawHook(ctx, t, copy, snapshot, mood, edition) {
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
@@ -669,7 +774,12 @@ function renderFrame(frame, copy, data, snapshot, mood) {
   if (frame < COVER_END) {
     drawCover(ctx, copy, mood, edition)
   } else if (frame < HOOK_END) {
-    drawHook(ctx, (frame - COVER_END) / (HOOK_END - COVER_END), copy, snapshot, mood, edition)
+    const t = (frame - COVER_END) / (HOOK_END - COVER_END)
+    if (copy.content_type === 'price_move') {
+      drawHook(ctx, t, copy, snapshot, mood, edition)
+    } else {
+      drawHookConcept(ctx, t, copy, mood, edition)
+    }
   } else if (frame < BEAT1_END) {
     drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood)
   } else if (frame < BEAT2_END) {
@@ -745,6 +855,7 @@ if (isNewsMode) {
 }
 
 const snapshot = readSnapshot()
+const history  = readHistory()
 
 const mood = classifyMood(data, snapshot)
 console.log(`🎵  Mood: ${mood}`)
@@ -752,9 +863,11 @@ const musicPath = await ensureMusic(mood)
 console.log(`  → ${musicPath.split('/').slice(-2).join('/')}\n`)
 
 console.log('🤖  Extracting copy via Haiku...')
+if (history.length) console.log(`  📚  Learning from ${Math.min(history.length, 8)} past reels`)
 const copy = isNewsMode
-  ? await extractNewsReelCopy(TOPIC, CONTEXT, snapshot)
-  : await extractReelCopy({ data, content }, snapshot)
+  ? await extractNewsReelCopy(TOPIC, CONTEXT, snapshot, history)
+  : await extractReelCopy({ data, content }, snapshot, history)
+console.log(`  type:         "${copy.content_type}"`)
 console.log(`  hook_caption: "${copy.hook_caption}"`)
 console.log(`  stat:         "${copy.stat_line}"`)
 console.log(`  beat1:        "${copy.beat1}"`)
@@ -842,9 +955,27 @@ const caption = [
 
 writeFileSync(CAP_FILE, caption, 'utf8')
 
+// Append to reel history
+appendHistory({
+  file:          `${filePrefix}-${padded}`,
+  topic:         isNewsMode ? TOPIC : data.title,
+  content_type:  copy.content_type ?? 'unknown',
+  mood,
+  hook_caption:  copy.hook_caption ?? '',
+  stat_line:     copy.stat_line ?? '',
+  payoff:        copy.payoff ?? '',
+  beat1:         copy.beat1 ?? '',
+  beat2:         copy.beat2 ?? '',
+  beat3:         copy.beat3 ?? '',
+  instagram_id:  null,   // filled in by post-reel-instagram.mjs after publishing
+  generated_at:  new Date().toISOString(),
+  edition:       edition ?? null,
+})
+
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  ✅  ${OUT_FILE}`)
 console.log(`  ✅  ${CAP_FILE}`)
 console.log(`  🎵  ${mood} → ${musicPath.split('/').slice(-2).join('/')}`)
 console.log(`  🎙️   Voice: ${voiceoverPath ? 'ElevenLabs' : 'none'}`)
+console.log(`  📚  History: ${readHistory().length} reels logged`)
 console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`)

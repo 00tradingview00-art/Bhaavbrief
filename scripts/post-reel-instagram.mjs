@@ -16,8 +16,8 @@
  *   REEL_FILE=public/reels/my-reel.mp4 node scripts/post-reel-instagram.mjs
  */
 
-import { readFileSync, existsSync, statSync, readdirSync } from 'fs'
-import { join, dirname } from 'path'
+import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from 'fs'
+import { join, dirname, basename } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -175,6 +175,22 @@ const publishData = await publishRes.json()
 if (publishData.error) {
   console.error('❌  Publish failed:', JSON.stringify(publishData.error, null, 2))
   process.exit(1)
+}
+
+// Update reel history with Instagram ID
+const HISTORY_FILE = join(ROOT, 'data/reel-history.json')
+if (existsSync(HISTORY_FILE)) {
+  try {
+    const reelKey = basename(REEL_PATH, '.mp4')
+    const history = JSON.parse(readFileSync(HISTORY_FILE, 'utf8'))
+    const entry = history.find(h => h.file === reelKey)
+    if (entry) {
+      entry.instagram_id = publishData.id
+      entry.posted_at    = new Date().toISOString()
+      writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
+      console.log(`  📚  History updated: ${reelKey}`)
+    }
+  } catch (e) { console.warn('  ⚠️  History update failed:', e.message) }
 }
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
