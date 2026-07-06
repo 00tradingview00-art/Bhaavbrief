@@ -1,65 +1,13 @@
-/**
- * GET /api/options?instrument=GOLD&expiry=2026-07-28
- *
- * Returns full MCX option chain with:
- * - Black-76 Greeks, live IV, Max Pain, PCR, OI bars
- * - MCX iVIX (India's OVX/GVZ/VXSLV equivalent — model-free implied vol index)
- * - MCX AAV (Annualized Actual Volatility) for 5/10/20/40/60-day windows
- * - Vol premium = iVIX − AAV(20d)
- *
- * Caching: option chain → Upstash 3-min TTL; historical closes → Upstash 1-hour TTL.
- */
-
 import { NextResponse } from 'next/server'
 import { KiteClient }   from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 
-const RISK_FREE_RATE = 0.065   // RBI repo rate
+export const runtime  = 'nodejs'
+export const dynamic  = 'force-dynamic'
+export const revalidate = 0
 
-// ── Upstash Redis helpers ─────────────────────────────────────────────────────
-
-async function rGet(key: string): Promise<string | null> {
-  const url   = process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return null
-  try {
-    const res = await fetch(`${url}/get/${encodeURIComponent(key)}`, {
-      headers: { Authorization: `Bearer ${token}` },
-      signal:  AbortSignal.timeout(3000),
-    })
-    const d = await res.json()
-    return d.result ?? null
-  } catch { return null }
-}
-
-async function rSet(key: string, value: string, exSeconds: number): Promise<void> {
-  const url   = process.env.UPSTASH_REDIS_REST_URL
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return
-  try {
-    // Pipeline format: passes value as JSON body element, not URL-encoded (handles large payloads)
-    await fetch(`${url}/pipeline`, {
-      method:  'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify([['SET', key, value, 'EX', String(exSeconds)]]),
-      signal:  AbortSignal.timeout(3000),
-    })
-  } catch { /* non-fatal */ }
-}
-
-// ── Market hours ──────────────────────────────────────────────────────────────
-
-function isMCXMarketOpen(): boolean {
-  const now = new Date()
-  const ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-  const mins = ist.getHours() * 60 + ist.getMinutes()
-  const day  = ist.getDay()
-  if (day === 0) return false   // Sunday
-  return mins >= 9 * 60 && mins < 23 * 60 + 30
-}
-
-// ── Supported instruments ─────────────────────────────────────────────────────
+const RISK_FREE_RATE = 0.065
 
 const MCX_INSTRUMENTS: Record<string, { label: string; unit: string; lotSize: number }> = {
   GOLD:        { label: 'Gold',         unit: '10g',     lotSize: 100  },
@@ -69,7 +17,13 @@ const MCX_INSTRUMENTS: Record<string, { label: string; unit: string; lotSize: nu
   COPPER:      { label: 'Copper',       unit: 'kg',      lotSize: 2500 },
 }
 
-// ── Route ─────────────────────────────────────────────────────────────────────
+function isMCXMarketOpen(): boolean {
+  const now = new Date()
+  const ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
+  const mins = ist.getHours() * 60 + ist.getMinutes()
+  if (ist.getDay() === 0) return false
+  return mins >= 9 * 60 && mins < 23 * 60 + 30
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -83,12 +37,6 @@ export async function GET(request: Request) {
     )
   }
 
-  const chainCacheKey = `options:${instrument}-${requestedExpiry ?? 'near'}`
-  const cached = await rGet(chainCacheKey)
-  if (cached) {
-    return NextResponse.json({ ...JSON.parse(cached), fromCache: true })
-  }
-
   if (!process.env.KITE_API_KEY || !process.env.KITE_ACCESS_TOKEN) {
     return NextResponse.json({ error: 'Kite credentials not configured' }, { status: 503 })
   }
@@ -96,17 +44,8 @@ export async function GET(request: Request) {
   try {
     const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
 
-    // ── Instrument list — Upstash cached 30 min ───────────────────────────────
-    const instCacheKey = 'options:instruments-full-v4'  // v4: fixed rSet pipeline format
-    let allInstruments: Awaited<ReturnType<KiteClient['getFullMCXInstruments']>>
-
-    const instCached = await rGet(instCacheKey)
-    if (instCached) {
-      allInstruments = JSON.parse(instCached)
-    } else {
-      allInstruments = await kc.getFullMCXInstruments()
-      await rSet(instCacheKey, JSON.stringify(allInstruments), 30 * 60)
-    }
+    // Fetch all MCX instruments (FUT + CE + PE)
+    const allInstruments = await kc.getFullMCXInstruments()
 
     // Filter options for this instrument
     const allOptions = allInstruments.filter(
@@ -114,37 +53,32 @@ export async function GET(request: Request) {
     )
     const expiries = [...new Set(allOptions.map(i => i.expiry))].sort()
     if (!expiries.length) {
-      // Return diagnostic info so we can see what names/types are in the list
-      const sampleNames = [...new Set(allInstruments.map(i => i.name))].slice(0, 20)
-      const sampleTypes = [...new Set(allInstruments.map(i => i.instrument_type))]
-      return NextResponse.json({
-        error: `No options found for ${instrument}`,
-        debug: { totalInstruments: allInstruments.length, sampleNames, sampleTypes },
-      }, { status: 404 })
+      return NextResponse.json({ error: `No options found for ${instrument}` }, { status: 404 })
     }
 
-    const activeExpiry   = requestedExpiry ?? expiries[0]
-    const activeOptions  = allOptions.filter(i => i.expiry === activeExpiry)
+    const activeExpiry  = requestedExpiry ?? expiries[0]
+    const activeOptions = allOptions.filter(i => i.expiry === activeExpiry)
 
     // Nearest future
     const today = new Date(); today.setHours(0, 0, 0, 0)
     const nearFut = allInstruments
-      .filter(i => i.name === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+      .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
       .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())[0]
 
-    // ── Quotes ────────────────────────────────────────────────────────────────
+    // Fetch quotes (future + active-expiry options, up to 500)
     const optionTokens = activeOptions.map(i => i.instrument_token)
     const allTokens    = nearFut ? [nearFut.instrument_token, ...optionTokens] : optionTokens
     const quotes       = await kc.getQuotes(allTokens.slice(0, 500))
 
     const futurePrice = nearFut ? (quotes[String(nearFut.instrument_token)]?.last_price ?? 0) : 0
 
-    // Time to expiry
-    const expiryDate = new Date(activeExpiry)
-    const now = new Date()
-    const T   = Math.max((expiryDate.getTime() - now.getTime()) / (365 * 24 * 60 * 60 * 1000), 1 / 365)
+    // Time to expiry in years
+    const T = Math.max(
+      (new Date(activeExpiry).getTime() - Date.now()) / (365 * 24 * 60 * 60 * 1000),
+      1 / 365,
+    )
 
-    // Group by strike
+    // Build chain rows grouped by strike
     const strikeMap: Record<number, { CE?: typeof activeOptions[0]; PE?: typeof activeOptions[0] }> = {}
     activeOptions.forEach(opt => {
       const k = opt.strike
@@ -152,7 +86,6 @@ export async function GET(request: Request) {
       strikeMap[k][opt.instrument_type as 'CE' | 'PE'] = opt
     })
 
-    // Build chain rows
     const chain = Object.entries(strikeMap)
       .map(([strikeStr, opts]) => {
         const strike = parseFloat(strikeStr)
@@ -160,13 +93,11 @@ export async function GET(request: Request) {
         const peOpt  = opts['PE']
         const ceQ    = ceOpt ? quotes[String(ceOpt.instrument_token)] : null
         const peQ    = peOpt ? quotes[String(peOpt.instrument_token)] : null
-
-        const ceLTP = ceQ?.last_price ?? 0
-        const peLTP = peQ?.last_price ?? 0
+        const ceLTP  = ceQ?.last_price ?? 0
+        const peLTP  = peQ?.last_price ?? 0
 
         const ceIV = ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : 0
         const peIV = peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : 0
-
         const ceGreeks = ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
         const peGreeks = peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
 
@@ -206,34 +137,22 @@ export async function GET(request: Request) {
       .sort((a, b) => a.strike - b.strike)
 
     // Analytics
-    const maxPain  = calculateMaxPain(chain)
     const totalCEOI = chain.reduce((s, r) => s + r.CE.oi, 0)
     const totalPEOI = chain.reduce((s, r) => s + r.PE.oi, 0)
-    const pcr = totalCEOI > 0 ? parseFloat((totalPEOI / totalCEOI).toFixed(3)) : 0
+    const maxPain   = calculateMaxPain(chain)
+    const pcr       = totalCEOI > 0 ? parseFloat((totalPEOI / totalCEOI).toFixed(3)) : 0
+    const ivix      = computeIVIX(chain, futurePrice, T, RISK_FREE_RATE)
 
-    // ── MCX iVIX ─────────────────────────────────────────────────────────────
-    const ivix = computeIVIX(chain, futurePrice, T, RISK_FREE_RATE)
-
-    // ── MCX AAV — Upstash cached 1 hour ──────────────────────────────────────
+    // AAV — fetch 75 calendar days of daily closes
     let aav: ReturnType<typeof computeAAV> = { '5d': null, '10d': null, '20d': null, '40d': null, '60d': null }
     if (nearFut) {
-      const aavCacheKey = `options:aav-${instrument}`
-      const aavCached = await rGet(aavCacheKey)
-      if (aavCached) {
-        aav = JSON.parse(aavCached)
-      } else {
-        try {
-          const toDate   = new Date(); toDate.setDate(toDate.getDate() - 1)
-          const fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 75)
-          const fmt = (d: Date) => d.toISOString().slice(0, 10)
-          const hist = await kc.getHistorical(nearFut.instrument_token, 'day', fmt(fromDate), fmt(toDate))
-          if (hist.length >= 6) {
-            const closes = hist.map(h => h.price)   // ascending date order
-            aav = computeAAV(closes)
-            await rSet(aavCacheKey, JSON.stringify(aav), 60 * 60)
-          }
-        } catch { /* AAV is optional — don't fail the whole request */ }
-      }
+      try {
+        const toDate   = new Date(); toDate.setDate(toDate.getDate() - 1)
+        const fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 75)
+        const fmt = (d: Date) => d.toISOString().slice(0, 10)
+        const hist = await kc.getHistorical(nearFut.instrument_token, 'day', fmt(fromDate), fmt(toDate))
+        if (hist.length >= 6) aav = computeAAV(hist.map(h => h.price))
+      } catch { /* non-fatal */ }
     }
 
     const volPremium = ivix != null && aav['20d'] != null
@@ -254,11 +173,11 @@ export async function GET(request: Request) {
       marketOpen:  isMCXMarketOpen(),
       chain,
       lastUpdated: new Date().toISOString(),
-      fromCache:   false,
     }
 
-    await rSet(chainCacheKey, JSON.stringify(payload), 3 * 60)
-    return NextResponse.json(payload)
+    return NextResponse.json(payload, {
+      headers: { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=10' },
+    })
 
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
