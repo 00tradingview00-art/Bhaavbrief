@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 const INSTRUMENTS = [
   { key: 'GOLD',       label: 'Gold'      },
@@ -160,6 +160,8 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   const [showAAV, setShowAAV]       = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date|null>(null)
   const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
+  const tableBodyRef  = useRef<HTMLDivElement>(null)
+  const atmRowRef     = useRef<HTMLTableRowElement>(null)
 
   const fetchData = useCallback(async () => {
     setLoading(true); setError(null)
@@ -177,6 +179,15 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   useEffect(() => { fetchData(); const t = setInterval(fetchData, 3 * 60 * 1000); return () => clearInterval(t) }, [fetchData])
   useEffect(() => { setExpiry(null); setPage('main') }, [instrument])
   useEffect(() => { setPage('main') }, [expiry])
+
+  // Scroll ATM row to centre of the table container after data loads
+  useEffect(() => {
+    if (!data || !atmRowRef.current || !tableBodyRef.current) return
+    const container = tableBodyRef.current
+    const row = atmRowRef.current
+    const offset = row.offsetTop - container.clientHeight / 2 + row.clientHeight / 2
+    container.scrollTo({ top: offset, behavior: 'smooth' })
+  }, [data, page])
 
   if (!isPro) {
     return (
@@ -297,8 +308,21 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       )}
 
       {/* ── Table ── */}
+      {/* Loading skeleton */}
+      {loading && !data && (
+        <div style={{ padding: '32px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              {Array.from({ length: 13 }).map((_, j) => (
+                <div key={j} style={{ flex: j === 6 ? '0 0 90px' : 1, height: 20, background: C.surf3, borderRadius: 3, opacity: 1 - i * 0.08 }} />
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+
       {data?.chain && (
-        <div style={{ overflowX: 'auto' }}>
+        <div ref={tableBodyRef} style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '72vh' }}>
           {/* Prev page nav */}
           {lowerPage.length > 0 && (
             <button
@@ -317,7 +341,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
           )}
 
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
-            <thead>
+            <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
               {/* Section headers */}
               <tr>
                 <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
@@ -362,7 +386,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                 const peOIColor   = row.PE.oiChange > 0 ? C.up : row.PE.oiChange < 0 ? C.dn : C.ink4
 
                 return (
-                  <tr key={row.strike} style={{ borderBottom: `1px solid ${C.bdr}`, borderTop: atmBT }}>
+                  <tr key={row.strike} ref={isATM ? atmRowRef : undefined} style={{ borderBottom: `1px solid ${C.bdr}`, borderTop: atmBT }}>
                     {/* ── CE side ── */}
                     {/* OI */}
                     <td style={{ ...PAD, textAlign: 'right', background: ceBg, minWidth: 56 }}>
