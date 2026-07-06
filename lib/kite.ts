@@ -46,6 +46,7 @@ export interface MCXInstrument {
   name:             string
   last_price:       number
   expiry:           string
+  strike:           number
   tick_size:        number
   lot_size:         number
   instrument_type:  string
@@ -173,7 +174,7 @@ export class KiteClient {
     return KiteClient.parseInstrumentsCSV(csv)
   }
 
-  static parseInstrumentsCSV(csv: string): MCXInstrument[] {
+  static parseInstrumentsCSV(csv: string, typesFilter?: string[]): MCXInstrument[] {
     const lines = csv.split('\n').filter(Boolean)
     if (lines.length < 2) return []
 
@@ -189,13 +190,27 @@ export class KiteClient {
         name:             cols[idx('name')]            ?? '',
         last_price:       parseFloat(cols[idx('last_price')] ?? '0'),
         expiry:           cols[idx('expiry')]          ?? '',
+        strike:           parseFloat(cols[idx('strike')]     ?? '0'),
         tick_size:        parseFloat(cols[idx('tick_size')] ?? '0'),
         lot_size:         parseInt(cols[idx('lot_size')]    ?? '0'),
         instrument_type:  cols[idx('instrument_type')] ?? '',
         segment:          cols[idx('segment')]         ?? '',
         exchange:         cols[idx('exchange')]        ?? '',
       }
-    }).filter(i => i.instrument_token > 0 && i.instrument_type === 'FUT')
+    }).filter(i =>
+      i.instrument_token > 0 &&
+      (typesFilter ? typesFilter.includes(i.instrument_type) : i.instrument_type === 'FUT')
+    )
+  }
+
+  // Returns all MCX instruments including CE and PE option contracts
+  async getFullMCXInstruments(): Promise<MCXInstrument[]> {
+    const res = await fetch(`${KITE_BASE}/instruments/MCX`, {
+      headers: this.headers(),
+      signal:  AbortSignal.timeout(15000),
+    })
+    if (!res.ok) throw new Error(`Instruments fetch failed: ${res.status}`)
+    return KiteClient.parseInstrumentsCSV(await res.text(), ['FUT', 'CE', 'PE'])
   }
 
   // Find the front-month (nearest active) futures contract for a commodity

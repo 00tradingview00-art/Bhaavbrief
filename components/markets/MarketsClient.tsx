@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import type { PriceData, MCXData, ForexData } from '@/lib/prices'
+import OptionChain from '@/components/mcx/OptionChain'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -360,6 +361,16 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           </div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
         </div>
+      </div>
+
+      {/* ── MCX Option Chain ── */}
+      <div style={{ marginBottom: 32 }}>
+        <SectionHeader label="MCX Option Chain" right={
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+            Black-76 · iVIX · AAV · 3-min refresh
+          </span>
+        } />
+        <OptionChain isPro={true} />
       </div>
 
       {/* ── Subscribe CTA ── */}
