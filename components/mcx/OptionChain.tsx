@@ -34,13 +34,13 @@ interface OptionsData {
 // ── Formatters ────────────────────────────────────────────────────────────────
 
 const fmtINR = (n: number|null|undefined, dec = 0) =>
-  n == null || isNaN(n) ? '—' : '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
+  n == null || isNaN(n) ? '·' : '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
 
 const fmtN = (n: number|null|undefined, dec = 2) =>
-  n == null || isNaN(n) ? '—' : Number(n).toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
+  n == null || isNaN(n) ? '·' : Number(n).toLocaleString('en-IN', { minimumFractionDigits: dec, maximumFractionDigits: dec })
 
 const fmtOI = (n: number) =>
-  !n ? '—' : n >= 100000 ? (n / 100000).toFixed(1) + 'L' : n >= 1000 ? (n / 1000).toFixed(1) + 'K' : String(n)
+  !n ? '·' : n >= 100000 ? (n / 100000).toFixed(1) + 'L' : n >= 1000 ? (n / 1000).toFixed(1) + 'K' : String(n)
 
 // ── Design tokens (matching bhaav.css) ────────────────────────────────────────
 
@@ -107,7 +107,7 @@ function PCRChip({ pcr }: { pcr: number }) {
 
 function LTPCell({ ltp, chng, itm, align }: { ltp: number; chng: number; itm: boolean; align: 'left'|'right' }) {
   const itmBg = itm ? T.goldPale : 'transparent'
-  if (!ltp) return <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, color: T.ink4, fontFamily: T.mono, fontSize: 12 }}>—</td>
+  if (!ltp) return <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, color: T.ink4, fontFamily: T.mono, fontSize: 12 }}>·</td>
   const chngColor = chng > 0 ? T.up : chng < 0 ? T.down : T.ink3
   const chngStr   = chng > 0 ? `+${fmtN(chng)}` : chng < 0 ? fmtN(chng) : null
   return (
@@ -134,7 +134,7 @@ function OICell({ oi, oiChange, max, side, itm, align }: { oi: number; oiChange:
 function GreekCell({ value, itm, align }: { value: number|null; itm: boolean; align: 'left'|'right' }) {
   return (
     <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontSize: 11 }}>
-      {value != null ? fmtN(value, 3) : '—'}
+      {value != null ? fmtN(value, 3) : '·'}
     </td>
   )
 }
@@ -142,7 +142,7 @@ function GreekCell({ value, itm, align }: { value: number|null; itm: boolean; al
 function IVCell({ iv, itm, align }: { iv: number|null; itm: boolean; align: 'left'|'right' }) {
   return (
     <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontSize: 11 }}>
-      {iv != null ? iv + '%' : '—'}
+      {iv != null ? iv + '%' : '·'}
     </td>
   )
 }
