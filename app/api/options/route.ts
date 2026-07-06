@@ -38,10 +38,11 @@ async function rSet(key: string, value: string, exSeconds: number): Promise<void
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
   if (!url || !token) return
   try {
-    await fetch(`${url}/set/${encodeURIComponent(key)}`, {
+    // Pipeline format: passes value as JSON body element, not URL-encoded (handles large payloads)
+    await fetch(`${url}/pipeline`, {
       method:  'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body:    JSON.stringify([value, 'EX', exSeconds]),
+      body:    JSON.stringify([['SET', key, value, 'EX', String(exSeconds)]]),
       signal:  AbortSignal.timeout(3000),
     })
   } catch { /* non-fatal */ }
@@ -96,7 +97,7 @@ export async function GET(request: Request) {
     const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
 
     // ── Instrument list — Upstash cached 30 min ───────────────────────────────
-    const instCacheKey = 'options:instruments-full-v3'  // v3: strip CSV quoted fields
+    const instCacheKey = 'options:instruments-full-v4'  // v4: fixed rSet pipeline format
     let allInstruments: Awaited<ReturnType<KiteClient['getFullMCXInstruments']>>
 
     const instCached = await rGet(instCacheKey)
