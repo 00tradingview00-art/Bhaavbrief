@@ -184,31 +184,71 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   )
 }
 
+// ── Info tooltip ──────────────────────────────────────────────────────────────
+
+function InfoTip({ text }: { text: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <span
+      style={{ position: 'relative', display: 'inline-flex', marginLeft: 4, verticalAlign: 'middle' }}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        type="button"
+        onClick={e => { e.stopPropagation(); setOpen(o => !o) }}
+        aria-label="What is this?"
+        style={{
+          width: 13, height: 13, borderRadius: '50%', border: `1px solid ${C.ink4}`,
+          background: 'transparent', color: C.ink4, fontSize: 9, fontWeight: 700,
+          lineHeight: '11px', padding: 0, cursor: 'pointer', fontFamily: C.sans,
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          textTransform: 'none', letterSpacing: 'normal', flexShrink: 0,
+        }}
+      >i</button>
+      {open && (
+        <div style={{
+          position: 'absolute', top: '100%', left: 0, marginTop: 6, zIndex: 50,
+          width: 200, padding: '8px 10px', borderRadius: 6, background: C.ink,
+          color: '#fff', fontSize: 11, fontWeight: 400, lineHeight: 1.4,
+          fontFamily: C.sans, textTransform: 'none', letterSpacing: 'normal',
+          boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
+        }}>
+          {text}
+        </div>
+      )}
+    </span>
+  )
+}
+
 // ── Metric pill in analytics bar ──────────────────────────────────────────────
 
-function Pill({ label, value, color, onClick, expand }: {
-  label: string; value: React.ReactNode; color?: string; onClick?: () => void; expand?: boolean
+function Pill({ label, value, color, onClick, expand, info }: {
+  label: string; value: React.ReactNode; color?: string; onClick?: () => void; expand?: boolean; info?: string
 }) {
   return (
     <div onClick={onClick} style={{
       cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column',
       gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0,
     }}>
-      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>
+      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
         {label}{expand != null && <span style={{ marginLeft: 4 }}>{expand ? '▲' : '▼'}</span>}
+        {info && <InfoTip text={info} />}
       </span>
       <span style={{ fontSize: 13, fontWeight: 600, color: color ?? C.ink, fontFamily: C.sans, ...numStyle, lineHeight: 1.2 }}>{value}</span>
     </div>
   )
 }
 
-function PCRPill({ pcr }: { pcr: number }) {
+function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
   const label = pcr > 1.2 ? 'Bullish' : pcr < 0.8 ? 'Bearish' : 'Neutral'
   const color = pcr > 1.2 ? C.up : pcr < 0.8 ? C.dn : 'var(--saffron)'
   const bg    = pcr > 1.2 ? C.upBg : pcr < 0.8 ? C.dnBg : C.goldPl
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0 }}>
-      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>PCR</span>
+      <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
+        PCR{info && <InfoTip text={info} />}
+      </span>
       <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
         <span style={{ fontSize: 13, fontWeight: 600, color: C.ink, fontFamily: C.sans, ...numStyle }}>{pcr}</span>
         <span style={{ fontSize: 10, fontWeight: 600, color, background: bg, padding: '1px 6px', borderRadius: 3, fontFamily: C.sans }}>{label}</span>
@@ -357,14 +397,20 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
       {/* ── Analytics strip ── */}
       {data && (
         <div style={{ borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none' }}>
-          <Pill label="Underlying" value={fmtINR(data.futurePrice)} />
-          <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold} />
-          <PCRPill pcr={data.pcr} />
-          {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6" />}
-          {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV} />}
-          {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor} />}
+          <Pill label="Underlying" value={fmtINR(data.futurePrice)}
+            info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks." />
+          <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold}
+            info="The strike where option writers (sellers) owe the least at expiry — often acts as a magnet for price as expiry nears." />
+          <PCRPill pcr={data.pcr}
+            info="Put-Call Ratio — total Put OI divided by total Call OI. Above 1.2 is read as bullish positioning, below 0.8 as bearish." />
+          {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6"
+            info="Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices." />}
+          {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV}
+            info="Annualized Actual Volatility — realized historical volatility computed from the last 20 trading days of closing prices." />}
+          {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor}
+            info="iVIX minus AAV 20d. Positive means options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
-            <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 500 }}>Status</span>
+            <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700 }}>Status</span>
             <span style={{ fontSize: 12, fontWeight: 600, color: data.marketOpen ? C.up : C.ink4, ...numStyle }}>● {data.marketOpen ? 'Live' : 'Closed'}</span>
           </div>
         </div>
@@ -433,9 +479,9 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
               <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
                 <tr>
-                  <th style={{ ...PAD, textAlign: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}` }}>CE LTP</th>
+                  <th style={{ ...PAD, textAlign: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.dnBg, borderBottom: `1px solid ${C.bdr}` }}>CE LTP</th>
                   <th style={{ ...PAD, textAlign: 'center', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
-                  <th style={{ ...PAD, textAlign: 'left', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}` }}>PE LTP</th>
+                  <th style={{ ...PAD, textAlign: 'left', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.upBg, borderBottom: `1px solid ${C.bdr}` }}>PE LTP</th>
                 </tr>
               </thead>
               <tbody>
@@ -477,9 +523,9 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
             <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
               {/* Section headers */}
               <tr>
-                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
+                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
                 <th style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
-                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
+                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
               </tr>
               {/* Column names */}
               <tr>
