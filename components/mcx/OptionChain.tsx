@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 
+function useIsMobile(breakpoint = 640) {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [breakpoint])
+  return isMobile
+}
+
 const INSTRUMENTS = [
   { key: 'GOLD',       label: 'Gold'      },
   { key: 'SILVER',     label: 'Silver'    },
@@ -115,6 +127,63 @@ function OIBar({ oi, max, side }: { oi: number; max: number; side: 'CE'|'PE' }) 
   )
 }
 
+// ── OI concentration map ──────────────────────────────────────────────────────
+
+function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
+  const top = [...chain]
+    .sort((a, b) => (b.CE.oi + b.PE.oi) - (a.CE.oi + a.PE.oi))
+    .slice(0, 8)
+    .sort((a, b) => a.strike - b.strike)
+  const max = Math.max(...top.flatMap(r => [r.CE.oi, r.PE.oi]), 1)
+
+  if (!top.length) return null
+
+  return (
+    <div style={{ padding: '12px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
+          OI Concentration — top strikes
+        </span>
+        <div style={{ display: 'flex', gap: 14, fontSize: 10, color: C.ink3, fontFamily: C.sans }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ display: 'inline-block', width: 8, height: 8, background: C.dn, borderRadius: 2 }} />Calls
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ display: 'inline-block', width: 8, height: 8, background: C.up, borderRadius: 2 }} />Puts
+          </span>
+        </div>
+      </div>
+      {top.map(row => {
+        const cePct = max > 0 ? (row.CE.oi / max) * 100 : 0
+        const pePct = max > 0 ? (row.PE.oi / max) * 100 : 0
+        return (
+          <div
+            key={row.strike}
+            title={`${row.strike.toLocaleString('en-IN')} — CE OI ${row.CE.oi.toLocaleString('en-IN')} · PE OI ${row.PE.oi.toLocaleString('en-IN')}`}
+            style={{ display: 'grid', gridTemplateColumns: '1fr 74px 1fr', alignItems: 'center', gap: 6, padding: '3px 0' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, minWidth: 0 }}>
+              <span style={{ fontSize: 10, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.CE.oi)}</span>
+              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', minWidth: 0 }}>
+                <div style={{ height: 10, width: `${cePct}%`, background: C.dn, borderRadius: '3px 0 0 3px', opacity: row.isATM ? 1 : 0.75 }} />
+              </div>
+            </div>
+            <div style={{ textAlign: 'center', fontSize: 11, fontWeight: row.isATM ? 700 : 600, color: row.isATM ? C.gold : C.ink2, ...numStyle }}>
+              {row.strike.toLocaleString('en-IN')}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', minWidth: 0 }}>
+                <div style={{ height: 10, width: `${pePct}%`, background: C.up, borderRadius: '0 3px 3px 0', opacity: row.isATM ? 1 : 0.75 }} />
+              </div>
+              <span style={{ fontSize: 10, color: C.ink3, ...numStyle, flexShrink: 0 }}>{fmtOI(row.PE.oi)}</span>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 // ── Metric pill in analytics bar ──────────────────────────────────────────────
 
 function Pill({ label, value, color, onClick, expand }: {
@@ -150,7 +219,7 @@ function PCRPill({ pcr }: { pcr: number }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function OptionChain({ isPro }: { isPro: boolean }) {
+export default function OptionChain({ isPro, preview = false }: { isPro: boolean; preview?: boolean }) {
   const [instrument, setInstrument] = useState('GOLD')
   const [expiry, setExpiry]         = useState<string|null>(null)
   const [data, setData]             = useState<OptionsData|null>(null)
@@ -158,10 +227,12 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   const [error, setError]           = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
+  const [showOIMap, setShowOIMap]   = useState(true)
   const [lastRefresh, setLastRefresh] = useState<Date|null>(null)
   const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
   const tableBodyRef  = useRef<HTMLDivElement>(null)
   const atmRowRef     = useRef<HTMLTableRowElement>(null)
+  const isMobile      = useIsMobile()
 
   const fetchData = useCallback(async () => {
     setLoading(true); setError(null)
@@ -182,7 +253,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
   // Scroll ATM row to centre of the table container after data loads
   useEffect(() => {
-    if (!data || !atmRowRef.current || !tableBodyRef.current) return
+    if (preview || !data || !atmRowRef.current || !tableBodyRef.current) return
     const container = tableBodyRef.current
     const row = atmRowRef.current
     const offset = row.offsetTop - container.clientHeight / 2 + row.clientHeight / 2
@@ -222,7 +293,15 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   const lowerPage = data?.chain.filter(r => r.strike < lo)  ?? []
   const mainPage  = data?.chain.filter(r => r.strike >= lo && r.strike <= hi) ?? []
   const upperPage = data?.chain.filter(r => r.strike > hi)  ?? []
-  const visibleChain = page === 'lower' ? lowerPage : page === 'upper' ? upperPage : mainPage
+  let visibleChain = page === 'lower' ? lowerPage : page === 'upper' ? upperPage : mainPage
+
+  // Preview mode: collapse to the 5 strikes nearest ATM, no pagination
+  if (preview) {
+    const atmIdx = mainPage.findIndex(r => r.isATM)
+    const centre = atmIdx >= 0 ? atmIdx : Math.floor(mainPage.length / 2)
+    const start  = Math.max(0, Math.min(centre - 2, mainPage.length - 5))
+    visibleChain = mainPage.slice(start, start + 5)
+  }
 
   const maxCEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.CE.oi), 1) : 1
   const maxPEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.PE.oi), 1) : 1
@@ -230,9 +309,9 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   const vpStr   = data?.volPremium != null ? (data.volPremium > 0 ? '+' : '') + data.volPremium : '·'
 
   // Default columns: OI | Chng OI | Vol | LTP | Chng | IV%  (6 per side)
-  // Greeks adds: Delta | Theta                               (2 more per side)
-  const ceCols = showGreeks ? 8 : 6
-  const peCols = showGreeks ? 8 : 6
+  // Greeks adds: Delta | Gamma | Theta | Vega                (4 more per side)
+  const ceCols = showGreeks ? 10 : 6
+  const peCols = showGreeks ? 10 : 6
 
   return (
     <div style={{ background: C.surf, borderRadius: 8, border: `1px solid ${C.bdr}`, overflow: 'hidden', fontFamily: C.sans, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
@@ -255,11 +334,18 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
             {data.expiries.map(e => <option key={e} value={e}>{e}</option>)}
           </select>
         )}
-        <button onClick={() => setShowGreeks(g => !g)} style={{
+        {!preview && !isMobile && (
+          <button onClick={() => setShowGreeks(g => !g)} style={{
+            padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+            border: `1px solid ${C.bdr}`, background: showGreeks ? C.goldPl : 'transparent',
+            color: showGreeks ? C.gold : C.ink3,
+          }}>Greeks {showGreeks ? '▲' : '▼'}</button>
+        )}
+        <button onClick={() => setShowOIMap(v => !v)} style={{
           padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
-          border: `1px solid ${C.bdr}`, background: showGreeks ? C.goldPl : 'transparent',
-          color: showGreeks ? C.gold : C.ink3,
-        }}>Greeks {showGreeks ? '▲' : '▼'}</button>
+          border: `1px solid ${C.bdr}`, background: showOIMap ? C.goldPl : 'transparent',
+          color: showOIMap ? C.gold : C.ink3,
+        }}>OI Map {showOIMap ? '▲' : '▼'}</button>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: '3px 8px', fontFamily: C.sans }}>
@@ -299,6 +385,9 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
       {error && <div style={{ padding: '10px 14px', color: C.dn, fontSize: 12, fontFamily: C.sans }}>{error}</div>}
 
+      {/* ── OI concentration map ── */}
+      {data?.chain && showOIMap && <OIConcentrationChart chain={mainPage} />}
+
       {/* ── ITM note ── */}
       {data?.chain && (
         <div style={{ padding: '4px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: C.ink4, fontFamily: C.sans, background: C.surf2 }}>
@@ -322,9 +411,9 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       )}
 
       {data?.chain && (
-        <div ref={tableBodyRef} style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: '72vh' }}>
+        <div ref={tableBodyRef} style={{ overflowX: 'auto', overflowY: 'auto', maxHeight: preview ? 'none' : '72vh' }}>
           {/* Prev page nav */}
-          {lowerPage.length > 0 && (
+          {!preview && lowerPage.length > 0 && (
             <button
               onClick={() => setPage(p => p === 'lower' ? 'main' : 'lower')}
               style={{
@@ -340,6 +429,50 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
             </button>
           )}
 
+          {isMobile && (
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
+              <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
+                <tr>
+                  <th style={{ ...PAD, textAlign: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}` }}>CE LTP</th>
+                  <th style={{ ...PAD, textAlign: 'center', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
+                  <th style={{ ...PAD, textAlign: 'left', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}` }}>PE LTP</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleChain.map(row => {
+                  const { isATM, isITM_CE, isITM_PE } = row
+                  const isMP  = row.strike === data.maxPain
+                  const ceBg  = isITM_CE ? ITM_BG : 'transparent'
+                  const peBg  = isITM_PE ? ITM_BG : 'transparent'
+                  const sBg   = isATM ? C.goldPl : isMP ? '#f5f3ff' : (isITM_CE || isITM_PE) ? ITM_BG : 'transparent'
+                  const sCol  = isATM ? C.gold : isMP ? '#6941c6' : C.ink
+                  const atmBT = isATM ? `2px solid ${C.gold}` : undefined
+                  const ceChngColor = row.CE.absChng > 0 ? C.up : row.CE.absChng < 0 ? C.dn : C.ink4
+                  const peChngColor = row.PE.absChng > 0 ? C.up : row.PE.absChng < 0 ? C.dn : C.ink4
+
+                  return (
+                    <tr key={row.strike} ref={isATM ? atmRowRef : undefined} style={{ borderBottom: `1px solid ${C.bdr}`, borderTop: atmBT }}>
+                      <td style={{ padding: '10px 8px', textAlign: 'right', background: ceBg }}>
+                        <div style={{ ...numStyle, fontSize: 15, fontWeight: 600, color: row.CE.ltp ? C.ink : C.ink4 }}>{row.CE.ltp ? fmtN(row.CE.ltp) : '·'}</div>
+                        <div style={{ ...numStyle, fontSize: 11, color: ceChngColor }}>{fmtChng(row.CE.absChng)}</div>
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center', background: sBg, borderLeft: `1px solid ${C.bdr2}`, borderRight: `1px solid ${C.bdr2}` }}>
+                        <span style={{ ...numStyle, fontSize: 14, fontWeight: 700, color: sCol }}>{Number(row.strike).toLocaleString('en-IN')}</span>
+                        {isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: C.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
+                        {isMP && !isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: '#6941c6', letterSpacing: '0.06em', marginTop: 2 }}>MAX PAIN</div>}
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'left', background: peBg }}>
+                        <div style={{ ...numStyle, fontSize: 15, fontWeight: 600, color: row.PE.ltp ? C.ink : C.ink4 }}>{row.PE.ltp ? fmtN(row.PE.ltp) : '·'}</div>
+                        <div style={{ ...numStyle, fontSize: 11, color: peChngColor }}>{fmtChng(row.PE.absChng)}</div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+
+          {!isMobile && (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
             <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
               {/* Section headers */}
@@ -357,11 +490,21 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                 <TH align="right">LTP</TH>
                 <TH align="right">Chng</TH>
                 <TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>IV%</TH>
-                {showGreeks && <><TH align="right">Delta</TH><TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>Theta</TH></>}
+                {showGreeks && <>
+                  <TH align="right">Delta</TH>
+                  <TH align="right">Gamma</TH>
+                  <TH align="right">Theta</TH>
+                  <TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>Vega</TH>
+                </>}
                 {/* Strike */}
                 <TH align="center" extra={{ color: C.ink2, fontWeight: 600, minWidth: 90 }}>Price</TH>
                 {/* PE columns */}
-                {showGreeks && <><TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>Delta</TH><TH align="left">Theta</TH></>}
+                {showGreeks && <>
+                  <TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>Delta</TH>
+                  <TH align="left">Gamma</TH>
+                  <TH align="left">Theta</TH>
+                  <TH align="left">Vega</TH>
+                </>}
                 <TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>IV%</TH>
                 <TH align="left">Chng</TH>
                 <TH align="left">LTP</TH>
@@ -409,8 +552,10 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                     {showGreeks && (
                       <>
                         <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.delta != null ? fmtN(row.CE.delta, 3) : '·'}</Td>
+                        <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.gamma != null ? fmtN(row.CE.gamma, 6) : '·'}</Td>
+                        <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.theta != null ? fmtN(row.CE.theta, 3) : '·'}</Td>
                         <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
-                          {row.CE.theta != null ? fmtN(row.CE.theta, 3) : '·'}
+                          {row.CE.vega != null ? fmtN(row.CE.vega, 3) : '·'}
                         </td>
                       </>
                     )}
@@ -431,7 +576,9 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                         <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
                           {row.PE.delta != null ? fmtN(row.PE.delta, 3) : '·'}
                         </td>
+                        <Td align="left" bg={peBg} color={C.ink3} small>{row.PE.gamma != null ? fmtN(row.PE.gamma, 6) : '·'}</Td>
                         <Td align="left" bg={peBg} color={C.ink3} small>{row.PE.theta != null ? fmtN(row.PE.theta, 3) : '·'}</Td>
+                        <Td align="left" bg={peBg} color={C.ink3} small>{row.PE.vega != null ? fmtN(row.PE.vega, 3) : '·'}</Td>
                       </>
                     )}
                     {/* IV% */}
@@ -456,9 +603,10 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
               })}
             </tbody>
           </table>
+          )}
 
           {/* Next page nav */}
-          {upperPage.length > 0 && (
+          {!preview && upperPage.length > 0 && (
             <button
               onClick={() => setPage(p => p === 'upper' ? 'main' : 'upper')}
               style={{
@@ -477,10 +625,20 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       )}
 
       {/* ── Footer ── */}
-      <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
-        <span>Black-76 · 6.5% risk-free rate · 30s cache</span>
-        <span>Not investment advice</span>
-      </div>
+      {preview ? (
+        <a href="/options" style={{
+          display: 'block', padding: '10px 14px', textAlign: 'center', textDecoration: 'none',
+          borderTop: `1px solid ${C.bdr}`, background: C.surf2, color: C.gold,
+          fontSize: 12, fontWeight: 600, fontFamily: C.sans,
+        }}>
+          View full option chain — Greeks, iVIX & Max Pain →
+        </a>
+      ) : (
+        <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
+          <span>Black-76 · 6.5% risk-free rate · 30s cache</span>
+          <span>Not investment advice</span>
+        </div>
+      )}
     </div>
   )
 }

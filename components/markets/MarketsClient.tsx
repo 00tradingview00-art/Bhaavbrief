@@ -366,11 +366,11 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
       {/* ── MCX Option Chain ── */}
       <div style={{ marginBottom: 32 }}>
         <SectionHeader label="MCX Option Chain" right={
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
-            Black-76 · iVIX · AAV · 3-min refresh
-          </span>
+          <a href="/options" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
+            View full chain →
+          </a>
         } />
-        <OptionChain isPro={true} />
+        <OptionChain isPro={true} preview />
       </div>
 
       {/* ── Subscribe CTA ── */}
