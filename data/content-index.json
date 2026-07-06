@@ -1,5 +1,23 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-058",
+    "href": "/briefs/edition-058",
+    "title": "COMEX Gold at $4198 as Safe-Haven Demand Enters a New Phase",
+    "description": "Weak US jobs data and geopolitical stress lift COMEX gold to $4198 — the safe-haven narrative is building, not peaking.",
+    "excerpt": "MCX Gold ₹147880 | Crude ₹6540 | USDINR ₹95.31 — Gold +1.46% | Silver +2.47% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4198/oz (CO",
+    "date": "2026-07-06T03:54:07.647Z",
+    "edition": "58",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro",
+      "Fed"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-07-06-mcx-nat-gas-falls-2-06-as-henry-hub-weakens-on-storage-surpl",
     "href": "/articles/2026-07-06-mcx-nat-gas-falls-2-06-as-henry-hub-weakens-on-storage-surpl",
@@ -19,24 +37,6 @@
       "MCX Nat Gas"
     ],
     "priceAtPublish": 304
-  },
-  {
-    "type": "brief",
-    "slug": "edition-058",
-    "href": "/briefs/edition-058",
-    "title": "COMEX Gold at $4185 as Safe-Haven Bid Holds but Silver Leads",
-    "description": "Weak US jobs data keeps safe-haven demand for gold alive while silver's industrial component pushes it to a fresh outperformance at $62.44/oz.",
-    "excerpt": "MCX Gold ₹147378 | Crude ₹6568 | USDINR ₹95.20 — Silver +2.11% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4185/oz (COMEX) | ₹95.20 ",
-    "date": "2026-07-06T02:59:00.143Z",
-    "edition": "58",
-    "tags": [
-      "MCX Gold",
-      "MCX Silver",
-      "Fed",
-      "Macro"
-    ],
-    "commodities": [],
-    "commodity": ""
   },
   {
     "type": "brief",
