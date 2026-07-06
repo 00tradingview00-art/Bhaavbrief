@@ -60,7 +60,7 @@ const T = {
   upBg:      'var(--up-bg)',
   down:      'var(--down)',
   downBg:    'var(--down-bg)',
-  mono:      'var(--font-mono)',
+  mono:      'var(--font-sans)',
   sans:      'var(--font-sans)',
 }
 
@@ -107,13 +107,14 @@ function PCRChip({ pcr }: { pcr: number }) {
 
 function LTPCell({ ltp, chng, itm, align }: { ltp: number; chng: number; itm: boolean; align: 'left'|'right' }) {
   const itmBg = itm ? T.goldPale : 'transparent'
-  if (!ltp) return <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, color: T.ink4, fontFamily: T.mono, fontSize: 12 }}>·</td>
+  const numStyle: React.CSSProperties = { fontFamily: T.mono, fontVariantNumeric: 'tabular-nums' }
+  if (!ltp) return <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, color: T.ink4, ...numStyle, fontSize: 12 }}>·</td>
   const chngColor = chng > 0 ? T.up : chng < 0 ? T.down : T.ink3
   const chngStr   = chng > 0 ? `+${fmtN(chng)}` : chng < 0 ? fmtN(chng) : null
   return (
     <td style={{ padding: '7px 10px', textAlign: align, background: itmBg }}>
-      <div style={{ fontWeight: 600, fontSize: 12, color: T.ink, fontFamily: T.mono }}>{fmtN(ltp)}</div>
-      {chngStr && <div style={{ fontSize: 10, color: chngColor, fontFamily: T.mono, marginTop: 1 }}>{chngStr}</div>}
+      <div style={{ fontWeight: 600, fontSize: 12, color: T.ink, ...numStyle }}>{fmtN(ltp)}</div>
+      {chngStr && <div style={{ fontSize: 10, color: chngColor, ...numStyle, marginTop: 1 }}>{chngStr}</div>}
     </td>
   )
 }
@@ -122,10 +123,11 @@ function OICell({ oi, oiChange, max, side, itm, align }: { oi: number; oiChange:
   const itmBg     = itm ? T.goldPale : 'transparent'
   const chngColor = oiChange > 0 ? T.up : oiChange < 0 ? T.down : T.ink4
   const chngStr   = oiChange !== 0 ? (oiChange > 0 ? '+' : '') + fmtOI(Math.abs(oiChange)) : null
+  const numStyle: React.CSSProperties = { fontFamily: T.mono, fontVariantNumeric: 'tabular-nums' }
   return (
     <td style={{ padding: '7px 10px', textAlign: align, background: itmBg, minWidth: 62 }}>
-      <div style={{ fontSize: 12, color: T.ink2, fontFamily: T.mono }}>{fmtOI(oi)}</div>
-      {chngStr && <div style={{ fontSize: 10, color: chngColor, fontFamily: T.mono, marginTop: 1 }}>{chngStr}</div>}
+      <div style={{ fontSize: 12, color: T.ink2, ...numStyle }}>{fmtOI(oi)}</div>
+      {chngStr && <div style={{ fontSize: 10, color: chngColor, ...numStyle, marginTop: 1 }}>{chngStr}</div>}
       <OIBar oi={oi} max={max} side={side} />
     </td>
   )
@@ -133,7 +135,7 @@ function OICell({ oi, oiChange, max, side, itm, align }: { oi: number; oiChange:
 
 function GreekCell({ value, itm, align }: { value: number|null; itm: boolean; align: 'left'|'right' }) {
   return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontSize: 11 }}>
+    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 11 }}>
       {value != null ? fmtN(value, 3) : '·'}
     </td>
   )
@@ -141,7 +143,7 @@ function GreekCell({ value, itm, align }: { value: number|null; itm: boolean; al
 
 function IVCell({ iv, itm, align }: { iv: number|null; itm: boolean; align: 'left'|'right' }) {
   return (
-    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontSize: 11 }}>
+    <td style={{ padding: '7px 10px', textAlign: align, background: itm ? T.goldPale : 'transparent', color: T.ink3, fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 11 }}>
       {iv != null ? iv + '%' : '·'}
     </td>
   )
@@ -383,7 +385,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                       padding: '7px 12px', textAlign: 'center', background: strikeBg,
                       borderLeft: `2px solid ${T.border2}`, borderRight: `2px solid ${T.border2}`,
                     }}>
-                      <span style={{ fontFamily: T.mono, fontSize: 13, fontWeight: 700, color: strikeColor }}>
+                      <span style={{ fontFamily: T.mono, fontVariantNumeric: 'tabular-nums', fontSize: 13, fontWeight: 700, color: strikeColor }}>
                         {Number(row.strike).toLocaleString('en-IN')}
                       </span>
                       {isATM && <div style={{ fontSize: 9, fontFamily: T.sans, fontWeight: 600, color: T.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
