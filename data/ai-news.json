@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-06-12-49-mcx-natural-gas-weakens-0-48-as-industrial-demand-faces",
+    "title": "MCX Natural Gas Weakens 0.48% as Industrial Demand Faces Monsoon Headwinds",
+    "summary": "MCX Natural Gas declined 0.48% to ₹308.90/mmBtu in this morning's session, extending a broader softness across energy and precious metals. Silver led the selloff at -0.52%, while crude oil fell 0.21% and gold shed 0.27%,",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-06T07:19:07.929Z",
+    "pubDateIST": "06 Jul 2026, 12:49",
+    "href": "/flash/2026-07-06-07-21-mcx-natural-gas-weakens-0-48-as-industrial-demand-faces-monsoon-headwinds",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-06-12-51-mcx-silver-falls-0-52-as-industrial-demand-overwhelms",
+    "title": "MCX Silver Falls 0.52% as Industrial Demand Overwhelms Geopolitical Haven Bid",
+    "summary": "MCX Silver fell 0.52% to ₹236,181/kg in Monday morning trade, leading the commodity complex lower alongside a 0.27% dip in gold to ₹146,980/10g. Crude oil and natural gas also retreated 0.21% and 0.48% respectively, with",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-06T07:21:01.393Z",
+    "pubDateIST": "06 Jul 2026, 12:51",
+    "href": "/flash/2026-07-06-07-21-mcx-silver-falls-0-52-as-industrial-demand-overwhelms-geopolitical-haven",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-04-09-24-silver-leads-2-rally-on-rupee-weakness-industrial-demand",
     "title": "Silver Leads 2% Rally on Rupee Weakness; Industrial Demand Outpacing Safe-Haven",
     "summary": "MCX Silver surged 2.11% this morning, leading a broad precious metals rally alongside Gold at ₹147376/10g (+1.11%) and Copper at ₹1284.80/kg (+0.77%). USD/INR weakened to ₹95.20, reducing rupee-denominated hedging costs ",
@@ -886,29 +910,5 @@
     "pubDateIST": "29 Jun 2026, 13:53",
     "href": "/flash/2026-06-29-08-23-mcx-natgas-tumbles-1-47-amid-monsoon-hydropower-surge-g",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-27-09-40-mcx-natural-gas-rallies-2-5-to-310-amid",
-    "title": "MCX Natural Gas rallies 2.5% to ₹310 amid energy complex supply tightness",
-    "summary": "MCX Natural Gas surged ₹310.00/mmBtu, gaining +2.51% this morning alongside crude oil's +1.78% advance to ₹6,788/bbl. The energy complex rally mirrors global supply tightness narratives, with silver posting +3.02% gains ",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-27T04:10:36.519Z",
-    "pubDateIST": "27 Jun 2026, 09:40",
-    "href": "/flash/2026-06-27-04-12-mcx-natural-gas-rallies-2-5-to-310-amid-energy-complex-",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-27-09-42-silver-surges-3-on-rupee-weakness-mcx-me",
-    "title": "Silver Surges 3% on Rupee Weakness; MCX Metals Rally Across Board",
-    "summary": "# BhaavBrief Flash Intelligence | 27 June 2026, 09:15 IST MCX Silver surged +3.02% to ₹219,512/kg this morning session, leading a broad commodity rally alongside gold (₹143,135/10g), copper (+1.57%), crude (+1.78% at ₹6,",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-27T04:12:30.028Z",
-    "pubDateIST": "27 Jun 2026, 09:42",
-    "href": "/flash/2026-06-27-04-12-silver-surges-3-on-rupee-weakness-mcx-metals-rally-acro",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
