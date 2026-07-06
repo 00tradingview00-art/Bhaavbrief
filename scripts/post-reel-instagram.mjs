@@ -43,9 +43,12 @@ if (!IG_USER || !IG_TOKEN) {
 
 function detectLatestReel() {
   try {
-    const files = readdirSync(join(ROOT, 'public/reels'))
-    const nums = files.map(f => f.match(/^brief-edition-(\d+)\.mp4$/)?.[1]).filter(Boolean).map(Number)
-    if (nums.length) return `public/reels/brief-edition-${String(Math.max(...nums)).padStart(3,'0')}.mp4`
+    const dir = join(ROOT, 'public/reels')
+    const mp4s = readdirSync(dir)
+      .filter(f => /^(brief-edition|news)-.*\.mp4$/.test(f))
+      .map(f => ({ f, mtime: statSync(join(dir, f)).mtimeMs }))
+      .sort((a, b) => b.mtime - a.mtime)
+    if (mp4s.length) return `public/reels/${mp4s[0].f}`
   } catch {}
   return 'public/reels/usdinr-forward-reel.mp4'
 }
@@ -120,6 +123,7 @@ const initRes = await fetch(`https://graph.facebook.com/v22.0/${IG_USER}/media`,
     upload_type:   'resumable',
     caption:       CAPTION,
     share_to_feed: true,
+    thumb_offset:  0,   // use first frame (cover screen) as thumbnail
     access_token:  IG_TOKEN,
   }),
   signal: AbortSignal.timeout(30000),

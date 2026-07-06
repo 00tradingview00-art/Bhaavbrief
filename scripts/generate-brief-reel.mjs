@@ -115,6 +115,66 @@ Return ONLY this JSON:
   }
 }
 
+// ── Copy extraction — news / trend mode ──────────────────────────────────────
+async function extractNewsReelCopy(topic, context, snapshot) {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+  const prices = snapshot ? [
+    `MCX Gold  ₹${Math.round(snapshot.instruments.MCX_GOLD?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_GOLD?.changePct?.toFixed(2) ?? '?'}%)`,
+    `MCX Crude ₹${Math.round(snapshot.instruments.MCX_CRUDE?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_CRUDE?.changePct?.toFixed(2) ?? '?'}%)`,
+    `MCX Silver ₹${Math.round(snapshot.instruments.MCX_SILVER?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_SILVER?.changePct?.toFixed(2) ?? '?'}%)`,
+    `USD/INR ₹${snapshot.instruments.USDINR?.price ?? '?'}  (${snapshot.instruments.USDINR?.changePct?.toFixed(2) ?? '?'}%)`,
+  ].join('\n') : ''
+
+  const msg = await client.messages.create({
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 700,
+    messages: [{
+      role:    'user',
+      content: `You are BhaavBrief's head of content — India's MCX commodity intelligence brand. You write Instagram Reels that jewellery buyers, importers, business owners, and everyday Indians stop to watch.
+
+Topic: "${topic}"${context ? `\nContext: ${context}` : ''}
+
+Live market data:
+${prices}
+
+This is a 35-second reel explaining this trend or news story. Make it feel urgent and relevant to anyone watching their rupee — not just traders.
+
+Rules:
+- NEVER start with a question
+- Frame in rupees or everyday human terms — not % jargon
+- Tone: sharp, direct, like a smart friend who tracks markets for a living
+- Each beat is ONE complete thought
+- Use today's live prices where relevant
+
+Return ONLY this JSON:
+{
+  "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
+
+  "hook_caption": "First line of Instagram caption. Relatable to anyone. Under 12 words. Frame the news in rupee impact or everyday terms. This stops the scroll.",
+
+  "stat_line": "The single most striking number or fact. Max 6 words. Punchy headline.",
+
+  "beat1": "What this news means in everyday terms. ONE sentence. Human impact first. Under 18 words.",
+  "beat2": "The structural reason or force driving this. ONE sentence. Name it specifically. Under 18 words.",
+  "beat3": "The level or event to watch next, and what it means if hit. Under 16 words. Specific number.",
+
+  "payoff": "The most counter-intuitive or surprising angle on this story. Under 12 words. Makes people think.",
+
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: the structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
+}`,
+    }],
+  })
+
+  const raw = msg.content[0].text.trim()
+  try { return JSON.parse(raw) }
+  catch {
+    const m = raw.match(/\{[\s\S]*\}/)
+    if (m) return JSON.parse(m[0])
+    throw new Error(`Haiku JSON parse failed: ${raw.slice(0, 200)}`)
+  }
+}
+
 // ── Dynamic music ─────────────────────────────────────────────────────────────
 const MUSIC_BASE = 'https://archive.org/download/Incompetech/mp3-royaltyfree'
 const TRACKS = {
@@ -187,16 +247,18 @@ async function generateVoiceover(script, outputPath) {
 const W = 1080, H = 1920, FPS = 30
 
 // Timing in seconds
+const COVER_DUR  = 1.5   // static cover frame — always fully rendered → Instagram thumbnail
 const HOOK_DUR   = 3.0
 const BEAT1_DUR  = 8.0
 const BEAT2_DUR  = 8.0
 const BEAT3_DUR  = 7.0
 const PAYOFF_DUR = 5.0
 const CTA_DUR    = 4.0
-const TOTAL_DUR  = HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
+const TOTAL_DUR  = COVER_DUR + HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
 
 // Frame boundaries
-const HOOK_END   = Math.round(HOOK_DUR   * FPS)
+const COVER_END  = Math.round(COVER_DUR  * FPS)
+const HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
 const BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
 const BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
 const BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
@@ -329,6 +391,42 @@ function drawHeader(ctx, snapshot) {
   ctx.beginPath(); ctx.moveTo(PAD, TOP_SAFE + 140); ctx.lineTo(W-PAD, TOP_SAFE + 140); ctx.stroke()
 }
 const HEADER_BOTTOM = TOP_SAFE + 148
+
+// ── Phase 0: COVER — static title card, always fully rendered ────────────────
+function drawCover(ctx, copy, mood, edition) {
+  const bg = MOOD_BG[mood] ?? '#18180F'
+  ctx.fillStyle = bg
+  ctx.fillRect(0, 0, W, H)
+
+  // Gold bars top & bottom
+  ctx.fillStyle = GOLD
+  ctx.fillRect(0, 0, W, 6)
+  ctx.fillRect(0, H - 6, W, 6)
+
+  const midY = H / 2
+
+  // Large wordmark
+  ctx.fillStyle     = GOLD
+  ctx.font          = 'bold 76px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign     = 'center'
+  ctx.letterSpacing = '14px'
+  ctx.fillText('BHAAVBRIEF', W / 2, midY - 60)
+  ctx.letterSpacing = '0px'
+
+  // Thin rule
+  ctx.strokeStyle = '#FFFFFF22'; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(180, midY - 14); ctx.lineTo(W - 180, midY - 14); ctx.stroke()
+
+  // Tagline
+  ctx.fillStyle = INK_6
+  ctx.font      = '32px "NotoSans", "Inter", sans-serif'
+  ctx.fillText('Daily MCX Intelligence', W / 2, midY + 36)
+
+  // Edition or mode label
+  ctx.fillStyle = INK_4
+  ctx.font      = '22px "NotoSans", "Inter", sans-serif'
+  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W / 2, midY + 86)
+}
 
 // ── Phase 1: HOOK ─────────────────────────────────────────────────────────────
 function drawHook(ctx, t, copy, snapshot, mood, edition) {
@@ -568,8 +666,10 @@ function renderFrame(frame, copy, data, snapshot, mood) {
   const ctx    = canvas.getContext('2d')
   const edition = data.edition ?? '?'
 
-  if (frame < HOOK_END) {
-    drawHook(ctx, frame / HOOK_END, copy, snapshot, mood, edition)
+  if (frame < COVER_END) {
+    drawCover(ctx, copy, mood, edition)
+  } else if (frame < HOOK_END) {
+    drawHook(ctx, (frame - COVER_END) / (HOOK_END - COVER_END), copy, snapshot, mood, edition)
   } else if (frame < BEAT1_END) {
     drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood)
   } else if (frame < BEAT2_END) {
@@ -585,6 +685,11 @@ function renderFrame(frame, copy, data, snapshot, mood) {
   return canvas.toBuffer('image/png')
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 44)
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 // Register fonts — prefer NotoSans (better canvas rendering), fall back to Inter
 const notoB = join(ROOT, 'public/fonts/NotoSans-Bold.ttf')
@@ -596,23 +701,50 @@ if (existsSync(notoR)) GlobalFonts.registerFromPath(notoR, 'NotoSans')
 if (existsSync(interV)) GlobalFonts.registerFromPath(interV, 'Inter')
 if (existsSync(interB)) GlobalFonts.registerFromPath(interB, 'Inter')
 
-let edition = process.env.EDITION ? parseInt(process.env.EDITION) : null
-if (!edition) {
-  const nums = readdirSync(join(ROOT, 'content/briefs'))
-    .map(f => f.match(/edition-(\d+)\.mdx/)?.[1]).filter(Boolean).map(Number)
-  edition = Math.max(...nums)
+// ── Mode detection ────────────────────────────────────────────────────────────
+const TOPIC   = process.env.TOPIC?.trim() || null
+const CONTEXT = process.env.CONTEXT?.trim() || null
+const isNewsMode = !!TOPIC
+
+let edition = null, data = {}, content = '', padded = null, filePrefix = ''
+
+if (isNewsMode) {
+  // News / trend mode — no brief needed
+  const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+  padded     = `${dateStamp}-${slugify(TOPIC)}`
+  filePrefix = 'news'
+  data       = { title: TOPIC, tags: [], edition: null }
+} else {
+  // Brief mode — EDITION env or auto-detect
+  edition = process.env.EDITION ? parseInt(process.env.EDITION) : null
+  if (!edition) {
+    const nums = readdirSync(join(ROOT, 'content/briefs'))
+      .map(f => f.match(/edition-(\d+)\.mdx/)?.[1]).filter(Boolean).map(Number)
+    edition = Math.max(...nums)
+  }
+  const briefData = readBrief(edition)
+  data       = briefData.data
+  content    = briefData.content
+  padded     = briefData.padded
+  filePrefix = 'brief-edition'
 }
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  BhaavBrief — Reel Generator`)
-console.log(`  Edition #${edition}  (${TOTAL_DUR}s / ${TOTAL_FRAMES} frames)`)
+console.log(isNewsMode
+  ? `  NEWS MODE  (${TOTAL_DUR.toFixed(1)}s / ${TOTAL_FRAMES} frames)`
+  : `  Edition #${edition}  (${TOTAL_DUR.toFixed(1)}s / ${TOTAL_FRAMES} frames)`)
 console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`)
 
-const { data, content, padded } = readBrief(edition)
-const snapshot = readSnapshot()
+if (isNewsMode) {
+  console.log(`📰  "${TOPIC}"`)
+  if (CONTEXT) console.log(`📋  Context: ${CONTEXT}`)
+} else {
+  console.log(`📖  "${data.title}"`)
+  console.log(`🏷️   ${(data.tags ?? []).join(', ')}`)
+}
 
-console.log(`📖  "${data.title}"`)
-console.log(`🏷️   ${(data.tags ?? []).join(', ')}`)
+const snapshot = readSnapshot()
 
 const mood = classifyMood(data, snapshot)
 console.log(`🎵  Mood: ${mood}`)
@@ -620,7 +752,9 @@ const musicPath = await ensureMusic(mood)
 console.log(`  → ${musicPath.split('/').slice(-2).join('/')}\n`)
 
 console.log('🤖  Extracting copy via Haiku...')
-const copy = await extractReelCopy({ data, content }, snapshot)
+const copy = isNewsMode
+  ? await extractNewsReelCopy(TOPIC, CONTEXT, snapshot)
+  : await extractReelCopy({ data, content }, snapshot)
 console.log(`  hook_caption: "${copy.hook_caption}"`)
 console.log(`  stat:         "${copy.stat_line}"`)
 console.log(`  beat1:        "${copy.beat1}"`)
@@ -636,8 +770,8 @@ console.log()
 
 const FRAMES_DIR = join(ROOT, '.reel-frames-tmp')
 const OUT_DIR    = join(ROOT, 'public/reels')
-const OUT_FILE   = join(OUT_DIR, `brief-edition-${padded}.mp4`)
-const CAP_FILE   = join(OUT_DIR, `brief-edition-${padded}.txt`)
+const OUT_FILE   = join(OUT_DIR, `${filePrefix}-${padded}.mp4`)
+const CAP_FILE   = join(OUT_DIR, `${filePrefix}-${padded}.txt`)
 
 if (existsSync(FRAMES_DIR)) rmSync(FRAMES_DIR, { recursive: true })
 mkdirSync(FRAMES_DIR, { recursive: true })
@@ -679,7 +813,7 @@ execFileSync('ffmpeg', args, { stdio: 'pipe' })
 rmSync(FRAMES_DIR, { recursive: true })
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
-// Caption — hook_caption as first line (the scroll-stopper)
+// Caption
 const TAG_MAP = {
   'MCX Gold':'#MCXGold','MCX Silver':'#MCXSilver','MCX Crude':'#MCXCrude',
   'MCX Copper':'#MCXCopper','MCX NatGas':'#MCXNatGas','Macro':'#MacroEconomics',
@@ -691,7 +825,10 @@ const hashtags = [
   '#BhaavBrief','#MCX','#CommodityMarkets','#IndianMarkets','#MCXTrading',
 ].join(' ')
 
-const slug    = data.urlSlug ?? `edition-${padded}`
+const briefLink = !isNewsMode
+  ? `\nFull brief → bhaavbrief.in/briefs/${data.urlSlug ?? `edition-${padded}`} 👇\n`
+  : `\nbhaavbrief.in 👇\n`
+
 const caption = [
   copy.hook_caption ?? copy.stat_line ?? data.title,
   '',
@@ -699,9 +836,7 @@ const caption = [
   copy.beat2,
   '',
   `Watch: ${copy.beat3}`,
-  '',
-  `Full brief → bhaavbrief.in/briefs/${slug} 👇`,
-  '',
+  briefLink,
   hashtags,
 ].join('\n')
 
