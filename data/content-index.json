@@ -39,6 +39,27 @@
     "priceAtPublish": 304
   },
   {
+    "type": "article",
+    "slug": "2026-07-06-mcx-gold-vs-comex-gold-difference",
+    "href": "/articles/2026-07-06-mcx-gold-vs-comex-gold-difference",
+    "title": "Why MCX Gold Price Differs from COMEX Gold — India Import Parity Explained",
+    "description": "Understand why MCX gold price differs from COMEX gold with India's import parity formula, rupee conversion, duty impact, and key macro drivers explained.",
+    "excerpt": "The mcx gold vs comex gold price difference explained simply comes down to three compounding layers: currency conversion, import duty, and GST applied to a global benchmark. MCX gold is not a local pr",
+    "date": "2026-07-06",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-057",
     "href": "/briefs/edition-057",
