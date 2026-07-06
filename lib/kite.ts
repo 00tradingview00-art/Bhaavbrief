@@ -175,27 +175,29 @@ export class KiteClient {
   }
 
   static parseInstrumentsCSV(csv: string, typesFilter?: string[]): MCXInstrument[] {
-    const lines = csv.split('\n').filter(Boolean)
+    // Strip CRLF so last-column values don't carry \r
+    const lines = csv.replace(/\r/g, '').split('\n').filter(Boolean)
     if (lines.length < 2) return []
 
-    const header = lines[0].split(',')
+    const header = lines[0].split(',').map(h => h.trim())
     const idx = (col: string) => header.indexOf(col)
+    const str = (cols: string[], col: string) => (cols[idx(col)] ?? '').trim()
 
     return lines.slice(1).map(line => {
       const cols = line.split(',')
       return {
-        instrument_token: parseInt(cols[idx('instrument_token')] ?? '0'),
-        exchange_token:   parseInt(cols[idx('exchange_token')]   ?? '0'),
-        tradingsymbol:    cols[idx('tradingsymbol')]  ?? '',
-        name:             cols[idx('name')]            ?? '',
-        last_price:       parseFloat(cols[idx('last_price')] ?? '0'),
-        expiry:           cols[idx('expiry')]          ?? '',
-        strike:           parseFloat(cols[idx('strike')]     ?? '0'),
-        tick_size:        parseFloat(cols[idx('tick_size')] ?? '0'),
-        lot_size:         parseInt(cols[idx('lot_size')]    ?? '0'),
-        instrument_type:  cols[idx('instrument_type')] ?? '',
-        segment:          cols[idx('segment')]         ?? '',
-        exchange:         cols[idx('exchange')]        ?? '',
+        instrument_token: parseInt(str(cols, 'instrument_token') || '0'),
+        exchange_token:   parseInt(str(cols, 'exchange_token')   || '0'),
+        tradingsymbol:    str(cols, 'tradingsymbol'),
+        name:             str(cols, 'name'),
+        last_price:       parseFloat(str(cols, 'last_price') || '0'),
+        expiry:           str(cols, 'expiry'),
+        strike:           parseFloat(str(cols, 'strike')     || '0'),
+        tick_size:        parseFloat(str(cols, 'tick_size')  || '0'),
+        lot_size:         parseInt(str(cols, 'lot_size')     || '0'),
+        instrument_type:  str(cols, 'instrument_type'),
+        segment:          str(cols, 'segment'),
+        exchange:         str(cols, 'exchange'),
       }
     }).filter(i =>
       i.instrument_token > 0 &&

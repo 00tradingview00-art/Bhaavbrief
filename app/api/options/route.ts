@@ -96,7 +96,7 @@ export async function GET(request: Request) {
     const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
 
     // ── Instrument list — Upstash cached 30 min ───────────────────────────────
-    const instCacheKey = 'options:instruments-full'
+    const instCacheKey = 'options:instruments-full-v2'  // v2: CRLF+trim fix
     let allInstruments: Awaited<ReturnType<KiteClient['getFullMCXInstruments']>>
 
     const instCached = await rGet(instCacheKey)
@@ -109,11 +109,17 @@ export async function GET(request: Request) {
 
     // Filter options for this instrument
     const allOptions = allInstruments.filter(
-      i => i.name === instrument && (i.instrument_type === 'CE' || i.instrument_type === 'PE'),
+      i => i.name.toUpperCase() === instrument && (i.instrument_type === 'CE' || i.instrument_type === 'PE'),
     )
     const expiries = [...new Set(allOptions.map(i => i.expiry))].sort()
     if (!expiries.length) {
-      return NextResponse.json({ error: 'No options found for instrument' }, { status: 404 })
+      // Return diagnostic info so we can see what names/types are in the list
+      const sampleNames = [...new Set(allInstruments.map(i => i.name))].slice(0, 20)
+      const sampleTypes = [...new Set(allInstruments.map(i => i.instrument_type))]
+      return NextResponse.json({
+        error: `No options found for ${instrument}`,
+        debug: { totalInstruments: allInstruments.length, sampleNames, sampleTypes },
+      }, { status: 404 })
     }
 
     const activeExpiry   = requestedExpiry ?? expiries[0]
