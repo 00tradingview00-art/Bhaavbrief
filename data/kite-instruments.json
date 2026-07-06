@@ -6,14 +6,14 @@
     "expiry": "2026-08-05"
   },
   "goldMini": {
-    "token": 130755591,
-    "symbol": "GOLDM26JULFUT",
-    "expiry": "2026-07-03"
+    "token": 142316039,
+    "symbol": "GOLDM26AUGFUT",
+    "expiry": "2026-08-05"
   },
   "silver": {
-    "token": 118822407,
-    "symbol": "SILVER26JULFUT",
-    "expiry": "2026-07-03"
+    "token": 120761607,
+    "symbol": "SILVER26SEPFUT",
+    "expiry": "2026-09-04"
   },
   "crude": {
     "token": 133299719,
@@ -72,5 +72,5 @@
       "expiry": "2026-07-29"
     }
   },
-  "updatedAt": "2026-07-02T04:03:45.398Z"
+  "updatedAt": "2026-07-06T02:58:39.611Z"
 }
