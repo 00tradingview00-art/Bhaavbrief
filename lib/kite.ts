@@ -181,7 +181,7 @@ export class KiteClient {
 
     const header = lines[0].split(',').map(h => h.trim())
     const idx = (col: string) => header.indexOf(col)
-    const str = (cols: string[], col: string) => (cols[idx(col)] ?? '').trim()
+    const str = (cols: string[], col: string) => (cols[idx(col)] ?? '').trim().replace(/^"|"$/g, '')
 
     return lines.slice(1).map(line => {
       const cols = line.split(',')

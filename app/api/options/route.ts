@@ -96,7 +96,7 @@ export async function GET(request: Request) {
     const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
 
     // ── Instrument list — Upstash cached 30 min ───────────────────────────────
-    const instCacheKey = 'options:instruments-full-v2'  // v2: CRLF+trim fix
+    const instCacheKey = 'options:instruments-full-v3'  // v3: strip CSV quoted fields
     let allInstruments: Awaited<ReturnType<KiteClient['getFullMCXInstruments']>>
 
     const instCached = await rGet(instCacheKey)
