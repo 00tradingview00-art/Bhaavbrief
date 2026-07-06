@@ -157,7 +157,8 @@ async function ensureMusic(mood) {
 // ── ElevenLabs voiceover ──────────────────────────────────────────────────────
 async function generateVoiceover(script, outputPath) {
   const apiKey  = process.env.ELEVENLABS_API_KEY
-  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'pNInz6obpgDQGcFmaJgB'
+  // Sarah — mature, reassuring, confident female voice
+  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'EXAVITQu4vr4xnSDxMaL'
 
   if (!apiKey) { console.warn('  ⚠️  ELEVENLABS_API_KEY not set — skipping voiceover'); return null }
 
@@ -167,7 +168,7 @@ async function generateVoiceover(script, outputPath) {
     body: JSON.stringify({
       text:      script,
       model_id:  'eleven_multilingual_v2',
-      voice_settings: { stability: 0.32, similarity_boost: 0.78, style: 0.60, use_speaker_boost: true },
+      voice_settings: { stability: 0.22, similarity_boost: 0.72, style: 0.28, use_speaker_boost: true },
     }),
     signal: AbortSignal.timeout(30000),
   })
@@ -270,26 +271,31 @@ function dominantMover(snapshot, preferLabel) {
   return best
 }
 
+// Instagram Reels safe zone: top 160px and bottom 260px are covered by UI overlays
+const TOP_SAFE = 168
+const BOT_SAFE = H - 268
+
 // ── Shared header (wordmark + price strip) ────────────────────────────────────
-function drawHeader(ctx, snapshot, mood) {
+function drawHeader(ctx, snapshot) {
   const PAD = 60
+
   // Gold top bar
   ctx.fillStyle = GOLD
   ctx.fillRect(0, 0, W, 6)
 
-  // Wordmark
-  ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 22px "NotoSans", "Inter", sans-serif'
-  ctx.textAlign   = 'left'
+  // Wordmark — inside safe zone
+  ctx.fillStyle     = GOLD
+  ctx.font          = 'bold 22px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign     = 'left'
   ctx.letterSpacing = '5px'
-  ctx.fillText('BHAAVBRIEF', PAD, 56)
+  ctx.fillText('BHAAVBRIEF', PAD, TOP_SAFE + 28)
   ctx.letterSpacing = '0px'
 
   // Thin separator
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(PAD, 72); ctx.lineTo(W-PAD, 72); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, TOP_SAFE + 44); ctx.lineTo(W-PAD, TOP_SAFE + 44); ctx.stroke()
 
-  // Price strip — 4 instruments in one row
+  // Price strip — 4 instruments
   const instruments = [
     { label: 'GOLD',   key: 'MCX_GOLD',   fmt: v => `₹${Math.round(v).toLocaleString('en-IN')}` },
     { label: 'CRUDE',  key: 'MCX_CRUDE',  fmt: v => `₹${Math.round(v)}` },
@@ -303,25 +309,26 @@ function drawHeader(ctx, snapshot, mood) {
     const isUp  = pct >= 0
     const px    = PAD + i * stripW
 
-    ctx.fillStyle   = INK_4
-    ctx.font        = 'bold 14px "NotoSans", "Inter", sans-serif'
-    ctx.textAlign   = 'left'
+    ctx.fillStyle     = INK_4
+    ctx.font          = 'bold 14px "NotoSans", "Inter", sans-serif'
+    ctx.textAlign     = 'left'
     ctx.letterSpacing = '1px'
-    ctx.fillText(inst.label, px, 100)
+    ctx.fillText(inst.label, px, TOP_SAFE + 74)
     ctx.letterSpacing = '0px'
 
     ctx.fillStyle = INK
     ctx.font      = 'bold 20px "NotoSans", "Inter", sans-serif'
-    ctx.fillText(instr ? inst.fmt(instr.price) : '—', px, 126)
+    ctx.fillText(instr ? inst.fmt(instr.price) : '—', px, TOP_SAFE + 100)
 
     ctx.fillStyle = isUp ? GREEN : RED
     ctx.font      = '16px "NotoSans", "Inter", sans-serif'
-    ctx.fillText(`${isUp ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`, px, 148)
+    ctx.fillText(`${isUp ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`, px, TOP_SAFE + 122)
   })
 
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(PAD, 164); ctx.lineTo(W-PAD, 164); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, TOP_SAFE + 140); ctx.lineTo(W-PAD, TOP_SAFE + 140); ctx.stroke()
 }
+const HEADER_BOTTOM = TOP_SAFE + 148
 
 // ── Phase 1: HOOK ─────────────────────────────────────────────────────────────
 function drawHook(ctx, t, copy, snapshot, mood, edition) {
@@ -333,13 +340,13 @@ function drawHook(ctx, t, copy, snapshot, mood, edition) {
   ctx.fillStyle = GOLD
   ctx.fillRect(0, 0, W, 6)
 
-  // Wordmark — fades in
+  // Wordmark — inside safe zone
   ctx.globalAlpha = easeOut(t * 10)
   ctx.fillStyle   = GOLD
   ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
-  ctx.fillText('BHAAVBRIEF', W/2, 68)
+  ctx.fillText('BHAAVBRIEF', W/2, TOP_SAFE + 24)
   ctx.letterSpacing = '0px'
 
   const mover  = dominantMover(snapshot, copy?.dominant_instrument)
@@ -390,13 +397,13 @@ function drawHook(ctx, t, copy, snapshot, mood, edition) {
   let hy = 890
   for (const l of hookLines.slice(0, 2)) { ctx.fillText(l, W/2, hy); hy += 70 }
 
-  // Edition chip
+  // Edition chip — inside bottom safe zone
   ctx.globalAlpha = easeOut(Math.max(0, t * 3 - 1.5))
   ctx.fillStyle   = '#FFFFFF0C'
-  roundRect(ctx, W/2 - 80, H - 120, 160, 42, 21); ctx.fill()
+  roundRect(ctx, W/2 - 80, BOT_SAFE - 56, 160, 42, 21); ctx.fill()
   ctx.fillStyle   = INK_6
   ctx.font        = '18px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(`Edition #${edition}`, W/2, H - 90)
+  ctx.fillText(`Edition #${edition}`, W/2, BOT_SAFE - 26)
 
   ctx.globalAlpha = 1
 }
@@ -408,41 +415,41 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
   ctx.fillStyle = CREAM
   ctx.fillRect(0, 0, W, H)
 
-  // Shared header
-  drawHeader(ctx, snapshot, mood)
+  // Shared header (renders within safe zone)
+  drawHeader(ctx, snapshot)
 
-  // Beat index label — e.g. "01 / 03"
-  ctx.fillStyle   = INK_4
-  ctx.font        = 'bold 16px "NotoSans", "Inter", sans-serif'
-  ctx.textAlign   = 'right'
+  // Beat index label — inside top safe zone
+  ctx.fillStyle     = INK_4
+  ctx.font          = 'bold 16px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign     = 'right'
   ctx.letterSpacing = '1px'
-  ctx.fillText(`0${beatIndex} / 03`, W - PAD, 56)
+  ctx.fillText(`0${beatIndex} / 03`, W - PAD, TOP_SAFE + 28)
   ctx.letterSpacing = '0px'
 
-  // Progress bar at bottom
-  const barY = H - 48, barH = 4, barX = PAD, barW = W - PAD * 2
+  // Progress bar — inside bottom safe zone
+  const barY = BOT_SAFE - 36, barH = 5, barX = PAD, barW = W - PAD * 2
   ctx.fillStyle = BORDER
   roundRect(ctx, barX, barY, barW, barH, 2); ctx.fill()
   const fill = ((beatIndex - 1) / 3 + t / 3) * barW
   ctx.fillStyle = GOLD
   roundRect(ctx, barX, barY, Math.max(0, fill), barH, 2); ctx.fill()
 
-  // Footer
+  // Footer — inside bottom safe zone
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(PAD, H - 70); ctx.lineTo(W - PAD, H - 70); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, BOT_SAFE - 58); ctx.lineTo(W - PAD, BOT_SAFE - 58); ctx.stroke()
   ctx.fillStyle = INK_4; ctx.font = '18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'left'
-  ctx.fillText('bhaavbrief.in', PAD, H - 40)
+  ctx.fillText('bhaavbrief.in', PAD, BOT_SAFE - 30)
   ctx.fillStyle = GOLD; ctx.font = 'bold 18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'right'
-  ctx.fillText('Daily MCX Intelligence', W - PAD, H - 40)
+  ctx.fillText('Daily MCX Intelligence', W - PAD, BOT_SAFE - 30)
 
-  // Main text — large, vertically centered, lines animate in sequentially
+  // Main text — large, vertically centered in safe zone, lines animate in
   ctx.font = 'bold 56px "NotoSans", "Inter", sans-serif'
   ctx.textAlign = 'left'
   const lines = wrapText(ctx, text, W - PAD * 2)
   const lineHeight = 76
   const totalTextH = lines.length * lineHeight
-  const contentTop = 164  // below header
-  const contentBot = H - 90 // above footer
+  const contentTop = HEADER_BOTTOM + 20
+  const contentBot = BOT_SAFE - 80
   const startY = contentTop + (contentBot - contentTop - totalTextH) / 2 + lineHeight
 
   lines.forEach((line, i) => {
@@ -468,24 +475,25 @@ function drawPayoff(ctx, t, copy, mood) {
   ctx.fillStyle = GOLD
   ctx.fillRect(0, 0, W, 6)
 
-  // Wordmark
+  // Wordmark — inside safe zone
   ctx.globalAlpha = easeOut(t * 8)
   ctx.fillStyle   = GOLD
   ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
-  ctx.fillText('BHAAVBRIEF', W/2, 90)
+  ctx.fillText('BHAAVBRIEF', W/2, TOP_SAFE + 24)
   ctx.letterSpacing = '0px'
 
   // Thin rule
   ctx.globalAlpha = easeOut(Math.max(0, t * 6 - 0.3))
   ctx.strokeStyle = '#FFFFFF15'; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(140, 120); ctx.lineTo(W-140, 120); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(140, TOP_SAFE + 46); ctx.lineTo(W-140, TOP_SAFE + 46); ctx.stroke()
 
-  // Payoff text — the line people screenshot
+  // Payoff text — centered within safe zone
   const payLines = wrapText(ctx, copy.payoff ?? '', W - 140)
   const lineH    = 90
-  const startY   = H / 2 - (payLines.length * lineH) / 2
+  const safeH    = BOT_SAFE - TOP_SAFE
+  const startY   = TOP_SAFE + safeH / 2 - (payLines.length * lineH) / 2 + lineH * 0.6
 
   payLines.forEach((line, i) => {
     const lineT  = Math.max(0, (t - i * 0.12) * 6)
@@ -511,42 +519,45 @@ function drawCTA(ctx, t, mood, edition) {
 
   const PAD = 80
 
-  // Large BHAAVBRIEF wordmark — the brand moment
+  // All CTA content centered within safe zone
+  const midY = TOP_SAFE + (BOT_SAFE - TOP_SAFE) / 2
+
+  // Large BHAAVBRIEF wordmark
   ctx.globalAlpha = easeOut(t * 6)
   ctx.fillStyle   = GOLD
   ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '10px'
-  ctx.fillText('BHAAVBRIEF', W/2, H/2 - 120)
+  ctx.fillText('BHAAVBRIEF', W/2, midY - 110)
   ctx.letterSpacing = '0px'
 
   // Tagline
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.4))
   ctx.fillStyle   = INK_6
   ctx.font        = '32px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('Daily MCX Intelligence', W/2, H/2 - 56)
+  ctx.fillText('Daily MCX Intelligence', W/2, midY - 50)
 
   // Rule
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.6))
   ctx.strokeStyle = '#FFFFFF12'; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(PAD, H/2 - 16); ctx.lineTo(W - PAD, H/2 - 16); ctx.stroke()
+  ctx.beginPath(); ctx.moveTo(PAD, midY - 10); ctx.lineTo(W - PAD, midY - 10); ctx.stroke()
 
   // Follow CTA
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.8))
   ctx.fillStyle   = CREAM
   ctx.font        = 'bold 34px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('Follow for your daily edge', W/2, H/2 + 40)
+  ctx.fillText('Follow for your daily edge', W/2, midY + 50)
 
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 1.0))
   ctx.fillStyle   = GOLD
   ctx.font        = '28px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('@bhaavbrief  ·  bhaavbrief.in', W/2, H/2 + 90)
+  ctx.fillText('@bhaavbrief  ·  bhaavbrief.in', W/2, midY + 100)
 
   // Edition
   ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.2))
   ctx.fillStyle   = INK_4
   ctx.font        = '20px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(`Edition #${edition}`, W/2, H/2 + 150)
+  ctx.fillText(`Edition #${edition}`, W/2, midY + 156)
 
   ctx.globalAlpha = 1
 }
