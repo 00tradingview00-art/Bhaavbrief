@@ -85,7 +85,7 @@ const C = {
 
 // ── Shared cell padding ───────────────────────────────────────────────────────
 
-const PAD: React.CSSProperties = { padding: '6px 8px' }
+const PAD: React.CSSProperties = { padding: '8px 10px' }
 const ITM_BG = C.goldPl
 
 // ── Column header ─────────────────────────────────────────────────────────────
@@ -93,7 +93,7 @@ const ITM_BG = C.goldPl
 function TH({ children, align = 'right', extra }: { children: React.ReactNode; align?: 'left'|'right'|'center'; extra?: React.CSSProperties }) {
   return (
     <th style={{
-      ...PAD, textAlign: align, fontSize: 10, fontWeight: 500, color: C.ink3,
+      ...PAD, textAlign: align, fontSize: 11, fontWeight: 500, color: C.ink3,
       fontFamily: C.sans, letterSpacing: '0.02em', whiteSpace: 'nowrap',
       background: C.surf2, borderBottom: `1px solid ${C.bdr}`, ...extra,
     }}>{children}</th>
@@ -109,7 +109,7 @@ function Td({ children, align = 'right', bg, bold, color, small }: {
   return (
     <td style={{
       ...PAD, textAlign: align, background: bg ?? 'transparent',
-      ...numStyle, fontSize: small ? 11 : 12,
+      ...numStyle, fontSize: small ? 12 : 13,
       fontWeight: bold ? 600 : 400,
       color: color ?? C.ink2,
     }}>{children}</td>
@@ -477,9 +477,9 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
             <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
               {/* Section headers */}
               <tr>
-                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
-                <th style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
-                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
+                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dn, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
+                <th style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
+                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.up, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
               </tr>
               {/* Column names */}
               <tr>
@@ -533,7 +533,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
                     {/* ── CE side ── */}
                     {/* OI */}
                     <td style={{ ...PAD, textAlign: 'right', background: ceBg, minWidth: 56 }}>
-                      <div style={{ ...numStyle, fontSize: 12, color: C.ink2 }}>{fmtOI(row.CE.oi)}</div>
+                      <div style={{ ...numStyle, fontSize: 13, color: C.ink2 }}>{fmtOI(row.CE.oi)}</div>
                       <OIBar oi={row.CE.oi} max={maxCEOI} side="CE" />
                     </td>
                     {/* Chng OI */}
@@ -545,7 +545,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
                     {/* Chng */}
                     <Td align="right" bg={ceBg} color={ceChngColor} small>{fmtChng(row.CE.absChng)}</Td>
                     {/* IV% */}
-                    <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                    <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 12, color: C.ink3 }}>
                       {row.CE.iv != null ? row.CE.iv + '%' : '·'}
                     </td>
                     {/* Greeks */}
@@ -554,7 +554,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
                         <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.delta != null ? fmtN(row.CE.delta, 3) : '·'}</Td>
                         <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.gamma != null ? fmtN(row.CE.gamma, 6) : '·'}</Td>
                         <Td align="right" bg={ceBg} color={C.ink3} small>{row.CE.theta != null ? fmtN(row.CE.theta, 3) : '·'}</Td>
-                        <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                        <td style={{ ...PAD, textAlign: 'right', background: ceBg, borderRight: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 12, color: C.ink3 }}>
                           {row.CE.vega != null ? fmtN(row.CE.vega, 3) : '·'}
                         </td>
                       </>
@@ -562,18 +562,18 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
 
                     {/* ── Strike ── */}
                     <td style={{ ...PAD, textAlign: 'center', background: sBg, borderLeft: `2px solid ${C.bdr2}`, borderRight: `2px solid ${C.bdr2}` }}>
-                      <span style={{ ...numStyle, fontSize: 13, fontWeight: 700, color: sCol }}>
+                      <span style={{ ...numStyle, fontSize: 15, fontWeight: 700, color: sCol }}>
                         {Number(row.strike).toLocaleString('en-IN')}
                       </span>
-                      {isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: C.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
-                      {isMP && !isATM && <div style={{ fontSize: 9, fontFamily: C.sans, fontWeight: 600, color: '#6941c6', letterSpacing: '0.06em', marginTop: 2 }}>MAX PAIN</div>}
+                      {isATM && <div style={{ fontSize: 10, fontFamily: C.sans, fontWeight: 600, color: C.gold, letterSpacing: '0.06em', marginTop: 2 }}>ATM</div>}
+                      {isMP && !isATM && <div style={{ fontSize: 10, fontFamily: C.sans, fontWeight: 600, color: '#6941c6', letterSpacing: '0.06em', marginTop: 2 }}>MAX PAIN</div>}
                     </td>
 
                     {/* ── PE side ── */}
                     {/* Greeks */}
                     {showGreeks && (
                       <>
-                        <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                        <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 12, color: C.ink3 }}>
                           {row.PE.delta != null ? fmtN(row.PE.delta, 3) : '·'}
                         </td>
                         <Td align="left" bg={peBg} color={C.ink3} small>{row.PE.gamma != null ? fmtN(row.PE.gamma, 6) : '·'}</Td>
@@ -582,7 +582,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
                       </>
                     )}
                     {/* IV% */}
-                    <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 11, color: C.ink3 }}>
+                    <td style={{ ...PAD, textAlign: 'left', background: peBg, borderLeft: `2px solid ${C.bdr2}`, ...numStyle, fontSize: 12, color: C.ink3 }}>
                       {row.PE.iv != null ? row.PE.iv + '%' : '·'}
                     </td>
                     {/* Chng */}
@@ -595,7 +595,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
                     <Td align="left" bg={peBg} color={peOIColor} small>{fmtOIChng(row.PE.oiChange)}</Td>
                     {/* OI */}
                     <td style={{ ...PAD, textAlign: 'left', background: peBg, minWidth: 56 }}>
-                      <div style={{ ...numStyle, fontSize: 12, color: C.ink2 }}>{fmtOI(row.PE.oi)}</div>
+                      <div style={{ ...numStyle, fontSize: 13, color: C.ink2 }}>{fmtOI(row.PE.oi)}</div>
                       <OIBar oi={row.PE.oi} max={maxPEOI} side="PE" />
                     </td>
                   </tr>
