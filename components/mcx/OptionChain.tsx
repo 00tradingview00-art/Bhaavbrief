@@ -164,7 +164,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
   )
 
   return (
-    <div style={{ background: 'var(--surface)', borderRadius: 8, border: '1px solid var(--border)', overflow: 'hidden' }}>
+    <div style={{ background: 'var(--surface)', borderRadius: 8, border: '1px solid var(--border)', overflow: 'hidden', fontFamily: 'inherit' }}>
 
       {/* ── Controls ── */}
       <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: 'var(--surface-2, #f9f8f4)' }}>
@@ -237,7 +237,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
       {/* ── Table ── */}
       {data?.chain && (
         <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: 'inherit' }}>
             <thead>
               <tr style={{ background: '#f9fafb' }}>
                 <th colSpan={showGreeks ? 6 : 3} style={{ padding: '6px 8px', textAlign: 'center', fontSize: 10, fontWeight: 700, color: '#dc2626', letterSpacing: '0.06em', borderBottom: '1px solid #e5e7eb', borderRight: '2px solid #d1d5db' }}>CALLS</th>
@@ -248,9 +248,9 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
                 <TH align="right">OI</TH>
                 <TH align="right">Vol</TH>
                 <TH align="right" style={{ borderRight: '2px solid #d1d5db' }}>LTP</TH>
-                {showGreeks && <><TH align="right">IV%</TH><TH align="right">Δ</TH><TH align="right">Θ</TH></>}
+                {showGreeks && <><TH align="right">IV</TH><TH align="right">Delta</TH><TH align="right">Theta</TH></>}
                 <TH align="center" style={{ color: '#1d4ed8', minWidth: 85, fontWeight: 700 }}>Price</TH>
-                {showGreeks && <><TH align="left">Δ</TH><TH align="left">Θ</TH><TH align="left">IV%</TH></>}
+                {showGreeks && <><TH align="left">Delta</TH><TH align="left">Theta</TH><TH align="left">IV</TH></>}
                 <TH align="left" style={{ borderLeft: '2px solid #d1d5db' }}>LTP</TH>
                 <TH align="left">Vol</TH>
                 <TH align="left">OI</TH>
@@ -318,7 +318,7 @@ export default function OptionChain({ isPro }: { isPro: boolean }) {
 
       {/* ── Footer ── */}
       <div style={{ padding: '7px 14px', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', fontSize: 10, color: 'var(--ink-4)', background: 'var(--surface-2, #f9f8f4)' }}>
-        <span>Black-76 model · 6.5% RFR · 30s cache · Kite Connect</span>
+        <span>Black-76 model · 6.5% RFR · 30s cache</span>
         <span>Not investment advice</span>
       </div>
     </div>
