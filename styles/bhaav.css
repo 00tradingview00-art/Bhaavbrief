@@ -25,7 +25,7 @@
 
   --font-serif: var(--font-playfair), 'Georgia', serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-mono: var(--font-dm-mono), 'Courier New', monospace;
+  --font-mono: var(--font-dm-sans), system-ui, sans-serif;
 }
 
 /* Tag colours */
