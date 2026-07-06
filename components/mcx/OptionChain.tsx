@@ -321,7 +321,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
         <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           {INSTRUMENTS.map(({ key, label }) => (
             <button key={key} onClick={() => setInstrument(key)} style={{
-              padding: '5px 12px', fontSize: 12, fontWeight: 500, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+              padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, fontWeight: 500, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
               border: instrument === key ? `1px solid ${C.gold}` : `1px solid ${C.bdr}`,
               background: instrument === key ? C.gold : 'transparent',
               color: instrument === key ? '#fff' : C.ink3,
@@ -330,7 +330,7 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
         </div>
         {data?.expiries && (
           <select value={expiry || data.expiry} onChange={e => setExpiry(e.target.value)}
-            style={{ background: C.surf, color: C.ink2, border: `1px solid ${C.bdr}`, borderRadius: 5, padding: '5px 8px', fontSize: 12, fontFamily: C.sans }}>
+            style={{ background: C.surf, color: C.ink2, border: `1px solid ${C.bdr}`, borderRadius: 5, padding: isMobile ? '13px 10px' : '5px 8px', fontSize: 12, fontFamily: C.sans }}>
             {data.expiries.map(e => <option key={e} value={e}>{e}</option>)}
           </select>
         )}
@@ -342,13 +342,13 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
           }}>Greeks {showGreeks ? '▲' : '▼'}</button>
         )}
         <button onClick={() => setShowOIMap(v => !v)} style={{
-          padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+          padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
           border: `1px solid ${C.bdr}`, background: showOIMap ? C.goldPl : 'transparent',
           color: showOIMap ? C.gold : C.ink3,
         }}>OI Map {showOIMap ? '▲' : '▼'}</button>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
-          <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: '3px 8px', fontFamily: C.sans }}>
+          <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
             {loading ? 'Loading…' : '↻ Refresh'}
           </button>
         </div>
