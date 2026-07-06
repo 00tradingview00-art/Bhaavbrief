@@ -1,5 +1,5 @@
 import { createCanvas, GlobalFonts } from '@napi-rs/canvas'
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import matter from 'gray-matter'
@@ -14,7 +14,15 @@ if (existsSync(envFile)) {
   }
 }
 
-const EDITION   = parseInt(process.env.EDITION ?? '1')
+function detectLatestEdition() {
+  try {
+    const files = readdirSync(join(process.cwd(), 'content/briefs'))
+    const nums = files.map(f => f.match(/^edition-(\d+)\.mdx$/)?.[1]).filter(Boolean).map(Number)
+    if (nums.length) return Math.max(...nums)
+  } catch {}
+  return 1
+}
+const EDITION   = parseInt(process.env.EDITION ?? '') || detectLatestEdition()
 const BRIEFS_DIR = join(process.cwd(), 'content/briefs')
 const OUT_DIR    = join(process.cwd(), 'public/instagram')
 
