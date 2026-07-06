@@ -479,9 +479,9 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: C.sans }}>
               <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
                 <tr>
-                  <th style={{ ...PAD, textAlign: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.dnBg, borderBottom: `1px solid ${C.bdr}` }}>CE LTP</th>
+                  <th style={{ ...PAD, textAlign: 'right', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.surf, borderBottom: `1px solid ${C.bdr}` }}>CE LTP</th>
                   <th style={{ ...PAD, textAlign: 'center', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
-                  <th style={{ ...PAD, textAlign: 'left', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.upBg, borderBottom: `1px solid ${C.bdr}` }}>PE LTP</th>
+                  <th style={{ ...PAD, textAlign: 'left', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.ink, background: C.surf, borderBottom: `1px solid ${C.bdr}` }}>PE LTP</th>
                 </tr>
               </thead>
               <tbody>
@@ -523,9 +523,9 @@ export default function OptionChain({ isPro, preview = false }: { isPro: boolean
             <thead style={{ position: 'sticky', top: 0, zIndex: 10 }}>
               {/* Section headers */}
               <tr>
-                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.dnBg, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
+                <th colSpan={ceCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.surf, borderBottom: `1px solid ${C.bdr}`, borderRight: `2px solid ${C.bdr2}` }}>Calls (CE)</th>
                 <th style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: C.ink3, background: C.surf2, borderBottom: `1px solid ${C.bdr}` }}>Strike</th>
-                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.upBg, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
+                <th colSpan={peCols} style={{ ...PAD, textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.ink, background: C.surf, borderBottom: `1px solid ${C.bdr}`, borderLeft: `2px solid ${C.bdr2}` }}>Puts (PE)</th>
               </tr>
               {/* Column names */}
               <tr>
