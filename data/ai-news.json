@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-07-05-12-gold-slips-to-146-866-as-inflation-concern-outweighs-iran",
+    "title": "Gold slips to ₹146,866 as inflation concern outweighs Iran tensions; silver diverges 64 bps lower",
+    "summary": "MCX gold declined 0.35% to ₹146,866/10g as safe-haven demand eased on renewed inflation concerns offsetting geopolitical risk from US-Iran tensions. Silver fell 0.64% to ₹235,900/kg, a sharper slide than gold, signaling ",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-06T23:42:05.791Z",
+    "pubDateIST": "07 Jul 2026, 05:12",
+    "href": "/flash/2026-07-06-23-42-gold-slips-to-146-866-as-inflation-concern-outweighs-iran-tensions-silver",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-07-00-51-silver-leads-mcx-retreat-at-0-48-as-industrial-demand",
     "title": "Silver leads MCX retreat at −0.48% as industrial demand signals weaken",
     "summary": "MCX silver extended losses to −0.48% today, leading a broad commodity retreat across precious metals and energy. MCX gold slipped −0.31% to ₹146,915/10g while crude oil declined −0.26% to ₹6,551/bbl—the mildest selloff i",
@@ -838,17 +850,5 @@
     "pubDateIST": "30 Jun 2026, 09:51",
     "href": "/flash/2026-06-30-04-21-mcx-gold-tumbles-1-507-as-real-yield-repricing-overwhelms-geopolitical",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-05-12-crude-rallies-2-3-on-geopolitical-premium-precious-metals",
-    "title": "Crude rallies 2.3% on geopolitical premium; precious metals surrender to real-yield pressure ahead of MCX open",
-    "summary": "MCX Crude rallied +2.30% to ₹6,728/bbl in today's global session, bucking weakness across the precious metals complex where Gold fell 1.21% and Silver declined 0.78%. Natural Gas slumped 3.10%, the session's largest move",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-29T23:42:01.523Z",
-    "pubDateIST": "30 Jun 2026, 05:12",
-    "href": "/flash/2026-06-29-23-42-crude-rallies-2-3-on-geopolitical-premium-precious-metals-surrender-to-real",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
