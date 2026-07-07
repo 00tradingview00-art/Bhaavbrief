@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-07-hawk-scan-mcx-nat-gas-3-44-break-below-305-on-summer-demand-",
+    "href": "/articles/2026-07-07-hawk-scan-mcx-nat-gas-3-44-break-below-305-on-summer-demand-",
+    "title": "MCX Nat Gas: -3.44% break below 305 on summer demand slack",
+    "description": "MCX Nat Gas ₹303.40/mmBtu, -3.44% — Henry Hub injection season storage builds outpace seasonal norms.",
+    "excerpt": "TRIGGER MCX Natural Gas has fallen 3.44% to ₹303.40/mmBtu as Henry Hub printed $3.21/mmBtu, signalling US storage injections are running 15–20% above the 5-year seasonal average during peak summer ref",
+    "date": "2026-07-07T18:07:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "Storage"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 303.4
+  },
+  {
     "type": "brief",
     "slug": "edition-059",
     "href": "/briefs/edition-059",
