@@ -93,6 +93,37 @@ async function fetchNews() {
 
 // ── Previous briefs for narrative continuity ──────────────────────────────────
 
+// How many consecutive recent editions led with the same commodity tag —
+// used to nudge the model away from repeating a stale lead when a fresher
+// story is available (see diversificationBlock in generate()).
+function getLeadStreak(count = 5) {
+  try {
+    const files = fs.readdirSync(BRIEFS_DIR)
+      .filter(f => f.match(/^edition-\d+\.mdx$/))
+      .sort()
+      .slice(-count)
+      .reverse() // most recent first
+
+    const leads = files.map(f => {
+      const content = fs.readFileSync(path.join(BRIEFS_DIR, f), 'utf8')
+      const tagsMatch = content.match(/^tags:\s*\[(.+?)\]/m)
+      const firstTag  = tagsMatch?.[1]?.split(',')[0]?.trim().replace(/^"|"$/g, '')
+      return firstTag ?? null
+    })
+
+    if (!leads[0]) return { streak: 0, lead: null }
+
+    let streak = 0
+    for (const tag of leads) {
+      if (tag === leads[0]) streak++
+      else break
+    }
+    return { streak, lead: leads[0] }
+  } catch {
+    return { streak: 0, lead: null }
+  }
+}
+
 function loadRecentBriefs(count = 3) {
   try {
     const files = fs.readdirSync(BRIEFS_DIR)
@@ -240,6 +271,24 @@ TODAY'S MCX PRICES (formatted from the snapshot above — same numbers, human-re
     ? `RECENT EDITIONS (for narrative continuity — evolve, don't repeat):\n${recentBriefs}`
     : ''
 
+  const { streak: leadStreak, lead: leadTag } = getLeadStreak(5)
+  const movers = [
+    ['MCX Gold',   prices?.goldPct],
+    ['MCX Silver', prices?.silverPct],
+    ['MCX Crude',  prices?.crudePct],
+    ['MCX Copper', prices?.copperPct],
+    ['MCX NatGas', prices?.gasPct],
+  ]
+    .filter(([, pct]) => pct != null)
+    .sort((a, b) => Math.abs(parseFloat(b[1])) - Math.abs(parseFloat(a[1])))
+
+  const diversificationBlock = (leadStreak >= 3 && leadTag)
+    ? `
+STREAK ALERT: The last ${leadStreak} editions in a row have led with ${leadTag}. Today's movers ranked by size of move: ${movers.map(([label, pct]) => `${label} ${parseFloat(pct) >= 0 ? '+' : ''}${pct}%`).join(', ')}.
+Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation of the same story), lead this edition with a different commodity — most likely ${movers.find(([label]) => label !== leadTag)?.[0] ?? 'the next-largest mover'} — and give ${leadTag} a supporting mention instead of the headline. Repetition fatigue is a real cost; only keep the same lead if the story has materially changed.
+`
+    : ''
+
   const prompt = `You are BhaavBrief's chief analyst writing Edition #${EDITION} for ${dateStr}.
 
 BhaavBrief's edge is the NARRATIVE ENGINE — we don't just report prices, we track the dominant macro story shaping Indian commodity markets and show traders if it's gaining or losing power.
@@ -250,7 +299,7 @@ ${priceBlock}
 ${newsBlock}
 
 ${historyBlock}
-
+${diversificationBlock}
 ═══════════════════════════════════════════
 NARRATIVE ENGINE — YOUR CORE JOB
 ═══════════════════════════════════════════

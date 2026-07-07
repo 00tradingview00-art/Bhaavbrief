@@ -3,9 +3,9 @@ name: Keepalive
 # Two-tier rescue strategy:
 #
 #  Tier 1 — Pre-market (3:25 AM UTC = 8:55 AM IST):
-#    Triggers daily-open-brief, generate-brief, flash-brief, intelligence-engine
-#    just before market open — ensures the morning brief always goes out even
-#    if GitHub's cron scheduler drops those workflows' own schedules.
+#    Triggers generate-brief, flash-brief, intelligence-engine just before
+#    market open — ensures the morning brief always goes out even if GitHub's
+#    cron scheduler drops those workflows' own schedules.
 #
 #  Tier 2 — Hourly during market hours (4:30–17:30 UTC = 10 AM–11 PM IST):
 #    Triggers flash-brief and intelligence-engine every hour so a dropped 15-min
@@ -28,16 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # ── Pre-market only: kick off brief generation ─────────────────────────
-      - name: Trigger Daily Open Brief (pre-market)
-        if: github.event.schedule == '25 3 * * 1-5' || github.event_name == 'workflow_dispatch'
-        run: |
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/daily-open-brief.yml/dispatches" \
-            -d '{"ref":"main"}'
-          echo "Daily Open Brief triggered"
-
       - name: Trigger Generate Brief (pre-market)
         if: github.event.schedule == '25 3 * * 1-5' || github.event_name == 'workflow_dispatch'
         run: |

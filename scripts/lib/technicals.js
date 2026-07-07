@@ -1,6 +1,6 @@
 /**
  * BhaavBrief — Kite Historical OHLC + Technical Level Calculator
- * Shared module used by intelligence-engine.js and daily-open-brief.js
+ * Shared module used by intelligence-engine.js
  */
 
 /**

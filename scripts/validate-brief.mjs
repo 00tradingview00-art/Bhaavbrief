@@ -33,8 +33,8 @@ if (!fs.existsSync(briefPath)) {
 const snapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
 const fullFile  = fs.readFileSync(briefPath, "utf8");
 
-// Load OHLC technical levels written by daily-open-brief.js — these are real
-// Kite data but live outside the snapshot, so the validator must know about them.
+// Load OHLC technical levels (written by a brief generator, when present) — these
+// are real Kite data but live outside the snapshot, so the validator must know about them.
 const technicalsPath = snapshotPath.replace("market-snapshot.json", "brief-technicals.json");
 const briefTechnicals = fs.existsSync(technicalsPath)
   ? JSON.parse(fs.readFileSync(technicalsPath, "utf8"))
@@ -74,8 +74,8 @@ for (const [key, value] of Object.entries(snapshot.derived ?? {})) {
   if (typeof value === "number" && value > 0)
     snapshotNumbers.push({ key: `derived.${key}`, value });
 }
-// Add Kite OHLC technical levels — written to brief-technicals.json by daily-open-brief.js
-// before the brief is generated. These include day range, week/month highs-lows, 20-SMA,
+// Add Kite OHLC technical levels — written to brief-technicals.json before the brief is
+// generated, when available. These include day range, week/month highs-lows, 20-SMA,
 // and nearest S/R bands — all real Kite historical data, not in the main snapshot.
 for (const [inst, levels] of Object.entries(briefTechnicals)) {
   for (const [field, value] of Object.entries(levels)) {
@@ -83,7 +83,7 @@ for (const [inst, levels] of Object.entries(briefTechnicals)) {
       snapshotNumbers.push({ key: `tech.${inst}.${field}`, value });
   }
 }
-// Add COMEX/NYMEX overnight prices (USD) — written to brief-comex.json by daily-open-brief.js.
+// Add COMEX/NYMEX overnight prices (USD) — written to brief-comex.json when available.
 // COMEX Gold (~$3,300/oz) and WTI Crude (~$68/bbl) are above IGNORE_BELOW but can never
 // match INR snapshot values, so they need their own accepted-number pool.
 const comexPath = snapshotPath.replace("market-snapshot.json", "brief-comex.json");
@@ -224,7 +224,7 @@ async function semanticCheck() {
     },
     body: JSON.stringify({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 800,
+      max_tokens: 2048,
       system:
         "You are a pre-publication fact-consistency checker for a financial morning brief. " +
         "You are NOT an editor of style or tone. You only flag clear factual self-contradictions WITHIN today's brief. " +
@@ -297,6 +297,7 @@ async function semanticCheck() {
       issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
     }
   } catch {
+    console.error("DEBUG raw checker response:\n" + text);
     issues.push("SEMANTIC: unparseable checker response — failing closed");
   }
 }
