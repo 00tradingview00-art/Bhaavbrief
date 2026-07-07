@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-07-23-22-natural-gas-poles-away-from-gold-as-energy-demand-signals",
+    "title": "Natural gas poles away from gold as energy demand signals diverge from safe-haven flows",
+    "summary": "MCX Natural Gas rose ₹311.90/mmBtu (+0.91%) today in a session where crude oil dominated the cross-asset narrative with a +2.27% surge. Gold and silver retreated, falling -1.07% and -2.22% respectively, signalling a rota",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T17:52:33.324Z",
+    "pubDateIST": "07 Jul 2026, 23:22",
+    "href": "/flash/2026-07-07-17-52-natural-gas-poles-away-from-gold-as-energy-demand-signals-diverge-from-safe",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-07-21-17-mcx-copper-flat-despite-lme-records-rupee-strength-masks",
     "title": "MCX Copper flat despite LME records; rupee strength masks global gains",
     "summary": "MCX Copper declined ₹1,279/kg, a −0.66% loss in the afternoon session, while crude surged +2.27% to ₹6,700/bbl—creating a rare divergence where energy rallied but base metals retreated. Silver fell −2.23% to ₹230,823/kg,",
@@ -838,29 +850,5 @@
     "pubDateIST": "01 Jul 2026, 00:45",
     "href": "/flash/2026-06-30-19-15-copper-rallies-amid-demand-signal-crude-slides-on-demand-pessimism",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-22-47-mcx-crude-slips-1-49-on-asia-demand-weakness-silver-rallies",
-    "title": "MCX Crude slips 1.49% on Asia demand weakness; Silver rallies 3.44%",
-    "summary": "MCX Crude fell 1.49% to ₹6,628/bbl in the afternoon session, breaking a three-day hold above ₹6,700 support. Simultaneously, MCX Gold slipped 0.03% to near ₹1,60,000/10g, showing weakness despite a +3.44% surge in Silver",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T17:17:51.479Z",
-    "pubDateIST": "30 Jun 2026, 22:47",
-    "href": "/flash/2026-06-30-17-19-mcx-crude-slips-1-49-on-asia-demand-weakness-silver-rallies-3-44",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-22-49-natural-gas-breaks-session-highs-on-monsoon-demand-crude",
-    "title": "Natural Gas Breaks Session Highs on Monsoon Demand; Crude Slides 1.49%",
-    "summary": "MCX Natural Gas surged 3.40% to ₹313.30/mmBtu in the afternoon session, outpacing a subdued broader commodity complex where crude fell 1.49% and gold remained anchored. Silver's 3.44% rally—the session's strongest mover—",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T17:19:44.255Z",
-    "pubDateIST": "30 Jun 2026, 22:49",
-    "href": "/flash/2026-06-30-17-19-natural-gas-breaks-session-highs-on-monsoon-demand-crude-slides-1-49",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
