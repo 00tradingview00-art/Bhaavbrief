@@ -99,9 +99,10 @@
       "status": "active",
       "editions": [
         56,
-        58
+        58,
+        59
       ],
-      "latestDay": 5,
+      "latestDay": 6,
       "summary": "Gold and silver rally sharply as weaker US non-farm payrolls data trigger FOMC rate-cut reassessment, reversing the safe-haven unwind and reducing the opportunity cost of holding non-yielding precious metals.",
       "primaryCommodity": "MCX Gold",
       "keyLevel": "₹141506/10g",
