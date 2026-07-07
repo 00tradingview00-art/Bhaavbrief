@@ -207,7 +207,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
   const [marketOpen, setMarketOpen] = useState(isMCXOpen())
-  const timerRef = useRef<ReturnType<typeof setTimeout>>()
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const refresh = useCallback(async () => {
     try {

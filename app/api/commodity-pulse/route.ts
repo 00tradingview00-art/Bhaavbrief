@@ -3,6 +3,7 @@ import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { readFileSync }  from 'fs'
 import path              from 'path'
 import Anthropic         from '@anthropic-ai/sdk'
+import { HAIKU_MODEL, extractJson } from '@/lib/claude'
 
 export const dynamic    = 'force-dynamic'
 export const revalidate = 0
@@ -77,34 +78,22 @@ Respond ONLY with valid JSON — no markdown, no explanation:
 
   const client = new Anthropic({ apiKey })
 
-  const models = [
-    { id: 'claude-haiku-4-5-20251001', label: 'Haiku' },
-  ]
-
-  for (const { id, label } of models) {
-    try {
-      const msg  = await client.messages.create({
-        model:      id,
-        max_tokens: 400,
-        messages:   [{ role: 'user', content: prompt }],
-      })
-      const raw  = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
-      if (!raw) continue
-      const text   = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim()
-      const parsed = JSON.parse(text)
-      const { theme, ...drivers } = parsed
-      console.log(`[commodity-pulse] Claude ${label} OK`)
-      return { drivers, theme }
-    } catch (err) {
-      const errMsg = (err as Error).message
-      console.warn(`[commodity-pulse] Claude ${label} failed:`, errMsg)
-      // On 529 overload, immediately try next model (Haiku)
-      if (errMsg.includes('529')) continue
-      // On other errors, bail out
-      return null
-    }
+  try {
+    const msg  = await client.messages.create({
+      model:      HAIKU_MODEL,
+      max_tokens: 400,
+      messages:   [{ role: 'user', content: prompt }],
+    })
+    const raw = msg.content[0].type === 'text' ? msg.content[0].text.trim() : null
+    if (!raw) return null
+    const parsed = extractJson<Record<string, string>>(raw)
+    const { theme, ...drivers } = parsed
+    console.log('[commodity-pulse] Claude Haiku OK')
+    return { drivers, theme }
+  } catch (err) {
+    console.warn('[commodity-pulse] Claude Haiku failed:', (err as Error).message)
+    return null
   }
-  return null
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────

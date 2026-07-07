@@ -50,6 +50,8 @@ export async function getAllArticles(): Promise<ArticleMeta[]> {
 }
 
 export async function getArticleBySlug(slug: string) {
+  if (!/^[a-z0-9-]+$/.test(slug)) return null
+
   const filepath = path.join(ARTICLES_DIR, `${slug}.mdx`)
   if (!fs.existsSync(filepath)) return null
 

@@ -33,13 +33,13 @@ jobs:
         env:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/discover-instruments.mjs || echo "Instrument discovery skipped"
+        run: node scripts/discover-instruments.mjs
 
       - name: Fetch MCX contract specs
         env:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/fetch-contract-specs.js || echo "Contract specs fetch skipped"
+        run: node scripts/fetch-contract-specs.js
 
       - name: Commit updated instruments and specs
         run: |

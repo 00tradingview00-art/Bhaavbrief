@@ -63,6 +63,8 @@ export function getAdjacentFlash(slug: string): { prev: FlashMeta | null; next: 
 }
 
 export function getFlash(slug: string): Flash | null {
+  if (!/^[a-z0-9-]+$/.test(slug)) return null
+
   const mdxPath = path.join(FLASH_DIR, `${slug}.mdx`)
   const mdPath  = path.join(FLASH_DIR, `${slug}.md`)
   const target  = fs.existsSync(mdxPath) ? mdxPath : fs.existsSync(mdPath) ? mdPath : null

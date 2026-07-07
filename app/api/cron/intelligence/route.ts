@@ -6,11 +6,8 @@ const REPO     = '00tradingview00-art/Bhaavbrief'
 const WORKFLOW = 'intelligence-engine.yml'
 
 export async function GET(req: Request) {
-  const secret = process.env.CRON_SECRET
-  const headerAuth = req.headers.get('authorization')
-  const querySecret = new URL(req.url).searchParams.get('secret')
-  const valid = secret && (headerAuth === `Bearer ${secret}` || querySecret === secret)
-  if (!valid) {
+  const auth = req.headers.get('authorization')
+  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

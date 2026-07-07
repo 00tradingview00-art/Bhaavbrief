@@ -73,6 +73,6 @@ export async function GET(
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'unknown'
     console.error(`[chart/${commodity}] ${msg}`)
-    return NextResponse.json({ error: msg }, { status: 502 })
+    return NextResponse.json({ error: 'chart_unavailable' }, { status: 502 })
   }
 }

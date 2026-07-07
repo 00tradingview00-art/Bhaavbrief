@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { scoreEntries, buildContentContext, type ScoredEntry } from '@/lib/searchIndex'
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit'
+import { HAIKU_MODEL, extractJson } from '@/lib/claude'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -84,7 +85,7 @@ export async function GET(req: NextRequest) {
   let parsed: { answer: string; answerType: string; relevantSlugs: string[]; relatedQuestions: string[] }
   try {
     const response = await client.messages.create({
-      model:      'claude-haiku-4-5-20251001',
+      model:      HAIKU_MODEL,
       max_tokens: 600,
       system:     SYSTEM_PROMPT,
       messages: [{
@@ -94,9 +95,7 @@ export async function GET(req: NextRequest) {
     })
 
     const text = response.content[0].type === 'text' ? response.content[0].text : ''
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error('No JSON in response')
-    parsed = JSON.parse(jsonMatch[0])
+    parsed = extractJson(text)
   } catch (err) {
     console.error('[search] Claude error:', err)
     // Graceful fallback — return content matches without AI answer

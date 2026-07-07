@@ -8,6 +8,6 @@ export const dynamic  = 'force-dynamic'
 export async function GET(): Promise<NextResponse> {
   const data = await loadEIA()
   return NextResponse.json(data, {
-    headers: { 'Cache-Control': 'no-store, max-age=0' },
+    headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=600' },
   })
 }
