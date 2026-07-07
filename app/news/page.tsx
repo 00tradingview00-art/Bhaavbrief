@@ -118,7 +118,7 @@ export default async function NewsPage() {
           fontWeight: 300,
           maxWidth: 560,
         }}>
-          What's moving MCX today — gold, crude, silver, copper. Updated every 15 minutes.
+          What&apos;s moving MCX today — gold, crude, silver, copper. Updated every 15 minutes.
         </p>
       </div>
 

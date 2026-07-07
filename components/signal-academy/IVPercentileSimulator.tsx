@@ -303,10 +303,10 @@ export default function IVPercentileSimulator() {
           marginBottom: 10,
           lineHeight: 1.8,
         }}>
-          IV-P = (sessions in past 252 where IV &lt; today's IV) ÷ 252 × 100
+          IV-P = (sessions in past 252 where IV &lt; today&apos;s IV) ÷ 252 × 100
         </div>
         <p style={{ fontSize: 12, color: 'var(--ink-3)', lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
-          This simulator uses illustrative min/max ranges for each commodity. In live data (Phase 2), it would rank today's actual IV against 252 real trading sessions. The zones and strategy implications are identical — only the precision of the percentile calculation changes.
+          This simulator uses illustrative min/max ranges for each commodity. In live data (Phase 2), it would rank today&apos;s actual IV against 252 real trading sessions. The zones and strategy implications are identical — only the precision of the percentile calculation changes.
         </p>
       </div>
 

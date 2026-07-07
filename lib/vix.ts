@@ -132,8 +132,6 @@ export function computeIVIX(
  * @returns       AAV for each window in %, or null if insufficient data
  */
 export function computeAAV(closes: number[]): AAVResult {
-  const WINDOWS = [5, 10, 20, 40, 60] as const
-
   function aav(n: number): number | null {
     // Need n+1 closes to get n returns
     if (closes.length < n + 1) return null

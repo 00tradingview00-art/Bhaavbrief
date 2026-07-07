@@ -162,7 +162,7 @@ export default function AboutSearch() {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
             }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
-                "{asked}"
+                &quot;{asked}&quot;
               </span>
               <button
                 onClick={() => { setResult(null); setQuery(''); setAsked('') }}
@@ -208,7 +208,7 @@ export default function AboutSearch() {
               }}>
                 From BhaavBrief
               </div>
-              {result.contentMatches.map((item, i) => (
+              {result.contentMatches.map((item) => (
                 <Link
                   key={item.slug}
                   href={item.href}

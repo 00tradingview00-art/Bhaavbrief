@@ -4,13 +4,6 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
-  // ESLint was only just introduced to this codebase (no config existed before)
-  // and surfaces pre-existing violations across many files — don't block
-  // production builds on those until they're cleaned up incrementally.
-  // `npm run lint` still runs the full strict set for local/CI use.
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.pexels.com' },

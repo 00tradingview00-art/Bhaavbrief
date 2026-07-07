@@ -311,7 +311,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
     const row = atmRowRef.current
     const offset = row.offsetTop - container.clientHeight / 2 + row.clientHeight / 2
     container.scrollTo({ top: offset, behavior: 'smooth' })
-  }, [data, page])
+  }, [data, page, preview])
 
   if (!isPro) {
     return (

@@ -92,7 +92,7 @@ export default function VolumeAnomalyPage() {
               Why the 20-day average matters
             </div>
             <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: '0 0 10px', fontWeight: 300 }}>
-              The 20-session average volume represents normal market participation — the baseline of retail, hedging, and routine institutional flow. When today's volume exceeds this baseline by 2× or more, something has changed: a new catalyst, a forced position unwind, or deliberate institutional accumulation or distribution.
+              The 20-session average volume represents normal market participation — the baseline of retail, hedging, and routine institutional flow. When today&apos;s volume exceeds this baseline by 2× or more, something has changed: a new catalyst, a forced position unwind, or deliberate institutional accumulation or distribution.
             </p>
             <p style={{ fontSize: 15, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0, fontWeight: 300 }}>
               Volume alone does not tell you the direction. But combined with price direction and OI change, it classifies exactly what type of participant is driving the move — and whether that move has the conviction to continue.

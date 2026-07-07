@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import OIDivergenceSimulator from '@/components/signal-academy/OIDivergenceSimulator'
 
@@ -29,13 +28,6 @@ const HISTORICAL_CASES = [
 ]
 
 export default function OIDivergencePage() {
-  const [unlocked, setUnlocked] = useState(true) // Signal 1 is always accessible
-
-  useEffect(() => {
-    // Signal 1 is always live — no gate needed
-    setUnlocked(true)
-  }, [])
-
   return (
     <div style={{ maxWidth: 760, margin: '0 auto', padding: 'clamp(24px,4vw,40px) clamp(16px,4vw,24px)' }}>
 

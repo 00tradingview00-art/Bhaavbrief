@@ -1,5 +1,5 @@
 import { KiteClient }   from '@/lib/kite'
-import { black76, calculateIV, calculateMaxPain } from '@/lib/black76'
+import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 
 const RISK_FREE_RATE = 0.065
@@ -84,8 +84,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
 
       const ceIV = ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : 0
       const peIV = peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : 0
-      const ceGreeks = ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
-      const peGreeks = peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
+      const ceGreeks: Partial<Greeks> = ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
+      const peGreeks: Partial<Greeks> = peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
 
       const distFromATM = futurePrice > 0 ? Math.abs(strike - futurePrice) / futurePrice : 1
 
@@ -102,10 +102,10 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oiChange: ceQ ? (ceQ.oi - (ceQ.oi_day_low ?? ceQ.oi)) : 0,
           volume:   ceQ?.volume ?? 0,
           iv:       ceIV > 0 ? parseFloat((ceIV * 100).toFixed(2)) : null,
-          delta:    (ceGreeks as any).delta ?? null,
-          gamma:    (ceGreeks as any).gamma ?? null,
-          theta:    (ceGreeks as any).theta ?? null,
-          vega:     (ceGreeks as any).vega  ?? null,
+          delta:    ceGreeks.delta ?? null,
+          gamma:    ceGreeks.gamma ?? null,
+          theta:    ceGreeks.theta ?? null,
+          vega:     ceGreeks.vega  ?? null,
         },
         PE: {
           symbol:   peOpt?.tradingsymbol ?? null,
@@ -115,10 +115,10 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oiChange: peQ ? (peQ.oi - (peQ.oi_day_low ?? peQ.oi)) : 0,
           volume:   peQ?.volume ?? 0,
           iv:       peIV > 0 ? parseFloat((peIV * 100).toFixed(2)) : null,
-          delta:    (peGreeks as any).delta ?? null,
-          gamma:    (peGreeks as any).gamma ?? null,
-          theta:    (peGreeks as any).theta ?? null,
-          vega:     (peGreeks as any).vega  ?? null,
+          delta:    peGreeks.delta ?? null,
+          gamma:    peGreeks.gamma ?? null,
+          theta:    peGreeks.theta ?? null,
+          vega:     peGreeks.vega  ?? null,
         },
       }
     })

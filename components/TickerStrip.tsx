@@ -38,16 +38,6 @@ interface Item {
 
 // No hardcoded fallback prices — show dashes until live data arrives.
 // Stale hardcoded prices destroy trust when they disagree with the brief body.
-const FALLBACK: Item[] = [
-  { label: 'MCX GOLD',    price: '—', pct: 0 },
-  { label: 'MCX SILVER',  price: '—', pct: 0 },
-  { label: 'MCX CRUDE',   price: '—', pct: 0 },
-  { label: 'MCX COPPER',  price: '—', pct: 0 },
-  { label: 'MCX NAT GAS', price: '—', pct: 0 },
-  { label: 'USD / INR',   price: '—', pct: 0 },
-  { label: 'COMEX GOLD',  price: '—', pct: 0 },
-  { label: 'WTI CRUDE',   price: '—', pct: 0 },
-]
 
 function mapToItems(d: PriceData): Item[] {
   return [

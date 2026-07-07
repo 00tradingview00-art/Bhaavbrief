@@ -24,7 +24,7 @@ export default async function OGImage() {
             <span style={{ fontSize: 34, fontWeight: 700, color: C.ink,  fontFamily: serif, letterSpacing: -1 }}>Bhaav</span>
             <span style={{ fontSize: 34, fontWeight: 700, color: C.gold, fontFamily: serif, letterSpacing: -1 }}>Brief</span>
             <span style={{ marginLeft: 16, fontSize: 12, color: C.ink4, letterSpacing: 2, textTransform: 'uppercase', fontFamily: 'sans-serif' }}>
-              India's First Commodity Intelligence
+              India&apos;s First Commodity Intelligence
             </span>
           </div>
 

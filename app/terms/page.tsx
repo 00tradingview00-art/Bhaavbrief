@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Terms of Use',
@@ -52,7 +53,7 @@ export default function TermsPage() {
 
         <Section title="1. About BhaavBrief">
           <p>
-            BhaavBrief ("we", "us", "our") is a commodity intelligence platform published at{' '}
+            BhaavBrief (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is a commodity intelligence platform published at{' '}
             <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>. We publish
             daily MCX commodity market intelligence, intraday flash signals, and educational content
             covering Gold, Silver, Crude Oil, Copper, and Natural Gas. BhaavBrief is free to access.
@@ -127,7 +128,7 @@ export default function TermsPage() {
 
         <Section title="8. Changes to These Terms">
           <p>
-            We may update these terms from time to time. The "last updated" date at the top will
+            We may update these terms from time to time. The &quot;last updated&quot; date at the top will
             reflect any changes. Continued use of BhaavBrief after changes are posted constitutes
             acceptance of the revised terms.
           </p>
@@ -152,12 +153,12 @@ export default function TermsPage() {
           border: '0.5px solid #DDDDD0',
           display: 'flex', gap: 24, flexWrap: 'wrap',
         }}>
-          <a href="/privacy" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+          <Link href="/privacy" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             Privacy Policy →
-          </a>
-          <a href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8A8A7A', textDecoration: 'none' }}>
+          </Link>
+          <Link href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8A8A7A', textDecoration: 'none' }}>
             ← Back to home
-          </a>
+          </Link>
         </div>
 
       </div>

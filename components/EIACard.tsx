@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { EIAResponse, EIAData, EIAWeek } from '@/lib/eia'
+import type { EIAResponse, EIAWeek } from '@/lib/eia'
 import { isEIAData } from '@/lib/eia'
 
 function timeAgo(iso: string): string {

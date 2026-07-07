@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { KiteClient } from '@/lib/kite'
 
 // Kite redirects here after login:
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
     let instrumentsMsg = ''
     try {
       const client = new KiteClient(apiKey, accessToken)
-      const tokens = await client.discoverAndCacheTokens()
+      await client.discoverAndCacheTokens()
       instrumentsMsg = `
         <div class="step">✅ Instrument tokens discovered and cached</div>
       `
@@ -105,6 +105,11 @@ async function updateGitHubSecret(accessToken: string): Promise<boolean> {
 }
 
 // ── Update Vercel Environment Variable ────────────────────────────────────────
+interface VercelEnvVar {
+  id:  string
+  key: string
+}
+
 async function updateVercelEnv(accessToken: string): Promise<boolean> {
   const vercelToken    = process.env.VERCEL_TOKEN
   const vercelProjectId= process.env.VERCEL_PROJECT_ID
@@ -120,8 +125,8 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
       `https://api.vercel.com/v9/projects/${vercelProjectId}/env`,
       { headers: { Authorization: `Bearer ${vercelToken}` } }
     )
-    const { envs } = await listRes.json()
-    const existing = envs?.find((e: any) => e.key === 'KITE_ACCESS_TOKEN')
+    const { envs } = await listRes.json() as { envs?: VercelEnvVar[] }
+    const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN')
 
     if (existing) {
       // Patch existing

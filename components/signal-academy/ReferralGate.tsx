@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 
 const UNLOCK_THRESHOLD = 5
 
@@ -8,13 +9,6 @@ const UNLOCK_THRESHOLD = 5
 async function computeRefCode(email: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(email.toLowerCase().trim()))
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 12)
-}
-
-function getOrCreateVisitorId(): string {
-  const key = 'bb_visitor_id'
-  let id = localStorage.getItem(key)
-  if (!id) { id = crypto.randomUUID(); localStorage.setItem(key, id) }
-  return id
 }
 
 interface Props {
@@ -135,7 +129,7 @@ export default function ReferralGate({ onUnlock, alreadyUnlocked }: Props) {
         </form>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 12 }}>
           Not subscribed yet?{' '}
-          <a href="/#subscribe" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Subscribe free</a>
+          <Link href="/#subscribe" style={{ color: 'var(--gold)', textDecoration: 'none' }}>Subscribe free</Link>
           {' '}— then come back here.
         </p>
       </div>

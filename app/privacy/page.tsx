@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -102,7 +103,7 @@ export default function PrivacyPage() {
             <li><strong>Request a copy</strong> of the data we hold about you</li>
           </ul>
           <p style={{ marginTop: '0.5rem' }}>
-            We will respond to all requests within 30 days, in compliance with India's Digital Personal
+            We will respond to all requests within 30 days, in compliance with India&apos;s Digital Personal
             Data Protection (DPDP) Act, 2023.
           </p>
         </Section>
@@ -125,7 +126,7 @@ export default function PrivacyPage() {
 
         <Section title="8. Changes to This Policy">
           <p>
-            We may update this policy from time to time. The "last updated" date at the top will reflect
+            We may update this policy from time to time. The &quot;last updated&quot; date at the top will reflect
             any changes. Continued use of the newsletter after changes constitutes acceptance of the
             updated policy.
           </p>
@@ -147,12 +148,12 @@ export default function PrivacyPage() {
         </div>
 
         <div style={{ marginTop: '2rem' }}>
-          <a href="/" style={{
+          <Link href="/" style={{
             fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
             color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1,
           }}>
             ← Back to home
-          </a>
+          </Link>
         </div>
 
       </div>

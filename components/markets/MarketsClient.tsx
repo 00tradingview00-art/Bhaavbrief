@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-import type { PriceData, MCXData, ForexData } from '@/lib/prices'
+import type { PriceData, MCXData } from '@/lib/prices'
 import OptionChain from '@/components/mcx/OptionChain'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -388,7 +388,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             Gold, crude, silver — why prices are moving, before the market opens.
           </div>
         </div>
-        <a
+        <Link
           href="/briefs"
           style={{
             display: 'inline-block', padding: '10px 20px',
@@ -398,7 +398,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           }}
         >
           Read latest brief →
-        </a>
+        </Link>
       </div>
 
       {/* ── Global Reference ── */}

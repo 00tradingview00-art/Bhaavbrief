@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
@@ -61,7 +62,7 @@ export default function Nav() {
             alignItems: 'center',
             gap: 9,
           }}>
-            <img src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} style={{ display: 'block' }} />
+            <Image src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} style={{ display: 'block' }} />
             <span style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 18,

@@ -113,7 +113,6 @@ function ConvergenceChart({
 
   // Y-axis: map basis value to SVG y
   const totalRange = basisMax - basisMin
-  const yZero      = padT + chartH * (basisMax / totalRange)
 
   function toY(val: number): number {
     return padT + chartH * ((basisMax - val) / totalRange)
@@ -135,9 +134,6 @@ function ConvergenceChart({
 
   // Normal carry band polygon (today: [yNormHigh, yNormLow] → expiry: [yZeroLine, yZeroLine])
   const bandPath = `M ${xToday} ${yNormHigh} L ${xExpiry} ${yZeroLine} L ${xExpiry} ${yZeroLine} L ${xToday} ${yNormLow} Z`
-
-  // Actual convergence line (today: yBasis → expiry: yZeroLine)
-  const linePath = `M ${xToday} ${yBasis} L ${xExpiry} ${yZeroLine}`
 
   // Y-axis tick values
   const ticks = [basisMax, Math.round(basisMax * 0.5), 0, Math.round(basisMin * 0.5)].filter(
@@ -308,7 +304,7 @@ export default function BasisConvergenceSimulator() {
           state={state}
         />
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)', marginTop: 8 }}>
-          Green band = normal carry range. Dot = today's basis. Line = required convergence path.
+          Green band = normal carry range. Dot = today&apos;s basis. Line = required convergence path.
         </div>
       </div>
 

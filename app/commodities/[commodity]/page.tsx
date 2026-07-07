@@ -2,6 +2,8 @@ import { notFound }        from 'next/navigation'
 import Link                 from 'next/link'
 import type { Metadata }    from 'next'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+
+type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel'
 import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
 import fs                   from 'fs'
@@ -296,7 +298,7 @@ export default async function CommodityPage({ params }: Props) {
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
 
-  const priceData = prices ? (prices as Record<string, any>)[entry.priceKey] : null
+  const priceData = prices ? prices[entry.priceKey as CommodityPriceKey] : null
   const ltp       = priceData?.mcx         ?? 0
   const pct       = priceData?.mcxChangePct ?? 0
   const open      = priceData?.mcxOpen      ?? 0
@@ -650,7 +652,7 @@ export default async function CommodityPage({ params }: Props) {
               </div>
             ))}
             <p style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 10, lineHeight: 1.5 }}>
-              Margins are illustrative. Check your broker's SPAN calculator for live requirements.
+              Margins are illustrative. Check your broker&apos;s SPAN calculator for live requirements.
             </p>
           </div>
 

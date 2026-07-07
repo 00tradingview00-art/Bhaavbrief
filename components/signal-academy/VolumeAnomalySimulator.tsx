@@ -213,7 +213,7 @@ export default function VolumeAnomalySimulator() {
       {/* Volume slider */}
       <div style={{ marginBottom: 28 }}>
         <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-3)', marginBottom: 10 }}>
-          Today's volume vs 20-day average
+          Today&apos;s volume vs 20-day average
           <span style={{ marginLeft: 12, fontSize: 22, fontWeight: 600, color: zone.color, verticalAlign: 'middle' }}>
             {multiplier.toFixed(1)}×
           </span>

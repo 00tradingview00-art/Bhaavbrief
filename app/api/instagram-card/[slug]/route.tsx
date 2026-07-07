@@ -58,8 +58,6 @@ export async function GET(
     Promise.resolve(getInterFont('bold')),
     fetchPrices(),
   ])
-  const font = interBold  // keep alias for title usage
-
   const cols = [
     { label: 'MCX GOLD',   d: prices?.gold   },
     { label: 'MCX CRUDE',  d: prices?.crude  },

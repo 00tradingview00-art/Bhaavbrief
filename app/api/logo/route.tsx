@@ -176,7 +176,7 @@ function wordmark(dark: boolean) {
             textTransform: 'uppercase',
             color: MUTED,
           }}>
-            India's First Commodity Intelligence
+            India&apos;s First Commodity Intelligence
           </span>
         </div>
 

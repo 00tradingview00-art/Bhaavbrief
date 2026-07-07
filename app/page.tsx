@@ -573,7 +573,7 @@ export default async function HomePage() {
               About BhaavBrief
             </p>
             <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.75, margin: 0 }}>
-              Independent commodity intelligence for India's traders, investors, merchants and businesses.
+              Independent commodity intelligence for India&apos;s traders, investors, merchants and businesses.
               MCX energy, metals, and NCDEX agri — prices, context, and what moves them.
             </p>
           </div>

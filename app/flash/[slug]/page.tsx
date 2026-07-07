@@ -1,6 +1,7 @@
 import { notFound }      from 'next/navigation'
 import { Metadata }      from 'next'
 import { MDXRemote }     from 'next-mdx-remote/rsc'
+import Link              from 'next/link'
 import Masthead          from '@/components/Masthead'
 import CopyLinkButton    from '@/components/CopyLinkButton'
 import { getFlash, getAllFlash, getAdjacentFlash } from '@/lib/flash'
@@ -108,9 +109,9 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <nav style={{ marginBottom: '1.5rem' }}>
-          <a href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+          <Link href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             ← Home
-          </a>
+          </Link>
         </nav>
 
         <article>
@@ -164,20 +165,20 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           {(prev || next) && (
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
               {next ? (
-                <a href={`/flash/${next.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4 }}>
+                <Link href={`/flash/${next.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4 }}>
                   <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>← Older</span>
                   {next.title.length > 72 ? next.title.slice(0, 72) + '…' : next.title}
-                </a>
+                </Link>
               ) : <span />}
               {prev ? (
-                <a href={`/flash/${prev.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4, textAlign: 'right' }}>
+                <Link href={`/flash/${prev.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4, textAlign: 'right' }}>
                   <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>Newer →</span>
                   {prev.title.length > 72 ? prev.title.slice(0, 72) + '…' : prev.title}
-                </a>
+                </Link>
               ) : <span />}
             </div>
           )}
-          <a href="/news" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← Intelligence Feed</a>
+          <Link href="/news" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← Intelligence Feed</Link>
         </nav>
       </div>
     </div>

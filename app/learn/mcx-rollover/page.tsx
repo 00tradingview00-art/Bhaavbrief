@@ -35,12 +35,6 @@ function fmt(n: number, decimals = 0) {
   return n.toLocaleString('en-IN', { maximumFractionDigits: decimals })
 }
 
-function fmtValue(v: number): string {
-  if (v >= 10_000_000) return `₹${(v / 10_000_000).toFixed(2)} crore`
-  if (v >= 100_000)    return `₹${(v / 100_000).toFixed(1)} lakh`
-  return `₹${fmt(Math.round(v))}`
-}
-
 export const metadata = {
   title: 'MCX Futures Rollover Guide 2026: When, How & Cost Explained',
   description: 'How to rollover MCX futures contracts in 2026. Rollover timing, cost calculation, worked examples for Crude Oil and Gold, step-by-step execution on Zerodha and Angel One, and common mistakes to avoid.',
@@ -139,7 +133,6 @@ export default function Page() {
   const goldContango    = 300   // typical ₹/10g spread
   const silverContango  = 800   // typical ₹/kg spread
   const copperContango  = 2     // typical ₹/kg spread (low)
-  const natgasContango  = 5     // typical ₹/mmBtu spread (can be negative in winter)
 
   const crudeRollCost   = crudeContango * 100      // per standard lot
   const crudeMiniRoll   = crudeContango * 10       // per mini lot

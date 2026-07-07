@@ -207,16 +207,16 @@ export default async function AboutPage() {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: 14, color: '#48483A', lineHeight: 1.8, fontWeight: 300 }}>
                 <p>
-                  My job inside an asset management company was sales — moving NFOs, PMS, AIF, and mutual fund products to hit targets. That role didn't teach me research. What it taught me was something more useful for building this: how clients actually think, and how easily that gets used against them.
+                  My job inside an asset management company was sales — moving NFOs, PMS, AIF, and mutual fund products to hit targets. That role didn&apos;t teach me research. What it taught me was something more useful for building this: how clients actually think, and how easily that gets used against them.
                 </p>
                 <p>
-                  I sat through years of fund manager calls and noticed the same pattern every time: generic commentary built on twenty years of market history, repeated almost word for word regardless of what was actually happening that quarter. Products got sold because there was a target to hit, not because anyone had checked if it fit the client sitting across the table. So I started doing my own work — tracking markets, building my own frameworks, reading the actual macro drivers instead of repeating the desk's talking points. That's where the real understanding came from.
+                  I sat through years of fund manager calls and noticed the same pattern every time: generic commentary built on twenty years of market history, repeated almost word for word regardless of what was actually happening that quarter. Products got sold because there was a target to hit, not because anyone had checked if it fit the client sitting across the table. So I started doing my own work — tracking markets, building my own frameworks, reading the actual macro drivers instead of repeating the desk&apos;s talking points. That&apos;s where the real understanding came from.
                 </p>
                 <p>
-                  The gap I kept running into wasn't just "nobody explains why gold moved today." It was bigger than that. Someone trying to understand commodities in India needs different things depending on where they're starting from — what a lot size even is, what's actually moving the market right now, how to tell a real signal from noise, and eventually, how to get exposure to it at all. Almost none of that exists in one place, built for an Indian trader instead of copy-pasted from a US market structure.
+                  The gap I kept running into wasn&apos;t just &quot;nobody explains why gold moved today.&quot; It was bigger than that. Someone trying to understand commodities in India needs different things depending on where they&apos;re starting from — what a lot size even is, what&apos;s actually moving the market right now, how to tell a real signal from noise, and eventually, how to get exposure to it at all. Almost none of that exists in one place, built for an Indian trader instead of copy-pasted from a US market structure.
                 </p>
                 <p style={{ marginBottom: 0 }}>
-                  That's what BhaavBrief is built to be — not a single product, but three layers stacked on top of each other:
+                  That&apos;s what BhaavBrief is built to be — not a single product, but three layers stacked on top of each other:
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', marginTop: '1.1rem' }}>

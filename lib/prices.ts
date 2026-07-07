@@ -17,7 +17,28 @@ import path from 'path'
 
 // ── Instrument token management ───────────────────────────────────────────────
 
-const FALLBACK_INSTRUMENTS: Record<string, InstrumentInfo> = {
+type MetalKey = 'gold' | 'goldMini' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'lead' | 'aluminium' | 'nickel'
+
+interface InstrumentTokens {
+  gold:      InstrumentInfo
+  goldMini?: InstrumentInfo
+  silver:    InstrumentInfo
+  crude:     InstrumentInfo
+  copper:    InstrumentInfo
+  natgas:    InstrumentInfo
+  zinc?:      InstrumentInfo
+  lead?:      InstrumentInfo
+  aluminium?: InstrumentInfo
+  nickel?:    InstrumentInfo
+  currencies?: {
+    usdinr: InstrumentInfo
+    eurinr: InstrumentInfo
+    gbpinr: InstrumentInfo
+    jpyinr: InstrumentInfo
+  }
+}
+
+const FALLBACK_INSTRUMENTS: InstrumentTokens = {
   gold:     { token: 117574919, symbol: 'GOLD',        expiry: '' },
   goldMini: { token: 125882119, symbol: 'GOLDM',       expiry: '' },
   silver:   { token: 118822407, symbol: 'SILVER',      expiry: '' },
@@ -26,7 +47,7 @@ const FALLBACK_INSTRUMENTS: Record<string, InstrumentInfo> = {
   natgas:   { token: 125057287, symbol: 'NATURALGAS',  expiry: '' },
 }
 
-function loadInstrumentTokens(): Record<string, InstrumentInfo> {
+function loadInstrumentTokens(): InstrumentTokens {
   try {
     const file = path.join(process.cwd(), 'data/kite-instruments.json')
     if (!fs.existsSync(file)) return FALLBACK_INSTRUMENTS
@@ -54,12 +75,17 @@ function loadInstrumentTokens(): Record<string, InstrumentInfo> {
 
 // ── Twelve Data ───────────────────────────────────────────────────────────────
 
+interface QuoteShape {
+  regularMarketPrice:         number
+  regularMarketChangePercent: number
+}
+
 const TD_SYMBOL_MAP: Record<string, string> = {
   'GC=F':     'XAU/USD',
   'USDINR=X': 'USD/INR',
 }
 
-async function fetchTwelveData(): Promise<Record<string, any> | null> {
+async function fetchTwelveData(): Promise<Record<string, QuoteShape> | null> {
   const apiKey = process.env.TWELVE_DATA_API_KEY
   if (!apiKey) return null
 
@@ -71,7 +97,7 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
   if (!res.ok) throw new Error(`Twelve Data: ${res.status}`)
   const data = await res.json()
 
-  const map: Record<string, any> = {}
+  const map: Record<string, QuoteShape> = {}
   for (const [yahooSym, tdSym] of Object.entries(TD_SYMBOL_MAP)) {
     const q = data[tdSym]
     if (!q || q.status === 'error') continue
@@ -86,11 +112,11 @@ async function fetchTwelveData(): Promise<Record<string, any> | null> {
 // ── Alpha Vantage ─────────────────────────────────────────────────────────────
 // Free: 25 calls/day, 5/min. Sequential fetch + 6-hr cache = ~16 calls/day.
 
-async function fetchAlphaVantage(): Promise<Record<string, any>> {
+async function fetchAlphaVantage(): Promise<Record<string, QuoteShape>> {
   const apiKey = process.env.ALPHA_VANTAGE_KEY
   if (!apiKey) return {}
 
-  const map: Record<string, any> = {}
+  const map: Record<string, QuoteShape> = {}
 
   for (const { yahooSym, fn, interval } of [
     { yahooSym: 'CL=F', fn: 'WTI',         interval: 'daily' },
@@ -158,8 +184,8 @@ const YAHOO_COMEX = [
   { key: 'USDINR=X', sym: 'USDINR%3DX' },  // USD/INR
 ]
 
-async function fetchYahooComex(): Promise<Record<string, any>> {
-  const map: Record<string, any> = {}
+async function fetchYahooComex(): Promise<Record<string, QuoteShape>> {
+  const map: Record<string, QuoteShape> = {}
   await Promise.all(
     YAHOO_COMEX.map(async ({ key, sym }) => {
       try {
@@ -186,7 +212,7 @@ async function fetchYahooComex(): Promise<Record<string, any>> {
 
 // ── Stooq (fallback — free CSV, no key, COMEX/NYMEX futures) ─────────────────
 
-async function fetchStooq(): Promise<Record<string, any>> {
+async function fetchStooq(): Promise<Record<string, QuoteShape>> {
   // Symbol,Date,Time,Open,High,Low,Close,Volume — Close at index 6
   const stooqMap: Record<string, string> = {
     'GC=F': 'gc.f',    // COMEX Gold $/troy oz
@@ -195,7 +221,7 @@ async function fetchStooq(): Promise<Record<string, any>> {
     'HG=F': 'hg.f',    // COMEX Copper ¢/lb
     'NG=F': 'ng.f',    // Henry Hub Nat Gas $/mmBtu
   }
-  const map: Record<string, any> = {}
+  const map: Record<string, QuoteShape> = {}
   await Promise.all(
     Object.entries(stooqMap).map(async ([yfKey, sym]) => {
       try {
@@ -224,7 +250,7 @@ async function fetchStooq(): Promise<Record<string, any>> {
   return map
 }
 
-async function fetchComexPrices(): Promise<Record<string, any>> {
+async function fetchComexPrices(): Promise<Record<string, QuoteShape>> {
   // Yahoo v8 is primary — intraday, no key, covers all 6 symbols reliably
   const yahoo = await fetchYahooComex()
   if (Object.keys(yahoo).length >= 4) return yahoo
@@ -285,7 +311,7 @@ function loadMCXCache(): MCXCache | null {
 
 const USDINR_MIN = 82, USDINR_MAX = 110
 
-function deriveFromYahoo(yahoo: Record<string, any>, usdinrFallback = 0) {
+function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallback = 0) {
   const yahooUsd = yahoo['USDINR=X']?.regularMarketPrice ?? 0
   // Prefer Frankfurter (daily ECB rate, reliable) over Yahoo FX which can be stale.
   // Reject either value if outside the plausible ₹82–₹110 range.
@@ -322,10 +348,13 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
   const instruments = loadInstrumentTokens()
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const coreKeys   = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
-    const mcxTokens  = coreKeys.filter(k => instruments[k]?.token).map(k => instruments[k].token)
+    const coreKeys: MetalKey[] = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
+    const mcxTokens  = coreKeys
+      .map(k => instruments[k])
+      .filter((info): info is InstrumentInfo => !!info?.token)
+      .map(info => info.token)
     const fxTokens   = instruments.currencies
-      ? Object.values(instruments.currencies as unknown as Record<string, InstrumentInfo>).map(c => c.token)
+      ? Object.values(instruments.currencies).map(c => c.token)
       : []
     return await client.getQuotes([...mcxTokens, ...fxTokens])
   } catch (err) {
@@ -523,10 +552,10 @@ export async function getPrices(): Promise<PriceData | null> {
       ...(nickelQ    ? { nickel:    buildMCXData(nickelQ,    0, 0, instruments.nickel!)    } : {}),
       ...(instruments.currencies ? {
         currencies: {
-          usdinr: buildForexData(kiteByToken((instruments.currencies as any).usdinr.token), (instruments.currencies as any).usdinr),
-          eurinr: buildForexData(kiteByToken((instruments.currencies as any).eurinr.token), (instruments.currencies as any).eurinr),
-          gbpinr: buildForexData(kiteByToken((instruments.currencies as any).gbpinr.token), (instruments.currencies as any).gbpinr),
-          jpyinr: buildForexData(kiteByToken((instruments.currencies as any).jpyinr.token), (instruments.currencies as any).jpyinr),
+          usdinr: buildForexData(kiteByToken(instruments.currencies.usdinr.token), instruments.currencies.usdinr),
+          eurinr: buildForexData(kiteByToken(instruments.currencies.eurinr.token), instruments.currencies.eurinr),
+          gbpinr: buildForexData(kiteByToken(instruments.currencies.gbpinr.token), instruments.currencies.gbpinr),
+          jpyinr: buildForexData(kiteByToken(instruments.currencies.jpyinr.token), instruments.currencies.jpyinr),
         }
       } : {}),
     }
@@ -550,9 +579,9 @@ function loadFromSnapshot(): PriceData | null {
     const inst = snap.instruments
     if (!inst) return null
 
-    const mcxUnits: Record<string, InstrumentInfo> = loadInstrumentTokens()
+    const mcxUnits = loadInstrumentTokens()
 
-    function mcxData(key: string, instKey: string): MCXData & { comex?: number; comexChangePct?: number } {
+    function mcxData(key: MetalKey, instKey: string): MCXData & { comex?: number; comexChangePct?: number } {
       const d = inst[instKey]
       const info = mcxUnits[key] ?? { token: 0, symbol: '', expiry: '' }
       return {
