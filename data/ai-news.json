@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-07-12-22-lme-copper-rally-fails-to-lift-mcx-base-metals-divergence",
+    "title": "LME copper rally fails to lift MCX; base metals divergence signals delayed India transmission",
+    "summary": "MCX Copper declined ₹1281/kg, down 0.50% in this morning session, tracking a broader LME base metals rally driven by aluminum supply concerns. Silver led the commodity selloff with a −1.35% loss, while crude rallied +1.2",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T06:52:33.626Z",
+    "pubDateIST": "07 Jul 2026, 12:22",
+    "href": "/flash/2026-07-07-06-54-lme-copper-rally-fails-to-lift-mcx-base-metals-divergence-signals-delayed",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-07-12-24-mcx-natural-gas-gains-0-81-as-energy-diverges-from-precious",
+    "title": "MCX Natural Gas gains 0.81% as energy diverges from precious metals weakness",
+    "summary": "MCX Natural Gas rose 0.81% to ₹311.60/mmBtu in this morning's session, outpacing a broader commodity complex where silver fell 1.35% and gold declined 0.78%. Crude oil gained 1.24% to ₹6632/bbl, showing strength alongsid",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T06:54:24.886Z",
+    "pubDateIST": "07 Jul 2026, 12:24",
+    "href": "/flash/2026-07-07-06-54-mcx-natural-gas-gains-0-81-as-energy-diverges-from-precious-metals-weakness",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-07-09-40-silver-leads-mcx-selloff-at-1-01-crude-stabilizes-above-6592",
     "title": "Silver leads MCX selloff at -1.01%; crude stabilizes above ₹6592",
     "summary": "MCX silver plunged -1.01% this morning session, the sharpest mover across the commodity complex, while crude edged higher by +0.63% to ₹6592/bbl. Gold declined -0.55% to trade near ₹146106/10g, with copper and other base",
@@ -849,30 +873,6 @@
     "pubDate": "2026-06-30T07:01:42.991Z",
     "pubDateIST": "30 Jun 2026, 12:31",
     "href": "/flash/2026-06-30-07-01-silver-hits-225-400-on-geopolitical-fears-crude-diverges-on-demand-weakness",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-09-49-mcx-nat-gas-slides-on-demand-softness-defies-geopolitical",
-    "title": "MCX Nat Gas slides on demand softness, defies geopolitical premium at ₹301/mmBtu",
-    "summary": "MCX Natural Gas fell 0.63% to ₹301.10/mmBtu in this morning's session, extending weakness alongside a broader commodity sell-off led by gold's 1.07% decline to ₹140,885/10g. Nat Gas weakness appears disconnected from Mid",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T04:19:14.348Z",
-    "pubDateIST": "30 Jun 2026, 09:49",
-    "href": "/flash/2026-06-30-04-21-mcx-nat-gas-slides-on-demand-softness-defies-geopolitical-premium-at-301",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-09-51-mcx-gold-tumbles-1-507-as-real-yield-repricing-overwhelms",
-    "title": "MCX Gold Tumbles ₹1,507 as Real-Yield Repricing Overwhelms Geopolitical Premium",
-    "summary": "MCX Gold collapsed ₹1,507 intraday to ₹140,885/10g, marking a -1.07% session loss and leading the commodity complex lower. Silver and crude followed with softer declines of -0.55% and -0.52% respectively. The selloff arr",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T04:21:07.769Z",
-    "pubDateIST": "30 Jun 2026, 09:51",
-    "href": "/flash/2026-06-30-04-21-mcx-gold-tumbles-1-507-as-real-yield-repricing-overwhelms-geopolitical",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
