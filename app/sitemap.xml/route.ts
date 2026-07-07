@@ -10,6 +10,7 @@ const STATIC_PAGES = [
   { url: BASE,                      priority: '1.0', changefreq: 'daily'   },
   { url: `${BASE}/briefs`,          priority: '0.9', changefreq: 'daily'   },
   { url: `${BASE}/markets`,         priority: '0.8', changefreq: 'hourly'  },
+  { url: `${BASE}/options`,         priority: '0.9', changefreq: 'hourly'  },
   { url: `${BASE}/news`,            priority: '0.8', changefreq: 'hourly'  },
   { url: `${BASE}/articles`,        priority: '0.7', changefreq: 'daily'   },
   { url: `${BASE}/learn`,                            priority: '0.7', changefreq: 'monthly' },

@@ -272,16 +272,16 @@ function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function OptionChain({ isPro, preview = false }: { isPro: boolean; preview?: boolean }) {
-  const [instrument, setInstrument] = useState('GOLD')
+export default function OptionChain({ isPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
+  const [instrument, setInstrument] = useState(initialData?.instrument ?? 'GOLD')
   const [expiry, setExpiry]         = useState<string|null>(null)
-  const [data, setData]             = useState<OptionsData|null>(null)
+  const [data, setData]             = useState<OptionsData|null>(initialData)
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
   const [showOIMap, setShowOIMap]   = useState(true)
-  const [lastRefresh, setLastRefresh] = useState<Date|null>(null)
+  const [lastRefresh, setLastRefresh] = useState<Date|null>(initialData ? new Date(initialData.lastUpdated) : null)
   const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
   const tableBodyRef  = useRef<HTMLDivElement>(null)
   const atmRowRef     = useRef<HTMLTableRowElement>(null)
