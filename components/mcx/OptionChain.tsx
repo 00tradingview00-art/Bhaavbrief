@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -188,15 +189,26 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
 
 function InfoTip({ text }: { text: string }) {
   const [open, setOpen] = useState(false)
+  const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+
+  const place = () => {
+    const r = btnRef.current?.getBoundingClientRect()
+    if (!r) return
+    const width = 200
+    setPos({ top: r.bottom + 6, left: Math.min(r.left, window.innerWidth - width - 8) })
+  }
+
   return (
     <span
       style={{ position: 'relative', display: 'inline-flex', marginLeft: 4, verticalAlign: 'middle' }}
-      onMouseEnter={() => setOpen(true)}
+      onMouseEnter={() => { place(); setOpen(true) }}
       onMouseLeave={() => setOpen(false)}
     >
       <button
+        ref={btnRef}
         type="button"
-        onClick={e => { e.stopPropagation(); setOpen(o => !o) }}
+        onClick={e => { e.stopPropagation(); place(); setOpen(o => !o) }}
         aria-label="What is this?"
         style={{
           width: 13, height: 13, borderRadius: '50%', border: `1px solid ${C.ink4}`,
@@ -206,16 +218,17 @@ function InfoTip({ text }: { text: string }) {
           textTransform: 'none', letterSpacing: 'normal', flexShrink: 0,
         }}
       >i</button>
-      {open && (
+      {open && pos && typeof document !== 'undefined' && createPortal(
         <div style={{
-          position: 'absolute', top: '100%', left: 0, marginTop: 6, zIndex: 50,
+          position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999,
           width: 200, padding: '8px 10px', borderRadius: 6, background: C.ink,
           color: '#fff', fontSize: 11, fontWeight: 400, lineHeight: 1.4,
           fontFamily: C.sans, textTransform: 'none', letterSpacing: 'normal',
           boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
         }}>
           {text}
-        </div>
+        </div>,
+        document.body,
       )}
     </span>
   )
