@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { scoreEntries, buildContentContext, type ScoredEntry } from '@/lib/searchIndex'
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -64,6 +65,12 @@ export async function GET(req: NextRequest) {
   }
   if (q.length > 300) {
     return NextResponse.json({ error: 'query too long' }, { status: 400 })
+  }
+
+  const ip = getClientIp(req)
+  const allowed = await checkRateLimit(`rl:search:${ip}`, 20, 60 * 60 * 1000)
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
   }
 
   // Log every search so we can see what people are looking for in Vercel logs

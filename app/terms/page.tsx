@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Use — BhaavBrief',
+  title: 'Terms of Use',
   description: 'Terms of use for BhaavBrief — MCX commodity intelligence platform.',
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://bhaavbrief.in/terms' },

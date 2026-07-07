@@ -6,7 +6,7 @@ import { getAllBriefs } from '@/lib/briefs'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: "About BhaavBrief — MCX Commodity Intelligence, Daily at 9:30 AM",
+  title: "About — MCX Commodity Intelligence, Daily at 9:30 AM",
   description: "BhaavBrief publishes daily MCX commodity briefs at 9:30 AM — gold, silver, crude, copper, natgas — with global context, open interest, and what moves each price.",
   alternates: { canonical: 'https://bhaavbrief.in/about' },
   openGraph: {

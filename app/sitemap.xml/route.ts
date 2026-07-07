@@ -1,6 +1,7 @@
 import { getAllBriefs }   from '@/lib/briefs'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
+import { getAllArcs }     from '@/lib/arcs'
 
 export const revalidate = 3600 // rebuild sitemap cache every hour
 
@@ -12,7 +13,6 @@ const STATIC_PAGES = [
   { url: `${BASE}/markets`,         priority: '0.8', changefreq: 'hourly'  },
   { url: `${BASE}/options`,         priority: '0.9', changefreq: 'hourly'  },
   { url: `${BASE}/news`,            priority: '0.8', changefreq: 'hourly'  },
-  { url: `${BASE}/articles`,        priority: '0.7', changefreq: 'daily'   },
   { url: `${BASE}/learn`,                            priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-lot-sizes`,             priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-margin-calculation`,    priority: '0.7', changefreq: 'monthly' },
@@ -35,6 +35,7 @@ const STATIC_PAGES = [
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },
   { url: `${BASE}/privacy`,         priority: '0.2', changefreq: 'yearly'  },
+  { url: `${BASE}/terms`,           priority: '0.2', changefreq: 'yearly'  },
   { url: `${BASE}/commodities/gold`,        priority: '0.9', changefreq: 'hourly' },
   { url: `${BASE}/commodities/silver`,      priority: '0.9', changefreq: 'hourly' },
   { url: `${BASE}/commodities/crude-oil`,   priority: '0.9', changefreq: 'hourly' },
@@ -64,6 +65,7 @@ export async function GET() {
       Promise.resolve(getAllFlash()),
       getAllArticles(),
     ])
+    const arcs = getAllArcs()
 
     const staticEntries = STATIC_PAGES.map(p =>
       entry(p.url, now, p.changefreq, p.priority)
@@ -81,9 +83,13 @@ export async function GET() {
       entry(`${BASE}/articles/${a.slug}`, a.date ? new Date(a.date).toISOString() : now, 'never', '0.7')
     )
 
+    const arcEntries = arcs.map(a =>
+      entry(`${BASE}/arcs/${a.id}`, a.startDate ? new Date(a.startDate).toISOString() : now, a.status === 'active' ? 'daily' : 'never', '0.6')
+    )
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticEntries, ...briefEntries, ...articleEntries, ...flashEntries].join('\n')}
+${[...staticEntries, ...briefEntries, ...articleEntries, ...flashEntries, ...arcEntries].join('\n')}
 </urlset>`
 
     return new Response(xml, {

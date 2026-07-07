@@ -2,7 +2,7 @@ import MarketsClient from '@/components/markets/MarketsClient'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 
 export const metadata = {
-  title: 'MCX Live Prices Today — Gold, Silver, Crude Oil, Copper | BhaavBrief',
+  title: 'MCX Live Prices Today — Gold, Silver, Crude Oil, Copper',
   description: 'MCX live prices today: Gold, Silver, Crude Oil, Copper, Natural Gas, Zinc, Lead, Aluminium, Nickel futures with OHLC, Volume and Open Interest. Updated every 30 seconds during market hours (9 AM–11:30 PM IST).',
   keywords: [
     'MCX live prices today',

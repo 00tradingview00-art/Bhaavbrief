@@ -79,7 +79,17 @@ jobs:
           git diff --staged --quiet && echo "No new brief" && exit 0
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
           git commit -m "MCX Close Brief — ${DATE_IST}"
-          git push origin main
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
 
       - name: Alert on failure
         # Only alert on infrastructure failures — not when validator blocks bad content.

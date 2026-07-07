@@ -1,11 +1,16 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { KiteClient } from '@/lib/kite'
 
 // GET /api/kite/discover
-// Discovers current MCX front-month instrument tokens from Kite
-// Called automatically at morning auth — also callable manually
+// Discovers current MCX front-month instrument tokens from Kite.
+// Manual ops trigger — requires the same bearer secret as /api/cron/*.
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const auth = req.headers.get('authorization')
+  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const apiKey      = process.env.KITE_API_KEY
   const accessToken = process.env.KITE_ACCESS_TOKEN
 

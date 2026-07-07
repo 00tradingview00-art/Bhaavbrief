@@ -36,8 +36,8 @@ export default function Masthead() {
             {[
               { label: 'Latest Brief', href: '/briefs' },
               { label: 'Archive',      href: '/briefs' },
-              { label: 'Subscribe',    href: '#subscribe' },
-              { label: 'About',        href: '#about' },
+              { label: 'Subscribe',    href: '/#subscribe' },
+              { label: 'About',        href: '/#about' },
             ].map(link => (
               <Link key={link.href} href={link.href} style={{ fontSize: 12, fontWeight: 500, color: '#48483A', textDecoration: 'none', letterSpacing: '0.02em' }}>
                 {link.label}

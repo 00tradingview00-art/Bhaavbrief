@@ -15,12 +15,13 @@ jobs:
         id: refresh
         run: |
           RESPONSE=$(curl -s "https://graph.facebook.com/v22.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${{ secrets.META_APP_ID }}&client_secret=${{ secrets.META_APP_SECRET }}&fb_exchange_token=${{ secrets.INSTAGRAM_ACCESS_TOKEN }}")
-          echo "Meta API response: $RESPONSE"
 
           if ! echo "$RESPONSE" | jq . >/dev/null 2>&1; then
             echo "::error::Instagram refresh returned non-JSON — token expired. Run scripts/refresh-instagram-token.js locally."
             exit 1
           fi
+
+          echo "Meta API response: $(echo "$RESPONSE" | jq -c 'del(.access_token)')"
 
           ERROR=$(echo "$RESPONSE" | jq -r '.error.message // empty')
           if [ -n "$ERROR" ]; then
@@ -29,6 +30,7 @@ jobs:
           fi
 
           NEW_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token // empty')
+          echo "::add-mask::$NEW_TOKEN"
           EXPIRES_IN=$(echo "$RESPONSE" | jq -r '.expires_in // 0')
 
           if [ -z "$NEW_TOKEN" ]; then
