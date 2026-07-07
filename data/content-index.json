@@ -1,6 +1,23 @@
 [
   {
     "type": "brief",
+    "slug": "edition-059",
+    "href": "/briefs/edition-059",
+    "title": "Gold Slips from $4198 Peak as Safe-Haven Trade Enters Doubt",
+    "description": "COMEX gold retreats to $4142 as a Trump-Xi meeting looms, testing whether the safe-haven rally has run its course.",
+    "excerpt": "MCX Gold ₹145800 | Crude ₹6596 | USDINR ₹95.34 — Gold -0.76% | Crude +0.69% | Silver -1.25% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-07T04:32:28.980Z",
+    "edition": "59",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-058",
     "href": "/briefs/edition-058",
     "title": "COMEX Gold at $4198 as Safe-Haven Demand Enters a New Phase",
