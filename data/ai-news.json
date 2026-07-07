@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-08-01-24-gold-silver-fall-1-2-as-inflation-fears-outweigh",
+    "title": "Gold, silver fall 1–2% as inflation fears outweigh geopolitical safe-haven bid; crude diverges up 2.3%",
+    "summary": "MCX Gold fell ₹2,100 per 10g (1.05%) to ₹145,375/10g during today's session, while MCX Silver declined ₹5,233/kg (2.23%) to ₹230,829/kg. Crude bucked the precious metals slide, advancing ₹155/bbl (2.32%) to ₹6,703/bbl am",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T19:54:08.252Z",
+    "pubDateIST": "08 Jul 2026, 01:24",
+    "href": "/flash/2026-07-07-19-54-gold-silver-fall-1-2-as-inflation-fears-outweigh-geopolitical-safe-haven",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-07-23-22-natural-gas-poles-away-from-gold-as-energy-demand-signals",
     "title": "Natural gas poles away from gold as energy demand signals diverge from safe-haven flows",
     "summary": "MCX Natural Gas rose ₹311.90/mmBtu (+0.91%) today in a session where crude oil dominated the cross-asset narrative with a +2.27% surge. Gold and silver retreated, falling -1.07% and -2.22% respectively, signalling a rota",
@@ -838,17 +850,5 @@
     "pubDateIST": "01 Jul 2026, 03:53",
     "href": "/flash/2026-06-30-22-23-mcx-crude-slides-1-59-on-demand-fears-copper-diverges-with-1-16-gain",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-01-00-45-copper-rallies-amid-demand-signal-crude-slides-on-demand",
-    "title": "Copper rallies amid demand signal; crude slides on demand pessimism",
-    "summary": "MCX Copper rallied ₹1259/kg (+1.16%) as London Metal Exchange base metals surged to record highs, driven by aluminum supply-side anxiety and industrial demand revival signals from the US session. Crude Oil fell 1.59% to ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T19:15:33.197Z",
-    "pubDateIST": "01 Jul 2026, 00:45",
-    "href": "/flash/2026-06-30-19-15-copper-rallies-amid-demand-signal-crude-slides-on-demand-pessimism",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
