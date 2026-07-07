@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-07-07-15-57-silver-leads-mcx-selloff-with-2-drop-rupee-strength",
+    "title": "Silver leads MCX selloff with 2% drop; rupee strength pressures imports",
+    "summary": "MCX silver crashed ₹231,367/kg, down 2.00% in afternoon trade, leading a broadly subdued commodity complex. MCX gold retreated 1.03% to ₹145,406/10g, while crude oil held relatively steady at ₹6,581/bbl. USD/INR softened",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T10:27:14.348Z",
+    "pubDateIST": "07 Jul 2026, 15:57",
+    "href": "/flash/2026-07-07-10-31-silver-leads-mcx-selloff-with-2-drop-rupee-strength-pressures-imports",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-07-15-59-silver-crashes-2-as-rbi-rate-call-weighs-on-industrial",
+    "title": "Silver crashes 2% as RBI rate call weighs on industrial demand signal",
+    "summary": "MCX Silver crashed ₹231367/kg down 2.00% in afternoon trade, leading a broadly subdued commodity complex. Gold fell 1.03% to ₹145406/10g while Copper edged lower 0.57% to ₹1280.00/kg. Natural Gas remained the sole gainer",
+    "category": "Policy",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T10:29:06.048Z",
+    "pubDateIST": "07 Jul 2026, 15:59",
+    "href": "/flash/2026-07-07-10-31-silver-crashes-2-as-rbi-rate-call-weighs-on-industrial-demand-signal",
+    "coverImage": "https://images.pexels.com/photos/10396412/pexels-photo-10396412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-07-16-00-silver-leads-precious-metals-rout-real-yield-compression-not",
+    "title": "Silver leads precious metals rout; real-yield compression, not geopolitics, driving MCX",
+    "summary": "MCX silver crashed -2.00% this afternoon session, leading a broad precious metals selloff that dragged gold down -1.03% to ₹145406/10g. The rout coincides with renewed inflation anxiety and escalating US-Iran geopolitica",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-07T10:30:55.604Z",
+    "pubDateIST": "07 Jul 2026, 16:00",
+    "href": "/flash/2026-07-07-10-30-silver-leads-precious-metals-rout-real-yield-compression-not-geopolitics",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-07-12-22-lme-copper-rally-fails-to-lift-mcx-base-metals-divergence",
     "title": "LME copper rally fails to lift MCX; base metals divergence signals delayed India transmission",
     "summary": "MCX Copper declined ₹1281/kg, down 0.50% in this morning session, tracking a broader LME base metals rally driven by aluminum supply concerns. Silver led the commodity selloff with a −1.35% loss, while crude rallied +1.2",
@@ -849,30 +885,6 @@
     "pubDate": "2026-06-30T10:35:12.504Z",
     "pubDateIST": "30 Jun 2026, 16:05",
     "href": "/flash/2026-06-30-10-35-mcx-silver-rallies-2-03-on-industrial-repricing-gold-weakness-signals-safe",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-12-29-silver-surges-2-73-on-rupee-weakness-gold-flat-shows-real",
-    "title": "Silver surges +2.73% on rupee weakness; Gold flat shows real-yield ceiling on MCX",
-    "summary": "MCX Silver surged +2.73% this morning session while Gold slipped −0.03% to ₹160,000/10g, creating a divergence within the precious metals complex. Crude Oil declined −0.79% to ₹6,675/bbl as geopolitical premium compresse",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T06:59:51.170Z",
-    "pubDateIST": "30 Jun 2026, 12:29",
-    "href": "/flash/2026-06-30-07-01-silver-surges-2-73-on-rupee-weakness-gold-flat-shows-real-yield-ceiling-on",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-06-30-12-31-silver-hits-225-400-on-geopolitical-fears-crude-diverges-on",
-    "title": "Silver hits ₹225,400 on geopolitical fears; crude diverges on demand weakness",
-    "summary": "MCX Silver surged 2.73% to ₹225,400/kg in this morning's session, outpacing all other major commodities as gold and broader metals faced headwinds. Crude Oil declined 0.79% to ₹6,675/bbl, signalling demand weakness despi",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-06-30T07:01:42.991Z",
-    "pubDateIST": "30 Jun 2026, 12:31",
-    "href": "/flash/2026-06-30-07-01-silver-hits-225-400-on-geopolitical-fears-crude-diverges-on-demand-weakness",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
