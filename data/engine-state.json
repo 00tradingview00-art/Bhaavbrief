@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 145215,
-    "silver": 231763,
-    "crude": 6593,
-    "copper": 1281.15,
-    "natgas": 312.3,
+    "gold": 145390,
+    "silver": 231654,
+    "crude": 6584,
+    "copper": 1279.75,
+    "natgas": 311.1,
     "usdinr": 95.4
   },
-  "lastChecked": "2026-07-07T09:31:36.590Z",
+  "lastChecked": "2026-07-07T10:08:24.901Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "284"
   },
   "lastGeoNews": {
-    "mideast": "Hormuz half-open: tanker fleet prices in recovery hope - Reuters",
+    "mideast": "Qatari LNG tanker badly damaged after being hit in Strait of Hormuz, sources say",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
