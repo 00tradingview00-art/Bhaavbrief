@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 145431,
-    "silver": 230683,
-    "crude": 6694,
-    "copper": 1277.7,
-    "natgas": 310.9,
+    "gold": 145491,
+    "silver": 230944,
+    "crude": 6712,
+    "copper": 1276.65,
+    "natgas": 311.8,
     "usdinr": 94.97
   },
-  "lastChecked": "2026-07-07T16:44:18.117Z",
+  "lastChecked": "2026-07-07T17:35:40.132Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "284"
   },
   "lastGeoNews": {
-    "mideast": "Qatari LNG tanker badly damaged after being hit in Strait of Hormuz, sources say",
+    "mideast": "LNG tanker at risk of exploding after two vessels struck near Strait of Hormuz -",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [
