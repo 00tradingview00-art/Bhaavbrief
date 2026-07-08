@@ -1,5 +1,22 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-060",
+    "href": "/briefs/edition-060",
+    "title": "Crude Jumps 2.7% as Geopolitical Premium Returns to Oil Markets",
+    "description": "WTI crosses $72 on renewed Middle East tensions, pulling crude to the top of today's commodity leaderboard while gold quietly holds its ground.",
+    "excerpt": "MCX Gold ₹144870 | Crude ₹6885 | USDINR ₹95.08 — Gold -0.36% | Crude +2.68% | Silver -0.71% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-08T04:27:24.316Z",
+    "edition": "60",
+    "tags": [
+      "MCX Crude",
+      "Geopolitics",
+      "MCX Gold"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-07-08-us-yield-mcx-gold",
     "href": "/articles/2026-07-08-us-yield-mcx-gold",
