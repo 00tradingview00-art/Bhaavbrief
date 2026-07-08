@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-08-16-22-mcx-copper-diverges-from-lme-record-highs-demand-skepticism",
+    "title": "MCX Copper diverges from LME record highs; demand skepticism outweighs global supply concerns",
+    "summary": "MCX Copper fell 1.04% to ₹1262.80/kg in the afternoon session, marking a rare divergence from the energy complex surge. Crude Oil surged 5.71% to ₹7088/bbl and Natural Gas rose 1.67% to ₹316.90/mmBtu, yet base metals rem",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-08T10:52:30.032Z",
+    "pubDateIST": "08 Jul 2026, 16:22",
+    "href": "/flash/2026-07-08-10-52-mcx-copper-diverges-from-lme-record-highs-demand-skepticism-outweighs",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-08-14-11-mcx-silver-tumbles-2-90-as-industrial-demand-offsets-energy",
     "title": "MCX Silver tumbles 2.90% as industrial demand offsets energy rally",
     "summary": "MCX Silver crashed 2.90% to ₹224165/kg in morning trade, marking the precious metals complex's worst performer as gold slipped 1.49% to ₹143230/10g. The sell-off defied the energy complex surge, with crude oil rallying 7",
@@ -886,17 +898,5 @@
     "pubDateIST": "01 Jul 2026, 19:03",
     "href": "/flash/2026-07-01-13-33-gold-rises-on-risk-off-crude-falls-as-growth-fears-grip-mcx",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-01-16-20-silver-tumbles-1-67-amid-geopolitical-premium-unwind-gold",
-    "title": "Silver tumbles 1.67% amid geopolitical-premium unwind; gold holds ₹141,985 support",
-    "summary": "Silver crashed 1.67% to ₹223,255/kg in the evening session, leading MCX's broad selloff as renewed US-Iran conflict rhetoric triggered a rotation out of safe-haven metals. Gold held firmer at ₹141,985/10g despite the geo",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-01T10:50:33.810Z",
-    "pubDateIST": "01 Jul 2026, 16:20",
-    "href": "/flash/2026-07-01-10-52-silver-tumbles-1-67-amid-geopolitical-premium-unwind-gold-holds-141-985",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
