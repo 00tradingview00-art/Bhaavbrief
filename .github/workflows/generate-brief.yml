@@ -74,6 +74,12 @@ jobs:
         run: node scripts/build-content-index.js
         continue-on-error: true
 
+      - name: Generate Instagram card
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: node scripts/generate-instagram-card.js
+        continue-on-error: true
+
       - name: Commit brief to main
         id: commit
         env:
@@ -90,7 +96,7 @@ jobs:
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           # Commit brief + snapshot together — they must be one atomic commit
           # so the site and email can never show prices from different vintages.
-          git add content/briefs/ data/market-snapshot.json data/content-index.json
+          git add content/briefs/ data/market-snapshot.json data/content-index.json public/instagram/
           if git diff --staged --quiet; then
             echo "Nothing to commit — brief already published today"
             echo "published=false" >> $GITHUB_OUTPUT
