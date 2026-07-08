@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-08-11-33-crude-geopolitical-spike-meets-rupee-headwind-on-gold-mcx",
+    "title": "Crude geopolitical spike meets rupee headwind on gold; MCX diverges across assets",
+    "summary": "MCX crude surged 3.52% to ₹6,941/bbl this morning, dominating session inflows while precious metals weakened under geopolitical risk repricing. MCX gold fell near ₹145,099/10g and silver eased 0.24% to ₹230,300/kg as esc",
+    "category": "Geopolitics",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-08T06:03:40.883Z",
+    "pubDateIST": "08 Jul 2026, 11:33",
+    "href": "/flash/2026-07-08-06-05-crude-geopolitical-spike-meets-rupee-headwind-on-gold-mcx-diverges-across",
+    "coverImage": "https://images.pexels.com/photos/37510660/pexels-photo-37510660.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-08-11-35-gold-edges-lower-at-145-099-as-crude-rally-signals-energy",
+    "title": "Gold edges lower at ₹145,099 as crude rally signals energy-specific geopolitical bid",
+    "summary": "MCX Gold fell 0.20% to ₹145,099/10g in this morning session, reversing overnight gains despite a reported 3% surge to ₹1.67 lakh cited in cross-asset commentary tied to Israel-Iran tensions. Crude oil dominates intraday ",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-08T06:05:33.089Z",
+    "pubDateIST": "08 Jul 2026, 11:35",
+    "href": "/flash/2026-07-08-06-05-gold-edges-lower-at-145-099-as-crude-rally-signals-energy-specific",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-08-09-05-mcx-copper-gains-0-27-on-lme-momentum-aluminum-supply-fears",
     "title": "MCX Copper Gains 0.27% on LME Momentum; Aluminum Supply Fears Drive Index Rally",
     "summary": "MCX Copper rose ₹1,279.50/kg to ₹1,280/kg in this morning session, gaining 0.27% alongside a broader LME base metals rally driven by aluminum supply concerns. Crude dominated the cross-asset move with a +2.74% surge, whi",
@@ -874,17 +898,5 @@
     "pubDateIST": "01 Jul 2026, 12:49",
     "href": "/flash/2026-07-01-07-19-mcx-silver-crashes-2-66-as-industrial-liquidation-overwhelms-safe-haven",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-01-10-17-silver-crashes-2-47-on-inflation-fears-gold-holds-ground-at",
-    "title": "Silver crashes 2.47% on inflation fears; Gold holds ground at ₹141,115",
-    "summary": "MCX Silver crashed 2.47% this morning, the session's sharpest mover, while MCX Gold eased 0.99% to ₹141,115/10g on renewed inflation anxiety and escalating US-Iran geopolitical tensions. Copper and Natural Gas followed w",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-01T04:47:03.459Z",
-    "pubDateIST": "01 Jul 2026, 10:17",
-    "href": "/flash/2026-07-01-04-49-silver-crashes-2-47-on-inflation-fears-gold-holds-ground-at-141-115",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
