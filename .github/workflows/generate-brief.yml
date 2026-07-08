@@ -138,7 +138,12 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js
 
+      - name: Install ffmpeg
+        if: steps.commit.outputs.published == 'true'
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Generate brief reel
+        id: reel
         if: steps.commit.outputs.published == 'true'
         continue-on-error: true
         env:
@@ -147,14 +152,17 @@ jobs:
           ELEVENLABS_API_KEY:   ${{ secrets.ELEVENLABS_API_KEY }}
           KITE_API_KEY:         ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:    ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/generate-brief-reel.mjs
+        run: |
+          node scripts/generate-brief-reel.mjs
+          PADDED=$(printf '%03d' ${{ steps.edition.outputs.number }})
+          echo "padded=$PADDED" >> $GITHUB_OUTPUT
 
       - name: Post reel to Instagram
-        if: steps.commit.outputs.published == 'true'
+        if: steps.commit.outputs.published == 'true' && steps.reel.outcome == 'success'
         continue-on-error: true
         env:
           EDITION:                ${{ steps.edition.outputs.number }}
-          REEL_FILE:              public/reels/brief-edition-${{ steps.edition.outputs.number }}.mp4
+          REEL_FILE:              public/reels/brief-edition-${{ steps.reel.outputs.padded }}.mp4
           INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-reel-instagram.mjs
