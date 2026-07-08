@@ -185,6 +185,210 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   )
 }
 
+// ── ATM IV history chart ──────────────────────────────────────────────────────
+
+function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
+  const [width, setWidth] = useState(0)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const ro = new ResizeObserver(entries => setWidth(entries[0].contentRect.width))
+    ro.observe(el)
+    setWidth(el.clientWidth)
+    return () => ro.disconnect()
+  }, [ref])
+  return width
+}
+
+const IV_LINE = '#6941c6' // matches the iVIX pill's color — same metric, same hue
+
+const LOOKBACKS = [
+  { key: '5',   label: '5D'  },
+  { key: '10',  label: '10D' },
+  { key: '30',  label: '30D' },
+  { key: '60',  label: '60D' },
+  { key: 'all', label: 'All' },
+] as const
+type Lookback = typeof LOOKBACKS[number]['key']
+
+interface IVPoint { date: string; iv: number; live?: boolean }
+
+const fmtHistDate = (iso: string) => {
+  const [, m, d] = iso.split('-')
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  return `${d} ${months[parseInt(m, 10) - 1]}`
+}
+
+function IVHistoryChart({ instrument, chain }: { instrument: string; chain: ChainRow[] }) {
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const width   = useElementWidth(wrapRef)
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null)
+  const [history, setHistory]   = useState<IVPoint[]>([])
+  const [histLoading, setHistLoading] = useState(true)
+  const [lookback, setLookback] = useState<Lookback>('30')
+
+  useEffect(() => {
+    let cancelled = false
+    setHistLoading(true)
+    fetch(`/api/options/iv-history?instrument=${instrument}`)
+      .then(r => r.json())
+      .then((d: { history?: IVPoint[] }) => { if (!cancelled) setHistory(d.history ?? []) })
+      .catch(() => { if (!cancelled) setHistory([]) })
+      .finally(() => { if (!cancelled) setHistLoading(false) })
+    return () => { cancelled = true }
+  }, [instrument])
+
+  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current chain
+  const atmRows = chain.filter(r => r.isATM)
+  const liveIVs = atmRows.flatMap(r => [r.CE.iv, r.PE.iv]).filter((v): v is number => v != null && v > 0)
+  const liveIV  = liveIVs.length ? parseFloat((liveIVs.reduce((s, v) => s + v, 0) / liveIVs.length).toFixed(2)) : null
+  const today   = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
+
+  const merged: IVPoint[] = [...history]
+  if (liveIV != null && merged[merged.length - 1]?.date !== today) {
+    merged.push({ date: today, iv: liveIV, live: true })
+  }
+
+  const visible = lookback === 'all' ? merged : merged.slice(-parseInt(lookback, 10))
+
+  if (histLoading && !merged.length) {
+    return (
+      <div style={{ padding: '20px 14px', textAlign: 'center', fontSize: 12, color: C.ink4, fontFamily: C.sans, borderBottom: `1px solid ${C.bdr}` }}>
+        Loading ATM IV history…
+      </div>
+    )
+  }
+
+  // Fewer than 2 points — a line chart would be degenerate. Show a stat tile instead.
+  if (visible.length < 2) {
+    return (
+      <div style={{ padding: '16px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
+        <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, marginBottom: 6 }}>
+          ATM IV — today
+        </div>
+        {visible.length === 1 ? (
+          <>
+            <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{visible[0].iv}%</div>
+            <div style={{ fontSize: 11, color: C.ink3, fontFamily: C.sans, marginTop: 4 }}>
+              Collecting daily ATM IV at MCX close — the trend chart fills in day by day starting tomorrow.
+            </div>
+          </>
+        ) : (
+          <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No ATM IV data available right now.</div>
+        )}
+      </div>
+    )
+  }
+
+  const H = 190
+  const padL = 40, padR = 50, padT = 14, padB = 24
+  const W = width || 600
+  const innerW = Math.max(W - padL - padR, 1)
+  const innerH = H - padT - padB
+
+  const x = (i: number) => padL + (visible.length > 1 ? (i / (visible.length - 1)) * innerW : innerW / 2)
+
+  const ivVals = visible.map(p => p.iv)
+  const yMin = Math.floor(Math.min(...ivVals) / 5) * 5
+  let yMax   = Math.ceil(Math.max(...ivVals) / 5) * 5
+  if (yMax - yMin < 10) yMax = yMin + 10
+  const y = (v: number) => padT + innerH - ((v - yMin) / (yMax - yMin)) * innerH
+
+  const path = visible.map((p, i) => (i === 0 ? 'M' : 'L') + x(i).toFixed(1) + ' ' + y(p.iv).toFixed(1)).join(' ')
+
+  const yTicks   = [yMin, yMin + (yMax - yMin) / 2, yMax]
+  const tickStep = Math.max(1, Math.ceil(visible.length / 6))
+  const xTicks   = visible.map((p, i) => ({ p, i })).filter(({ i }) => i % tickStep === 0 || i === visible.length - 1)
+  const hoverPt  = hoverIdx != null ? visible[hoverIdx] : null
+  const last     = visible[visible.length - 1]
+
+  const onMove = (e: React.MouseEvent<SVGRectElement>) => {
+    const rect = e.currentTarget.ownerSVGElement!.getBoundingClientRect()
+    const px = e.clientX - rect.left
+    const frac = (px - padL) / innerW
+    const nearest = Math.max(0, Math.min(visible.length - 1, Math.round(frac * (visible.length - 1))))
+    setHoverIdx(nearest)
+  }
+
+  return (
+    <div style={{ padding: '8px 14px 10px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 6 }}>
+        <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
+          ATM IV — trailing
+        </span>
+        <div style={{ display: 'flex', gap: 3 }}>
+          {LOOKBACKS.map(({ key, label }) => (
+            <button key={key} onClick={() => setLookback(key)} style={{
+              padding: '2px 8px', fontSize: 10, fontWeight: 500, borderRadius: 4, cursor: 'pointer', fontFamily: C.sans,
+              border: `1px solid ${lookback === key ? IV_LINE : C.bdr}`,
+              background: lookback === key ? '#f5f3ff' : 'transparent',
+              color: lookback === key ? IV_LINE : C.ink3,
+            }}>{label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div ref={wrapRef} style={{ position: 'relative' }}>
+        <svg width={W} height={H} style={{ display: 'block', overflow: 'visible' }}>
+          {yTicks.map((t, i) => (
+            <g key={i}>
+              <line x1={padL} x2={W - padR} y1={y(t)} y2={y(t)} stroke={C.bdr} strokeWidth={1} />
+              <text x={padL - 8} y={y(t)} textAnchor="end" dominantBaseline="middle" fontSize={9} fill={C.ink4} fontFamily={C.sans}>{Math.round(t)}%</text>
+            </g>
+          ))}
+
+          {xTicks.map(({ p, i }) => (
+            <text key={p.date} x={x(i)} y={H - 6} textAnchor="middle" fontSize={9} fill={C.ink4} fontFamily={C.sans}>
+              {fmtHistDate(p.date)}
+            </text>
+          ))}
+
+          <path d={path} fill="none" stroke={IV_LINE} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+
+          {/* End marker + direct label — "lines carry the value at the end" */}
+          <circle cx={x(visible.length - 1)} cy={y(last.iv)} r={4} fill={IV_LINE} stroke={C.surf} strokeWidth={2}
+            strokeDasharray={last.live ? '2 2' : undefined} />
+          <text x={x(visible.length - 1) + 8} y={y(last.iv)} textAnchor="start" dominantBaseline="middle"
+            fontSize={12} fontWeight={700} fill={IV_LINE} fontFamily={C.sans} style={numStyle}>
+            {last.iv}%
+          </text>
+          {last.live && (
+            <text x={x(visible.length - 1) + 8} y={y(last.iv) + 12} textAnchor="start" dominantBaseline="middle"
+              fontSize={8} fill={C.ink4} fontFamily={C.sans}>live</text>
+          )}
+
+          {hoverPt && (
+            <>
+              <line x1={x(hoverIdx!)} x2={x(hoverIdx!)} y1={padT} y2={padT + innerH} stroke={C.ink3} strokeWidth={1} />
+              <circle cx={x(hoverIdx!)} cy={y(hoverPt.iv)} r={4} fill={IV_LINE} stroke={C.surf} strokeWidth={2} />
+            </>
+          )}
+
+          <rect x={padL} y={padT} width={innerW} height={innerH} fill="transparent"
+            onMouseMove={onMove} onMouseLeave={() => setHoverIdx(null)} />
+        </svg>
+
+        {hoverPt && (
+          <div style={{
+            position: 'absolute', top: 2, pointerEvents: 'none',
+            left: Math.min(Math.max(x(hoverIdx!) - 50, 0), W - 106),
+            width: 100, padding: '6px 8px', borderRadius: 5, background: C.ink, color: '#fff',
+            fontSize: 10, fontFamily: C.sans, boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
+          }}>
+            <div style={{ fontWeight: 700, marginBottom: 3 }}>{fmtHistDate(hoverPt.date)}{hoverPt.live ? ' (live)' : ''}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ display: 'inline-block', width: 8, height: 2, background: IV_LINE, borderRadius: 1 }} />ATM IV
+              </span>
+              <span style={{ ...numStyle, fontWeight: 600 }}>{hoverPt.iv}%</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ── Info tooltip ──────────────────────────────────────────────────────────────
 
 function InfoTip({ text }: { text: string }) {
@@ -280,7 +484,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   const [error, setError]           = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
-  const [showOIMap, setShowOIMap]   = useState(true)
+  const [mapView, setMapView]       = useState<'oi'|'iv'|null>('oi')
   const [lastRefresh, setLastRefresh] = useState<Date|null>(initialData ? new Date(initialData.lastUpdated) : null)
   const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
   const tableBodyRef  = useRef<HTMLDivElement>(null)
@@ -394,11 +598,16 @@ export default function OptionChain({ isPro, preview = false, initialData = null
             color: showGreeks ? C.gold : C.ink3,
           }}>Greeks {showGreeks ? '▲' : '▼'}</button>
         )}
-        <button onClick={() => setShowOIMap(v => !v)} style={{
+        <button onClick={() => setMapView(v => v === 'oi' ? null : 'oi')} style={{
           padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
-          border: `1px solid ${C.bdr}`, background: showOIMap ? C.goldPl : 'transparent',
-          color: showOIMap ? C.gold : C.ink3,
-        }}>OI Map {showOIMap ? '▲' : '▼'}</button>
+          border: `1px solid ${C.bdr}`, background: mapView === 'oi' ? C.goldPl : 'transparent',
+          color: mapView === 'oi' ? C.gold : C.ink3,
+        }}>OI Map {mapView === 'oi' ? '▲' : '▼'}</button>
+        <button onClick={() => setMapView(v => v === 'iv' ? null : 'iv')} style={{
+          padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+          border: `1px solid ${C.bdr}`, background: mapView === 'iv' ? C.goldPl : 'transparent',
+          color: mapView === 'iv' ? C.gold : C.ink3,
+        }}>ATM IV {mapView === 'iv' ? '▲' : '▼'}</button>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
@@ -444,8 +653,9 @@ export default function OptionChain({ isPro, preview = false, initialData = null
 
       {error && <div style={{ padding: '10px 14px', color: C.dn, fontSize: 12, fontFamily: C.sans }}>{error}</div>}
 
-      {/* ── OI concentration map ── */}
-      {data?.chain && showOIMap && <OIConcentrationChart chain={mainPage} />}
+      {/* ── OI concentration map / IV skew chart ── */}
+      {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
+      {data?.chain && mapView === 'iv' && <IVHistoryChart instrument={instrument} chain={mainPage} />}
 
       {/* ── ITM note ── */}
       {data?.chain && (
