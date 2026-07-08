@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-08-hawk-scan-mcx-crude-3-94-spike-to-7146-breaches-week-high",
+    "href": "/articles/2026-07-08-hawk-scan-mcx-crude-3-94-spike-to-7146-breaches-week-high",
+    "title": "HAWK-SCAN MCX Crude: 3.94% spike to ₹7146 breaches week high",
+    "description": "MCX Crude surges ₹274/bbl to ₹7146 (+3.94%) — WTI $74.59, above 3% Hawk threshold. Silver down 2.73%.",
+    "excerpt": "TRIGGER MCX Crude has rallied 3.94% to ₹7,146/bbl — breaking the weekly high of ₹7,218 tested intraday — firing the Hawk-Scan on a 274 rupee move in a single session. PRICE ₹7,146/bbl · +3.94% · SURGI",
+    "date": "2026-07-08T15:14:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Nat Gas",
+      "WTI",
+      "Brent"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7146
+  },
+  {
     "type": "article",
     "slug": "2026-07-08-mcx-crude-surges-2-8-on-supply-tightness-signal",
     "href": "/articles/2026-07-08-mcx-crude-surges-2-8-on-supply-tightness-signal",
