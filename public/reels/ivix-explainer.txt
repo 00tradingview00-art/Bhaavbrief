@@ -1,0 +1,7 @@
+You know India VIX. Now meet iVIX — the volatility index MCX doesn't publish, we do. 📈
+
+Same CBOE-style formula as India VIX, computed live for Gold, Silver, Crude, Nat Gas & Copper options.
+
+And now — for the first time — you can see the trend, not just today's number. 5D / 10D / 30D / 60D ATM IV history, updated daily. This is how you catch volatility building before the price moves.
+
+#MCX #iVIX #IndiaVIX #ImpliedVolatility #Options #IndianCommodities #BhaavBrief
