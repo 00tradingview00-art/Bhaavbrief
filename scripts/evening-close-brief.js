@@ -22,8 +22,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 
 const client       = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-const ARTICLES_DIR = path.join(ROOT, 'content/articles')
-const STATE_FILE   = path.join(ROOT, 'data/evening-brief-state.json')
+const ARTICLES_DIR    = path.join(ROOT, 'content/articles')
+const STATE_FILE      = path.join(ROOT, 'data/evening-brief-state.json')
+const TECHNICALS_FILE = path.join(ROOT, 'data/brief-technicals.json')
 
 function todayIST() {
   return new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
@@ -240,6 +241,8 @@ MCX closes at 11:30 PM IST. This brief publishes 30 minutes before close — an 
 
 SEBI COMPLIANCE (BhaavBrief is unregistered — educational content only): No buy/sell/accumulate/avoid/exit/hold/square-off directed at reader. Technical levels are observations not triggers. No predictive price targets — use "historically" or "in past episodes" framing. State data, never judge it.
 
+CURRENCY UNITS — do not mix these up: MCX prices are always ₹ (INR). COMEX/NYMEX prices (COMEX Gold, COMEX Silver, WTI Crude, Brent, Henry Hub Gas) are always $ (USD) — never write a ₹ symbol in front of a COMEX/NYMEX price, even when discussing them in the same sentence as an MCX price.
+
 DAY'S NARRATIVE:
 ${narrative}
 
@@ -416,6 +419,16 @@ async function main() {
 
   // Fetch technicals for top 2 movers to give Claude real levels
   let technicalSummary = ''
+  // Real Kite-derived numbers (day range, week range, SMA, S/R) that the writer may
+  // cite — persisted so validate-brief.mjs's hallucination check recognizes them
+  // instead of flagging real levels as "not in snapshot".
+  const briefTechnicals = {}
+  const INST_KEY = { gold: 'MCX_GOLD', silver: 'MCX_SILVER', crude: 'MCX_CRUDE', copper: 'MCX_COPPER', natgas: 'MCX_NATGAS' }
+  if (kitePrices) {
+    for (const [key, p] of Object.entries(kitePrices)) {
+      briefTechnicals[INST_KEY[key]] = { dayHigh: p.dayHigh, dayLow: p.dayLow, dayOpen: p.dayOpen }
+    }
+  }
   if (instruments && kitePrices) {
     const KEY_MAP = { gold: 'gold', silver: 'silver', crude: 'crude', copper: 'copper', natgas: 'natgas' }
     const sorted  = Object.entries(kitePrices)
@@ -430,12 +443,21 @@ async function main() {
         const candles = await fetchKiteHistorical(token, 22)
         const levels  = computeTechnicalLevels(candles, p.ltp)
         if (!levels) return null
+        briefTechnicals[INST_KEY[key]] = {
+          ...briefTechnicals[INST_KEY[key]],
+          weekHigh: levels.weekHigh, weekLow: levels.weekLow,
+          monthHigh: levels.monthHigh, monthLow: levels.monthLow,
+          sma20: levels.sma20,
+          support1: levels.support1, support2: levels.support2,
+          resistance1: levels.resistance1, resistance2: levels.resistance2,
+        }
         const names = { gold: 'Gold', silver: 'Silver', crude: 'Crude', copper: 'Copper', natgas: 'NatGas' }
         return `${names[key]}: prev close ₹${levels.prevClose}, 5d range ₹${levels.weekLow}–₹${levels.weekHigh}, 20d SMA ₹${Math.round(levels.sma20 ?? 0)}, S1 ₹${levels.support1}, R1 ₹${levels.resistance1}`
       } catch { return null }
     }))
     technicalSummary = blocks.filter(Boolean).join('\n')
   }
+  try { fs.writeFileSync(TECHNICALS_FILE, JSON.stringify(briefTechnicals, null, 2), 'utf8') } catch {}
 
   console.log('\nGenerating evening close brief...')
   const { mdx, sessionDate } = await generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary })
