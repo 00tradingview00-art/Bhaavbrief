@@ -228,6 +228,9 @@ async function semanticCheck() {
       system:
         "You are a pre-publication fact-consistency checker for a financial morning brief. " +
         "You are NOT an editor of style or tone. You only flag clear factual self-contradictions WITHIN today's brief. " +
+        "The \"issues\" array is a list of PROBLEMS ONLY. Do not walk through each check and report its outcome. " +
+        "If a check passes, omit it entirely — do not add an entry that concludes 'PASS', 'consistent', or 'no contradiction'. " +
+        "An empty issues array is the expected, common result for a correct brief. " +
         "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"severity\": \"block\"|\"warn\", \"detail\": string}]}. " +
         "No markdown fences, no preamble.",
       messages: [
@@ -290,9 +293,12 @@ async function semanticCheck() {
       const selfContradicted =
         detail.includes("no block issue") ||
         detail.includes("no contradiction") ||
+        detail.includes("no historical contradiction") ||
         detail.includes("no block on this") ||
         detail.includes("not a contradiction") ||
         detail.includes("consistent with") ||
+        /\bconsistent\.?\s*pass\b/.test(detail) ||
+        /\bpass\.?\s*$/.test(detail.trim()) ||
         detail.includes("matches snapshot") ||
         detail.includes("which matches");
       const isBlock = it.severity === "block" && !selfContradicted;
