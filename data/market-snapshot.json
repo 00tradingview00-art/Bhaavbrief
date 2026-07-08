@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T06:09:37.833Z",
+  "generatedAt": "2026-07-08T06:09:40.235Z",
   "generatedAtIST": "2026-07-08 11:39 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -28,15 +28,15 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 313.4,
+      "price": 313.2,
       "prevClose": 311.7,
-      "changePct": 0.5454,
+      "changePct": 0.4812,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
       "price": 95.23,
       "prevClose": 95.6,
-      "changePct": -0.3933,
+      "changePct": -0.3959,
       "unit": "INR"
     },
     "COMEX_GOLD": {
@@ -52,9 +52,9 @@
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 72.79,
+      "price": 72.78,
       "prevClose": 70.44,
-      "changePct": 3.3362,
+      "changePct": 3.322,
       "unit": "USD/bbl"
     },
     "BRENT": {
