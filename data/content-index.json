@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-08-us-yield-mcx-gold",
+    "href": "/articles/2026-07-08-us-yield-mcx-gold",
+    "title": "Why Rising US Treasury Yields Weigh on MCX Gold Prices",
+    "description": "Understand how US Treasury yield affects MCX gold prices through real rates, dollar strength, and India's import parity formula in this clear explainer.",
+    "excerpt": "Understanding how US Treasury yield affects MCX gold prices is essential for any Indian trader navigating the commodity markets, because the linkage is direct, multi-step, and amplified by India-speci",
+    "date": "2026-07-08",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-07-07-hawk-scan-mcx-nat-gas-3-44-break-below-305-on-summer-demand-",
     "href": "/articles/2026-07-07-hawk-scan-mcx-nat-gas-3-44-break-below-305-on-summer-demand-",
