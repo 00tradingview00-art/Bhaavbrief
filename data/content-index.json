@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-08-mcx-crude-surges-2-8-on-supply-tightness-signal",
+    "href": "/articles/2026-07-08-mcx-crude-surges-2-8-on-supply-tightness-signal",
+    "title": "MCX Crude surges 2.8% on supply tightness signal",
+    "description": "MCX Crude at ₹6901/bbl (+2.82%) as WTI backwardation widens; OPEC spare capacity squeeze reshapes near-term structure.",
+    "excerpt": "WHAT HAPPENED MCX Crude has accelerated 2.82% to ₹6901/bbl — the only commodity in green on a subdued morning — because the WTI-Brent spread has widened to $3.82 overnight, signaling a shift in physic",
+    "date": "2026-07-08T10:43:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Supply Tightness"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 6901
+  },
+  {
     "type": "brief",
     "slug": "edition-060",
     "href": "/briefs/edition-060",
