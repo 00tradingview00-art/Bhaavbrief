@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-07-09-12-19-silver-rallies-1-30-on-china-inflation-signal-copper-rises",
+    "title": "Silver rallies 1.30% on China inflation signal; copper rises as crude retreats",
+    "summary": "MCX silver surged +1.30% to ₹226,334/kg this morning, outpacing gold's +0.58% advance to ₹144,544/10g. Copper rallied +0.70% to ₹1,277/kg in tandem, while crude fell -0.89% to ₹7,010/bbl — a divergence that splits commod",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T06:49:04.025Z",
+    "pubDateIST": "09 Jul 2026, 12:19",
+    "href": "/flash/2026-07-09-06-53-silver-rallies-1-30-on-china-inflation-signal-copper-rises-as-crude",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-09-12-20-crude-falls-0-89-as-precious-metals-rally-bifurcated",
+    "title": "Crude falls 0.89% as precious metals rally; bifurcated commodity signals emerge",
+    "summary": "MCX crude fell 0.89% to ₹7010/bbl this morning, while gold advanced 0.58% to ₹144544/10g and silver surged 1.30%. The divergence reflects a classic risk-off repositioning: energy contracts retreating while precious metal",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T06:50:57.047Z",
+    "pubDateIST": "09 Jul 2026, 12:20",
+    "href": "/flash/2026-07-09-06-52-crude-falls-0-89-as-precious-metals-rally-bifurcated-commodity-signals",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-09-12-22-silver-jumps-1-30-to-226-334-kg-industrial-demand-outpaces",
+    "title": "Silver jumps 1.30% to ₹226,334/kg; industrial demand outpaces safe-haven flight",
+    "summary": "MCX Silver surged ₹226,334/kg (+1.30%) in this morning's session, outpacing a broader precious metals rally where gold advanced 0.58% to ₹144,544/10g. Crude oil declined 0.89% to ₹7,010/bbl, creating a divergence where s",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T06:52:49.303Z",
+    "pubDateIST": "09 Jul 2026, 12:22",
+    "href": "/flash/2026-07-09-06-52-silver-jumps-1-30-to-226-334-kg-industrial-demand-outpaces-safe-haven",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-09-09-36-crude-pins-gains-as-china-data-triggers-geopolitical-demand",
     "title": "Crude pins gains as China data triggers geopolitical-demand divergence; precious metals ease",
     "summary": "MCX Crude opened +0.59% at ₹7,115/bbl this morning, establishing itself as the session's sole directional mover while Gold slipped -0.21% to ₹143,404/10g and Silver declined -0.46% to ₹222,412/kg. China's overnight CPI a",
@@ -862,53 +898,5 @@
     "pubDateIST": "02 Jul 2026, 15:23",
     "href": "/flash/2026-07-02-09-53-mcx-copper-diverges-from-lme-records-as-india-demand-stays-muted-at-1-270",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-12-17-mcx-silver-slides-0-36-as-industrial-demand-signals-fade",
-    "title": "MCX Silver slides 0.36% as industrial demand signals fade despite rupee stability",
-    "summary": "MCX Silver declined 0.36% to ₹227,400/kg in this morning session, underperforming the broader precious metals complex where Gold remains relatively steadier at ₹144,577/10g. The weakness in Silver emerged alongside a sha",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T06:47:32.746Z",
-    "pubDateIST": "02 Jul 2026, 12:17",
-    "href": "/flash/2026-07-02-06-49-mcx-silver-slides-0-36-as-industrial-demand-signals-fade-despite-rupee",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-12-19-mcx-crude-slides-0-72-to-6478-demand-weakness-not",
-    "title": "MCX Crude slides 0.72% to ₹6478—demand weakness, not geopolitical risk",
-    "summary": "MCX Crude fell ₹6478/bbl, marking a -0.72% decline in this morning's session and leading all commodity movers. MCX Natural Gas and Silver followed with softer moves of -0.68% and -0.36% respectively. Gold remained nearly",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T06:49:25.779Z",
-    "pubDateIST": "02 Jul 2026, 12:19",
-    "href": "/flash/2026-07-02-06-49-mcx-crude-slides-0-72-to-6478-demand-weakness-not-geopolitical-risk",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-09-44-iran-diplomacy-peels-geopolitical-premium-from-mcx-crude-at",
-    "title": "Iran Diplomacy Peels Geopolitical Premium from MCX Crude at ₹6,470",
-    "summary": "MCX Crude Oil slipped 0.84% to ₹6,470/bbl this morning on diplomatic optimism around Iran nuclear negotiations, reducing immediate geopolitical supply-risk premium. Silver bucked the energy weakness, rising 0.50% to ₹229",
-    "category": "Geopolitics",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T04:14:55.679Z",
-    "pubDateIST": "02 Jul 2026, 09:44",
-    "href": "/flash/2026-07-02-04-16-iran-diplomacy-peels-geopolitical-premium-from-mcx-crude-at-6-470",
-    "coverImage": "https://images.pexels.com/photos/37510660/pexels-photo-37510660.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-09-46-mcx-natural-gas-slides-0-65-as-geopolitical-premium-bypasses",
-    "title": "MCX Natural Gas slides 0.65% as geopolitical premium bypasses energy fundamentals",
-    "summary": "MCX Natural Gas declined 0.65% to ₹304.80/mmBtu in this morning session, tracking a broader energy complex softness led by crude oil's 0.84% pullback. Silver bucked the weakness with a +0.50% gain, while gold moved highe",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T04:16:47.909Z",
-    "pubDateIST": "02 Jul 2026, 09:46",
-    "href": "/flash/2026-07-02-04-16-mcx-natural-gas-slides-0-65-as-geopolitical-premium-bypasses-energy",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
