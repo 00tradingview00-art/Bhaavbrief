@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-09-06-41-silver-plunges-3-66-to-222-419-kg-rupee-strength-industrial",
+    "title": "Silver plunges 3.66% to ₹222,419/kg; rupee strength + industrial weakness align",
+    "summary": "MCX Silver crashed ₹222,419/kg, down 3.66% in pre-market trade, marking the sharpest decline among precious metals today. Gold fell a milder 1.35% to ₹143,430/10g, while crude surged 6.38% to ₹7,133/bbl — creating a rare",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T01:11:19.192Z",
+    "pubDateIST": "09 Jul 2026, 06:41",
+    "href": "/flash/2026-07-09-01-13-silver-plunges-3-66-to-222-419-kg-rupee-strength-industrial-weakness-align",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-09-06-43-crude-surges-6-38-on-geopolitical-premium-gold-silver-weaken",
+    "title": "Crude surges 6.38% on geopolitical premium; Gold, Silver weaken on real-yield pressure",
+    "summary": "MCX Crude surged ₹7133/bbl, up 6.38% in overnight trade, while Gold slipped 1.35% to ₹143,430/10g and Silver contracted 3.66% to ₹222,419/kg. The crude rally dominated session movers as other energy and precious metals f",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T01:13:11.779Z",
+    "pubDateIST": "09 Jul 2026, 06:43",
+    "href": "/flash/2026-07-09-01-13-crude-surges-6-38-on-geopolitical-premium-gold-silver-weaken-on-real-yield",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-09-01-22-mcx-copper-falls-0-71-as-lme-rally-fails-to-anchor-spot",
     "title": "MCX Copper Falls 0.71% as LME Rally Fails to Anchor Spot Momentum",
     "summary": "MCX Copper closed ₹1,267/kg, down 0.71% in today's session, tracking a broader softening in base metals despite LME's record index high. Gold led the commodity selloff at –1.20% (₹143,650/10g), signalling a shift away fr",
@@ -862,17 +886,5 @@
     "pubDateIST": "02 Jul 2026, 09:46",
     "href": "/flash/2026-07-02-04-16-mcx-natural-gas-slides-0-65-as-geopolitical-premium-bypasses-energy",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-05-48-silver-gains-0-69-as-safe-haven-bid-outpaces-industrial",
-    "title": "Silver gains 0.69% as safe-haven bid outpaces industrial demand recovery",
-    "summary": "MCX Silver rose 0.69% to ₹228,615/kg in today's session, extending a safe-haven bid that has lifted precious metals across the board. Gold climbed 1.30%, while crude fell 1.36% to ₹6,527/bbl, signalling a clear flight-to",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T00:18:30.192Z",
-    "pubDateIST": "02 Jul 2026, 05:48",
-    "href": "/flash/2026-07-02-00-18-silver-gains-0-69-as-safe-haven-bid-outpaces-industrial-demand-recovery",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
