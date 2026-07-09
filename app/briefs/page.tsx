@@ -1,6 +1,7 @@
 import { getAllBriefs } from '@/lib/briefs'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
+import SectionTabs from '@/components/SectionTabs'
 
 export const metadata = {
   title: 'MCX Daily Commodity Briefs — Market Outlook & Analysis',
@@ -45,6 +46,13 @@ export default async function BriefsPage() {
 
       {/* Main — briefs list */}
       <main>
+        <SectionTabs
+          active="/briefs"
+          tabs={[
+            { label: 'Daily Editions', href: '/briefs' },
+            { label: 'Live Feed',      href: '/news' },
+          ]}
+        />
         <div style={{ marginBottom: 28 }}>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
             All Briefs

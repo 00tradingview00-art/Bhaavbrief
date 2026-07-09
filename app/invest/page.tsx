@@ -1,4 +1,5 @@
 import InvestPage from '@/components/InvestPage'
+import SectionTabs from '@/components/SectionTabs'
 
 export const metadata = {
   title: 'Invest in Commodities from India — Gold ETF, Silver ETF, Commodity MFs 2026',
@@ -30,5 +31,18 @@ export const metadata = {
 }
 
 export default function Page() {
-  return <InvestPage />
+  return (
+    <>
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '24px 16px 0' }}>
+        <SectionTabs
+          active="/invest"
+          tabs={[
+            { label: 'MCX Trading', href: '/learn' },
+            { label: 'Investing',   href: '/invest' },
+          ]}
+        />
+      </div>
+      <InvestPage />
+    </>
+  )
 }

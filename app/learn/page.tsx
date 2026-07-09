@@ -3,6 +3,7 @@ import path from 'node:path'
 import Link from 'next/link'
 import LearnPage from '@/components/LearnPage'
 import type { ContractSpecs } from '@/components/LearnPage'
+import SectionTabs from '@/components/SectionTabs'
 
 export const metadata = {
   title: 'Learn MCX Trading — All Contracts, Lot Sizes, Margins & Taxation',
@@ -194,6 +195,15 @@ export default function Page() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <div style={{ maxWidth: 860, margin: '0 auto', padding: '24px 16px 0' }}>
+        <SectionTabs
+          active="/learn"
+          tabs={[
+            { label: 'MCX Trading', href: '/learn' },
+            { label: 'Investing',   href: '/invest' },
+          ]}
+        />
+      </div>
       <LearnPage specs={specs} />
 
       {/* Deep-dive guides index */}

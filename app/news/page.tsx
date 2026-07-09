@@ -1,6 +1,7 @@
 import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
+import SectionTabs from '@/components/SectionTabs'
 
 export const metadata = {
   title: 'MCX Commodity Intelligence Feed — Why Prices Are Moving Today',
@@ -81,6 +82,13 @@ export default async function NewsPage() {
 
   return (
     <div>
+      <SectionTabs
+        active="/news"
+        tabs={[
+          { label: 'Daily Editions', href: '/briefs' },
+          { label: 'Live Feed',      href: '/news' },
+        ]}
+      />
       {/* Page header */}
       <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '0.5px solid #DDDDD0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
