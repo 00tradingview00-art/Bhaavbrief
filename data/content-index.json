@@ -1,5 +1,22 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-061",
+    "href": "/briefs/edition-061",
+    "title": "Oil Jumps 6% as Middle East Tensions Fracture Gold's Safe-Haven Logic",
+    "description": "Crude surges on geopolitical supply fears while gold falls 1.5%, exposing a rare and unstable divergence between the two classic crisis assets.",
+    "excerpt": "MCX Gold ₹143711 | Crude ₹7073 | USDINR ₹95.55 | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4081/oz (COMEX) | ₹95.55 | ₹143711/10g | ",
+    "date": "2026-07-09T01:53:37.802Z",
+    "edition": "61",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-07-08-hawk-scan-mcx-crude-3-94-spike-to-7146-breaches-week-high",
     "href": "/articles/2026-07-08-hawk-scan-mcx-crude-3-94-spike-to-7146-breaches-week-high",
