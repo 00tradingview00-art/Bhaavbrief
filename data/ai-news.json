@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-10-01-29-gold-surges-to-145-350-on-israel-iran-tensions-crude-falls",
+    "title": "Gold surges to ₹145,350 on Israel-Iran tensions; crude falls despite geopolitical premium",
+    "summary": "MCX gold surged ₹145,350/10g (+1.14%) as geopolitical tensions in the Israel-Iran region triggered safe-haven demand, while crude tumbled -3.18% signalling decoupling between conflict premium and oil fundamentals. Silver",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T19:59:24.147Z",
+    "pubDateIST": "10 Jul 2026, 01:29",
+    "href": "/flash/2026-07-09-20-01-gold-surges-to-145-350-on-israel-iran-tensions-crude-falls-despite",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-10-01-31-copper-defies-crude-slump-with-1-98-rally-industrial-demand",
+    "title": "Copper defies crude slump with 1.98% rally; industrial demand decouples from energy weakness",
+    "summary": "MCX Copper rallied ₹1,293.20/kg, up 1.98% in today's session, extending gains alongside gold and silver despite crude oil's 3.18% fall to ₹6,848/bbl. The divergence signals industrial metals are detaching from energy wea",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T20:01:17.261Z",
+    "pubDateIST": "10 Jul 2026, 01:31",
+    "href": "/flash/2026-07-09-20-01-copper-defies-crude-slump-with-1-98-rally-industrial-demand-decouples-from",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-09-23-44-silver-surges-226-450-kg-on-dual-safe-haven-and-industrial",
     "title": "Silver surges ₹226,450/kg on dual safe-haven and industrial bid, crude tumbles",
     "summary": "MCX Silver rallied ₹226,450/kg (+1.35%) in today's global session, joining a broad precious metals advance that also lifted Gold +1.14% to ₹145,350/10g. Crude Oil reversed sharply, falling -3.18% to ₹6,848/bbl, while Cop",
@@ -874,29 +898,5 @@
     "pubDateIST": "03 Jul 2026, 02:06",
     "href": "/flash/2026-07-02-20-36-gold-rallies-0-90-on-real-yield-compression-silver-safe-haven-bid-outpaces",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-03-01-17-gold-rallies-0-90-as-crude-stalls-demand-destruction",
-    "title": "Gold rallies 0.90% as crude stalls—demand destruction outpaces geopolitical premium on MCX",
-    "summary": "MCX gold rallied +0.90% to ₹145,723/10g, leading a muted commodity session where crude edged up 0.37% to ₹6,549/bbl and copper gained only 0.18%. The divergence is sharp: precious metals are absorbing demand signals that",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T19:47:00.102Z",
-    "pubDateIST": "03 Jul 2026, 01:17",
-    "href": "/flash/2026-07-02-19-47-gold-rallies-0-90-as-crude-stalls-demand-destruction-outpaces-geopolitical",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-23-48-gold-0-90-leads-mcx-copper-stalls-as-industrial-demand-stays",
-    "title": "Gold +0.90% Leads MCX; Copper Stalls as Industrial Demand Stays Dormant",
-    "summary": "MCX Gold rallied +0.90% to ₹145,723/10g while Silver gained +0.64% as global risk-off sentiment drove safe-haven demand during the US/EU session. Crude Oil edged higher +0.37% to ₹6,549/bbl on steady demand, but Copper's",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T18:18:28.432Z",
-    "pubDateIST": "02 Jul 2026, 23:48",
-    "href": "/flash/2026-07-02-18-18-gold-0-90-leads-mcx-copper-stalls-as-industrial-demand-stays-dormant",
-    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
