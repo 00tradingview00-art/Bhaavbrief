@@ -327,17 +327,18 @@
       "description_educational": "Wholesale price data offers a secondary, producer-side read on Indian inflation, complementing CPI in shaping RBI's policy stance and, in turn, INR direction."
     },
     {
-      "id": "rbi_mpc",
-      "name": "RBI Monetary Policy Committee Decision",
-      "source_url": "https://www.rbi.org.in/",
-      "frequency": "6x/year",
+      "id": "india_union_budget",
+      "name": "Union Budget of India",
+      "source_url": "https://www.indiabudget.gov.in/",
+      "frequency": "annual",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-06T04:30:00Z",
+      "next_release_utc": "2027-02-01T05:30:00Z",
       "affected_contracts": [
         "gold",
+        "silver",
         "crude"
       ],
-      "impact_tier": "medium",
+      "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
         "value": null,
@@ -346,7 +347,36 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "RBI's repo-rate decision and INR-management stance directly affect USD/INR — since MCX Gold and Crude are INR-denominated, rupee moves around MPC decisions show up mechanically in both contracts even without any change in underlying USD prices."
+      "description_educational": "India's annual Union Budget (presented 1 February, 11:00 AM IST) is where the government sets customs duty on gold and silver imports — the single largest discrete lever on MCX Gold and Silver pricing outside of global COMEX moves; each 1 percentage-point duty change has historically shifted MCX gold by roughly ₹1,000/10g overnight. Crude-linked windfall/export levies on fuel have also been announced at Budget in past years."
+    },
+    {
+      "id": "rbi_mpc",
+      "name": "RBI Monetary Policy Committee Decision",
+      "source_url": "https://www.rbi.org.in/",
+      "frequency": "6x/year",
+      "cadence_type": "manual",
+      "next_release_utc": "2026-08-06T04:30:00Z",
+      "affected_contracts": [
+        "gold",
+        "silver",
+        "crude",
+        "copper",
+        "natgas",
+        "zinc",
+        "aluminium",
+        "lead",
+        "nickel"
+      ],
+      "impact_tier": "high",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
+      "description_educational": "RBI's repo-rate decision and INR-management stance directly move USD/INR — since every MCX contract is INR-denominated, a rupee move around an MPC decision shows up mechanically across all 9 commodities even without any change in the underlying USD/international price. High-priority for an India-focused platform: this is one of the few events that moves every MCX contract at once, not just one commodity's benchmark."
     },
     {
       "id": "cftc_cot_report",
