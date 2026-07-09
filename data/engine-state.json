@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 145089,
-    "silver": 226401,
-    "crude": 6969,
-    "copper": 1288.45,
-    "natgas": 297.1,
+    "gold": 145121,
+    "silver": 226301,
+    "crude": 6894,
+    "copper": 1291,
+    "natgas": 290.8,
     "usdinr": 95.39
   },
-  "lastChecked": "2026-07-09T14:03:33.873Z",
+  "lastChecked": "2026-07-09T15:45:28.777Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,11 +22,13 @@
     "mideast": "LNG tanker at risk of exploding after two vessels struck near Strait of Hormuz -",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-07-08T09:44:29.082Z",
+  "articlesToday": [
+    "2026-07-09/2026-07-09-mcx-nat-gas-crashes-5-5-crude-follows-demand-concern-spreads"
+  ],
+  "lastArticleAt": "2026-07-09T15:45:42.151Z",
   "lastCoveredAt": {
     "crude": "2026-07-08T09:44:29.082Z",
     "silver": "2026-07-01T07:01:38.810Z",
-    "natgas": "2026-07-07T12:37:47.969Z"
+    "natgas": "2026-07-09T15:45:42.151Z"
   }
 }

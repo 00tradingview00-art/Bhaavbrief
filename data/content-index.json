@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-09-mcx-nat-gas-crashes-5-5-crude-follows-demand-concern-spreads",
+    "href": "/articles/2026-07-09-mcx-nat-gas-crashes-5-5-crude-follows-demand-concern-spreads",
+    "title": "MCX Nat Gas Crashes 5.5%, Crude Follows—Demand Concern Spreads",
+    "description": "MCX Natural Gas ₹290.80/mmBtu (−5.52% session), Crude ₹6894/bbl (−2.53%). Henry Hub weakness signals US storage surplus; gold rallies on safe-haven bid.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has collapsed ₹290.80/mmBtu (−5.52% session) while MCX Crude dropped ₹6894/bbl (−2.53%), signalling that energy traders are pricing in sustained US supply surplus and wea",
+    "date": "2026-07-09T21:15:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "Energy",
+      "Henry Hub"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 291
+  },
+  {
     "type": "brief",
     "slug": "edition-061",
     "href": "/briefs/edition-061",
