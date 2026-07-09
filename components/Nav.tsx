@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/briefs',         label: 'Briefs'  },
   { href: '/markets',        label: 'Markets' },
   { href: '/options',        label: 'Options' },
+  { href: '/calendar',       label: 'Calendar' },
   { href: '/news',           label: 'Feed'    },
   { href: '/learn',          label: 'Learn'   },
   { href: '/invest',         label: 'Invest'  },

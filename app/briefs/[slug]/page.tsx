@@ -5,6 +5,7 @@ import { MDXRemote }          from 'next-mdx-remote/rsc'
 import remarkGfm              from 'remark-gfm'
 import SubscribeForm          from '@/components/SubscribeForm'
 import CopyLinkButton         from '@/components/CopyLinkButton'
+import TapeMovers             from '@/components/TapeMovers'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 import { getBriefArcs } from '@/lib/arcs'
 
@@ -249,6 +250,8 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 ))}
               </div>
             )}
+
+            <TapeMovers tags={brief.tags ?? []} />
 
             <div className="brief-prose" itemProp="articleBody">
               <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />

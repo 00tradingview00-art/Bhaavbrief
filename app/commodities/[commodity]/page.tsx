@@ -9,6 +9,7 @@ import { getAllBriefs }     from '@/lib/briefs'
 import fs                   from 'fs'
 import path                 from 'path'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
+import UpcomingEventsForCommodity from '@/components/UpcomingEventsForCommodity'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -597,6 +598,8 @@ export default async function CommodityPage({ params }: Props) {
               ))}
             </ul>
           </div>
+
+          <UpcomingEventsForCommodity commodityKey={entry.key} name={info.name} />
 
           {/* Demand drivers */}
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', margin: '0 0 16px' }}>

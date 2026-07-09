@@ -198,3 +198,40 @@ body {
 /* Hero h1: hard cap at 2rem on mobile */
 .hero-h1 { font-size: 2rem !important; }
 @media (min-width: 768px) { .hero-h1 { font-size: clamp(2rem, 4vw, 3.1rem) !important; } }
+
+/* Today's Tape Movers widget: stacked rows on mobile, grid on desktop */
+.tape-movers-widget .tape-movers-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+@media (min-width: 768px) {
+  .tape-movers-widget .tape-movers-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 0 16px;
+  }
+}
+
+/* Calendar filter chip bar: horizontal scroll on mobile, wraps on desktop */
+.calendar-filter-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+@media (min-width: 768px) {
+  .calendar-filter-bar { flex-wrap: wrap; overflow-x: visible; }
+}
+
+/* Calendar event grid: single column on mobile, two columns on desktop */
+.calendar-week-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .calendar-week-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+}

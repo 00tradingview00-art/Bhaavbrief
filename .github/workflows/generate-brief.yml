@@ -70,6 +70,19 @@ jobs:
           fi
           node scripts/validate-brief.mjs data/market-snapshot.json "$BRIEF"
 
+      - name: Compliance lint (banned-phrase scan)
+        id: compliance
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: |
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF" ]; then
+            echo "No new brief generated — skipping compliance lint"
+            exit 0
+          fi
+          node scripts/compliance-lint.mjs data/market-snapshot.json "$BRIEF"
+
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
         continue-on-error: true
@@ -174,9 +187,9 @@ jobs:
         run: node scripts/post-reel-instagram.mjs
 
       - name: Alert on failure
-        # Only alert if generation or commit failed — not if validate blocked a bad brief.
-        # Validate failures are quality control, not infrastructure failures.
-        if: failure() && steps.validate.outcome != 'failure'
+        # Only alert if generation or commit failed — not if validate/compliance blocked a bad brief.
+        # Validate/compliance failures are quality control, not infrastructure failures.
+        if: failure() && steps.validate.outcome != 'failure' && steps.compliance.outcome != 'failure'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \

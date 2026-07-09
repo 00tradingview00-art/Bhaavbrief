@@ -1,0 +1,58 @@
+name: Compliance Check
+
+on:
+  pull_request:
+    paths:
+      - 'content/briefs/**'
+      - 'data/event-map.json'
+      - 'scripts/compliance-lint.mjs'
+      - 'scripts/**'
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'content/briefs/**'
+      - 'data/event-map.json'
+      - 'scripts/compliance-lint.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Lint changed brief files
+        run: |
+          BASE_REF="${{ github.event.pull_request.base.sha || github.event.before }}"
+          CHANGED=$(git diff --name-only "$BASE_REF" HEAD -- 'content/briefs/*.mdx' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No brief files changed"
+          else
+            FAILED=0
+            for f in $CHANGED; do
+              [ -f "$f" ] || continue
+              node scripts/compliance-lint.mjs data/market-snapshot.json "$f" || FAILED=1
+            done
+            exit $FAILED
+          fi
+
+      - name: Validate event-map.json schema (once it exists)
+        run: |
+          if [ -f data/event-map.json ] && [ -f scripts/validate-event-map.mjs ]; then
+            node scripts/validate-event-map.mjs
+          else
+            echo "event-map.json / validator not yet present — skipping"
+          fi
