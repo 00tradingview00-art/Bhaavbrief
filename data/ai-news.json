@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-09-15-58-gold-144531-silver-lead-three-asset-mcx-rally-on-israel-iran",
+    "title": "Gold ₹144531, Silver Lead Three-Asset MCX Rally on Israel-Iran Geopolitics",
+    "summary": "MCX gold advanced ₹144531/10g (+0.57%) in afternoon trade as geopolitical tensions in the Israel-Iran corridor lifted safe-haven demand. Silver outpaced gold with a +1.07% move to ₹225837/kg, while copper added +0.84%, s",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T10:28:35.031Z",
+    "pubDateIST": "09 Jul 2026, 15:58",
+    "href": "/flash/2026-07-09-10-30-gold-144531-silver-lead-three-asset-mcx-rally-on-israel-iran-geopolitics",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-09-16-00-mcx-copper-hits-0-84-as-global-base-metals-rally-signals",
+    "title": "MCX Copper Hits 0.84% as Global Base Metals Rally Signals Demand, Not Deflation",
+    "summary": "MCX Copper rallied ₹1,279/kg, up 0.84% this afternoon session, as global base metals indices hit record highs on demand recovery signals. The LME complex advanced on aluminum supply concerns offsetting lingering slowdown",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T10:30:27.016Z",
+    "pubDateIST": "09 Jul 2026, 16:00",
+    "href": "/flash/2026-07-09-10-30-mcx-copper-hits-0-84-as-global-base-metals-rally-signals-demand-not",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-09-12-19-silver-rallies-1-30-on-china-inflation-signal-copper-rises",
     "title": "Silver rallies 1.30% on China inflation signal; copper rises as crude retreats",
     "summary": "MCX silver surged +1.30% to ₹226,334/kg this morning, outpacing gold's +0.58% advance to ₹144,544/10g. Copper rallied +0.70% to ₹1,277/kg in tandem, while crude fell -0.89% to ₹7,010/bbl — a divergence that splits commod",
@@ -886,17 +910,5 @@
     "pubDateIST": "02 Jul 2026, 17:50",
     "href": "/flash/2026-07-02-12-20-crude-dives-on-geopolitical-demand-fears-while-gas-diverges-silver-holds",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-15-23-mcx-copper-diverges-from-lme-records-as-india-demand-stays",
-    "title": "MCX Copper Diverges from LME Records as India Demand Stays Muted at ₹1,270",
-    "summary": "MCX Copper declined 0.21% to ₹1,269.55/kg in afternoon trade, underperforming a broader base metals rally on the London Metal Exchange where copper hit record highs. The weakness arrived despite LME copper reaching fresh",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T09:53:05.692Z",
-    "pubDateIST": "02 Jul 2026, 15:23",
-    "href": "/flash/2026-07-02-09-53-mcx-copper-diverges-from-lme-records-as-india-demand-stays-muted-at-1-270",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
