@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-09-21-43-crude-crashes-2-5-to-6-895-as-safe-haven-gold-soars-on-mcx",
+    "title": "Crude Crashes 2.5% to ₹6,895 as Safe-Haven Gold Soars on MCX",
+    "summary": "MCX crude oil fell 2.52% to ₹6,895/bbl in afternoon session, while gold advanced 1.0% and silver gained 1.36%, creating a divergent cross-asset picture. Natural gas collapsed 5.98% to ₹289.40/mmBtu, the session's weakest",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T16:13:30.692Z",
+    "pubDateIST": "09 Jul 2026, 21:43",
+    "href": "/flash/2026-07-09-16-15-crude-crashes-2-5-to-6-895-as-safe-haven-gold-soars-on-mcx",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-09-21-45-natural-gas-slumps-5-98-as-copper-defies-risk-off-mcx",
+    "title": "Natural Gas Slumps 5.98% as Copper Defies Risk-Off, MCX Fragmentation Deepens",
+    "summary": "MCX Natural Gas collapsed 5.98% to ₹289.40/mmBtu in afternoon trade, the sharpest mover on the board. Crude Oil retreated 2.52% to ₹6,895/bbl, while Copper advanced 2.23% to ₹1,296.35/kg in a divergent cross-commodity se",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-09T16:15:23.226Z",
+    "pubDateIST": "09 Jul 2026, 21:45",
+    "href": "/flash/2026-07-09-16-15-natural-gas-slumps-5-98-as-copper-defies-risk-off-mcx-fragmentation-deepens",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-09-19-05-natural-gas-sinks-2-79-as-copper-rallies-dollar-weakness-not",
     "title": "Natural Gas Sinks 2.79% as Copper Rallies—Dollar Weakness, Not Demand, Drives Divergence",
     "summary": "MCX Natural Gas collapsed 2.79% to ₹299.20/mmBtu in afternoon trade, marking the session's steepest decline among tracked commodities. Simultaneously, copper rallied 1.30% to ₹1284.55/kg while gold and silver both advanc",
@@ -874,29 +898,5 @@
     "pubDateIST": "02 Jul 2026, 21:58",
     "href": "/flash/2026-07-02-16-28-mcx-crude-breaks-reflation-rally-gold-silver-copper-advance-on-dollar",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-20-05-copper-breaks-higher-on-lme-aluminum-scares-mcx-1-278-kg",
-    "title": "Copper breaks higher on LME aluminum scares; MCX ₹1,278/kg signals industrial demand",
-    "summary": "MCX Copper rose ₹1,278.10/kg (+0.46%) this afternoon session, extending a broader base metals rally alongside gold's +1.17% surge to ₹146,124/10g. The LME copper complex climbed to record highs on aluminum supply concern",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T14:35:18.650Z",
-    "pubDateIST": "02 Jul 2026, 20:05",
-    "href": "/flash/2026-07-02-14-37-copper-breaks-higher-on-lme-aluminum-scares-mcx-1-278-kg-signals-industrial",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-02-20-07-gold-rallies-to-146-124-on-safe-haven-demand-as-crude",
-    "title": "Gold Rallies to ₹146,124 on Safe-Haven Demand as Crude Retreats",
-    "summary": "MCX Gold surged ₹146,124/10g, gaining 1.17% in the afternoon session as safe-haven demand accelerated. Silver followed with a 0.64% climb to ₹229,690/kg, while crude oil weakened 0.78% to ₹6,474/bbl, signaling a clear ri",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T14:37:11.772Z",
-    "pubDateIST": "02 Jul 2026, 20:07",
-    "href": "/flash/2026-07-02-14-37-gold-rallies-to-146-124-on-safe-haven-demand-as-crude-retreats",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
