@@ -8,6 +8,7 @@ import CommodityPulse from '@/components/CommodityPulse'
 import EIACard from '@/components/EIACard'
 import { loadEIA } from '@/lib/eia'
 import { getActiveArcs } from '@/lib/arcs'
+import { getNextHighImpactEvent } from '@/lib/eventMap'
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
@@ -121,6 +122,7 @@ export default async function HomePage() {
   const prices = snap ? snapshotToPriceData(snap) : null
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
+  const nextEvent = getNextHighImpactEvent()
 
   return (
     <div>
@@ -480,6 +482,36 @@ export default async function HomePage() {
               </div>
             </div>
           </Link>
+
+          {/* Next high-impact event teaser */}
+          {nextEvent && (
+            <Link href={`/calendar#${nextEvent.id}`} style={{ textDecoration: 'none', display: 'block' }}>
+              <div style={{
+                background: 'var(--gold-pale)',
+                border: '1px solid var(--border)',
+                borderLeft: '3px solid var(--gold)',
+                borderRadius: '0 4px 4px 0',
+                padding: '14px 16px',
+                marginBottom: 16,
+              }}>
+                <div style={{
+                  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                  textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 6,
+                }}>
+                  Next High-Impact Event
+                </div>
+                <div style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500, marginBottom: 4 }}>
+                  {nextEvent.name}
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>
+                  {new Intl.DateTimeFormat('en-IN', {
+                    timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short',
+                    hour: 'numeric', minute: '2-digit', hour12: true,
+                  }).format(new Date(nextEvent.next_release_utc))} IST · Full calendar →
+                </div>
+              </div>
+            </Link>
+          )}
 
           {/* EIA crude inventory card */}
           <EIACard initialData={eiaData} />

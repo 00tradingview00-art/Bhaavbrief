@@ -8,18 +8,79 @@ export const revalidate = 900
 
 const BASE_URL = 'https://bhaavbrief.in'
 
+const TITLE = 'MCX Event Calendar — Trader Intelligence | BhaavBrief'
+const DESCRIPTION = 'Scheduled macro and data-release events mapped to MCX contracts — EIA storage, FOMC, CPI, RBI MPC, Union Budget, China PMI and more, with historical context. Educational, not advice.'
+
 export const metadata: Metadata = {
-  title: 'MCX Event Calendar — Trader Intelligence | BhaavBrief',
-  description: 'Scheduled macro and data-release events mapped to MCX contracts — EIA storage, FOMC, CPI, China PMI and more, with historical context. Educational, not advice.',
+  title: TITLE,
+  description: DESCRIPTION,
+  keywords: [
+    'MCX event calendar',
+    'EIA natural gas storage report India',
+    'FOMC MCX gold impact',
+    'RBI MPC MCX gold crude impact',
+    'Union Budget gold import duty MCX',
+    'MCX crude oil inventory report schedule',
+    'China PMI MCX copper impact',
+    'MCX contract expiry calendar 2026',
+    'CFTC commitment of traders MCX',
+  ],
   alternates: { canonical: `${BASE_URL}/calendar` },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: `${BASE_URL}/calendar`,
+    siteName: 'BhaavBrief',
+    type: 'website',
+    locale: 'en_IN',
+  },
+  twitter: {
+    card: 'summary' as const,
+    title: 'MCX Event Calendar | BhaavBrief',
+    description: 'Scheduled macro/data-release events mapped to MCX contracts — EIA, FOMC, CPI, RBI MPC, Union Budget and more.',
+    site: '@bhaavbrief',
+  },
 }
+
+const BASE = BASE_URL
 
 export default function CalendarPage() {
   const events = getUpcomingEvents()
   const nextHighImpact = getNextHighImpactEvent()
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+      { '@type': 'ListItem', position: 2, name: 'Calendar' },
+    ],
+  }
+
+  const eventListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: events.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Event',
+        name: e.name,
+        startDate: e.next_release_utc,
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        description: e.description_educational,
+        url: `${BASE}/calendar#${e.id}`,
+        location: { '@type': 'VirtualLocation', url: `${BASE}/calendar#${e.id}` },
+      },
+    })),
+  }
+
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventListSchema) }} />
+
       <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Home', href: '/' },
