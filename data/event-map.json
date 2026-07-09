@@ -8,10 +8,18 @@
       "frequency": "weekly",
       "cadence_type": "rule_based",
       "next_release_utc": "2026-07-16T14:30:00Z",
-      "affected_contracts": ["natgas"],
+      "affected_contracts": [
+        "natgas"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": -55, "unit": "Bcf", "as_of_period": "week ending 2026-07-03", "source": "eia_api", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": 61,
+        "unit": "Bcf",
+        "as_of_period": "week ending 2026-07-03",
+        "source": "eia_api",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR."
     },
     {
@@ -21,10 +29,18 @@
       "frequency": "weekly",
       "cadence_type": "rule_based",
       "next_release_utc": "2026-07-15T14:30:00Z",
-      "affected_contracts": ["crude"],
+      "affected_contracts": [
+        "crude"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": -1.5, "unit": "million barrels", "as_of_period": "week ending 2026-07-03", "source": "eia_api", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": -3.2,
+        "unit": "million barrels",
+        "as_of_period": "week ending 2026-07-03",
+        "source": "eia_api",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate."
     },
     {
@@ -34,10 +50,18 @@
       "frequency": "weekly",
       "cadence_type": "rule_based",
       "next_release_utc": "2026-07-14T20:30:00Z",
-      "affected_contracts": ["crude"],
+      "affected_contracts": [
+        "crude"
+      ],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "million barrels", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "million barrels",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "American Petroleum Institute's own weekly estimate of US crude stock changes, released the evening before the official EIA figure — often moves MCX Crude in the Wednesday-morning IST session ahead of the EIA number."
     },
     {
@@ -47,10 +71,18 @@
       "frequency": "irregular",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-03T13:00:00Z",
-      "affected_contracts": ["crude"],
+      "affected_contracts": [
+        "crude"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "OPEC+ production-quota decisions directly set the supply backdrop for Brent/WTI, which MCX Crude tracks via USD/INR — historically the single largest scheduled (non-geopolitical-shock) driver of crude volatility."
     },
     {
@@ -60,10 +92,20 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-07-14T12:30:00Z",
-      "affected_contracts": ["gold", "silver", "crude"],
+      "affected_contracts": [
+        "gold",
+        "silver",
+        "crude"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "% MoM", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "% MoM",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "US inflation prints shape Fed rate-path expectations, which move real yields and the dollar — the two primary transmission channels into MCX Gold and Silver."
     },
     {
@@ -73,10 +115,21 @@
       "frequency": "8x/year",
       "cadence_type": "manual",
       "next_release_utc": "2026-07-29T18:00:00Z",
-      "affected_contracts": ["gold", "silver", "copper", "crude"],
+      "affected_contracts": [
+        "gold",
+        "silver",
+        "copper",
+        "crude"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "The Fed's rate decision and forward guidance move US real yields and the dollar — the dominant macro driver for MCX Gold and Silver, with secondary effects on Copper and Crude via broad risk appetite."
     },
     {
@@ -86,10 +139,19 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-07T12:30:00Z",
-      "affected_contracts": ["gold", "silver"],
+      "affected_contracts": [
+        "gold",
+        "silver"
+      ],
       "impact_tier": "high",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "jobs added", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "jobs added",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "The monthly US jobs report is a key Fed-policy input — a labor market that cools faster than expected raises rate-cut odds, typically supportive for gold via lower real yields."
     },
     {
@@ -99,10 +161,21 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-07-31T01:00:00Z",
-      "affected_contracts": ["copper", "aluminium", "zinc", "crude"],
+      "affected_contracts": [
+        "copper",
+        "aluminium",
+        "zinc",
+        "crude"
+      ],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "index", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "index",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "China's official manufacturing PMI is a headline read on industrial demand — the single largest external demand signal for base metals (Copper, Aluminium, Zinc) given China's share of global consumption."
     },
     {
@@ -112,10 +185,22 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-03T01:45:00Z",
-      "affected_contracts": ["copper", "aluminium", "zinc", "lead", "nickel"],
+      "affected_contracts": [
+        "copper",
+        "aluminium",
+        "zinc",
+        "lead",
+        "nickel"
+      ],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "index", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "index",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Caixin's PMI skews toward smaller/export-facing manufacturers, complementing the official NBS PMI — divergence between the two is itself a watched signal for base-metals demand momentum."
     },
     {
@@ -128,7 +213,13 @@
       "affected_contracts": [],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "USDA's World Agricultural Supply and Demand Estimates cover cotton and the broader vegetable-oil complex, with indirect linkage to CPO/edible-oil pricing dynamics tracked in India's agri-commodity space."
     },
     {
@@ -141,7 +232,13 @@
       "affected_contracts": [],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "million tonnes", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "million tonnes",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Malaysia's monthly palm oil stock/production/export data is the primary benchmark for the vegetable-oil complex globally, with a secondary read-through to India's edible-oil import economics."
     },
     {
@@ -151,10 +248,19 @@
       "frequency": "weekly",
       "cadence_type": "rule_based",
       "next_release_utc": "2026-07-10T17:00:00Z",
-      "affected_contracts": ["crude", "natgas"],
+      "affected_contracts": [
+        "crude",
+        "natgas"
+      ],
       "impact_tier": "low",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "active rigs", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "active rigs",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "A weekly proxy for future US drilling activity and supply growth — a slower-moving, lower-impact signal than inventory reports, but relevant context for medium-term crude/gas supply trajectory."
     },
     {
@@ -164,10 +270,18 @@
       "frequency": "daily",
       "cadence_type": "manual",
       "next_release_utc": "2026-07-10T12:00:00Z",
-      "affected_contracts": ["natgas"],
+      "affected_contracts": [
+        "natgas"
+      ],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Heating/cooling degree-day forecasts drive near-term US natural gas demand expectations — during peak summer cooling or winter heating season, weather forecast shifts can rival storage-report volatility for Natural Gas."
     },
     {
@@ -177,10 +291,18 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-12T12:00:00Z",
-      "affected_contracts": ["gold"],
+      "affected_contracts": [
+        "gold"
+      ],
       "impact_tier": "low",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "% YoY", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "% YoY",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "India's retail inflation print shapes RBI policy expectations and rupee sentiment — MCX Gold, quoted in INR, carries a currency-translation sensitivity to India-specific macro data on top of USD-gold moves."
     },
     {
@@ -190,10 +312,18 @@
       "frequency": "monthly",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-14T12:00:00Z",
-      "affected_contracts": ["gold"],
+      "affected_contracts": [
+        "gold"
+      ],
       "impact_tier": "low",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": "% YoY", "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": "% YoY",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Wholesale price data offers a secondary, producer-side read on Indian inflation, complementing CPI in shaping RBI's policy stance and, in turn, INR direction."
     },
     {
@@ -203,10 +333,19 @@
       "frequency": "6x/year",
       "cadence_type": "manual",
       "next_release_utc": "2026-08-06T04:30:00Z",
-      "affected_contracts": ["gold", "crude"],
+      "affected_contracts": [
+        "gold",
+        "crude"
+      ],
       "impact_tier": "medium",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "RBI's repo-rate decision and INR-management stance directly affect USD/INR — since MCX Gold and Crude are INR-denominated, rupee moves around MPC decisions show up mechanically in both contracts even without any change in underlying USD prices."
     },
     {
@@ -216,10 +355,26 @@
       "frequency": "weekly",
       "cadence_type": "rule_based",
       "next_release_utc": "2026-07-10T19:30:00Z",
-      "affected_contracts": ["gold", "silver", "crude", "copper", "natgas", "zinc", "aluminium", "lead", "nickel"],
+      "affected_contracts": [
+        "gold",
+        "silver",
+        "crude",
+        "copper",
+        "natgas",
+        "zinc",
+        "aluminium",
+        "lead",
+        "nickel"
+      ],
       "impact_tier": "context",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "manual", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "A weekly snapshot of futures positioning by trader category (commercial, managed money, etc.) on the international benchmark contracts — context on how crowded a positioning is, not a signal of future direction."
     },
     {
@@ -229,10 +384,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-08-05T17:55:00Z",
-      "affected_contracts": ["gold"],
+      "affected_contracts": [
+        "gold"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Gold futures contract — open positions must be closed or rolled to the next contract before expiry; liquidity and spreads can widen in the final sessions."
     },
     {
@@ -242,10 +405,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-09-04T17:55:00Z",
-      "affected_contracts": ["silver"],
+      "affected_contracts": [
+        "silver"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Silver futures contract before rollover to the next contract month."
     },
     {
@@ -255,10 +426,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-20T17:55:00Z",
-      "affected_contracts": ["crude"],
+      "affected_contracts": [
+        "crude"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Crude Oil futures contract — crude expires ahead of the physical delivery month and rolls monthly, more frequently than metals."
     },
     {
@@ -268,10 +447,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-31T17:55:00Z",
-      "affected_contracts": ["copper"],
+      "affected_contracts": [
+        "copper"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Copper futures contract before rollover to the next contract month."
     },
     {
@@ -281,10 +468,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-28T17:55:00Z",
-      "affected_contracts": ["natgas"],
+      "affected_contracts": [
+        "natgas"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Natural Gas futures contract — this contract rolls monthly, aligned closely with the Henry Hub futures calendar."
     },
     {
@@ -294,10 +489,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-31T17:55:00Z",
-      "affected_contracts": ["zinc"],
+      "affected_contracts": [
+        "zinc"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Zinc futures contract before rollover to the next contract month."
     },
     {
@@ -307,10 +510,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-31T17:55:00Z",
-      "affected_contracts": ["lead"],
+      "affected_contracts": [
+        "lead"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Lead futures contract before rollover to the next contract month."
     },
     {
@@ -320,10 +531,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-31T17:55:00Z",
-      "affected_contracts": ["aluminium"],
+      "affected_contracts": [
+        "aluminium"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Aluminium futures contract before rollover to the next contract month."
     },
     {
@@ -333,10 +552,18 @@
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
       "next_release_utc": "2026-07-15T17:55:00Z",
-      "affected_contracts": ["nickel"],
+      "affected_contracts": [
+        "nickel"
+      ],
       "impact_tier": "structural",
       "consensus_field": null,
-      "prior_field": { "value": null, "unit": null, "as_of_period": null, "source": "kite_instruments", "as_of": "2026-07-09" },
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "kite_instruments",
+        "as_of": "2026-07-09"
+      },
       "description_educational": "Last trading day for the current MCX Nickel futures contract before rollover to the next contract month."
     }
   ]

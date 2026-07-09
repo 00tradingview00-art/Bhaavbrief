@@ -1,0 +1,55 @@
+name: Refresh Event Impact Stats
+
+on:
+  schedule:
+    # Monday 3:45 AM UTC = 9:15 AM IST — 30 min after kite-morning-auth.yml's
+    # Monday run (3:15 AM UTC), so this always has a fresh Kite token. Kept off
+    # weekends deliberately: kite-morning-auth only runs Mon-Fri, so a weekend
+    # run here would hit an expired token.
+    - cron: '45 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Fetch EIA actuals
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: node scripts/fetch-eia-data.mjs
+
+      - name: Roll forward rule-based event dates
+        run: node scripts/refresh-event-calendar.mjs
+
+      - name: Compute event impact stats
+        env:
+          KITE_API_KEY: ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+        run: node scripts/compute-event-impact.mjs
+
+      - name: Validate event-map.json schema
+        run: node scripts/validate-event-map.mjs
+
+      - name: Commit updated data
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/event-map.json data/event-impact-stats.json
+          git diff --cached --quiet && echo "No changes" || \
+            git commit -m "chore: refresh event impact stats [skip ci]"
+          git pull --rebase origin main
+          git push
