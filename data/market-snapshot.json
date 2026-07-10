@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-10T06:57:38.429Z",
-  "generatedAtIST": "2026-07-10 12:27 IST",
+  "generatedAt": "2026-07-10T06:59:09.256Z",
+  "generatedAtIST": "2026-07-10 12:29 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 144541,
+      "price": 144529,
       "prevClose": 145300,
-      "changePct": -0.5224,
+      "changePct": -0.5306,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
@@ -16,9 +16,9 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 6884,
+      "price": 6889,
       "prevClose": 6854,
-      "changePct": 0.4377,
+      "changePct": 0.5107,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -36,43 +36,43 @@
     "USDINR": {
       "price": 95.39,
       "prevClose": 95.86,
-      "changePct": -0.4948,
+      "changePct": -0.4922,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4121.6,
+      "price": 4122.2,
       "prevClose": 4130.6,
-      "changePct": -0.2179,
+      "changePct": -0.2034,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 60.5,
+      "price": 60.48,
       "prevClose": 60.38,
-      "changePct": 0.2021,
+      "changePct": 0.1689,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 72.18,
+      "price": 72.17,
       "prevClose": 72.08,
-      "changePct": 0.1387,
+      "changePct": 0.1249,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 76.36,
+      "price": 76.39,
       "prevClose": 76.3,
-      "changePct": 0.0786,
+      "changePct": 0.118,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.01,
       "prevClose": 3.01,
-      "changePct": -0.0664,
+      "changePct": 0.0332,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 375.55,
+      "price": 375.7,
       "prevClose": 375.9,
-      "changePct": -0.0931,
+      "changePct": -0.0532,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
@@ -113,8 +113,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 126404,
-    "mcxComexGoldSpreadPct": 14.35,
-    "goldSilverRatio": 68.1
+    "importParityGoldINR": 126422,
+    "mcxComexGoldSpreadPct": 14.32,
+    "goldSilverRatio": 68.2
   }
 }
