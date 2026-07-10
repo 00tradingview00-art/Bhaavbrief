@@ -599,22 +599,51 @@ export default function OptionChain({ isPro, preview = false, initialData = null
           </select>
         )}
         {!preview && !isMobile && (
-          <button onClick={() => setShowGreeks(g => !g)} style={{
-            padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
-            border: `1px solid ${C.bdr}`, background: showGreeks ? C.goldPl : 'transparent',
-            color: showGreeks ? C.gold : C.ink3,
-          }}>Greeks {showGreeks ? '▲' : '▼'}</button>
+          // Column add-on toggle — deliberately styled unlike the OI Map/ATM IV pair
+          // below (dashed border, +/− prefix, no arrow) since it's an independent
+          // "add columns to this table" switch, not a mutually-exclusive view.
+          <button
+            onClick={() => setShowGreeks(g => !g)}
+            aria-pressed={showGreeks}
+            style={{
+              padding: '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+              border: `1px dashed ${showGreeks ? C.gold : C.bdr}`, background: showGreeks ? C.goldPl : 'transparent',
+              color: showGreeks ? C.gold : C.ink3,
+            }}
+          >
+            {showGreeks ? '− Greeks columns' : '+ Greeks columns'}
+          </button>
         )}
-        <button onClick={() => setMapView(v => v === 'oi' ? null : 'oi')} style={{
-          padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
-          border: `1px solid ${C.bdr}`, background: mapView === 'oi' ? C.goldPl : 'transparent',
-          color: mapView === 'oi' ? C.gold : C.ink3,
-        }}>OI Map {mapView === 'oi' ? '▲' : '▼'}</button>
-        <button onClick={() => setMapView(v => v === 'iv' ? null : 'iv')} style={{
-          padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
-          border: `1px solid ${C.bdr}`, background: mapView === 'iv' ? C.goldPl : 'transparent',
-          color: mapView === 'iv' ? C.gold : C.ink3,
-        }}>ATM IV {mapView === 'iv' ? '▲' : '▼'}</button>
+        {/* OI Map / ATM IV — a real segmented control: one border around both,
+            a shared divider, no gap between them — since only one can be active. */}
+        <div style={{ display: 'flex', border: `1px solid ${C.bdr}`, borderRadius: 5, overflow: 'hidden' }} role="tablist" aria-label="Chart view">
+          <button
+            onClick={() => setMapView(v => v === 'oi' ? null : 'oi')}
+            role="tab"
+            aria-selected={mapView === 'oi'}
+            style={{
+              padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
+              border: 'none', borderRight: `1px solid ${C.bdr}`,
+              background: mapView === 'oi' ? C.goldPl : 'transparent',
+              color: mapView === 'oi' ? C.gold : C.ink3,
+            }}
+          >
+            OI Map
+          </button>
+          <button
+            onClick={() => setMapView(v => v === 'iv' ? null : 'iv')}
+            role="tab"
+            aria-selected={mapView === 'iv'}
+            style={{
+              padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
+              border: 'none',
+              background: mapView === 'iv' ? C.goldPl : 'transparent',
+              color: mapView === 'iv' ? C.gold : C.ink3,
+            }}
+          >
+            ATM IV
+          </button>
+        </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
