@@ -465,7 +465,11 @@ function Pill({ label, value, color, onClick, expand, info }: {
 }
 
 function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
-  const label = pcr > 1.2 ? 'Bullish' : pcr < 0.8 ? 'Bearish' : 'Neutral'
+  // Labels describe the positioning data itself (which side has more open
+  // interest), not a translated market call — "conventionally read as
+  // bullish/bearish" is explained in the info tooltip instead, so the at-a-
+  // glance label never reads as a directional signal.
+  const label = pcr > 1.2 ? 'Put-heavy' : pcr < 0.8 ? 'Call-heavy' : 'Balanced'
   const color = pcr > 1.2 ? C.up : pcr < 0.8 ? C.dn : 'var(--saffron)'
   const bg    = pcr > 1.2 ? C.upBg : pcr < 0.8 ? C.dnBg : C.goldPl
   return (
@@ -660,7 +664,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
           <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold}
             info="The strike where option writers (sellers) owe the least at expiry — often acts as a magnet for price as expiry nears." />
           <PCRPill pcr={data.pcr}
-            info="Put-Call Ratio — total Put OI divided by total Call OI. Above 1.2 is read as bullish positioning, below 0.8 as bearish." />
+            info="Put-Call Ratio — total Put OI divided by total Call OI. Above 1.2 (more puts open) is conventionally read as bullish positioning; below 0.8 (more calls open) as bearish." />
           {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6"
             info="Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices." />}
           {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV}
