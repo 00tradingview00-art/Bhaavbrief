@@ -14,6 +14,8 @@ import { getNextHighImpactEvent } from '@/lib/eventMap'
 export const revalidate = 60
 
 export const metadata = {
+  title: 'BhaavBrief — Daily MCX Market Brief, Event Calendar & Commodity Intelligence',
+  description: 'Daily MCX intelligence at 9:30 AM IST: an event calendar mapping EIA, OPEC, CPI, FOMC and RBI MPC releases to the MCX contracts they move, plus daily briefs for crude oil, natural gas, gold, silver and copper. Educational and informational only.',
   alternates: { canonical: 'https://bhaavbrief.in' },
 }
 
@@ -137,6 +139,39 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* ── VALUE PROP (SEO/AI-Overview quotable section) ───────────────────── */}
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{
+          fontFamily: 'var(--font-serif)', fontWeight: 800,
+          fontSize: 'clamp(1.6rem, 3.5vw, 2.4rem)', lineHeight: 1.15,
+          letterSpacing: '-0.02em', color: 'var(--ink)', margin: '0 0 10px',
+        }}>
+          India&apos;s Commodity Intelligence Platform for MCX Traders
+        </h1>
+        <p style={{ fontSize: 16, color: 'var(--ink-2)', lineHeight: 1.6, maxWidth: 720, marginBottom: 16 }}>
+          Daily market briefs and an event calendar for MCX crude oil, natural gas, gold, silver, and base metals — published every trading day at 9:30 AM IST, before the session opens.
+        </p>
+        <p style={{ fontSize: 14, color: 'var(--ink-3)', lineHeight: 1.7, maxWidth: 720, marginBottom: 20 }}>
+          BhaavBrief publishes a daily MCX market brief at 9:30 AM IST covering crude oil, natural gas, gold, silver, copper, and USD/INR, alongside an event calendar that maps global data releases — EIA inventory reports, OPEC meetings, US CPI, FOMC decisions, RBI MPC, and China PMI — to the specific MCX contracts they historically move. The calendar reports historical event-impact statistics, so traders know what is scheduled, when it releases in IST, and how much the market has typically moved — without offering any trading advice or recommendations.
+        </p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/briefs" style={{
+            display: 'inline-block', background: 'var(--ink)', color: 'var(--surface)',
+            fontSize: 14, fontWeight: 500, textDecoration: 'none',
+            padding: '10px 20px', borderRadius: 4,
+          }}>
+            Read Today&apos;s Brief (free)
+          </Link>
+          <Link href="/calendar" style={{
+            display: 'inline-block', background: 'var(--surface)', color: 'var(--ink)',
+            fontSize: 14, fontWeight: 500, textDecoration: 'none',
+            padding: '10px 20px', borderRadius: 4, border: '1px solid var(--border)',
+          }}>
+            See What Moves Each Commodity
+          </Link>
+        </div>
+      </div>
+
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       {latest && (
         <section style={{
@@ -184,7 +219,7 @@ export default async function HomePage() {
           {/* Title + description: two-col on desktop */}
           <div className="home-hero-inner">
             <div>
-              <h1 style={{
+              <h2 style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: 'clamp(26px, 3.5vw, 38px)',
                 fontWeight: 500,
@@ -194,7 +229,7 @@ export default async function HomePage() {
                 margin: '0 0 16px',
               }}>
                 {latest.title}
-              </h1>
+              </h2>
 
               <p style={{
                 fontSize: 15,

@@ -140,11 +140,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             borderTop: '1px solid var(--border)',
             borderRadius: 0,
           }}>
-            <strong style={{ color: 'var(--ink-3)' }}>Disclaimer:</strong> BhaavBrief is for educational and informational purposes only.
-            We are not registered with SEBI or any other regulatory authority.
-            Nothing on this platform constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity.
-            All data and analysis is sourced from publicly available information. Past patterns are not indicative of future results.
-            Commodity and equity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.
+            <strong style={{ color: 'var(--ink-3)' }}>Disclaimer:</strong> BhaavBrief provides factual market data, statistics, event calendars, and educational content only.
+            Nothing on this platform constitutes investment advice, research recommendations, or an inducement to trade.
+            BhaavBrief is not a SEBI-registered Research Analyst or Investment Adviser.
+            All data and analysis is sourced from publicly available information; past patterns are not indicative of future results.
+            Commodity derivatives trading involves substantial risk of loss and is not suitable for all investors. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.
           </p>
         </footer>
         <Analytics />

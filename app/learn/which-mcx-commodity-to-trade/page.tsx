@@ -48,7 +48,7 @@ const HOWTO_SCHEMA = {
     { '@type': 'HowToStep', position: 2, name: 'Assess your screen time availability', text: 'If you can only trade evenings (7–10 PM IST), choose Crude Oil Mini, Gold Mini, or Silver (COMEX-driven, most volatile in this window). If you trade afternoons (2–6 PM IST), Copper or Zinc follow LME afternoon session. If you can trade mornings (9–11 AM IST), all contracts are active at MCX open.' },
     { '@type': 'HowToStep', position: 3, name: 'Match volatility to your risk tolerance', text: 'For calm, slow moves: Copper or Zinc. For moderate volatility: Gold Mini. For higher volatility: Crude Oil (EIA Wednesday, OPEC events). For extreme volatility: Silver or Natural Gas — avoid as a beginner.' },
     { '@type': 'HowToStep', position: 4, name: 'Start with 1 lot for at least 30 trades', text: 'Never start with more than 1 lot regardless of capital. Trade the same commodity for at least 30 trades to understand its rhythm — how it responds to news, how wide the spread is during day vs evening, how much slippage you get at your broker.' },
-    { '@type': 'HowToStep', position: 5, name: 'Read the daily brief before every trade', text: 'Check what is driving the commodity today — OPEC news for crude, COMEX for gold, LME for copper. Trading without knowing the day\'s key driver is gambling. BhaavBrief publishes a daily MCX brief every morning at 9:47 AM.' },
+    { '@type': 'HowToStep', position: 5, name: 'Read the daily brief before every trade', text: 'Check what is driving the commodity today — OPEC news for crude, COMEX for gold, LME for copper. Trading without knowing the day\'s key driver is gambling. BhaavBrief publishes a daily MCX brief every morning at 9:30 AM.' },
   ],
 }
 

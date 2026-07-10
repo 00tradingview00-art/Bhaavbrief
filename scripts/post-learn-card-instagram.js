@@ -72,7 +72,7 @@ This is where India's jewellers, oil importers, and merchants manage price risk 
 
 You can be on the right side of that trade.
 
-Follow @bhaavbrief — free daily MCX intelligence at 9:47 AM.
+Follow @bhaavbrief — free daily MCX intelligence at 9:30 AM.
 
 #MCX #CommodityMarkets #IndianMarkets #BhaavBrief #TradingEducation #MCXGold #MCXCrude #SEBI #Commodities #StockMarket #MCXTrader`,
 

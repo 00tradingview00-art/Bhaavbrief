@@ -36,7 +36,7 @@ const PRINCIPLES = [
 ]
 
 const AUDIENCES = [
-  { icon: '◈', label: 'MCX Futures Traders',   desc: 'Intraday and positional. OHLC levels, OI shifts, and key support/resistance before the morning session opens.' },
+  { icon: '◈', label: 'MCX Futures Traders',   desc: 'Intraday and positional. OHLC levels, OI shifts, and historical price ranges before the morning session opens.' },
   { icon: '◇', label: 'Commodity Businesses',  desc: 'Jewellers, fuel dealers, agri merchants. Understand cost hedging windows, import parity, and when to lock rates.' },
   { icon: '△', label: 'Portfolio Investors',   desc: 'Gold ETF and commodity MF holders. Know when and why commodity prices are moving — before you check your NAV.' },
   { icon: '○', label: 'Analysts & Students',   desc: 'Learning futures, options, and commodity economics through real MCX market context every weekday.' },
