@@ -32,7 +32,6 @@ Not SEBI registered. Educational and informational purposes only. No buy/sell ca
 - [MCX Event Calendar](${BASE}/calendar): Scheduled macro/data-release events mapped to MCX contracts — EIA, FOMC, RBI MPC, Union Budget, China PMI, with historical impact stats
 - [Learn MCX Trading](${BASE}/learn): Complete guides on futures, margins, lot sizes, order types, hours, hedging, and taxation
 - [How to Invest](${BASE}/invest): Gold ETF, Silver ETF, commodity mutual funds for Indian investors
-- [Signal Academy](${BASE}/signal-academy): Interactive commodity trading simulators — OI divergence, IV percentile, basis convergence
 - [About](${BASE}/about): Mission, principles, what we cover, and how it works
 
 ## Commodity Intelligence Pages

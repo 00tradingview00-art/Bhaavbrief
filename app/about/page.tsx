@@ -227,7 +227,7 @@ export default async function AboutPage() {
                   },
                   {
                     label: 'Build the capability',
-                    body: 'A Learn library covering the mechanics nobody bothers to explain simply — lot sizes, margin, rollover, taxation, hedging — for someone starting from zero. Then Signal Academy, where instead of being told what a signal means, you learn to read it yourself: open interest, implied volatility, basis, seasonality, volume.',
+                    body: 'A Learn library covering the mechanics nobody bothers to explain simply — lot sizes, margin, rollover, taxation, hedging — for someone starting from zero. Then the Option Chain, live Greeks, implied volatility, Max Pain, PCR and OI concentration for every MCX contract, so you can read positioning yourself instead of being told what a signal means.',
                   },
                   {
                     label: 'Act on it',

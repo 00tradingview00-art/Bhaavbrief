@@ -46,12 +46,6 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/aluminium`,   priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/lead`,        priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
-  { url: `${BASE}/signal-academy`,                          priority: '0.7', changefreq: 'monthly' },
-  { url: `${BASE}/signal-academy/oi-divergence`,            priority: '0.6', changefreq: 'monthly' },
-  { url: `${BASE}/signal-academy/iv-percentile`,            priority: '0.6', changefreq: 'monthly' },
-  { url: `${BASE}/signal-academy/basis-convergence`,        priority: '0.6', changefreq: 'monthly' },
-  { url: `${BASE}/signal-academy/seasonal-patterns`,        priority: '0.6', changefreq: 'monthly' },
-  { url: `${BASE}/signal-academy/volume-anomaly`,           priority: '0.6', changefreq: 'monthly' },
 ]
 
 function entry(url: string, lastmod: string, changefreq: string, priority: string): string {
