@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-10-05-43-crude-crashes-2-86-as-gold-holds-copper-diverges-in-risk-off",
+    "title": "Crude crashes 2.86% as gold holds; copper diverges in risk-off MCX",
+    "summary": "MCX crude fell 2.86% to ₹6,871/bbl in today's global session, while gold advanced 1.1% and silver gained 1.31%, signaling a clear pivot away from energy into precious metals. Natural gas collapsed 6.30%, the largest sing",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-10T00:13:58.343Z",
+    "pubDateIST": "10 Jul 2026, 05:43",
+    "href": "/flash/2026-07-10-00-15-crude-crashes-2-86-as-gold-holds-copper-diverges-in-risk-off-mcx",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-10-05-45-mcx-nat-gas-plunges-6-3-on-us-summer-storage-glut-copper",
+    "title": "MCX Nat Gas plunges 6.3% on US summer storage glut; copper defies risk-off",
+    "summary": "MCX Nat Gas crashed 6.30% to ₹288.40/mmBtu in today's session, the sharpest mover across the board. Gold and silver advanced +1.1% and +1.31% respectively, signalling a synchronized safe-haven bid despite copper gaining ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-10T00:15:50.706Z",
+    "pubDateIST": "10 Jul 2026, 05:45",
+    "href": "/flash/2026-07-10-00-15-mcx-nat-gas-plunges-6-3-on-us-summer-storage-glut-copper-defies-risk-off",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-10-01-29-gold-surges-to-145-350-on-israel-iran-tensions-crude-falls",
     "title": "Gold surges to ₹145,350 on Israel-Iran tensions; crude falls despite geopolitical premium",
     "summary": "MCX gold surged ₹145,350/10g (+1.14%) as geopolitical tensions in the Israel-Iran region triggered safe-haven demand, while crude tumbled -3.18% signalling decoupling between conflict premium and oil fundamentals. Silver",
@@ -873,18 +897,6 @@
     "pubDate": "2026-07-03T04:02:43.066Z",
     "pubDateIST": "03 Jul 2026, 09:32",
     "href": "/flash/2026-07-03-04-02-mcx-copper-hits-1286-on-lme-supply-shock-base-metals-index-at-record",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-03-04-49-mcx-gold-0-90-on-safe-haven-bid-copper-divergence-signals",
-    "title": "MCX Gold +0.90% on Safe-Haven Bid; Copper Divergence Signals Selective Demand",
-    "summary": "# FLASH INTELLIGENCE: MCX GOLD BREAKS SESSION LEADERSHIP AS SAFE-HAVEN BID SUSTAINS MCX Gold rallied +0.90% to ₹145,723/10g during Friday's global session, outpacing all major commodities on the desk. Silver followed at ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-02T23:19:59.182Z",
-    "pubDateIST": "03 Jul 2026, 04:49",
-    "href": "/flash/2026-07-02-23-19-mcx-gold-0-90-on-safe-haven-bid-copper-divergence-signals-selective-demand",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
