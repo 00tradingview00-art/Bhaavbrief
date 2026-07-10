@@ -1,37 +1,42 @@
 {
-  "generatedAt": "2026-07-10T21:37:12.086Z",
-  "generatedAtIST": "2026-07-11 03:07 IST",
-  "source": "kite+yahoo",
+  "generatedAt": "2026-07-10T23:03:20.200Z",
+  "generatedAtIST": "2026-07-11 04:33 IST",
+  "source": "stale-cache+yahoo",
   "instruments": {
     "MCX_GOLD": {
       "price": 143480,
       "prevClose": 145300,
       "changePct": -1.2526,
-      "unit": "INR/10g"
+      "unit": "INR/10g",
+      "stale": true
     },
     "MCX_SILVER": {
       "price": 222680,
       "prevClose": 226377,
       "changePct": -1.6331,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_CRUDE": {
       "price": 6820,
       "prevClose": 6854,
       "changePct": -0.4961,
-      "unit": "INR/bbl"
+      "unit": "INR/bbl",
+      "stale": true
     },
     "MCX_COPPER": {
       "price": 1293.5,
       "prevClose": 1292.8,
       "changePct": 0.0541,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_NATGAS": {
       "price": 279.8,
       "prevClose": 280.3,
       "changePct": -0.1784,
-      "unit": "INR/mmBtu"
+      "unit": "INR/mmBtu",
+      "stale": true
     },
     "USDINR": {
       "price": 95.37,
@@ -73,43 +78,50 @@
       "price": 376,
       "prevClose": 375.9,
       "changePct": 0.0266,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_LEAD": {
       "price": 200.75,
       "prevClose": 200.85,
       "changePct": -0.0498,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_ALUMINIUM": {
       "price": 338.65,
       "prevClose": 343.95,
       "changePct": -1.5409,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "MCX_NICKEL": {
       "price": 1564.6,
       "prevClose": 1592.3,
       "changePct": -1.7396,
-      "unit": "INR/kg"
+      "unit": "INR/kg",
+      "stale": true
     },
     "EURINR": {
       "price": 109.26,
       "prevClose": 109.3875,
       "changePct": -0.1166,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     },
     "GBPINR": {
       "price": 128.385,
       "prevClose": 128.3875,
       "changePct": -0.0019,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     },
     "JPYINR": {
       "price": 59.3975,
       "prevClose": 59.3975,
       "changePct": 0,
-      "unit": "INR"
+      "unit": "INR",
+      "stale": true
     }
   },
   "derived": {
