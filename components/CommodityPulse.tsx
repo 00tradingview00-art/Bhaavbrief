@@ -131,12 +131,16 @@ function PulseSkeleton() {
 export default function CommodityPulse() {
   const [data,    setData]    = useState<PulseData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error,   setError]   = useState(false)
 
   useEffect(() => {
     fetch('/api/commodity-pulse')
       .then(r => r.ok ? r.json() : null)
-      .then(d => { if (d?.rows) setData(d) })
-      .catch(() => {})
+      .then(d => {
+        if (d?.rows) { setData(d); setError(false) }
+        else setError(true)
+      })
+      .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [])
 
@@ -171,7 +175,16 @@ export default function CommodityPulse() {
       </div>
 
       {/* Body */}
-      {loading ? <PulseSkeleton /> : !data ? null : (
+      {loading ? <PulseSkeleton /> : error || !data ? (
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4,
+          overflow: 'hidden', padding: '48px 16px', textAlign: 'center',
+        }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: 0 }}>
+            Commodity pulse offline — retrying in 5 min
+          </p>
+        </div>
+      ) : (
         <div style={{
           background: 'var(--surface)',
           borderRadius: 4,

@@ -122,7 +122,8 @@ export default function CalendarFilterBar({ events }: { events: EventMapEntry[] 
           onClick={() => setActive('all')}
           style={{
             fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em',
-            padding: '6px 12px', border: '1px solid var(--border)', whiteSpace: 'nowrap',
+            padding: '10px 16px', minHeight: 44, display: 'inline-flex', alignItems: 'center',
+            border: '1px solid var(--border)', whiteSpace: 'nowrap',
             background: active === 'all' ? 'var(--gold)' : 'var(--surface-1)',
             color: active === 'all' ? '#FAFAF6' : 'var(--ink-2)',
             cursor: 'pointer',
@@ -136,7 +137,8 @@ export default function CalendarFilterBar({ events }: { events: EventMapEntry[] 
             onClick={() => setActive(c)}
             style={{
               fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em',
-              padding: '6px 12px', border: '1px solid var(--border)', whiteSpace: 'nowrap',
+              padding: '10px 16px', minHeight: 44, display: 'inline-flex', alignItems: 'center',
+              border: '1px solid var(--border)', whiteSpace: 'nowrap',
               background: active === c ? 'var(--gold)' : 'var(--surface-1)',
               color: active === c ? '#FAFAF6' : 'var(--ink-2)',
               cursor: 'pointer',

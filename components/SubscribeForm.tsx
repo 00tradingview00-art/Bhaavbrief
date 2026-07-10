@@ -51,7 +51,7 @@ export default function SubscribeForm({ compact = false, location, onSuccess }: 
     display: 'block', width: '100%', padding: '10px 12px',
     border: '0.5px solid #C8C8B8', background: '#FAFAF6',
     fontFamily: 'var(--font-sans)', fontSize: 15, color: '#18180F',
-    outline: 'none', marginBottom: 8,
+    marginBottom: 8,
   }
   const btnStyle: React.CSSProperties = {
     display: 'block', width: '100%', background: status === 'loading' ? '#8A8A7A' : '#18180F',

@@ -444,10 +444,17 @@ function Pill({ label, value, color, onClick, expand, info }: {
   label: string; value: React.ReactNode; color?: string; onClick?: () => void; expand?: boolean; info?: string
 }) {
   return (
-    <div onClick={onClick} style={{
-      cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column',
-      gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0,
-    }}>
+    <div
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      aria-expanded={onClick && expand != null ? expand : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } } : undefined}
+      style={{
+        cursor: onClick ? 'pointer' : 'default', display: 'flex', flexDirection: 'column',
+        gap: 1, padding: '6px 14px', borderRight: `1px solid ${C.bdr}`, flexShrink: 0,
+      }}
+    >
       <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
         {label}{expand != null && <span style={{ marginLeft: 4 }}>{expand ? '▲' : '▼'}</span>}
         {info && <InfoTip text={info} />}

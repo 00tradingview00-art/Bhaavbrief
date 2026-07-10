@@ -148,7 +148,7 @@ export default function SearchModal({ open, onClose }: Props) {
             onKeyDown={e => e.key === 'Enter' && doSearch(query)}
             placeholder="Ask about commodities…"
             style={{
-              flex: 1, border: 'none', outline: 'none',
+              flex: 1, border: 'none',
               fontSize: 15, color: 'var(--ink)',
               background: 'transparent',
               fontFamily: 'var(--font-sans)',

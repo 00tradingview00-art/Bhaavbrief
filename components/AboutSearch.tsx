@@ -111,7 +111,7 @@ export default function AboutSearch() {
           onKeyDown={e => e.key === 'Enter' && doSearch(query)}
           placeholder="e.g. how does rising crude affect chemical companies"
           style={{
-            flex: 1, border: 'none', outline: 'none', background: 'transparent',
+            flex: 1, border: 'none', background: 'transparent',
             fontSize: 15, color: '#18180F', fontFamily: 'var(--font-sans)',
           }}
         />
