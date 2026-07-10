@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-10-21-07-mcx-silver-falls-1-32-as-inflation-fears-override",
+    "title": "MCX Silver Falls 1.32% as Inflation Fears Override Geopolitical Risk Premium",
+    "summary": "MCX silver fell 1.32% to ₹223,400/kg in Friday afternoon trade, extending a two-day decline amid renewed inflation concerns and escalating US-Iran tensions. Gold weakened 1.03% to ₹143,800/10g, while crude slipped 0.60% ",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-10T15:37:28.521Z",
+    "pubDateIST": "10 Jul 2026, 21:07",
+    "href": "/flash/2026-07-10-15-39-mcx-silver-falls-1-32-as-inflation-fears-override-geopolitical-risk-premium",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-10-21-09-mcx-natural-gas-plunges-3-86-as-copper-holds-flat-supply",
+    "title": "MCX Natural Gas Plunges 3.86% as Copper Holds Flat; Supply Signal Isolated",
+    "summary": "MCX Natural Gas collapsed 3.86% to ₹276.60/mmBtu in the afternoon session, leading all commodities lower while gold and silver retreated modestly by 1.03% and 1.32% respectively. USD/INR held steady at ₹95.32, removing c",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-10T15:39:21.598Z",
+    "pubDateIST": "10 Jul 2026, 21:09",
+    "href": "/flash/2026-07-10-15-39-mcx-natural-gas-plunges-3-86-as-copper-holds-flat-supply-signal-isolated",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-10-18-25-silver-crashes-1-65-on-mcx-industrial-demand-cracks-faster",
     "title": "Silver crashes 1.65% on MCX; industrial demand cracks faster than safe-haven bids hold",
     "summary": "MCX Silver crashed -1.65% this afternoon session, the sharpest mover across the complex, while Gold slipped -0.81% to ₹144,127/10g and Crude edged up +0.51% to ₹6,889/bbl. The precious metals selloff intensified despite ",
@@ -849,30 +873,6 @@
     "pubDate": "2026-07-03T16:10:33.923Z",
     "pubDateIST": "03 Jul 2026, 21:40",
     "href": "/flash/2026-07-03-16-10-silver-rallies-2-25-to-234-400-kg-on-dollar-weakness-and-industrial-demand",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-03-19-57-silver-extends-gains-on-rupee-weakness-usd-inr-slides-to-95",
-    "title": "Silver extends gains on rupee weakness; USD/INR slides to 95.20",
-    "summary": "# FLASH INTELLIGENCE | MCX Evening Session MCX silver surged +2.03% to ₹233,892/kg, leading a broad precious metals rally alongside gold at +0.89% and copper at +0.60%. USD/INR weakened to ₹95.20, reducing rupee hedging ",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-03T14:27:36.932Z",
-    "pubDateIST": "03 Jul 2026, 19:57",
-    "href": "/flash/2026-07-03-14-29-silver-extends-gains-on-rupee-weakness-usd-inr-slides-to-95-20",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-03-19-59-mcx-copper-steady-at-1283-kg-as-industrial-demand-drives",
-    "title": "MCX Copper Steady at ₹1283/kg as Industrial Demand Drives Base Metals Record",
-    "summary": "MCX Copper rose ₹1283/kg (+0.60%) in afternoon trade, tracking a broader base metals rally led by record highs on the LME index. Silver gained +2.03% and gold +0.89%, signalling synchronized strength across precious and ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-03T14:29:29.768Z",
-    "pubDateIST": "03 Jul 2026, 19:59",
-    "href": "/flash/2026-07-03-14-29-mcx-copper-steady-at-1283-kg-as-industrial-demand-drives-base-metals-record",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
