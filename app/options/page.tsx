@@ -62,7 +62,7 @@ const FAQ_SCHEMA = {
     {
       '@type': 'Question',
       name: 'What does PCR (Put-Call Ratio) tell you?',
-      acceptedAnswer: { '@type': 'Answer', text: 'PCR is total Put open interest divided by total Call open interest for an expiry. A PCR above 1 means more Put OI than Call OI, typically read as bearish positioning or hedging demand; a PCR well below 1 suggests bullish or Call-heavy positioning. Extreme readings (very high or very low) are sometimes read as contrarian signals near market turning points.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'PCR is total Put open interest divided by total Call open interest for an expiry. A PCR above 1.2 (more Put OI than Call OI) is conventionally read as bullish positioning; below 0.8 (more Call OI) as bearish. Extreme readings are sometimes treated as a contrarian indicator near market turning points.' },
     },
     {
       '@type': 'Question',
