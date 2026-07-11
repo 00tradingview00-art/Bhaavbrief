@@ -2,6 +2,7 @@ import { getAllBriefs }   from '@/lib/briefs'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 import { getAllArcs }     from '@/lib/arcs'
+import { getAllEvents }   from '@/lib/events'
 
 export const revalidate = 3600 // rebuild sitemap cache every hour
 
@@ -46,6 +47,7 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/aluminium`,   priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/lead`,        priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/events`,                  priority: '0.6', changefreq: 'daily'  },
 ]
 
 function entry(url: string, lastmod: string, changefreq: string, priority: string): string {
@@ -55,10 +57,11 @@ function entry(url: string, lastmod: string, changefreq: string, priority: strin
 export async function GET() {
   try {
     const now = new Date().toISOString()
-    const [briefs, flash, articles] = await Promise.all([
+    const [briefs, flash, articles, events] = await Promise.all([
       getAllBriefs(),
       Promise.resolve(getAllFlash()),
       getAllArticles(),
+      getAllEvents(),
     ])
     const arcs = getAllArcs()
 
@@ -82,9 +85,13 @@ export async function GET() {
       entry(`${BASE}/arcs/${a.id}`, a.startDate ? new Date(a.startDate).toISOString() : now, a.status === 'active' ? 'daily' : 'never', '0.6')
     )
 
+    const eventEntries = events.map(e =>
+      entry(`${BASE}/events/${e.slug}`, e.date ? new Date(e.date).toISOString() : now, 'never', '0.6')
+    )
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticEntries, ...briefEntries, ...articleEntries, ...flashEntries, ...arcEntries].join('\n')}
+${[...staticEntries, ...briefEntries, ...articleEntries, ...flashEntries, ...arcEntries, ...eventEntries].join('\n')}
 </urlset>`
 
     return new Response(xml, {

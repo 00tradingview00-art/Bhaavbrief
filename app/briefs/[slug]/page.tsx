@@ -93,7 +93,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   // Permanent redirect from old edition-XXX slugs to SEO-friendly URL
   if (slug !== brief.urlSlug) redirect(`/briefs/${brief.urlSlug}`)
 
-  const { prev, next } = getPrevNextBriefs(brief.urlSlug)
+  const { prev, next } = await getPrevNextBriefs(brief.urlSlug)
 
 
   const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'

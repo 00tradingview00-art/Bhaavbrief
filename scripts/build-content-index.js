@@ -7,6 +7,7 @@
 import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { deriveCommodityLabelsFromTags } from './lib/commodity-tags.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
@@ -59,6 +60,8 @@ function indexBriefs() {
       const raw = fs.readFileSync(path.join(BRIEFS_DIR, file), 'utf8')
       const fm  = parseFrontmatter(raw)
       const slug = file.replace(/\.(mdx|md)$/, '')
+      const tags = Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : [])
+      const rawCommodities = Array.isArray(fm.commodities) ? fm.commodities : (fm.commodities ? [fm.commodities] : [])
       return {
         type:        'brief',
         slug,
@@ -68,8 +71,11 @@ function indexBriefs() {
         excerpt:     extractExcerpt(raw),
         date:        fm.date         ?? '',
         edition:     fm.edition      ?? '',
-        tags:        Array.isArray(fm.tags)       ? fm.tags       : (fm.tags ? [fm.tags] : []),
-        commodities: Array.isArray(fm.commodities) ? fm.commodities : (fm.commodities ? [fm.commodities] : []),
+        tags,
+        // generate-brief.js now writes `commodities` for new briefs, but the
+        // existing corpus predates that — derive from tags (same fallback
+        // lib/briefs.ts uses) instead of indexing an empty array for those.
+        commodities: rawCommodities.length > 0 ? rawCommodities : deriveCommodityLabelsFromTags(tags),
         commodity:   fm.commodity    ?? '',
       }
     })

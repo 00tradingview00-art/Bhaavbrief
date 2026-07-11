@@ -1,5 +1,6 @@
 import { getAllArticles, getArticleBySlug } from '@/lib/articles'
 import { getAllBriefs } from '@/lib/briefs'
+import { COMMODITY_ACCENT_COLORS } from '@/lib/commodityTags'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -47,15 +48,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const COMMODITY_COLORS: Record<string, string> = {
-  gold:   '#B45309',
-  silver: '#2B4FC7',
-  crude:  '#7C3AED',
-  copper: '#065F46',
-  natgas: '#7C3AED',
-  macro:  '#6B21A8',
-}
-
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params
   const [article, recentBriefs] = await Promise.all([
@@ -65,7 +57,7 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound()
 
   const { meta, content } = article
-  const color = COMMODITY_COLORS[meta.commodity] ?? '#7A7668'
+  const color = COMMODITY_ACCENT_COLORS[meta.commodity as keyof typeof COMMODITY_ACCENT_COLORS] ?? '#7A7668'
 
   // JSON-LD schema for SEO
   const articleUrl = `https://bhaavbrief.in/articles/${slug}`

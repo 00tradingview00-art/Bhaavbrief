@@ -47,6 +47,8 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const STATE_FILE      = path.join(ROOT, 'data/engine-state.json')
 const MCX_CACHE_FILE  = path.join(ROOT, 'data/mcx-last-prices.json')
 const ARTICLES_DIR    = path.join(ROOT, 'content/articles')
+const EVENTS_DIR       = path.join(ROOT, 'content/events')
+const EVENT_MAP_FILE   = path.join(ROOT, 'data/event-map.json')
 const TITLE_FILE      = path.join(ROOT, 'data/last-article-title.txt')
 const IMPACT_MAP_FILE = path.join(ROOT, 'data/impact-map.json')
 
@@ -1220,6 +1222,55 @@ function saveArticle(mdx) {
   return { filepath, slug, title }
 }
 
+// ── 7a. Event Result Pages ─────────────────────────────────────────────────────
+// When a scheduled event we track in event-map.json fires (currently: EIA
+// crude/nat-gas storage — the only cadence_type:'rule_based' events with an
+// automatic, verifiable firing signal), publish a permanent /events/[slug]
+// page capturing the result + MCX price at print + the mechanism, pulled
+// straight from event-map.json's description_educational field. This runs
+// alongside (not instead of) the regular article/hawk-scan.
+let _eventMap = null
+function loadEventMap() {
+  if (_eventMap) return _eventMap
+  try { _eventMap = JSON.parse(fs.readFileSync(EVENT_MAP_FILE, 'utf8')).events ?? [] }
+  catch { _eventMap = [] }
+  return _eventMap
+}
+
+function publishEventResultPage({ eventId, date, result, commodity, mcxPrice, mcxChangePct, relatedArticleSlug }) {
+  const eventDef = loadEventMap().find(e => e.id === eventId)
+  if (!eventDef) { console.warn(`  Event page skipped — no event-map entry for "${eventId}"`); return }
+
+  const dateStr = date.slice(0, 10)
+  const slug    = `${eventId.replace(/_/g, '-')}-${dateStr}`
+  const filepath = path.join(EVENTS_DIR, `${slug}.mdx`)
+  if (fs.existsSync(filepath)) return // already published for this event+date
+
+  const title       = `${eventDef.name} — ${new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`
+  const direction    = mcxChangePct >= 0 ? 'up' : 'down'
+  const description = `${result} MCX ${commodity === 'natgas' ? 'Natural Gas' : commodity[0].toUpperCase() + commodity.slice(1)} moved ${direction} ${Math.abs(mcxChangePct).toFixed(2)}% to ₹${mcxPrice} at time of print.`.slice(0, 300)
+
+  const frontmatter = `---
+title: "${title.replace(/"/g, '\\"')}"
+description: "${description.replace(/"/g, '\\"')}"
+eventId: "${eventId}"
+eventName: "${eventDef.name.replace(/"/g, '\\"')}"
+commodity: "${commodity}"
+date: "${date}"
+result: "${result.replace(/"/g, '\\"')}"
+mcxPrice: ${mcxPrice}
+mcxChangePct: ${mcxChangePct}
+mechanism: "${eventDef.description_educational.replace(/"/g, '\\"')}"
+${relatedArticleSlug ? `relatedArticleSlug: "${relatedArticleSlug}"` : ''}
+published: true
+---
+`
+
+  if (!fs.existsSync(EVENTS_DIR)) fs.mkdirSync(EVENTS_DIR, { recursive: true })
+  fs.writeFileSync(filepath, frontmatter, 'utf8')
+  console.log(`  Event result page published: content/events/${slug}.mdx`)
+}
+
 // ── 8. Throttle Check ─────────────────────────────────────────────────────────
 function canPublish(state) {
   const today = new Date().toISOString().split('T')[0]
@@ -1443,6 +1494,39 @@ async function main() {
   if (!result) {
     saveState(state)
     return
+  }
+
+  // Publish permanent event-result pages for any significant EIA release this run
+  if (eiaData) {
+    const nowIso = new Date().toISOString()
+    try {
+      if (eiaData.isSignificant) {
+        const crudeMove = moves.find(m => m.key === 'crude')
+        publishEventResultPage({
+          eventId:            'eia_petroleum_status_report',
+          date:               nowIso,
+          result:             eiaData.summary,
+          commodity:          'crude',
+          mcxPrice:           crudeMove?.price ?? prices.mcxCrude,
+          mcxChangePct:       crudeMove?.pct ?? parseFloat(prices.crudePct ?? '0'),
+          relatedArticleSlug: result.slug,
+        })
+      }
+      if (eiaData.natGas?.isSignificant) {
+        const gasMove = moves.find(m => m.key === 'natgas')
+        publishEventResultPage({
+          eventId:            'eia_natural_gas_storage',
+          date:               nowIso,
+          result:             eiaData.natGas.summary,
+          commodity:          'natgas',
+          mcxPrice:           gasMove?.price ?? prices.mcxNatGas,
+          mcxChangePct:       gasMove?.pct ?? parseFloat(prices.gasPct ?? '0'),
+          relatedArticleSlug: result.slug,
+        })
+      }
+    } catch (e) {
+      console.warn('Event result page publish failed (non-fatal):', e.message)
+    }
   }
 
   state.articlesToday = state.articlesToday ?? []

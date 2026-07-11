@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { isTradingHoliday, todayIST, getHolidayName } from './lib/holidays.js'
+import { deriveCommodityLabelsFromTags } from './lib/commodity-tags.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const envFile = path.join(__dirname, '../.env.local')
@@ -124,6 +125,68 @@ function getLeadStreak(count = 5) {
   }
 }
 
+// ── Deterministic arc-trigger rule ────────────────────────────────────────────
+// If the same commodity has been the PRIMARY (first) tag for 2+ consecutive
+// editions and its combined day-over-day move over that streak exceeds
+// RULE_MOVE_THRESHOLD_PCT, this qualifies as a developing story regardless of
+// the LLM's subjective read — see detectAndUpdateArc().
+const RULE_STREAK_THRESHOLD    = 2
+const RULE_MOVE_THRESHOLD_PCT  = 5
+
+const TAG_TO_PRICE_ROW_LABEL = {
+  'MCX Gold':   'Gold',
+  'MCX Silver': 'Silver',
+  'MCX Crude':  'Crude',
+  'MCX Copper': 'Copper',
+  'MCX NatGas': 'Nat Gas',
+}
+
+// Reads the MCX price for `rowLabel` out of a brief's rendered Price Bridge
+// table (built by buildPriceBridge() — always present whenever that
+// commodity's price data exists, unlike the Key Number %-tail which is
+// sometimes omitted). Row format: "| Crude | $72.35/bbl (WTI) | ₹95.08 | **₹6885/bbl** |"
+function extractMcxPriceFromBrief(content, rowLabel) {
+  const re = new RegExp(`\\|\\s*${rowLabel}\\s*\\|[^|]*\\|[^|]*\\|\\s*\\*\\*₹([\\d,.]+)`)
+  const m = content.match(re)
+  return m ? parseFloat(m[1].replace(/,/g, '')) : null
+}
+
+// Sum of |day-over-day % move| for `leadTag` across the last `streak` editions.
+function getLeadCommodityMoveSum(leadTag, streak) {
+  const rowLabel = TAG_TO_PRICE_ROW_LABEL[leadTag]
+  if (!rowLabel || streak < 1) return 0
+  try {
+    const files = fs.readdirSync(BRIEFS_DIR)
+      .filter(f => f.match(/^edition-\d+\.mdx$/))
+      .sort()
+      .slice(-(streak + 1)) // one extra file needed to compute `streak` deltas
+    const prices = files
+      .map(f => extractMcxPriceFromBrief(fs.readFileSync(path.join(BRIEFS_DIR, f), 'utf8'), rowLabel))
+    let sum = 0
+    for (let i = 1; i < prices.length; i++) {
+      // Skip (don't bridge across) a day whose price couldn't be extracted —
+      // comparing two non-adjacent days as if they were consecutive would
+      // silently distort the combined-move sum.
+      if (prices[i] === null || prices[i - 1] === null) continue
+      sum += Math.abs((prices[i] - prices[i - 1]) / prices[i - 1] * 100)
+    }
+    return sum
+  } catch {
+    return 0
+  }
+}
+
+// Evaluated after the new brief is saved (so getLeadStreak sees it). Returns
+// null when the rule doesn't fire, otherwise the facts detectAndUpdateArc
+// uses to build the arc record deterministically (no LLM involved).
+function evaluateArcTriggerRule() {
+  const { streak, lead } = getLeadStreak(RULE_STREAK_THRESHOLD + 3)
+  if (!lead || streak < RULE_STREAK_THRESHOLD) return null
+  const moveSum = getLeadCommodityMoveSum(lead, streak)
+  if (moveSum < RULE_MOVE_THRESHOLD_PCT) return null
+  return { lead, streak, moveSum }
+}
+
 function loadRecentBriefs(count = 3) {
   try {
     const files = fs.readdirSync(BRIEFS_DIR)
@@ -171,8 +234,10 @@ function buildPriceBridge(prices) {
     rows.push(`| Crude   | $${prices.wti}/bbl (WTI)          | ₹${prices.usdinr} | **₹${prices.mcxCrude}/bbl** |`)
   if (prices.comexSilver && prices.mcxSilver)
     rows.push(`| Silver  | $${prices.comexSilver}/oz (COMEX)  | ₹${prices.usdinr} | **₹${prices.mcxSilver}/kg** |`)
-  if (prices.comexCopper && prices.mcxCopper)
-    rows.push(`| Copper  | $${prices.comexCopper}/lb (COMEX)  | ₹${prices.usdinr} | **₹${prices.mcxCopper}/kg** |`)
+  if (prices.mcxCopper)
+    rows.push(`| Copper  | ${prices.comexCopper ? `$${prices.comexCopper}/lb (COMEX)` : '—'}  | ₹${prices.usdinr} | **₹${prices.mcxCopper}/kg** |`)
+  if (prices.mcxGas)
+    rows.push(`| Nat Gas | ${prices.henryHub ? `$${prices.henryHub}/mmBtu (Henry Hub)` : '—'} | ₹${prices.usdinr} | **₹${prices.mcxGas}/mmBtu** |`)
   if (!rows.length) return null
   return `| Commodity | Global Price | USD/INR | MCX Price |
 |-----------|--------------|---------|-----------|
@@ -547,15 +612,35 @@ async function main() {
     mdx = mdx.replace(/^(---\n)/, `$1urlSlug: "${urlSlug}"\n`)
   }
 
+  // Write `commodities:` at generation time — this is the actual source of
+  // the field readers (lib/briefs.ts etc.) were falling back to deriving
+  // from `tags` at read time. Deriving here too, from the same tags this
+  // brief was just written with, so new briefs carry the field directly.
+  const tagsMatchForCommodities = mdx.match(/^tags:\s*\[(.+?)\]/m)
+  if (tagsMatchForCommodities) {
+    const tagList = tagsMatchForCommodities[1]
+      .split(',')
+      .map(t => t.trim().replace(/^"|"$/g, ''))
+    const commodities = deriveCommodityLabelsFromTags(tagList)
+    if (commodities.length > 0) {
+      const commoditiesYaml = commodities.map(c => `"${c}"`).join(', ')
+      mdx = mdx.replace(/^(---\n)/, `$1commodities: [${commoditiesYaml}]\n`)
+    }
+  }
+
   if (!fs.existsSync(BRIEFS_DIR)) fs.mkdirSync(BRIEFS_DIR, { recursive: true })
   const file = path.join(BRIEFS_DIR, `edition-${String(EDITION).padStart(3, '0')}.mdx`)
   if (fs.existsSync(file)) { console.warn('Already exists, skipping'); process.exit(0) }
   fs.writeFileSync(file, mdx.trim(), 'utf8')
   console.log(`Saved: ${file}`)
 
-  // Arc detection — runs after brief is saved
+  // Arc detection — runs after brief is saved (getLeadStreak/rule need the file on disk)
   try {
-    await detectAndUpdateArc(mdx, EDITION)
+    const ruleTrigger = evaluateArcTriggerRule()
+    if (ruleTrigger) {
+      console.log(`  Arc rule triggered: ${ruleTrigger.lead} led ${ruleTrigger.streak} consecutive editions, combined move ${ruleTrigger.moveSum.toFixed(1)}%`)
+    }
+    await detectAndUpdateArc(mdx, EDITION, ruleTrigger)
   } catch (e) {
     console.warn('Arc detection failed (non-fatal):', e.message)
   }
@@ -573,7 +658,48 @@ function saveArcs(data) {
   fs.writeFileSync(ARC_FILE, JSON.stringify(data, null, 2), 'utf8')
 }
 
-async function detectAndUpdateArc(mdx, edition) {
+// Fully deterministic arc create/continue — used whenever evaluateArcTriggerRule()
+// has already decided the outcome. No LLM call is involved: this both avoids
+// wasting an API call on a decision already made, and removes the two failure
+// modes a "prompt the LLM, backstop on non-compliance" design had — a
+// transient API failure (429/timeout) and a valid-but-unrelated LLM action
+// could otherwise leave the rule-mandated arc write silently skipped.
+function applyDeterministicArc(arcData, activeArcs, ruleTrigger, { edition, date, title, tags, mdx }) {
+  const existingArc = activeArcs.find(a => a.primaryCommodity === ruleTrigger.lead)
+  const rowLabel     = TAG_TO_PRICE_ROW_LABEL[ruleTrigger.lead]
+  const keyLevel     = rowLabel ? extractMcxPriceFromBrief(mdx, rowLabel) : null
+  const keyLevelStr  = keyLevel ? `₹${keyLevel}` : ''
+  let parsedTags = []
+  try { parsedTags = JSON.parse(tags.replace(/'/g, '"')) } catch { parsedTags = [ruleTrigger.lead] }
+
+  if (existingArc) {
+    if (!existingArc.editions.includes(edition)) {
+      existingArc.editions.push(edition)
+      existingArc.latestDay += 1
+      existingArc.summary = `${ruleTrigger.lead} remains the primary daily narrative — day ${existingArc.latestDay}, combined move ${ruleTrigger.moveSum.toFixed(1)}% over the last ${ruleTrigger.streak} editions. Latest: ${title}.`
+      if (keyLevelStr) existingArc.keyLevel = keyLevelStr
+      console.log(`  Arc rule — continued: "${existingArc.title}" Day ${existingArc.latestDay}`)
+    }
+    return
+  }
+
+  const slug = `${ruleTrigger.lead.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-developing-story-${date}`
+  arcData.arcs.push({
+    id:               slug,
+    title,
+    startDate:        date,
+    status:           'active',
+    editions:         [edition],
+    latestDay:        ruleTrigger.streak,
+    summary:          `${ruleTrigger.lead} has led the primary daily narrative for ${ruleTrigger.streak} consecutive editions with a combined move of ${ruleTrigger.moveSum.toFixed(1)}%. Latest: ${title}.`,
+    primaryCommodity: ruleTrigger.lead,
+    keyLevel:         keyLevelStr,
+    tags:             parsedTags,
+  })
+  console.log(`  Arc rule — started: "${title}" (${slug})`)
+}
+
+async function detectAndUpdateArc(mdx, edition, ruleTrigger = null) {
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
   const tagsMatch  = mdx.match(/^tags:\s*(\[.*?\])/m)
   const dateMatch  = mdx.match(/^date:\s*"?(\d{4}-\d{2}-\d{2})/m)
@@ -586,6 +712,12 @@ async function detectAndUpdateArc(mdx, edition) {
 
   const arcData    = loadArcs()
   const activeArcs = arcData.arcs.filter(a => a.status === 'active')
+
+  if (ruleTrigger) {
+    applyDeterministicArc(arcData, activeArcs, ruleTrigger, { edition, date, title, tags, mdx })
+    saveArcs(arcData)
+    return
+  }
 
   const prompt = `You are reading a new BhaavBrief market brief. Determine if it starts, continues, or ends a story arc.
 
@@ -620,20 +752,21 @@ Rules:
 - Only create arcs for significant macro/geopolitical events, NOT routine daily briefs.
 - dayNumber: 1 for new arc, existing latestDay+1 for continue.`
 
-  const response = await client.messages.create({
-    model:      'claude-haiku-4-5-20251001',
-    max_tokens: 300,
-    messages:   [{ role: 'user', content: prompt }],
-  })
+  let result = null
+  try {
+    const response = await client.messages.create({
+      model:      'claude-haiku-4-5-20251001',
+      max_tokens: 300,
+      messages:   [{ role: 'user', content: prompt }],
+    })
+    const text  = response.content[0]?.type === 'text' ? response.content[0].text.trim() : ''
+    const match = text.match(/\{[\s\S]*\}/)
+    if (match) result = JSON.parse(match[0])
+  } catch (e) {
+    console.warn('  Arc LLM call failed (non-fatal):', e.message)
+  }
 
-  const text  = response.content[0]?.type === 'text' ? response.content[0].text.trim() : ''
-  const match = text.match(/\{[\s\S]*\}/)
-  if (!match) return
-
-  const result = JSON.parse(match[0])
-  if (!result.action || result.action === 'none') return
-
-  if (result.action === 'start' && result.arcId) {
+  if (result?.action === 'start' && result.arcId) {
     arcData.arcs.push({
       id:               result.arcId,
       title:            result.title ?? title,
@@ -649,7 +782,7 @@ Rules:
     console.log(`  Arc started: "${result.title}" (${result.arcId})`)
   }
 
-  if (result.action === 'continue' && result.arcId) {
+  if (result?.action === 'continue' && result.arcId) {
     const arc = arcData.arcs.find(a => a.id === result.arcId)
     if (arc && !arc.editions.includes(edition)) {
       arc.editions.push(edition)
@@ -659,7 +792,7 @@ Rules:
     }
   }
 
-  if (result.action === 'end' && result.arcId) {
+  if (result?.action === 'end' && result.arcId) {
     const arc = arcData.arcs.find(a => a.id === result.arcId)
     if (arc) {
       arc.status  = 'closed'

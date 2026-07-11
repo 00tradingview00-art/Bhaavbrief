@@ -6,6 +6,8 @@ import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel'
 import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
+import { getActiveArcs }    from '@/lib/arcs'
+import { normalizeCommodityValue, KEY_TO_MCX_LABEL, type CommodityKey } from '@/lib/commodityTags'
 import fs                   from 'fs'
 import path                 from 'path'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
@@ -308,25 +310,31 @@ export default async function CommodityPage({ params }: Props) {
   const prevClose = priceData?.mcxPrevClose  ?? 0
 
   const commodityArticles = articles
-    .filter(a => a.commodity === entry.priceKey || a.commodity === entry.key)
+    .filter(a => normalizeCommodityValue(a.commodity) === entry.key)
     .slice(0, 6)
 
-  // Map commodity slug to the label used in brief frontmatter
-  const BRIEF_COMMODITY_MAP: Record<string, string> = {
-    gold:      'MCX Gold',
-    silver:    'MCX Silver',
-    crude:     'MCX Crude',
-    copper:    'MCX Copper',
-    natgas:    'MCX Natural Gas',
-    zinc:      'MCX Zinc',
-    aluminium: 'MCX Aluminium',
-    lead:      'MCX Lead',
-    nickel:    'MCX Nickel',
-  }
-  const briefCommodityLabel = BRIEF_COMMODITY_MAP[entry.key]
+  // Label used in brief frontmatter / arc data — single shared source of
+  // truth (was a locally duplicated map that disagreed with the arc system's
+  // natgas naming convention; see lib/commodityTags.ts).
+  const briefCommodityLabel = KEY_TO_MCX_LABEL[entry.key as CommodityKey]
   const recentBriefs = allBriefs
     .filter(b => b.commodities.includes(briefCommodityLabel))
     .slice(0, 5)
+
+  // Developing Story banner — active arc where this commodity is the lead or a named participant.
+  // Prefer an arc where this commodity is actually PRIMARY over one that merely
+  // tags it (e.g. don't show the crude page's arc on the gold page just
+  // because the crude arc's tags happen to include "MCX Gold"); break ties by
+  // most recently started.
+  const commodityArcs = getActiveArcs()
+    .filter(arc => arc.primaryCommodity === briefCommodityLabel || arc.tags.includes(briefCommodityLabel))
+    .sort((a, b) => {
+      const aPrimary = a.primaryCommodity === briefCommodityLabel ? 1 : 0
+      const bPrimary = b.primaryCommodity === briefCommodityLabel ? 1 : 0
+      if (aPrimary !== bPrimary) return bPrimary - aPrimary
+      return b.startDate.localeCompare(a.startDate)
+    })
+  const leadArc = commodityArcs[0]
 
   const pageDescription = `Live MCX ${info.name} price today in India. OHLC levels, import parity from COMEX, who controls supply, and what moves the price — with daily AI-generated market intelligence.`
   const pageUrl         = `${BASE}/commodities/${commodity}`
@@ -500,6 +508,60 @@ export default async function CommodityPage({ params }: Props) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32, alignItems: 'start' }}>
         {/* Left column */}
         <div>
+          {/* Developing Story — shows when an active arc involves this commodity */}
+          {leadArc && (
+            <Link href={`/arcs/${leadArc.id}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 24 }}>
+              <div style={{
+                background: 'var(--gold-pale)',
+                border: '1px solid rgba(181,134,42,0.35)',
+                borderLeft: '3px solid var(--gold)',
+                borderRadius: '0 8px 8px 0',
+                padding: '14px 16px',
+              }}>
+                <div style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 10,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: 'var(--gold)',
+                  fontWeight: 700,
+                  marginBottom: 6,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}>
+                  <span className="live-dot" style={{ background: 'var(--gold)' }} />
+                  Developing Story · Day {leadArc.latestDay}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--font-serif)',
+                  fontSize: 16,
+                  fontWeight: 600,
+                  color: 'var(--ink)',
+                  lineHeight: 1.3,
+                  marginBottom: 6,
+                }}>
+                  {leadArc.title}
+                </div>
+                <p style={{
+                  fontSize: 13,
+                  color: 'var(--ink-3)',
+                  margin: '0 0 8px',
+                  lineHeight: 1.5,
+                }}>
+                  {leadArc.summary}
+                </p>
+                <span style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: 10,
+                  color: 'var(--gold)',
+                }}>
+                  Follow this story →
+                </span>
+              </div>
+            </Link>
+          )}
+
           {/* Recent intelligence */}
           <h2 style={{
             fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500,

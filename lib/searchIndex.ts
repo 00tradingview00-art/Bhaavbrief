@@ -1,6 +1,7 @@
 import fs   from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { deriveCommodityLabelsFromTags } from './commodityTags'
 
 export interface ContentEntry {
   type:        'brief' | 'article' | 'hawk-scan' | 'news'
@@ -59,7 +60,9 @@ function makeBriefEntry(file: string): ContentEntry | null {
       date:        String(data.date ?? ''),
       edition:     data.edition ?? '',
       tags:        Array.isArray(data.tags)        ? data.tags        : (data.tags ? [String(data.tags)] : []),
-      commodities: Array.isArray(data.commodities) ? data.commodities : (data.commodities ? [String(data.commodities)] : []),
+      commodities: Array.isArray(data.commodities) && data.commodities.length > 0
+        ? data.commodities
+        : deriveCommodityLabelsFromTags(Array.isArray(data.tags) ? data.tags : []),
       commodity:   String(data.commodity ?? ''),
     }
   } catch { return null }

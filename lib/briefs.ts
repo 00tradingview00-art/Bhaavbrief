@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { deriveCommodityLabelsFromTags } from './commodityTags'
 
 const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
 
@@ -71,15 +72,28 @@ function parseBriefFile(filename: string): BriefMeta | null {
     summary:     desc,
     edition:     data.edition  ?? 0,
     tags:        data.tags     || [],
-    commodities: data.commodities || [],
+    commodities: Array.isArray(data.commodities) && data.commodities.length > 0
+      ? data.commodities
+      : deriveCommodityLabelsFromTags(data.tags),
     published:   data.published !== false,
   }
 }
 
+// 60-second TTL cache — mirrors lib/searchIndex.ts's pattern. getAllBriefs()
+// is called from over a dozen routes; without this, every one of them
+// re-reads and re-parses every content/briefs/*.mdx file from scratch (the
+// corpus grows by one file per weekday via the automated pipeline).
+let _briefsCache: BriefMeta[] | null = null
+let _briefsCacheAt = 0
+const BRIEFS_TTL_MS = 60_000
+
 export async function getAllBriefs(): Promise<BriefMeta[]> {
+  const now = Date.now()
+  if (_briefsCache && now - _briefsCacheAt < BRIEFS_TTL_MS) return _briefsCache
+
   if (!fs.existsSync(BRIEFS_DIR)) return []
 
-  return fs.readdirSync(BRIEFS_DIR)
+  _briefsCache = fs.readdirSync(BRIEFS_DIR)
     .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
     .map(parseBriefFile)
     .filter((b): b is BriefMeta => b !== null && b.published)
@@ -88,6 +102,8 @@ export async function getAllBriefs(): Promise<BriefMeta[]> {
       if (dateDiff !== 0) return dateDiff
       return b.edition - a.edition
     })
+  _briefsCacheAt = now
+  return _briefsCache
 }
 
 export function getBrief(slug: string): Brief | null {
@@ -126,7 +142,9 @@ export function getBrief(slug: string): Brief | null {
       summary:     desc,
       edition:     data.edition  ?? 0,
       tags:        data.tags     || [],
-      commodities: data.commodities || [],
+      commodities: Array.isArray(data.commodities) && data.commodities.length > 0
+      ? data.commodities
+      : deriveCommodityLabelsFromTags(data.tags),
       published:   data.published !== false,
       content,
     }
@@ -134,22 +152,11 @@ export function getBrief(slug: string): Brief | null {
   return null
 }
 
-export function getPrevNextBriefs(currentUrlSlug: string): {
+export async function getPrevNextBriefs(currentUrlSlug: string): Promise<{
   prev: BriefMeta | null   // older edition
   next: BriefMeta | null   // newer edition
-} {
-  if (!fs.existsSync(BRIEFS_DIR)) return { prev: null, next: null }
-
-  const all = fs.readdirSync(BRIEFS_DIR)
-    .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
-    .map(parseBriefFile)
-    .filter((b): b is BriefMeta => b !== null && b.published)
-    .sort((a, b) => {
-      const dateDiff = b.date.localeCompare(a.date)
-      if (dateDiff !== 0) return dateDiff
-      return b.edition - a.edition
-    })
-
+}> {
+  const all = await getAllBriefs()
   const idx = all.findIndex(b => b.urlSlug === currentUrlSlug || b.slug === currentUrlSlug)
   if (idx === -1) return { prev: null, next: null }
 

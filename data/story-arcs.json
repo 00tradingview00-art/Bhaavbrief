@@ -93,6 +93,28 @@
       "outcome": "The natural gas spike faded without reaching the ₹314.5/mmBtu key level, leaving MCX NatGas at ₹304 as the cooling demand narrative lost traction after five days."
     },
     {
+      "id": "crude-geopolitical-premium-return-and-fade-jul-2026",
+      "title": "Crude's Geopolitical Premium: A Three-Day Spike and Fade",
+      "startDate": "2026-07-08",
+      "status": "active",
+      "editions": [
+        60,
+        61,
+        62
+      ],
+      "latestDay": 3,
+      "summary": "Renewed Middle East tensions pushed WTI crude from $72.35 to $74.15 over two sessions, with MCX Crude jumping from ₹6885 to ₹7073 as the market priced in a fresh supply-risk premium. By day three the premium began fading — WTI eased back to $72.29 and MCX Crude retreated to ₹6913 — even as copper signaled a broader industrial recovery, fracturing the unified fear-trade narrative.",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹7073/bbl",
+      "tags": [
+        "MCX Crude",
+        "Geopolitics",
+        "MCX Gold",
+        "MCX Copper",
+        "Middle East"
+      ]
+    },
+    {
       "id": "precious-metals-safe-haven-unwind-fomc-hawkish",
       "title": "Precious Metals Unwind as FOMC Hawkish Stance & Middle East Easing Reduce Safe-Haven Demand",
       "startDate": "2026-07-02",

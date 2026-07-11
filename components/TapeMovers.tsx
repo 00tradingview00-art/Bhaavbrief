@@ -2,17 +2,7 @@ import Link from 'next/link'
 import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getEventsForCommodity, COMMODITY_LABELS, type EventMapEntry } from '@/lib/eventMap'
 import { getImpactStats } from '@/lib/eventImpactStats'
-
-// Maps the brief's frontmatter tags (e.g. "MCX Gold") to event-map.json's
-// commodity keys (e.g. "gold"). Brief.commodities is always empty (never
-// written by generate-brief.js) — brief.tags is the only reliable source.
-const TAG_TO_COMMODITY_KEY: Record<string, string> = {
-  'MCX Gold':        'gold',
-  'MCX Silver':       'silver',
-  'MCX Crude':        'crude',
-  'MCX Copper':       'copper',
-  'MCX Natural Gas':  'natgas',
-}
+import { deriveCommodityKeysFromTags, type CommodityKey } from '@/lib/commodityTags'
 
 function formatIST(iso: string): string {
   return new Intl.DateTimeFormat('en-IN', {
@@ -50,9 +40,7 @@ function TapeMoversRow({ event, commodityKey }: { event: EventMapEntry; commodit
 }
 
 export default function TapeMovers({ tags }: { tags: string[] }) {
-  const commodityKeys = Array.from(new Set(
-    tags.map(t => TAG_TO_COMMODITY_KEY[t]).filter((k): k is string => Boolean(k))
-  ))
+  const commodityKeys = deriveCommodityKeysFromTags(tags)
 
   if (commodityKeys.length === 0) return null
 
@@ -71,7 +59,7 @@ export default function TapeMovers({ tags }: { tags: string[] }) {
           const next = getEventsForCommodity(k)[0]
           return next ? { event: next, commodityKey: k } : null
         })
-        .filter((r): r is { event: EventMapEntry; commodityKey: string } => r !== null)
+        .filter((r): r is { event: EventMapEntry; commodityKey: CommodityKey } => r !== null)
         .slice(0, 3)
 
   if (rows.length === 0) return null
