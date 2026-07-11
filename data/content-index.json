@@ -15,7 +15,10 @@
       "Geopolitics",
       "USD/INR"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Copper"
+    ],
     "commodity": ""
   },
   {
@@ -74,7 +77,10 @@
       "MCX Gold",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -154,7 +160,10 @@
       "Geopolitics",
       "MCX Gold"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -213,7 +222,10 @@
       "Geopolitics",
       "Fed"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -252,7 +264,10 @@
       "Macro",
       "Fed"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -312,7 +327,10 @@
       "Macro",
       "Fed"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -417,7 +435,11 @@
       "MCX Crude",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -477,7 +499,11 @@
       "MCX NatGas",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX NatGas"
+    ],
     "commodity": ""
   },
   {
@@ -515,7 +541,10 @@
       "MCX Gold",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -580,7 +609,10 @@
       "Macro",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -597,7 +629,10 @@
       "MCX Crude",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -614,7 +649,10 @@
       "Geopolitics",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -693,7 +731,10 @@
       "MCX Silver",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -710,7 +751,10 @@
       "MCX Crude",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -766,7 +810,10 @@
       "MCX Silver",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -909,7 +956,10 @@
       "MCX Crude",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1016,7 +1066,11 @@
       "MCX Crude",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1074,7 +1128,10 @@
       "Geopolitics",
       "Inflation"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1307,7 +1364,10 @@
       "Macro",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1326,7 +1386,11 @@
       "MCX Crude",
       "MCX Silver"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -1428,7 +1492,11 @@
       "Geopolitics",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Copper"
+    ],
     "commodity": ""
   },
   {
@@ -1446,7 +1514,10 @@
       "Geopolitics",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1463,7 +1534,10 @@
       "MCX Gold",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1544,7 +1618,10 @@
       "MCX Crude",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1563,7 +1640,11 @@
       "Macro",
       "Inflation"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1625,7 +1706,10 @@
       "OPEC",
       "Inflation"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1643,7 +1727,11 @@
       "Geopolitics",
       "MCX Copper"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Copper"
+    ],
     "commodity": ""
   },
   {
@@ -1703,7 +1791,10 @@
       "Macro",
       "Fed"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1721,7 +1812,10 @@
       "MCX Gold",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -1738,7 +1832,9 @@
       "Fed",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1799,7 +1895,10 @@
       "Macro",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX NatGas"
+    ],
     "commodity": ""
   },
   {
@@ -1819,7 +1918,12 @@
       "Macro",
       "Fed"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Copper",
+      "MCX NatGas"
+    ],
     "commodity": ""
   },
   {
@@ -1838,7 +1942,11 @@
       "MCX Gold",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Copper",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1857,7 +1965,11 @@
       "MCX Silver",
       "OPEC"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -1918,7 +2030,10 @@
       "Fed",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
     "commodity": ""
   },
   {
@@ -1937,7 +2052,10 @@
       "Geopolitics",
       "Inflation"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -1999,7 +2117,10 @@
       "Inflation",
       "Geopolitics"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -2016,7 +2137,10 @@
       "MCX Crude",
       "Macro"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2094,7 +2218,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2111,7 +2239,10 @@
       "MCX Gold",
       "Inflation"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
     "commodity": ""
   },
   {
@@ -2171,7 +2302,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2188,7 +2323,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2205,7 +2344,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2222,7 +2365,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2239,7 +2386,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2256,7 +2407,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
@@ -2294,7 +2449,11 @@
       "MCX Silver",
       "MCX Crude"
     ],
-    "commodities": [],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
     "commodity": ""
   },
   {
