@@ -26,6 +26,9 @@ export async function GET(request: Request) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[MCX Options API]', msg)
     const status = msg === 'Kite credentials not configured' ? 503 : msg.startsWith('No options found') ? 404 : 500
-    return NextResponse.json({ error: msg }, { status })
+    const publicMsg = msg.startsWith('No options found')
+      ? msg
+      : 'Option chain data is temporarily unavailable. Please check back shortly.'
+    return NextResponse.json({ error: publicMsg }, { status })
   }
 }
