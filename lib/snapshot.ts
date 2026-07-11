@@ -56,7 +56,7 @@ export function snapshotAgeMinutes(snap: Snapshot): number {
   return (Date.now() - new Date(snap.generatedAt).getTime()) / 60000
 }
 
-function isMCXOpenNow(): boolean {
+export function isMCXOpenNow(): boolean {
   const ist = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
   const day = ist.getDay()
   if (day === 0 || day === 6) return false
