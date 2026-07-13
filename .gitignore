@@ -9,3 +9,4 @@ out/
 .vercel
 scripts/.kite-session.json
 tsconfig.tsbuildinfo
+.claude/scheduled_tasks.lock
