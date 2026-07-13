@@ -114,8 +114,9 @@ async function fetchFeed(feed) {
       const pubDate = dateM ? new Date(dateM[1]) : new Date()
       const url     = linkM ? linkM[1].trim() : feed.url
 
-      // Only items published in the last 3 hours
-      if (Date.now() - pubDate.getTime() > 6 * 3600 * 1000) continue
+      // Only items published in the last 10 hours (covers the overnight gap between the
+      // 11:52 PM IST run and the 9:07 AM IST run — flash-brief doesn't run 12 AM-8 AM IST)
+      if (Date.now() - pubDate.getTime() > 10 * 3600 * 1000) continue
 
       items.push({ title, url, source: feed.source, pubDate })
     }

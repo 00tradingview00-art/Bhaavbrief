@@ -6,9 +6,7 @@ on:
     # Offset by 7 min from intelligence-engine.yml to prevent git push collisions.
     - cron: '7,22,37,52 3-17 * * 1-5'   # 9:07 AM – 11:22 PM IST
     - cron: '7,22,37 18 * * 1-5'         # 11:37 PM IST final window
-    # Overnight — every 30 min, offset 7 min from intelligence-engine overnight crons
-    - cron: '7,37 19-23 * * 1-5'         # 12:37 AM – 5:07 AM IST
-    - cron: '7,37 0-2 * * 2-6'           # 5:37 AM – 8:07 AM IST
+    # No runs 12 AM – 8 AM IST — MCX closed, not worth the API spend.
   workflow_dispatch:
 
 # Queue concurrent keepalive/cron runs — never cancel to avoid partial commits
