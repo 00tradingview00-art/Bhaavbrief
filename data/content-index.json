@@ -1,6 +1,27 @@
 [
   {
     "type": "brief",
+    "slug": "edition-063",
+    "href": "/briefs/edition-063",
+    "title": "Silver Breaks Down 1.9% as Oil Surges — Two Narratives, One Market",
+    "description": "Silver's industrial demand signal diverges sharply from crude's geopolitical surge, exposing a split market with the Fed meeting looming.",
+    "excerpt": "MCX Gold ₹142175 | Crude ₹7119 | USDINR ₹95.69 — Gold -0.91% | Crude +4.48% | Silver -1.90% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-13T03:49:14.045Z",
+    "edition": "63",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics",
+      "Fed"
+    ],
+    "commodities": [
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-062",
     "href": "/briefs/edition-062",
     "title": "Geopolitical Premium Fades as Oil Slips and Copper Signals Recovery",
