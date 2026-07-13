@@ -73,6 +73,51 @@ jobs:
             echo "✓ Engine articles today: $COUNT"
           fi
 
+      - name: Check ATM IV snapshot (9:45 AM IST run only)
+        id: iv_check
+        run: |
+          UTC_HOUR=$(date -u +%H)
+          if [ "$UTC_HOUR" != "04" ]; then
+            echo "Not the 9:45 AM check — skipping IV snapshot check"
+            echo "iv_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # iv-snapshot cron runs at 23:35 IST the previous night. Walk back from
+          # yesterday to the most recent real trading day — skipping weekends AND
+          # MCX holidays from data/market-holidays.json — so Mondays and holidays
+          # don't false-alarm.
+          CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
+          for i in 1 2 3 4 5; do
+            DOW=$(date -d "$CHECK_DATE" +%u)  # 1=Mon .. 7=Sun
+            IS_HOLIDAY=$(jq --arg d "$CHECK_DATE" '[.[] | select(.date == $d)] | length' data/market-holidays.json)
+            if [ "$DOW" -ge 6 ] || [ "$IS_HOLIDAY" != "0" ]; then
+              CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
+            else
+              break
+            fi
+          done
+          echo "Checking ATM IV snapshot for $CHECK_DATE (last trading day)..."
+
+          MISSING=""
+          for INSTRUMENT in GOLD SILVER CRUDEOIL NATURALGAS COPPER; do
+            COUNT=$(curl -s "https://bhaavbrief.in/api/options/iv-history?instrument=$INSTRUMENT" \
+              | jq --arg d "$CHECK_DATE" '[.history[]? | select(.date == $d)] | length' 2>/dev/null)
+            if [ -z "$COUNT" ] || [ "$COUNT" = "0" ]; then
+              MISSING="$MISSING $INSTRUMENT"
+            fi
+          done
+
+          if [ -n "$MISSING" ]; then
+            echo "iv_ok=false" >> $GITHUB_OUTPUT
+            echo "iv_missing=$MISSING" >> $GITHUB_OUTPUT
+            echo "iv_date=$CHECK_DATE" >> $GITHUB_OUTPUT
+            echo "::error::ATM IV snapshot missing for $CHECK_DATE:$MISSING"
+          else
+            echo "iv_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ ATM IV snapshot present for all instruments on $CHECK_DATE"
+          fi
+
       - name: Auto-recover — trigger generate-brief
         if: steps.brief_check.outputs.brief_ok == 'false'
         run: |
@@ -124,4 +169,26 @@ jobs:
             }"
 
           echo "Alert sent for silent engine"
+          exit 1
+
+      - name: Alert — ATM IV snapshot missing
+        if: steps.iv_check.outputs.iv_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL="${{ steps.iv_check.outputs.iv_date }}"
+          MISSING="${{ steps.iv_check.outputs.iv_missing }}"
+
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ ATM IV snapshot missing for ${DATE_LABEL} —${MISSING}\",
+              \"htmlContent\": \"<p>The daily ATM IV snapshot (Vercel Cron → /api/cron/iv-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>Likely a silent skip (no futures price / no ATM IV from Kite at 23:35 IST) or an unhandled error — check the Vercel dashboard function logs for this route, since nothing else surfaces its failures.</p>\"
+            }"
+
+          echo "Alert sent for missing ATM IV snapshot"
           exit 1
