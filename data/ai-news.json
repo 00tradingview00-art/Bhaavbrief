@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-13-13-15-natural-gas-slides-amid-monsoon-oversupply-crude-rally",
+    "title": "Natural gas slides amid monsoon oversupply; crude rally contained to oils only",
+    "summary": "MCX Natural Gas declined 0.68% to ₹278.40/mmBtu in this morning's session, underperforming a broad commodity rally led by crude's +4.09% surge. Gold and silver also retreated, down 0.84% and 1.44% respectively, signaling",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-13T07:45:48.662Z",
+    "pubDateIST": "13 Jul 2026, 13:15",
+    "href": "/flash/2026-07-13-07-47-natural-gas-slides-amid-monsoon-oversupply-crude-rally-contained-to-oils",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-13-13-17-gold-slides-142-266-as-crude-s-4-09-surge-triggers-rotation",
+    "title": "Gold slides ₹142,266 as crude's 4.09% surge triggers rotation to inflation plays",
+    "summary": "MCX Gold declined 0.84% to ₹142,266/10g in this morning session, tracking a broader pullback in precious metals as crude oil surged 4.09% to dominate intraday flows. Silver fell 1.44% alongside gold, signalling a coordin",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-13T07:47:41.770Z",
+    "pubDateIST": "13 Jul 2026, 13:17",
+    "href": "/flash/2026-07-13-07-47-gold-slides-142-266-as-crude-s-4-09-surge-triggers-rotation-to-inflation",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-13-11-56-mcx-silver-breaks-1-77-while-crude-soars-industrial-demand",
     "title": "MCX Silver Breaks 1.77% While Crude Soars—Industrial Demand Divergence Widens",
     "summary": "MCX Silver crashed ₹218,729/kg, down 1.77% in morning trade, extending a weakness that contrasts sharply with crude's explosive +4.83% rally to ₹7,143/bbl. Gold slipped 0.81% to ₹142,314/10g, while copper fell 0.55% to ₹",
@@ -838,29 +862,5 @@
     "pubDateIST": "06 Jul 2026, 17:17",
     "href": "/flash/2026-07-06-11-47-natural-gas-leads-mcx-selloff-at-306-as-summer-demand-thaws-gold-slips",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-06-12-49-mcx-natural-gas-weakens-0-48-as-industrial-demand-faces",
-    "title": "MCX Natural Gas Weakens 0.48% as Industrial Demand Faces Monsoon Headwinds",
-    "summary": "MCX Natural Gas declined 0.48% to ₹308.90/mmBtu in this morning's session, extending a broader softness across energy and precious metals. Silver led the selloff at -0.52%, while crude oil fell 0.21% and gold shed 0.27%,",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-06T07:19:07.929Z",
-    "pubDateIST": "06 Jul 2026, 12:49",
-    "href": "/flash/2026-07-06-07-21-mcx-natural-gas-weakens-0-48-as-industrial-demand-faces-monsoon-headwinds",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-06-12-51-mcx-silver-falls-0-52-as-industrial-demand-overwhelms",
-    "title": "MCX Silver Falls 0.52% as Industrial Demand Overwhelms Geopolitical Haven Bid",
-    "summary": "MCX Silver fell 0.52% to ₹236,181/kg in Monday morning trade, leading the commodity complex lower alongside a 0.27% dip in gold to ₹146,980/10g. Crude oil and natural gas also retreated 0.21% and 0.48% respectively, with",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-06T07:21:01.393Z",
-    "pubDateIST": "06 Jul 2026, 12:51",
-    "href": "/flash/2026-07-06-07-21-mcx-silver-falls-0-52-as-industrial-demand-overwhelms-geopolitical-haven",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
