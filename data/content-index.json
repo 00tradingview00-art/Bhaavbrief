@@ -21,6 +21,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-13-mcx-silver-volatility-vs-gold",
+    "href": "/articles/2026-07-13-mcx-silver-volatility-vs-gold",
+    "title": "Why MCX Silver Is Far More Volatile Than Gold in India",
+    "description": "Understand why MCX silver is more volatile than gold India traders track daily — dual demand, thin markets, and rupee amplification explained.",
+    "excerpt": "Understanding why MCX silver is more volatile than gold in India begins with a single structural fact: silver serves two masters simultaneously — monetary store of value and industrial raw material — ",
+    "date": "2026-07-13",
+    "edition": "keyword-brief",
+    "tags": [
+      "silver",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "silver",
+    "commodities": [
+      "silver"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-062",
     "href": "/briefs/edition-062",
