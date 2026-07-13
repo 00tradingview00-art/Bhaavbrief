@@ -16,7 +16,12 @@ export async function GET(request: Request) {
     )
   }
 
-  const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+  let raw: string[] | null = null
+  try {
+    raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+  } catch (e) {
+    console.error('[iv-history] redis error:', (e as Error).message)
+  }
   const history: { date: string; iv: number }[] = []
   if (raw) {
     for (let i = 0; i < raw.length; i += 2) {
