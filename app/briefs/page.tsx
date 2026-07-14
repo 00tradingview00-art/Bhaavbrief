@@ -50,7 +50,7 @@ export default async function BriefsPage() {
           active="/briefs"
           tabs={[
             { label: 'Daily Editions', href: '/briefs' },
-            { label: 'Live Feed',      href: '/news' },
+            { label: 'Feed',           href: '/news' },
           ]}
         />
         <div style={{ marginBottom: 28 }}>

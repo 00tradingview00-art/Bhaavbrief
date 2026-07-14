@@ -86,7 +86,7 @@ export default async function NewsPage() {
         active="/news"
         tabs={[
           { label: 'Daily Editions', href: '/briefs' },
-          { label: 'Live Feed',      href: '/news' },
+          { label: 'Feed',           href: '/news' },
         ]}
       />
       {/* Page header */}
