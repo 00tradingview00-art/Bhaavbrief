@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-14-13-00-crude-rallies-5-37-on-geopolitical-bid-nat-gas-diverges",
+    "title": "Crude rallies 5.37% on geopolitical bid; nat gas diverges lower",
+    "summary": "MCX crude surged +5.37% to ₹7755/bbl in this morning session, anchoring a broad commodity rally that lifted gold +0.78% to ₹141400/10g and silver +1.36% to ₹220684/kg. Natural gas bucked the trend, declining −0.25% to ₹2",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-14T07:30:56.424Z",
+    "pubDateIST": "14 Jul 2026, 13:00",
+    "href": "/flash/2026-07-14-07-30-crude-rallies-5-37-on-geopolitical-bid-nat-gas-diverges-lower",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-14-12-02-mcx-crude-surges-4-62-on-dollar-weakness-industrial-metals",
     "title": "MCX crude surges 4.62% on dollar weakness; industrial metals lag gains",
     "summary": "MCX crude surged +4.62% to ₹7700/bbl this morning, leading a broad commodity rally alongside gold (+0.77% to ₹141395/10g), silver (+1.20%), and copper (+0.84%). USD/INR weakened to ₹96.12, removing a headwind for rupee-d",
@@ -862,29 +874,5 @@
     "pubDateIST": "07 Jul 2026, 16:00",
     "href": "/flash/2026-07-07-10-30-silver-leads-precious-metals-rout-real-yield-compression-not-geopolitics",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-12-22-lme-copper-rally-fails-to-lift-mcx-base-metals-divergence",
-    "title": "LME copper rally fails to lift MCX; base metals divergence signals delayed India transmission",
-    "summary": "MCX Copper declined ₹1281/kg, down 0.50% in this morning session, tracking a broader LME base metals rally driven by aluminum supply concerns. Silver led the commodity selloff with a −1.35% loss, while crude rallied +1.2",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T06:52:33.626Z",
-    "pubDateIST": "07 Jul 2026, 12:22",
-    "href": "/flash/2026-07-07-06-54-lme-copper-rally-fails-to-lift-mcx-base-metals-divergence-signals-delayed",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-12-24-mcx-natural-gas-gains-0-81-as-energy-diverges-from-precious",
-    "title": "MCX Natural Gas gains 0.81% as energy diverges from precious metals weakness",
-    "summary": "MCX Natural Gas rose 0.81% to ₹311.60/mmBtu in this morning's session, outpacing a broader commodity complex where silver fell 1.35% and gold declined 0.78%. Crude oil gained 1.24% to ₹6632/bbl, showing strength alongsid",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T06:54:24.886Z",
-    "pubDateIST": "07 Jul 2026, 12:24",
-    "href": "/flash/2026-07-07-06-54-mcx-natural-gas-gains-0-81-as-energy-diverges-from-precious-metals-weakness",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
