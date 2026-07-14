@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-14-16-34-crude-surges-5-98-to-7-800-outpacing-nat-gas-in-bifurcated",
+    "title": "Crude Surges 5.98% to ₹7,800, Outpacing Nat Gas in Bifurcated Energy Rally",
+    "summary": "MCX crude surged +5.98% to ₹7,800/barrel in afternoon trade, leading a broad commodity rally that lifted gold +0.59% to ₹141,139/10g and silver +1.17% to ₹220,275/kg. Copper extended gains with +1.43% to ₹1,314.80/kg, wh",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-14T11:04:52.005Z",
+    "pubDateIST": "14 Jul 2026, 16:34",
+    "href": "/flash/2026-07-14-11-04-crude-surges-5-98-to-7-800-outpacing-nat-gas-in-bifurcated-energy-rally",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-14-14-53-crude-rallies-5-39-on-geopolitical-premium-outpaces-rupee",
     "title": "Crude rallies 5.39% on geopolitical premium, outpaces rupee weakness signal",
     "summary": "MCX Crude surged ₹7757/bbl, up 5.39% in morning trade, leading a broad commodity rally that included silver at +1.27% and copper at +1.02%. Gold added +0.59% to reach ₹141,143/10g, while USD/INR weakened to ₹96.21, creat",
@@ -849,42 +861,6 @@
     "pubDate": "2026-07-07T13:03:01.626Z",
     "pubDateIST": "07 Jul 2026, 18:33",
     "href": "/flash/2026-07-07-13-03-silver-plunges-1-53-to-232-480-kg-inflation-fears-override-geopolitical",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-15-57-silver-leads-mcx-selloff-with-2-drop-rupee-strength",
-    "title": "Silver leads MCX selloff with 2% drop; rupee strength pressures imports",
-    "summary": "MCX silver crashed ₹231,367/kg, down 2.00% in afternoon trade, leading a broadly subdued commodity complex. MCX gold retreated 1.03% to ₹145,406/10g, while crude oil held relatively steady at ₹6,581/bbl. USD/INR softened",
-    "category": "Macro",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T10:27:14.348Z",
-    "pubDateIST": "07 Jul 2026, 15:57",
-    "href": "/flash/2026-07-07-10-31-silver-leads-mcx-selloff-with-2-drop-rupee-strength-pressures-imports",
-    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-15-59-silver-crashes-2-as-rbi-rate-call-weighs-on-industrial",
-    "title": "Silver crashes 2% as RBI rate call weighs on industrial demand signal",
-    "summary": "MCX Silver crashed ₹231367/kg down 2.00% in afternoon trade, leading a broadly subdued commodity complex. Gold fell 1.03% to ₹145406/10g while Copper edged lower 0.57% to ₹1280.00/kg. Natural Gas remained the sole gainer",
-    "category": "Policy",
-    "tagType": "macro",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T10:29:06.048Z",
-    "pubDateIST": "07 Jul 2026, 15:59",
-    "href": "/flash/2026-07-07-10-31-silver-crashes-2-as-rbi-rate-call-weighs-on-industrial-demand-signal",
-    "coverImage": "https://images.pexels.com/photos/10396412/pexels-photo-10396412.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-16-00-silver-leads-precious-metals-rout-real-yield-compression-not",
-    "title": "Silver leads precious metals rout; real-yield compression, not geopolitics, driving MCX",
-    "summary": "MCX silver crashed -2.00% this afternoon session, leading a broad precious metals selloff that dragged gold down -1.03% to ₹145406/10g. The rout coincides with renewed inflation anxiety and escalating US-Iran geopolitica",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T10:30:55.604Z",
-    "pubDateIST": "07 Jul 2026, 16:00",
-    "href": "/flash/2026-07-07-10-30-silver-leads-precious-metals-rout-real-yield-compression-not-geopolitics",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
