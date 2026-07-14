@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-14-20-01-crude-rallies-3-89-to-7-646-as-silver-surges-gas-diverges",
+    "title": "Crude rallies 3.89% to ₹7,646 as silver surges; gas diverges sharply",
+    "summary": "MCX crude surged +3.89% to ₹7,646/bbl in afternoon trade, pulling gold and silver higher in a broad commodity rally. Gold climbed +1.60% to ₹142,556/10g while silver gained +2.84% to ₹223,900/kg, signaling a shift toward",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-14T14:31:11.167Z",
+    "pubDateIST": "14 Jul 2026, 20:01",
+    "href": "/flash/2026-07-14-14-31-crude-rallies-3-89-to-7-646-as-silver-surges-gas-diverges-sharply",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-14-18-11-crude-jumps-5-23-silver-3-16-on-rupee-weakness-and-reflation",
     "title": "Crude jumps 5.23%, silver 3.16% on rupee weakness and reflation trade",
     "summary": "MCX crude surged +5.23% to ₹7,745/bbl in afternoon trade, while gold climbed +1.86% to ₹142,925/10g and silver jumped +3.16% to ₹224,599/kg. Copper advanced +1.76% to ₹1,319.10/kg, completing a broad commodities rally ac",
@@ -862,29 +874,5 @@
     "pubDateIST": "07 Jul 2026, 21:19",
     "href": "/flash/2026-07-07-15-49-crude-outpaces-gold-as-crude-hits-6-700-industrial-demand-stays-weak",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-18-31-mcx-natural-gas-drops-1-2-as-seasonal-demand-pressure-splits",
-    "title": "MCX Natural Gas Drops 1.2% as Seasonal Demand Pressure Splits from Crude Gains",
-    "summary": "MCX Natural Gas fell ₹305.30/mmBtu, down 1.23% in afternoon session, extending weakness as broader energy complex showed divergence. Silver led commodity losses at -1.53%, while crude edged higher by +0.70%, signalling a",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T13:01:10.774Z",
-    "pubDateIST": "07 Jul 2026, 18:31",
-    "href": "/flash/2026-07-07-13-03-mcx-natural-gas-drops-1-2-as-seasonal-demand-pressure-splits-from-crude",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-07-18-33-silver-plunges-1-53-to-232-480-kg-inflation-fears-override",
-    "title": "Silver plunges 1.53% to ₹232,480/kg; inflation fears override geopolitical hedge",
-    "summary": "MCX Silver collapsed 1.53% to ₹232,480/kg in afternoon trade, leading all commodities lower. Gold declined alongside silver despite traditional safe-haven demand, suggesting a broader repricing in precious metals rather ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-07T13:03:01.626Z",
-    "pubDateIST": "07 Jul 2026, 18:33",
-    "href": "/flash/2026-07-07-13-03-silver-plunges-1-53-to-232-480-kg-inflation-fears-override-geopolitical",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
