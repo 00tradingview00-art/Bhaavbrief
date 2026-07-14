@@ -12,8 +12,8 @@ const NAV_LINKS = [
   { href: '/briefs',         label: 'Briefs'  },
   { href: '/markets',        label: 'Markets' },
   { href: '/options',        label: 'Options' },
+  { href: '/news',           label: 'Feed'    },
   { href: '/calendar',       label: 'Calendar' },
-  { href: '/news',           label: 'Live Feed' },
   { href: '/learn',          label: 'Learn'   },
 ]
 
