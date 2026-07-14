@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-064",
+    "href": "/briefs/edition-064",
+    "title": "Crude Surges 4.3% as Rupee Slips — Gold Holds Its Ground",
+    "description": "A sudden rupee slide to ₹96.14 and oil's sharp rise are pulling MCX commodities in competing directions today.",
+    "excerpt": "MCX Gold ₹141372 | Crude ₹7677 | USDINR ₹96.14 — Gold +0.76% | Crude +4.31% | Silver +0.98% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-14T04:37:56.529Z",
+    "edition": "64",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "USD/INR",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-07-14-gold-silver-ratio-mcx-india",
     "href": "/articles/2026-07-14-gold-silver-ratio-mcx-india",
