@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-15-hawk-scan-mcx-crude-surges-11-69-eia-gas-draw-trumps-flat-oi",
+    "href": "/articles/2026-07-15-hawk-scan-mcx-crude-surges-11-69-eia-gas-draw-trumps-flat-oi",
+    "title": "MCX Crude surges 11.69% — EIA gas draw trumps flat oil inventory",
+    "description": "MCX Crude ₹7617/bbl (+11.69%) on significant 442 Bcf nat gas storage draw; WTI $79.14 session +0.44%. EIA crude draw minimal at 0.0M bbl.",
+    "excerpt": "TRIGGER MCX Crude has spiked 11.69% to ₹7,617/bbl following EIA weekly data: crude draw 0.0M barrels (flat, non-significant) but nat gas storage draw 442 Bcf (>80 Bcf threshold = significant tightness",
+    "date": "2026-07-15T23:48:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Copper",
+      "MCX Nat Gas",
+      "EIA",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7617
+  },
+  {
     "type": "brief",
     "slug": "edition-065",
     "href": "/briefs/edition-065",

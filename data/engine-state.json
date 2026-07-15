@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 143480,
-    "silver": 222680,
-    "crude": 6820,
-    "copper": 1293.5,
-    "natgas": 279.8,
-    "usdinr": 95.34
+    "gold": 141900,
+    "silver": 220750,
+    "crude": 7617,
+    "copper": 1312.05,
+    "natgas": 283.2,
+    "usdinr": 96.26
   },
-  "lastChecked": "2026-07-10T18:07:41.007Z",
+  "lastChecked": "2026-07-15T18:18:40.780Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,17 +15,19 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-07-03",
-    "value": "266"
+    "period": "2026-07-10",
+    "value": "206"
   },
   "lastGeoNews": {
     "mideast": "LNG tanker at risk of exploding after two vessels struck near Strait of Hormuz -",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-07-09T15:45:42.151Z",
+  "articlesToday": [
+    "2026-07-15/2026-07-15-hawk-scan-mcx-crude-surges-11-69-eia-gas-draw-trumps-flat-oi"
+  ],
+  "lastArticleAt": "2026-07-15T18:18:50.449Z",
   "lastCoveredAt": {
-    "crude": "2026-07-08T09:44:29.082Z",
+    "crude": "2026-07-15T18:18:50.449Z",
     "silver": "2026-07-01T07:01:38.810Z",
     "natgas": "2026-07-09T15:45:42.151Z"
   }

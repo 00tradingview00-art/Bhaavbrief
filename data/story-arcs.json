@@ -96,7 +96,7 @@
       "id": "crude-geopolitical-premium-return-and-fade-jul-2026",
       "title": "Crude's Geopolitical Premium: A Three-Day Spike and Fade",
       "startDate": "2026-07-08",
-      "status": "active",
+      "status": "closed",
       "editions": [
         60,
         61,
@@ -112,13 +112,15 @@
         "MCX Gold",
         "MCX Copper",
         "Middle East"
-      ]
+      ],
+      "endDate": "2026-07-15",
+      "outcome": "MCX Crude spiked from ₹6885 to ₹7073 on Middle East geopolitical tensions but faded back to ₹6913 by day three as the supply-risk premium dissipated amid signals of broader industrial recovery."
     },
     {
       "id": "precious-metals-safe-haven-unwind-fomc-hawkish",
       "title": "Precious Metals Unwind as FOMC Hawkish Stance & Middle East Easing Reduce Safe-Haven Demand",
       "startDate": "2026-07-02",
-      "status": "active",
+      "status": "closed",
       "editions": [
         56,
         58,
@@ -135,7 +137,9 @@
         "FOMC",
         "Middle East Diplomacy",
         "Macro"
-      ]
+      ],
+      "endDate": "2026-07-15",
+      "outcome": "The precious metals unwind reversed as weakening US employment data reassessed FOMC rate-cut expectations, lifting gold from ₹141506/10g to ₹1,41,900 before the narrative faded after eight days without new editions."
     }
   ]
 }
