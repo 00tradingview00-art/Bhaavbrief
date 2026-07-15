@@ -28,6 +28,7 @@ const INSTRUMENTS = [
 interface OptionSide {
   symbol: string|null; ltp: number; absChng: number; oi: number
   oiChange: number; volume: number; iv: number|null
+  bid: number|null; ask: number|null
   delta: number|null; gamma: number|null; theta: number|null; vega: number|null
 }
 interface ChainRow {
@@ -62,6 +63,12 @@ const fmtChng = (n: number) =>
 
 const fmtOIChng = (n: number) =>
   n > 0 ? `+${fmtOI(n)}` : n < 0 ? `-${fmtOI(Math.abs(n))}` : '·'
+
+// Best bid/ask in one compact cell — illiquid far strikes commonly have no
+// depth at all, which is expected (thin MCX options liquidity away from ATM),
+// not a data bug.
+const fmtBidAsk = (bid: number|null, ask: number|null) =>
+  bid == null && ask == null ? '·' : `${bid != null ? fmtN(bid) : '·'} / ${ask != null ? fmtN(ask) : '·'}`
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 
@@ -185,7 +192,7 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   )
 }
 
-// ── ATM IV history chart ──────────────────────────────────────────────────────
+// ── Volatility history chart (ATM IV + Realized Vol) ────────────────────────────
 
 function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
   const [width, setWidth] = useState(0)
@@ -200,7 +207,8 @@ function useElementWidth(ref: React.RefObject<HTMLDivElement | null>) {
   return width
 }
 
-const IV_LINE = '#6941c6' // matches the iVIX pill's color — same metric, same hue
+const IV_LINE  = '#6941c6' // matches the iVIX pill's color — same metric, same hue
+const AAV_LINE = '#0369a1' // matches the AAV pill's existing color
 
 const LOOKBACKS = [
   { key: '5',   label: '5D'  },
@@ -211,7 +219,13 @@ const LOOKBACKS = [
 ] as const
 type Lookback = typeof LOOKBACKS[number]['key']
 
-interface IVPoint { date: string; iv: number; live?: boolean }
+interface IVPoint  { date: string; iv: number }
+interface AAVPoint { date: string; aav: number }
+// Merged timeline point. Realized Vol (AAV) can be backfilled ~200 days from
+// ordinary futures closes; ATM IV only exists from whenever the daily cron
+// snapshot started, so it's null for most of the range until that catches up —
+// the two series are NOT the same length and rarely share a date range.
+interface VolPoint { date: string; iv: number | null; aav: number | null; live?: boolean }
 
 const fmtHistDate = (iso: string) => {
   const [, m, d] = iso.split('-')
@@ -219,62 +233,103 @@ const fmtHistDate = (iso: string) => {
   return `${d} ${months[parseInt(m, 10) - 1]}`
 }
 
+function buildLinePath(points: VolPoint[], key: 'iv'|'aav', x: (i: number) => number, y: (v: number) => number): string {
+  let d = ''
+  let drawing = false
+  points.forEach((p, i) => {
+    const v = p[key]
+    if (v == null) { drawing = false; return }
+    d += (drawing ? ' L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1)
+    drawing = true
+  })
+  return d.trim()
+}
+
+function lastDefined(points: VolPoint[], key: 'iv'|'aav'): { idx: number; val: number; live?: boolean } | null {
+  for (let i = points.length - 1; i >= 0; i--) {
+    const v = points[i][key]
+    if (v != null) return { idx: i, val: v, live: points[i].live }
+  }
+  return null
+}
+
 function IVHistoryChart({ instrument, chain }: { instrument: string; chain: ChainRow[] }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const width   = useElementWidth(wrapRef)
-  const [hoverIdx, setHoverIdx] = useState<number | null>(null)
-  const [history, setHistory]   = useState<IVPoint[]>([])
+  const [hoverIdx, setHoverIdx]       = useState<number | null>(null)
+  const [ivHistory, setIvHistory]     = useState<IVPoint[]>([])
+  const [aavHistory, setAavHistory]   = useState<AAVPoint[]>([])
   const [histLoading, setHistLoading] = useState(true)
-  const [lookback, setLookback] = useState<Lookback>('30')
+  const [lookback, setLookback]       = useState<Lookback>('30')
 
   useEffect(() => {
     let cancelled = false
     setHistLoading(true)
-    fetch(`/api/options/iv-history?instrument=${instrument}`)
-      .then(r => r.json())
-      .then((d: { history?: IVPoint[] }) => { if (!cancelled) setHistory(d.history ?? []) })
-      .catch(() => { if (!cancelled) setHistory([]) })
-      .finally(() => { if (!cancelled) setHistLoading(false) })
+    Promise.all([
+      fetch(`/api/options/iv-history?instrument=${instrument}`).then(r => r.json()).catch(() => ({ history: [] })),
+      fetch(`/api/options/aav-history?instrument=${instrument}`).then(r => r.json()).catch(() => ({ history: [] })),
+    ]).then(([ivRes, aavRes]: [{ history?: IVPoint[] }, { history?: AAVPoint[] }]) => {
+      if (cancelled) return
+      setIvHistory(ivRes.history ?? [])
+      setAavHistory(aavRes.history ?? [])
+    }).finally(() => { if (!cancelled) setHistLoading(false) })
     return () => { cancelled = true }
   }, [instrument])
 
-  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current chain
+  // Merge both series onto one date-indexed timeline
+  const byDate = new Map<string, VolPoint>()
+  for (const p of aavHistory) byDate.set(p.date, { date: p.date, iv: null, aav: p.aav })
+  for (const p of ivHistory) {
+    const existing = byDate.get(p.date)
+    if (existing) existing.iv = p.iv
+    else byDate.set(p.date, { date: p.date, iv: p.iv, aav: null })
+  }
+  let merged = [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date))
+
+  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current chain.
+  // (No "live" AAV point — realized vol is conventionally quoted as of last close.)
   const atmRows = chain.filter(r => r.isATM)
   const liveIVs = atmRows.flatMap(r => [r.CE.iv, r.PE.iv]).filter((v): v is number => v != null && v > 0)
   const liveIV  = liveIVs.length ? parseFloat((liveIVs.reduce((s, v) => s + v, 0) / liveIVs.length).toFixed(2)) : null
   const today   = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
 
-  const merged: IVPoint[] = [...history]
-  if (liveIV != null && merged[merged.length - 1]?.date !== today) {
-    merged.push({ date: today, iv: liveIV, live: true })
+  if (liveIV != null) {
+    const lastIdx = merged.length - 1
+    if (merged[lastIdx]?.date === today) {
+      merged = [...merged]
+      merged[lastIdx] = { ...merged[lastIdx], iv: liveIV, live: true }
+    } else {
+      merged = [...merged, { date: today, iv: liveIV, aav: null, live: true }]
+    }
   }
 
   const visible = lookback === 'all' ? merged : merged.slice(-parseInt(lookback, 10))
+  const allVals = visible.flatMap(p => [p.iv, p.aav]).filter((v): v is number => v != null)
 
   if (histLoading && !merged.length) {
     return (
       <div style={{ padding: '20px 14px', textAlign: 'center', fontSize: 12, color: C.ink4, fontFamily: C.sans, borderBottom: `1px solid ${C.bdr}` }}>
-        Loading ATM IV history…
+        Loading volatility history…
       </div>
     )
   }
 
-  // Fewer than 2 points — a line chart would be degenerate. Show a stat tile instead.
-  if (visible.length < 2) {
+  // Not enough combined data (IV + Realized Vol) to draw a line — show a stat tile instead.
+  // Realized Vol alone should almost always clear this once the aav-history endpoint has
+  // data, so this fallback is mainly a first-load/error-path guard, not steady state.
+  if (allVals.length < 2) {
     return (
       <div style={{ padding: '16px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
         <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, marginBottom: 6 }}>
-          ATM IV — today
+          Volatility — today
         </div>
-        {visible.length === 1 ? (
+        {liveIV != null ? (
           <>
-            <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{visible[0].iv}%</div>
-            <div style={{ fontSize: 11, color: C.ink3, fontFamily: C.sans, marginTop: 4 }}>
-              Collecting daily ATM IV at MCX close — the trend chart fills in day by day starting tomorrow.
-            </div>
+            <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{liveIV}%</div>
+            <div style={{ fontSize: 11, color: C.ink3, fontFamily: C.sans, marginTop: 4 }}>ATM IV — trend chart fills in as more history becomes available.</div>
           </>
         ) : (
-          <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No ATM IV data available right now.</div>
+          <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No volatility data available right now.</div>
         )}
       </div>
     )
@@ -288,19 +343,20 @@ function IVHistoryChart({ instrument, chain }: { instrument: string; chain: Chai
 
   const x = (i: number) => padL + (visible.length > 1 ? (i / (visible.length - 1)) * innerW : innerW / 2)
 
-  const ivVals = visible.map(p => p.iv)
-  const yMin = Math.floor(Math.min(...ivVals) / 5) * 5
-  let yMax   = Math.ceil(Math.max(...ivVals) / 5) * 5
+  const yMin = Math.floor(Math.min(...allVals) / 5) * 5
+  let yMax   = Math.ceil(Math.max(...allVals) / 5) * 5
   if (yMax - yMin < 10) yMax = yMin + 10
   const y = (v: number) => padT + innerH - ((v - yMin) / (yMax - yMin)) * innerH
 
-  const path = visible.map((p, i) => (i === 0 ? 'M' : 'L') + x(i).toFixed(1) + ' ' + y(p.iv).toFixed(1)).join(' ')
+  const ivPath  = buildLinePath(visible, 'iv',  x, y)
+  const aavPath = buildLinePath(visible, 'aav', x, y)
+  const lastIV  = lastDefined(visible, 'iv')
+  const lastAAV = lastDefined(visible, 'aav')
 
   const yTicks   = [yMin, yMin + (yMax - yMin) / 2, yMax]
   const tickStep = Math.max(1, Math.ceil(visible.length / 6))
   const xTicks   = visible.map((p, i) => ({ p, i })).filter(({ i }) => i % tickStep === 0 || i === visible.length - 1)
   const hoverPt  = hoverIdx != null ? visible[hoverIdx] : null
-  const last     = visible[visible.length - 1]
 
   const onMove = (e: React.MouseEvent<SVGRectElement>) => {
     const rect = e.currentTarget.ownerSVGElement!.getBoundingClientRect()
@@ -313,9 +369,17 @@ function IVHistoryChart({ instrument, chain }: { instrument: string; chain: Chai
   return (
     <div style={{ padding: '8px 14px 10px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4, flexWrap: 'wrap', gap: 6 }}>
-        <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
-          ATM IV — trailing
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
+            Volatility — trailing
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9, color: C.ink3, fontFamily: C.sans }}>
+            <span style={{ display: 'inline-block', width: 8, height: 2, background: IV_LINE, borderRadius: 1 }} />ATM IV
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9, color: C.ink3, fontFamily: C.sans }}>
+            <span style={{ display: 'inline-block', width: 8, height: 2, background: AAV_LINE, borderRadius: 1 }} />Realized Vol 20d
+          </span>
+        </div>
         <div style={{ display: 'flex', gap: 3 }}>
           {LOOKBACKS.map(({ key, label }) => (
             <button key={key} onClick={() => setLookback(key)} style={{
@@ -343,24 +407,35 @@ function IVHistoryChart({ instrument, chain }: { instrument: string; chain: Chai
             </text>
           ))}
 
-          <path d={path} fill="none" stroke={IV_LINE} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+          {aavPath && <path d={aavPath} fill="none" stroke={AAV_LINE} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />}
+          {ivPath  && <path d={ivPath}  fill="none" stroke={IV_LINE}  strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />}
 
-          {/* End marker + direct label — "lines carry the value at the end" */}
-          <circle cx={x(visible.length - 1)} cy={y(last.iv)} r={4} fill={IV_LINE} stroke={C.surf} strokeWidth={2}
-            strokeDasharray={last.live ? '2 2' : undefined} />
-          <text x={x(visible.length - 1) + 8} y={y(last.iv)} textAnchor="start" dominantBaseline="middle"
-            fontSize={12} fontWeight={700} fill={IV_LINE} fontFamily={C.sans} style={numStyle}>
-            {last.iv}%
-          </text>
-          {last.live && (
-            <text x={x(visible.length - 1) + 8} y={y(last.iv) + 12} textAnchor="start" dominantBaseline="middle"
-              fontSize={8} fill={C.ink4} fontFamily={C.sans}>live</text>
+          {/* End marker + direct label per series — "lines carry the value at the end" */}
+          {lastAAV && (
+            <>
+              <circle cx={x(lastAAV.idx)} cy={y(lastAAV.val)} r={4} fill={AAV_LINE} stroke={C.surf} strokeWidth={2} />
+              <text x={x(lastAAV.idx) + 8} y={y(lastAAV.val)} textAnchor="start" dominantBaseline="middle"
+                fontSize={12} fontWeight={700} fill={AAV_LINE} fontFamily={C.sans} style={numStyle}>
+                {lastAAV.val}%
+              </text>
+            </>
+          )}
+          {lastIV && (
+            <>
+              <circle cx={x(lastIV.idx)} cy={y(lastIV.val)} r={4} fill={IV_LINE} stroke={C.surf} strokeWidth={2}
+                strokeDasharray={lastIV.live ? '2 2' : undefined} />
+              <text x={x(lastIV.idx) + 8} y={y(lastIV.val)} textAnchor="start" dominantBaseline="middle"
+                fontSize={12} fontWeight={700} fill={IV_LINE} fontFamily={C.sans} style={numStyle}>
+                {lastIV.val}%{lastIV.live ? ' live' : ''}
+              </text>
+            </>
           )}
 
           {hoverPt && (
             <>
               <line x1={x(hoverIdx!)} x2={x(hoverIdx!)} y1={padT} y2={padT + innerH} stroke={C.ink3} strokeWidth={1} />
-              <circle cx={x(hoverIdx!)} cy={y(hoverPt.iv)} r={4} fill={IV_LINE} stroke={C.surf} strokeWidth={2} />
+              {hoverPt.aav != null && <circle cx={x(hoverIdx!)} cy={y(hoverPt.aav)} r={4} fill={AAV_LINE} stroke={C.surf} strokeWidth={2} />}
+              {hoverPt.iv  != null && <circle cx={x(hoverIdx!)} cy={y(hoverPt.iv)}  r={4} fill={IV_LINE}  stroke={C.surf} strokeWidth={2} />}
             </>
           )}
 
@@ -371,17 +446,27 @@ function IVHistoryChart({ instrument, chain }: { instrument: string; chain: Chai
         {hoverPt && (
           <div style={{
             position: 'absolute', top: 2, pointerEvents: 'none',
-            left: Math.min(Math.max(x(hoverIdx!) - 50, 0), W - 106),
-            width: 100, padding: '6px 8px', borderRadius: 5, background: C.ink, color: '#fff',
+            left: Math.min(Math.max(x(hoverIdx!) - 55, 0), W - 116),
+            width: 110, padding: '6px 8px', borderRadius: 5, background: C.ink, color: '#fff',
             fontSize: 10, fontFamily: C.sans, boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
           }}>
             <div style={{ fontWeight: 700, marginBottom: 3 }}>{fmtHistDate(hoverPt.date)}{hoverPt.live ? ' (live)' : ''}</div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ display: 'inline-block', width: 8, height: 2, background: IV_LINE, borderRadius: 1 }} />ATM IV
-              </span>
-              <span style={{ ...numStyle, fontWeight: 600 }}>{hoverPt.iv}%</span>
-            </div>
+            {hoverPt.iv != null && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ display: 'inline-block', width: 8, height: 2, background: IV_LINE, borderRadius: 1 }} />ATM IV
+                </span>
+                <span style={{ ...numStyle, fontWeight: 600 }}>{hoverPt.iv}%</span>
+              </div>
+            )}
+            {hoverPt.aav != null && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ display: 'inline-block', width: 8, height: 2, background: AAV_LINE, borderRadius: 1 }} />Realized Vol
+                </span>
+                <span style={{ ...numStyle, fontWeight: 600 }}>{hoverPt.aav}%</span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -502,20 +587,37 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   const atmRowRef     = useRef<HTMLTableRowElement>(null)
   const isMobile      = useIsMobile()
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (): Promise<OptionsData|null> => {
     setLoading(true); setError(null)
     try {
       const params = new URLSearchParams({ instrument })
       if (expiry) params.set('expiry', expiry)
       const res = await fetch(`/api/options?${params}`)
       if (!res.ok) throw new Error(((await res.json()) as { error: string }).error)
-      setData(await res.json())
+      const json: OptionsData = await res.json()
+      setData(json)
       setLastRefresh(new Date())
-    } catch (e) { setError((e as Error).message) }
+      return json
+    } catch (e) { setError((e as Error).message); return null }
     finally { setLoading(false) }
   }, [instrument, expiry])
 
-  useEffect(() => { fetchData(); const t = setInterval(fetchData, 3 * 60 * 1000); return () => clearInterval(t) }, [fetchData])
+  // Poll every 3 min while MCX is open; back off to 20 min once it's closed —
+  // no point re-triggering the full fetch overnight/Sundays when nothing moves.
+  useEffect(() => {
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    async function scheduleNext() {
+      const result = await fetchData()
+      if (cancelled) return
+      const delay = result?.marketOpen === false ? 20 * 60 * 1000 : 3 * 60 * 1000
+      timer = setTimeout(scheduleNext, delay)
+    }
+
+    scheduleNext()
+    return () => { cancelled = true; if (timer) clearTimeout(timer) }
+  }, [fetchData])
   useEffect(() => { setExpiry(null); setPage('main') }, [instrument])
   useEffect(() => { setPage('main') }, [expiry])
 
@@ -576,10 +678,10 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   const vpColor = data?.volPremium == null ? C.ink3 : data.volPremium > 2 ? 'var(--saffron)' : data.volPremium < -2 ? C.up : C.ink3
   const vpStr   = data?.volPremium != null ? (data.volPremium > 0 ? '+' : '') + data.volPremium : '·'
 
-  // Default columns: OI | Chng OI | Vol | LTP | Chng | IV%  (6 per side)
-  // Greeks adds: Delta | Gamma | Theta | Vega                (4 more per side)
-  const ceCols = showGreeks ? 10 : 6
-  const peCols = showGreeks ? 10 : 6
+  // Default columns: OI | Chng OI | Vol | Bid/Ask | LTP | Chng | IV%  (7 per side)
+  // Greeks adds: Delta | Gamma | Theta | Vega                       (4 more per side)
+  const ceCols = showGreeks ? 11 : 7
+  const peCols = showGreeks ? 11 : 7
 
   return (
     <div style={{ background: C.surf, borderRadius: 8, border: `1px solid ${C.bdr}`, overflow: 'hidden', fontFamily: C.sans, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
@@ -618,7 +720,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
             {showGreeks ? '− Greeks columns' : '+ Greeks columns'}
           </button>
         )}
-        {/* OI Map / ATM IV — a real segmented control: one border around both,
+        {/* OI Map / Volatility — a real segmented control: one border around both,
             a shared divider, no gap between them — since only one can be active. */}
         <div style={{ display: 'flex', border: `1px solid ${C.bdr}`, borderRadius: 5, overflow: 'hidden' }} role="tablist" aria-label="Chart view">
           <button
@@ -645,7 +747,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
               color: mapView === 'iv' ? C.gold : C.ink3,
             }}
           >
-            ATM IV
+            Volatility
           </button>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -764,6 +866,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                       <td style={{ padding: '10px 8px', textAlign: 'right', background: ceBg }}>
                         <div style={{ ...numStyle, fontSize: 15, fontWeight: 600, color: row.CE.ltp ? C.ink : C.ink4 }}>{row.CE.ltp ? fmtN(row.CE.ltp) : '·'}</div>
                         <div style={{ ...numStyle, fontSize: 11, color: ceChngColor }}>{fmtChng(row.CE.absChng)}</div>
+                        <div style={{ ...numStyle, fontSize: 9, color: C.ink4, marginTop: 1 }}>{fmtBidAsk(row.CE.bid, row.CE.ask)}</div>
                       </td>
                       <td style={{ padding: '10px 8px', textAlign: 'center', background: sBg, borderLeft: `1px solid ${C.bdr2}`, borderRight: `1px solid ${C.bdr2}` }}>
                         <span style={{ ...numStyle, fontSize: 14, fontWeight: 700, color: sCol }}>{Number(row.strike).toLocaleString('en-IN')}</span>
@@ -773,6 +876,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                       <td style={{ padding: '10px 8px', textAlign: 'left', background: peBg }}>
                         <div style={{ ...numStyle, fontSize: 15, fontWeight: 600, color: row.PE.ltp ? C.ink : C.ink4 }}>{row.PE.ltp ? fmtN(row.PE.ltp) : '·'}</div>
                         <div style={{ ...numStyle, fontSize: 11, color: peChngColor }}>{fmtChng(row.PE.absChng)}</div>
+                        <div style={{ ...numStyle, fontSize: 9, color: C.ink4, marginTop: 1 }}>{fmtBidAsk(row.PE.bid, row.PE.ask)}</div>
                       </td>
                     </tr>
                   )
@@ -796,6 +900,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                 <TH align="right">OI</TH>
                 <TH align="right">Chng OI</TH>
                 <TH align="right">Vol</TH>
+                <TH align="right">Bid/Ask</TH>
                 <TH align="right">LTP</TH>
                 <TH align="right">Chng</TH>
                 <TH align="right" extra={{ borderRight: `2px solid ${C.bdr2}` }}>IV%</TH>
@@ -817,6 +922,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                 <TH align="left" extra={{ borderLeft: `2px solid ${C.bdr2}` }}>IV%</TH>
                 <TH align="left">Chng</TH>
                 <TH align="left">LTP</TH>
+                <TH align="left">Bid/Ask</TH>
                 <TH align="left">Vol</TH>
                 <TH align="left">Chng OI</TH>
                 <TH align="left">OI</TH>
@@ -849,6 +955,8 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                     <Td align="right" bg={ceBg} color={ceOIColor} small>{fmtOIChng(row.CE.oiChange)}</Td>
                     {/* Vol */}
                     <Td align="right" bg={ceBg} color={C.ink3}>{fmtOI(row.CE.volume)}</Td>
+                    {/* Bid/Ask */}
+                    <Td align="right" bg={ceBg} color={C.ink3} small>{fmtBidAsk(row.CE.bid, row.CE.ask)}</Td>
                     {/* LTP */}
                     <Td align="right" bg={ceBg} bold color={row.CE.ltp ? C.ink : C.ink4}>{row.CE.ltp ? fmtN(row.CE.ltp) : '·'}</Td>
                     {/* Chng */}
@@ -898,6 +1006,8 @@ export default function OptionChain({ isPro, preview = false, initialData = null
                     <Td align="left" bg={peBg} color={peChngColor} small>{fmtChng(row.PE.absChng)}</Td>
                     {/* LTP */}
                     <Td align="left" bg={peBg} bold color={row.PE.ltp ? C.ink : C.ink4}>{row.PE.ltp ? fmtN(row.PE.ltp) : '·'}</Td>
+                    {/* Bid/Ask */}
+                    <Td align="left" bg={peBg} color={C.ink3} small>{fmtBidAsk(row.PE.bid, row.PE.ask)}</Td>
                     {/* Vol */}
                     <Td align="left" bg={peBg} color={C.ink3}>{fmtOI(row.PE.volume)}</Td>
                     {/* Chng OI */}

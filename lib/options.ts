@@ -1,4 +1,4 @@
-import { KiteClient }   from '@/lib/kite'
+import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 
@@ -30,8 +30,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
 
   const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
 
-  // Fetch all MCX instruments (FUT + CE + PE)
-  const allInstruments = await kc.getFullMCXInstruments()
+  // Fetch all MCX instruments (FUT + CE + PE) — cached, changes rarely intraday
+  const allInstruments = await getFullMCXInstrumentsCached()
 
   // Filter options for this instrument
   const allOptions = allInstruments.filter(
@@ -102,6 +102,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oiChange: ceQ ? (ceQ.oi - (ceQ.oi_day_low ?? ceQ.oi)) : 0,
           volume:   ceQ?.volume ?? 0,
           iv:       ceIV > 0 ? parseFloat((ceIV * 100).toFixed(2)) : null,
+          bid:      ceQ?.depth?.buy?.[0]?.price  || null,
+          ask:      ceQ?.depth?.sell?.[0]?.price || null,
           delta:    ceGreeks.delta ?? null,
           gamma:    ceGreeks.gamma ?? null,
           theta:    ceGreeks.theta ?? null,
@@ -115,6 +117,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oiChange: peQ ? (peQ.oi - (peQ.oi_day_low ?? peQ.oi)) : 0,
           volume:   peQ?.volume ?? 0,
           iv:       peIV > 0 ? parseFloat((peIV * 100).toFixed(2)) : null,
+          bid:      peQ?.depth?.buy?.[0]?.price  || null,
+          ask:      peQ?.depth?.sell?.[0]?.price || null,
           delta:    peGreeks.delta ?? null,
           gamma:    peGreeks.gamma ?? null,
           theta:    peGreeks.theta ?? null,

@@ -5,6 +5,7 @@
  */
 
 import crypto from 'crypto'
+import { unstable_cache } from 'next/cache'
 
 const KITE_BASE   = 'https://api.kite.trade'
 const KITE_V      = '3'
@@ -31,6 +32,13 @@ export interface KiteQuote {
     close: number
   }
   change: number  // % change from previous close
+  // 5-level market depth — full quote mode only. Optional: not guaranteed
+  // present for every segment/entitlement, MCX included — always read
+  // defensively (depth?.buy?.[0]).
+  depth?: {
+    buy:  { price: number; quantity: number; orders: number }[]
+    sell: { price: number; quantity: number; orders: number }[]
+  }
 }
 
 export interface InstrumentInfo {
@@ -275,3 +283,20 @@ export class KiteClient {
 export function getLoginUrl(apiKey: string): string {
   return `https://kite.trade/connect/login?api_key=${apiKey}&v=3`
 }
+
+// ── Cached instrument discovery ────────────────────────────────────────────────
+// getFullMCXInstruments() re-fetches and re-parses the entire MCX instruments CSV
+// (every commodity, every FUT+CE+PE contract) on every call. Which strikes/expiries/
+// tokens exist changes rarely intraday — cache it. Credentials are read from
+// process.env inside the function (not passed as arguments) so a live secret never
+// gets serialized into the unstable_cache key.
+export const getFullMCXInstrumentsCached = unstable_cache(
+  async () => {
+    const apiKey      = process.env.KITE_API_KEY
+    const accessToken = process.env.KITE_ACCESS_TOKEN
+    if (!apiKey || !accessToken) throw new Error('Kite credentials not configured')
+    return new KiteClient(apiKey, accessToken).getFullMCXInstruments()
+  },
+  ['mcx-full-instruments'],
+  { revalidate: 3600 },
+)
