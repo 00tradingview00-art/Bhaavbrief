@@ -1,6 +1,48 @@
 [
   {
     "type": "brief",
+    "slug": "edition-065",
+    "href": "/briefs/edition-065",
+    "title": "Gold Breaks $4,043 as Crude Jumps 2.5% — Two Rallies, One Question",
+    "description": "COMEX gold clears $4,043 and crude surges past $80 simultaneously — a combination that historically signals genuine macro stress, not sector rotation.",
+    "excerpt": "MCX Gold ₹142257 | Crude ₹7584 | USDINR ₹96.19 | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold | $4043/oz (COMEX) | ₹96.19 | ₹142257/10g | ",
+    "date": "2026-07-15T03:20:08.536Z",
+    "edition": "65",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-07-14-mcx-close-15jul2026-metals-dollar-weakness",
+    "href": "/articles/2026-07-14-mcx-close-15jul2026-metals-dollar-weakness",
+    "title": "MCX Close 15Jul: Silver Leads Metals Rally on Dollar Weakness",
+    "description": "15 Jul 2026 — MCX silver +2.57%, gold +1.50% as broad metals advance. COMEX extends gains overnight; crude flat. Overnight watch: COMEX momentum into US session.",
+    "excerpt": "MCX metals complex closed decisively higher, led by silver's +2.57% surge to ₹223,320/kg and gold's +1.50% advance to ₹142,419/10g. Copper followed with +1.29% to ₹1,313/kg. The broad advance reflects",
+    "date": "2026-07-14T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Metals",
+      "Silver",
+      "Gold"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
     "slug": "edition-064",
     "href": "/briefs/edition-064",
     "title": "Crude Surges 4.3% as Rupee Slips — Gold Holds Its Ground",
