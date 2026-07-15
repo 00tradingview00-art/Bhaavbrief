@@ -1,5 +1,17 @@
 [
   {
+    "id": "2026-07-15-18-17-mcx-copper-holds-record-parity-on-lme-aluminium-supply-shock",
+    "title": "MCX Copper Holds Record Parity on LME Aluminium Supply Shock",
+    "summary": "MCX Copper rose ₹1316/kg (+0.31%) in the afternoon session, holding ground while crude surged +1.27% and most other base metals stalled. LME copper benchmarks have hit record highs on supply disruption fears in aluminium",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-15T12:47:13.446Z",
+    "pubDateIST": "15 Jul 2026, 18:17",
+    "href": "/flash/2026-07-15-12-47-mcx-copper-holds-record-parity-on-lme-aluminium-supply-shock",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-15-16-39-crude-rallies-on-us-demand-recovery-gold-retreats-as-real",
     "title": "Crude rallies on US demand recovery; gold retreats as real yields shift",
     "summary": "MCX crude surged ₹135/bbl to ₹7717 in afternoon trade, posting a +1.75% gain as the session's strongest performer. Gold retreated ₹893 to ₹141,359/10g (–0.63%) while silver weakened ₹2,385/kg to ₹220,779 (–1.08%), signal",
@@ -837,18 +849,6 @@
     "pubDate": "2026-07-08T16:47:30.315Z",
     "pubDateIST": "08 Jul 2026, 22:17",
     "href": "/flash/2026-07-08-16-47-crude-rallies-6-91-to-7-168-as-gold-silver-weaken-on-demand-fears",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-08-17-51-crude-jumps-5-15-on-supply-concern-precious-metals-sell-off",
-    "title": "Crude jumps 5.15% on supply concern; precious metals sell-off suggests demand shock skepticism",
-    "summary": "MCX crude surged +5.15% to ₹7,050/bbl this afternoon session, while natural gas gained +1.41% to ₹316.10/mmBtu, signaling coordinated strength in the energy complex. Gold retreated -1.14% to ₹143,740/10g and silver fell ",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-08T12:21:19.331Z",
-    "pubDateIST": "08 Jul 2026, 17:51",
-    "href": "/flash/2026-07-08-12-21-crude-jumps-5-15-on-supply-concern-precious-metals-sell-off-suggests-demand",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
