@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-16-mcx-crude-vs-brent-price-india",
+    "href": "/articles/2026-07-16-mcx-crude-vs-brent-price-india",
+    "title": "Why MCX Crude Oil Price Differs from International Brent — India Import Parity Explained",
+    "description": "Understand why MCX crude price differs from Brent oil India traders track — rupee conversion, import parity formula, and key global price drivers explained.",
+    "excerpt": "The reason why MCX crude price differs from Brent oil India traders monitor comes down to three compounding layers: currency conversion, import parity pricing, and MCX contract structure. MCX Crude Oi",
+    "date": "2026-07-16",
+    "edition": "keyword-brief",
+    "tags": [
+      "crude",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "crude",
+    "commodities": [
+      "crude"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-07-15-hawk-scan-mcx-crude-surges-11-69-eia-gas-draw-trumps-flat-oi",
     "href": "/articles/2026-07-15-hawk-scan-mcx-crude-surges-11-69-eia-gas-draw-trumps-flat-oi",
