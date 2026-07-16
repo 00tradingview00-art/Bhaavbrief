@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141478,
-    "silver": 219098,
-    "crude": 7658,
-    "copper": 1314.55,
-    "natgas": 280.7,
+    "gold": 141313,
+    "silver": 218500,
+    "crude": 7660,
+    "copper": 1311.9,
+    "natgas": 281,
     "usdinr": 96.26
   },
-  "lastChecked": "2026-07-16T09:37:20.312Z",
+  "lastChecked": "2026-07-16T11:21:03.584Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
