@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-16-23-26-gold-silver-fall-on-real-yield-repricing-natgas-diverges",
+    "title": "Gold, silver fall on real-yield repricing; natgas diverges with demand weakness",
+    "summary": "# GOLD, SILVER SLIP ON COMEX WEAKNESS; NATGAS LEADS SELLOFF MCX gold fell 1.03% to ₹140,395/10g as Comex bullion weakness transmitted overnight into Indian futures. MCX silver dropped 2.08% tracking a sharper rout in int",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-16T17:56:46.852Z",
+    "pubDateIST": "16 Jul 2026, 23:26",
+    "href": "/flash/2026-07-16-17-58-gold-silver-fall-on-real-yield-repricing-natgas-diverges-with-demand",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-16-23-28-natural-gas-leads-selloff-at-275-demand-destruction-signal",
+    "title": "Natural Gas Leads Selloff at ₹275; Demand Destruction Signal Over Supply Shock",
+    "summary": "MCX Natural Gas collapsed 2.72% to ₹275/mmBtu, leading a broad commodity selloff across the session. Silver followed with a 2.08% decline to ₹216,021/kg, while gold fell 1.03% to ₹140,395/10g and copper edged down 0.29% ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-16T17:58:35.257Z",
+    "pubDateIST": "16 Jul 2026, 23:28",
+    "href": "/flash/2026-07-16-17-58-natural-gas-leads-selloff-at-275-demand-destruction-signal-over-supply",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-16-20-52-mcx-silver-falls-1-64-as-industrial-demand-rotates-away-from",
     "title": "MCX Silver Falls 1.64% as Industrial Demand Rotates Away From Bullion",
     "summary": "MCX Silver fell 1.64% to ₹217,000/kg in the afternoon session, tracking a broader retreat in bullion futures across MCX and Comex. Gold declined 0.79% to ₹140,725/10g, while Natural Gas led the session losses at -2.76%, ",
@@ -790,29 +814,5 @@
     "pubDateIST": "09 Jul 2026, 23:44",
     "href": "/flash/2026-07-09-18-14-silver-surges-226-450-kg-on-dual-safe-haven-and-industrial-bid-crude",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-09-21-43-crude-crashes-2-5-to-6-895-as-safe-haven-gold-soars-on-mcx",
-    "title": "Crude Crashes 2.5% to ₹6,895 as Safe-Haven Gold Soars on MCX",
-    "summary": "MCX crude oil fell 2.52% to ₹6,895/bbl in afternoon session, while gold advanced 1.0% and silver gained 1.36%, creating a divergent cross-asset picture. Natural gas collapsed 5.98% to ₹289.40/mmBtu, the session's weakest",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-09T16:13:30.692Z",
-    "pubDateIST": "09 Jul 2026, 21:43",
-    "href": "/flash/2026-07-09-16-15-crude-crashes-2-5-to-6-895-as-safe-haven-gold-soars-on-mcx",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-09-21-45-natural-gas-slumps-5-98-as-copper-defies-risk-off-mcx",
-    "title": "Natural Gas Slumps 5.98% as Copper Defies Risk-Off, MCX Fragmentation Deepens",
-    "summary": "MCX Natural Gas collapsed 5.98% to ₹289.40/mmBtu in afternoon trade, the sharpest mover on the board. Crude Oil retreated 2.52% to ₹6,895/bbl, while Copper advanced 2.23% to ₹1,296.35/kg in a divergent cross-commodity se",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-09T16:15:23.226Z",
-    "pubDateIST": "09 Jul 2026, 21:45",
-    "href": "/flash/2026-07-09-16-15-natural-gas-slumps-5-98-as-copper-defies-risk-off-mcx-fragmentation-deepens",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
