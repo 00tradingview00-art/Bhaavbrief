@@ -307,6 +307,20 @@ async function generate(prices, news, recentBriefs, snapshot) {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   })
 
+  // Next trading day (IST) — walks forward past weekends/holidays so the
+  // "Tomorrow:" line never names today's own day (the D-08 class of bug:
+  // a Friday brief saying "scheduled across Friday's global session").
+  let nextTradingDateStr = todayIST()
+  do {
+    nextTradingDateStr = new Date(
+      new Date(nextTradingDateStr + 'T00:00:00Z').getTime() + 86400000
+    ).toISOString().slice(0, 10)
+  } while (isTradingHoliday(nextTradingDateStr))
+  const nextTradingDayName = new Date(nextTradingDateStr + 'T00:00:00Z')
+    .toLocaleDateString('en-IN', { weekday: 'long', timeZone: 'UTC' })
+  const nextTradingDateFull = new Date(nextTradingDateStr + 'T00:00:00Z')
+    .toLocaleDateString('en-IN', { day: 'numeric', month: 'long', timeZone: 'UTC' })
+
   const keyNumber   = buildKeyNumber(prices)
   const priceBridge = buildPriceBridge(prices)
 
@@ -355,6 +369,10 @@ Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation 
     : ''
 
   const prompt = `You are BhaavBrief's chief analyst writing Edition #${EDITION} for ${dateStr}.
+
+TEMPORAL ACCURACY — NON-NEGOTIABLE:
+Today is ${dateStr}. The next trading session is ${nextTradingDayName}, ${nextTradingDateFull}.
+When writing the "Tomorrow:" line, refer to the next trading session using ONLY the day name "${nextTradingDayName}" — never today's own day name, and never assume the next calendar day is a trading session (it may be a weekend or market holiday, in which case "${nextTradingDayName}" is the correct next session, not the literal next calendar day).
 
 BhaavBrief's edge is the NARRATIVE ENGINE — we don't just report prices, we track the dominant macro story shaping Indian commodity markets and show traders if it's gaining or losing power.
 
@@ -439,7 +457,7 @@ WRITING RULES
 
 - MAX TWO HARD NUMBERS PER SENTENCE (price figures, precise percentages, ratios). Three or more precise figures back to back reads as a spreadsheet. State a number, say what it means, then introduce the next one. The Price Bridge table is exempt.
 
-- End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences.
+- End with "Edge of the Day:" — one specific data point or level to monitor, followed on a new line by "Tomorrow:" — one sentence naming the next data release or event that will confirm or kill this narrative, with the two conditions and their consequences. If naming a day, it MUST be "${nextTradingDayName}" — see TEMPORAL ACCURACY above.
   Example: "Tomorrow: US CPI at 6:00 PM IST — above 3.5% makes the Iran crude premium look cheap and upgrades the bullish thesis; below 3.0% and the entire energy rally looks borrowed."
 
 LANGUAGE — NON-NEGOTIABLE:
@@ -488,7 +506,7 @@ Include specific price levels from the data above.]
 
 **Edge of the Day:** [The single most important price level to monitor today, or the scheduled data release that will confirm or negate this narrative. An observation — never a buy/sell call.]
 
-**Tomorrow:** [One sentence. Name the next data release or market event in the next 24 hours, the exact time IST, and the two observable outcomes: "if X, the thesis holds; if Z, it is challenged." Never name a specific future price level as an outcome. Example: "Tomorrow: EIA crude inventory data at 8:00 PM IST — a draw above 3 million barrels keeps the supply-tight thesis intact; a surprise build above 2 million barrels challenges it."]
+**Tomorrow:** [One sentence. Name the next data release or market event, the exact time IST, and the two observable outcomes: "if X, the thesis holds; if Z, it is challenged." If a day name is used, it MUST be "${nextTradingDayName}" (the next trading session, per TEMPORAL ACCURACY above) — never today's day name. Never name a specific future price level as an outcome. Example: "Tomorrow: US CPI at 6:00 PM IST — above 3.5% keeps the thesis intact; below 3.0% and it looks borrowed."]
 
 ═══════════════════════════════════════════
 TAGS — pick the 1-3 most relevant (not always Gold):
