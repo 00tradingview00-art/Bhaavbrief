@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-07-17-21-39-mcx-crude-surges-3-94-on-supply-concern-copper-diverges",
+    "title": "MCX Crude Surges 3.94% on Supply Concern; Copper Diverges Bearish",
+    "summary": "MCX crude surged ₹7,914/bbl with a +3.94% gain in afternoon trade, while natural gas climbed ₹279.80/mmBtu up +1.78%, signalling a coordinated energy complex rally. Gold edged higher to ₹140,907/10g (+0.40%), while coppe",
+    "category": "Macro",
+    "tagType": "macro",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T16:09:35.116Z",
+    "pubDateIST": "17 Jul 2026, 21:39",
+    "href": "/flash/2026-07-17-16-13-mcx-crude-surges-3-94-on-supply-concern-copper-diverges-bearish",
+    "coverImage": "https://images.pexels.com/photos/27275198/pexels-photo-27275198.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-17-21-41-mcx-gold-holds-140-907-as-rupee-strength-offsets-comex",
+    "title": "MCX Gold holds ₹140,907 as rupee strength offsets Comex weakness; crude surges on supply fears",
+    "summary": "MCX Gold rose ₹140,907/10g (+0.40%) in the afternoon session, bucking weakness across global bullion markets where Comex gold traded lower. The rupee strengthened to ₹96.27/USD, reducing import parity for foreign gold in",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T16:11:27.950Z",
+    "pubDateIST": "17 Jul 2026, 21:41",
+    "href": "/flash/2026-07-17-16-13-mcx-gold-holds-140-907-as-rupee-strength-offsets-comex-weakness-crude",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-17-21-43-crude-rallies-3-94-on-supply-fears-as-copper-stalls-demand",
+    "title": "Crude rallies 3.94% on supply fears as copper stalls—demand divergence widens",
+    "summary": "MCX crude surged ₹7914/bbl, delivering a +3.94% intraday gain as the energy complex rallied in tandem with natural gas climbing +1.78% to ₹279.80/mmBtu. Gold edged higher by +0.40% to ₹140907/10g, while copper retreated ",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T16:13:20.360Z",
+    "pubDateIST": "17 Jul 2026, 21:43",
+    "href": "/flash/2026-07-17-16-13-crude-rallies-3-94-on-supply-fears-as-copper-stalls-demand-divergence",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-17-20-20-mcx-copper-slips-0-54-as-energy-surge-signals-supply-not",
     "title": "MCX Copper Slips 0.54% as Energy Surge Signals Supply, Not Demand",
     "summary": "MCX Copper declined 0.54% to ₹1,301.45/kg in afternoon trade, underperforming a broader LME base metals rally that pushed the index to record highs. The energy complex surged simultaneously, with crude oil advancing 2.82",
@@ -802,29 +838,5 @@
     "pubDateIST": "10 Jul 2026, 23:08",
     "href": "/flash/2026-07-10-17-38-gold-pullback-signals-geopolitical-premium-exhausted-143-450-level-tested",
     "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-10-21-07-mcx-silver-falls-1-32-as-inflation-fears-override",
-    "title": "MCX Silver Falls 1.32% as Inflation Fears Override Geopolitical Risk Premium",
-    "summary": "MCX silver fell 1.32% to ₹223,400/kg in Friday afternoon trade, extending a two-day decline amid renewed inflation concerns and escalating US-Iran tensions. Gold weakened 1.03% to ₹143,800/10g, while crude slipped 0.60% ",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-10T15:37:28.521Z",
-    "pubDateIST": "10 Jul 2026, 21:07",
-    "href": "/flash/2026-07-10-15-39-mcx-silver-falls-1-32-as-inflation-fears-override-geopolitical-risk-premium",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-10-21-09-mcx-natural-gas-plunges-3-86-as-copper-holds-flat-supply",
-    "title": "MCX Natural Gas Plunges 3.86% as Copper Holds Flat; Supply Signal Isolated",
-    "summary": "MCX Natural Gas collapsed 3.86% to ₹276.60/mmBtu in the afternoon session, leading all commodities lower while gold and silver retreated modestly by 1.03% and 1.32% respectively. USD/INR held steady at ₹95.32, removing c",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-10T15:39:21.598Z",
-    "pubDateIST": "10 Jul 2026, 21:09",
-    "href": "/flash/2026-07-10-15-39-mcx-natural-gas-plunges-3-86-as-copper-holds-flat-supply-signal-isolated",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
