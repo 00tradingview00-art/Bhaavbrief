@@ -70,8 +70,8 @@ preview URL instead of production for manual testing.
   go through a PR if you want that reviewed first — just say so.
 - **Never let it "clean up while it's there."** Scope creep during an AI-assisted change is the
   most common source of silent regressions in this repo's history (see
-  `docs/runbooks/founding-postmortem.md` once written) — diff review every change against what
-  was actually asked.
+  `docs/postmortems/2026-05-27-feed-death.md`, the founding postmortem) — diff review every
+  change against what was actually asked.
 - **Verify before/after, not just after.** Reproduce the bug or confirm the current behavior
   first, then fix, then re-verify — especially for anything touching the live-serving price or
   options-chain paths (`lib/snapshot.ts`, `lib/prices.ts`, `lib/options.ts`, `lib/black76.ts`).
