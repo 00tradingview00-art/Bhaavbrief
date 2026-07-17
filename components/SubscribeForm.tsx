@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { trackSubscribe, trackEvent } from '@/lib/analytics'
+import { trackSubscribe, trackSubscribeCompleted, trackEvent } from '@/lib/analytics'
 
 export default function SubscribeForm({ compact = false, location, onSuccess }: { compact?: boolean; location?: string; onSuccess?: () => void }) {
   const [email,   setEmail]   = useState('')
@@ -34,6 +34,7 @@ export default function SubscribeForm({ compact = false, location, onSuccess }: 
         ph?.capture('subscribe_success', { location: loc })
         ph?.identify(email.trim())
         trackSubscribe(loc)
+        trackSubscribeCompleted(loc)
         onSuccess?.()
       } else {
         setStatus('error')

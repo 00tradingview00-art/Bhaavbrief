@@ -17,7 +17,13 @@ export async function addSubscriber(email: string, name?: string) {
     },
     body: JSON.stringify({
       email,
-      attributes: { FIRSTNAME: name ?? '' },
+      // SIGNUP_DATE drives scripts/send-welcome-followups.mjs's day-2/day-5
+      // welcome sequence (FIX-12, D-16). NOTE: Brevo custom contact
+      // attributes (SIGNUP_DATE, WELCOME2_SENT, WELCOME3_SENT) may need to
+      // be created once in the Brevo dashboard (Contacts → Settings →
+      // Attributes) before the API will persist them — verify a real test
+      // signup shows SIGNUP_DATE on the contact before relying on this.
+      attributes: { FIRSTNAME: name ?? '', SIGNUP_DATE: new Date().toISOString().slice(0, 10) },
       listIds: [LIST_ID],
       updateEnabled: true,
     }),

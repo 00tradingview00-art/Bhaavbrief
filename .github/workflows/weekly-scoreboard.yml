@@ -1,0 +1,35 @@
+name: Weekly Edge Scoreboard
+
+on:
+  schedule:
+    # Monday 9:00 AM IST = 3:30 AM UTC — after the Monday morning brief has
+    # published, ahead of the working week.
+    - cron: '30 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send-scoreboard:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Send weekly Edge Scoreboard
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+        run: node scripts/send-edge-scoreboard.mjs

@@ -1,0 +1,35 @@
+name: Welcome Sequence Follow-ups
+
+on:
+  schedule:
+    # 10:00 AM IST = 4:30 AM UTC, daily — after the morning brief pipeline
+    # has settled, so this isn't competing for runner slots at 9:00 AM IST.
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send-followups:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Send day-2 / day-5 welcome follow-ups
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LIST_ID: ${{ secrets.BREVO_LIST_ID }}
+          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+        run: node scripts/send-welcome-followups.mjs

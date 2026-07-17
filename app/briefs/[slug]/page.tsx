@@ -6,6 +6,8 @@ import remarkGfm              from 'remark-gfm'
 import SubscribeForm          from '@/components/SubscribeForm'
 import CopyLinkButton         from '@/components/CopyLinkButton'
 import TapeMovers             from '@/components/TapeMovers'
+import BriefScrollTracker     from '@/components/BriefScrollTracker'
+import EmailCaptureModal      from '@/components/EmailCaptureModal'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 import { getBriefArcs } from '@/lib/arcs'
 
@@ -271,7 +273,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
             <div className="brief-prose" itemProp="articleBody">
               <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+              <div id="brief-end" />
             </div>
+            <BriefScrollTracker edition={String(brief.edition)} />
+            <EmailCaptureModal location="brief_page_modal" />
 
             <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>

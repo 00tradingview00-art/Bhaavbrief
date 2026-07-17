@@ -40,6 +40,32 @@ export function trackBriefReadComplete(edition: string) {
   trackEvent("brief_read_complete", { edition });
 }
 
+// FIX-12 (D-16): the master doc's own event names — GA showed ~10% returning
+// users on a daily product with no instrumentation to explain why. These
+// were previously just documented in this file's comments below, never
+// actually called from any component.
+
+/** Fires when the retention modal (components/EmailCaptureModal.tsx) becomes
+ *  visible — pairs with trackSubscribeCompleted to compute the modal's own
+ *  conversion rate, not just top-of-funnel subscribe volume. */
+export function trackSubscribeShown(source: string) {
+  trackEvent("subscribe_shown", { source });
+}
+
+/** Fires alongside the existing trackSubscribe("subscribe") call — kept as a
+ *  second, exactly-named event because the master doc specifies
+ *  "subscribe_completed" and existing GA4 configuration may already depend
+ *  on the "subscribe" event name elsewhere; this doesn't replace it. */
+export function trackSubscribeCompleted(source: string) {
+  trackEvent("subscribe_completed", { source });
+}
+
+/** Per-section scroll depth on a brief — which sections actually earn the
+ *  read, not just whether someone reached the bottom. */
+export function trackSectionSeen(edition: string, section: string) {
+  trackEvent("brief_section_seen", { edition, section });
+}
+
 // ---------------------------------------------------------------------------
 // Wiring into the subscribe form handler:
 // ---------------------------------------------------------------------------
