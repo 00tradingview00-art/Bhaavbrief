@@ -71,15 +71,15 @@ export default function MethodologyPage() {
           <h2 style={h2Style}>Data sources</h2>
           <p style={pStyle}>
             <strong>MCX prices</strong> — Zerodha Kite Connect, live quotes and historical daily candles,
-            refreshed via <code>scripts/fetch-snapshot.mjs</code> on the same cadence as the intelligence
-            engine (roughly every 15–30 minutes during market hours, plus a dedicated fetch immediately
-            before every brief is generated).
+            refreshed automatically on the same cadence as the intelligence engine (roughly every 15–30
+            minutes during market hours, plus a dedicated fetch immediately before every brief is
+            generated).
           </p>
           <p style={pStyle}>
             <strong>Global reference prices</strong> — COMEX gold/silver, WTI crude, COMEX copper, Henry
             Hub natural gas, fetched from Yahoo Finance with Alpha Vantage / Stooq / Twelve Data as
-            fallbacks if the primary feed is unavailable. A stale feed is carried forward with an explicit
-            <code>stale: true</code> flag rather than silently dropped or replaced with an invented number.
+            fallbacks if the primary feed is unavailable. A stale feed is carried forward and clearly
+            flagged as stale rather than silently dropped or replaced with an invented number.
           </p>
           <p style={pStyle}>
             <strong>USD/INR</strong> — live FX rate, part of the same snapshot pull as the commodity prices,
@@ -88,8 +88,8 @@ export default function MethodologyPage() {
           </p>
           <p style={pStyle}>
             <strong>Event calendar</strong> — EIA, API, Baker Hughes, CFTC, and other scheduled release
-            dates from <code>data/event-map.json</code>. Historical impact statistics for these events (see
-            Claims Ledger below) are computed from real Kite historical candles, not estimated.
+            dates, maintained internally. Historical impact statistics for these events (see Claims Ledger
+            below) are computed from real Kite historical candles, not estimated.
           </p>
           <p style={pStyle}>
             <strong>Options chain</strong> — live Kite quotes (LTP, bid/ask depth, OI, volume) for MCX
@@ -100,13 +100,12 @@ export default function MethodologyPage() {
         <section style={sectionStyle}>
           <h2 style={h2Style}>Import parity &amp; the Price Bridge</h2>
           <p style={pStyle}>
-            The Price Bridge on each brief and the <code>/markets</code> page reconciles{' '}
+            The Price Bridge on each brief and the Markets page reconciles{' '}
             <em>Global price × USD/INR × (1 + duty/GST wedge) = MCX price</em>. The wedge is not a fixed
-            assumption — it&apos;s back-computed daily as{' '}
-            <code>(MCX price − import parity) / import parity</code>, where import parity itself is the
-            global price converted to INR at the unit MCX actually trades (per 10g for gold, per kg for
-            silver). Gold and silver import parity is computed by{' '}
-            <code>scripts/fetch-snapshot.mjs</code> on every snapshot fetch.
+            assumption — it&apos;s back-computed daily as the gap between the live MCX price and import
+            parity, where import parity itself is the global price converted to INR at the unit MCX
+            actually trades (per 10g for gold, per kg for silver). Gold and silver import parity is
+            recomputed automatically on every price refresh.
           </p>
           <p style={pStyle}>
             Gold and silver carry a broadly similar duty/GST structure, so their computed wedges should
@@ -191,16 +190,15 @@ export default function MethodologyPage() {
           <h2 style={h2Style}>Corrections policy</h2>
           <p style={pStyle}>
             An error in a published brief gets fixed, not silently edited. A corrected edition carries a
-            visible notice at the top of the page — what changed, and when — and the frontmatter records
-            <code>corrected</code>, <code>correctedAt</code>, and a <code>correctionNote</code>. Corrections
-            are never removed from the historical record.
+            visible notice at the top of the page — what changed, and when. Corrections are never removed
+            from the historical record.
           </p>
         </section>
 
         <section style={sectionStyle}>
           <h2 style={h2Style}>Publication gate</h2>
           <p style={pStyle}>
-            Nothing publishes without passing an automated gate (<code>scripts/validate-brief.mjs</code>) —
+            Nothing publishes without passing an automated validation gate —
             data integrity checks (FX sanity, price staleness, Price Bridge reconciliation, no negative
             prices, unconfirmed large moves), content integrity checks (temporal/weekday consistency, the
             claims ledger constraint above, edition numbering, required section structure, SEBI-compliance
