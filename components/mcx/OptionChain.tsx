@@ -25,10 +25,11 @@ const INSTRUMENTS = [
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+type QuoteTier = 'LIVE' | 'STALE' | 'JUNK'
 interface OptionSide {
   symbol: string|null; ltp: number; absChng: number; oi: number
   oiChange: number; volume: number; iv: number|null
-  bid: number|null; ask: number|null
+  bid: number|null; ask: number|null; tier: QuoteTier
   delta: number|null; gamma: number|null; theta: number|null; vega: number|null
 }
 interface ChainRow {
@@ -43,6 +44,7 @@ interface OptionsData {
   futurePrice: number; maxPain: number; pcr: number
   ivix: number|null; aav: AAVResult; volPremium: number|null
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
+  riskFreeRate: number; riskFreeRateAsOf: string
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -326,6 +328,11 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
   const [mapView, setMapView]       = useState<'oi'|'iv'|null>('oi')
+  // D-06: strikes with zero liquidity / no-arbitrage violations are tiered
+  // JUNK server-side (lib/options.ts) and hidden by default here — a row is
+  // hidden only when BOTH sides are JUNK, so a genuinely liquid CE next to a
+  // dead PE at the same strike still shows.
+  const [showAllStrikes, setShowAllStrikes] = useState(false)
   const [lastRefresh, setLastRefresh] = useState<Date|null>(initialData ? new Date(initialData.lastUpdated) : null)
   const [page, setPage]             = useState<'lower'|'main'|'upper'>('main')
   const tableBodyRef  = useRef<HTMLDivElement>(null)
@@ -418,6 +425,11 @@ export default function OptionChain({ isPro, preview = false, initialData = null
     visibleChain = mainPage.slice(start, start + 5)
   }
 
+  const junkHiddenCount = visibleChain.filter(r => r.CE.tier === 'JUNK' && r.PE.tier === 'JUNK').length
+  if (!showAllStrikes) {
+    visibleChain = visibleChain.filter(r => !(r.CE.tier === 'JUNK' && r.PE.tier === 'JUNK'))
+  }
+
   const maxCEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.CE.oi), 1) : 1
   const maxPEOI = visibleChain.length ? Math.max(...visibleChain.map(r => r.PE.oi), 1) : 1
   const vpColor = data?.volPremium == null ? C.ink3 : data.volPremium > 2 ? 'var(--saffron)' : data.volPremium < -2 ? C.up : C.ink3
@@ -465,6 +477,20 @@ export default function OptionChain({ isPro, preview = false, initialData = null
             {showGreeks ? '− Greeks columns' : '+ Greeks columns'}
           </button>
         )}
+        {!preview && junkHiddenCount > 0 && (
+          <button
+            onClick={() => setShowAllStrikes(v => !v)}
+            aria-pressed={showAllStrikes}
+            title="Strikes with zero liquidity or a price outside no-arbitrage bounds are hidden by default"
+            style={{
+              padding: isMobile ? '13px 12px' : '5px 12px', fontSize: 12, borderRadius: 5, cursor: 'pointer', fontFamily: C.sans,
+              border: `1px dashed ${showAllStrikes ? C.gold : C.bdr}`, background: showAllStrikes ? C.goldPl : 'transparent',
+              color: showAllStrikes ? C.gold : C.ink3,
+            }}
+          >
+            {showAllStrikes ? `Hide ${junkHiddenCount} illiquid strikes` : `Show ${junkHiddenCount} hidden strikes`}
+          </button>
+        )}
         {/* OI Map / Volatility — a real segmented control: one border around both,
             a shared divider, no gap between them — since only one can be active. */}
         <div style={{ display: 'flex', border: `1px solid ${C.bdr}`, borderRadius: 5, overflow: 'hidden' }} role="tablist" aria-label="Chart view">
@@ -502,6 +528,15 @@ export default function OptionChain({ isPro, preview = false, initialData = null
           </button>
         </div>
       </div>
+
+      {!preview && showAllStrikes && junkHiddenCount > 0 && (
+        <div style={{
+          padding: '8px 14px', fontSize: 12, fontFamily: C.sans, color: '#8A5A00',
+          background: '#FFF6E0', borderBottom: `1px solid ${C.bdr}`,
+        }}>
+          Showing {junkHiddenCount} strike{junkHiddenCount === 1 ? '' : 's'} with no live market — zero traded volume/open interest, or a quoted price outside the no-arbitrage bound for this strike. IV and Greeks are not computed for these; treat any shown price as indicative, not tradeable.
+        </div>
+      )}
 
       {/* ── Analytics strip ── */}
       {data && (
@@ -799,7 +834,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
         </a>
       ) : (
         <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
-          <span>Black-76 · 6.5% risk-free rate · 30s cache</span>
+          <span>Black-76 · {data ? (data.riskFreeRate * 100).toFixed(1) : '6.5'}% risk-free rate (as of {data?.riskFreeRateAsOf ?? '—'}) · 30s cache</span>
           <span>Not investment advice</span>
         </div>
       )}

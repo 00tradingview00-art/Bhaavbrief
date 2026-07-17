@@ -2,7 +2,63 @@ import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 
+// Single source of truth for the risk-free rate — read by the chain response
+// below so the UI (components/mcx/OptionChain.tsx) can display the same value
+// instead of an independently hardcoded string that can drift out of sync.
+// TODO: replace with a daily-fetched 91-day T-bill / MIBOR rate (D-11); this
+// constant is a dated, disclosed fallback in the meantime, not a silent one.
 const RISK_FREE_RATE = 0.065
+const RISK_FREE_RATE_ASOF = '2026-07'
+
+// ── Quote quality tiering (D-06) ────────────────────────────────────────────
+// Verified live 2026-07-17 against the real GOLD chain: zero-OI/zero-volume
+// strikes carry stale LTPs that violate Black-76 no-arbitrage bounds (e.g.
+// strike 143500 PE priced BELOW its own intrinsic value) and get solved into
+// garbage IVs (0.1% floor, 100%+ readings) with zero filtering today. Genuine
+// liquid strikes (OI>0, traded today, tight bid-ask) show sane, matched IVs.
+const SPREAD_LIVE_MAX_RATIO = 0.15  // LIVE requires spread <= 15% of mid
+const SPREAD_JUNK_MAX_RATIO = 0.40  // spread > 40% of mid is JUNK regardless of liquidity
+const IV_PARITY_TOLERANCE_VOL_PTS = 5  // CE/PE IV mismatch beyond this at the same strike demotes both
+
+type Tier = 'LIVE' | 'STALE' | 'JUNK'
+
+function classifyQuote(
+  ltp: number, oi: number, volume: number,
+  bid: number | null, ask: number | null,
+  intrinsic: number, upperBound: number,
+): { tier: Tier; validForSolve: boolean } {
+  // No-arbitrage bound violation — never feed to the solver regardless of
+  // liquidity; this is the source of the 0.1%/66%+ IV readings today.
+  const tolerance = Math.max(intrinsic, upperBound, 1) * 0.001
+  if (ltp <= 0 || ltp < intrinsic - tolerance || ltp > upperBound + tolerance) {
+    return { tier: 'JUNK', validForSolve: false }
+  }
+
+  const hasTwoSidedQuote = bid != null && ask != null && bid > 0 && ask > 0
+  const tradedToday = oi > 0 && volume > 0
+
+  if (!hasTwoSidedQuote) {
+    // No live market at all — the LTP may be a leftover print from whenever
+    // this contract last traded, not a current tradeable price. Some open
+    // interest with no current quote is still worth showing as STALE; truly
+    // dead strikes (no OI, no volume, no quote) are JUNK.
+    return tradedToday || oi > 0
+      ? { tier: 'STALE', validForSolve: true }
+      : { tier: 'JUNK', validForSolve: false }
+  }
+
+  const mid = (bid + ask) / 2
+  const spreadRatio = mid > 0 ? (ask - bid) / mid : Infinity
+  if (spreadRatio > SPREAD_JUNK_MAX_RATIO) {
+    return { tier: 'JUNK', validForSolve: false }
+  }
+
+  if (tradedToday && spreadRatio <= SPREAD_LIVE_MAX_RATIO) {
+    return { tier: 'LIVE', validForSolve: true }
+  }
+
+  return { tier: 'STALE', validForSolve: true }
+}
 
 export const MCX_INSTRUMENTS: Record<string, { label: string; unit: string; lotSize: number }> = {
   GOLD:        { label: 'Gold',         unit: '10g',     lotSize: 100  },
@@ -72,6 +128,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     strikeMap[k][opt.instrument_type as 'CE' | 'PE'] = opt
   })
 
+  const df = Math.exp(-RISK_FREE_RATE * T)
+
   const chain = Object.entries(strikeMap)
     .map(([strikeStr, opts]) => {
       const strike = parseFloat(strikeStr)
@@ -81,9 +139,39 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
       const peQ    = peOpt ? quotes[String(peOpt.instrument_token)] : null
       const ceLTP  = ceQ?.last_price ?? 0
       const peLTP  = peQ?.last_price ?? 0
+      const ceOI     = ceQ?.oi ?? 0
+      const peOI     = peQ?.oi ?? 0
+      const ceVolume = ceQ?.volume ?? 0
+      const peVolume = peQ?.volume ?? 0
+      const ceBid = ceQ?.depth?.buy?.[0]?.price  || null
+      const ceAsk = ceQ?.depth?.sell?.[0]?.price || null
+      const peBid = peQ?.depth?.buy?.[0]?.price  || null
+      const peAsk = peQ?.depth?.sell?.[0]?.price || null
 
-      const ceIV = ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : 0
-      const peIV = peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : 0
+      // No-arbitrage bounds (D-06): max(0, discounted intrinsic) <= price <= discounted upper bound.
+      const ceIntrinsic   = df * Math.max(futurePrice - strike, 0)
+      const ceUpperBound  = df * futurePrice
+      const peIntrinsic   = df * Math.max(strike - futurePrice, 0)
+      const peUpperBound  = df * strike
+
+      let ce = classifyQuote(ceLTP, ceOI, ceVolume, ceBid, ceAsk, ceIntrinsic, ceUpperBound)
+      let pe = classifyQuote(peLTP, peOI, peVolume, peBid, peAsk, peIntrinsic, peUpperBound)
+
+      const ceIV = ce.validForSolve && ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : 0
+      const peIV = pe.validForSolve && peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : 0
+
+      // Per-strike put-call parity check: two LIVE-tier quotes at the same
+      // strike/expiry whose IVs diverge sharply mean one side's quote is off
+      // even though it individually passed the liquidity/spread bar — demote
+      // both rather than render one as trustworthy and the other not.
+      if (ce.tier === 'LIVE' && pe.tier === 'LIVE' && ceIV > 0 && peIV > 0) {
+        const ivGapPts = Math.abs(ceIV - peIV) * 100
+        if (ivGapPts > IV_PARITY_TOLERANCE_VOL_PTS) {
+          ce = { ...ce, tier: 'STALE' }
+          pe = { ...pe, tier: 'STALE' }
+        }
+      }
+
       const ceGreeks: Partial<Greeks> = ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
       const peGreeks: Partial<Greeks> = peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
 
@@ -98,12 +186,13 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           symbol:   ceOpt?.tradingsymbol ?? null,
           ltp:      ceLTP,
           absChng:  ceQ ? parseFloat((ceLTP - (ceQ.ohlc?.close ?? ceLTP)).toFixed(2)) : 0,
-          oi:       ceQ?.oi ?? 0,
+          oi:       ceOI,
           oiChange: ceQ ? (ceQ.oi - (ceQ.oi_day_low ?? ceQ.oi)) : 0,
-          volume:   ceQ?.volume ?? 0,
+          volume:   ceVolume,
           iv:       ceIV > 0 ? parseFloat((ceIV * 100).toFixed(2)) : null,
-          bid:      ceQ?.depth?.buy?.[0]?.price  || null,
-          ask:      ceQ?.depth?.sell?.[0]?.price || null,
+          bid:      ceBid,
+          ask:      ceAsk,
+          tier:     ce.tier,
           delta:    ceGreeks.delta ?? null,
           gamma:    ceGreeks.gamma ?? null,
           theta:    ceGreeks.theta ?? null,
@@ -113,12 +202,13 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           symbol:   peOpt?.tradingsymbol ?? null,
           ltp:      peLTP,
           absChng:  peQ ? parseFloat((peLTP - (peQ.ohlc?.close ?? peLTP)).toFixed(2)) : 0,
-          oi:       peQ?.oi ?? 0,
+          oi:       peOI,
           oiChange: peQ ? (peQ.oi - (peQ.oi_day_low ?? peQ.oi)) : 0,
-          volume:   peQ?.volume ?? 0,
+          volume:   peVolume,
           iv:       peIV > 0 ? parseFloat((peIV * 100).toFixed(2)) : null,
-          bid:      peQ?.depth?.buy?.[0]?.price  || null,
-          ask:      peQ?.depth?.sell?.[0]?.price || null,
+          bid:      peBid,
+          ask:      peAsk,
+          tier:     pe.tier,
           delta:    peGreeks.delta ?? null,
           gamma:    peGreeks.gamma ?? null,
           theta:    peGreeks.theta ?? null,
@@ -163,6 +253,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     aav,
     volPremium,
     marketOpen:  isMCXMarketOpen(),
+    riskFreeRate:      RISK_FREE_RATE,
+    riskFreeRateAsOf:  RISK_FREE_RATE_ASOF,
     chain,
     lastUpdated: new Date().toISOString(),
   }
