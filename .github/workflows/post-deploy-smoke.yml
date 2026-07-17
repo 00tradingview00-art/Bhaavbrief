@@ -13,6 +13,15 @@ name: Post-Deploy Smoke Test
 # blocking; until then, this closes the "how long until someone notices a
 # bad deploy" gap from days down to under a minute, which is most of the
 # value even without hard blocking.
+#
+# Targets the stable production domain, NOT
+# github.event.deployment_status.target_url/environment_url — verified
+# directly that Vercel's per-deployment URL (the one the webhook reports)
+# is behind Vercel's own SSO wall (a 302 to vercel.com/sso-api) and
+# unreachable by an unauthenticated curl, which made every check fail for
+# the wrong reason the first four times this workflow ran. The custom
+# domain is what synthetic-monitor.yml already checks every 15 min and
+# reflects the deployment moments after Vercel's alias swap.
 
 on:
   deployment_status:
@@ -42,10 +51,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run smoke test against the just-deployed URL
+      - name: Run smoke test against the production domain
         id: monitor
         env:
-          MONITOR_BASE_URL: ${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}
+          MONITOR_BASE_URL: https://bhaavbrief.in
         run: |
           set +e
           node scripts/synthetic-monitor.mjs > /tmp/smoke-report.json
@@ -58,7 +67,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          BODY="Post-deploy smoke test failed for deployment $(printf '%s' "${{ github.event.deployment.sha }}" | cut -c1-7) at $(date -u '+%Y-%m-%d %H:%M UTC').\n\nDeployment URL: ${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}\n\n\`\`\`json\n$(cat /tmp/smoke-report.json)\n\`\`\`"
+          BODY="Post-deploy smoke test failed for deployment $(printf '%s' "${{ github.event.deployment.sha }}" | cut -c1-7) at $(date -u '+%Y-%m-%d %H:%M UTC').\n\nChecked: https://bhaavbrief.in (Vercel's per-deployment URL is behind an SSO wall, not publicly reachable — see workflow header)\n\n\`\`\`json\n$(cat /tmp/smoke-report.json)\n\`\`\`"
           gh issue create --repo "${{ github.repository }}" \
             --title "Post-deploy smoke test failed — $(date -u '+%Y-%m-%d %H:%M UTC')" \
             --label monitor-incident \
@@ -69,4 +78,4 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: node scripts/send-monitor-alert.mjs /tmp/smoke-report.json "${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}"
+        run: node scripts/send-monitor-alert.mjs /tmp/smoke-report.json "https://bhaavbrief.in"
