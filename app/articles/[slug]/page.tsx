@@ -63,6 +63,7 @@ export default async function ArticlePage({ params }: Props) {
 
   const { meta, content } = article
   const color = COMMODITY_ACCENT_COLORS[meta.commodity as keyof typeof COMMODITY_ACCENT_COLORS] ?? '#7A7668'
+  const sectionLabel = meta.edition === 'evening-brief' ? 'MCX Close' : 'Flash Intelligence'
 
   // JSON-LD schema for SEO
   const articleUrl = `https://bhaavbrief.in/articles/${slug}`
@@ -89,7 +90,7 @@ export default async function ArticlePage({ params }: Props) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home',              item: 'https://bhaavbrief.in' },
-          { '@type': 'ListItem', position: 2, name: 'Flash Intelligence', item: 'https://bhaavbrief.in/articles' },
+          { '@type': 'ListItem', position: 2, name: sectionLabel, item: 'https://bhaavbrief.in/articles' },
           { '@type': 'ListItem', position: 3, name: meta.title,          item: articleUrl },
         ],
       },
@@ -108,7 +109,7 @@ export default async function ArticlePage({ params }: Props) {
         <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
-          <Link href="/articles" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Flash Intelligence</Link>
+          <Link href="/articles" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>{sectionLabel}</Link>
           <span>›</span>
           <span style={{ color: 'var(--ink-3)' }}>{meta.commodity.charAt(0).toUpperCase() + meta.commodity.slice(1)}</span>
         </div>
@@ -139,7 +140,7 @@ export default async function ArticlePage({ params }: Props) {
                 {meta.commodity.toUpperCase()}
               </span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
-                {meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                {meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}
                 {meta.time && ` · ${meta.time} IST`}
               </span>
             </div>
@@ -179,7 +180,7 @@ export default async function ArticlePage({ params }: Props) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 15, color: 'var(--ink-4)' }}>
               <span>BhaavBrief Intelligence</span>
               <span>·</span>
-              <span>{meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              <span>{meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })}</span>
               {meta.time && <><span>·</span><span>{meta.time} IST</span></>}
             </div>
           </div>
@@ -226,7 +227,7 @@ export default async function ArticlePage({ params }: Props) {
                     transition: 'border-color 0.15s',
                   }}>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
-                      {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}
                     </div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)', lineHeight: 1.4 }}>
                       {b.title}
@@ -253,7 +254,7 @@ export default async function ArticlePage({ params }: Props) {
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: 15, color: 'var(--gold)', textDecoration: 'none', fontWeight: 500,
           }}>
-            ← All Flash Intelligence
+            ← All {sectionLabel}
           </Link>
         </div>
       </article>

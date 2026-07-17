@@ -43,6 +43,7 @@ export async function getAllArticles(): Promise<ArticleMeta[]> {
       displayDate: data.date
         ? new Date(data.date).toLocaleDateString('en-IN', {
             weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+            timeZone: 'Asia/Kolkata',
           })
         : '',
     }
