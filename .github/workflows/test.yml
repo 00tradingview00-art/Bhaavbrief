@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  pull_request:
+    paths:
+      - 'lib/**'
+      - 'scripts/**'
+      - 'app/**'
+      - 'components/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vitest.config.ts'
+  push:
+    branches: [main]
+    paths:
+      - 'lib/**'
+      - 'scripts/**'
+      - 'app/**'
+      - 'components/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vitest.config.ts'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Lint
+        run: npm run lint
