@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-17-13-19-mcx-gold-holds-as-rupee-stability-shields-comex-decline-at",
+    "title": "MCX Gold holds as rupee stability shields Comex decline at ₹140,701/10g",
+    "summary": "MCX Gold rose 0.25% to ₹140,701/10g in this morning session, bucking broader weakness in global bullion markets where both Comex gold and silver traded lower. Copper led the commodity selloff with a -0.67% decline, signa",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T07:49:52.023Z",
+    "pubDateIST": "17 Jul 2026, 13:19",
+    "href": "/flash/2026-07-17-07-51-mcx-gold-holds-as-rupee-stability-shields-comex-decline-at-140-701-10g",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-17-13-21-copper-tumbles-0-67-as-crude-holds-gains-demand-divergence",
+    "title": "Copper tumbles 0.67% as crude holds gains—demand divergence widens on MCX",
+    "summary": "MCX Crude opened the Friday morning session up 0.54% to ₹7,655/bbl, extending a modest rally while broader commodities remained subdued. Copper declined 0.67%, the session's largest mover, signalling demand-side weakness",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T07:51:44.651Z",
+    "pubDateIST": "17 Jul 2026, 13:21",
+    "href": "/flash/2026-07-17-07-51-copper-tumbles-0-67-as-crude-holds-gains-demand-divergence-widens-on-mcx",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-17-11-17-mcx-nat-gas-rallies-0-51-to-276-copper-weakness-shows",
     "title": "MCX Nat Gas rallies 0.51% to ₹276—copper weakness shows commodity divergence",
     "summary": "MCX Natural Gas rose ₹276.30/mmBtu (+0.51%) in this morning's session, outpacing subdued moves across precious metals and tracking a narrow intraday range. Copper fell 1.00%, the session's largest mover, while gold and s",
@@ -742,29 +766,5 @@
     "pubDateIST": "10 Jul 2026, 15:58",
     "href": "/flash/2026-07-10-10-28-silver-tumbles-1-37-on-industrial-demand-fears-gold-steadies-at-144-253",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-10-12-21-mcx-gold-slips-0-52-as-profit-taking-outpaces-geopolitical",
-    "title": "MCX Gold slips 0.52% as profit-taking outpaces geopolitical bid; silver falls harder",
-    "summary": "MCX Gold declined 0.52% to ₹144,549/10g in Friday morning trade, extending a pullback from the recent 3% surge that had pushed prices toward ₹1.67 lakh. Silver led downside pressure with a sharper −1.18% drop, while crud",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-10T06:51:26.403Z",
-    "pubDateIST": "10 Jul 2026, 12:21",
-    "href": "/flash/2026-07-10-06-53-mcx-gold-slips-0-52-as-profit-taking-outpaces-geopolitical-bid-silver-falls",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-10-12-23-silver-down-1-18-as-inflation-fears-override-geopolitical",
-    "title": "Silver down 1.18% as inflation fears override geopolitical haven demand",
-    "summary": "MCX Silver fell 1.18% to ₹223,707/kg in this morning's session, extending a decline driven by renewed inflation concerns and geopolitical tension in the US-Iran theatre. Gold declined more modestly at -0.52% to ₹144,549/",
-    "category": "Metals",
-    "tagType": "metals",
-    "impact": "neutral",
-    "pubDate": "2026-07-10T06:53:19.851Z",
-    "pubDateIST": "10 Jul 2026, 12:23",
-    "href": "/flash/2026-07-10-06-53-silver-down-1-18-as-inflation-fears-override-geopolitical-haven-demand",
-    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
