@@ -1,5 +1,29 @@
 [
   {
+    "id": "2026-07-17-20-20-mcx-copper-slips-0-54-as-energy-surge-signals-supply-not",
+    "title": "MCX Copper Slips 0.54% as Energy Surge Signals Supply, Not Demand",
+    "summary": "MCX Copper declined 0.54% to ₹1,301.45/kg in afternoon trade, underperforming a broader LME base metals rally that pushed the index to record highs. The energy complex surged simultaneously, with crude oil advancing 2.82",
+    "category": "Metals",
+    "tagType": "metals",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T14:50:05.561Z",
+    "pubDateIST": "17 Jul 2026, 20:20",
+    "href": "/flash/2026-07-17-14-52-mcx-copper-slips-0-54-as-energy-surge-signals-supply-not-demand",
+    "coverImage": "https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
+    "id": "2026-07-17-20-21-crude-rallies-2-82-on-supply-concern-nat-gas-trails-at-1-56",
+    "title": "Crude rallies 2.82% on supply concern; nat gas trails at +1.56%",
+    "summary": "MCX Crude Oil surged ₹7829/bbl (+2.82%) and Natural Gas climbed ₹279.20/mmBtu (+1.56%) in afternoon trade, with both energy contracts moving in lockstep. The energy complex acceleration coincides with reported supply con",
+    "category": "Energy",
+    "tagType": "energy",
+    "impact": "neutral",
+    "pubDate": "2026-07-17T14:51:57.670Z",
+    "pubDateIST": "17 Jul 2026, 20:21",
+    "href": "/flash/2026-07-17-14-51-crude-rallies-2-82-on-supply-concern-nat-gas-trails-at-1-56",
+    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+  },
+  {
     "id": "2026-07-17-18-23-gold-slides-on-safe-haven-retreat-crude-surges-2",
     "title": "Gold slides on safe-haven retreat; crude surges 2% independently on MCX",
     "summary": "MCX Gold declined 0.26% to ₹139,990/10g in Friday's afternoon session, extending weakness seen across bullion futures on both MCX and Comex. Silver fell more sharply at -0.83%, tracking international bullion weakness as ",
@@ -801,18 +825,6 @@
     "pubDate": "2026-07-10T15:39:21.598Z",
     "pubDateIST": "10 Jul 2026, 21:09",
     "href": "/flash/2026-07-10-15-39-mcx-natural-gas-plunges-3-86-as-copper-holds-flat-supply-signal-isolated",
-    "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-  },
-  {
-    "id": "2026-07-10-18-25-silver-crashes-1-65-on-mcx-industrial-demand-cracks-faster",
-    "title": "Silver crashes 1.65% on MCX; industrial demand cracks faster than safe-haven bids hold",
-    "summary": "MCX Silver crashed -1.65% this afternoon session, the sharpest mover across the complex, while Gold slipped -0.81% to ₹144,127/10g and Crude edged up +0.51% to ₹6,889/bbl. The precious metals selloff intensified despite ",
-    "category": "Energy",
-    "tagType": "energy",
-    "impact": "neutral",
-    "pubDate": "2026-07-10T12:55:57.060Z",
-    "pubDateIST": "10 Jul 2026, 18:25",
-    "href": "/flash/2026-07-10-12-55-silver-crashes-1-65-on-mcx-industrial-demand-cracks-faster-than-safe-haven",
     "coverImage": "https://images.pexels.com/photos/5831511/pexels-photo-5831511.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
   }
 ]
