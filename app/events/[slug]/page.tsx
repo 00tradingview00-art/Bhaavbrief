@@ -8,6 +8,9 @@ import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
 
 export const dynamicParams = true
+// P-03: without this, a slug rendered on-demand (dynamicParams path) caches
+// forever with no revalidate timer. HOURLY tier (config/revalidate.mjs).
+export const revalidate = 3600
 
 interface Props {
   params: Promise<{ slug: string }>

@@ -1,0 +1,72 @@
+name: Post-Deploy Smoke Test
+
+# P-04 — runs M-01..M-06 against the URL Vercel just deployed, as soon as
+# Vercel's GitHub integration reports the deployment succeeded.
+#
+# Honest scope note: this ALERTS fast on a bad deploy (issue + Telegram, same
+# as synthetic-monitor.yml), it does not BLOCK promotion to production the
+# way the master doc's P-04 describes — that requires configuring Vercel's
+# own Deployment Protection / Checks feature (Vercel dashboard, not
+# something this repo's CI can turn on by itself) to have Vercel wait on a
+# GitHub check before aliasing production. See docs/runbooks/
+# synthetic-monitor-setup.md for the manual step if you want true no-promote
+# blocking; until then, this closes the "how long until someone notices a
+# bad deploy" gap from days down to under a minute, which is most of the
+# value even without hard blocking.
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  smoke-test:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'production'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run smoke test against the just-deployed URL
+        id: monitor
+        env:
+          MONITOR_BASE_URL: ${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}
+        run: |
+          set +e
+          node scripts/synthetic-monitor.mjs > /tmp/smoke-report.json
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+          cat /tmp/smoke-report.json
+
+      - name: Open incident issue on smoke-test failure
+        if: steps.monitor.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BODY="Post-deploy smoke test failed for deployment $(printf '%s' "${{ github.event.deployment.sha }}" | cut -c1-7) at $(date -u '+%Y-%m-%d %H:%M UTC').\n\nDeployment URL: ${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}\n\n\`\`\`json\n$(cat /tmp/smoke-report.json)\n\`\`\`"
+          gh issue create --repo "${{ github.repository }}" \
+            --title "Post-deploy smoke test failed — $(date -u '+%Y-%m-%d %H:%M UTC')" \
+            --label monitor-incident \
+            --body "$(printf '%b' "$BODY")"
+
+      - name: Alert Telegram on smoke-test failure
+        if: steps.monitor.outputs.exit_code != '0'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/send-monitor-alert.mjs /tmp/smoke-report.json "${{ github.event.deployment_status.target_url || github.event.deployment_status.environment_url }}"

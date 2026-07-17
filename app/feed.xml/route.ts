@@ -2,6 +2,12 @@ import { getAllBriefs }   from '@/lib/briefs'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
+// P-03: was undeclared (full-SSG, only refreshes on redeploy) despite reading
+// live content directories — M-04's feed-freshness monitor check would have
+// had no way to ever see a fresh feed between deploys. FAST tier
+// (config/revalidate.mjs) — see that file for why this must be a literal.
+export const revalidate = 300
+
 const BASE_URL  = 'https://bhaavbrief.in'
 const SITE_NAME = 'BhaavBrief'
 

@@ -9,6 +9,11 @@ import CopyLinkButton from '@/components/CopyLinkButton'
 
 // Allow slugs not pre-rendered at build time (new articles published by GitHub Actions)
 export const dynamicParams = true
+// P-03: without this, a slug rendered on-demand (dynamicParams path) caches
+// forever with no revalidate timer — a correction to that article would
+// never surface. HOURLY tier (config/revalidate.mjs) — content-detail pages
+// are otherwise immutable once published.
+export const revalidate = 3600
 
 interface Props {
   params: Promise<{ slug: string }>

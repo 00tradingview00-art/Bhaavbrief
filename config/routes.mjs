@@ -1,0 +1,77 @@
+/**
+ * config/routes.mjs — P-02 route manifest: the single list of every route
+ * this app is expected to serve. scripts/check-route-manifest.mjs (run in
+ * CI, see test.yml) enumerates every actual page.tsx/route.ts under app/
+ * and fails the build if the two sets don't match exactly — deleting a
+ * route file without updating this list fails CI, and so does adding one.
+ * Forces route removal/addition to be a deliberate, reviewed act instead of
+ * an accidental side effect of a refactor (no orphaned prerenders, no
+ * silently-shipped new surface area).
+ *
+ * To add or remove a route: change both the app/ file and this list in the
+ * same PR — scripts/check-route-manifest.mjs will fail otherwise.
+ */
+export const ROUTES = [
+  '/',
+  '/about',
+  '/api/chart/[commodity]',
+  '/api/commodity-pulse',
+  '/api/cron/brief',
+  '/api/cron/flash',
+  '/api/cron/intelligence',
+  '/api/cron/iv-snapshot',
+  '/api/eia',
+  '/api/health',
+  '/api/invest-prices',
+  '/api/kite/callback',
+  '/api/kite/discover',
+  '/api/news',
+  '/api/options',
+  '/api/options/aav-history',
+  '/api/options/iv-history',
+  '/api/prices',
+  '/api/search',
+  '/api/subscribe',
+  '/api/thesis',
+  '/arcs/[id]',
+  '/articles/[slug]',
+  '/briefs',
+  '/briefs/[slug]',
+  '/calendar',
+  '/commodities/[commodity]',
+  '/events',
+  '/events/[slug]',
+  '/feed.xml',
+  '/flash/[slug]',
+  '/invest',
+  '/learn',
+  '/learn-cards',
+  '/learn/best-time-to-trade-mcx',
+  '/learn/comex-vs-mcx-gold',
+  '/learn/gold-etf-vs-mcx-gold',
+  '/learn/how-much-money-to-start-mcx-trading',
+  '/learn/mcx-circuit-limits',
+  '/learn/mcx-commodity-tax-india',
+  '/learn/mcx-contract-expiry',
+  '/learn/mcx-gold-contracts',
+  '/learn/mcx-gold-vs-physical-gold',
+  '/learn/mcx-lot-sizes',
+  '/learn/mcx-margin-calculation',
+  '/learn/mcx-margin-calculator',
+  '/learn/mcx-order-types',
+  '/learn/mcx-rollover',
+  '/learn/mcx-trading-hours',
+  '/learn/what-is-comex',
+  '/learn/which-mcx-commodity-to-trade',
+  '/learn/why-usdinr-affects-mcx-gold',
+  '/llms.txt',
+  '/markets',
+  '/methodology',
+  '/news',
+  '/news-sitemap.xml',
+  '/options',
+  '/privacy',
+  '/sitemap.xml',
+  '/terms',
+  '/track-record',
+]

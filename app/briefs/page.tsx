@@ -4,6 +4,12 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SectionTabs from '@/components/SectionTabs'
 
+// P-03: was undeclared (full-SSG, only refreshes on redeploy) despite reading
+// live edition data and computing the delayed-edition banner — the exact
+// D-01 failure mode. FAST tier (config/revalidate.mjs) — see that file for
+// why this must be a literal, not an import.
+export const revalidate = 300
+
 export const metadata = {
   title: 'MCX Daily Commodity Briefs — Market Outlook & Analysis',
   description: 'Daily MCX commodity briefs for Indian traders. Each edition explains what moved gold, crude oil, silver and copper — and why. Geopolitical lens, supply-demand signals, rupee-dollar impact, price outlook. Every weekday.',
