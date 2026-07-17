@@ -92,6 +92,7 @@ jobs:
           git stash pop || true
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ data/evening-brief-state.json data/market-snapshot.json
+          [ -f data/gate-log.jsonl ] && git add data/gate-log.jsonl || true
           git diff --staged --quiet && echo "No new brief" && exit 0
           DATE_IST=$(TZ=Asia/Kolkata date '+%a %d %b %Y')
           git commit -m "MCX Close Brief — ${DATE_IST}"

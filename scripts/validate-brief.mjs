@@ -33,6 +33,7 @@ if (!fs.existsSync(briefPath)) {
   process.exit(2);
 }
 
+const gateStartedAt = Date.now();
 const issues = [];
 
 // Marks a failure as "the gate itself couldn't run" (upstream API down, a check
@@ -658,6 +659,28 @@ try {
     }, null, 2) + "\n"
   );
 } catch { /* non-fatal — the human gate falls back to auto-publish if this is unreadable */ }
+
+// 4.2 pipeline telemetry: one append-only line per gate run, read by
+// scripts/send-telemetry-digest.mjs for the weekly Telegram digest (editions
+// published, gate pass rate, overrides used). Append-only and low-frequency
+// (once or twice a day) — safe to commit, unlike the 15-min synthetic-monitor
+// cadence, which deliberately does NOT write to a committed file (see
+// synthetic-monitor.yml's use of GitHub Issues as its audit trail instead).
+try {
+  const editionMatch = briefPath.match(/edition-(\d+)/);
+  const logLine = JSON.stringify({
+    edition: editionMatch ? parseInt(editionMatch[1], 10) : null,
+    briefPath,
+    clean: issues.length === 0,
+    issueCount: issues.length,
+    blockerCount: blockers.length,
+    warningCount: issues.length - blockers.length,
+    hasInternalError,
+    durationMs: Date.now() - gateStartedAt,
+    checkedAt: new Date().toISOString(),
+  });
+  fs.appendFileSync(path.join(process.cwd(), "data/gate-log.jsonl"), logLine + "\n");
+} catch { /* non-fatal — telemetry logging must never block publication */ }
 
 console.log("\n=== BhaavBrief publish gate ===");
 if (issues.length === 0) {

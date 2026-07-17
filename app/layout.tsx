@@ -32,6 +32,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 const BASE = 'https://bhaavbrief.in'
 
+// P-01 (build-ID stamping): Vercel sets VERCEL_GIT_COMMIT_SHA at build time;
+// GITHUB_SHA covers CI-only builds (e.g. `npm run build` in test.yml). The
+// synthetic monitor's M-01 check compares this across routes — two different
+// values live at once means two builds are serving simultaneously (the exact
+// failure mode that took 7 weeks to notice before this existed).
+const BUILD_SHA = process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? 'local-dev'
+
 export const metadata: Metadata = {
   title: {
     default:  'BhaavBrief — Indian Commodity Intelligence',
@@ -104,6 +111,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        {/* Rendered directly here (not via the Metadata API's `other` field) so it
+            can't be silently dropped by a child route's own metadata export —
+            Next.js does not deep-merge `other` objects, it replaces them wholesale. */}
+        <meta name="bb-build" content={BUILD_SHA} />
+      </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />

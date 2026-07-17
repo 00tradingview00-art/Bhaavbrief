@@ -1,0 +1,91 @@
+name: Synthetic Monitor
+
+# Part 4 (M-01..M-06) — external, independent of app infra. Checks what a
+# user actually sees on production, every 15 min. This is the layer that
+# would have caught the May 27 feed death in minutes instead of 51 days.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: synthetic-monitor
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run synthetic monitor
+        id: monitor
+        run: |
+          set +e
+          node scripts/synthetic-monitor.mjs > /tmp/monitor-report.json
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+          cat /tmp/monitor-report.json
+
+      - name: Find existing open incident issue
+        id: existing
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NUM=$(gh issue list --repo "${{ github.repository }}" --label monitor-incident --state open --json number --jq '.[0].number // empty')
+          echo "number=$NUM" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update incident issue
+        if: steps.monitor.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BODY="Synthetic monitor detected a failing check at $(date -u '+%Y-%m-%d %H:%M UTC').\n\n\`\`\`json\n$(cat /tmp/monitor-report.json)\n\`\`\`\n\nSee \`scripts/synthetic-monitor.mjs\` for check definitions (M-01..M-06) and \`docs/runbooks/\` for the matching runbook."
+          if [ -n "${{ steps.existing.outputs.number }}" ]; then
+            gh issue comment "${{ steps.existing.outputs.number }}" --repo "${{ github.repository }}" --body "$(printf '%b' "$BODY")"
+            echo "Existing incident #${{ steps.existing.outputs.number }} still failing — commented, no new issue or alert (avoids alert fatigue)."
+          else
+            ISSUE_URL=$(gh issue create --repo "${{ github.repository }}" \
+              --title "Synthetic monitor incident — $(date -u '+%Y-%m-%d %H:%M UTC')" \
+              --label monitor-incident \
+              --body "$(printf '%b' "$BODY")")
+            echo "issue_url=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+            echo "new_incident=true" >> "$GITHUB_OUTPUT"
+          fi
+        id: incident
+
+      - name: Alert Telegram on new incident
+        if: steps.incident.outputs.new_incident == 'true'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/send-monitor-alert.mjs /tmp/monitor-report.json "${{ steps.incident.outputs.issue_url }}"
+
+      - name: Close incident issue on recovery
+        if: steps.monitor.outputs.exit_code == '0' && steps.existing.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment "${{ steps.existing.outputs.number }}" --repo "${{ github.repository }}" \
+            --body "All checks passed at $(date -u '+%Y-%m-%d %H:%M UTC') — closing as recovered."
+          gh issue close "${{ steps.existing.outputs.number }}" --repo "${{ github.repository }}"
