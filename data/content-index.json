@@ -1,5 +1,48 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-066",
+    "href": "/briefs/edition-066",
+    "title": "COMEX Gold Touches $3,997 as Crude Climbs — Two Rallies, One Rupee",
+    "description": "Gold nears $4,000 and crude rebounds while a firmer rupee quietly offsets both moves for Indian traders.",
+    "excerpt": "MCX Gold ₹140400 | Crude ₹7690 | USDINR ₹96.29 — Gold +0.04% | Crude +1.00% | Silver -0.35% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-17T04:03:23.646Z",
+    "edition": "66",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics",
+      "USD/INR"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-07-16-mcx-close-17jul2026-natgas-selloff",
+    "href": "/articles/2026-07-16-mcx-close-17jul2026-natgas-selloff",
+    "title": "MCX Close 17 Jul: NatGas Leads Selloff at -2.79%",
+    "description": "MCX evening close 17 Jul 2026: NatGas drops 2.79% to ₹274.8, Silver -2.25%. COMEX fading confirms bearish overnight tone.",
+    "excerpt": "Natural Gas dominated MCX's Friday close, sliding 2.79% to ₹274.8/mmBtu on broad energy weakness tied to US summer inventory builds and softer global LNG demand signals. Silver followed closely, retre",
+    "date": "2026-07-16T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "NatGas",
+      "Silver",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "article",
     "slug": "2026-07-16-mcx-crude-vs-brent-price-india",
     "href": "/articles/2026-07-16-mcx-crude-vs-brent-price-india",
