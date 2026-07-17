@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-07-17T11:04:58.436Z",
-  "generatedAtIST": "2026-07-17 16:34 IST",
+  "generatedAt": "2026-07-17T11:05:38.953Z",
+  "generatedAtIST": "2026-07-17 16:35 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 140639,
+      "price": 140590,
       "prevClose": 140348,
-      "changePct": 0.2073,
+      "changePct": 0.1724,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
@@ -16,21 +16,21 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7776,
+      "price": 7780,
       "prevClose": 7614,
-      "changePct": 2.1277,
+      "changePct": 2.1802,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1293.75,
+      "price": 1293.5,
       "prevClose": 1308.5,
-      "changePct": -1.1272,
+      "changePct": -1.1464,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 276.7,
+      "price": 276.8,
       "prevClose": 274.9,
-      "changePct": 0.6548,
+      "changePct": 0.6912,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -40,27 +40,27 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 3997.4,
+      "price": 3995.5,
       "prevClose": 3985.6,
-      "changePct": 0.2961,
+      "changePct": 0.2484,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 55.57,
+      "price": 55.56,
       "prevClose": 55.9,
-      "changePct": -0.5957,
+      "changePct": -0.6047,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 79.97,
+      "price": 79.99,
       "prevClose": 78.95,
-      "changePct": 1.292,
+      "changePct": 1.3173,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 85.76,
+      "price": 85.83,
       "prevClose": 84.23,
-      "changePct": 1.8165,
+      "changePct": 1.8996,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -113,8 +113,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 123726,
-    "mcxComexGoldSpreadPct": 13.67,
+    "importParityGoldINR": 123667,
+    "mcxComexGoldSpreadPct": 13.68,
     "goldSilverRatio": 71.9
   }
 }
