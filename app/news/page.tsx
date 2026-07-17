@@ -45,10 +45,26 @@ function commodityCategory(commodity: string): string {
 }
 
 export default async function NewsPage() {
-  const [flashItems, articles] = await Promise.all([
-    Promise.resolve(getAllFlash()),
-    getAllArticles(),
-  ])
+  // D-01 (17-Jul audit): this route was found serving a frozen ~7-week-old
+  // render in production, with source/content confirmed healthy — pointing at
+  // a silent ISR revalidation failure rather than a code bug. If getAllFlash()
+  // or getAllArticles() ever throws during a future revalidation, log it loudly
+  // instead of letting Vercel silently keep serving the last good render
+  // indefinitely, which is what made the original incident take 51 days to
+  // notice.
+  let flashItems: ReturnType<typeof getAllFlash>
+  let articles: Awaited<ReturnType<typeof getAllArticles>>
+  try {
+    ;[flashItems, articles] = await Promise.all([
+      Promise.resolve(getAllFlash()),
+      getAllArticles(),
+    ])
+  } catch (e) {
+    console.error('[news/page] getAllFlash/getAllArticles threw during render — D-01 class failure:', e)
+    throw e
+  }
+
+  const generatedAtIST = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 16).replace('T', ' ') + ' IST'
 
   const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10)
 
@@ -103,6 +119,12 @@ export default async function NewsPage() {
             padding: '3px 9px',
           }}>
             Live · Updated every 15 min
+          </span>
+          <span
+            title="When this page was last rendered — a stuck value here means the page stopped refreshing"
+            style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}
+          >
+            Rendered {generatedAtIST}
           </span>
         </div>
 
