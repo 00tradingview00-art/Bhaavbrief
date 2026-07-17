@@ -260,6 +260,141 @@ for (const re of banned) {
     );
 }
 
+// 6. FX sanity (G-02): USDINR must be within a sane band of its previous
+//    close — a garbled or stale FX feed silently corrupts every MCX price on
+//    the page (the Price Bridge, the ticker, the brief's own arithmetic all
+//    key off this one number).
+{
+  const usdinr = snapshot.instruments?.USDINR;
+  if (usdinr?.price > 0 && usdinr?.prevClose > 0) {
+    const movePct = Math.abs((usdinr.price - usdinr.prevClose) / usdinr.prevClose) * 100;
+    if (movePct > 1.5) {
+      issues.push(
+        `FX: USDINR moved ${movePct.toFixed(2)}% from prevClose (₹${usdinr.prevClose} -> ₹${usdinr.price}) — beyond the 1.5% single-session sanity band`
+      );
+    }
+  } else {
+    issues.push("FX: USDINR price or prevClose missing/invalid in snapshot");
+  }
+}
+
+// 7. Price staleness (G-03): the snapshot must be fresh at publish time — a
+//    stale snapshot silently ships yesterday's numbers as if they were
+//    today's. Note for local/manual testing: this will correctly fire
+//    against any snapshot fetched more than 20 minutes before the check
+//    runs, which is normal outside the live pipeline (fetch-snapshot.mjs
+//    runs immediately before this script in the same CI job).
+{
+  const ageMinutes = (Date.now() - new Date(snapshot.generatedAt).getTime()) / 60000;
+  if (!(ageMinutes >= 0 && ageMinutes <= 20)) {
+    issues.push(
+      `STALE: snapshot is ${Number.isFinite(ageMinutes) ? ageMinutes.toFixed(1) : "an unparseable number of"} minutes old (generatedAt=${snapshot.generatedAt}) — must be <20 min at publish`
+    );
+  }
+}
+
+// 8. Price Bridge foot (G-04): the "## Price Bridge" table's Global/FX/MCX
+//    columns for Gold, Silver, and Crude are meant to be near-exact echoes of
+//    the snapshot — not narrative approximations like the rest of the brief —
+//    so they get a much tighter tolerance (0.5%) than the general NUMBER
+//    check (15%). Catches the class of bug where the table itself doesn't
+//    reconcile even though every individual number, read in isolation, looks
+//    plausible.
+{
+  const bridgeMatch = brief.match(/##\s*Price Bridge[\s\S]*?(?=\n##|\n---|\n\*\*BhaavBrief|$)/i);
+  if (!bridgeMatch) {
+    issues.push("STRUCTURE: required section \"Price Bridge\" is missing");
+  } else {
+    const bridgeText = bridgeMatch[0];
+    const rowChecks = [
+      { name: "Gold",   globalKey: "COMEX_GOLD",   mcxKey: "MCX_GOLD"   },
+      { name: "Silver", globalKey: "COMEX_SILVER", mcxKey: "MCX_SILVER" },
+      { name: "Crude",  globalKey: "WTI",          mcxKey: "MCX_CRUDE"  },
+    ];
+    const closeEnough = (a, b, tol) => a > 0 && b > 0 && Math.abs(a - b) / b <= tol;
+    for (const { name, globalKey, mcxKey } of rowChecks) {
+      const rowRe = new RegExp(
+        `\\|\\s*${name}\\s*\\|[^|]*?\\$\\s?([\\d,]+(?:\\.\\d+)?)[^|]*\\|[^|]*?₹\\s?([\\d.]+)[^|]*\\|[^|]*?₹\\s?\\*{0,2}([\\d,]+(?:\\.\\d+)?)`,
+        "i"
+      );
+      const m = bridgeText.match(rowRe);
+      if (!m) continue; // row not present this edition (a commodity-light day) — not itself an error
+      const printedGlobal = parseFloat(m[1].replace(/,/g, ""));
+      const printedFX = parseFloat(m[2]);
+      const printedMCX = parseFloat(m[3].replace(/,/g, ""));
+      const snapGlobal = snapshot.instruments?.[globalKey]?.price;
+      const snapFX = snapshot.instruments?.USDINR?.price;
+      const snapMCX = snapshot.instruments?.[mcxKey]?.price;
+      if (snapGlobal && !closeEnough(printedGlobal, snapGlobal, 0.005)) {
+        issues.push(`BRIDGE: ${name} row's Global price ${printedGlobal} doesn't match snapshot ${snapGlobal} within 0.5%`);
+      }
+      if (snapFX && !closeEnough(printedFX, snapFX, 0.005)) {
+        issues.push(`BRIDGE: ${name} row's USD/INR ${printedFX} doesn't match snapshot ${snapFX} within 0.5%`);
+      }
+      if (snapMCX && !closeEnough(printedMCX, snapMCX, 0.005)) {
+        issues.push(`BRIDGE: ${name} row's MCX price ${printedMCX} doesn't match snapshot ${snapMCX} within 0.5%`);
+      }
+    }
+  }
+}
+
+// 9. Bound checks (G-05): no non-positive prices in the snapshot, and no
+//    >15% single-session move without an explicit confirmedEvent flag on the
+//    snapshot — distinguishes a genuine large move (an Iran-conflict-style
+//    spike) from a fat-finger/bad-tick. Non-blocking for now: there's no
+//    human-ack workflow yet to clear a false positive on a real large move,
+//    and this session's whole theme is "don't let an unproven check silently
+//    repeat D-04" — see G-1 in the earlier commits for the same reasoning.
+{
+  for (const [key, inst] of Object.entries(snapshot.instruments ?? {})) {
+    if (inst?.price != null && inst.price <= 0) {
+      issues.push(`BOUND: ${key}.price is non-positive (${inst.price})`);
+    }
+    if (Number.isFinite(inst?.changePct) && Math.abs(inst.changePct) > 15 && !snapshot.confirmedEvent) {
+      issues.push(
+        `BOUND-WARN: ${key} moved ${inst.changePct}% — beyond the 15% single-session sanity band with no confirmedEvent flag set (fat-finger vs. genuine event unconfirmed)`
+      );
+    }
+  }
+}
+
+// 10. Internal consistency (G-09): a stated gold-silver ratio must match the
+//     pre-computed derived.goldSilverRatio — recomputing it from prose
+//     instead would be exactly how D-02's narrative went stale-but-plausible.
+{
+  const derivedRatio = snapshot.derived?.goldSilverRatio;
+  if (derivedRatio > 0) {
+    const ratioMatches = [...brief.matchAll(/gold-silver ratio[^.]*?(\d+(?:\.\d+)?)/gi)];
+    for (const m of ratioMatches) {
+      const stated = parseFloat(m[1]);
+      if (Number.isFinite(stated) && Math.abs(stated - derivedRatio) > 0.5) {
+        issues.push(`RATIO: brief states gold-silver ratio ${stated}, derived value is ${derivedRatio}`);
+      }
+    }
+  }
+}
+
+// 11. Structure (G-11): every required section must be present — a
+//     generation truncation or format drift should never silently ship a
+//     brief missing "Who Is Affected" or "Edge of the Day".
+{
+  const requiredSections = [
+    { name: "Macro Thread",                          re: /##\s*Macro Thread/i },
+    { name: "Narrative header (BUILDING/FADING/SHIFTING)", re: /##[^\n]*—\s*(BUILDING|FADING|SHIFTING)/i },
+    { name: "The Market Is Saying",                  re: /##\s*The Market Is Saying/i },
+    { name: "Historical Context",                    re: /##\s*Historical Context/i },
+    { name: "What Kills It",                         re: /##\s*What Kills It/i },
+    { name: "Who Is Affected",                        re: /##\s*Who Is Affected/i },
+    { name: "Edge of the Day",                       re: /\*\*Edge of the Day:\*\*/i },
+    { name: "Tomorrow",                              re: /\*\*Tomorrow:\*\*/i },
+  ];
+  for (const { name, re } of requiredSections) {
+    if (!re.test(brief)) {
+      issues.push(`STRUCTURE: required section "${name}" is missing`);
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // LAYER 2 — semantic pass (one Claude Haiku call)
 // ---------------------------------------------------------------------------
@@ -421,7 +556,7 @@ await semanticCheck();
 //       it means validation was skipped or degraded, not that content failed it
 // ---------------------------------------------------------------------------
 
-const NON_BLOCKING_PREFIXES = ["SEMANTIC-WARN", "PARITY-WARN"];
+const NON_BLOCKING_PREFIXES = ["SEMANTIC-WARN", "PARITY-WARN", "BOUND-WARN"];
 const blockers = issues.filter((i) => !NON_BLOCKING_PREFIXES.some((p) => i.startsWith(p)));
 const hasInternalError = issues.some((i) => i.startsWith("GATE_INTERNAL_ERROR:"));
 
