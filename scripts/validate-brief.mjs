@@ -14,7 +14,7 @@
  */
 
 import fs from "node:fs";
-import { isTradingHoliday } from "./lib/holidays.js";
+import { checkWeekday } from "./lib/weekdayCheck.js";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -206,55 +206,12 @@ if (!fullFile.includes(monthName) && !fullFile.includes(yearNum)) {
   );
 }
 
-// 3b. Weekday sanity: the "Tomorrow:" line must never name today's own weekday,
-//     and if it names a day at all, it must match the actual next trading day —
-//     computed by walking forward from the snapshot's date past weekends and
-//     data/market-holidays.json entries (same logic generate-brief.js uses).
-//     Catches the D-08 class of bug (a Friday brief saying "scheduled across
-//     Friday's global session").
+// 3b. Weekday sanity (D-08) — extracted into scripts/lib/weekdayCheck.js so
+//     the logic is a testable pure function (see weekdayCheck.test.mjs)
+//     instead of inline script logic with no regression coverage.
 try {
-  const snapshotDateIST = new Date(new Date(snapshot.generatedAt).getTime() + 5.5 * 3600000)
-    .toISOString().slice(0, 10);
-  let nextTradingDateStr = snapshotDateIST;
-  do {
-    nextTradingDateStr = new Date(
-      new Date(nextTradingDateStr + "T00:00:00Z").getTime() + 86400000
-    ).toISOString().slice(0, 10);
-  } while (isTradingHoliday(nextTradingDateStr));
-  const correctNextDayName = new Date(nextTradingDateStr + "T00:00:00Z")
-    .toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" });
-  const todayDayName = new Date(snapshotDateIST + "T00:00:00Z")
-    .toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" });
-
-  const tomorrowMatch = brief.match(/\*\*Tomorrow:\*\*([^\n]*)/i);
-  if (tomorrowMatch) {
-    // Only check the event/timing clause (before the first em-dash) — the
-    // template's structure is "Tomorrow: [event, time] — [condition]; [condition]",
-    // and everything after the dash is a conditional/consequence clause that
-    // routinely contains backward-looking day references (e.g. "challenges the
-    // entire basis of Friday's move", describing a PAST session) which are never
-    // a claim about the next session and must not be flagged.
-    const eventClause = tomorrowMatch[1].split("—")[0];
-    const DAY_RE = /\b(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\b/g;
-    for (const m of eventClause.matchAll(DAY_RE)) {
-      const day = m[1];
-      // Deliberately narrow to the one audit-confirmed, high-precision bug class:
-      // today's own day name used for the upcoming session. A broader "any day
-      // that isn't the correct next trading day" check was tried and produced a
-      // real false positive in verification (a brief legitimately referencing a
-      // past Friday's move) — precision matters more than recall on a check that
-      // blocks publication.
-      if (day !== todayDayName) continue;
-      // "Tuesday evening"-style mentions are a legitimate same-day-later
-      // reference — US session hours land within the same IST calendar day the
-      // morning brief publishes — not the bug. Only flag when NOT followed by
-      // such a qualifier.
-      const after = eventClause.slice(m.index + m[0].length, m.index + m[0].length + 15);
-      if (/^\s*(evening|night|tonight)/i.test(after)) continue;
-      issues.push(
-        `WEEKDAY: "Tomorrow:" line names "${day}" — that is TODAY's day, not the next session (should be "${correctNextDayName}")`
-      );
-    }
+  for (const msg of checkWeekday(brief, snapshot.generatedAt)) {
+    issues.push(msg);
   }
 } catch (e) {
   // A throw here (malformed snapshot.generatedAt, unreadable holidays file, etc.)

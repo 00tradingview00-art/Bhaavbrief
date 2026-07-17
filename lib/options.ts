@@ -20,9 +20,12 @@ const SPREAD_LIVE_MAX_RATIO = 0.15  // LIVE requires spread <= 15% of mid
 const SPREAD_JUNK_MAX_RATIO = 0.40  // spread > 40% of mid is JUNK regardless of liquidity
 const IV_PARITY_TOLERANCE_VOL_PTS = 5  // CE/PE IV mismatch beyond this at the same strike demotes both
 
-type Tier = 'LIVE' | 'STALE' | 'JUNK'
+export type Tier = 'LIVE' | 'STALE' | 'JUNK'
 
-function classifyQuote(
+// Exported for lib/options.test.ts — this is the financially-consequential
+// no-arbitrage/liquidity filter (D-06), it should not be tested only by
+// manual live-data spot-checks that don't survive the next refactor.
+export function classifyQuote(
   ltp: number, oi: number, volume: number,
   bid: number | null, ask: number | null,
   intrinsic: number, upperBound: number,
