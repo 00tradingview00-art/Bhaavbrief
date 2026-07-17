@@ -1,5 +1,17 @@
 import { NextResponse } from 'next/server'
 
+// This is a SECOND, independent trigger for generate-brief.yml, on top of that
+// workflow's own native GitHub Actions cron (30 3 * * 1-5 = 9:00 AM IST).
+// vercel.json schedules this route for 0 4 * * 1-5 = 9:30 AM IST — 30 minutes
+// after the native cron. Currently harmless: generate-brief.yml's own
+// idempotency check ("Get next edition number" + "Nothing to commit" guard)
+// makes the second dispatch a no-op if the first run already published today's
+// edition. Kept as a deliberate 30-min safety-net trigger, not dead code — but
+// it was undocumented and added real confusion diagnosing the 2026-07-16
+// missed-brief incident (three generate-brief.yml runs that day came from a
+// mix of this cron, a manual dispatch, and the native schedule, all delayed by
+// GitHub's own runner queue that day). If you're investigating why
+// generate-brief.yml ran more than once, check both trigger sources.
 export const dynamic = 'force-dynamic'
 
 const REPO    = '00tradingview00-art/Bhaavbrief'

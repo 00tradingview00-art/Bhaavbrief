@@ -14,6 +14,7 @@
  */
 
 import fs from "node:fs";
+import { isTradingHoliday } from "./lib/holidays.js";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -46,6 +47,18 @@ const fmEnd = fullFile.indexOf("---", 4);
 const brief = fmEnd > 3 ? fullFile.slice(fmEnd + 3).trim() : fullFile;
 
 const issues = [];
+
+// Marks a failure as "the gate itself couldn't run" (upstream API down, a check
+// threw on malformed input, etc.) as distinct from "the gate ran and correctly
+// rejected the content." Both block publication, but only the former should page
+// a human — see the exit-code contract at the bottom of this file. Root cause of
+// the 2026-07-16 missed brief: three attempts were blocked by a semantic-check API
+// error with no retry and no way for the workflow to tell "gate broke" from
+// "gate rejected bad content" apart, so the failure was silently swallowed as
+// routine content-quality noise.
+function pushInternalError(msg) {
+  issues.push(`GATE_INTERNAL_ERROR: ${msg}`);
+}
 
 // ---------------------------------------------------------------------------
 // LAYER 1 — deterministic
@@ -183,6 +196,63 @@ if (!fullFile.includes(monthName) && !fullFile.includes(yearNum)) {
   );
 }
 
+// 3b. Weekday sanity: the "Tomorrow:" line must never name today's own weekday,
+//     and if it names a day at all, it must match the actual next trading day —
+//     computed by walking forward from the snapshot's date past weekends and
+//     data/market-holidays.json entries (same logic generate-brief.js uses).
+//     Catches the D-08 class of bug (a Friday brief saying "scheduled across
+//     Friday's global session").
+try {
+  const snapshotDateIST = new Date(new Date(snapshot.generatedAt).getTime() + 5.5 * 3600000)
+    .toISOString().slice(0, 10);
+  let nextTradingDateStr = snapshotDateIST;
+  do {
+    nextTradingDateStr = new Date(
+      new Date(nextTradingDateStr + "T00:00:00Z").getTime() + 86400000
+    ).toISOString().slice(0, 10);
+  } while (isTradingHoliday(nextTradingDateStr));
+  const correctNextDayName = new Date(nextTradingDateStr + "T00:00:00Z")
+    .toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" });
+  const todayDayName = new Date(snapshotDateIST + "T00:00:00Z")
+    .toLocaleDateString("en-IN", { weekday: "long", timeZone: "UTC" });
+
+  const tomorrowMatch = brief.match(/\*\*Tomorrow:\*\*([^\n]*)/i);
+  if (tomorrowMatch) {
+    // Only check the event/timing clause (before the first em-dash) — the
+    // template's structure is "Tomorrow: [event, time] — [condition]; [condition]",
+    // and everything after the dash is a conditional/consequence clause that
+    // routinely contains backward-looking day references (e.g. "challenges the
+    // entire basis of Friday's move", describing a PAST session) which are never
+    // a claim about the next session and must not be flagged.
+    const eventClause = tomorrowMatch[1].split("—")[0];
+    const DAY_RE = /\b(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)\b/g;
+    for (const m of eventClause.matchAll(DAY_RE)) {
+      const day = m[1];
+      // Deliberately narrow to the one audit-confirmed, high-precision bug class:
+      // today's own day name used for the upcoming session. A broader "any day
+      // that isn't the correct next trading day" check was tried and produced a
+      // real false positive in verification (a brief legitimately referencing a
+      // past Friday's move) — precision matters more than recall on a check that
+      // blocks publication.
+      if (day !== todayDayName) continue;
+      // "Tuesday evening"-style mentions are a legitimate same-day-later
+      // reference — US session hours land within the same IST calendar day the
+      // morning brief publishes — not the bug. Only flag when NOT followed by
+      // such a qualifier.
+      const after = eventClause.slice(m.index + m[0].length, m.index + m[0].length + 15);
+      if (/^\s*(evening|night|tonight)/i.test(after)) continue;
+      issues.push(
+        `WEEKDAY: "Tomorrow:" line names "${day}" — that is TODAY's day, not the next session (should be "${correctNextDayName}")`
+      );
+    }
+  }
+} catch (e) {
+  // A throw here (malformed snapshot.generatedAt, unreadable holidays file, etc.)
+  // must not crash the process uncaught — that would skip the verdict/exit-code
+  // logic below and lose the GATE_INTERNAL_ERROR signal entirely.
+  pushInternalError(`weekday check threw: ${e.message}`);
+}
+
 // 4. Slug guard: catches the "27-ay2026" class of bug before it mints a bad URL.
 //    This is now fixed in fetch-snapshot + slug generator but keep as a safety net.
 const slugRe = /\b\d{1,2}-?ay-?20\d{2}\b|\b-(an|eb|ar|pr|ay|un|ul|ug|ep|ct|ov|ec)20\d{2}\b/;
@@ -207,11 +277,13 @@ for (const re of banned) {
 // LAYER 2 — semantic pass (one Claude Haiku call)
 // ---------------------------------------------------------------------------
 
-async function semanticCheck() {
+// A single attempt at the semantic check. Returns:
+//   { ok: true, verdict }                       — got a parsed verdict, may still contain issues
+//   { ok: false, retryable, reason }             — failed; retryable failures get one retry in semanticCheck()
+async function attemptSemanticCheck() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    issues.push("SEMANTIC: ANTHROPIC_API_KEY not set — failing closed");
-    return;
+    return { ok: false, retryable: false, reason: "ANTHROPIC_API_KEY not set" };
   }
 
   // Use Haiku for speed + cost efficiency on this validation task
@@ -274,8 +346,9 @@ async function semanticCheck() {
   });
 
   if (!res.ok) {
-    issues.push(`SEMANTIC: API error ${res.status} — failing closed (manual review required)`);
-    return;
+    // 5xx is the upstream having a bad moment — worth a retry. 4xx (auth, bad
+    // request) won't be fixed by retrying, so don't burn the attempt budget on it.
+    return { ok: false, retryable: res.status >= 500, reason: `API error ${res.status}` };
   }
   const data = await res.json();
   const text = (data.content ?? [])
@@ -285,28 +358,51 @@ async function semanticCheck() {
     .replace(/```json|```/g, "")
     .trim();
   try {
-    const verdict = JSON.parse(text);
-    for (const it of verdict.issues ?? []) {
-      const detail = (it.detail ?? "").toLowerCase();
-      // Haiku sometimes returns severity:"block" but then explains in the detail that
-      // there is actually no contradiction. Demote those to warnings.
-      const selfContradicted =
-        detail.includes("no block issue") ||
-        detail.includes("no contradiction") ||
-        detail.includes("no historical contradiction") ||
-        detail.includes("no block on this") ||
-        detail.includes("not a contradiction") ||
-        detail.includes("consistent with") ||
-        /\bconsistent\.?\s*pass\b/.test(detail) ||
-        /\bpass\.?\s*$/.test(detail.trim()) ||
-        detail.includes("matches snapshot") ||
-        detail.includes("which matches");
-      const isBlock = it.severity === "block" && !selfContradicted;
-      issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
-    }
+    return { ok: true, verdict: JSON.parse(text) };
   } catch {
     console.error("DEBUG raw checker response:\n" + text);
-    issues.push("SEMANTIC: unparseable checker response — failing closed");
+    return { ok: false, retryable: true, reason: "unparseable checker response" };
+  }
+}
+
+// Retries once on a retryable failure before routing the final failure through
+// GATE_INTERNAL_ERROR (see pushInternalError above) rather than an ordinary
+// SEMANTIC issue — this is what makes a transient upstream 5xx alert instead of
+// silently blocking publication the way it did on 2026-07-16.
+async function semanticCheck() {
+  const MAX_ATTEMPTS = 2;
+  let result;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    result = await attemptSemanticCheck();
+    if (result.ok || !result.retryable) break;
+    if (attempt < MAX_ATTEMPTS) {
+      console.error(`SEMANTIC: attempt ${attempt} failed (${result.reason}) — retrying...`);
+      await new Promise((r) => setTimeout(r, 3000));
+    }
+  }
+
+  if (!result.ok) {
+    pushInternalError(`semantic check failed: ${result.reason}`);
+    return;
+  }
+
+  for (const it of result.verdict.issues ?? []) {
+    const detail = (it.detail ?? "").toLowerCase();
+    // Haiku sometimes returns severity:"block" but then explains in the detail that
+    // there is actually no contradiction. Demote those to warnings.
+    const selfContradicted =
+      detail.includes("no block issue") ||
+      detail.includes("no contradiction") ||
+      detail.includes("no historical contradiction") ||
+      detail.includes("no block on this") ||
+      detail.includes("not a contradiction") ||
+      detail.includes("consistent with") ||
+      /\bconsistent\.?\s*pass\b/.test(detail) ||
+      /\bpass\.?\s*$/.test(detail.trim()) ||
+      detail.includes("matches snapshot") ||
+      detail.includes("which matches");
+    const isBlock = it.severity === "block" && !selfContradicted;
+    issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
   }
 }
 
@@ -314,9 +410,19 @@ await semanticCheck();
 
 // ---------------------------------------------------------------------------
 // Verdict — SEMANTIC-WARN prints but doesn't block; everything else blocks.
+//
+// Exit code contract (the calling workflow branches on this — see
+// generate-brief.yml / evening-close-brief.yml "Alert on failure" steps):
+//   0 = pass
+//   1 = blocked by a legitimate content rejection — the gate worked correctly,
+//       stay silent (this is routine, expected, happens on real bad content)
+//   2 = blocked (at least partly) because the gate itself couldn't run a check
+//       (GATE_INTERNAL_ERROR present) — this must always alert a human, since
+//       it means validation was skipped or degraded, not that content failed it
 // ---------------------------------------------------------------------------
 
 const blockers = issues.filter((i) => !i.startsWith("SEMANTIC-WARN"));
+const hasInternalError = issues.some((i) => i.startsWith("GATE_INTERNAL_ERROR:"));
 
 console.log("\n=== BhaavBrief publish gate ===");
 if (issues.length === 0) {
@@ -327,7 +433,7 @@ if (issues.length === 0) {
 
 if (blockers.length > 0) {
   console.error(`\nBLOCKED: ${blockers.length} blocking issue(s). Brief NOT published.`);
-  process.exit(1);
+  process.exit(hasInternalError ? 2 : 1);
 }
 console.log(
   "\nPASS" +

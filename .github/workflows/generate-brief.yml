@@ -68,7 +68,19 @@ jobs:
             echo "No new brief generated (already published today or skipped) — skipping validation"
             exit 0
           fi
+          # Capture the gate's exit code explicitly (0=pass, 1=legit content
+          # rejection, 2=gate-internal failure) so "Alert on failure" below can
+          # tell "gate correctly rejected bad content" (stay silent) apart from
+          # "gate itself couldn't run" (must alert) — see validate-brief.mjs's
+          # exit-code contract. Root cause of the 2026-07-16 missed brief was
+          # this distinction not existing: a validate-gate API error and a real
+          # content rejection looked identical to this workflow.
+          set +e
           node scripts/validate-brief.mjs data/market-snapshot.json "$BRIEF"
+          CODE=$?
+          set -e
+          echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"
+          exit $CODE
 
       - name: Compliance lint (banned-phrase scan)
         id: compliance
@@ -187,9 +199,13 @@ jobs:
         run: node scripts/post-reel-instagram.mjs
 
       - name: Alert on failure
-        # Only alert if generation or commit failed — not if validate/compliance blocked a bad brief.
-        # Validate/compliance failures are quality control, not infrastructure failures.
-        if: failure() && steps.validate.outcome != 'failure' && steps.compliance.outcome != 'failure'
+        # Alert on generation/commit failure, or a gate-internal failure (validate
+        # exit code 2 — see validate-brief.mjs's exit-code contract). Stay silent
+        # only when validate exited 1 (a legitimate content rejection — quality
+        # control working as intended) or compliance-lint blocked a bad brief.
+        # steps.validate.outputs.exit_code is empty if the validate step never ran
+        # (e.g. an earlier step failed), which correctly falls through to alerting.
+        if: failure() && steps.validate.outputs.exit_code != '1' && steps.compliance.outcome != 'failure'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \

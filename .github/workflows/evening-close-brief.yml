@@ -6,6 +6,14 @@ on:
     - cron: '15 18 * * 1-5'
   workflow_dispatch:
 
+# Only one evening brief per run — queue if a manual dispatch overlaps the
+# schedule, never cancel in progress. Was previously missing here (unlike
+# generate-brief.yml, which has always had this) — a latent duplicate-commit
+# risk found during the D-04 investigation, not yet triggered in practice.
+concurrency:
+  group: evening-close-brief
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -58,7 +66,15 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ -f "${{ steps.generate.outputs.brief_file }}" ]; then
+            # Exit-code contract (0=pass, 1=legit rejection, 2=gate-internal
+            # failure) — see validate-brief.mjs and generate-brief.yml for the
+            # full rationale. Same fix applied here for consistency.
+            set +e
             node scripts/validate-brief.mjs data/market-snapshot.json "${{ steps.generate.outputs.brief_file }}"
+            CODE=$?
+            set -e
+            echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"
+            exit $CODE
           else
             echo "Brief file not found — skipping validation"
           fi
@@ -92,8 +108,10 @@ jobs:
           done
 
       - name: Alert on failure
-        # Only alert on infrastructure failures — not when validator blocks bad content.
-        if: failure() && steps.validate.outcome != 'failure'
+        # Alert on infrastructure failures, or a gate-internal failure (validate
+        # exit code 2) — not when validate exited 1 (a legitimate content
+        # rejection). See validate-brief.mjs's exit-code contract.
+        if: failure() && steps.validate.outputs.exit_code != '1'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
