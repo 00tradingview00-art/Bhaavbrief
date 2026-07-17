@@ -27,6 +27,14 @@ function classifyQuote(
   bid: number | null, ask: number | null,
   intrinsic: number, upperBound: number,
 ): { tier: Tier; validForSolve: boolean } {
+  // Code-review finding: NaN/non-finite comparisons are always false in JS
+  // (`NaN <= 0`, `NaN < x` both evaluate false), so a malformed upstream Kite
+  // value would silently skip every check below instead of being caught by
+  // them — reject it explicitly, up front, before it can slip through.
+  if (!Number.isFinite(ltp) || !Number.isFinite(oi) || !Number.isFinite(volume)) {
+    return { tier: 'JUNK', validForSolve: false }
+  }
+
   // No-arbitrage bound violation — never feed to the solver regardless of
   // liquidity; this is the source of the 0.1%/66%+ IV readings today.
   const tolerance = Math.max(intrinsic, upperBound, 1) * 0.001
@@ -34,7 +42,8 @@ function classifyQuote(
     return { tier: 'JUNK', validForSolve: false }
   }
 
-  const hasTwoSidedQuote = bid != null && ask != null && bid > 0 && ask > 0
+  const hasTwoSidedQuote =
+    bid != null && ask != null && Number.isFinite(bid) && Number.isFinite(ask) && bid > 0 && ask > 0
   const tradedToday = oi > 0 && volume > 0
 
   if (!hasTwoSidedQuote) {
@@ -45,6 +54,15 @@ function classifyQuote(
     return tradedToday || oi > 0
       ? { tier: 'STALE', validForSolve: true }
       : { tier: 'JUNK', validForSolve: false }
+  }
+
+  // A crossed market (ask < bid) is a data-quality fault in its own right —
+  // Kite depth-data glitches can produce one — and must be caught explicitly:
+  // a negative (ask-bid) makes the spread-ratio check below pass trivially
+  // (a negative number is never > SPREAD_JUNK_MAX_RATIO), so without this it
+  // would sail through as if it were a suspiciously tight spread.
+  if (ask < bid) {
+    return { tier: 'JUNK', validForSolve: false }
   }
 
   const mid = (bid + ask) / 2

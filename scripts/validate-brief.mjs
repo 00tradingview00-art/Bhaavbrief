@@ -19,17 +19,41 @@ import { isTradingHoliday } from "./lib/holidays.js";
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
   console.error("usage: node validate-brief.mjs <snapshot.json> <brief.mdx>");
-  process.exit(1);
+  process.exit(2); // can't even start — never a content rejection
 }
 
 if (!fs.existsSync(snapshotPath)) {
   console.error(`Snapshot not found: ${snapshotPath} — run fetch-snapshot.mjs first`);
-  process.exit(1);
+  process.exit(2);
 }
 if (!fs.existsSync(briefPath)) {
   console.error(`Brief not found: ${briefPath}`);
-  process.exit(1);
+  process.exit(2);
 }
+
+const issues = [];
+
+// Marks a failure as "the gate itself couldn't run" (upstream API down, a check
+// threw on malformed input, etc.) as distinct from "the gate ran and correctly
+// rejected the content." Both block publication, but only the former should page
+// a human — see the exit-code contract at the bottom of this file. Root cause of
+// the 2026-07-16 missed brief: three attempts were blocked by a semantic-check API
+// error with no retry and no way for the workflow to tell "gate broke" from
+// "gate rejected bad content" apart, so the failure was silently swallowed as
+// routine content-quality noise.
+function pushInternalError(msg) {
+  issues.push(`GATE_INTERNAL_ERROR: ${msg}`);
+}
+
+// Everything below (through the end of the semantic check) runs inside one
+// top-level try/catch. Code-review finding: the first version of this fix only
+// wrapped the two checks added alongside it (weekday, parity-warning) — a crash
+// anywhere else (a malformed snapshot, a bug in an older check) still exited 1,
+// the exact code the workflow treats as "gate worked, stay silent." Verified
+// live: `echo '{"broken json' > x.json && node validate-brief.mjs x.json ...`
+// crashed with exit 1 before this fix. Wrapping the whole body, not just the
+// new checks, is what actually closes the D-04 class of gap.
+try {
 
 const snapshot = JSON.parse(fs.readFileSync(snapshotPath, "utf8"));
 const fullFile  = fs.readFileSync(briefPath, "utf8");
@@ -45,20 +69,6 @@ const briefTechnicals = fs.existsSync(technicalsPath)
 // numeric fields (edition: 42) don't count as price references.
 const fmEnd = fullFile.indexOf("---", 4);
 const brief = fmEnd > 3 ? fullFile.slice(fmEnd + 3).trim() : fullFile;
-
-const issues = [];
-
-// Marks a failure as "the gate itself couldn't run" (upstream API down, a check
-// threw on malformed input, etc.) as distinct from "the gate ran and correctly
-// rejected the content." Both block publication, but only the former should page
-// a human — see the exit-code contract at the bottom of this file. Root cause of
-// the 2026-07-16 missed brief: three attempts were blocked by a semantic-check API
-// error with no retry and no way for the workflow to tell "gate broke" from
-// "gate rejected bad content" apart, so the failure was silently swallowed as
-// routine content-quality noise.
-function pushInternalError(msg) {
-  issues.push(`GATE_INTERNAL_ERROR: ${msg}`);
-}
 
 // ---------------------------------------------------------------------------
 // LAYER 1 — deterministic
@@ -427,6 +437,16 @@ async function semanticCheck() {
 }
 
 await semanticCheck();
+
+} catch (e) {
+  // Catches anything the specific try/catches above (weekday, parity) don't:
+  // a malformed snapshot, a bug in NUMBER/DIRECTION/DATE/SLUG/COMPLIANCE, a
+  // missing snapshot.instruments field, etc. Without this, any of those crash
+  // uncaught with exit code 1 — indistinguishable from a legitimate content
+  // rejection to the calling workflow.
+  console.error("DEBUG uncaught error in publish gate:\n" + (e.stack ?? e.message));
+  pushInternalError(`gate crashed: ${e.message}`);
+}
 
 // ---------------------------------------------------------------------------
 // Verdict — SEMANTIC-WARN and PARITY-WARN print but don't block; everything

@@ -14,6 +14,21 @@ export function todayIST(): string {
   return new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }
 
+// Code-review finding: isTodaysBriefDelayed previously compared todayIST()
+// (IST-shifted) against a raw UTC slice of the brief's date field — two
+// different date bases. It happened to be silently correct only because both
+// publishing workflows run at hours far from the UTC/IST midnight-crossing
+// window (9:00 AM and 11:45 PM IST); a schedule change or an odd-hour manual
+// trigger would have broken the comparison without anyone noticing. Returns
+// null on an unparseable timestamp rather than throwing — callers treat null
+// as "not today," which correctly surfaces the delayed banner instead of
+// crashing the page render on bad pipeline data.
+function toISTDate(isoTimestamp: string): string | null {
+  const d = new Date(isoTimestamp)
+  if (isNaN(d.getTime())) return null
+  return new Date(d.getTime() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
 export function isTradingDay(dateStr: string): boolean {
   const day = new Date(dateStr + 'T00:00:00+05:30').getDay()
   if (day === 0 || day === 6) return false
@@ -35,6 +50,6 @@ export function isTodaysBriefDelayed(latestBriefDateISO: string | undefined): bo
   const today = todayIST()
   if (!isTradingDay(today)) return false
   if (istMinutesSinceMidnight() < BRIEF_DEADLINE_IST_MINUTES) return false
-  const latestDate = latestBriefDateISO?.slice(0, 10) ?? ''
+  const latestDate = latestBriefDateISO ? toISTDate(latestBriefDateISO) : null
   return latestDate !== today
 }
