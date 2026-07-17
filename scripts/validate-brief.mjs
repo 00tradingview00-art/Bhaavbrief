@@ -253,6 +253,26 @@ try {
   pushInternalError(`weekday check threw: ${e.message}`);
 }
 
+// 3c. Parity wedge divergence (D-02): fetch-snapshot.mjs cross-checks the
+//     gold and silver import-parity spreads and writes a warning to the
+//     snapshot if they diverge beyond tolerance (they carry a similar duty/GST
+//     structure and should track). Surfaced here as non-blocking for now —
+//     the live gap (~11pts) is far past tolerance right now and the root
+//     cause (which metal's feed, or the duty assumption itself, is off) isn't
+//     resolved yet, so this does not block publication until that's settled.
+//     Promote to a blocker by changing the "PARITY-WARN:" prefix below to
+//     something not excluded by the `blockers` filter further down, once
+//     confidence is established.
+try {
+  for (const w of snapshot.warnings ?? []) {
+    if (w.type === "PARITY_WEDGE_DIVERGENCE") {
+      issues.push(`PARITY-WARN: ${w.detail}`);
+    }
+  }
+} catch (e) {
+  pushInternalError(`parity warning check threw: ${e.message}`);
+}
+
 // 4. Slug guard: catches the "27-ay2026" class of bug before it mints a bad URL.
 //    This is now fixed in fetch-snapshot + slug generator but keep as a safety net.
 const slugRe = /\b\d{1,2}-?ay-?20\d{2}\b|\b-(an|eb|ar|pr|ay|un|ul|ug|ep|ct|ov|ec)20\d{2}\b/;
@@ -409,7 +429,8 @@ async function semanticCheck() {
 await semanticCheck();
 
 // ---------------------------------------------------------------------------
-// Verdict — SEMANTIC-WARN prints but doesn't block; everything else blocks.
+// Verdict — SEMANTIC-WARN and PARITY-WARN print but don't block; everything
+// else blocks.
 //
 // Exit code contract (the calling workflow branches on this — see
 // generate-brief.yml / evening-close-brief.yml "Alert on failure" steps):
@@ -421,7 +442,8 @@ await semanticCheck();
 //       it means validation was skipped or degraded, not that content failed it
 // ---------------------------------------------------------------------------
 
-const blockers = issues.filter((i) => !i.startsWith("SEMANTIC-WARN"));
+const NON_BLOCKING_PREFIXES = ["SEMANTIC-WARN", "PARITY-WARN"];
+const blockers = issues.filter((i) => !NON_BLOCKING_PREFIXES.some((p) => i.startsWith(p)));
 const hasInternalError = issues.some((i) => i.startsWith("GATE_INTERNAL_ERROR:"));
 
 console.log("\n=== BhaavBrief publish gate ===");

@@ -343,6 +343,7 @@ async function main() {
   const usdinr   = instruments.USDINR.price
   const mcxGold  = instruments.MCX_GOLD.price
   const silverUSD = instruments.COMEX_SILVER.price
+  const mcxSilver = instruments.MCX_SILVER.price
 
   const importParityGoldINR = goldUSD > 0 && usdinr > 0
     ? Math.round((goldUSD / 31.1035) * 10 * usdinr)   // per troy oz → per 10g
@@ -352,9 +353,40 @@ async function main() {
     ? roundTo(((mcxGold - importParityGoldINR) / importParityGoldINR) * 100, 2)
     : 0
 
+  // Silver's equivalent of the gold pair above — added for D-02 (17-Jul audit:
+  // gold and silver wedges diverged ~11pts with nothing cross-checking them).
+  // MCX Silver is quoted per kg vs COMEX per troy oz, hence ×1000 not ×10.
+  const importParitySilverINR = silverUSD > 0 && usdinr > 0
+    ? Math.round((silverUSD / 31.1035) * 1000 * usdinr)   // per troy oz → per kg
+    : 0
+
+  const mcxComexSilverSpreadPct = importParitySilverINR > 0 && mcxSilver > 0
+    ? roundTo(((mcxSilver - importParitySilverINR) / importParitySilverINR) * 100, 2)
+    : 0
+
   const goldSilverRatio = silverUSD > 0
     ? roundTo(goldUSD / silverUSD, 1)
     : 0
+
+  // Parity cross-check (G-01, D-02): gold and silver carry a similar import
+  // duty/GST structure, so their MCX-vs-import-parity spreads should track
+  // each other within a few points. A wide divergence means one metal's feed
+  // (or the other's) has drifted — surface it as a warning rather than
+  // silently publishing a Price Bridge that doesn't reconcile.
+  const WEDGE_DELTA_TOLERANCE_PTS = 2
+  const warnings = []
+  if (mcxComexGoldSpreadPct !== 0 && mcxComexSilverSpreadPct !== 0) {
+    const wedgeDeltaPts = roundTo(Math.abs(mcxComexGoldSpreadPct - mcxComexSilverSpreadPct), 2)
+    if (wedgeDeltaPts > WEDGE_DELTA_TOLERANCE_PTS) {
+      warnings.push({
+        type: 'PARITY_WEDGE_DIVERGENCE',
+        detail: `Gold import-parity spread ${mcxComexGoldSpreadPct}% vs silver ${mcxComexSilverSpreadPct}% — ${wedgeDeltaPts}pt gap exceeds ${WEDGE_DELTA_TOLERANCE_PTS}pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.`,
+        goldSpreadPct: mcxComexGoldSpreadPct,
+        silverSpreadPct: mcxComexSilverSpreadPct,
+        deltaPts: wedgeDeltaPts,
+      })
+    }
+  }
 
   // IST timestamp
   const now = new Date()
@@ -369,7 +401,8 @@ async function main() {
     generatedAtIST,
     source: kiteMCX ? 'kite+yahoo' : (cacheAgeHours < 2 ? 'cache+yahoo' : 'stale-cache+yahoo'),
     instruments,
-    derived: { importParityGoldINR, mcxComexGoldSpreadPct, goldSilverRatio },
+    derived: { importParityGoldINR, mcxComexGoldSpreadPct, importParitySilverINR, mcxComexSilverSpreadPct, goldSilverRatio },
+    ...(warnings.length ? { warnings } : {}),
   }
 
   fs.mkdirSync(path.dirname(SNAPSHOT_FILE), { recursive: true })
@@ -388,6 +421,10 @@ async function main() {
   console.log(`\n  Stale instruments: ${staleCount}`)
   console.log(`  Written: ${SNAPSHOT_FILE}`)
   console.log(`  As of:   ${generatedAtIST}`)
+  if (warnings.length) {
+    console.warn(`\n  ⚠ ${warnings.length} data-quality warning(s):`)
+    for (const w of warnings) console.warn(`    - [${w.type}] ${w.detail}`)
+  }
 
   if (staleCount > 3) {
     console.error(`\nFATAL: ${staleCount} instruments stale — blocking pipeline. Check Yahoo Finance / Kite connectivity.`)
