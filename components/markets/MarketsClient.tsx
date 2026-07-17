@@ -385,7 +385,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
             Get the MCX morning brief — free
           </div>
           <div style={{ fontSize: 15, color: 'var(--ink-3)' }}>
-            Gold, crude, silver — why prices are moving, before the market opens.
+            Gold, crude, silver — why prices are moving, before the session finds direction.
           </div>
         </div>
         <Link

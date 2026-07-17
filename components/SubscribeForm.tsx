@@ -78,10 +78,10 @@ export default function SubscribeForm({ compact = false, location, onSuccess }: 
             Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
-            Get the call before 9:30 AM market open
+            Get the brief by 9:30 AM IST
           </div>
           <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300, marginBottom: '1.1rem' }}>
-            Full MCX analysis — gold, crude, silver, what to watch — in your inbox before market opens. Every weekday.
+            Full MCX analysis — gold, crude, silver, what to watch — in your inbox by 9:30 AM IST. Every weekday.
           </p>
         </>
       )}

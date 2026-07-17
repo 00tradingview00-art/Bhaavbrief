@@ -36,7 +36,7 @@ const PRINCIPLES = [
 ]
 
 const AUDIENCES = [
-  { icon: '◈', label: 'MCX Futures Traders',   desc: 'Intraday and positional. OHLC levels, OI shifts, and historical price ranges before the morning session opens.' },
+  { icon: '◈', label: 'MCX Futures Traders',   desc: 'Intraday and positional. OHLC levels, OI shifts, and historical price ranges before the morning session finds direction.' },
   { icon: '◇', label: 'Commodity Businesses',  desc: 'Jewellers, fuel dealers, agri merchants. Understand cost hedging windows, import parity, and when to lock rates.' },
   { icon: '△', label: 'Portfolio Investors',   desc: 'Gold ETF and commodity MF holders. Know when and why commodity prices are moving — before you check your NAV.' },
   { icon: '○', label: 'Analysts & Students',   desc: 'Learning futures, options, and commodity economics through real MCX market context every weekday.' },
@@ -57,7 +57,7 @@ export default async function AboutPage() {
             MCX commodity intelligence, every weekday at 9:30 AM
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300, maxWidth: 760 }}>
-            BhaavBrief publishes a daily open brief before MCX session start — OHLC levels, open interest,
+            BhaavBrief publishes a daily open brief at MCX session start — OHLC levels, open interest,
             global benchmarks, and what they mean for Indian traders. Flash articles go out through the
             day as prices move. Built for MCX traders, commodity businesses, and anyone whose P&amp;L
             is touched by gold, crude, silver, or copper.
@@ -99,7 +99,7 @@ export default async function AboutPage() {
                     badge: 'Daily Brief',
                     badgeBg: '#F3F0E8', badgeColor: '#7A7668', badgeBorder: '#C8C8B8',
                     title: 'Daily open brief',
-                    desc: 'Delivered at 9:30 AM IST every weekday. OHLC levels, open interest, percent change, and global reference prices — contextualised for MCX traders before the session opens.',
+                    desc: 'Delivered at 9:30 AM IST every weekday. OHLC levels, open interest, percent change, and global reference prices — contextualised for MCX traders before the session finds direction.',
                     link: '/briefs', linkText: 'Read latest brief',
                   },
                   {
@@ -188,7 +188,7 @@ export default async function AboutPage() {
                   global macro context: COMEX, LME, crude benchmarks, and the USD/INR rate.
                 </p>
                 <p>
-                  The brief is written by 9 AM and lands in your inbox by 9:30 AM IST, before the MCX
+                  The brief is written at market open and lands in your inbox by 9:30 AM IST, before the MCX
                   morning session heats up. One read to size up all five commodity markets, with the full
                   data context before the narrative starts.
                 </p>

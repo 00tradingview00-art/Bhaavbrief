@@ -257,7 +257,7 @@ function CTASlide() {
           color: '#FFFFFF', fontSize: 48*S, fontWeight: 700,
           lineHeight: 1.2, marginBottom: 32*S,
         }}>
-          We track all 5 at 9:30 AM, every morning — before MCX opens.
+          We track all 5 at 9:30 AM, every morning — before the session finds direction.
         </div>
         <div style={{ color: INK_4, fontSize: 22*S, lineHeight: 1.6, marginBottom: 48*S }}>
           Gold · Silver · Crude · Copper · NatGas{'\n'}Live prices · Global context · What it means

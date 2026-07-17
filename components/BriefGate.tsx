@@ -41,10 +41,10 @@ export default function BriefGate() {
         fontWeight: 700, lineHeight: 1.25,
         color: 'var(--ink)', margin: '0 0 0.5rem',
       }}>
-        Get the full analysis before 9:30 AM market open
+        Get the full analysis by 9:30 AM IST
       </h3>
       <p style={{ fontSize: 13, color: '#48483A', lineHeight: 1.65, margin: '0 0 1.25rem' }}>
-        The rest of this brief — what the market is actually saying, historical context, what kills the trade, and who is affected — lands in your inbox before MCX opens. Not on this page.
+        The rest of this brief — what the market is actually saying, historical context, what kills the trade, and who is affected — lands in your inbox by 9:30 AM IST. Not on this page.
       </p>
       <div style={{ maxWidth: 380 }}>
         <SubscribeForm compact location="brief_gate" onSuccess={revealContent} />
