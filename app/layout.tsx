@@ -125,6 +125,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in ·{' '}
             <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>About</a>{' '}·{' '}
+            <a href="/methodology" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Methodology</a>{' '}·{' '}
+            <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Track Record</a>{' '}·{' '}
             <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>{' '}·{' '}
             <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Terms of Use</a>
           </p>

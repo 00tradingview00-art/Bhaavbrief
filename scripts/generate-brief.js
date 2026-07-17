@@ -4,6 +4,7 @@ import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { isTradingHoliday, todayIST, getHolidayName } from './lib/holidays.js'
 import { deriveCommodityLabelsFromTags } from './lib/commodity-tags.js'
+import { resolveEdge, formatEdgeResultBlock, appendToLedger } from './lib/edgeLedger.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const envFile = path.join(__dirname, '../.env.local')
@@ -221,6 +222,52 @@ function loadRecentBriefs(count = 3) {
     }).join('\n\n---\n\n')
   } catch {
     return ''
+  }
+}
+
+// FIX-10 (D-14): resolve the most recently published edition's structured
+// Edge of the Day against today's fresh snapshot, before generating today's
+// brief. Returns null if there's no prior edition, or the prior edition
+// predates this feature (no edgeMetric frontmatter) — in either case there's
+// nothing to report and today's brief simply has no "Yesterday's Edge —
+// Result" block, rather than a fabricated one.
+function resolveYesterdaysEdge(snapshot) {
+  try {
+    const files = fs.readdirSync(BRIEFS_DIR).filter(f => /^edition-\d+\.mdx$/.test(f)).sort()
+    if (files.length === 0) return null
+    const priorFile = files[files.length - 1]
+    const priorContent = fs.readFileSync(path.join(BRIEFS_DIR, priorFile), 'utf8')
+    const priorEditionMatch = priorContent.match(/^edition:\s*(\d+)/m)
+    if (!priorEditionMatch) return null
+    const priorEdition = parseInt(priorEditionMatch[1], 10)
+
+    const metricMatch    = priorContent.match(/^edgeMetric:\s*"?([A-Z_]+)"?/m)
+    const levelMatch      = priorContent.match(/^edgeLevel:\s*([\d.]+)/m)
+    const conditionMatch = priorContent.match(/^edgeCondition:\s*"?(above|below)"?/m)
+    if (!metricMatch || !levelMatch || !conditionMatch) return null // pre-FIX-10 edition, nothing to resolve
+
+    const edge = {
+      edgeMetric:    metricMatch[1],
+      edgeLevel:     parseFloat(levelMatch[1]),
+      edgeCondition: conditionMatch[1],
+    }
+    const resolution = resolveEdge(edge, snapshot)
+    appendToLedger({
+      forEdition: priorEdition,
+      resolvedByEdition: EDITION,
+      edgeMetric: edge.edgeMetric,
+      edgeLevel: edge.edgeLevel,
+      edgeCondition: edge.edgeCondition,
+      verdict: resolution.verdict,
+      resolvedValue: resolution.resolvedValue,
+      resolvedAt: new Date().toISOString(),
+    })
+    const block = formatEdgeResultBlock(priorEdition, edge, resolution)
+    console.log(`Yesterday's Edge (edition #${priorEdition}): ${resolution.verdict}`)
+    return block
+  } catch (e) {
+    console.warn('Edge resolution failed (non-fatal):', e.message)
+    return null
   }
 }
 
@@ -554,6 +601,9 @@ date: "${today.toISOString()}"
 edition: ${EDITION}
 published: true
 tags: ["tag1", "tag2"]
+edgeMetric: "[MUST be exactly one of: COMEX_GOLD, COMEX_SILVER, WTI, MCX_GOLD, MCX_SILVER, MCX_CRUDE, MCX_COPPER, MCX_NATGAS, USDINR — whichever instrument the Edge of the Day text above is actually about. This is parsed by code tomorrow to resolve today's Edge of the Day against tomorrow's price — it MUST match the same instrument named in the Edge of the Day sentence, not a different one.]"
+edgeLevel: [the exact numeric level from the Edge of the Day sentence above — no currency symbol, no commas, must be the same number that appears in the prose]
+edgeCondition: "[exactly \"above\" or \"below\" — whichever direction the Edge of the Day sentence asks readers to watch for]"
 ---
 
 [Brief content starting with ## Macro Thread]`
@@ -609,6 +659,9 @@ async function main() {
     process.exit(1)
   }
 
+  // FIX-10 (D-14): resolve yesterday's Edge of the Day before writing today's.
+  const edgeResultBlock = resolveYesterdaysEdge(snapshot)
+
   const prices = snapshotToPrices(snapshot)
   const news   = await fetchNews()
   console.log(`Prices: OK (from snapshot, ${snapshot.generatedAtIST})`)
@@ -639,8 +692,9 @@ async function main() {
     const header = fmMatch[1]
     const body   = fmMatch[2].trimStart()
     const inject = [
-      keyNumber   ? keyNumber   : null,
-      priceBridge ? `## Price Bridge\n\n${priceBridge}` : null,
+      keyNumber      ? keyNumber      : null,
+      edgeResultBlock ? edgeResultBlock : null,
+      priceBridge    ? `## Price Bridge\n\n${priceBridge}` : null,
     ].filter(Boolean).join('\n\n')
     mdx = inject ? `${header}\n\n${inject}\n\n${body}` : `${header}\n\n${body}`
   }

@@ -397,6 +397,62 @@ for (const re of banned) {
   }
 }
 
+// 12a. Edition continuity (G-08): the edition number must be max(every OTHER
+//      existing edition)+1, the brief's date must match the snapshot's own
+//      date, and no other edition file may already exist for that date.
+//      Independently re-verifies what generate-brief.js's own
+//      "next edition = max+1" logic computed, rather than trusting it — the
+//      D-04/D-05 defect class was exactly a generator-side assumption not
+//      being independently checked at the gate.
+try {
+  const briefsDir = path.join(process.cwd(), "content/briefs");
+  const files = fs.existsSync(briefsDir)
+    ? fs.readdirSync(briefsDir).filter((f) => /^edition-\d+\.mdx$/.test(f))
+    : [];
+  const thisEditionMatch = fullFile.match(/^edition:\s*(\d+)/m);
+  const thisDateMatch = fullFile.match(/^date:\s*"([^"]+)"/m);
+
+  if (!thisEditionMatch || !thisDateMatch) {
+    issues.push("CONTINUITY: brief frontmatter is missing an edition or date field");
+  } else {
+    const thisEdition = parseInt(thisEditionMatch[1], 10);
+    const thisDateIST = new Date(new Date(thisDateMatch[1]).getTime() + 5.5 * 3600000)
+      .toISOString().slice(0, 10);
+    const briefBasename = path.basename(briefPath);
+
+    let maxOtherEdition = 0;
+    let duplicateDateFile = null;
+    for (const f of files) {
+      if (f === briefBasename) continue;
+      const content = fs.readFileSync(path.join(briefsDir, f), "utf8");
+      const em = content.match(/^edition:\s*(\d+)/m);
+      const dm = content.match(/^date:\s*"([^"]+)"/m);
+      if (em) maxOtherEdition = Math.max(maxOtherEdition, parseInt(em[1], 10));
+      if (dm) {
+        const otherDateIST = new Date(new Date(dm[1]).getTime() + 5.5 * 3600000)
+          .toISOString().slice(0, 10);
+        if (otherDateIST === thisDateIST) duplicateDateFile = f;
+      }
+    }
+
+    if (thisEdition !== maxOtherEdition + 1) {
+      issues.push(
+        `CONTINUITY: edition ${thisEdition} is not max(existing)+1 — max other edition on disk is ${maxOtherEdition}, expected ${maxOtherEdition + 1}`
+      );
+    }
+    if (duplicateDateFile) {
+      issues.push(`CONTINUITY: ${duplicateDateFile} already exists for date ${thisDateIST} — duplicate edition for the same trading day`);
+    }
+    const expectedDateIST = new Date(new Date(snapshot.generatedAt).getTime() + 5.5 * 3600000)
+      .toISOString().slice(0, 10);
+    if (thisDateIST !== expectedDateIST) {
+      issues.push(`CONTINUITY: brief date ${thisDateIST} doesn't match the snapshot's own date ${expectedDateIST}`);
+    }
+  }
+} catch (e) {
+  pushInternalError(`edition continuity check threw: ${e.message}`);
+}
+
 // 12. Claims ledger conformance (G-07) — extracted into
 //     scripts/lib/claimsCheck.js (a testable pure function; see
 //     claimsCheck.test.mjs) after two revisions during verification: the
