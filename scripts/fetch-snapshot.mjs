@@ -3,11 +3,18 @@
  * scripts/fetch-snapshot.mjs — single-source-of-truth market data writer
  *
  * Runs ONCE per pipeline cycle, before the brief generator.
- * Writes data/market-snapshot.json — the only file that ever contains prices.
- * All brief generators, UI API routes, and the email template read from here.
+ * Writes data/market-snapshot.json. All brief generators, the publish
+ * gate, and the email template read exclusively from here via
+ * lib/snapshot.ts. UI pages also read it (SSR initialPrices), but
+ * app/api/prices/route.ts's primary path is a second, independent live
+ * fetch (lib/prices.ts) with this snapshot only as its fallback — see the
+ * C-01 note atop lib/snapshot.ts for the full honest picture.
  *
  * Exit 0 = snapshot written cleanly (or with acceptable stale count).
- * Exit 1 = >3 instruments have no data at all — block the pipeline.
+ * Exit 1 = >3 instruments have no data at all, OR the assembled snapshot
+ *          fails its C-02 schema/plausible-range contract (scripts/lib/
+ *          snapshotSchema.mjs) — the bad payload is saved to
+ *          data/quarantine/ and the last good snapshot is left untouched.
  *
  * Stale handling (rule 3 of the spec):
  *   - If a live fetch fails, carry forward the last good value and mark stale:true.
@@ -17,6 +24,16 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import {
+  computeImportParityGoldINR,
+  computeImportParitySilverINR,
+  computeSpreadPct,
+  computeGoldSilverRatio,
+  checkParityWedge,
+} from '../lib/parity.mjs'
+import { validateSnapshot } from './lib/snapshotSchema.mjs'
+import { appendDailySnapshot } from './lib/historicalStore.mjs'
+import { todayIST } from './lib/holidays.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -338,35 +355,24 @@ async function main() {
   }
 
   // Derived values — computed from the same numbers shown in the brief.
-  // These can never disagree with the prices next to them.
+  // These can never disagree with the prices next to them. C-04: the actual
+  // conversion math lives in lib/parity.mjs (single tested module), not
+  // inline here — this is the ingestion call site, not the implementation.
   const goldUSD  = instruments.COMEX_GOLD.price
   const usdinr   = instruments.USDINR.price
   const mcxGold  = instruments.MCX_GOLD.price
   const silverUSD = instruments.COMEX_SILVER.price
   const mcxSilver = instruments.MCX_SILVER.price
 
-  const importParityGoldINR = goldUSD > 0 && usdinr > 0
-    ? Math.round((goldUSD / 31.1035) * 10 * usdinr)   // per troy oz → per 10g
-    : 0
-
-  const mcxComexGoldSpreadPct = importParityGoldINR > 0 && mcxGold > 0
-    ? roundTo(((mcxGold - importParityGoldINR) / importParityGoldINR) * 100, 2)
-    : 0
+  const importParityGoldINR = computeImportParityGoldINR(goldUSD, usdinr)
+  const mcxComexGoldSpreadPct = computeSpreadPct(mcxGold, importParityGoldINR)
 
   // Silver's equivalent of the gold pair above — added for D-02 (17-Jul audit:
   // gold and silver wedges diverged ~11pts with nothing cross-checking them).
-  // MCX Silver is quoted per kg vs COMEX per troy oz, hence ×1000 not ×10.
-  const importParitySilverINR = silverUSD > 0 && usdinr > 0
-    ? Math.round((silverUSD / 31.1035) * 1000 * usdinr)   // per troy oz → per kg
-    : 0
+  const importParitySilverINR = computeImportParitySilverINR(silverUSD, usdinr)
+  const mcxComexSilverSpreadPct = computeSpreadPct(mcxSilver, importParitySilverINR)
 
-  const mcxComexSilverSpreadPct = importParitySilverINR > 0 && mcxSilver > 0
-    ? roundTo(((mcxSilver - importParitySilverINR) / importParitySilverINR) * 100, 2)
-    : 0
-
-  const goldSilverRatio = silverUSD > 0
-    ? roundTo(goldUSD / silverUSD, 1)
-    : 0
+  const goldSilverRatio = computeGoldSilverRatio(goldUSD, silverUSD)
 
   // Parity cross-check (G-01, D-02): gold and silver carry a similar import
   // duty/GST structure, so their MCX-vs-import-parity spreads should track
@@ -377,18 +383,8 @@ async function main() {
   // (2026-07-17), not a fact about the world; a code-review follow-up.
   const WEDGE_DELTA_TOLERANCE_PTS = Number(process.env.WEDGE_DELTA_TOLERANCE_PTS ?? 2)
   const warnings = []
-  if (mcxComexGoldSpreadPct !== 0 && mcxComexSilverSpreadPct !== 0) {
-    const wedgeDeltaPts = roundTo(Math.abs(mcxComexGoldSpreadPct - mcxComexSilverSpreadPct), 2)
-    if (wedgeDeltaPts > WEDGE_DELTA_TOLERANCE_PTS) {
-      warnings.push({
-        type: 'PARITY_WEDGE_DIVERGENCE',
-        detail: `Gold import-parity spread ${mcxComexGoldSpreadPct}% vs silver ${mcxComexSilverSpreadPct}% — ${wedgeDeltaPts}pt gap exceeds ${WEDGE_DELTA_TOLERANCE_PTS}pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.`,
-        goldSpreadPct: mcxComexGoldSpreadPct,
-        silverSpreadPct: mcxComexSilverSpreadPct,
-        deltaPts: wedgeDeltaPts,
-      })
-    }
-  }
+  const wedgeWarning = checkParityWedge(mcxComexGoldSpreadPct, mcxComexSilverSpreadPct, WEDGE_DELTA_TOLERANCE_PTS)
+  if (wedgeWarning) warnings.push(wedgeWarning)
 
   // IST timestamp
   const now = new Date()
@@ -407,8 +403,29 @@ async function main() {
     ...(warnings.length ? { warnings } : {}),
   }
 
+  // C-02: contract violation quarantines the write instead of silently
+  // publishing garbage a brief could cite as fact — the last good snapshot
+  // stays on disk untouched, and the bad one is saved for inspection.
+  const { valid, errors } = validateSnapshot(snapshot)
+  if (!valid) {
+    fs.mkdirSync(path.join(ROOT, 'data/quarantine'), { recursive: true })
+    const quarantinePath = path.join(ROOT, 'data/quarantine', `snapshot-${now.toISOString().replace(/[:.]/g, '-')}.json`)
+    fs.writeFileSync(quarantinePath, JSON.stringify({ snapshot, errors }, null, 2), 'utf8')
+    console.error(`\nSNAPSHOT QUARANTINED — ${errors.length} contract violation(s), last good snapshot left untouched:`)
+    for (const e of errors) console.error(`  - ${e}`)
+    console.error(`\nQuarantined payload: ${quarantinePath}`)
+    process.exit(1)
+  }
+
   fs.mkdirSync(path.dirname(SNAPSHOT_FILE), { recursive: true })
   fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2), 'utf8')
+
+  // C-05: archive today's canonical values — only ever overwrites *today's*
+  // file (this script runs several times a day); a prior day's file is
+  // never touched again once the date rolls over. Powers claims-ledger
+  // verification and Yesterday's-Edge resolution without depending on a
+  // live re-fetch from Kite's historical API each time.
+  appendDailySnapshot(path.join(ROOT, 'data/history'), todayIST(), snapshot)
 
   // Log summary table
   console.log('\n  Instrument        Price          Chg%    Stale')

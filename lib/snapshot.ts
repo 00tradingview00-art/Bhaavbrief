@@ -1,10 +1,24 @@
 /**
- * lib/snapshot.ts — single reader for data/market-snapshot.json
+ * lib/snapshot.ts — reader for data/market-snapshot.json
  *
- * This is the ONLY place UI code reads price data.
  * Only scripts/fetch-snapshot.mjs may WRITE the file.
  *
- * All routes and pages import from here, not from lib/prices.ts.
+ * C-01 honesty note (Part 6 audit, 2026-07-18): this is NOT actually the
+ * only place UI code reads price data, despite what an earlier version of
+ * this comment claimed. lib/prices.ts is a second, independent live-fetch
+ * module (Kite + Twelve Data + Alpha Vantage + Stooq + Frankfurter) still
+ * directly imported by app/page.tsx, app/api/prices/route.ts,
+ * components/TickerStrip.tsx, and components/markets/MarketsClient.tsx —
+ * it's the actual live-serving path for the ticker, with this module
+ * (server-side snapshot, cron-refreshed) used for SSR's `initialPrices`
+ * and as /api/prices's fallback when the live Kite call fails. Both derive
+ * from the same underlying feeds but compute independently, so they CAN
+ * disagree in principle (M-06's cross-page consistency check exists partly
+ * to catch that in production). Consolidating them into one module is a
+ * real architectural improvement but a large, risky change to the app's
+ * core live-serving path — deliberately deferred rather than attempted as
+ * a side effect of a data-architecture audit. Brief generators, the
+ * publish gate, and the email template DO exclusively read this module.
  */
 
 import fs from 'fs'

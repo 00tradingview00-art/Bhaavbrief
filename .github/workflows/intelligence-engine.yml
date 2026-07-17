@@ -98,6 +98,7 @@ jobs:
           git add content/articles/ content/events/ data/content-index.json
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
           git add data/market-snapshot.json data/story-arcs.json data/site-stats.json data/market-structure.json 2>/dev/null || true
+          [ -d data/history ] && git add data/history/ || true
           # Always commit engine state — lastArticleAt + lastPrices must persist between runs
           # Without this, each run starts from a clean checkout and the cooldown resets
           git add data/engine-state.json 2>/dev/null || true

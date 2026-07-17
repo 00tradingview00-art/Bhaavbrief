@@ -154,6 +154,7 @@ jobs:
           # defensively in case either is ever absent for any reason.
           [ -f data/gate-streak.json ] && git add data/gate-streak.json || true
           [ -f data/gate-log.jsonl ] && git add data/gate-log.jsonl || true
+          [ -d data/history ] && git add data/history/ || true
           if git diff --staged --quiet; then
             echo "Nothing to commit — brief already published today"
             echo "published=false" >> $GITHUB_OUTPUT
