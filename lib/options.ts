@@ -2,13 +2,25 @@ import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 
+// Code-review follow-up: these were all bare constants requiring a code
+// review + deploy to adjust, even though they're tuning knobs calibrated
+// against one live spot-check (2026-07-17), not facts about the world.
+// Env-overridable with the same defaults, so a threshold can be loosened at
+// 9:05 AM without a hotfix deploy.
+function envNumber(name: string, fallback: number): number {
+  const raw = process.env[name]
+  if (raw == null || raw === '') return fallback
+  const n = Number(raw)
+  return Number.isFinite(n) ? n : fallback
+}
+
 // Single source of truth for the risk-free rate — read by the chain response
 // below so the UI (components/mcx/OptionChain.tsx) can display the same value
 // instead of an independently hardcoded string that can drift out of sync.
 // TODO: replace with a daily-fetched 91-day T-bill / MIBOR rate (D-11); this
 // constant is a dated, disclosed fallback in the meantime, not a silent one.
-const RISK_FREE_RATE = 0.065
-const RISK_FREE_RATE_ASOF = '2026-07'
+const RISK_FREE_RATE = envNumber('OPTIONS_RISK_FREE_RATE', 0.065)
+const RISK_FREE_RATE_ASOF = process.env.OPTIONS_RISK_FREE_RATE_ASOF ?? '2026-07'
 
 // ── Quote quality tiering (D-06) ────────────────────────────────────────────
 // Verified live 2026-07-17 against the real GOLD chain: zero-OI/zero-volume
@@ -16,9 +28,9 @@ const RISK_FREE_RATE_ASOF = '2026-07'
 // strike 143500 PE priced BELOW its own intrinsic value) and get solved into
 // garbage IVs (0.1% floor, 100%+ readings) with zero filtering today. Genuine
 // liquid strikes (OI>0, traded today, tight bid-ask) show sane, matched IVs.
-const SPREAD_LIVE_MAX_RATIO = 0.15  // LIVE requires spread <= 15% of mid
-const SPREAD_JUNK_MAX_RATIO = 0.40  // spread > 40% of mid is JUNK regardless of liquidity
-const IV_PARITY_TOLERANCE_VOL_PTS = 5  // CE/PE IV mismatch beyond this at the same strike demotes both
+const SPREAD_LIVE_MAX_RATIO = envNumber('OPTIONS_SPREAD_LIVE_MAX_RATIO', 0.15)  // LIVE requires spread <= 15% of mid
+const SPREAD_JUNK_MAX_RATIO = envNumber('OPTIONS_SPREAD_JUNK_MAX_RATIO', 0.40)  // spread > 40% of mid is JUNK regardless of liquidity
+const IV_PARITY_TOLERANCE_VOL_PTS = envNumber('OPTIONS_IV_PARITY_TOLERANCE_VOL_PTS', 5)  // CE/PE IV mismatch beyond this at the same strike demotes both
 
 export type Tier = 'LIVE' | 'STALE' | 'JUNK'
 

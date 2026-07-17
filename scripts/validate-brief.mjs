@@ -357,14 +357,16 @@ async function attemptSemanticCheck() {
 // SEMANTIC issue — this is what makes a transient upstream 5xx alert instead of
 // silently blocking publication the way it did on 2026-07-16.
 async function semanticCheck() {
-  const MAX_ATTEMPTS = 2;
+  // Env-overridable — tuning knobs, not facts about the world (code-review follow-up).
+  const MAX_ATTEMPTS = Number(process.env.SEMANTIC_CHECK_MAX_ATTEMPTS ?? 2);
+  const RETRY_DELAY_MS = Number(process.env.SEMANTIC_CHECK_RETRY_DELAY_MS ?? 3000);
   let result;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     result = await attemptSemanticCheck();
     if (result.ok || !result.retryable) break;
     if (attempt < MAX_ATTEMPTS) {
       console.error(`SEMANTIC: attempt ${attempt} failed (${result.reason}) — retrying...`);
-      await new Promise((r) => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
     }
   }
 

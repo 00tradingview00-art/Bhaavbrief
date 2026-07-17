@@ -373,7 +373,9 @@ async function main() {
   // each other within a few points. A wide divergence means one metal's feed
   // (or the other's) has drifted — surface it as a warning rather than
   // silently publishing a Price Bridge that doesn't reconcile.
-  const WEDGE_DELTA_TOLERANCE_PTS = 2
+  // Env-overridable — a tuning knob calibrated against one live spot-check
+  // (2026-07-17), not a fact about the world; a code-review follow-up.
+  const WEDGE_DELTA_TOLERANCE_PTS = Number(process.env.WEDGE_DELTA_TOLERANCE_PTS ?? 2)
   const warnings = []
   if (mcxComexGoldSpreadPct !== 0 && mcxComexSilverSpreadPct !== 0) {
     const wedgeDeltaPts = roundTo(Math.abs(mcxComexGoldSpreadPct - mcxComexSilverSpreadPct), 2)
