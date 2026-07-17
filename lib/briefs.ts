@@ -42,6 +42,12 @@ export interface BriefMeta {
   tags:        string[]
   commodities: string[]
   published:   boolean
+  // FIX-11 (D-13): corrections must be visible, never silent edits — these
+  // were previously written to frontmatter (see D-08 fixes on editions #57
+  // and #66) but never surfaced anywhere on the rendered page.
+  corrected:      boolean
+  correctedAt:    string | null
+  correctionNote: string | null
 }
 
 export interface Brief extends BriefMeta {
@@ -76,6 +82,9 @@ function parseBriefFile(filename: string): BriefMeta | null {
       ? data.commodities
       : deriveCommodityLabelsFromTags(data.tags),
     published:   data.published !== false,
+    corrected:      data.corrected === true,
+    correctedAt:    data.correctedAt ?? null,
+    correctionNote: data.correctionNote ?? null,
   }
 }
 
@@ -146,6 +155,9 @@ export function getBrief(slug: string): Brief | null {
       ? data.commodities
       : deriveCommodityLabelsFromTags(data.tags),
       published:   data.published !== false,
+      corrected:      data.corrected === true,
+      correctedAt:    data.correctedAt ?? null,
+      correctionNote: data.correctionNote ?? null,
       content,
     }
   }

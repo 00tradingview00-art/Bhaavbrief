@@ -175,6 +175,29 @@ export default function MethodologyPage() {
         </section>
 
         <section style={sectionStyle}>
+          <h2 style={h2Style}>Content tiers</h2>
+          <p style={pStyle}>
+            <strong>Daily Brief</strong> — the flagship, full editorial standard on this page: verified data,
+            the claims ledger constraint, the full publication gate. <strong>Flash</strong> — intraday
+            updates, reserved for genuinely market-moving developments (a margin hike, a supply disruption,
+            a policy decision) — not a rewrite of a city-wise rate table or other aggregator filler; that
+            kind of low-materiality flash content is being phased out as a content tier. <strong>Learn</strong>{' '}
+            — evergreen educational guides, not tied to a specific trading day and not claiming any
+            time-sensitive market view.
+          </p>
+        </section>
+
+        <section style={sectionStyle} id="corrections">
+          <h2 style={h2Style}>Corrections policy</h2>
+          <p style={pStyle}>
+            An error in a published brief gets fixed, not silently edited. A corrected edition carries a
+            visible notice at the top of the page — what changed, and when — and the frontmatter records
+            <code>corrected</code>, <code>correctedAt</code>, and a <code>correctionNote</code>. Corrections
+            are never removed from the historical record.
+          </p>
+        </section>
+
+        <section style={sectionStyle}>
           <h2 style={h2Style}>Publication gate</h2>
           <p style={pStyle}>
             Nothing publishes without passing an automated gate (<code>scripts/validate-brief.mjs</code>) —

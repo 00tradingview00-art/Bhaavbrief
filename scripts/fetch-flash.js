@@ -420,6 +420,10 @@ CRITICAL GATE — check this FIRST before writing anything:
 If the article is primarily about equity share prices, stock market indices (Sensex/Nifty/barometers), sector stock performance (pharma/IT/FMCG), or company earnings with no direct link to MCX-traded commodities (gold, silver, crude, copper, natural gas, zinc, aluminium) — respond with exactly: SKIP
 Do not write the article. Do not explain. Just: SKIP
 
+MATERIALITY GATE — check this SECOND, also before writing anything:
+Flash is for genuinely market-moving developments only — a margin/duty change, a supply disruption, a policy decision, an OPEC/Fed/RBI action, a real geopolitical development. It is NOT a channel for routine, low-information rewrites: city-wise gold/silver retail rate roundups, "today's gold rate in [city]" listicles, generic daily price recaps with no new information or mechanism, or anything that is functionally a rewrite of an aggregator's rate table. If the article is one of these — respond with exactly: SKIP
+Do not write the article. Do not explain. Just: SKIP
+
 FORMATTING: Use **bold** to highlight key data points inline — price levels (e.g. **₹9,254/bbl**), percentage moves (e.g. **+2.3%**), company/commodity names on first mention (e.g. **Hindalco**, **MCX Aluminium**), and critical thresholds (e.g. **400,000 tonnes**). Do not bold entire sentences — only the specific numbers, names, and figures that a trader would scan for first.
 
 Rules: No opinions. No action verbs directed at the reader. No title. No byline. End with: Source: ${article.source}

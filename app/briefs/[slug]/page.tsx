@@ -203,7 +203,23 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <span itemProp="name">BhaavBrief</span>
                 <span itemProp="url">{BASE_URL}</span>
               </span>
+              <div style={{ marginTop: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.03em' }}>
+                BhaavBrief Intelligence Engine · <Link href="/methodology" style={{ color: '#8A8A7A', textDecoration: 'underline' }}>AI-generated, gate-validated</Link>
+              </div>
             </header>
+
+            {/* Correction notice — visible, never a silent edit (D-13) */}
+            {brief.corrected && (
+              <div style={{
+                marginBottom: '1.5rem', padding: '0.85rem 1rem',
+                background: '#FFF6E0', border: '1px solid #F0D585', borderRadius: 4,
+                fontSize: 13, color: '#8A5A00', lineHeight: 1.6,
+              }}>
+                <strong>Corrected{brief.correctedAt ? ` ${formatDate(brief.correctedAt)}` : ''}:</strong>{' '}
+                {brief.correctionNote ?? 'This edition was corrected after publication.'}{' '}
+                See our <Link href="/methodology#corrections" style={{ color: '#8A5A00', textDecoration: 'underline' }}>corrections policy</Link>.
+              </div>
+            )}
 
             {/* Story arc banner */}
             {arcs.length > 0 && (
