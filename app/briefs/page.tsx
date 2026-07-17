@@ -1,4 +1,5 @@
 import { getAllBriefs } from '@/lib/briefs'
+import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SectionTabs from '@/components/SectionTabs'
@@ -40,6 +41,7 @@ function getTagType(tag?: string): string {
 
 export default async function BriefsPage() {
   const briefs = await getAllBriefs()
+  const delayed = isTodaysBriefDelayed(briefs[0]?.date)
 
   return (
     <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto' }}>
@@ -60,6 +62,15 @@ export default async function BriefsPage() {
           <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
             {briefs.length} editions published · Every weekday at 9:30 AM IST
           </p>
+          {delayed && (
+            <p style={{
+              fontSize: 13, color: '#8A5A00', background: '#FFF6E0',
+              border: '1px solid #F0D585', borderRadius: 4,
+              padding: '8px 12px', marginTop: 12,
+            }}>
+              Today&apos;s edition is delayed. The latest available brief is shown below — a fresh one will replace it as soon as it publishes.
+            </p>
+          )}
         </div>
 
         {briefs.length === 0 ? (

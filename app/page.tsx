@@ -1,4 +1,5 @@
 import { getAllBriefs } from '@/lib/briefs'
+import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import type { PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
@@ -125,6 +126,7 @@ export default async function HomePage() {
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
+  const briefDelayed = isTodaysBriefDelayed(latest?.date)
 
   return (
     <div>
@@ -149,7 +151,7 @@ export default async function HomePage() {
           India&apos;s Commodity Intelligence Platform for MCX Traders
         </h1>
         <p style={{ fontSize: 16, color: 'var(--ink-2)', lineHeight: 1.6, maxWidth: 720, marginBottom: 16 }}>
-          Daily market briefs and an event calendar for MCX crude oil, natural gas, gold, silver, and base metals — published every trading day at 9:30 AM IST, before the session opens.
+          Daily market briefs and an event calendar for MCX crude oil, natural gas, gold, silver, and base metals — published every trading day at 9:30 AM IST, before the session finds direction.
         </p>
         <p style={{ fontSize: 14, color: 'var(--ink-3)', lineHeight: 1.7, maxWidth: 720, marginBottom: 20 }}>
           BhaavBrief publishes a daily MCX market brief at 9:30 AM IST covering crude oil, natural gas, gold, silver, copper, and USD/INR, alongside an event calendar that maps global data releases — EIA inventory reports, OPEC meetings, US CPI, FOMC decisions, RBI MPC, and China PMI — to the specific MCX contracts they historically move. The calendar reports historical event-impact statistics, so traders know what is scheduled, when it releases in IST, and how much the market has typically moved — without offering any trading advice or recommendations.
@@ -215,6 +217,16 @@ export default async function HomePage() {
               {latest.displayDate}
             </span>
           </div>
+
+          {briefDelayed && (
+            <p style={{
+              fontSize: 13, color: '#8A5A00', background: '#FFF6E0',
+              border: '1px solid #F0D585', borderRadius: 4,
+              padding: '8px 12px', marginBottom: 18,
+            }}>
+              Today&apos;s edition is delayed. Showing the latest available brief below — a fresh one will replace it as soon as it publishes.
+            </p>
+          )}
 
           {/* Title + description: two-col on desktop */}
           <div className="home-hero-inner">
@@ -611,7 +623,7 @@ export default async function HomePage() {
                 fontSize: 16, fontWeight: 500,
                 color: '#fff', margin: 0, lineHeight: 1.35,
               }}>
-                Get today&apos;s brief before market open.
+                Get today&apos;s brief by 9:30 AM IST.
               </p>
             </div>
             <div style={{ padding: '18px 20px' }}>
