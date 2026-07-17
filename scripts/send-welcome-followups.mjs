@@ -111,7 +111,7 @@ const EMAIL_2 = {
     <ol style="font-size:14px;line-height:2;color:#48483A;padding-left:20px">
       <li><strong style="color:#18180F">Price Bridge</strong> — the raw numbers, global price to MCX, in one glance.</li>
       <li><strong style="color:#18180F">The dominant narrative</strong> — one macro story, and whether it's building, fading, or shifting.</li>
-      <li><strong style="color:#18180F">Historical Context</strong> — how this pattern has played out before (only from our <a href="https://bhaavbrief.in/methodology" style="color:#C8720A">verified claims ledger</a> — never an invented statistic).</li>
+      <li><strong style="color:#18180F">Historical Context</strong> — how this pattern has played out before, from a verified statistical record — never an invented statistic.</li>
       <li><strong style="color:#18180F">What Kills It</strong> — the specific trigger that would reverse the narrative.</li>
       <li><strong style="color:#18180F">Edge of the Day</strong> — one falsifiable level to watch, resolved the next morning against real data.</li>
     </ol>

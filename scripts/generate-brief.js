@@ -319,7 +319,7 @@ ${rows.join('\n')}`
 
 const DISCLAIMER = `---
 
-*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information. See our [methodology](/methodology) for data sources, the claims ledger, and how this brief is generated and validated.*`
+*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information. See our [methodology](/methodology) for how this brief is generated, validated, and corrected.*`
 
 // ── Bold post-processor ───────────────────────────────────────────────────────
 // Ensures all price figures (₹/$ with numbers) and percentages are bolded in
