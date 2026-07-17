@@ -205,9 +205,6 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <span itemProp="name">BhaavBrief</span>
                 <span itemProp="url">{BASE_URL}</span>
               </span>
-              <div style={{ marginTop: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.03em' }}>
-                BhaavBrief Intelligence Engine · <Link href="/methodology" style={{ color: '#8A8A7A', textDecoration: 'underline' }}>AI-generated, gate-validated</Link>
-              </div>
             </header>
 
             {/* Correction notice — visible, never a silent edit (D-13) */}
