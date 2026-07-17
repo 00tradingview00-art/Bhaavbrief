@@ -643,6 +643,22 @@ const NON_BLOCKING_PREFIXES = ["SEMANTIC-WARN", "PARITY-WARN", "BOUND-WARN"];
 const blockers = issues.filter((i) => !NON_BLOCKING_PREFIXES.some((p) => i.startsWith(p)));
 const hasInternalError = issues.some((i) => i.startsWith("GATE_INTERNAL_ERROR:"));
 
+// G-12: a machine-readable result for the human-approval-gate streak logic
+// (scripts/apply-human-gate.mjs) — "zero overrides" means zero issues of any
+// kind, not just zero blockers, so a WARN-level issue also breaks the streak.
+try {
+  fs.writeFileSync(
+    path.join(process.cwd(), "data/last-gate-result.json"),
+    JSON.stringify({
+      clean: issues.length === 0,
+      issueCount: issues.length,
+      blockers,
+      warnings: issues.filter((i) => NON_BLOCKING_PREFIXES.some((p) => i.startsWith(p))),
+      checkedAt: new Date().toISOString(),
+    }, null, 2) + "\n"
+  );
+} catch { /* non-fatal — the human gate falls back to auto-publish if this is unreadable */ }
+
 console.log("\n=== BhaavBrief publish gate ===");
 if (issues.length === 0) {
   console.log("PASS — no issues found.");

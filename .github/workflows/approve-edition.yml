@@ -1,0 +1,51 @@
+name: Approve Staged Edition
+
+on:
+  workflow_dispatch:
+    inputs:
+      edition:
+        description: 'Edition number to approve and publish (e.g. 68)'
+        required: true
+        type: number
+
+permissions:
+  contents: write
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Flip published:false -> published:true
+        run: |
+          PADDED=$(printf '%03d' ${{ inputs.edition }})
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF" ]; then
+            echo "::error::$BRIEF not found"
+            exit 1
+          fi
+          if ! grep -q '^published: false' "$BRIEF"; then
+            echo "::error::$BRIEF is not staged (no 'published: false' line) — nothing to approve, or it was already approved"
+            exit 1
+          fi
+          sed -i 's/^published: false/published: true/' "$BRIEF"
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$BRIEF"
+          git commit -m "Approve Brief #${{ inputs.edition }}"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+          echo "Edition ${{ inputs.edition }} approved and published."

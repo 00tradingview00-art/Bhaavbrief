@@ -95,6 +95,32 @@ jobs:
           fi
           node scripts/compliance-lint.mjs data/market-snapshot.json "$BRIEF"
 
+      - name: Apply human approval gate (G-12)
+        id: humangate
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF" ]; then
+            echo "No new brief generated — skipping human gate"
+            echo "staged=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Dormant unless TELEGRAM_BOT_TOKEN/TELEGRAM_CHAT_ID are both set —
+          # see scripts/apply-human-gate.mjs's own safety-net comment. Until
+          # 30 consecutive clean gate passes accumulate, this rewrites the
+          # brief to published:false and pings Telegram for approval instead
+          # of publishing immediately.
+          node scripts/apply-human-gate.mjs "$BRIEF" "$EDITION"
+          if grep -q '^published: false' "$BRIEF"; then
+            echo "staged=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "staged=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Rebuild content search index
         run: node scripts/build-content-index.js
         continue-on-error: true
@@ -122,6 +148,11 @@ jobs:
           # Commit brief + snapshot together — they must be one atomic commit
           # so the site and email can never show prices from different vintages.
           git add content/briefs/ data/market-snapshot.json data/content-index.json public/instagram/
+          # Seeded in the repo so this always exists, but `git add` on a
+          # missing path is a hard failure (exit 128) that would break this
+          # entire step — verified directly before relying on it. Guarded
+          # defensively in case it's ever absent for any reason.
+          [ -f data/gate-streak.json ] && git add data/gate-streak.json || true
           if git diff --staged --quiet; then
             echo "Nothing to commit — brief already published today"
             echo "published=false" >> $GITHUB_OUTPUT
@@ -142,7 +173,7 @@ jobs:
           echo "published=true" >> $GITHUB_OUTPUT
 
       - name: Wait for Vercel deploy then send newsletter
-        if: steps.commit.outputs.published == 'true'
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
         continue-on-error: true
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
@@ -161,7 +192,7 @@ jobs:
           node scripts/send-newsletter.js
 
       - name: Post to Instagram
-        if: steps.commit.outputs.published == 'true'
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
         continue-on-error: true
         env:
           EDITION:                  ${{ steps.edition.outputs.number }}
@@ -170,12 +201,12 @@ jobs:
         run: node scripts/post-instagram.js
 
       - name: Install ffmpeg
-        if: steps.commit.outputs.published == 'true'
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Generate brief reel
         id: reel
-        if: steps.commit.outputs.published == 'true'
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
         continue-on-error: true
         env:
           EDITION:              ${{ steps.edition.outputs.number }}
@@ -189,7 +220,7 @@ jobs:
           echo "padded=$PADDED" >> $GITHUB_OUTPUT
 
       - name: Post reel to Instagram
-        if: steps.commit.outputs.published == 'true' && steps.reel.outcome == 'success'
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true' && steps.reel.outcome == 'success'
         continue-on-error: true
         env:
           EDITION:                ${{ steps.edition.outputs.number }}

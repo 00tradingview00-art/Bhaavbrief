@@ -10,3 +10,8 @@ out/
 scripts/.kite-session.json
 tsconfig.tsbuildinfo
 .claude/scheduled_tasks.lock
+
+# Transient, single-CI-run-scoped: passes data from validate-brief.mjs to
+# apply-human-gate.mjs (G-12) within the same job. data/gate-streak.json is
+# NOT here — that one is persistent state and must be committed.
+data/last-gate-result.json
