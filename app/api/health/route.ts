@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { loadSnapshot, snapshotAgeMinutes, isMCXOpenNow } from '@/lib/snapshot'
+import { todayIST, isTradingDay, toISTDate, istMinutesSinceMidnight, BRIEF_DEADLINE_IST_MINUTES } from '@/lib/tradingCalendar'
 
 export const runtime    = 'nodejs'
 export const dynamic    = 'force-dynamic'
@@ -12,27 +13,21 @@ export const revalidate = 0
 const SNAPSHOT_STALE_MARKET_OPEN_MIN   = 120
 const SNAPSHOT_STALE_MARKET_CLOSED_MIN = 720
 
-// Public promise is 9:30 AM IST; generation cron fires ~9:00 AM IST with a 30min buffer
-// for GH Actions scheduling lag. 10:00 AM gives another 30min before alerting.
-const BRIEF_DEADLINE_IST_MINUTES = 10 * 60
-
 // intelligence-engine.yml runs every 15-30min during MCX hours; >60min silent during
 // market hours means the pipeline is stuck, not just between runs.
 const ENGINE_STALE_MARKET_OPEN_MIN = 60
 
-function todayIST(): string {
-  return new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
-}
-
-function istMinutesSinceMidnight(): number {
-  const ist = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-  return ist.getHours() * 60 + ist.getMinutes()
-}
-
-function isWeekend(dateStr: string): boolean {
-  const day = new Date(dateStr + 'T00:00:00+05:30').getDay()
-  return day === 0 || day === 6
-}
+// Code-review follow-up: todayIST/isWeekend/holiday-loading used to be
+// reimplemented inline here, a third copy of logic that also lives in
+// scripts/lib/holidays.js and lib/tradingCalendar.ts. Now imported from
+// lib/tradingCalendar.ts, which fixes a real bug this duplication caused:
+// isWeekend anchored on `dateStr + 'T00:00:00+05:30'` (midnight IST), which
+// falls on the PREVIOUS calendar day in UTC — under Vercel's UTC-default
+// runtime, `.getDay()` on that returned the previous day's weekday. Verified
+// concretely: a real Monday (2026-07-20) evaluated as Sunday, so this health
+// check has been silently unable to detect a missing Monday brief. See
+// lib/tradingCalendar.ts for the full writeup and the fix (isTradingDay,
+// which delegates to scripts/lib/holidays.js's already-correct anchor).
 
 function loadJSON<T>(relPath: string): T | null {
   try {
@@ -64,13 +59,10 @@ function checkBrief() {
   try {
     const today = todayIST()
 
-    if (isWeekend(today)) return { ok: true, reason: 'weekend, no brief expected' }
-
-    const holidays = loadJSON<Array<{ date: string }>>('data/market-holidays.json') ?? []
-    if (holidays.some(h => h.date === today)) return { ok: true, reason: 'market holiday, no brief expected' }
+    if (!isTradingDay(today)) return { ok: true, reason: 'weekend or market holiday, no brief expected' }
 
     if (istMinutesSinceMidnight() < BRIEF_DEADLINE_IST_MINUTES) {
-      return { ok: true, reason: 'before 10:00 AM IST deadline' }
+      return { ok: true, reason: 'before deadline' }
     }
 
     // content-index.json is rebuilt on every generate-brief.yml run — the reliable
@@ -79,9 +71,12 @@ function checkBrief() {
     const index = loadJSON<Array<{ type: string; date: string }>>('data/content-index.json')
     if (!index) return { ok: false, reason: 'content-index.json missing' }
 
+    // toISTDate, not a raw slice(0,10) — the raw UTC slice was the same
+    // date-basis bug fixed elsewhere in this pass (see lib/tradingCalendar.ts).
     const latestBriefDate = index
       .filter(e => e.type === 'brief')
-      .map(e => e.date.slice(0, 10))
+      .map(e => toISTDate(e.date))
+      .filter((d): d is string => d !== null)
       .sort()
       .pop() ?? null
 
