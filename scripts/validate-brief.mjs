@@ -14,7 +14,9 @@
  */
 
 import fs from "node:fs";
+import path from "node:path";
 import { checkWeekday } from "./lib/weekdayCheck.js";
+import { checkClaims } from "./lib/claimsCheck.mjs";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -393,6 +395,31 @@ for (const re of banned) {
       issues.push(`STRUCTURE: required section "${name}" is missing`);
     }
   }
+}
+
+// 12. Claims ledger conformance (G-07) — extracted into
+//     scripts/lib/claimsCheck.js (a testable pure function; see
+//     claimsCheck.test.mjs) after two revisions during verification: the
+//     first version matched numbers against the whole ledger with ±0.5
+//     tolerance and let a fabricated "5%" through because it coincidentally
+//     landed near an unrelated copper claim's value; the current version
+//     requires both a near-exact number match AND the right commodity
+//     mentioned nearby. Catches the D-07 defect class directly — edition
+//     #66's "Brent has fallen 3-5%..." and "MCX gold has typically given
+//     back 1-2%" both have no ledger entry and are flagged.
+try {
+  let claims = [];
+  try {
+    claims = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data/claims.json"), "utf8")).claims ?? [];
+  } catch {
+    // No ledger file yet — every historical-% claim below correctly fails
+    // closed (nothing to match against), which is the safe default.
+  }
+  for (const msg of checkClaims(brief, claims)) {
+    issues.push(msg);
+  }
+} catch (e) {
+  pushInternalError(`claims ledger check threw: ${e.message}`);
 }
 
 // ---------------------------------------------------------------------------

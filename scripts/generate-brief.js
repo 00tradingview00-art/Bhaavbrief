@@ -18,6 +18,25 @@ if (fs.existsSync(envFile)) {
 const client     = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const BRIEFS_DIR = path.join(process.cwd(), 'content/briefs')
 
+// FIX-07 (D-07): the only historical/statistical claims the model may cite —
+// see scripts/lib/buildClaimsLedger.mjs for how this is (re)generated, and
+// data/claims.json for why it's currently limited to event-calendar impact
+// stats (EIA storage, API inventories, etc.) and does NOT cover geopolitical
+// reaction patterns like ceasefire timing or "self-limiting" price
+// thresholds — there's no verified dataset behind those, and previous
+// editions freely invented plausible-sounding numbers for exactly that kind
+// of claim (e.g. "Brent falls 3-5% within 24h of a ceasefire" — no source,
+// no sample, no N). validate-brief.mjs's G-07 check enforces this at the
+// gate; this is the corresponding constraint on the generation side.
+function loadClaimsLedger() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/claims.json'), 'utf8'))
+    return raw.claims ?? []
+  } catch {
+    return []
+  }
+}
+
 function detectNextEdition() {
   if (process.env.EDITION) return parseInt(process.env.EDITION, 10)
   try {
@@ -246,7 +265,7 @@ ${rows.join('\n')}`
 
 const DISCLAIMER = `---
 
-*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information.*`
+*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information. See our [methodology](/methodology) for data sources, the claims ledger, and how this brief is generated and validated.*`
 
 // ── Bold post-processor ───────────────────────────────────────────────────────
 // Ensures all price figures (₹/$ with numbers) and percentages are bolded in
@@ -333,6 +352,15 @@ Derived: ${JSON.stringify(snapshot.derived)}
 Snapshot as of: ${snapshot.generatedAtIST}
 ` : ''
 
+  const claimsLedger = loadClaimsLedger()
+  const claimsBlock = `
+<claims_allowed>
+${claimsLedger.length > 0 ? JSON.stringify(claimsLedger.map(c => ({
+    claim_id: c.claim_id,
+    statement: c.statement_template.replace(/\{(\w+)\}/g, (_, k) => c.values?.[k] ?? `{${k}}`),
+  })), null, 2) : '[] — the ledger is currently empty or unavailable'}
+</claims_allowed>`
+
   const priceBlock = prices ? `
 TODAY'S MCX PRICES (formatted from the snapshot above — same numbers, human-readable):
 - MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today
@@ -373,6 +401,10 @@ Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation 
 TEMPORAL ACCURACY — NON-NEGOTIABLE:
 Today is ${dateStr}. The next trading session is ${nextTradingDayName}, ${nextTradingDateFull}.
 When writing the "Tomorrow:" line, refer to the next trading session using ONLY the day name "${nextTradingDayName}" — never today's own day name, and never assume the next calendar day is a trading session (it may be a weekend or market holiday, in which case "${nextTradingDayName}" is the correct next session, not the literal next calendar day).
+
+HISTORICAL/STATISTICAL CLAIMS — NON-NEGOTIABLE (FIX-07):
+You may ONLY state a historical or statistical claim (any sentence with a %, an "average", a "typically", or a "historically [verb] by X" pattern) by directly using one of the pre-verified statements in <claims_allowed> below, near-verbatim. If no claim in the ledger is relevant to today's narrative, DO NOT invent one — write the Historical Context and What Kills It sections in purely qualitative terms instead ("prices have moved sharply in past episodes of this pattern" is fine; "prices moved 3-5%" with no ledger backing is not). The ledger currently only covers scheduled economic-data-release impact stats (EIA storage, API inventories, Baker Hughes, CFTC COT) — it does NOT cover geopolitical reaction timing, "self-limiting" price thresholds, or rupee-lag patterns, because no verified dataset exists for those yet. A plausible-sounding number with no ledger entry is worse than no number at all — this is not a style preference, it is the fix for a defect that already shipped (see /methodology).
+${claimsBlock}
 
 BhaavBrief's edge is the NARRATIVE ENGINE — we don't just report prices, we track the dominant macro story shaping Indian commodity markets and show traders if it's gaining or losing power.
 
@@ -418,7 +450,7 @@ BhaavBrief is unregistered. Every sentence must pass the educational test.
 - State data, never judge it: "Crude at $87.40, up 2.3%" ✅ | "Crude closed strong" ❌
 - No action verbs directed at reader. BANNED: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No predictive framing: "Goldman Sachs projects crude at $95" ✅ | "Crude headed to $95" ❌
-- Historical context over prediction: "In past dollar-strength episodes, MCX gold fell 2-4%" ✅ | "MCX gold will fall" ❌
+- Historical context over prediction: "In past dollar-strength episodes, MCX gold has typically moved lower" ✅ (qualitative, no invented number) | "MCX gold will fall" ❌ (predictive) | "MCX gold fell 2-4%" ❌ unless that exact figure is a <claims_allowed> entry — see HISTORICAL/STATISTICAL CLAIMS above
 - Macro linkage must be educational not prescriptive: use "has historically" / "in past instances" framing
 - "Edge of the Day" must be an observation or a data point to watch — never a trading call
 ═══════════════════════════════════════════
@@ -433,9 +465,9 @@ WRITING RULES
   CONTRARIAN: "Everyone is buying gold right now. Here is why that instinct may be the wrong one."
   NEVER open any section with a price followed by a percentage change. Open with what it MEANS.
 
-- THE TWIST: Inside the Historical Context section, include exactly one sentence that names the contrarian view — what smart money or analysts on the OTHER side of this trade argue. Frame as historical observation per SEBI rules.
-  Example: "The contrary read, based on past OPEC spare-capacity episodes, is that any move above $95 historically becomes self-defeating as cheating by smaller members accelerates."
-  Example: "The twist worth watching: gold is falling INTO a war, which historically lasts no more than 48 hours before safe-haven demand reasserts — a sustained selloff here would be the anomaly."
+- THE TWIST: Inside the Historical Context section, include exactly one sentence that names the contrarian view — what smart money or analysts on the OTHER side of this trade argue. Frame as historical observation per SEBI rules. State it qualitatively (a direction and a mechanism) — do NOT attach an invented number, percentage, or specific time window unless that exact figure is a <claims_allowed> entry.
+  Example: "The contrary read, based on past OPEC spare-capacity episodes, is that a sustained move above current levels historically becomes self-defeating as cheating by smaller members accelerates."
+  Example: "The twist worth watching: gold is falling INTO a war — historically the safe-haven bid has reasserted once the initial shock passes, which would make a sustained selloff here the anomaly, not the norm."
 
 - Open with the narrative, not with prices. Prices prove the narrative.
 - If the recent editions were about Iran/crude, this edition must either deepen that story or show it reversing — never repeat it flatly.
@@ -493,10 +525,10 @@ The divergence between A and B is telling you Z about narrative conviction.
 Include specific price levels from the data above.]
 
 ## Historical Context
-[How have MCX commodities behaved in past episodes of this same narrative — use "historically", "in past instances", "during similar periods". Describe the CHARACTER and DIRECTION of the price response. Only cite a specific percentage if you are certain of the exact figure. If uncertain, write "prices moved sharply higher/lower" — do not invent statistics. Never a directional call — only documented patterns.]
+[How have MCX commodities behaved in past episodes of this same narrative — use "historically", "in past instances", "during similar periods". Describe the CHARACTER and DIRECTION of the price response. A specific percentage or average may ONLY appear here if it is a <claims_allowed> entry, cited near-verbatim — never invented, never estimated, never recalled from training. If no ledger claim fits today's narrative, write "prices have moved sharply higher/lower" or similar — qualitative, no number. Never a directional call — only documented patterns.]
 
 ## What Kills It
-[One specific trigger or data point that would reverse the narrative. What should traders have on their radar?]
+[One specific trigger or data point that would reverse the narrative. What should traders have on their radar? If describing how markets have reacted to similar triggers before, the same rule applies: a specific number/percentage/time-window requires a <claims_allowed> entry; otherwise stay qualitative (e.g. "de-escalation announcements have historically stripped the premium quickly" — no invented figure).]
 
 ## Who Is Affected
 3 sentences — one each, specific and concrete:
