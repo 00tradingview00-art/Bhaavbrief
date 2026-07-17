@@ -17,11 +17,14 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { sendTelegramMessage } from './lib/telegram.mjs'
+import { MCX_SANITY_INSTRUMENTS, fetchInstrumentSanity, formatOptionsSanitySection } from './lib/optionsSanity.mjs'
+
+const OPTIONS_SANITY_BASE_URL = process.env.MONITOR_BASE_URL ?? 'https://bhaavbrief.in'
 
 const WINDOW_DAYS = 7
 const windowStart = Date.now() - WINDOW_DAYS * 24 * 3600 * 1000
 
-function readGateLog() {
+export function readGateLog() {
   const file = path.join(process.cwd(), 'data/gate-log.jsonl')
   if (!fs.existsSync(file)) return []
   return fs.readFileSync(file, 'utf8')
@@ -29,6 +32,11 @@ function readGateLog() {
     .filter(Boolean)
     .map((line) => { try { return JSON.parse(line) } catch { return null } })
     .filter(Boolean)
+    // gate-log.jsonl also carries 'generation_call' records (Part 8.4) since
+    // this commit — only 'gate_run' entries feed the pass-rate stat below.
+    // The `type` field check falls back to "has checkedAt" for any entry
+    // written before this field existed.
+    .filter((entry) => (entry.type ?? (entry.checkedAt ? 'gate_run' : null)) === 'gate_run')
     .filter((entry) => new Date(entry.checkedAt).getTime() >= windowStart)
 }
 
@@ -54,7 +62,7 @@ async function fetchMonitorIncidents() {
   }
 }
 
-export function buildDigest({ gateEntries, edgeLedger, incidents }) {
+export function buildDigest({ gateEntries, edgeLedger, incidents, optionsSanitySection }) {
   const totalRuns = gateEntries.length
   const cleanRuns = gateEntries.filter((e) => e.clean).length
   const internalErrors = gateEntries.filter((e) => e.hasInternalError).length
@@ -83,14 +91,29 @@ export function buildDigest({ gateEntries, edgeLedger, incidents }) {
 
   lines.push('', 'Overrides-used tracking is not yet wired up — G-12 approvals aren\'t logged separately from ordinary commits.')
 
+  if (optionsSanitySection) lines.push(optionsSanitySection)
+
   return lines.join('\n')
+}
+
+async function fetchOptionsSanitySection() {
+  try {
+    const summaries = await Promise.all(
+      MCX_SANITY_INSTRUMENTS.map((i) => fetchInstrumentSanity(OPTIONS_SANITY_BASE_URL, i))
+    )
+    return formatOptionsSanitySection(summaries)
+  } catch (e) {
+    console.warn('Options sanity report skipped (fetch failed):', e.message)
+    return null
+  }
 }
 
 async function main() {
   const gateEntries = readGateLog()
   const edgeLedger = readEdgeLedger()
   const incidents = await fetchMonitorIncidents()
-  const digest = buildDigest({ gateEntries, edgeLedger, incidents })
+  const optionsSanitySection = await fetchOptionsSanitySection()
+  const digest = buildDigest({ gateEntries, edgeLedger, incidents, optionsSanitySection })
 
   console.log(digest.replace(/<\/?b>/g, ''))
 

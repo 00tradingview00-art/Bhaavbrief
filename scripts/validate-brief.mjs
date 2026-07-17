@@ -17,6 +17,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { checkWeekday } from "./lib/weekdayCheck.js";
 import { checkClaims } from "./lib/claimsCheck.mjs";
+import { appendGateLogEntry } from "./lib/gateLog.mjs";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -668,7 +669,8 @@ try {
 // synthetic-monitor.yml's use of GitHub Issues as its audit trail instead).
 try {
   const editionMatch = briefPath.match(/edition-(\d+)/);
-  const logLine = JSON.stringify({
+  appendGateLogEntry({
+    type: "gate_run",
     edition: editionMatch ? parseInt(editionMatch[1], 10) : null,
     briefPath,
     clean: issues.length === 0,
@@ -679,7 +681,6 @@ try {
     durationMs: Date.now() - gateStartedAt,
     checkedAt: new Date().toISOString(),
   });
-  fs.appendFileSync(path.join(process.cwd(), "data/gate-log.jsonl"), logLine + "\n");
 } catch { /* non-fatal — telemetry logging must never block publication */ }
 
 console.log("\n=== BhaavBrief publish gate ===");

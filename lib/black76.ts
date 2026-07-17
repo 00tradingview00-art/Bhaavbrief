@@ -72,7 +72,18 @@ export function black76(F: number, K: number, T: number, r: number, sigma: numbe
 
 /**
  * Newton-Raphson IV solver.
- * @returns IV as decimal (0.25 = 25%), or 0 if unsolvable.
+ *
+ * Part 7 (options engine standard): "IV solver failures return null
+ * rendered as '—', never 0.1% or clamped extremes." Before this, hitting
+ * the sigma clamp during iteration (0.001 or 5) without ever converging
+ * was indistinguishable from a real, legitimately extreme IV — both
+ * returned a plain number, so a non-convergent solve rendered as a
+ * plausible-looking "0.10%" instead of a visible failure. Convergence is
+ * now tracked explicitly: only a sigma reached via `|diff| < TOLERANCE`
+ * counts as a solved value; hitting MAX_ITER or a dead (near-zero) vega
+ * without ever converging returns null instead of the clamped boundary.
+ *
+ * @returns IV as decimal (0.25 = 25%), or null if unsolvable/non-convergent.
  */
 export function calculateIV(
   marketPrice: number,
@@ -81,26 +92,28 @@ export function calculateIV(
   T: number,
   r: number,
   type: 'CE' | 'PE',
-): number {
-  if (marketPrice <= 0 || T <= 0) return 0
+): number | null {
+  if (marketPrice <= 0 || T <= 0) return null
 
   let sigma = 0.3  // seed
   const MAX_ITER = 100
   const TOLERANCE = 0.01
+  let converged = false
 
   for (let i = 0; i < MAX_ITER; i++) {
     const { price, vega } = black76(F, K, T, r, sigma, type)
     const diff = price - marketPrice
 
-    if (Math.abs(diff) < TOLERANCE) break
-    if (Math.abs(vega) < 1e-10) break
+    if (Math.abs(diff) < TOLERANCE) { converged = true; break }
+    if (Math.abs(vega) < 1e-10) break // dead vega, can't move further — not a converged solve
 
     sigma = sigma - diff / (vega * 100)
     if (sigma <= 0.001) sigma = 0.001
     if (sigma > 5) sigma = 5
   }
 
-  return isNaN(sigma) || sigma <= 0 ? 0 : sigma
+  if (!converged || isNaN(sigma) || sigma <= 0) return null
+  return sigma
 }
 
 export interface ChainRowForMaxPain {

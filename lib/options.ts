@@ -190,14 +190,14 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
       let ce = classifyQuote(ceLTP, ceOI, ceVolume, ceBid, ceAsk, ceIntrinsic, ceUpperBound)
       let pe = classifyQuote(peLTP, peOI, peVolume, peBid, peAsk, peIntrinsic, peUpperBound)
 
-      const ceIV = ce.validForSolve && ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : 0
-      const peIV = pe.validForSolve && peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : 0
+      const ceIV = ce.validForSolve && ceLTP > 0 ? calculateIV(ceLTP, futurePrice, strike, T, RISK_FREE_RATE, 'CE') : null
+      const peIV = pe.validForSolve && peLTP > 0 ? calculateIV(peLTP, futurePrice, strike, T, RISK_FREE_RATE, 'PE') : null
 
       // Per-strike put-call parity check: two LIVE-tier quotes at the same
       // strike/expiry whose IVs diverge sharply mean one side's quote is off
       // even though it individually passed the liquidity/spread bar — demote
       // both rather than render one as trustworthy and the other not.
-      if (ce.tier === 'LIVE' && pe.tier === 'LIVE' && ceIV > 0 && peIV > 0) {
+      if (ce.tier === 'LIVE' && pe.tier === 'LIVE' && ceIV !== null && peIV !== null && ceIV > 0 && peIV > 0) {
         const ivGapPts = Math.abs(ceIV - peIV) * 100
         if (ivGapPts > IV_PARITY_TOLERANCE_VOL_PTS) {
           ce = { ...ce, tier: 'STALE' }
@@ -205,8 +205,8 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
         }
       }
 
-      const ceGreeks: Partial<Greeks> = ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
-      const peGreeks: Partial<Greeks> = peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
+      const ceGreeks: Partial<Greeks> = ceIV !== null && ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
+      const peGreeks: Partial<Greeks> = peIV !== null && peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
 
       const distFromATM = futurePrice > 0 ? Math.abs(strike - futurePrice) / futurePrice : 1
 
@@ -222,7 +222,7 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oi:       ceOI,
           oiChange: ceQ ? (ceQ.oi - (ceQ.oi_day_low ?? ceQ.oi)) : 0,
           volume:   ceVolume,
-          iv:       ceIV > 0 ? parseFloat((ceIV * 100).toFixed(2)) : null,
+          iv:       ceIV !== null && ceIV > 0 ? parseFloat((ceIV * 100).toFixed(2)) : null,
           bid:      ceBid,
           ask:      ceAsk,
           tier:     ce.tier,
@@ -238,7 +238,7 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
           oi:       peOI,
           oiChange: peQ ? (peQ.oi - (peQ.oi_day_low ?? peQ.oi)) : 0,
           volume:   peVolume,
-          iv:       peIV > 0 ? parseFloat((peIV * 100).toFixed(2)) : null,
+          iv:       peIV !== null && peIV > 0 ? parseFloat((peIV * 100).toFixed(2)) : null,
           bid:      peBid,
           ask:      peAsk,
           tier:     pe.tier,
