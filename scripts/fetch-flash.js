@@ -9,6 +9,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 import { fetchPexelsImage } from './lib/pexels.js'
+import { extractFlashTitle } from './lib/flashTitle.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
@@ -394,7 +395,7 @@ ${trendingLine ? '\n' + trendingLine : ''}
 
 Write a 200-240 word intelligence flash on the article below. Use this exact structure:
 
-TITLE: [Your own MCX-framed headline — under 12 words, lead with the commodity or market angle, NOT the source's headline. Examples: "Steel Output Surge Lifts MCX Copper Demand Signal", "Hindalco Aluminium Push Tightens Domestic Ingot Supply". Never copy the source title.]
+TITLE: [Your own MCX-framed headline — under 12 words, lead with the commodity or market angle, NOT the source's headline. Examples: "Steel Output Surge Lifts MCX Copper Demand Signal", "Hindalco Aluminium Push Tightens Domestic Ingot Supply". Never copy the source title. This line must be plain text starting with "TITLE:" — never a markdown heading (no #), never bolded, and the headline must be on the same line as "TITLE:", not the line below it.]
 
 **WHAT HAPPENED**
 One sentence. State the specific fact with the key number or figure. Facts only, no interpretation.
@@ -569,10 +570,13 @@ async function main() {
         continue
       }
 
-      // Extract generated title from TITLE: line, fall back to source title
-      const titleLine = content.match(/^TITLE:\s*(.+)$/m)
-      const title     = titleLine?.[1]?.trim().replace(/^["']|["']$/g, '') ?? article.title
-      const body      = content.replace(/^TITLE:.*$/m, '').trim()
+      // Extract generated title from TITLE: line, fall back to source title.
+      // See scripts/lib/flashTitle.mjs — the model occasionally reformats
+      // this one line to match the rest of the prompt's **BOLD** heading
+      // style instead of the requested plain "TITLE: ..." line; handled
+      // there rather than leaving a literal "# TITLE" placeholder published.
+      const { title, body, usedFallback } = extractFlashTitle(content, article.title)
+      if (usedFallback) console.warn(`  Title extraction fell back to source headline: ${article.title.slice(0, 60)}`)
 
       const ist      = getISTNow()
       const p        = n => String(n).padStart(2, '0')
