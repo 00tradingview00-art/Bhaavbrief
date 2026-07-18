@@ -30,7 +30,7 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
             Tomorrow
           </div>
           <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, margin: 0 }}>
-            {renderInlineBold(tomorrow)}
+            {renderInlineBold(tomorrow, 700)}
           </p>
         </div>
       )}

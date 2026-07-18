@@ -153,7 +153,12 @@ Businesses, Investors and Consumers body.
     expect(parsed?.dominantThemeStatus).toBe('METALS UNDER PRESSURE')
   })
 
-  it('does not throw when a Price Bridge commodity cell is bolded (regex-injection regression)', () => {
+  it('does not throw when a Price Bridge commodity cell is bolded, and still finds its pct (regex-injection regression)', () => {
+    // Regression test: escaping the raw "**Gold**" cell for regex safety is
+    // not enough on its own — searching for the literal bolded text never
+    // matches prose like "Gold is up **+0.04%**" (where only the number is
+    // bolded), so the escape fix must also use the bold-STRIPPED commodity
+    // name for the pct lookup, not just for regex-injection safety.
     const content = SYNTHETIC_SECTIONS(
       'Some Theme — BUILDING',
       '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| **Gold** | $3997/oz | ₹96.29 | ₹140400/10g |'
@@ -161,6 +166,7 @@ Businesses, Investors and Consumers body.
     expect(() => parseBriefSections(content)).not.toThrow()
     const parsed = parseBriefSections(content)
     expect(parsed?.priceBridgeRows?.[0]?.commodity).toBe('Gold')
+    expect(parsed?.priceBridgeRows?.[0]?.pct).toBeCloseTo(1.00, 2)
   })
 
   it('does not drop the last column when a Price Bridge row is missing its trailing pipe', () => {
@@ -171,5 +177,35 @@ Businesses, Investors and Consumers body.
     const parsed = parseBriefSections(content)
     expect(parsed?.priceBridgeRows).not.toBeNull()
     expect(parsed?.priceBridgeRows?.[0]?.mcx).toContain('140400')
+  })
+
+  it('preserves a row whose last cell is genuinely empty instead of dropping it', () => {
+    // Regression test: stripping leading/trailing empty cells in a loop
+    // (rather than at most once per side) couldn't distinguish the row's
+    // own outer-pipe artifact from a legitimately-blank last column, and
+    // popped both — silently dropping the entire row.
+    const content = SYNTHETIC_SECTIONS(
+      'Some Theme — BUILDING',
+      '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| Gold | $3997/oz | ₹96.29 | |'
+    )
+    const parsed = parseBriefSections(content)
+    expect(parsed?.priceBridgeRows).not.toBeNull()
+    expect(parsed?.priceBridgeRows?.[0]?.commodity).toBe('Gold')
+    expect(parsed?.priceBridgeRows?.[0]?.mcx).toBe('')
+  })
+
+  it('extracts a multi-word status suffix that itself contains a comma', () => {
+    // Regression test: edition-018's real (legacy-format, currently
+    // dormant) heading is "Stagflation Premium Repricing — WEAKENING AT THE
+    // EDGES, NOT REVERSING" — a single-character separator between
+    // all-caps words left the comma stuck to the end of the title instead
+    // of being absorbed into the status phrase.
+    const content = SYNTHETIC_SECTIONS(
+      'Stagflation Premium Repricing — WEAKENING AT THE EDGES, NOT REVERSING',
+      '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| Gold | $3997/oz | ₹96.29 | ₹140400/10g |'
+    )
+    const parsed = parseBriefSections(content)
+    expect(parsed?.dominantThemeTitle).toBe('Stagflation Premium Repricing')
+    expect(parsed?.dominantThemeStatus).toBe('WEAKENING AT THE EDGES, NOT REVERSING')
   })
 })
