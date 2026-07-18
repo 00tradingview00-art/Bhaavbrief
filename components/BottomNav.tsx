@@ -44,12 +44,33 @@ const TABS = [
     ),
   },
   {
+    href: '/news',
+    label: 'Feed',
+    icon: (active: boolean) => (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M4 4a12 12 0 0 1 12 12" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" strokeLinecap="round" />
+        <path d="M4 9a7 7 0 0 1 7 7" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="5" cy="15" r="1.6" fill={active ? 'var(--gold)' : 'var(--ink-4)'} />
+      </svg>
+    ),
+  },
+  {
     href: '/calendar',
     label: 'Calendar',
     icon: (active: boolean) => (
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
         <rect x="3" y="4" width="14" height="12.5" rx="1.4" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" />
         <path d="M3 7.5h14M6.5 2.5v3M13.5 2.5v3" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+  {
+    href: '/learn',
+    label: 'Learn',
+    icon: (active: boolean) => (
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 5.5c-1.3-1-3-1.5-6-1.5v10.5c3 0 4.7.5 6 1.5c1.3-1 3-1.5 6-1.5V4c-3 0-4.7.5-6 1.5Z" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" strokeLinejoin="round" />
+        <path d="M10 5.5v10.5" stroke={active ? 'var(--gold)' : 'var(--ink-4)'} strokeWidth="1.6" />
       </svg>
     ),
   },
@@ -93,6 +114,7 @@ export default function BottomNav() {
             >
               {icon(active)}
               <span
+                className="bb-tab-label"
                 style={{
                   fontFamily: 'system-ui, sans-serif',
                   fontSize: 10,
@@ -115,6 +137,9 @@ export default function BottomNav() {
         }
         @media (prefers-reduced-motion: reduce) {
           .bb-bottom-nav a span { transition: none; }
+        }
+        @media (max-width: 400px) {
+          .bb-tab-label { font-size: 9px !important; }
         }
       `}</style>
     </>
