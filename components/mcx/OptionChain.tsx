@@ -539,8 +539,15 @@ export default function OptionChain({ isPro, preview = false, initialData = null
       )}
 
       {/* ── Analytics strip ── */}
+      {/* Part 12 §12.8: sticky while scrolling the chain, below the global
+          Nav (53px) + TickerStrip (~46.5px) sticky header. Only sticks within
+          non-preview usage — the /markets preview embed doesn't scroll far
+          enough for this to matter, but the sticky rule is harmless there. */}
       {data && (
-        <div style={{ borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none' }}>
+        <div style={{
+          borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none',
+          position: preview ? undefined : 'sticky', top: preview ? undefined : 102, zIndex: 20,
+        }}>
           <Pill label="Underlying" value={fmtINR(data.futurePrice)}
             info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks." />
           <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold}
