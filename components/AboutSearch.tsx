@@ -116,11 +116,10 @@ export default function AboutSearch() {
           }}
         />
         {loading && (
-          <div style={{
-            width: 14, height: 14, borderRadius: '50%', flexShrink: 0,
-            border: '2px solid #DDDDD0', borderTopColor: '#C8720A',
-            animation: 'spin 0.7s linear infinite',
-          }} />
+          // Part 12 §12.9: no infinite spinning loaders — static text instead.
+          <span style={{ fontSize: 11, color: '#8A8A7A', flexShrink: 0, fontFamily: 'var(--font-mono)' }}>
+            Searching…
+          </span>
         )}
       </div>
 
@@ -275,8 +274,6 @@ export default function AboutSearch() {
           )}
         </div>
       )}
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </section>
   )
 }

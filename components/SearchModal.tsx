@@ -156,12 +156,10 @@ export default function SearchModal({ open, onClose }: Props) {
             }}
           />
           {loading && (
-            <div style={{
-              width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
-              border: '2px solid var(--border)',
-              borderTopColor: 'var(--gold)',
-              animation: 'spin 0.7s linear infinite',
-            }} />
+            // Part 12 §12.9: no infinite spinning loaders — static text instead.
+            <span style={{ fontSize: 11, color: 'var(--ink-4)', flexShrink: 0, fontFamily: 'var(--font-mono)' }}>
+              Searching…
+            </span>
           )}
           <kbd onClick={onClose} style={{
             fontFamily: 'var(--font-mono)', fontSize: 10,
@@ -373,9 +371,6 @@ export default function SearchModal({ open, onClose }: Props) {
         </div>
       </div>
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   )
 }

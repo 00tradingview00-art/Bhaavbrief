@@ -84,7 +84,7 @@ export default function SentimentPanel() {
               </span>
             </div>
             <div style={{ height: 3, borderRadius: 2, background: 'var(--surface-3)', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${pct}%`, borderRadius: 2, background: 'var(--gold)' }} />
+              <div style={{ height: '100%', width: `${pct}%`, borderRadius: 2, background: 'var(--ink-3)' }} />
             </div>
           </div>
         ))

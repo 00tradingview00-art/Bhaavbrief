@@ -25,7 +25,7 @@
 
   --font-serif: var(--font-playfair), 'Georgia', serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-mono: var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), 'JetBrains Mono', ui-monospace, monospace;
 }
 
 /* ── Keyboard focus ───────────────────────────────────────────────────────── */
@@ -55,6 +55,50 @@
   margin-right: 5px;
   animation: livePulse 2s infinite;
   vertical-align: middle;
+}
+
+/* Part 12 §12.4.3 ring-expansion Live Pulse Dot variant — added alongside
+   .live-dot (not a replacement; .live-dot is already used in several places
+   and a wholesale swap risks visual regression there). Use .live-dot-ring
+   where the doc's specific expanding-ring treatment is wanted. */
+@keyframes livePulseRing {
+  0%  { transform: scale(1);   opacity: 1; }
+  60% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.live-dot-ring {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--up);
+  vertical-align: middle;
+}
+.live-dot-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--up);
+  animation: livePulseRing 2s ease-out infinite;
+}
+
+/* Part 12 §12.9 Price Flash — 600ms flash on data refresh. Apply
+   .price-flash to a price element when its value changes; remove after
+   ~700ms (matches the doc's "apply/remove class" contract). */
+@keyframes priceFlash {
+  0%   { background: var(--gold-pale); }
+  100% { background: transparent; }
+}
+.price-flash {
+  animation: priceFlash 600ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot::before, .live-dot-ring::after, .price-flash {
+    animation: none;
+  }
 }
 
 /* Ticker strip scroll */
