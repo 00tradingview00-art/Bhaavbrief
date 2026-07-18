@@ -68,6 +68,16 @@ const EXPECTED_HEADINGS = [
 
 const COMMODITY_NAMES = ['Gold', 'Crude', 'Silver', 'Copper', 'Nickel', 'Zinc', 'Lead', 'Aluminium', 'Natural [Gg]as', 'Nat Gas']
 
+// A commodity name scraped from AI-generated markdown is untrusted input as
+// far as regex construction goes — escape it before interpolating into
+// `new RegExp(...)` so a stray metacharacter (or the cell being bolded, e.g.
+// "**Gold**") can't throw a SyntaxError and crash the whole brief page. This
+// bypassed the parser's fail-open contract entirely, since it happens after
+// the 7-heading structural check already passed.
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function splitSections(content: string): { opening: string; sections: BriefSection[] } {
   const parts = content.split(/\n(?=## )/)
   const opening = parts[0].startsWith('## ') ? '' : parts[0]
@@ -88,13 +98,26 @@ function parsePriceBridgeTable(body: string, pctLookupText: string): PriceBridge
 
   const rows: PriceBridgeRow[] = []
   for (const line of lines.slice(2)) {
-    const cells = line.split('|').map(c => c.trim()).filter((_, i, arr) => i > 0 && i < arr.length - 1)
+    // Drop only genuinely-empty leading/trailing cells (the artifact of a
+    // row's outer pipes), not a fixed first/last index — a row missing its
+    // trailing `|` would otherwise have its real last column (MCX price)
+    // stripped instead, since arr.length-1 no longer points at an artifact.
+    const cells = line.split('|').map(c => c.trim())
+    while (cells.length && cells[0] === '') cells.shift()
+    while (cells.length && cells[cells.length - 1] === '') cells.pop()
     if (cells.length < 4) continue
     const [commodity, global, fx, mcx] = cells
     // The Price Bridge table itself has no % column — the signed change for
     // each commodity is mentioned in prose elsewhere (opening line / Market
     // Is Saying), so look there. Fails open to "—" (no direction) if absent.
-    const pctMatch = pctLookupText.match(new RegExp(`${commodity}[^\\n]{0,80}?\\*\\*([+-]?\\d+(?:\\.\\d+)?)%\\*\\*`, 'i'))
+    // Window is intentionally tight (20 chars, not 80): a wider window let
+    // an early, unrelated commodity's own mention (e.g. the opening line's
+    // "...Crude ₹7690 | USDINR ₹96.29** — Gold **+0.04%**") match Crude's
+    // regex before reaching Crude's own bolded % later in the text —
+    // confirmed against a real edition where Crude showed Gold's +0.04%
+    // instead of its actual +1.00%. The real pairings in this content are
+    // always word-adjacent ("Crude **+1.00%**" / "Crude's **+1.00%**").
+    const pctMatch = pctLookupText.match(new RegExp(`${escapeRegExp(commodity)}[^\\n]{0,20}?\\*\\*([+-]?\\d+(?:\\.\\d+)?)%\\*\\*`, 'i'))
     rows.push({
       commodity: commodity.replace(/\*\*/g, ''),
       global: global.replace(/\*\*/g, ''),
@@ -138,7 +161,7 @@ function parseWhoIsAffected(body: string): { edgeOfDay: string | null; tomorrow:
   return {
     edgeOfDay: edgeMatch ? edgeMatch[1].trim() : null,
     tomorrow: tomorrowMatch ? tomorrowMatch[1].trim() : null,
-    rest: rest.replace(/\*\*Edge of the Day:\*\*/i, '').replace(/\*\*Tomorrow:\*\*/i, '').trim(),
+    rest,
   }
 }
 
@@ -155,12 +178,18 @@ export function parseBriefSections(content: string): ParsedBriefSections | null 
 
   const [priceBridge, macroThread, dominantTheme, marketIsSaying, historicalContext, whatKillsIt, whoIsAffected] = sections
 
-  // Status word is the trailing all-caps token (BUILDING, STRENGTHENING,
-  // FADING, SHIFTING, WEAKENING, ...) regardless of what separates it from
-  // the title — some editions use "— WORD", others "Something: WORD" (e.g.
-  // "Peace Dividend — Rupee Cushion Edition: STRENGTHENING"), which the
-  // previous single-token-after-the-last-em-dash regex missed entirely.
-  const statusMatch = dominantTheme.heading.match(/^(.*?)[\s:—-]*([A-Z]{3,})$/)
+  // Status word is the trailing run of all-caps word(s) (BUILDING,
+  // STRENGTHENING, "METALS UNDER PRESSURE", ...) regardless of what
+  // separates it from the title — some editions use "— WORD", others
+  // "Something: WORD" (e.g. "Peace Dividend — Rupee Cushion Edition:
+  // STRENGTHENING"), and some pre-2026-07 editions use multi-word statuses.
+  // A lazy title group plus a trailing all-caps-words-and-spaces run still
+  // can't distinguish a genuine status suffix from a heading that
+  // coincidentally ends in an unrelated acronym (e.g. "...Meets LME") —
+  // accepted as a known, lower-severity edge case rather than maintaining a
+  // fixed status-word vocabulary that would need updating as the content
+  // pipeline's prompt evolves.
+  const statusMatch = dominantTheme.heading.match(/^(.*?)[\s:—-]*((?:[A-Z]{2,}\s?)+)$/)
   const dominantThemeTitle = statusMatch && statusMatch[1].trim() ? statusMatch[1].trim() : dominantTheme.heading
   const dominantThemeStatus = statusMatch && statusMatch[1].trim() ? statusMatch[2] : null
 

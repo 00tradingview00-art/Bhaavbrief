@@ -87,6 +87,20 @@ describe('parseBriefSections', () => {
     expect(gold?.pct).toBeCloseTo(0.04, 2)
   })
 
+  it('does not cross-contaminate one commodity\'s % with another mentioned earlier in the same line', () => {
+    // Regression test: edition-066's opening line is "**MCX Gold ₹140400 |
+    // Crude ₹7690 | USDINR ₹96.29** — Gold **+0.04%** | Crude **+1.00%** |
+    // Silver **-0.35%**". A too-wide lookup window let Crude's regex match
+    // Gold's "+0.04%" (the first bolded % appearing after ANY "Crude"
+    // substring, including the early non-bold price mention) instead of
+    // continuing to Crude's own "+1.00%" later in the string.
+    const raw = fs.readFileSync(path.join(BRIEFS_DIR, 'edition-066.mdx'), 'utf8')
+    const { content } = matter(raw)
+    const parsed = parseBriefSections(content)
+    const crude = parsed?.priceBridgeRows?.find(r => r.commodity === 'Crude')
+    expect(crude?.pct).toBeCloseTo(1.00, 2)
+  })
+
   it('fails open (returns null) on unrecognized heading structure instead of throwing', () => {
     const malformed = '## Some Random Heading\nBody text.\n\n## Another\nMore text.'
     expect(() => parseBriefSections(malformed)).not.toThrow()
@@ -95,5 +109,67 @@ describe('parseBriefSections', () => {
 
   it('fails open on empty content', () => {
     expect(parseBriefSections('')).toBeNull()
+  })
+
+  const SYNTHETIC_SECTIONS = (dominantHeading: string, priceBridgeBody: string) => `
+Opening line.
+
+## Price Bridge
+
+${priceBridgeBody}
+
+## Macro Thread
+
+Macro body.
+
+## ${dominantHeading}
+
+Dominant theme body.
+
+## The Market Is Saying
+
+Gold is up **+1.00%** today.
+
+## Historical Context
+
+Historical body.
+
+## What Kills It
+
+What kills it body.
+
+## Who Is Affected
+
+Businesses, Investors and Consumers body.
+`
+
+  it('extracts a multi-word status suffix without swallowing it into the title', () => {
+    const content = SYNTHETIC_SECTIONS(
+      'Crude Surge — METALS UNDER PRESSURE',
+      '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| Gold | $3997/oz | ₹96.29 | ₹140400/10g |'
+    )
+    const parsed = parseBriefSections(content)
+    expect(parsed?.dominantThemeTitle).toBe('Crude Surge')
+    expect(parsed?.dominantThemeStatus).toBe('METALS UNDER PRESSURE')
+  })
+
+  it('does not throw when a Price Bridge commodity cell is bolded (regex-injection regression)', () => {
+    const content = SYNTHETIC_SECTIONS(
+      'Some Theme — BUILDING',
+      '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| **Gold** | $3997/oz | ₹96.29 | ₹140400/10g |'
+    )
+    expect(() => parseBriefSections(content)).not.toThrow()
+    const parsed = parseBriefSections(content)
+    expect(parsed?.priceBridgeRows?.[0]?.commodity).toBe('Gold')
+  })
+
+  it('does not drop the last column when a Price Bridge row is missing its trailing pipe', () => {
+    const content = SYNTHETIC_SECTIONS(
+      'Some Theme — BUILDING',
+      '| Commodity | Global Price | FX Rate | MCX Price |\n|---|---|---|---|\n| Gold | $3997/oz | ₹96.29 | ₹140400/10g'
+    )
+    const parsed = parseBriefSections(content)
+    expect(parsed?.priceBridgeRows).not.toBeNull()
+    expect(parsed?.priceBridgeRows?.[0]?.mcx).toContain('140400')
   })
 })

@@ -1,9 +1,4 @@
-function renderInlineBold(text: string) {
-  const parts = text.split(/\*\*(.*?)\*\*/g)
-  return parts.map((part, i) =>
-    i % 2 === 1 ? <strong key={i} style={{ color: 'var(--ink)', fontWeight: 700 }}>{part}</strong> : part
-  )
-}
+import renderInlineBold from './renderInlineBold'
 
 // Part 12 §12.4.5 "Edge of the Day" callout. The doc's spec calls for a
 // progress bar showing proximity to a key level, but extracting "current
@@ -27,7 +22,7 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
         Edge of the Day
       </h2>
       <p style={{ fontSize: 15, fontFamily: 'var(--font-serif)', fontWeight: 500, color: 'var(--ink)', lineHeight: 1.5, margin: tomorrow ? '0 0 10px' : 0 }}>
-        {renderInlineBold(text)}
+        {renderInlineBold(text, 700)}
       </p>
       {tomorrow && (
         <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(181,134,42,0.2)' }}>

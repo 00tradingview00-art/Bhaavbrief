@@ -463,7 +463,7 @@ export default async function HomePage() {
                     <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
-                        {price ? `₹${price.toLocaleString('en-IN', { maximumFractionDigits: 0 })}` : '—'}
+                        {price ? fmtINR(price) : '—'}
                         <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
                       </span>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>

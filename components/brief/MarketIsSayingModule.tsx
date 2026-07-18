@@ -1,14 +1,5 @@
 import type { MarketIsSayingRow } from '@/lib/parseBriefSections'
-
-// Renders **bold** spans as <strong> without invoking the full MDX pipeline
-// per row — this content only ever uses bold markers (confirmed against
-// sampled editions), never links or lists.
-function renderInlineBold(text: string) {
-  const parts = text.split(/\*\*(.*?)\*\*/g)
-  return parts.map((part, i) =>
-    i % 2 === 1 ? <strong key={i} style={{ color: 'var(--ink)', fontWeight: 600 }}>{part}</strong> : part
-  )
-}
+import renderInlineBold from './renderInlineBold'
 
 // Part 12 §12.4.5 "The Market Is Saying" module — chip rows, source order
 // preserved (no fabricated significance ranking; the content pipeline's own

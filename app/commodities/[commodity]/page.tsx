@@ -434,11 +434,6 @@ export default async function CommodityPage({ params }: Props) {
         <span>›</span>
         <span style={{ color: 'var(--ink-2)' }}>{info.name}</span>
       </div>
-      {/* SEBI disclaimer */}
-      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '0 0 20px', lineHeight: 1.6 }}>
-        BhaavBrief is not a SEBI-registered investment advisor. Prices and analysis are for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
-      </p>
-
       {/* Hero — live price */}
       <div className="commodity-price-summary" style={{
         background: 'var(--surface-1)', border: '1px solid var(--border)',
@@ -867,6 +862,13 @@ export default async function CommodityPage({ params }: Props) {
           </Link>
         </div>
       </div>
+
+      {/* SEBI disclaimer — moved here (Part 12 §12.11: "below the content,
+          above the bottom nav"), was previously at the very top of the page,
+          227 lines away from the event-impact stats it's meant to cover. */}
+      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '20px 0 0', lineHeight: 1.6 }}>
+        BhaavBrief is not a SEBI-registered investment advisor. Prices and analysis are for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
+      </p>
     </>
   )
 }

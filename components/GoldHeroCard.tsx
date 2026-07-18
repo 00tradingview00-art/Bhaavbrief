@@ -1,12 +1,33 @@
 import Link from 'next/link'
 import type { PriceData } from '@/lib/prices'
 import { getSparklineCloses } from '@/lib/history'
+import { fmtINR } from '@/lib/format'
 import Sparkline from '@/components/ui/Sparkline'
 
 // Prominent flagship-commodity price card (Part 12 §12.5 "Gold Hero Card").
 export default function GoldHeroCard({ data }: { data: PriceData | null }) {
-  const gold = data?.gold
-  if (!gold || !gold.mcx) return null
+  // No snapshot at all — nothing meaningful to show (matches the rest of
+  // the homepage's convention, e.g. MarketSnapshot's own `if (!data) return
+  // null`). But if a snapshot loaded and gold specifically is missing (a
+  // partial feed outage), surface that rather than silently vanishing the
+  // whole hero section with no explanation — the deleted CommodityPulse
+  // this replaced had an explicit "offline — retrying" message for exactly
+  // this case.
+  if (!data) return null
+  const gold = data.gold
+  if (!gold || !gold.mcx) {
+    return (
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border)',
+        borderLeft: '3px solid var(--border-2)', borderRadius: 4,
+        padding: '18px 22px', marginBottom: 32, textAlign: 'center',
+      }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)' }}>
+          MCX Gold price unavailable — refreshing shortly
+        </span>
+      </div>
+    )
+  }
 
   const closes = getSparklineCloses('gold')
 
@@ -39,7 +60,7 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
               fontFamily: 'var(--font-mono)', fontSize: 28, fontWeight: 700,
               color: 'var(--ink)', lineHeight: 1, fontVariantNumeric: 'tabular-nums',
             }}>
-              ₹{gold.mcx.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+              {fmtINR(gold.mcx)}
             </span>
             <span style={{
               fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700,

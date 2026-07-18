@@ -11,13 +11,18 @@ interface Segment {
 export default function SignalBar({ data }: { data: PriceData | null }) {
   if (!data) return null
 
-  const segments: Segment[] = [
-    { label: 'Gold',    pct: data.gold?.mcxChangePct   ?? 0 },
-    { label: 'Silver',  pct: data.silver?.mcxChangePct ?? 0 },
-    { label: 'Crude',   pct: data.crude?.mcxChangePct  ?? 0 },
-    { label: 'Copper',  pct: data.copper?.mcxChangePct ?? 0 },
-    { label: 'Nat Gas', pct: data.natgas?.mcxChangePct ?? 0 },
-  ].filter(s => Number.isFinite(s.pct))
+  // Filter BEFORE defaulting: a commodity with genuinely missing data
+  // (undefined) must not be indistinguishable from a real flat 0% day —
+  // `?? 0` ahead of the finite-check would silently turn "no data" into a
+  // fabricated "Gold +0.00%" segment during a partial feed outage.
+  const raw: { label: string; pct: number | undefined }[] = [
+    { label: 'Gold',    pct: data.gold?.mcxChangePct },
+    { label: 'Silver',  pct: data.silver?.mcxChangePct },
+    { label: 'Crude',   pct: data.crude?.mcxChangePct },
+    { label: 'Copper',  pct: data.copper?.mcxChangePct },
+    { label: 'Nat Gas', pct: data.natgas?.mcxChangePct },
+  ]
+  const segments: Segment[] = raw.filter((s): s is Segment => Number.isFinite(s.pct))
 
   const totalMagnitude = segments.reduce((sum, s) => sum + Math.abs(s.pct), 0)
   if (totalMagnitude === 0) return null
