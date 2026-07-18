@@ -5,9 +5,8 @@ import type { PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
-import CommodityPulse from '@/components/CommodityPulse'
-import EIACard from '@/components/EIACard'
-import { loadEIA } from '@/lib/eia'
+import SignalBar from '@/components/SignalBar'
+import GoldHeroCard from '@/components/GoldHeroCard'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 
@@ -117,19 +116,19 @@ function getTagType(tag?: string): string {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
-  const [briefs, eiaData] = await Promise.all([
-    getAllBriefs(),
-    loadEIA(),
-  ])
+  const briefs = await getAllBriefs()
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
   const activeArcs = getActiveArcs()
-  const [latest, ...previous] = briefs
+  const [latest] = briefs
   const nextEvent = getNextHighImpactEvent()
   const briefDelayed = isTodaysBriefDelayed(latest?.date)
 
   return (
     <div>
+      {/* ── SIGNAL BAR (Part 12 §12.4.2 / §12.5) ─────────────────────────────── */}
+      <SignalBar data={prices} />
+
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
       <div style={{ marginBottom: 16 }}>
         <div style={{
@@ -150,11 +149,8 @@ export default async function HomePage() {
         }}>
           India&apos;s Commodity Intelligence Platform for MCX Traders
         </h1>
-        <p style={{ fontSize: 16, color: 'var(--ink-2)', lineHeight: 1.6, maxWidth: 720, marginBottom: 16 }}>
+        <p style={{ fontSize: 16, color: 'var(--ink-2)', lineHeight: 1.6, maxWidth: 720, marginBottom: 20 }}>
           Daily market briefs and an event calendar for MCX crude oil, natural gas, gold, silver, and base metals — published every trading day at 9:30 AM IST, before the session finds direction.
-        </p>
-        <p style={{ fontSize: 14, color: 'var(--ink-3)', lineHeight: 1.7, maxWidth: 720, marginBottom: 20 }}>
-          BhaavBrief publishes a daily MCX market brief at 9:30 AM IST covering crude oil, natural gas, gold, silver, copper, and USD/INR, alongside an event calendar that maps global data releases — EIA inventory reports, OPEC meetings, US CPI, FOMC decisions, RBI MPC, and China PMI — to the specific MCX contracts they historically move. The calendar reports historical event-impact statistics, so traders know what is scheduled, when it releases in IST, and how much the market has typically moved — without offering any trading advice or recommendations.
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Link href="/briefs" style={{
@@ -312,8 +308,8 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── COMMODITY PULSE ──────────────────────────────────────────────────── */}
-      <CommodityPulse />
+      {/* ── GOLD HERO CARD (Part 12 §12.5) ──────────────────────────────────── */}
+      <GoldHeroCard data={prices} />
 
       {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
       <div className="home-body">
@@ -324,11 +320,11 @@ export default async function HomePage() {
           {/* Market snapshot */}
           <MarketSnapshot data={prices} />
 
-          {/* Previous briefs header */}
-          <div style={{
+          {/* Previous editions — single link, full list lives on /briefs (Part 12 §12.5) */}
+          <Link href="/briefs" style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            marginBottom: 0, paddingBottom: 12,
-            borderBottom: '2px solid var(--ink)',
+            padding: '16px 0', borderTop: '2px solid var(--ink)',
+            textDecoration: 'none',
           }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
@@ -337,86 +333,14 @@ export default async function HomePage() {
             }}>
               Previous Editions
             </span>
-            <Link href="/briefs" style={{
+            <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: 10, color: 'var(--gold)', textDecoration: 'none',
+              fontSize: 10, color: 'var(--gold)',
               letterSpacing: '0.04em',
             }}>
-              View all →
-            </Link>
-          </div>
-
-          {/* Brief list */}
-          {previous.slice(0, 6).map((brief, idx) => (
-            <Link
-              key={brief.slug}
-              href={`/briefs/${brief.slug}`}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '44px 1fr',
-                gap: '0 16px',
-                padding: '20px 0',
-                borderBottom: '1px solid var(--border)',
-                textDecoration: 'none',
-                alignItems: 'start',
-              }}
-            >
-              {/* Edition number column */}
-              <div style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 15,
-                fontWeight: 500,
-                color: idx === 0 ? 'var(--gold)' : 'var(--ink-4)',
-                lineHeight: 1,
-                paddingTop: 3,
-                letterSpacing: '-0.5px',
-              }}>
-                #{brief.edition}
-              </div>
-
-              {/* Content column */}
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <Tag type={getTagType(brief.tags?.[0])}>{brief.tags?.[0] ?? 'Brief'}</Tag>
-                  <span style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 10, color: 'var(--ink-4)',
-                    letterSpacing: '0.03em',
-                  }}>
-                    {brief.displayDate}
-                  </span>
-                </div>
-                <h2 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 18,
-                  fontWeight: 500,
-                  lineHeight: 1.3,
-                  color: 'var(--ink)',
-                  margin: '0 0 6px',
-                }}>
-                  {brief.title}
-                </h2>
-                <p style={{
-                  fontSize: 15, color: 'var(--ink-3)',
-                  lineHeight: 1.65, margin: 0,
-                }}>
-                  {brief.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-
-          {previous.length > 6 && (
-            <div style={{ paddingTop: 20 }}>
-              <Link href="/briefs" style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 11, color: 'var(--gold)',
-                textDecoration: 'none', letterSpacing: '0.04em',
-              }}>
-                View all {briefs.length} editions →
-              </Link>
-            </div>
-          )}
+              View all {briefs.length} editions →
+            </span>
+          </Link>
         </div>
 
         {/* RIGHT ─ sticky sidebar */}
@@ -560,9 +484,6 @@ export default async function HomePage() {
             </Link>
           )}
 
-          {/* EIA crude inventory card */}
-          <EIACard initialData={eiaData} />
-
           {/* Stats strip */}
           <div style={{
             background: 'var(--surface)',
@@ -597,44 +518,31 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* Subscribe card — desktop only (mobile sees the hero form above the fold) */}
+          {/* Subscribe CTA block — desktop only (mobile sees the hero form above the fold).
+              Part 12 §12.5.1: intentionally dark even on the otherwise-light site,
+              the doc's own explicitly called-out treatment for this one block. */}
           <div id="subscribe" className="desktop-only" style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
+            background: '#0C0E00',
+            border: '1px solid #252800',
             borderRadius: 4,
             overflow: 'hidden',
             marginBottom: 16,
+            padding: '20px 20px 18px',
           }}>
-            <div style={{
-              background: 'var(--ink)',
-              padding: '14px 20px',
+            <p style={{
+              fontFamily: 'var(--font-serif)',
+              fontSize: 19, fontWeight: 700,
+              color: '#fff', margin: '0 0 8px', lineHeight: 1.3,
             }}>
-              <div style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 10, letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                color: 'var(--gold)',
-                marginBottom: 4,
-              }}>
-                Daily brief
-              </div>
-              <p style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 16, fontWeight: 500,
-                color: '#fff', margin: 0, lineHeight: 1.35,
-              }}>
-                Get today&apos;s brief by 9:30 AM IST.
-              </p>
-            </div>
-            <div style={{ padding: '18px 20px' }}>
-              <p style={{
-                fontSize: 15, color: 'var(--ink-3)',
-                lineHeight: 1.65, marginBottom: 14,
-              }}>
-                Full MCX analysis — gold, crude, silver — in your inbox by 9:30 AM IST, every weekday.
-              </p>
-              <SubscribeForm compact location="footer" />
-            </div>
+              Get it before market opens.
+            </p>
+            <p style={{
+              fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em',
+              color: 'rgba(255,255,255,0.5)', margin: '0 0 16px',
+            }}>
+              Every weekday · 9:30 AM IST · Free · {briefs.length} editions
+            </p>
+            <SubscribeForm compact primary location="footer" />
           </div>
 
           {/* About */}

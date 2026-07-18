@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { trackSubscribe, trackSubscribeCompleted, trackEvent } from '@/lib/analytics'
 
-export default function SubscribeForm({ compact = false, location, onSuccess }: { compact?: boolean; location?: string; onSuccess?: () => void }) {
+export default function SubscribeForm({ compact = false, primary = false, location, onSuccess }: { compact?: boolean; primary?: boolean; location?: string; onSuccess?: () => void }) {
   const [email,   setEmail]   = useState('')
   const [status,  setStatus]  = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
@@ -48,19 +48,39 @@ export default function SubscribeForm({ compact = false, location, onSuccess }: 
     }
   }
 
+  // Radius is primary-only, matching btnStyle below — everywhere else
+  // (~11 non-primary call sites: learn pages, about, brief_page, brief_gate
+  // modal, email capture modal) stays pixel-identical to the pre-Part-12
+  // styling, not just visually similar.
   const inputStyle: React.CSSProperties = {
     display: 'block', width: '100%', padding: '10px 12px',
     border: '0.5px solid #C8C8B8', background: '#FAFAF6',
     fontFamily: 'var(--font-sans)', fontSize: 15, color: '#18180F',
+    ...(primary ? { borderRadius: 6 } : {}),
     marginBottom: 8,
   }
-  const btnStyle: React.CSSProperties = {
-    display: 'block', width: '100%', background: status === 'loading' ? '#8A8A7A' : '#18180F',
-    color: '#FAFAF6', fontFamily: 'var(--font-mono)',
-    fontSize: 11, letterSpacing: '0.05em', padding: 11,
-    border: 'none', cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-    transition: 'background 0.15s',
-  }
+  // Part 12 §12.4.8 PRIMARY CTA — gold fill only when `primary` is explicitly
+  // set (the page's single designated Subscribe CTA block). Left as the
+  // original neutral/ink button everywhere else: this component renders on
+  // ~12 different pages/contexts, and making every instance gold would
+  // itself violate the Gold Rule's "max 1-2 gold elements per viewport"
+  // scarcity contract audited in Phase 3.
+  const btnStyle: React.CSSProperties = primary
+    ? {
+        display: 'block', width: '100%',
+        background: status === 'loading' ? 'var(--ink-4)' : 'var(--gold)',
+        color: '#080A0C', fontFamily: 'system-ui, sans-serif',
+        fontSize: 14, fontWeight: 800, letterSpacing: '0.01em', padding: '13px 20px',
+        borderRadius: 9, border: 'none', cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+        transition: 'background 0.15s',
+      }
+    : {
+        display: 'block', width: '100%', background: status === 'loading' ? '#8A8A7A' : '#18180F',
+        color: '#FAFAF6', fontFamily: 'var(--font-mono)',
+        fontSize: 11, letterSpacing: '0.05em', padding: 11,
+        border: 'none', cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+        transition: 'background 0.15s',
+      }
 
   if (status === 'success') {
     return (
