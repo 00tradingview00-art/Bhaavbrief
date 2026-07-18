@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import {
   type EventMapEntry,
   COMMODITY_URL_SLUGS,
@@ -96,8 +95,6 @@ function EventCard({ event }: { event: EventMapEntry }) {
           ))}
         </div>
       )}
-
-      <StatisticalDisclaimer />
     </div>
   )
 }

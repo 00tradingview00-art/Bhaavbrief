@@ -1,4 +1,7 @@
-export default function StatisticalDisclaimer({ style }: { style?: React.CSSProperties }) {
+// Part 12 §12.11 — genericized with a `text` prop so the same component can
+// also carry the consolidated disclaimer copy, without breaking existing
+// call sites that want the shorter statistical-only phrasing.
+export default function StatisticalDisclaimer({ style, text }: { style?: React.CSSProperties; text?: string }) {
   return (
     <p style={{
       fontFamily: 'var(--font-mono)',
@@ -9,7 +12,7 @@ export default function StatisticalDisclaimer({ style }: { style?: React.CSSProp
       margin: '8px 0 0',
       ...style,
     }}>
-      Statistical information, not a trading recommendation.
+      {text ?? 'Statistical information, not a trading recommendation.'}
     </p>
   )
 }

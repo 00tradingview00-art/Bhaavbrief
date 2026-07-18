@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getEventsForCommodity } from '@/lib/eventMap'
 import { getImpactStats } from '@/lib/eventImpactStats'
 
@@ -75,7 +74,6 @@ export default function UpcomingEventsForCommodity({ commodityKey, name }: { com
             )
           })}
         </div>
-        <StatisticalDisclaimer style={{ marginTop: 12 }} />
       </div>
     </>
   )
