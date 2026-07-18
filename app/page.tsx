@@ -39,24 +39,25 @@ interface SnapItem {
   price: string
   pct: number
   unit: string
+  href?: string
 }
 
 function MarketSnapshot({ data }: { data: PriceData | null }) {
   if (!data) return null
 
   const items: SnapItem[] = [
-    { label: 'MCX Gold',   price: fmtINR(data.gold?.mcx),   pct: data.gold?.mcxChangePct  ?? 0, unit: '/ 10g'  },
-    { label: 'MCX Crude',  price: fmtINR(data.crude?.mcx),  pct: data.crude?.mcxChangePct ?? 0, unit: '/ bbl'  },
-    { label: 'MCX Silver', price: fmtINR(data.silver?.mcx), pct: data.silver?.mcxChangePct ?? 0, unit: '/ kg'  },
-    { label: 'USD / INR',  price: fmtUSD(data.usdinr, 4),   pct: data.usdinrChangePct      ?? 0, unit: ''      },
+    { label: 'MCX Gold',   price: fmtINR(data.gold?.mcx),   pct: data.gold?.mcxChangePct  ?? 0, unit: '/ 10g', href: '/commodities/gold'      },
+    { label: 'MCX Crude',  price: fmtINR(data.crude?.mcx),  pct: data.crude?.mcxChangePct ?? 0, unit: '/ bbl', href: '/commodities/crude-oil' },
+    { label: 'MCX Silver', price: fmtINR(data.silver?.mcx), pct: data.silver?.mcxChangePct ?? 0, unit: '/ kg',  href: '/commodities/silver'    },
+    { label: 'USD / INR',  price: fmtUSD(data.usdinr, 4),   pct: data.usdinrChangePct      ?? 0, unit: ''                                     },
   ]
 
   return (
     <div className="market-snap">
       {items.map((item) => {
         const up = item.pct >= 0
-        return (
-          <div key={item.label} style={{
+        const tile = (
+          <div style={{
             background: 'var(--surface)',
             padding: '14px 16px',
           }}>
@@ -95,6 +96,10 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
             </div>
           </div>
         )
+        if (item.href) {
+          return <Link key={item.label} href={item.href} style={{ textDecoration: 'none', display: 'block' }}>{tile}</Link>
+        }
+        return <div key={item.label}>{tile}</div>
       })}
     </div>
   )

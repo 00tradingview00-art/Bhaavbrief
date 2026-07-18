@@ -4,7 +4,7 @@ import matter from 'gray-matter'
 import { deriveCommodityLabelsFromTags } from './commodityTags'
 
 export interface ContentEntry {
-  type:        'brief' | 'article' | 'hawk-scan' | 'news'
+  type:        'brief' | 'article' | 'hawk-scan' | 'news' | 'commodity'
   slug:        string
   href:        string
   title:       string
@@ -132,15 +132,49 @@ function readNews(): ContentEntry[] {
   } catch { return [] }
 }
 
+// Static reference pages (app/commodities/[commodity]) — live price + explainers.
+// Not filesystem content like briefs/articles, so they're listed here rather than
+// derived, and given "now" as their date so they always earn the recency boost —
+// they're the one destination that's always current.
+const COMMODITY_PAGES: Array<{ slug: string; name: string; description: string }> = [
+  { slug: 'gold',       name: 'Gold',       description: 'MCX gold price live today — why gold is up or down: Fed policy, rupee-dollar moves, COMEX spread and geopolitics. OHLC, import parity and daily intelligence for Indian traders.' },
+  { slug: 'silver',     name: 'Silver',     description: 'MCX silver price live today — why silver is up or down: gold-silver ratio, industrial demand, COMEX moves and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'crude-oil',  name: 'Crude Oil',  description: 'MCX crude oil price live today — why crude is up or down: OPEC decisions, WTI/Brent spread, Iran risk, rupee impact. OHLC, import parity and daily intelligence for Indian traders.' },
+  { slug: 'copper',     name: 'Copper',     description: 'MCX copper price live today — why copper is up or down: China PMI, LME inventory, COMEX moves and rupee impact. OHLC, import parity and daily intelligence for Indian traders.' },
+  { slug: 'natural-gas', name: 'Natural Gas', description: 'MCX natural gas price live today — why nat gas is up or down: Henry Hub correlation, winter demand, LNG exports and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'zinc',       name: 'Zinc',       description: 'MCX zinc price live today — why zinc is up or down: LME stocks, Hindustan Zinc output, China galvanizing demand and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'aluminium',  name: 'Aluminium',  description: 'MCX aluminium price live today — why aluminium is up or down: China smelter output, LME stocks, EU energy costs and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'lead',       name: 'Lead',       description: 'MCX lead price live today — why lead is up or down: battery demand, inverter cycle, Hindustan Zinc output and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'nickel',     name: 'Nickel',     description: 'MCX nickel price live today — why nickel is up or down: Indonesia export ban, LME stocks, EV battery demand and rupee impact. OHLC and daily intelligence for Indian traders.' },
+]
+
+function readCommodityPages(): ContentEntry[] {
+  const now = new Date().toISOString()
+  return COMMODITY_PAGES.map(c => ({
+    type:        'commodity' as const,
+    slug:        `commodity-${c.slug}`,
+    href:        `/commodities/${c.slug}`,
+    title:       `MCX ${c.name} — Live Price & Intelligence`,
+    description: c.description,
+    excerpt:     c.description,
+    date:        now,
+    edition:     '',
+    tags:        [c.name.toLowerCase(), ...c.slug.split('-')],
+    commodities: [c.name],
+    commodity:   c.name,
+  }))
+}
+
 export function loadIndex(): ContentEntry[] {
   const now = Date.now()
   if (_cache && (now - _cacheAt) < TTL_MS) return _cache
 
-  const briefs   = readBriefs()
-  const articles = readArticles()
-  const news     = readNews()
+  const briefs      = readBriefs()
+  const articles    = readArticles()
+  const news        = readNews()
+  const commodities = readCommodityPages()
 
-  _cache = [...briefs, ...articles, ...news]
+  _cache = [...briefs, ...articles, ...news, ...commodities]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   _cacheAt = now
   return _cache
@@ -171,14 +205,22 @@ export function scoreEntries(query: string, limit = 5): ScoredEntry[] {
       if (excerptL.includes(word)) score += 1
     }
 
-    // Recency boost
-    const ageDays = (Date.now() - new Date(entry.date).getTime()) / 86400000
-    if (ageDays <= 1)  score += 3
-    if (ageDays <= 7)  score += 2
-    if (ageDays <= 30) score += 1
+    // Recency boost — only as a tiebreaker among entries that already matched a
+    // keyword, never on its own. Unconditional, this let every commodity page
+    // (always dated "now") outrank genuinely relevant content on unrelated queries.
+    if (score > 0) {
+      const ageDays = (Date.now() - new Date(entry.date).getTime()) / 86400000
+      if (ageDays <= 1)  score += 3
+      if (ageDays <= 7)  score += 2
+      if (ageDays <= 30) score += 1
+    }
 
     // Hawk-scan surfaces first when relevant
     if (entry.type === 'hawk-scan' && score > 0) score += 2
+
+    // The commodity reference page (live price + explainers) is the best single
+    // destination for a bare commodity-name query — rank it above one-off mentions.
+    if (entry.type === 'commodity' && score > 0) score += 5
 
     return { ...entry, score }
   })
