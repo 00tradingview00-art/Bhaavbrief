@@ -10,6 +10,13 @@ import BriefScrollTracker     from '@/components/BriefScrollTracker'
 import EmailCaptureModal      from '@/components/EmailCaptureModal'
 import { getBrief, getAllBriefs, getPrevNextBriefs, formatDate } from '@/lib/briefs'
 import { getBriefArcs } from '@/lib/arcs'
+import { parseBriefSections } from '@/lib/parseBriefSections'
+import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import PriceSnapshotStrip from '@/components/brief/PriceSnapshotStrip'
+import PriceBridgeTable from '@/components/brief/PriceBridgeTable'
+import MarketIsSayingModule from '@/components/brief/MarketIsSayingModule'
+import WhatKillsItBlock from '@/components/brief/WhatKillsItBlock'
+import EdgeOfDayCallout from '@/components/brief/EdgeOfDayCallout'
 
 const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
@@ -102,6 +109,14 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
   const url      = `${BASE_URL}/briefs/${brief.urlSlug}`
   const arcs     = getBriefArcs(brief.edition)
+
+  // Part 12 UI-05 — client-side MDX section parser. Returns null (fail-open)
+  // for editions that don't match the fixed 7-heading shape (e.g. the older
+  // pre-edition-040 format), in which case the legacy full-prose render
+  // below is used, unchanged.
+  const parsed = parseBriefSections(brief.content)
+  const snap   = loadSnapshot()
+  const prices = snap ? snapshotToPriceData(snap) : null
 
   const ogParams = new URLSearchParams({
     title:   brief.title,
@@ -268,8 +283,60 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
             <TapeMovers tags={brief.tags ?? []} />
 
+            {parsed && <PriceSnapshotStrip commodities={brief.commodities ?? []} data={prices} />}
+
             <div className="brief-prose" itemProp="articleBody">
-              <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+              {parsed ? (
+                <>
+                  {/* Dominant Theme — sacred section, full heading + body always rendered;
+                      the status word is additive (small badge), never a replacement for the text.
+                      The <h2> keeps the exact original heading text (title + status) so
+                      BriefScrollTracker's trackSectionSeen() analytics key is unchanged. */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: '1.5rem', flexWrap: 'wrap' }}>
+                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.375rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>
+                      {parsed.dominantTheme.heading}
+                    </h2>
+                    {parsed.dominantThemeStatus && (
+                      <span style={{
+                        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700,
+                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        background: 'var(--gold-sub, var(--gold-pale))', color: 'var(--gold)',
+                        border: '1px solid rgba(181,134,42,0.25)', borderRadius: 6, padding: '3px 8px',
+                        flexShrink: 0,
+                      }}>
+                        {parsed.dominantThemeStatus}
+                      </span>
+                    )}
+                  </div>
+                  <MDXRemote source={parsed.dominantTheme.body} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+
+                  {parsed.priceBridgeRows ? (
+                    <PriceBridgeTable heading={parsed.priceBridge.heading} rows={parsed.priceBridgeRows} />
+                  ) : (
+                    <>
+                      <h2>{parsed.priceBridge.heading}</h2>
+                      <MDXRemote source={parsed.priceBridge.body} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+                    </>
+                  )}
+
+                  <h2>{parsed.macroThread.heading}</h2>
+                  <MDXRemote source={parsed.macroThread.body} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+
+                  <MarketIsSayingModule heading={parsed.marketIsSaying.heading} rows={parsed.marketIsSayingRows} />
+
+                  <h2>{parsed.historicalContext.heading}</h2>
+                  <MDXRemote source={parsed.historicalContext.body} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+
+                  <WhatKillsItBlock heading={parsed.whatKillsIt.heading} body={parsed.whatKillsIt.body} />
+
+                  <h2>{parsed.whoIsAffected.heading}</h2>
+                  <MDXRemote source={parsed.whoIsAffectedRest} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+
+                  {parsed.edgeOfDay && <EdgeOfDayCallout text={parsed.edgeOfDay} tomorrow={parsed.tomorrow} />}
+                </>
+              ) : (
+                <MDXRemote source={brief.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+              )}
               <div id="brief-end" />
             </div>
             <BriefScrollTracker edition={String(brief.edition)} />
