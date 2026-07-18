@@ -1,5 +1,9 @@
 import MarketsClient from '@/components/markets/MarketsClient'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import { loadEIA } from '@/lib/eia'
+import { getSparklineCloses } from '@/lib/history'
+
+const SPARKLINE_COMMODITIES = ['gold', 'silver', 'crude', 'copper', 'natgas']
 
 export const metadata = {
   title: 'MCX Live Prices Today — Gold, Silver, Crude Oil, Copper',
@@ -35,5 +39,9 @@ export const revalidate = 30
 export default async function MarketsPage() {
   const snap = loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
-  return <MarketsClient initialPrices={initialPrices} />
+  const eiaData = await loadEIA()
+  const sparklines = Object.fromEntries(
+    SPARKLINE_COMMODITIES.map(key => [key, getSparklineCloses(key)])
+  )
+  return <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} />
 }

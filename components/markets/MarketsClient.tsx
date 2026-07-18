@@ -2,7 +2,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import type { PriceData, MCXData } from '@/lib/prices'
+import type { EIAResponse } from '@/lib/eia'
 import OptionChain from '@/components/mcx/OptionChain'
+import EIACard from '@/components/EIACard'
+import Sparkline from '@/components/ui/Sparkline'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -80,11 +83,12 @@ function RangeBar({ low, high, current, isUp }: { low: number; high: number; cur
 }
 
 function PriceCard({
-  cfg, data, flashing,
+  cfg, data, flashing, closes,
 }: {
   cfg: typeof CARDS[0]
   data: MCXData
   flashing: boolean
+  closes?: number[]
 }) {
   const isUp       = data.mcxChangePct >= 0
   const hasKite    = data.mcxHigh > 0
@@ -96,6 +100,7 @@ function PriceCard({
     <div style={{
       background: flashing ? (isUp ? '#f0fdf4' : '#fff1f0') : 'var(--surface)',
       border: `1px solid ${flashing ? color : 'var(--border)'}`,
+      borderLeft: `3px solid ${data.mcx > 0 ? color : 'var(--border)'}`,
       borderRadius: 4,
       padding: '14px 16px',
       transition: 'background 0.5s ease, border-color 0.5s ease',
@@ -117,9 +122,12 @@ function PriceCard({
         ) : null}
       </div>
 
-      {/* Price */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
-        {data.mcx > 0 ? cfg.fmtP(data.mcx) : '—'}
+      {/* Price + sparkline */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+          {data.mcx > 0 ? cfg.fmtP(data.mcx) : '—'}
+        </div>
+        {closes && closes.length >= 2 && <Sparkline closes={closes} size="card" />}
       </div>
       <div style={{ fontSize: 10, color: 'var(--ink-4)', marginBottom: hasKite ? 10 : 0 }}>
         {data.mcxChange !== 0 && (
@@ -203,7 +211,7 @@ function SectionHeader({ label, right }: { label: string; right?: React.ReactNod
 
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
-export default function MarketsClient({ initialPrices }: { initialPrices: PriceData | null }) {
+export default function MarketsClient({ initialPrices, eiaData, sparklines }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]> }) {
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
   const [marketOpen, setMarketOpen] = useState(isMCXOpen())
@@ -290,7 +298,7 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           )
           return (
             <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
-              <PriceCard cfg={cfg} data={data} flashing={flashing} />
+              <PriceCard cfg={cfg} data={data} flashing={flashing} closes={sparklines?.[cfg.key]} />
             </Link>
           )
         })}
@@ -344,6 +352,13 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
               {fx?.symbol && (
                 <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
               )}
+              {cfg.key === 'usdinr' && ltp > 0 && (
+                <div style={{ fontSize: 11, color: 'var(--ink-3)', marginTop: 8, lineHeight: 1.4, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
+                  {isUp
+                    ? 'A weaker rupee amplifies MCX gains from global commodity price moves today.'
+                    : 'A stronger rupee dampens MCX gains from global commodity price moves today.'}
+                </div>
+              )}
             </div>
           )
         })}
@@ -362,6 +377,13 @@ export default function MarketsClient({ initialPrices }: { initialPrices: PriceD
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
         </div>
       </div>
+
+      {/* ── EIA Crude Inventory ── (relocated from homepage, Part 12 UI-02; EIACard renders its own "EIA Crude Stocks" header) */}
+      {eiaData && (
+        <div style={{ marginBottom: 32, maxWidth: 420 }}>
+          <EIACard initialData={eiaData} />
+        </div>
+      )}
 
       {/* ── MCX Option Chain ── */}
       <div style={{ marginBottom: 32 }}>
