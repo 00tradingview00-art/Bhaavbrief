@@ -30,6 +30,7 @@ function TypePill({ type }: { type: ScoredEntry['type'] }) {
     article:     { bg: '#F0F4FF', color: '#2B4FC7', label: 'Flash'    },
     'hawk-scan': { bg: '#1A0A0A', color: '#FF4444', label: '⚡ Hawk', border: '#FF4444' },
     news:        { bg: '#EFFAF4', color: '#166534', label: 'News'     },
+    commodity:   { bg: '#FBF3E3', color: '#8A6415', label: 'Live'     },
   }
   const st = s[type] ?? s.article
   return (
