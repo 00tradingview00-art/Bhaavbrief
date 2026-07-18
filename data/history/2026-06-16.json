@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-06-16T12:00:00.000Z",
+  "generatedAtIST": "2026-06-16 (backfilled)",
+  "source": "kite-backfill",
+  "backfilled": true,
+  "instruments": {
+    "MCX_GOLD": {
+      "price": 153091,
+      "prevClose": 152916,
+      "changePct": 0.1144,
+      "unit": "INR/10g"
+    },
+    "MCX_SILVER": {
+      "price": 256029,
+      "prevClose": 257133,
+      "changePct": -0.4293,
+      "unit": "INR/kg"
+    },
+    "MCX_CRUDE": {
+      "price": 7124,
+      "prevClose": 7522,
+      "changePct": -5.2911,
+      "unit": "INR/bbl"
+    },
+    "MCX_COPPER": {
+      "price": 1356.25,
+      "prevClose": 1357.75,
+      "changePct": -0.1105,
+      "unit": "INR/kg"
+    },
+    "MCX_NATGAS": {
+      "price": 309.3,
+      "prevClose": 300.7,
+      "changePct": 2.86,
+      "unit": "INR/mmBtu"
+    }
+  }
+}
