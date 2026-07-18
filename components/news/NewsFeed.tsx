@@ -434,7 +434,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
             ← Prev
           </button>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, overflowX: 'auto', minWidth: 0 }}>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
               <button
                 key={p}

@@ -189,6 +189,9 @@ export default function Nav() {
         @media (max-width: 480px) {
           .nav-links a { padding: 0 8px !important; font-size: 13px !important; }
         }
+        @media (max-width: 767px) {
+          .nav-links { display: none !important; }
+        }
       `}</style>
     </>
   )

@@ -311,7 +311,7 @@ export default async function HomePage() {
       <div className="home-body">
 
         {/* LEFT ─ market snap + previous briefs */}
-        <div>
+        <div style={{ minWidth: 0 }}>
 
           {/* Market snapshot */}
           <MarketSnapshot data={prices} />
@@ -358,6 +358,7 @@ export default async function HomePage() {
               <span style={{
                 fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.4,
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                minWidth: 0,
               }}>
                 {brief.title}
               </span>
