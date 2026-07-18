@@ -6,6 +6,7 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import GoldHeroCard from '@/components/GoldHeroCard'
+import ContinueReading from '@/components/ContinueReading'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 
@@ -170,6 +171,8 @@ export default async function HomePage() {
           </Link>
         </div>
       </div>
+
+      <ContinueReading />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       {latest && (
