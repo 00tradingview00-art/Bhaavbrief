@@ -175,6 +175,13 @@ body {
   .desktop-only { display: block; }
 }
 
+/* Bottom nav (components/BottomNav.tsx) is fixed on mobile only — reserve
+   space so it never covers page content or the footer disclaimer. */
+@media (max-width: 767px) {
+  .bb-main   { padding-bottom: 76px !important; }
+  .bb-footer { padding-bottom: calc(76px + clamp(24px, 4vw, 32px)) !important; }
+}
+
 /* Sidebar panel: top border on mobile, left border on desktop */
 .sidebar-panel {
   border-top: 0.5px solid #DDDDD0;

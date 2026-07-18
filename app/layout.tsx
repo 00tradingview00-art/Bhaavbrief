@@ -5,6 +5,7 @@ import Script from 'next/script'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
+import BottomNav from '@/components/BottomNav'
 import TickerStrip from '@/components/TickerStrip'
 import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
@@ -125,10 +126,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <div style={{ position: 'sticky', top: 56, zIndex: 39 }}>
           <TickerStrip initialPrices={initialPrices} />
         </div>
-        <main style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>
+        <main className="bb-main" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>
           {children}
         </main>
-        <footer style={{ borderTop: '1px solid var(--border)', padding: 'clamp(24px, 4vw, 32px) clamp(16px, 4vw, 24px)', marginTop: 'clamp(40px, 6vw, 64px)', textAlign: 'center' }}>
+        <footer className="bb-footer" style={{ borderTop: '1px solid var(--border)', padding: 'clamp(24px, 4vw, 32px) clamp(16px, 4vw, 24px)', marginTop: 'clamp(40px, 6vw, 64px)', textAlign: 'center' }}>
           <p style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: 'var(--ink)', marginBottom: 8 }}>
             Bhaav<span style={{ color: 'var(--gold)' }}>Brief</span>
           </p>
@@ -160,6 +161,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Commodity derivatives trading involves substantial risk of loss and is not suitable for all investors. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.
           </p>
         </footer>
+        <BottomNav />
         <Analytics />
         {/* Google Analytics 4 — lazyOnload so it doesn't block interactivity */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="lazyOnload" />
