@@ -120,7 +120,7 @@ export default async function HomePage() {
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
   const activeArcs = getActiveArcs()
-  const [latest] = briefs
+  const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
   const briefDelayed = isTodaysBriefDelayed(latest?.date)
 
@@ -320,11 +320,12 @@ export default async function HomePage() {
           {/* Market snapshot */}
           <MarketSnapshot data={prices} />
 
-          {/* Previous editions — single link, full list lives on /briefs (Part 12 §12.5) */}
-          <Link href="/briefs" style={{
+          {/* Previous editions — compact 3-item list (was a bare link with no
+              visible briefs, which read as broken/empty rather than
+              intentionally compressed). Full list still lives on /briefs. */}
+          <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '16px 0', borderTop: '2px solid var(--ink)',
-            textDecoration: 'none',
+            paddingTop: 16, paddingBottom: 8, borderTop: '2px solid var(--ink)',
           }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
@@ -333,14 +334,39 @@ export default async function HomePage() {
             }}>
               Previous Editions
             </span>
-            <span style={{
+            <Link href="/briefs" style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 10, color: 'var(--gold)',
-              letterSpacing: '0.04em',
+              letterSpacing: '0.04em', textDecoration: 'none',
             }}>
               View all {briefs.length} editions →
-            </span>
-          </Link>
+            </Link>
+          </div>
+
+          {previous.slice(0, 3).map(brief => (
+            <Link
+              key={brief.slug}
+              href={`/briefs/${brief.slug}`}
+              style={{
+                display: 'flex', alignItems: 'baseline', gap: 12,
+                padding: '12px 0', borderBottom: '1px solid var(--border)',
+                textDecoration: 'none',
+              }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)',
+                flexShrink: 0, minWidth: 32,
+              }}>
+                #{brief.edition}
+              </span>
+              <span style={{
+                fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.4,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {brief.title}
+              </span>
+            </Link>
+          ))}
         </div>
 
         {/* RIGHT ─ sticky sidebar */}

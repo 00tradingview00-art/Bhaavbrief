@@ -539,14 +539,16 @@ export default function OptionChain({ isPro, preview = false, initialData = null
       )}
 
       {/* ── Analytics strip ── */}
-      {/* Part 12 §12.8: sticky while scrolling the chain, below the global
-          Nav (53px) + TickerStrip (~46.5px) sticky header. Only sticks within
-          non-preview usage — the /markets preview embed doesn't scroll far
-          enough for this to matter, but the sticky rule is harmless there. */}
+      {/* Reverted the Part 12 §12.8 sticky treatment: position:sticky here
+          introduced a real, confirmed rendering bug — the strip rendered
+          ~52px lower than its natural static position even while not
+          actively "stuck" (reproduced live: switching a tab that changes
+          the content below it left the strip mispositioned, overlapping
+          IVHistoryChart's ATM IV text). Not worth the regression risk on a
+          live options page for a nice-to-have; back to normal static flow. */}
       {data && (
         <div style={{
           borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none',
-          position: preview ? undefined : 'sticky', top: preview ? undefined : 102, zIndex: 20,
         }}>
           <Pill label="Underlying" value={fmtINR(data.futurePrice)}
             info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks." />
