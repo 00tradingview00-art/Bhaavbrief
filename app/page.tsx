@@ -5,7 +5,6 @@ import type { PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
-import SignalBar from '@/components/SignalBar'
 import GoldHeroCard from '@/components/GoldHeroCard'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
@@ -126,9 +125,6 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* ── SIGNAL BAR (Part 12 §12.4.2 / §12.5) ─────────────────────────────── */}
-      <SignalBar data={prices} />
-
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
       <div style={{ marginBottom: 16 }}>
         <div style={{
