@@ -97,7 +97,11 @@ async function updateGitHubSecret(accessToken: string): Promise<boolean> {
         body: JSON.stringify({ encrypted_value: encrypted, key_id }),
       }
     )
-    return putRes.ok || putRes.status === 204
+    if (!putRes.ok && putRes.status !== 204) {
+      console.error('GitHub Secret PUT failed:', putRes.status, await putRes.text())
+      return false
+    }
+    return true
   } catch (err) {
     console.error('GitHub Secret update failed:', err)
     return false
@@ -139,7 +143,10 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
           body: JSON.stringify({ value: accessToken, type: existing.type }),
         }
       )
-      if (!patchRes.ok) return false
+      if (!patchRes.ok) {
+        console.error('Vercel env PATCH failed:', patchRes.status, await patchRes.text())
+        return false
+      }
     } else {
       // Create new
       const createRes = await fetch(
@@ -155,7 +162,10 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
           }),
         }
       )
-      if (!createRes.ok) return false
+      if (!createRes.ok) {
+        console.error('Vercel env POST failed:', createRes.status, await createRes.text())
+        return false
+      }
     }
 
     // Trigger a Vercel redeploy so the new env var is picked up
