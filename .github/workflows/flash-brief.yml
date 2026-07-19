@@ -104,6 +104,13 @@ jobs:
           fi
           FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
           NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
+          # fetch-snapshot.mjs (above) writes these as a side effect for this job's
+          # own use, but they're excluded from git add — intelligence-engine.yml
+          # owns them. Discard the local write before stashing, or an unscoped
+          # `git stash` grabs it anyway and conflicts with the newer copy
+          # intelligence-engine pushes independently every ~15 min.
+          git checkout -- data/market-snapshot.json 2>/dev/null || true
+          git checkout -- data/history 2>/dev/null || true
           git stash
           git pull --rebase origin main
           git stash pop || true
