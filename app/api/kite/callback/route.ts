@@ -170,18 +170,18 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
 
     // Trigger a Vercel redeploy so the new env var is picked up
     // (env changes require redeploy to take effect in serverless functions)
-    await fetch(
-      `https://api.vercel.com/v13/deployments`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${vercelToken}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name:   'bhaavbrief',
-          target: 'production',
-          gitSource: { type: 'github', repoId: process.env.GITHUB_REPO_ID, ref: 'main' },
-        }),
+    const deployHookUrl = process.env.VERCEL_DEPLOY_HOOK
+    if (deployHookUrl) {
+      const hookRes = await fetch(deployHookUrl, { method: 'POST' }).catch(err => {
+        console.error('Vercel deploy hook request failed:', err)
+        return null
+      })
+      if (hookRes && !hookRes.ok) {
+        console.error('Vercel deploy hook responded', hookRes.status, await hookRes.text())
       }
-    ).catch(() => {}) // Non-critical — env will pick up on next natural deploy
+    } else {
+      console.warn('VERCEL_DEPLOY_HOOK not set — env change will not take effect until next natural deploy')
+    }
 
     return true
   } catch (err) {
