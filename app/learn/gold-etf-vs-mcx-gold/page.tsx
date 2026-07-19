@@ -415,9 +415,6 @@ export default function Page() {
         <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Last updated {p.snapshotDate}
         </p>
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
-          This is for informational purposes only and not investment advice. Tax laws change — verify current rates with a CA. Commodity futures involve significant risk of loss.
-        </p>
       </div>
     </>
   )

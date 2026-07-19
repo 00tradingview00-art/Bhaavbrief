@@ -502,7 +502,7 @@ export default async function CommodityPage({ params }: Props) {
       {/* Historical chart */}
       <CommodityChartWrapper commodity={commodity} color={color} unit={info.unit} />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 32, alignItems: 'start' }}>
+      <div className="layout-main" style={{ alignItems: 'start' }}>
         {/* Left column */}
         <div>
           {/* Developing Story — shows when an active arc involves this commodity */}
@@ -864,13 +864,6 @@ export default async function CommodityPage({ params }: Props) {
           </Link>
         </div>
       </div>
-
-      {/* SEBI disclaimer — moved here (Part 12 §12.11: "below the content,
-          above the bottom nav"), was previously at the very top of the page,
-          227 lines away from the event-impact stats it's meant to cover. */}
-      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '20px 0 0', lineHeight: 1.6 }}>
-        BhaavBrief is not a SEBI-registered investment advisor. Prices and analysis are for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
-      </p>
     </>
   )
 }

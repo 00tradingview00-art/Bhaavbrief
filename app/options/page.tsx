@@ -88,9 +88,6 @@ export default async function OptionsPage() {
           Live Greeks · iVIX · AAV · Max Pain · PCR — Black-76 model
         </p>
       </div>
-      <p style={{ fontSize: 11, color: 'var(--ink-4)', margin: '-12px 0 24px', lineHeight: 1.6 }}>
-        BhaavBrief is not a SEBI-registered investment advisor. Option data is for informational purposes only. Nothing here constitutes a buy, sell, or hold recommendation.
-      </p>
 
       {initialData && (
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
