@@ -46,15 +46,14 @@ jobs:
           KITE_API_KEY:        ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
 
-      - name: Generate AI news feed
+      - name: Flash monitor (trigger-based T1+T2)
         continue-on-error: true
-        run: node scripts/generate-news.js
+        run: node scripts/flash-monitor.mjs
         env:
-          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
-          KITE_API_KEY:        ${{ secrets.KITE_API_KEY }}
-          KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
-          TWELVE_DATA_API_KEY: ${{ secrets.TWELVE_DATA_API_KEY }}
-          ALPHA_VANTAGE_KEY:   ${{ secrets.ALPHA_VANTAGE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor MCX/SEBI circulars
         continue-on-error: true
@@ -63,60 +62,30 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
-      - name: Monitor geopolitical signals
-        continue-on-error: true
-        run: node scripts/monitor-geopolitical-signals.js
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
-
-      - name: Monitor India policy signals
-        continue-on-error: true
-        run: node scripts/monitor-india-policy-signals.js
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
-
-      - name: Monitor NCDEX agri signals
-        continue-on-error: true
-        run: node scripts/monitor-ncdex-agri.js
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
-
-      - name: Monitor macro economy signals
-        continue-on-error: true
-        run: node scripts/monitor-macro-economy.js
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
-
       - name: Commit and push
         run: |
           git config user.name "BhaavBrief Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Note: market-snapshot.json is intentionally excluded — intelligence-engine owns it.
-          # Including it here caused rebase conflicts in the retry loop.
-          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json data/commodity-price-state.json scripts/seen-news.json
+          # Stage trigger-based flash articles, state, circulars, and gate log.
+          # market-snapshot.json intentionally excluded — intelligence-engine owns it.
+          git add content/flash/ scripts/seen-circulars.json \
+                  data/flash-state.json data/gate-log.jsonl
           if git diff --staged --quiet; then
             echo "Nothing new to commit"
             exit 0
           fi
           FLASH=$(git diff --staged --name-only -- content/flash/ | grep -c '\.mdx$' || true)
-          NEWS=$(git diff --staged --name-only -- data/ai-news.json | grep -c '.' || true)
-          # fetch-snapshot.mjs (above) writes these as a side effect for this job's
-          # own use, but they're excluded from git add — intelligence-engine.yml
-          # owns them. Discard the local write before stashing, or an unscoped
-          # `git stash` grabs it anyway and conflicts with the newer copy
-          # intelligence-engine pushes independently every ~15 min.
+          # Discard snapshot/history side-effects before stashing — intelligence-engine
+          # owns them and pushing them here causes rebase conflicts.
           git checkout -- data/market-snapshot.json 2>/dev/null || true
           git checkout -- data/history 2>/dev/null || true
           git stash
           git pull --rebase origin main
           git stash pop || true
-          git add content/flash/ scripts/seen-circulars.json scripts/seen-geopolitical.json scripts/seen-india-policy.json scripts/seen-agri.json scripts/seen-macro.json data/ai-news.json data/commodity-price-state.json scripts/seen-news.json
+          git add content/flash/ scripts/seen-circulars.json \
+                  data/flash-state.json data/gate-log.jsonl
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
-          git commit -m "intelligence: ${FLASH} flash, ${NEWS:+news updated} $(date -u '+%H:%M UTC')"
+          git commit -m "flash: ${FLASH} signal(s) $(date -u '+%H:%M UTC')"
           for attempt in 1 2 3; do
             git push origin main && break
             if [ $attempt -lt 3 ]; then

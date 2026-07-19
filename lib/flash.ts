@@ -9,7 +9,7 @@ export interface FlashMeta {
   title:       string
   date:        string
   source:      string
-  category:    'energy' | 'metals' | 'forex' | 'macro'
+  category:    'energy' | 'metals' | 'forex' | 'macro' | 'geopolitical'
   published:   boolean
   excerpt:     string
   coverImage?: string
@@ -33,7 +33,7 @@ export function getAllFlash(): FlashMeta[] {
       const plain = content
         .replace(/^#+\s.*$/gm, '')
         .replace(/\*+/g, '')
-        .replace(/^(WHAT HAPPENED|MCX IMPACT|CONTEXT|WHY IT MATTERS|WATCH)[:\s]*/gim, '')
+        .replace(/^(WHAT HAPPENED|WHAT IT MEANS|WHO IS AFFECTED|BOTTOM LINE|WHAT TO WATCH|MCX IMPACT|CONTEXT|WHY IT MATTERS|WATCH)[:\s]*/gim, '')
         .replace(/\n+/g, ' ')
         .trim()
       const excerpt = plain.length > 220 ? plain.slice(0, plain.lastIndexOf(' ', 220)) + '…' : plain
