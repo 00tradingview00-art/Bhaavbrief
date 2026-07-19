@@ -379,9 +379,6 @@ export default function InvestPage() {
         </p>
       )}
 
-      <div style={{ marginTop: 32, paddingTop: 16, borderTop: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', lineHeight: 1.8, letterSpacing: '0.02em' }}>
-        BhaavBrief is not a SEBI-registered investment advisor. This page lists publicly available instruments for informational purposes only. Nothing here is a buy, sell, or hold recommendation. Consult a SEBI-registered advisor before making any financial decision.
-      </div>
     </div>
   )
 }

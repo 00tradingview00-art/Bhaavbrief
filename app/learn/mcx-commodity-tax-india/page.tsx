@@ -631,9 +631,6 @@ export default function Page() {
         <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Last updated {p.snapshotDate}
         </p>
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
-          This guide is for informational purposes only and does not constitute tax advice. Tax laws change — consult a CA familiar with F&amp;O and commodity taxation for your specific filing.
-        </p>
       </div>
     </>
   )
