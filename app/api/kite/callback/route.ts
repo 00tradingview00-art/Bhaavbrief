@@ -81,7 +81,7 @@ async function updateGitHubSecret(accessToken: string): Promise<boolean> {
     )
     const { key, key_id } = await pkRes.json()
 
-    // Encrypt the secret using libsodium (via tweetnacl)
+    // Encrypt the secret using libsodium sealed-box, as GitHub's API requires
     const encrypted = await encryptSecret(key, accessToken)
 
     // Upsert the secret
@@ -190,33 +190,20 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
   }
 }
 
-// ── Encrypt for GitHub Secrets (requires tweetnacl) ───────────────────────────
+// ── Encrypt for GitHub Secrets ─────────────────────────────────────────────────
+// GitHub's Actions Secrets API requires libsodium sealed-box encryption
+// (crypto_box_seal) — not a plain nacl.box with a random nonce, which produces
+// a format GitHub's API rejects with "improperly encrypted secret".
 async function encryptSecret(publicKey: string, secretValue: string): Promise<string> {
-  // Dynamic import so this doesn't break if tweetnacl isn't installed
-  try {
-    const nacl      = await import('tweetnacl')
-    const naclUtil  = await import('tweetnacl-util')
-    const { encodeBase64, decodeBase64, decodeUTF8 } = naclUtil.default ?? naclUtil
+  const sodiumMod = await import('libsodium-wrappers')
+  const sodium    = sodiumMod.default ?? sodiumMod
+  await sodium.ready
 
-    const keyBytes    = decodeBase64(publicKey)
-    const secretBytes = decodeUTF8(secretValue)
+  const keyBytes    = sodium.from_base64(publicKey, sodium.base64_variants.ORIGINAL)
+  const secretBytes = sodium.from_string(secretValue)
+  const encrypted    = sodium.crypto_box_seal(secretBytes, keyBytes)
 
-    // Generate ephemeral keypair for box encryption
-    const senderKeypair = nacl.default.box.keyPair()
-    const nonce         = nacl.default.randomBytes(24)
-    const encrypted     = nacl.default.box(secretBytes, nonce, keyBytes, senderKeypair.secretKey)
-
-    // Prepend sender public key + nonce to encrypted bytes
-    const combined = new Uint8Array(senderKeypair.publicKey.length + nonce.length + encrypted.length)
-    combined.set(senderKeypair.publicKey, 0)
-    combined.set(nonce, senderKeypair.publicKey.length)
-    combined.set(encrypted, senderKeypair.publicKey.length + nonce.length)
-
-    return encodeBase64(combined)
-  } catch {
-    // If tweetnacl not available, return a placeholder that signals manual update needed
-    throw new Error('tweetnacl not installed — run: npm install tweetnacl tweetnacl-util')
-  }
+  return sodium.to_base64(encrypted, sodium.base64_variants.ORIGINAL)
 }
 
 // ── HTML response helper ──────────────────────────────────────────────────────
