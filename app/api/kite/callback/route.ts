@@ -106,8 +106,9 @@ async function updateGitHubSecret(accessToken: string): Promise<boolean> {
 
 // ── Update Vercel Environment Variable ────────────────────────────────────────
 interface VercelEnvVar {
-  id:  string
-  key: string
+  id:   string
+  key:  string
+  type: string
 }
 
 async function updateVercelEnv(accessToken: string): Promise<boolean> {
@@ -129,13 +130,13 @@ async function updateVercelEnv(accessToken: string): Promise<boolean> {
     const existing = envs?.find(e => e.key === 'KITE_ACCESS_TOKEN')
 
     if (existing) {
-      // Patch existing
+      // Patch existing — preserve existing type (sensitive vars reject type changes)
       const patchRes = await fetch(
         `https://api.vercel.com/v9/projects/${vercelProjectId}/env/${existing.id}`,
         {
           method: 'PATCH',
           headers: { Authorization: `Bearer ${vercelToken}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ value: accessToken, type: 'encrypted' }),
+          body: JSON.stringify({ value: accessToken, type: existing.type }),
         }
       )
       if (!patchRes.ok) return false
@@ -184,7 +185,8 @@ async function encryptSecret(publicKey: string, secretValue: string): Promise<st
   // Dynamic import so this doesn't break if tweetnacl isn't installed
   try {
     const nacl      = await import('tweetnacl')
-    const { encodeBase64, decodeBase64, decodeUTF8 } = await import('tweetnacl-util')
+    const naclUtil  = await import('tweetnacl-util')
+    const { encodeBase64, decodeBase64, decodeUTF8 } = naclUtil.default ?? naclUtil
 
     const keyBytes    = decodeBase64(publicKey)
     const secretBytes = decodeUTF8(secretValue)
