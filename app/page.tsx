@@ -6,6 +6,7 @@ import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import GoldHeroCard from '@/components/GoldHeroCard'
+import ContinueReading from '@/components/ContinueReading'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 
@@ -170,6 +171,8 @@ export default async function HomePage() {
           </Link>
         </div>
       </div>
+
+      <ContinueReading />
 
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       {latest && (
@@ -546,10 +549,16 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* Subscribe CTA block — desktop only (mobile sees the hero form above the fold).
+          {/* Subscribe CTA block — the page's single "primary" (gold-button) ask.
+              Was desktop-only on the theory that mobile already saw the quiet
+              hero form above the fold; that meant mobile visitors never reached
+              the one deliberately unmistakable CTA at all. Shown on all
+              breakpoints now — it sits far enough down-page from the hero form
+              that they're never both in view together, so the Gold Rule's
+              per-viewport scarcity budget still holds.
               Part 12 §12.5.1: intentionally dark even on the otherwise-light site,
               the doc's own explicitly called-out treatment for this one block. */}
-          <div id="subscribe" className="desktop-only" style={{
+          <div id="subscribe" style={{
             background: '#0C0E00',
             border: '1px solid #252800',
             borderRadius: 4,
