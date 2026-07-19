@@ -1,12 +1,25 @@
 {
-  "generatedAt": "2026-07-18T02:20:18.321Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-07-19T02:32:25.948Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [],
+    "learnIssues": [
+      {
+        "field": "MCX Gold lot size",
+        "currentValue": "Gold Mini contract with a 100g lot size",
+        "correctValue": "No Gold Mini (100g) contract exists in current MCX specs. Standard Gold contract is 1 kg (1000g). Gold Mini was discontinued.",
+        "location": "FAQ Schema - 'What is the MCX Gold lot size in 2026?' answer"
+      },
+      {
+        "field": "Gold Mini margin estimate",
+        "currentValue": "approximately ₹55,000–₹75,000",
+        "correctValue": "Cannot be verified as Gold Mini contract no longer exists in ground-truth specs",
+        "location": "FAQ Schema - Gold lot size answer"
+      }
+    ],
     "investIssues": [],
     "circularImpact": []
   }
