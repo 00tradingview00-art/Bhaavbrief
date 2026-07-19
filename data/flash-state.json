@@ -1,0 +1,8 @@
+{
+  "MCX_GOLD":   { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] },
+  "MCX_SILVER": { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] },
+  "MCX_CRUDE":  { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] },
+  "MCX_COPPER": { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] },
+  "MCX_NATGAS": { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] },
+  "USDINR":     { "lastFlashAt": null, "lastFlashPrice": null, "lastRoundLevel": null, "recentFlashIds": [] }
+}
