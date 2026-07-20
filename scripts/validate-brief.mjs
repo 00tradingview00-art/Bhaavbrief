@@ -18,6 +18,7 @@ import path from "node:path";
 import { checkWeekday } from "./lib/weekdayCheck.js";
 import { checkClaims } from "./lib/claimsCheck.mjs";
 import { appendGateLogEntry } from "./lib/gateLog.mjs";
+import { classifySemanticIssue } from "./lib/semanticDemote.mjs";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -596,22 +597,11 @@ async function semanticCheck() {
   }
 
   for (const it of result.verdict.issues ?? []) {
-    const detail = (it.detail ?? "").toLowerCase();
     // Haiku sometimes returns severity:"block" but then explains in the detail that
-    // there is actually no contradiction. Demote those to warnings.
-    const selfContradicted =
-      detail.includes("no block issue") ||
-      detail.includes("no contradiction") ||
-      detail.includes("no historical contradiction") ||
-      detail.includes("no block on this") ||
-      detail.includes("not a contradiction") ||
-      detail.includes("consistent with") ||
-      /\bconsistent\.?\s*pass\b/.test(detail) ||
-      /\bpass\.?\s*$/.test(detail.trim()) ||
-      detail.includes("matches snapshot") ||
-      detail.includes("which matches");
-    const isBlock = it.severity === "block" && !selfContradicted;
-    issues.push(`${isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN"}: ${it.detail}`);
+    // there is actually no contradiction. Demote those to warnings — see
+    // semanticDemote.mjs for the phrasings this needs to catch.
+    const prefix = classifySemanticIssue(it.severity, it.detail);
+    issues.push(`${prefix}: ${it.detail}`);
   }
 }
 
