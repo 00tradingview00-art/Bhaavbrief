@@ -1,24 +1,23 @@
 [
   {
     "type": "article",
-    "slug": "2026-07-20-red-sea-shipping-mcx-crude",
-    "href": "/articles/2026-07-20-red-sea-shipping-mcx-crude",
-    "title": "How Red Sea Shipping Disruptions Push MCX Crude Oil Higher in India",
-    "description": "Understand how Red Sea shipping disruptions affect MCX crude India prices through freight costs, Brent premiums, and rupee conversion in this clear guide.",
-    "excerpt": "Understanding how Red Sea shipping disruptions affect MCX crude India prices requires tracing a specific chain of events — from Houthi missile strikes in the Gulf of Aden to the ₹-per-barrel figure on",
-    "date": "2026-07-20",
-    "edition": "keyword-brief",
+    "slug": "2026-07-20-mcx-crude-surges-2-6-geopolitical-premium-or-demand-shift",
+    "href": "/articles/2026-07-20-mcx-crude-surges-2-6-geopolitical-premium-or-demand-shift",
+    "title": "MCX Crude Surges 2.6%—Geopolitical Premium or Demand Shift?",
+    "description": "MCX Crude rallies to ₹8149/bbl (+2.44%) as WTI breaks $83.74. Spare OPEC capacity tightens; watch Brent-WTI spread for physical reality.",
+    "excerpt": "WHAT HAPPENED MCX Crude has rallied ₹199 (+2.44%) to ₹8149/bbl in this morning's session, outpacing gold and silver by 3x—a sign crude is responding to supply-side tightening rather than broad-based r",
+    "date": "2026-07-20T05:57:25.939Z",
+    "edition": "flash",
     "tags": [
-      "crude",
-      "mcx",
-      "india",
-      "energy"
+      "MCX Crude",
+      "Energy",
+      "Intraday"
     ],
-    "commodity": "crude",
+    "commodity": "MCX Crude",
     "commodities": [
-      "crude"
+      "MCX Crude"
     ],
-    "priceAtPublish": 0
+    "priceAtPublish": 8149
   },
   {
     "type": "brief",
@@ -39,6 +38,27 @@
       "MCX Gold"
     ],
     "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-07-20-red-sea-shipping-mcx-crude",
+    "href": "/articles/2026-07-20-red-sea-shipping-mcx-crude",
+    "title": "How Red Sea Shipping Disruptions Push MCX Crude Oil Higher in India",
+    "description": "Understand how Red Sea shipping disruptions affect MCX crude India prices through freight costs, Brent premiums, and rupee conversion in this clear guide.",
+    "excerpt": "Understanding how Red Sea shipping disruptions affect MCX crude India prices requires tracing a specific chain of events — from Houthi missile strikes in the Gulf of Aden to the ₹-per-barrel figure on",
+    "date": "2026-07-20",
+    "edition": "keyword-brief",
+    "tags": [
+      "crude",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "crude",
+    "commodities": [
+      "crude"
+    ],
+    "priceAtPublish": 0
   },
   {
     "type": "brief",

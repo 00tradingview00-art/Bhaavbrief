@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 140840,
-    "silver": 216200,
-    "crude": 7955,
-    "copper": 1301.95,
-    "natgas": 281.7,
+    "gold": 141210,
+    "silver": 218116,
+    "crude": 8149,
+    "copper": 1305.05,
+    "natgas": 278.9,
     "usdinr": 96.28
   },
-  "lastChecked": "2026-07-17T17:45:03.846Z",
+  "lastChecked": "2026-07-20T05:57:25.698Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,10 +22,12 @@
     "mideast": "South Korea Bets on Red Sea Route as Hormuz Disruptions Persist - Crude Oil Pric",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-07-15T18:18:50.449Z",
+  "articlesToday": [
+    "2026-07-20/2026-07-20-mcx-crude-surges-2-6-geopolitical-premium-or-demand-shift"
+  ],
+  "lastArticleAt": "2026-07-20T05:57:40.593Z",
   "lastCoveredAt": {
-    "crude": "2026-07-15T18:18:50.449Z",
+    "crude": "2026-07-20T05:57:40.593Z",
     "silver": "2026-07-01T07:01:38.810Z",
     "natgas": "2026-07-09T15:45:42.151Z"
   }
