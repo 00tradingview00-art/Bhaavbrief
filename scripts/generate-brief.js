@@ -467,9 +467,10 @@ Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation 
 
   const callStartedAt = Date.now()
   const model = 'claude-sonnet-4-6'
+  const MAX_OUTPUT_TOKENS = 4096
   const r = await client.messages.create({
     model,
-    max_tokens: 2800,
+    max_tokens: MAX_OUTPUT_TOKENS,
     messages:   [{ role: 'user', content: prompt }],
   })
 
@@ -484,12 +485,23 @@ Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation 
       model,
       inputTokens: r.usage?.input_tokens ?? null,
       outputTokens: r.usage?.output_tokens ?? null,
+      stopReason: r.stop_reason ?? null,
       latencyMs: Date.now() - callStartedAt,
       payloadHash: hashPayload(prompt),
       calledAt: new Date(callStartedAt).toISOString(),
     })
   } catch (e) {
     console.warn('gate-log write failed (non-fatal):', e.message)
+  }
+
+  // A max_tokens cutoff means the brief was cut off mid-sentence — that must
+  // fail loudly here, not get smuggled through as valid content for the
+  // publish gate to catch (or miss) by accident. See 2026-07-20: edition #67
+  // was silently truncated ("...and its softness is a domestic s") and only
+  // caught because the gate's semantic checker happened to notice.
+  if (r.stop_reason === 'max_tokens') {
+    console.error(`Model hit the ${MAX_OUTPUT_TOKENS}-token output cap mid-brief (stop_reason=max_tokens) — refusing to publish a truncated brief`)
+    return null
   }
 
   return r.content[0].type === 'text' ? r.content[0].text : null
