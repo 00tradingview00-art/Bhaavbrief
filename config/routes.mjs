@@ -66,7 +66,6 @@ export const ROUTES = [
   '/learn/why-usdinr-affects-mcx-gold',
   '/llms.txt',
   '/markets',
-  '/methodology',
   '/news',
   '/news-sitemap.xml',
   '/options',

@@ -230,8 +230,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 fontSize: 13, color: '#8A5A00', lineHeight: 1.6,
               }}>
                 <strong>Corrected{brief.correctedAt ? ` ${formatDate(brief.correctedAt)}` : ''}:</strong>{' '}
-                {brief.correctionNote ?? 'This edition was corrected after publication.'}{' '}
-                See our <Link href="/methodology#corrections" style={{ color: '#8A5A00', textDecoration: 'underline' }}>corrections policy</Link>.
+                {brief.correctionNote ?? 'This edition was corrected after publication.'}
               </div>
             )}
 
