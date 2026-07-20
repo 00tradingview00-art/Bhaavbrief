@@ -33,9 +33,11 @@
     "recentFlashIds": []
   },
   "USDINR": {
-    "lastFlashAt": null,
-    "lastFlashPrice": null,
-    "lastRoundLevel": null,
-    "recentFlashIds": []
+    "lastFlashAt": "2026-07-20T09:44:11.241Z",
+    "lastFlashPrice": 96.4,
+    "lastRoundLevel": 96.5,
+    "recentFlashIds": [
+      "2026-07-20-15-14-usd-inr-breaks-96-5-round-level-lower-amid-rupee-streng"
+    ]
   }
 }
