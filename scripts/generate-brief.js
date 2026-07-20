@@ -317,10 +317,6 @@ function buildPriceBridge(prices) {
 ${rows.join('\n')}`
 }
 
-const DISCLAIMER = `---
-
-*BhaavBrief is not a SEBI-registered investment advisor. Content is for educational and informational purposes only. Nothing here is a buy, sell, or hold recommendation. Commodity markets carry significant risk — consult a registered advisor before acting on any information. See our [methodology](/methodology) for how this brief is generated, validated, and corrected.*`
-
 // ── Bold post-processor ───────────────────────────────────────────────────────
 // Ensures all price figures (₹/$ with numbers) and percentages are bolded in
 // body paragraphs. Skips: frontmatter, ## headers, table rows, disclaimer line,
@@ -590,8 +586,7 @@ async function main() {
     mdx = inject ? `${header}\n\n${inject}\n\n${body}` : `${header}\n\n${body}`
   }
 
-  // Append disclaimer footer
-  mdx = mdx.trimEnd() + '\n\n' + DISCLAIMER
+  mdx = mdx.trimEnd()
 
   // Bold prices and percentages in body text (safety net — Claude may miss some)
   mdx = applyBodyBold(mdx)
