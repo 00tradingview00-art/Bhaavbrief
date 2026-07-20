@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141632,
-    "silver": 219200,
-    "crude": 7935,
-    "copper": 1313.5,
+    "gold": 141641,
+    "silver": 219219,
+    "crude": 7923,
+    "copper": 1313.4,
     "natgas": 275.3,
     "usdinr": 96.45
   },
-  "lastChecked": "2026-07-20T15:24:56.460Z",
+  "lastChecked": "2026-07-20T15:27:21.200Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "206"
   },
   "lastGeoNews": {
-    "mideast": "South Korea Bets on Red Sea Route as Hormuz Disruptions Persist - Crude Oil Pric",
+    "mideast": "Houthis impose Saudi naval blockade, opening new front in US-Iran war - Reuters",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [
