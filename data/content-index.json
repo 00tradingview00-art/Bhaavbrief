@@ -22,6 +22,26 @@
   },
   {
     "type": "brief",
+    "slug": "edition-067",
+    "href": "/briefs/edition-067",
+    "title": "Brent Crosses $90 as Middle East Premium Resurfaces — Gold Diverges",
+    "description": "Oil surges on fresh Middle East supply fears while gold dips, splitting the classic safe-haven trade in two.",
+    "excerpt": "MCX Gold ₹141440 | Crude ₹8135 | USDINR ₹96.45 — Gold +0.38% | Crude +2.39% | Silver +1.36% | Commodity | Global Price | USD/INR | MCX Price | |-----------|--------------|---------|-----------| | Gold",
+    "date": "2026-07-20T04:38:23.380Z",
+    "edition": "67",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-066",
     "href": "/briefs/edition-066",
     "title": "COMEX Gold Touches $3,997 as Crude Climbs — Two Rallies, One Rupee",

@@ -1,0 +1,4 @@
+{"type":"generation_call","call":"brief","promptVersion":"brief_v1","model":"claude-sonnet-4-6","inputTokens":7765,"outputTokens":1417,"stopReason":"end_turn","latencyMs":38456,"payloadHash":"241d863bc640ed4f","calledAt":"2026-07-20T04:38:23.406Z"}
+{"type":"generation_call","call":"consistency_check","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":751,"outputTokens":80,"latencyMs":2165,"payloadHash":"bf12a69069b51364","calledAt":"2026-07-20T04:39:01.864Z"}
+{"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":820,"outputTokens":160,"latencyMs":2459,"payloadHash":"3d505c73e5c17e02","calledAt":"2026-07-20T04:39:04.031Z"}
+{"type":"gate_run","edition":67,"briefPath":"content/briefs/edition-067.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":17795,"checkedAt":"2026-07-20T04:39:24.352Z"}
