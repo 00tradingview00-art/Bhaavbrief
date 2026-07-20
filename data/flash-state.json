@@ -12,10 +12,11 @@
     "recentFlashIds": []
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-07-20T06:24:07.448Z",
-    "lastFlashPrice": 8164,
+    "lastFlashAt": "2026-07-20T07:40:19.249Z",
+    "lastFlashPrice": 8035,
     "lastRoundLevel": 8000,
     "recentFlashIds": [
+      "2026-07-20-13-10-mcx-crude-rallies-on-supply-risk-premium",
       "2026-07-20-11-54-mcx-crude-surges-2-76-on-geopolitical-supply-concerns"
     ]
   },
