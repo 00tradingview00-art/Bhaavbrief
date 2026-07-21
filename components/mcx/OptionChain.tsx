@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -194,15 +195,63 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   )
 }
 
-// ── Volatility — today (chart returns once ATM IV history has enough days) ────
+// ── Volatility — today + 5-day ATM IV trend ────────────────────────────────────
 
 const IV_LINE = '#6941c6' // matches the iVIX pill's color — same metric, same hue
 
-function IVHistoryChart({ chain }: { chain: ChainRow[] }) {
+function fmtIVDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+}
+
+interface IVHistoryTooltipProps {
+  active?:  boolean
+  payload?: { payload: { date: string; iv: number } }[]
+}
+
+function IVHistoryTooltip({ active, payload }: IVHistoryTooltipProps) {
+  if (!active || !payload?.length) return null
+  const d = payload[0].payload
+  return (
+    <div style={{
+      background: C.ink, color: '#fff', border: `1px solid ${C.bdr}`,
+      padding: '6px 10px', borderRadius: 4, fontSize: 11, fontFamily: C.sans,
+    }}>
+      <div style={{ opacity: 0.7, marginBottom: 2 }}>{fmtIVDate(d.date)}</div>
+      <div style={{ fontWeight: 600, ...numStyle }}>{d.iv}%</div>
+    </div>
+  )
+}
+
+function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: string }) {
   // Today's live ATM IV — average of the ATM row's Call/Put IV from the current chain.
   const atmRows = chain.filter(r => r.isATM)
   const liveIVs = atmRows.flatMap(r => [r.CE.iv, r.PE.iv]).filter((v): v is number => v != null && v > 0)
   const liveIV  = liveIVs.length ? parseFloat((liveIVs.reduce((s, v) => s + v, 0) / liveIVs.length).toFixed(2)) : null
+
+  const [history, setHistory]       = useState<{ date: string; iv: number }[]>([])
+  const [histLoading, setHistLoading] = useState(true)
+  const [histError, setHistError]     = useState<string|null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setHistLoading(true); setHistError(null)
+    fetch(`/api/options/iv-history?instrument=${instrument}`)
+      .then(res => { if (!res.ok) throw new Error('bad response'); return res.json() })
+      .then((json: { history: { date: string; iv: number }[] }) => { if (!cancelled) setHistory(json.history ?? []) })
+      .catch(() => { if (!cancelled) setHistError('unavailable') })
+      .finally(() => { if (!cancelled) setHistLoading(false) })
+    return () => { cancelled = true }
+  }, [instrument])
+
+  // Last 5 trading days with data — real gaps (missed cron days) are left as
+  // gaps, never interpolated or backfilled. The "5-Day" label names the
+  // intended window even when fewer points exist; the point count itself
+  // communicates sparseness.
+  const recent = history.slice(-5)
+  const ivValues = recent.map(d => d.iv)
+  const minIV = ivValues.length ? Math.min(...ivValues) : 0
+  const maxIV = ivValues.length ? Math.max(...ivValues) : 0
+  const gradId = `grad-iv-${instrument}`
 
   return (
     <div style={{ padding: '16px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
@@ -210,12 +259,59 @@ function IVHistoryChart({ chain }: { chain: ChainRow[] }) {
         Volatility — today
       </div>
       {liveIV != null ? (
-        <>
-          <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{liveIV}%</div>
-          <div style={{ fontSize: 11, color: C.ink3, fontFamily: C.sans, marginTop: 4 }}>ATM IV — trend chart returns once enough daily history has built up.</div>
-        </>
+        <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{liveIV}%</div>
       ) : (
         <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No volatility data available right now.</div>
+      )}
+
+      <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, margin: '14px 0 6px' }}>
+        ATM IV — 5-Day
+      </div>
+
+      {histLoading ? (
+        <div style={{ fontSize: 11, color: C.ink4, fontFamily: C.sans }}>Loading…</div>
+      ) : histError ? (
+        <div style={{ fontSize: 11, color: C.ink4, fontFamily: C.sans }}>No volatility data available right now.</div>
+      ) : recent.length < 2 ? (
+        <div style={{ fontSize: 11, color: C.ink3, fontFamily: C.sans }}>ATM IV — trend chart returns once enough daily history has built up.</div>
+      ) : (
+        <div style={{ height: 130 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={recent} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"   stopColor={IV_LINE} stopOpacity={0.18} />
+                  <stop offset="100%" stopColor={IV_LINE} stopOpacity={0}    />
+                </linearGradient>
+              </defs>
+
+              <XAxis dataKey="date" hide />
+              <YAxis domain={[minIV * 0.98, maxIV * 1.02]} hide />
+
+              <Tooltip
+                content={<IVHistoryTooltip />}
+                cursor={{ stroke: IV_LINE, strokeWidth: 1, strokeDasharray: '3 3' }}
+              />
+
+              <ReferenceLine
+                y={recent[0].iv}
+                stroke={C.bdr}
+                strokeDasharray="2 4"
+                strokeWidth={0.8}
+              />
+
+              <Area
+                type="monotone"
+                dataKey="iv"
+                stroke={IV_LINE}
+                strokeWidth={1.5}
+                fill={`url(#${gradId})`}
+                dot={{ r: 2.5, fill: IV_LINE, stroke: C.surf, strokeWidth: 1 }}
+                activeDot={{ r: 3.5, fill: IV_LINE, stroke: '#fff', strokeWidth: 1.5 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       )}
     </div>
   )
@@ -586,7 +682,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
 
       {/* ── OI concentration map / IV skew chart ── */}
       {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
-      {data?.chain && mapView === 'iv' && <IVHistoryChart chain={mainPage} />}
+      {data?.chain && mapView === 'iv' && <IVHistoryChart chain={mainPage} instrument={instrument} />}
 
       {/* ── ITM note ── */}
       {data?.chain && (
