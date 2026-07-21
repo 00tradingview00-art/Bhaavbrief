@@ -6,10 +6,12 @@
     "recentFlashIds": []
   },
   "MCX_SILVER": {
-    "lastFlashAt": null,
-    "lastFlashPrice": null,
-    "lastRoundLevel": null,
-    "recentFlashIds": []
+    "lastFlashAt": "2026-07-21T07:05:27.717Z",
+    "lastFlashPrice": 223300,
+    "lastRoundLevel": 220000,
+    "recentFlashIds": [
+      "2026-07-21-12-35-mcx-silver-surges-2-24-on-safe-haven-demand-shift"
+    ]
   },
   "MCX_CRUDE": {
     "lastFlashAt": "2026-07-20T07:40:19.249Z",
