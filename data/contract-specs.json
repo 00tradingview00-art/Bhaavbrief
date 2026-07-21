@@ -25,8 +25,8 @@
   },
   "crude": {
     "name": "CRUDEOIL",
-    "tradingsymbol": "CRUDEOIL26JULFUT",
-    "expiry": "2026-07-20",
+    "tradingsymbol": "CRUDEOIL26AUGFUT",
+    "expiry": "2026-08-19",
     "contractSize": 100,
     "contractSizeStr": "100 barrels",
     "priceQuote": "per barrel",

@@ -16,9 +16,9 @@
     "expiry": "2026-09-04"
   },
   "crude": {
-    "token": 133299719,
-    "symbol": "CRUDEOIL26JULFUT",
-    "expiry": "2026-07-20"
+    "token": 143610119,
+    "symbol": "CRUDEOIL26AUGFUT",
+    "expiry": "2026-08-19"
   },
   "copper": {
     "token": 143884295,
@@ -50,6 +50,7 @@
     "symbol": "NICKEL26AUGFUT",
     "expiry": "2026-08-19"
   },
+  "updatedAt": "2026-07-21T03:51:28.411Z",
   "currencies": {
     "usdinr": {
       "token": 323843,
@@ -71,6 +72,5 @@
       "symbol": "JPYINR26JULFUT",
       "expiry": "2026-07-29"
     }
-  },
-  "updatedAt": "2026-07-19T04:22:55.142Z"
+  }
 }
