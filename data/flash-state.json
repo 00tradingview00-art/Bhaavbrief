@@ -25,10 +25,12 @@
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": null,
-    "lastFlashPrice": null,
+    "lastFlashAt": "2026-07-21T10:53:13.274Z",
+    "lastFlashPrice": 1334.05,
     "lastRoundLevel": null,
-    "recentFlashIds": []
+    "recentFlashIds": [
+      "2026-07-21-16-23-mcx-copper-rallies-1-51-on-global-risk-appetite"
+    ]
   },
   "MCX_NATGAS": {
     "lastFlashAt": null,
