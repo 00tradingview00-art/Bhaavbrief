@@ -223,9 +223,17 @@ function IVHistoryTooltip({ active, payload }: IVHistoryTooltipProps) {
 }
 
 function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: string }) {
-  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current chain.
+  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current
+  // chain, LIVE-tier only. STALE-tier sides (illiquid, wide-spread, but not
+  // disqualified) still get a Black-76 IV computed from a stale/thin price and
+  // can be wildly wrong — averaging one in unfiltered dragged this number off
+  // by tens of points on a real ATM-strike case (2026-07-21, Silver: a clean
+  // 37% LIVE call averaged with a stale ~95% put read as "66% today").
   const atmRows = chain.filter(r => r.isATM)
-  const liveIVs = atmRows.flatMap(r => [r.CE.iv, r.PE.iv]).filter((v): v is number => v != null && v > 0)
+  const liveIVs = atmRows
+    .flatMap(r => [r.CE, r.PE])
+    .filter(side => side.tier === 'LIVE' && side.iv != null && side.iv > 0)
+    .map(side => side.iv as number)
   const liveIV  = liveIVs.length ? parseFloat((liveIVs.reduce((s, v) => s + v, 0) / liveIVs.length).toFixed(2)) : null
 
   const [history, setHistory]       = useState<{ date: string; iv: number }[]>([])
