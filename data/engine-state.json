@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 142784,
-    "silver": 223350,
-    "crude": 8055,
-    "copper": 1333.95,
-    "natgas": 276.9,
-    "usdinr": 96.45
+    "gold": 142759,
+    "silver": 223491,
+    "crude": 8154,
+    "copper": 1332.5,
+    "natgas": 276.5,
+    "usdinr": 96.23
   },
-  "lastChecked": "2026-07-21T12:08:01.585Z",
+  "lastChecked": "2026-07-21T14:18:21.897Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "206"
   },
   "lastGeoNews": {
-    "mideast": "Houthis impose Saudi naval blockade, opening new front in US-Iran war - Reuters",
+    "mideast": "Iran's forces attack Bahrain and Kuwait after US hits Iranian ports and cities -",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
