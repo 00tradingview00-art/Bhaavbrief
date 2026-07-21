@@ -1,6 +1,4 @@
 import { getAllBriefs }   from '@/lib/briefs'
-import { getAllFlash }    from '@/lib/flash'
-import { getAllArticles } from '@/lib/articles'
 import { getAllArcs }     from '@/lib/arcs'
 import { getAllEvents }   from '@/lib/events'
 
@@ -57,10 +55,8 @@ function entry(url: string, lastmod: string, changefreq: string, priority: strin
 export async function GET() {
   try {
     const now = new Date().toISOString()
-    const [briefs, flash, articles, events] = await Promise.all([
+    const [briefs, events] = await Promise.all([
       getAllBriefs(),
-      Promise.resolve(getAllFlash()),
-      getAllArticles(),
       getAllEvents(),
     ])
     const arcs = getAllArcs()
@@ -73,14 +69,11 @@ export async function GET() {
       entry(`${BASE}/briefs/${b.urlSlug}`, b.date ? new Date(b.date).toISOString() : now, 'never', '0.8')
     )
 
-    const flashEntries = flash.map(f =>
-      entry(`${BASE}/flash/${f.slug}`, f.date ? new Date(f.date).toISOString() : now, 'never', '0.6')
-    )
-
-    const articleEntries = articles.map(a =>
-      entry(`${BASE}/articles/${a.slug}`, a.date ? new Date(a.date).toISOString() : now, 'never', '0.7')
-    )
-
+    // /flash and /articles are deliberately excluded — high volume, noindex'd
+    // at the page level (see their generateMetadata), and covered separately
+    // by news-sitemap.xml for fresh (48h) discovery instead of the general
+    // index. Including them here diluted crawl budget across ~360 mostly
+    // unindexed URLs.
     const arcEntries = arcs.map(a =>
       entry(`${BASE}/arcs/${a.id}`, a.startDate ? new Date(a.startDate).toISOString() : now, a.status === 'active' ? 'daily' : 'never', '0.6')
     )
@@ -91,7 +84,7 @@ export async function GET() {
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticEntries, ...briefEntries, ...articleEntries, ...flashEntries, ...arcEntries, ...eventEntries].join('\n')}
+${[...staticEntries, ...briefEntries, ...arcEntries, ...eventEntries].join('\n')}
 </urlset>`
 
     return new Response(xml, {

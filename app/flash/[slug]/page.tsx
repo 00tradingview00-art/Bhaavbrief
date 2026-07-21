@@ -40,6 +40,11 @@ export async function generateMetadata(
   return {
     title,
     description,
+    // Excluded from sitemap.xml (see app/sitemap.xml/route.ts) — high-volume,
+    // low-per-page-value flash items diluted crawl budget. Kept out of the
+    // general index but still crawlable so link equity flows through;
+    // news-sitemap.xml separately surfaces items from the last 48h.
+    robots: { index: false, follow: true },
     alternates: { canonical: url },
     openGraph: {
       type: 'article', url, title, description,

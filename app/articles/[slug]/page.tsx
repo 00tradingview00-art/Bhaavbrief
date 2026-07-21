@@ -35,6 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title:       meta.title,
     description: meta.description,
+    // Excluded from sitemap.xml (see app/sitemap.xml/route.ts) — high-volume,
+    // low-per-page-value articles diluted crawl budget. Kept out of the
+    // general index but still crawlable so link equity flows through;
+    // news-sitemap.xml separately surfaces items from the last 48h.
+    robots: { index: false, follow: true },
     alternates:  { canonical },
     openGraph: {
       title:       meta.title,
