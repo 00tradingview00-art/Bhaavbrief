@@ -1,9 +1,11 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": null,
-    "lastFlashPrice": null,
+    "lastFlashAt": "2026-07-21T09:59:21.132Z",
+    "lastFlashPrice": 142883,
     "lastRoundLevel": null,
-    "recentFlashIds": []
+    "recentFlashIds": [
+      "2026-07-21-15-29-mcx-gold-rises-1-06-on-safe-haven-demand"
+    ]
   },
   "MCX_SILVER": {
     "lastFlashAt": "2026-07-21T07:05:27.717Z",
