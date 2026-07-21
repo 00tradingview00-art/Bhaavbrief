@@ -1,0 +1,12 @@
+[
+  {
+    "forEdition": 67,
+    "resolvedByEdition": 68,
+    "edgeMetric": "WTI",
+    "edgeLevel": 83.68,
+    "edgeCondition": "above",
+    "verdict": "rejected",
+    "resolvedValue": 82.36,
+    "resolvedAt": "2026-07-21T03:02:13.767Z"
+  }
+]
