@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 142890,
-    "silver": 223721,
-    "crude": 8185,
-    "copper": 1332.45,
-    "natgas": 277.2,
+    "gold": 142985,
+    "silver": 223983,
+    "crude": 8172,
+    "copper": 1338.3,
+    "natgas": 277.4,
     "usdinr": 96.23
   },
-  "lastChecked": "2026-07-21T14:32:54.181Z",
+  "lastChecked": "2026-07-21T15:58:21.398Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "206"
   },
   "lastGeoNews": {
-    "mideast": "Iran's forces attack Bahrain and Kuwait after US hits Iranian ports and cities -",
+    "mideast": "Saudi crude tankers turn back as Houthis open new front in US-Iran war - Reuters",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
