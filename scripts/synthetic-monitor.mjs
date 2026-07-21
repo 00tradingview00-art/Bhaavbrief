@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * scripts/synthetic-monitor.mjs — Part 4 (M-01..M-06) synthetic monitoring.
+ * scripts/synthetic-monitor.mjs — Part 4 (M-01..M-07) synthetic monitoring.
  *
  * Runs from GitHub Actions, external to the app's own runtime, hitting real
  * production URLs — checks what a user actually sees, not what the pipeline
@@ -14,6 +14,7 @@
  */
 
 import { todayIST, isTradingHoliday } from './lib/holidays.js'
+import { checkSitemapShape, expectedSitemapCount } from './lib/sitemapCheck.mjs'
 
 const BASE = process.env.MONITOR_BASE_URL ?? 'https://bhaavbrief.in'
 const CROSS_CHECK_ROUTES = ['/', '/briefs', '/options']
@@ -179,6 +180,29 @@ async function run() {
     if (asOf !== '—' && !asOf.startsWith(currentMonth)) {
       issues.push(`M-05: options risk-free rate "as of ${asOf}" is not the current month (${currentMonth})`)
     }
+  }
+
+  // M-07: sitemap shape — no /flash|/articles URLs (deliberately excluded and
+  // noindex'd 2026-07-21 after 77% of a 467-URL sitemap turned out to be
+  // never-indexed feed items), and total count within ±2 of the composition
+  // the route intends (statics + published briefs + arcs + events). The
+  // exclusion assertion is purely live; the expected count is the one
+  // deliberate exception to this file's "never trust local repo state"
+  // rule — it's derived from the checkout at HEAD (synthetic-monitor.yml
+  // does a full checkout), which is exactly the intent the live sitemap is
+  // being checked against.
+  try {
+    const { status, text } = await fetchText('/sitemap.xml')
+    if (status !== 200) {
+      issues.push(`M-07: /sitemap.xml returned HTTP ${status}`)
+    } else {
+      const expected = expectedSitemapCount()
+      results.sitemapUrlCount = (text.match(/<loc>/g) ?? []).length
+      results.sitemapExpectedCount = expected
+      issues.push(...checkSitemapShape(text, expected))
+    }
+  } catch (e) {
+    issues.push(`M-07: sitemap check failed: ${e.message}`)
   }
 
   return { issues, results, checkedAt: new Date().toISOString(), baseUrl: BASE }
