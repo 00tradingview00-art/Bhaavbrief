@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-069",
+    "href": "/briefs/edition-069",
+    "title": "COMEX Gold at $4,137 as Oil and War Premium Move Together",
+    "description": "Gold and crude are rising in tandem as geopolitical risk and supply fears reinforce each other, with the rupee offering no buffer today.",
+    "excerpt": "MCX Gold ₹144879 | Crude ₹8233 | USDINR ₹96.45 — Gold +1.40% | Crude +1.02% | Silver +1.19% Yesterday's Edge — Result: Edition #68 watched whether COMEX GOLD would close above 4,037.4. Confirmed ✓, no",
+    "date": "2026-07-22T05:49:58.346Z",
+    "edition": "69",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-07-22-us-lng-export-mcx-natural-gas-india",
     "href": "/articles/2026-07-22-us-lng-export-mcx-natural-gas-india",
