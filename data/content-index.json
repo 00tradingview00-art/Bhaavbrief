@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-22-us-lng-export-mcx-natural-gas-india",
+    "href": "/articles/2026-07-22-us-lng-export-mcx-natural-gas-india",
+    "title": "How US LNG Export Growth Affects MCX Natural Gas Prices in India",
+    "description": "Understand how US LNG export growth affects MCX Natural Gas prices in India through Henry Hub import parity, rupee conversion, and storage data.",
+    "excerpt": "How US LNG export growth affects MCX Natural Gas prices in India is a direct transmission story: as more American LNG leaves Gulf Coast terminals, global spot supply tightens, Henry Hub prices rise, a",
+    "date": "2026-07-22",
+    "edition": "keyword-brief",
+    "tags": [
+      "natgas",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "natgas",
+    "commodities": [
+      "natgas"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-068",
     "href": "/briefs/edition-068",
