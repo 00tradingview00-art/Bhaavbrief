@@ -1,9 +1,10 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-07-22T08:42:17.628Z",
-    "lastFlashPrice": 144582,
-    "lastRoundLevel": null,
+    "lastFlashAt": "2026-07-22T14:50:23.965Z",
+    "lastFlashPrice": 145706,
+    "lastRoundLevel": 145000,
     "recentFlashIds": [
+      "2026-07-22-20-20-mcx-gold-breaks-145000-round-level-on-commodity-rally",
       "2026-07-22-14-12-mcx-gold-rallies-1-19-on-risk-appetite-rebound",
       "2026-07-21-15-29-mcx-gold-rises-1-06-on-safe-haven-demand"
     ]
