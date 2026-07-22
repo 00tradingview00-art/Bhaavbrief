@@ -37,10 +37,12 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": null,
-    "lastFlashPrice": null,
+    "lastFlashAt": "2026-07-22T16:55:32.049Z",
+    "lastFlashPrice": 282.6,
     "lastRoundLevel": null,
-    "recentFlashIds": []
+    "recentFlashIds": [
+      "2026-07-22-22-25-mcx-natural-gas-rises-2-65-on-energy-complex-strength"
+    ]
   },
   "USDINR": {
     "lastFlashAt": "2026-07-20T09:44:11.241Z",
