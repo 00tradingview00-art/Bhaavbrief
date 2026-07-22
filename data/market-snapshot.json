@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T06:07:27.260Z",
+  "generatedAt": "2026-07-22T06:07:29.342Z",
   "generatedAtIST": "2026-07-22 11:37 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,9 +16,9 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8251,
+      "price": 8249,
       "prevClose": 8150,
-      "changePct": 1.2393,
+      "changePct": 1.2147,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -40,9 +40,9 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4133.5,
+      "price": 4133.6,
       "prevClose": 4071.1,
-      "changePct": 1.5328,
+      "changePct": 1.5352,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -113,7 +113,7 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 128217,
+    "importParityGoldINR": 128220,
     "mcxComexGoldSpreadPct": 12.96,
     "importParitySilverINR": 185711,
     "mcxComexSilverSpreadPct": 21.85,
