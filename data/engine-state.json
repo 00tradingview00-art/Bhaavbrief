@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 145912,
-    "silver": 227770,
-    "crude": 8330,
-    "copper": 1341.7,
-    "natgas": 281.6,
+    "gold": 145678,
+    "silver": 227081,
+    "crude": 8342,
+    "copper": 1336.6,
+    "natgas": 282.7,
     "usdinr": 96.57
   },
-  "lastChecked": "2026-07-22T15:55:33.662Z",
+  "lastChecked": "2026-07-22T16:55:44.876Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "206"
   },
   "lastGeoNews": {
-    "mideast": "Saudi crude tankers turn back as Houthis open new front in US-Iran war - Reuters",
+    "mideast": "Middle East war deepens 2026 oil deficit outlook, but 2027 glut still looms - Re",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
