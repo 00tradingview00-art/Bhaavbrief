@@ -276,7 +276,8 @@ async function generateVoiceover(script, outputPath) {
 const W = 1080, H = 1920, FPS = 30
 
 // Timing in seconds
-const COVER_DUR  = 1.5   // static cover frame — always fully rendered → Instagram thumbnail
+const COVER_DUR  = 0     // cover removed — hook renders from frame 0 (first-frame value rule);
+                         // drawCover() kept below but never dispatched while this is 0
 const HOOK_DUR   = 3.0
 const BEAT1_DUR  = 8.0
 const BEAT2_DUR  = 8.0
@@ -504,7 +505,7 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
   const startY = midY - blockH / 2
 
   conceptLines.forEach((line, i) => {
-    const lineT = Math.max(0, (t - i * 0.15) * 5)
+    const lineT = Math.max(0, (t - i * 0.08) * 6)
     const alpha = easeOut(Math.min(1, lineT))
     const yShift = (1 - spring(Math.min(1, lineT))) * 32
     ctx.globalAlpha = alpha
@@ -512,8 +513,8 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
     ctx.fillText(line, W / 2, startY + i * lineH - yShift)
   })
 
-  // Hook sub-line below
-  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 0.8))
+  // Hook sub-line below — legible by ≈1s of video, same rationale as drawHook
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.6))
   ctx.fillStyle   = INK_6
   ctx.font        = '34px "NotoSans", "Inter", sans-serif'
   const subLines = wrapText(ctx, copy.hook_caption ?? '', W - 200)
@@ -588,12 +589,14 @@ function drawHook(ctx, t, copy, snapshot, mood, edition) {
   ctx.fillText(`${isUp ? '+' : ''}${animPct.toFixed(2)}% today`, W/2, 752)
 
   // Divider
-  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.8))
+  ctx.globalAlpha = easeOut(Math.max(0, t * 6 - 0.6))
   ctx.strokeStyle = '#FFFFFF18'; ctx.lineWidth = 1
   ctx.beginPath(); ctx.moveTo(120, 810); ctx.lineTo(W-120, 810); ctx.stroke()
 
-  // Stat line — the punchline
-  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.0))
+  // Stat line — the punchline. Fully opaque by hook-local t≈0.34 (≈1.0s of
+  // video) — the viewer's stay/scroll decision happens inside the first
+  // 1-1.5s, so the payoff can't wait for t=0.5 like it used to.
+  ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.7))
   ctx.fillStyle   = CREAM
   ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
   const hookLines = wrapText(ctx, copy?.stat_line ?? '', W - 160)

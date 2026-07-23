@@ -123,7 +123,8 @@ const initRes = await fetch(`https://graph.facebook.com/v22.0/${IG_USER}/media`,
     upload_type:   'resumable',
     caption:       CAPTION,
     share_to_feed: true,
-    thumb_offset:  0,   // use first frame (cover screen) as thumbnail
+    thumb_offset:  1300,   // ms — hook text is fully rendered by ~1s, so the
+                           // feed thumbnail shows the price-move hook, not a blank frame
     access_token:  IG_TOKEN,
   }),
   signal: AbortSignal.timeout(30000),
