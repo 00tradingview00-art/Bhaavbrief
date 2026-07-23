@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-070",
+    "href": "/briefs/edition-070",
+    "title": "Oil Crosses $96 as Iran Premium Turns Into a Structural Bid",
+    "description": "Brent at $96.32 and WTI at $88.51 signal the Middle East war premium is no longer noise — gold's dip is the puzzle.",
+    "excerpt": "MCX Gold ₹145290 | Crude ₹8556 | USDINR ₹96.48 — Gold -0.27% | Crude +1.74% | Silver -0.25% Yesterday's Edge — Result: Edition #69 watched whether COMEX GOLD would close above 4,137. Rejected ✗, now a",
+    "date": "2026-07-23T03:41:48.411Z",
+    "edition": "70",
+    "tags": [
+      "MCX Crude",
+      "Geopolitics",
+      "MCX Gold"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-069",
     "href": "/briefs/edition-069",
     "title": "COMEX Gold at $4,137 as Oil and War Premium Move Together",
