@@ -111,6 +111,8 @@ Rules:
 - Tone: sharp, direct, like a smart friend who tracks markets for a living
 - Each beat is ONE complete thought — no "and also"
 - Vary your hook structure from past reels
+- The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
+- If today's move is small or flat, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
 
 Return ONLY this JSON:
 {
@@ -173,6 +175,8 @@ Rules:
 - Tone: sharp, direct, like a smart friend who tracks markets for a living
 - Each beat is ONE complete thought
 - Vary your hook and payoff angle from past reels listed above
+- The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
+- If the topic has no sharp move, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
 
 Return ONLY this JSON:
 {
