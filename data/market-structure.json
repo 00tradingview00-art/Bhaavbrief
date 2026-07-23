@@ -87,7 +87,7 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹44–61K",
-    "contractValue": "~₹8.8 lakh at ₹8,774/bbl",
+    "contractValue": "~₹8.8 lakh at ₹8,783/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
     "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -131,7 +131,7 @@
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
     "typicalMargin": "₹1.7–2.3 lakh",
-    "contractValue": "~₹33.4 lakh at ₹1,334.65/kg",
+    "contractValue": "~₹33.4 lakh at ₹1,334.6/kg",
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
     "keyBodies": [
@@ -342,7 +342,7 @@
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
     "typicalMargin": "₹18–25K",
-    "contractValue": "~₹3.6 lakh at ₹286.2/mmBtu",
+    "contractValue": "~₹3.6 lakh at ₹285.8/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
