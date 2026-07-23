@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-23-mcx-natural-gas-volatility-india",
+    "href": "/articles/2026-07-23-mcx-natural-gas-volatility-india",
+    "title": "Why MCX Natural Gas Is the Most Volatile MCX Commodity in India",
+    "description": "Understand why MCX natural gas is so volatile in India — from Henry Hub import parity and EIA storage data to rupee swings and hurricane disruptions.",
+    "excerpt": "MCX natural gas is so volatile in India primarily because its price is mechanically linked to the US Henry Hub benchmark via import parity, meaning every American weather forecast, storage report, and",
+    "date": "2026-07-23",
+    "edition": "keyword-brief",
+    "tags": [
+      "natgas",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "natgas",
+    "commodities": [
+      "natgas"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-069",
     "href": "/briefs/edition-069",
