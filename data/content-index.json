@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-24-eia-gas-storage-mcx-natural-gas",
+    "href": "/articles/2026-07-24-eia-gas-storage-mcx-natural-gas",
+    "title": "How the US EIA Natural Gas Storage Report Moves MCX Natural Gas Prices",
+    "description": "Learn how the EIA natural gas storage report affects MCX India prices — the transmission pathway, India-specific factors, and key data points to watch.",
+    "excerpt": "Understanding how the EIA natural gas storage report affects MCX India prices is essential for anyone trading the most volatile commodity on the exchange. Every Thursday at 8 PM IST, a single US gover",
+    "date": "2026-07-24",
+    "edition": "keyword-brief",
+    "tags": [
+      "natgas",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "natgas",
+    "commodities": [
+      "natgas"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-070",
     "href": "/briefs/edition-070",
