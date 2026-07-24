@@ -10,23 +10,23 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-07-24T06:06:50.507Z",
-    "lastFlashPrice": 218306,
+    "lastFlashAt": "2026-07-24T15:53:49.407Z",
+    "lastFlashPrice": 222836,
     "lastRoundLevel": 220000,
     "recentFlashIds": [
+      "2026-07-24-21-23-mcx-silver-surges-1-58-on-safe-haven-demand-reversal",
       "2026-07-24-11-36-mcx-silver-slides-0-49-as-profit-taking-resumes",
-      "2026-07-23-15-25-mcx-silver-falls-1-80-amid-cross-asset-repricing",
-      "2026-07-22-20-03-mcx-silver-surges-1-84-on-safe-haven-and-industrial-dem"
+      "2026-07-23-15-25-mcx-silver-falls-1-80-amid-cross-asset-repricing"
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-07-23T16:55:19.379Z",
-    "lastFlashPrice": 8961,
-    "lastRoundLevel": 8500,
+    "lastFlashAt": "2026-07-24T15:53:49.407Z",
+    "lastFlashPrice": 8541,
+    "lastRoundLevel": 9000,
     "recentFlashIds": [
+      "2026-07-24-21-23-mcx-crude-falls-5-35-on-profit-taking-after-rally",
       "2026-07-23-22-25-mcx-crude-surges-6-55-on-sustained-geopolitical-supply",
-      "2026-07-23-17-39-mcx-crude-surges-4-46-on-sustained-geopolitical-supply",
-      "2026-07-23-11-38-mcx-crude-rises-1-40-on-sustained-supply-risk"
+      "2026-07-23-17-39-mcx-crude-surges-4-46-on-sustained-geopolitical-supply"
     ]
   },
   "MCX_COPPER": {
