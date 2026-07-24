@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-071",
+    "href": "/briefs/edition-071",
+    "title": "Oil at $99.92 and Gold Selling Off — The Market Is Splitting",
+    "description": "Brent crosses $99.92 as geopolitical premium surges, but gold falls sharply — a rare divergence that signals repositioning, not panic.",
+    "excerpt": "MCX Gold ₹142821 | Crude ₹9024 | USDINR ₹96.56 Yesterday's Edge — Result: Edition #70 watched whether WTI would close above 88.51. Confirmed ✓, now at 91.49. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-07-24T01:47:01.007Z",
+    "edition": "71",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-070",
     "href": "/briefs/edition-070",
     "title": "Oil Crosses $96 as Iran Premium Turns Into a Structural Bid",
