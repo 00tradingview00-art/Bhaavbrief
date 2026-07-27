@@ -588,8 +588,8 @@ export default function StrategyBuilder() {
               {[
                 { label: 'Net Delta', value: fmtGreek(netGreeks.delta, 2) },
                 { label: 'Net Gamma', value: fmtGreek(netGreeks.gamma, 4) },
-                { label: 'Net Theta/day', value: `₹${fmtGreek(netGreeks.theta * lotSize, 0)}` },
-                { label: 'Net Vega/1%', value: `₹${fmtGreek(netGreeks.vega * lotSize, 0)}` },
+                { label: 'Net Theta/day', value: `₹${fmtGreek(netGreeks.theta, 0)}` },
+                { label: 'Net Vega/1%', value: `₹${fmtGreek(netGreeks.vega, 0)}` },
               ].map(g => (
                 <div key={g.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '6px 12px' }}>
