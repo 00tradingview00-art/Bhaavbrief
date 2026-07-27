@@ -46,6 +46,8 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/lead`,        priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/events`,                  priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/track-record`,            priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/options/strategy`,        priority: '0.7', changefreq: 'monthly'},
 ]
 
 function entry(url: string, lastmod: string, changefreq: string, priority: string): string {
@@ -69,11 +71,11 @@ export async function GET() {
       entry(`${BASE}/briefs/${b.urlSlug}`, b.date ? new Date(b.date).toISOString() : now, 'never', '0.8')
     )
 
-    // /flash and /articles are deliberately excluded — high volume, noindex'd
-    // at the page level (see their generateMetadata), and covered separately
-    // by news-sitemap.xml for fresh (48h) discovery instead of the general
-    // index. Including them here diluted crawl budget across ~360 mostly
-    // unindexed URLs.
+    // /flash and /articles are deliberately excluded from sitemap.xml —
+    // high volume (~350+ URLs) and covered separately by news-sitemap.xml
+    // for Google News/Discover discovery (48h window). Keeping them out of
+    // the general sitemap prevents crawl budget dilution without blocking
+    // indexation (pages are indexable; news-sitemap handles fresh discovery).
     const arcEntries = arcs.map(a =>
       entry(`${BASE}/arcs/${a.id}`, a.startDate ? new Date(a.startDate).toISOString() : now, a.status === 'active' ? 'daily' : 'never', '0.6')
     )
