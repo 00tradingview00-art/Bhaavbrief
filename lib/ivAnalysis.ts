@@ -27,7 +27,10 @@ export function computeIVRegime(history: IVHistoryPoint[], currentIV: number): I
   const below = ivValues.filter(iv => iv < currentIV).length
   const percentile = Math.round((below / ivValues.length) * 100)
 
-  const ivRank = max > min ? Math.round(((currentIV - min) / (max - min)) * 100) : 50
+  // clamp to [0,100]: currentIV may exceed historical max (or be below min)
+  const ivRank = max > min
+    ? Math.round(Math.min(100, Math.max(0, ((currentIV - min) / (max - min)) * 100)))
+    : 50
 
   const regime: 'CHEAP' | 'NORMAL' | 'RICH' =
     percentile < CHEAP_THRESHOLD ? 'CHEAP' :
@@ -35,9 +38,9 @@ export function computeIVRegime(history: IVHistoryPoint[], currentIV: number): I
     'NORMAL'
 
   const labels: Record<typeof regime, string> = {
-    CHEAP:  `Cheap — ${percentile}th percentile, favour buying options`,
-    NORMAL: `Normal — ${percentile}th percentile, use directional spreads`,
-    RICH:   `Rich — ${percentile}th percentile, favour selling options`,
+    CHEAP:  `Cheap — ${percentile}th percentile of past ${ivValues.length} days`,
+    NORMAL: `Normal — ${percentile}th percentile of past ${ivValues.length} days`,
+    RICH:   `Rich — ${percentile}th percentile of past ${ivValues.length} days`,
   }
 
   return { currentIV, percentile, ivRank, regime, label: labels[regime] }
