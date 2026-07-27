@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-07-27T06:46:04.757Z",
-    "lastFlashPrice": 8082,
+    "lastFlashAt": "2026-07-27T17:52:50.595Z",
+    "lastFlashPrice": 7959,
     "lastRoundLevel": 8500,
     "recentFlashIds": [
+      "2026-07-27-23-22-mcx-crude-falls-sharply-as-geopolitical-premium-unwinds",
       "2026-07-27-12-16-mcx-crude-retreats-6-07-amid-geopolitical-relief",
-      "2026-07-24-21-23-mcx-crude-falls-5-35-on-profit-taking-after-rally",
-      "2026-07-23-22-25-mcx-crude-surges-6-55-on-sustained-geopolitical-supply"
+      "2026-07-24-21-23-mcx-crude-falls-5-35-on-profit-taking-after-rally"
     ]
   },
   "MCX_COPPER": {
