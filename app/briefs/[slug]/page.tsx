@@ -287,26 +287,14 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             <div className="brief-prose" itemProp="articleBody">
               {parsed ? (
                 <>
-                  {/* Dominant Theme — sacred section, full heading + body always rendered;
-                      the status word is additive (small badge), never a replacement for the text.
-                      The <h2> keeps the exact original heading text (title + status) so
+                  {/* Dominant Theme — sacred section, full heading + body always rendered.
+                      No separate status badge: the status word (BUILDING/FADING/SHIFTING/...)
+                      already appears inside the heading text itself, so a badge would just
+                      repeat it. The <h2> keeps the exact original heading text so
                       BriefScrollTracker's trackSectionSeen() analytics key is unchanged. */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: '1.5rem', flexWrap: 'wrap' }}>
-                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.375rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>
-                      {parsed.dominantTheme.heading}
-                    </h2>
-                    {parsed.dominantThemeStatus && (
-                      <span style={{
-                        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700,
-                        letterSpacing: '0.08em', textTransform: 'uppercase',
-                        background: 'var(--gold-sub, var(--gold-pale))', color: 'var(--gold)',
-                        border: '1px solid rgba(181,134,42,0.25)', borderRadius: 6, padding: '3px 8px',
-                        flexShrink: 0,
-                      }}>
-                        {parsed.dominantThemeStatus}
-                      </span>
-                    )}
-                  </div>
+                  <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.375rem', fontWeight: 700, color: 'var(--ink)', margin: '1.5rem 0 0' }}>
+                    {parsed.dominantTheme.heading}
+                  </h2>
                   <MDXRemote source={parsed.dominantTheme.body} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
 
                   {parsed.priceBridgeRows ? (
