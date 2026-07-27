@@ -218,8 +218,8 @@ function persistSaved(strategies: SavedStrategy[]): void {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function StrategyBuilder() {
-  const [instrument,    setInstrument]    = useState('GOLD')
+export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaultInstrument?: string }) {
+  const [instrument,    setInstrument]    = useState(defaultInstrument)
   const [chainData,     setChainData]     = useState<ChainData | null>(null)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
   const [legs,          setLegs]          = useState<Leg[]>([])
@@ -232,6 +232,7 @@ export default function StrategyBuilder() {
   const [secondsAgo,    setSecondsAgo]    = useState(0)
   const [saveLabel,     setSaveLabel]     = useState('')
   const [riskBudget,    setRiskBudget]    = useState('')
+  const [briefEdge, setBriefEdge] = useState<{ edge: string; title: string; urlSlug: string; date: string } | null>(null)
   // Cross-instrument chain data for My Strategies P&L
   const allChainDataRef = useRef<Record<string, ChainData>>({})
 
@@ -304,6 +305,15 @@ export default function StrategyBuilder() {
 
   // Load saved strategies from localStorage on mount
   useEffect(() => { setSaved(loadSaved()) }, [])
+
+  // Fetch today's Edge of Day for the selected instrument
+  useEffect(() => {
+    setBriefEdge(null)
+    fetch(`/api/brief-edge?commodity=${instrument}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d?.edge) setBriefEdge(d) })
+      .catch(() => {/* silent */})
+  }, [instrument])
 
   // Fetch cross-instrument chains for My Strategies P&L when tab switches to saved
   useEffect(() => {
@@ -601,6 +611,21 @@ export default function StrategyBuilder() {
               </span>
             )}
           </div>
+
+          {/* Today's Edge of Day from the morning brief */}
+          {briefEdge && (
+            <div style={{ margin: '0 0 14px', padding: '10px 14px', background: '#FFFBF0', border: '0.5px solid rgba(181,134,42,0.3)', borderRadius: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', fontWeight: 700 }}>
+                  Today&apos;s Edge
+                </span>
+                <a href={`/briefs/${briefEdge.urlSlug}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#9ca3af', textDecoration: 'none', letterSpacing: '0.04em' }}>
+                  {briefEdge.date} →
+                </a>
+              </div>
+              <p style={{ margin: 0, fontSize: 12, color: '#48483A', lineHeight: 1.55 }}>{briefEdge.edge}</p>
+            </div>
+          )}
 
           {/* Mini chain — ±5 strikes around ATM */}
           {(() => {

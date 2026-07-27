@@ -17,6 +17,15 @@ const CAT_STYLES: Record<string, React.CSSProperties> = {
   macro:  { background: '#F3F2EC', color: '#48483A', borderColor: '#C8C8B8' },
 }
 
+// energy and metals categories map to liquid MCX options instruments;
+// forex and macro don't have a single clear MCX options surface.
+const CATEGORY_TO_INSTRUMENT: Record<string, { key: string; label: string } | null> = {
+  energy:  { key: 'CRUDEOIL', label: 'Crude Oil' },
+  metals:  { key: 'GOLD',     label: 'Gold'      },
+  forex:   null,
+  macro:   null,
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
@@ -160,6 +169,17 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
           <CopyLinkButton url={url} title={flash.title} />
         </div>
+
+        {CATEGORY_TO_INSTRUMENT[flash.category] && (
+          <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
+            <Link
+              href={`/options?commodity=${CATEGORY_TO_INSTRUMENT[flash.category]!.key}`}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}
+            >
+              Analyze {CATEGORY_TO_INSTRUMENT[flash.category]!.label} Options →
+            </Link>
+          </div>
+        )}
 
         <nav style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '0.5px solid #DDDDD0' }}>
           {(prev || next) && (

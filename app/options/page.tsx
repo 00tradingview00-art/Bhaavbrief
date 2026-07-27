@@ -72,8 +72,21 @@ const FAQ_SCHEMA = {
   ],
 }
 
-export default async function OptionsPage() {
-  const initialData = await getOptionsChain('GOLD').catch(() => null)
+const VALID_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']
+const INSTRUMENT_LABELS: Record<string, string> = {
+  GOLD: 'Gold', SILVER: 'Silver', CRUDEOIL: 'Crude Oil', NATURALGAS: 'Natural Gas', COPPER: 'Copper',
+}
+
+export default async function OptionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ commodity?: string }>
+}) {
+  const { commodity } = await searchParams
+  const instrument = VALID_INSTRUMENTS.includes(commodity?.toUpperCase() ?? '')
+    ? commodity!.toUpperCase()
+    : 'GOLD'
+  const initialData = await getOptionsChain(instrument).catch(() => null)
 
   return (
     <div>
@@ -91,13 +104,13 @@ export default async function OptionsPage() {
 
       {initialData && (
         <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
-          As of {new Date(initialData.lastUpdated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST, MCX Gold Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
+          As of {new Date(initialData.lastUpdated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST, MCX {INSTRUMENT_LABELS[instrument] ?? instrument} Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
           {initialData.ivix != null ? ` and implied volatility (iVIX) of ${initialData.ivix.toFixed(1)}%` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: 'var(--gold)' }}>rollover mechanics</Link> for the underlying futures contract.
         </p>
       )}
 
       <div style={{ marginBottom: 20 }}>
-        <Link href="/options/strategy" style={{
+        <Link href={`/options/strategy?instrument=${instrument}`} style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
           padding: '8px 16px', borderRadius: 6,
           background: 'var(--gold)', color: '#fff',
