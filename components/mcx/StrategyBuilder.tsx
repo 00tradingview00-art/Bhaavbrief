@@ -9,8 +9,8 @@ import {
   type Leg, type SavedStrategy, type PayoffPoint,
 } from '@/lib/strategy'
 import {
-  computeIVRegime, recommendStrategies,
-  type IVRegime, type MarketView, type TemplateId,
+  computeIVRegime,
+  type IVRegime, type TemplateId,
 } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 
@@ -95,7 +95,7 @@ function buildFRange(futurePrice: number): number[] {
 
 // ── Template builder ──────────────────────────────────────────────────────────
 
-function buildTemplateLegs(templateId: TemplateId, chain: ChainRow[], futurePrice: number): Leg[] {
+function buildTemplateLegs(templateId: TemplateId, chain: ChainRow[], futurePrice: number, fallbackIV: number): Leg[] {
   const sorted = [...chain].sort((a, b) => Math.abs(a.strike - futurePrice) - Math.abs(b.strike - futurePrice))
   const atm = sorted[0]
   if (!atm) return []
@@ -116,7 +116,7 @@ function buildTemplateLegs(templateId: TemplateId, chain: ChainRow[], futurePric
     action,
     qty:     1,
     premium: row[type].ltp,
-    iv:      (row[type].iv ?? 25) / 100,
+    iv:      (row[type].iv ?? fallbackIV) / 100,
   })
 
   switch (templateId) {
@@ -182,7 +182,6 @@ export default function StrategyBuilder() {
   const [chainData,   setChainData]   = useState<ChainData | null>(null)
   const [ivHistory,   setIvHistory]   = useState<{ date: string; iv: number }[]>([])
   const [legs,        setLegs]        = useState<Leg[]>([])
-  const [marketView,  setMarketView]  = useState<MarketView>('NEUTRAL')
   const [tab,         setTab]         = useState<'build' | 'saved'>('build')
   const [saved,       setSaved]       = useState<SavedStrategy[]>([])
   const [savedPnls,   setSavedPnls]   = useState<Record<string, number | null>>({})
@@ -277,7 +276,7 @@ export default function StrategyBuilder() {
     if (side.ltp <= 0) return
     setLegs(prev => [
       ...prev,
-      { strike: row.strike, type, action, qty: 1, premium: side.ltp, iv: (side.iv ?? 25) / 100 },
+      { strike: row.strike, type, action, qty: 1, premium: side.ltp, iv: (side.iv ?? currentIV) / 100 },
     ])
   }
 
@@ -294,7 +293,7 @@ export default function StrategyBuilder() {
   }
 
   function loadTemplate(templateId: TemplateId) {
-    const newLegs = buildTemplateLegs(templateId, chain, futurePrice)
+    const newLegs = buildTemplateLegs(templateId, chain, futurePrice, currentIV || 0)
     if (newLegs.length > 0) setLegs(newLegs)
   }
 
@@ -318,8 +317,6 @@ export default function StrategyBuilder() {
     setSaved(updated)
     persistSaved(updated)
   }
-
-  const recs = ivRegime ? recommendStrategies(ivRegime.regime, marketView) : []
 
   const regimeColors: Record<string, string> = {
     CHEAP:  '#22c55e',
@@ -388,41 +385,34 @@ export default function StrategyBuilder() {
         </div>
       )}
 
-      {/* Market view + recommendations */}
+      {/* Quick Setup — all templates, no IV-based filtering */}
       {chainData && (
-        <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '14px 16px', marginBottom: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Market View</div>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-            {(['BULLISH', 'NEUTRAL', 'BEARISH'] as MarketView[]).map(v => (
-              <button key={v} onClick={() => setMarketView(v)}
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            {([
+              { id: 'ATM_STRADDLE',     name: 'ATM Straddle'      },
+              { id: 'OTM_STRANGLE',     name: 'OTM Strangle'      },
+              { id: 'LONG_CALL',        name: 'Long Call'          },
+              { id: 'LONG_PUT',         name: 'Long Put'           },
+              { id: 'BULL_CALL_SPREAD', name: 'Bull Call Spread'   },
+              { id: 'BEAR_PUT_SPREAD',  name: 'Bear Put Spread'    },
+              { id: 'IRON_CONDOR',      name: 'Iron Condor'        },
+              { id: 'BULL_PUT_SPREAD',  name: 'Bull Put Spread'    },
+              { id: 'BEAR_CALL_SPREAD', name: 'Bear Call Spread'   },
+            ] as { id: TemplateId; name: string }[]).map(t => (
+              <button key={t.id} onClick={() => loadTemplate(t.id)}
                 style={{
-                  padding: '5px 12px', borderRadius: 5, border: '1px solid', cursor: 'pointer', fontSize: 12,
-                  borderColor: marketView === v ? '#6366f1' : '#d1d5db',
-                  background: marketView === v ? '#eef2ff' : 'transparent',
-                  color: marketView === v ? '#4f46e5' : 'inherit', fontWeight: marketView === v ? 600 : 400,
+                  padding: '5px 10px', borderRadius: 5, border: '1px solid #d1d5db',
+                  background: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 500,
                 }}>
-                {v === 'BULLISH' ? '↑ Bullish' : v === 'BEARISH' ? '↓ Bearish' : '→ Neutral'}
+                {t.name}
               </button>
             ))}
           </div>
-          {recs.length > 0 && (
-            <>
-              <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>Suggested strategies</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                {recs.map(rec => (
-                  <button key={rec.templateId} onClick={() => loadTemplate(rec.templateId)}
-                    style={{
-                      padding: '6px 12px', borderRadius: 6, border: '1px solid #6366f1',
-                      background: '#fff', cursor: 'pointer', fontSize: 12, textAlign: 'left',
-                    }}
-                    title={rec.description}>
-                    <span style={{ fontWeight: 600 }}>{rec.name}</span>
-                    <span style={{ color: '#6366f1', marginLeft: 4 }}>→ Load</span>
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
+          <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+            Or click LTP cells in the chain below to add legs manually
+          </div>
         </div>
       )}
 
