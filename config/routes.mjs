@@ -69,6 +69,7 @@ export const ROUTES = [
   '/news',
   '/news-sitemap.xml',
   '/options',
+  '/options/strategy',
   '/privacy',
   '/sitemap.xml',
   '/terms',
