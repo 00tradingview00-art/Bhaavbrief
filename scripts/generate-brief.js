@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Part 8.2: bump this (and the prompts/brief_vN.md filename) on any material
 // prompt change — logged per generation call in data/gate-log.jsonl (8.4)
 // so any published brief can be traced to its exact prompt version.
-const PROMPT_VERSION = 'brief_v2'
+const PROMPT_VERSION = 'brief_v3'
 const envFile = path.join(__dirname, '../.env.local')
 if (fs.existsSync(envFile)) {
   for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
@@ -67,6 +67,12 @@ function snapshotToPrices(snapshot) {
   const i   = snapshot.instruments
   const fmt = (v, dec = 0) => (v > 0 ? v.toFixed(dec) : null)
   const pct = (v) => (v != null ? v.toFixed(2) : '0.00')
+  // D-16: pre-compute every absolute change here in JS (deterministic,
+  // always correct) so the model never has to subtract price - prevClose
+  // itself in prose — that manual arithmetic is what tripped the publish
+  // gate's SEMANTIC-BLOCK check repeatedly (edition #72 attempts, 2026-07-27).
+  const chg = (inst, dec = 0) =>
+    (inst?.price > 0 && inst?.prevClose > 0) ? (inst.price - inst.prevClose).toFixed(dec) : null
 
   return {
     usdinr:      fmt(i.USDINR?.price,      2),
@@ -86,6 +92,15 @@ function snapshotToPrices(snapshot) {
     crudePct:    pct(i.MCX_CRUDE?.changePct),
     copperPct:   pct(i.MCX_COPPER?.changePct),
     gasPct:      pct(i.MCX_NATGAS?.changePct),
+    mcxGoldChange:    chg(i.MCX_GOLD,    0),
+    mcxSilverChange:  chg(i.MCX_SILVER,  0),
+    mcxCrudeChange:   chg(i.MCX_CRUDE,   0),
+    mcxCopperChange:  chg(i.MCX_COPPER,  2),
+    mcxGasChange:     chg(i.MCX_NATGAS,  2),
+    comexGoldChange:  chg(i.COMEX_GOLD,  1),
+    comexSilverChange: chg(i.COMEX_SILVER, 2),
+    wtiChange:        chg(i.WTI,   2),
+    brentChange:      chg(i.BRENT, 2),
   }
 }
 
@@ -411,13 +426,15 @@ ${claimsLedger.length > 0 ? JSON.stringify(claimsLedger.map(c => ({
   })), null, 2) : '[] — the ledger is currently empty or unavailable'}
 </claims_allowed>`
 
+  const sign = (v) => (v == null ? null : `${parseFloat(v) >= 0 ? '+' : ''}${v}`)
   const priceBlock = prices ? `
 TODAY'S MCX PRICES (formatted from the snapshot above — same numbers, human-readable):
-- MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today
-- MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today
-- MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today
-- MCX Copper: ₹${prices.mcxCopper ?? 'N/A'}/kg  | COMEX $${prices.comexCopper}/lb | ${prices.copperPct}% today
-- MCX NatGas: ₹${prices.mcxGas ?? 'N/A'}/mmBtu  | Henry Hub $${prices.henryHub} | ${prices.gasPct}% today
+PRE-CALCULATED CHANGE FROM LAST CLOSE (₹/$, already computed — use these exact figures verbatim, never subtract prices yourself):
+- MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today | change ₹${sign(prices.mcxGoldChange) ?? 'N/A'} | COMEX change $${sign(prices.comexGoldChange) ?? 'N/A'}
+- MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today | change ₹${sign(prices.mcxSilverChange) ?? 'N/A'} | COMEX change $${sign(prices.comexSilverChange) ?? 'N/A'}
+- MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today | change ₹${sign(prices.mcxCrudeChange) ?? 'N/A'} | WTI change $${sign(prices.wtiChange) ?? 'N/A'} | Brent change $${sign(prices.brentChange) ?? 'N/A'}
+- MCX Copper: ₹${prices.mcxCopper ?? 'N/A'}/kg  | COMEX $${prices.comexCopper}/lb | ${prices.copperPct}% today | change ₹${sign(prices.mcxCopperChange) ?? 'N/A'}
+- MCX NatGas: ₹${prices.mcxGas ?? 'N/A'}/mmBtu  | Henry Hub $${prices.henryHub} | ${prices.gasPct}% today | change ₹${sign(prices.mcxGasChange) ?? 'N/A'}
 - USD/INR: ₹${prices.usdinr ?? 'N/A'}` : 'PRICES: Unavailable — state estimates are estimates.'
 
   const newsBlock = news.length > 0
