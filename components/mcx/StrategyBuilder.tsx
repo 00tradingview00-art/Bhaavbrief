@@ -600,7 +600,7 @@ export default function StrategyBuilder() {
                   <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 10 }} width={68} />
                   <Tooltip
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
-                    labelFormatter={v => `F = ₹${fmt(Number(v))}`} />
+                    labelFormatter={v => `P = ₹${fmt(Number(v))}`} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
                   {breakevens.map((be, i) => (
