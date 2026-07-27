@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-27T19:44:13.228Z",
-  "generatedAtIST": "2026-07-28 01:14 IST",
+  "generatedAt": "2026-07-27T19:57:18.658Z",
+  "generatedAtIST": "2026-07-28 01:27 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,27 +40,27 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4088.1,
+      "price": 4089.4,
       "prevClose": 4070.8,
-      "changePct": 0.425,
+      "changePct": 0.4569,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 58.93,
+      "price": 58.88,
       "prevClose": 58.91,
-      "changePct": 0.0407,
+      "changePct": -0.0526,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 82.26,
+      "price": 82.19,
       "prevClose": 89.31,
-      "changePct": -7.8939,
+      "changePct": -7.9722,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 87.98,
+      "price": 87.89,
       "prevClose": 96.78,
-      "changePct": -9.0928,
+      "changePct": -9.1858,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 126047,
-    "mcxComexGoldSpreadPct": 13.53,
-    "importParitySilverINR": 181696,
-    "mcxComexSilverSpreadPct": 21.74,
-    "goldSilverRatio": 69.4
+    "importParityGoldINR": 126087,
+    "mcxComexGoldSpreadPct": 13.5,
+    "importParitySilverINR": 181542,
+    "mcxComexSilverSpreadPct": 21.85,
+    "goldSilverRatio": 69.5
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.53% vs silver 21.74% — 8.21pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.53,
-      "silverSpreadPct": 21.74,
-      "deltaPts": 8.21
+      "detail": "Gold import-parity spread 13.5% vs silver 21.85% — 8.35pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.5,
+      "silverSpreadPct": 21.85,
+      "deltaPts": 8.35
     }
   ]
 }
