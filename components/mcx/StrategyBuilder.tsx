@@ -218,8 +218,8 @@ function persistSaved(strategies: SavedStrategy[]): void {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function StrategyBuilder() {
-  const [instrument,    setInstrument]    = useState('GOLD')
+export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaultInstrument?: string }) {
+  const [instrument,    setInstrument]    = useState(defaultInstrument)
   const [chainData,     setChainData]     = useState<ChainData | null>(null)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
   const [legs,          setLegs]          = useState<Leg[]>([])
