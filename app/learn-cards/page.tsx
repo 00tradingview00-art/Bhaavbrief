@@ -3,6 +3,7 @@ import { CARD_ORDER } from '@/lib/learn-cards'
 export const metadata = {
   title: 'Learn Cards — Instagram Downloads',
   alternates: { canonical: 'https://bhaavbrief.in/learn-cards' },
+  robots: { index: false, follow: false },
 }
 
 export default function LearnCardsPage() {
