@@ -12,6 +12,7 @@ import {
   computeIVRegime,
   type IVRegime, type TemplateId,
 } from '@/lib/ivAnalysis'
+import Link from 'next/link'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 
 // ── Types mirrored from getOptionsChain return shape ─────────────────────────
@@ -197,10 +198,13 @@ export default function StrategyBuilder() {
   const T          = expiry ? daysToExpiry(expiry) / 365 : 0
 
   // IV regime from history + current chain
+  // Only average sides that have real IV data — a null side should not pull the average down
   const atmIV = chain.find(r => r.isATM)
-  const currentIV = atmIV
-    ? ((atmIV.CE.iv ?? 0) + (atmIV.PE.iv ?? 0)) / 2
-    : 0
+  const currentIV = (() => {
+    if (!atmIV) return 0
+    const vals = [atmIV.CE.iv, atmIV.PE.iv].filter((v): v is number => v != null && v > 0)
+    return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0
+  })()
   const ivRegime: IVRegime | null = currentIV > 0 && ivHistory.length > 0
     ? computeIVRegime(ivHistory, currentIV)
     : null
@@ -331,8 +335,14 @@ export default function StrategyBuilder() {
 
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
-        <p style={{ color: '#6b7280', fontSize: 14, margin: '4px 0 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+          <Link href="/options" style={{ color: '#6b7280', fontSize: 14, textDecoration: 'none', lineHeight: 1 }}
+            title="Back to Option Chain">
+            ← Options
+          </Link>
+          <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
+        </div>
+        <p style={{ color: '#6b7280', fontSize: 14, margin: 0 }}>
           Compose multi-leg strategies and visualise P&amp;L at expiry
         </p>
       </div>
