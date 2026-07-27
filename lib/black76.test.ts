@@ -52,4 +52,35 @@ describe('black76', () => {
     const high = black76(145000, 141000, 30 / 365, 0.065, 0.2, 'CE')
     expect(high.price).toBeGreaterThan(low.price)
   })
+
+  it('theta correct carry: r·C - vol_term per day', () => {
+    // Black-76 theta = r·C - df·F·N'(d1)·σ/(2√T), per calendar day.
+    // Pre-fix the code was missing the +r·df·F·N(d1) term; for Gold ATM at σ=25%
+    // this inflated |theta| from ~41/day (correct) to ~49/day (~20% error).
+    // Use σ=25% which is realistic for current MCX Gold IV.
+    const F = 88000, K = 88000, T = 30 / 365, r = 0.065, sigma = 0.25
+    const { theta, price } = black76(F, K, T, r, sigma, 'CE')
+    expect(theta).toBeLessThan(0)              // time decay is always negative for long
+    expect(Math.abs(theta)).toBeLessThan(47)   // not inflated to pre-fix ~49 level
+    expect(Math.abs(theta)).toBeGreaterThan(30) // substantial vol decay
+    // Sanity: theta ≈ r·price/365 - vol_term. r·price/365 is small positive so
+    // |theta| must be less than the vol_term alone (≈ 41.7/day here).
+    expect(Math.abs(theta)).toBeLessThan(r * price / 365 + 42)
+  })
+
+  it('put-call parity: CE price − PE price ≈ df·(F − K)', () => {
+    const F = 88000, K = 88000, T = 30 / 365, r = 0.065, sigma = 0.25
+    const ce = black76(F, K, T, r, sigma, 'CE')
+    const pe = black76(F, K, T, r, sigma, 'PE')
+    const df = Math.exp(-r * T)
+    expect(ce.price - pe.price).toBeCloseTo(df * (F - K), 0)
+  })
+
+  it('ATM theta_CE ≈ theta_PE (put-call symmetry at F=K)', () => {
+    // From put-call parity differentiated w.r.t. T: ∂C/∂T - ∂P/∂T = -r·df·(F-K).
+    // At F=K this difference is 0, so CE and PE thetas must be equal.
+    const { theta: thetaCE } = black76(88000, 88000, 30 / 365, 0.065, 0.25, 'CE')
+    const { theta: thetaPE } = black76(88000, 88000, 30 / 365, 0.065, 0.25, 'PE')
+    expect(thetaCE).toBeCloseTo(thetaPE, 1)
+  })
 })

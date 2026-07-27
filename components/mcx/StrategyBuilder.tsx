@@ -197,12 +197,13 @@ export default function StrategyBuilder() {
   const r          = chainData?.riskFreeRate ?? 0.065
   const T          = expiry ? daysToExpiry(expiry) / 365 : 0
 
-  // IV regime from history + current chain
-  // Only average sides that have real IV data — a null side should not pull the average down
-  const atmIV = chain.find(r => r.isATM)
+  // IV regime from history + current chain — only LIVE-tier sides, matching IVHistoryChart
+  const atmRows  = chain.filter(r => r.isATM)
   const currentIV = (() => {
-    if (!atmIV) return 0
-    const vals = [atmIV.CE.iv, atmIV.PE.iv].filter((v): v is number => v != null && v > 0)
+    const vals = atmRows.flatMap(r => [
+      r.CE.tier === 'LIVE' ? r.CE.iv : null,
+      r.PE.tier === 'LIVE' ? r.PE.iv : null,
+    ]).filter((v): v is number => v != null && v > 0)
     return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0
   })()
   const ivRegime: IVRegime | null = currentIV > 0 && ivHistory.length > 0
@@ -459,7 +460,15 @@ export default function StrategyBuilder() {
 
           {/* Mini chain — ±5 strikes around ATM */}
           {(() => {
-            const atmIdx = chain.findIndex(r => r.isATM)
+            let atmIdx = chain.findIndex(r => r.isATM)
+            // Safety net: isATM may be missing in stale/partial responses; find nearest strike
+            if (atmIdx === -1 && futurePrice > 0 && chain.length > 0) {
+              atmIdx = chain.reduce(
+                (best, row, i) =>
+                  Math.abs(row.strike - futurePrice) < Math.abs(chain[best].strike - futurePrice) ? i : best,
+                0,
+              )
+            }
             const start  = Math.max(0, atmIdx - 5)
             const end    = Math.min(chain.length - 1, atmIdx + 5)
             const visible = chain.slice(start, end + 1)
