@@ -106,7 +106,10 @@ export default async function OptionsPage() {
           Strategy Builder →
         </Link>
         <span style={{ marginLeft: 10, fontSize: 12, color: 'var(--ink-3)' }}>
-          Build multi-leg strategies · payoff diagrams · IV regime signal
+          Build multi-leg strategies · payoff diagrams
+          {initialData?.ivix != null && (
+            <> · Gold iVIX <strong style={{ color: 'var(--ink)' }}>{initialData.ivix.toFixed(1)}%</strong></>
+          )}
         </span>
       </div>
 
