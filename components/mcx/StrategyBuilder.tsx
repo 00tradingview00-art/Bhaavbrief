@@ -63,6 +63,15 @@ function fmt(n: number): string {
   return new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(n)
 }
 
+function fmtPnlAxis(v: number): string {
+  if (v === 0) return '0'
+  const abs = Math.abs(v)
+  const sign = v < 0 ? '−' : '+'
+  if (abs >= 100000) return `${sign}₹${(abs / 100000).toFixed(abs % 100000 === 0 ? 0 : 1)}L`
+  if (abs >= 1000)   return `${sign}₹${(abs / 1000).toFixed(abs % 1000 === 0 ? 0 : 1)}K`
+  return `${sign}₹${abs}`
+}
+
 function fmtPnl(n: number | null): string {
   if (n === null) return 'Unlimited'
   const sign = n >= 0 ? '+' : ''
@@ -461,9 +470,9 @@ export default function StrategyBuilder() {
                     <tr style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>CE IV%</th>
                       <th style={{ padding: '6px 8px', textAlign: 'right' }}>CE LTP</th>
-                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>CE Δ</th>
+                      <th style={{ padding: '6px 8px', textAlign: 'right' }}>CE Delta</th>
                       <th style={{ padding: '6px 8px', textAlign: 'center', fontWeight: 700 }}>Strike</th>
-                      <th style={{ padding: '6px 8px', textAlign: 'left' }}>PE Δ</th>
+                      <th style={{ padding: '6px 8px', textAlign: 'left' }}>PE Delta</th>
                       <th style={{ padding: '6px 8px', textAlign: 'left' }}>PE LTP</th>
                       <th style={{ padding: '6px 8px', textAlign: 'left' }}>PE IV%</th>
                     </tr>
@@ -577,10 +586,10 @@ export default function StrategyBuilder() {
           {netGreeks && legs.length > 0 && (
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 12 }}>
               {[
-                { label: 'Net Δ', value: fmtGreek(netGreeks.delta, 2) },
-                { label: 'Net Γ', value: fmtGreek(netGreeks.gamma, 4) },
-                { label: 'Net Θ/day', value: `₹${fmtGreek(netGreeks.theta * lotSize, 0)}` },
-                { label: 'Net V/1%', value: `₹${fmtGreek(netGreeks.vega * lotSize, 0)}` },
+                { label: 'Net Delta', value: fmtGreek(netGreeks.delta, 2) },
+                { label: 'Net Gamma', value: fmtGreek(netGreeks.gamma, 4) },
+                { label: 'Net Theta/day', value: `₹${fmtGreek(netGreeks.theta * lotSize, 0)}` },
+                { label: 'Net Vega/1%', value: `₹${fmtGreek(netGreeks.vega * lotSize, 0)}` },
               ].map(g => (
                 <div key={g.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '6px 12px' }}>
@@ -598,7 +607,7 @@ export default function StrategyBuilder() {
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartData} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
                   <XAxis dataKey="F" tickFormatter={v => `₹${fmt(v)}`} tick={{ fontSize: 10 }} />
-                  <YAxis tickFormatter={v => `₹${fmt(v)}`} tick={{ fontSize: 10 }} width={70} />
+                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 10 }} width={68} />
                   <Tooltip
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
                     labelFormatter={v => `F = ₹${fmt(Number(v))}`} />
