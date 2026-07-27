@@ -57,9 +57,11 @@ export function black76(F: number, K: number, T: number, r: number, sigma: numbe
 
   const gamma = (df * normalPDF(d1)) / (F * sigma * sqrtT)
   const vega  = (F * df * normalPDF(d1) * sqrtT) / 100   // per 1% IV move
+  // Black-76 theta = −∂C/∂T = −rC − df·F·N'(d1)·σ/(2√T)
+  // Expanding rC = r·df·[F·N(d1)−K·N(d2)] gives the full per-day form below.
   const theta = type === 'CE'
-    ? ((-df * F * normalPDF(d1) * sigma) / (2 * sqrtT) - r * df * K * normalCDF(d2))  / 365
-    : ((-df * F * normalPDF(d1) * sigma) / (2 * sqrtT) + r * df * K * normalCDF(-d2)) / 365
+    ? ((-df * F * normalPDF(d1) * sigma) / (2 * sqrtT) - r * df * K * normalCDF(d2)  + r * df * F * normalCDF(d1))  / 365
+    : ((-df * F * normalPDF(d1) * sigma) / (2 * sqrtT) + r * df * K * normalCDF(-d2) - r * df * F * normalCDF(-d1)) / 365
 
   return {
     price: Math.max(0, price),

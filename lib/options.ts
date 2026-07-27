@@ -208,11 +208,9 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
       const ceGreeks: Partial<Greeks> = ceIV !== null && ceIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, ceIV, 'CE') : {}
       const peGreeks: Partial<Greeks> = peIV !== null && peIV > 0 ? black76(futurePrice, strike, T, RISK_FREE_RATE, peIV, 'PE') : {}
 
-      const distFromATM = futurePrice > 0 ? Math.abs(strike - futurePrice) / futurePrice : 1
-
       return {
         strike,
-        isATM:    distFromATM < 0.005,
+        isATM:    false,  // set in post-pass below
         isITM_CE: strike < futurePrice,
         isITM_PE: strike > futurePrice,
         CE: {
@@ -250,6 +248,19 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
       }
     })
     .sort((a, b) => a.strike - b.strike)
+
+  // Mark exactly one row as ATM: the one with minimum |strike − futurePrice|.
+  // A percentage-band threshold (e.g. < 0.5%) fails for wide strike steps
+  // (NATURALGAS ₹5 increments → max gap 0.95%, COPPER ₹10 → 0.56%) and can
+  // mark zero or two rows. Minimum-distance always marks exactly one.
+  if (futurePrice > 0 && chain.length > 0) {
+    let minDist = Infinity, atmRowIdx = 0
+    chain.forEach((row, i) => {
+      const d = Math.abs(row.strike - futurePrice)
+      if (d < minDist) { minDist = d; atmRowIdx = i }
+    })
+    chain.forEach((row, i) => { row.isATM = (i === atmRowIdx) })
+  }
 
   // Analytics
   const totalCEOI = chain.reduce((s, r) => s + r.CE.oi, 0)
