@@ -26,6 +26,15 @@ const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Natural Gas': { slug: 'natural-gas', label: 'MCX Natural Gas' },
 }
 
+// Map from commodity page slug → MCX options API instrument key
+const SLUG_TO_INSTRUMENT: Record<string, string> = {
+  'gold':        'GOLD',
+  'silver':      'SILVER',
+  'crude-oil':   'CRUDEOIL',
+  'copper':      'COPPER',
+  'natural-gas': 'NATURALGAS',
+}
+
 export const revalidate = 3600
 
 const BASE_URL = 'https://bhaavbrief.in'
@@ -408,6 +417,35 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                       padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
                     }}>
                       <span>{p.label}</span>
+                      <span style={{ fontSize: 10, color: '#C8C8B8' }}>→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
+
+          {/* Options chain deep links for commodities in this brief */}
+          {(() => {
+            const optPages = (brief.commodities ?? [])
+              .map(c => COMMODITY_PAGE_MAP[c])
+              .filter(Boolean)
+              .filter(p => SLUG_TO_INSTRUMENT[p!.slug]) as { slug: string; label: string }[]
+            if (optPages.length === 0) return null
+            return (
+              <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+                  Options Chain
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {optPages.map(p => (
+                    <Link key={p.slug} href={`/options?commodity=${SLUG_TO_INSTRUMENT[p.slug]}`} style={{
+                      fontFamily: 'var(--font-mono)', fontSize: 11,
+                      color: '#C8720A', textDecoration: 'none',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
+                    }}>
+                      <span>{p.label} Options</span>
                       <span style={{ fontSize: 10, color: '#C8C8B8' }}>→</span>
                     </Link>
                   ))}

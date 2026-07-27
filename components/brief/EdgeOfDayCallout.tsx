@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import renderInlineBold from './renderInlineBold'
 
 // Part 12 §12.4.5 "Edge of the Day" callout. The doc's spec calls for a
@@ -34,6 +35,11 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
           </p>
         </div>
       )}
+      <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(181,134,42,0.15)', textAlign: 'right' }}>
+        <Link href="/track-record" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--gold)', textDecoration: 'none' }}>
+          See past edges →
+        </Link>
+      </div>
     </div>
   )
 }
