@@ -47,9 +47,11 @@ export function computePayoff(
   legs:    Leg[],
   FRange:  number[],
   lotSize: number,
-  T:       number,   // time to expiry in years (use 0 for expiry-only)
-  r:       number,   // risk-free rate
+  T:       number,    // time to expiry in years (use 0 for expiry-only)
+  r:       number,    // risk-free rate
+  liveIV?: number,    // current ATM IV as % (e.g. 24.5); overrides leg.iv for "today" line
 ): PayoffPoint[] {
+  const liveIvDecimal = liveIV != null && liveIV > 0 ? liveIV / 100 : undefined
   return FRange.map(F => {
     const pnlExpiry = legs.reduce((sum, leg) => {
       return sum + sign(leg.action) * leg.qty * lotSize * (intrinsic(leg.type, F, leg.strike) - leg.premium)
@@ -57,7 +59,8 @@ export function computePayoff(
 
     const pnlToday = T > 0
       ? legs.reduce((sum, leg) => {
-          const currentPrice = black76(F, leg.strike, T, r, leg.iv, leg.type).price
+          const ivToUse      = liveIvDecimal ?? leg.iv
+          const currentPrice = black76(F, leg.strike, T, r, ivToUse, leg.type).price
           return sum + sign(leg.action) * leg.qty * lotSize * (currentPrice - leg.premium)
         }, 0)
       : pnlExpiry
