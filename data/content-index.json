@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-27-hawk-scan-mcx-crude-6-13-to-8088-wti-breaks-85-on-demand-fad",
+    "href": "/articles/2026-07-27-hawk-scan-mcx-crude-6-13-to-8088-wti-breaks-85-on-demand-fad",
+    "title": "HAWK-SCAN MCX Crude: -6.13% to ₹8088 — WTI breaks $85 on demand fade",
+    "description": "MCX Crude crashes ₹8088 (-6.13%) as WTI slides to $84.20. US refinery maintenance season + monsoon demand dip converge.",
+    "excerpt": "TRIGGER MCX Crude has fallen 6.13% to ₹8,088/bbl (WTI $84.20, Brent $91.35 session -6.00%) as US refinery turnaround season overlap with Indian monsoon demand destruction converges. PRICE ₹8,088/bbl ·",
+    "date": "2026-07-27T06:15:15.547Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "MCX Silver",
+      "WTI",
+      "Brent"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8088
+  },
+  {
     "type": "brief",
     "slug": "edition-072",
     "href": "/briefs/edition-072",
