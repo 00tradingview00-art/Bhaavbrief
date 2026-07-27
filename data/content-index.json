@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-27-henry-hub-mcx-natural-gas-india",
+    "href": "/articles/2026-07-27-henry-hub-mcx-natural-gas-india",
+    "title": "How Henry Hub Natural Gas Prices Connect to MCX Natural Gas in India",
+    "description": "Understand how Henry Hub price affects MCX natural gas India traders through import parity, USD/INR conversion, and EIA storage data.",
+    "excerpt": "Understanding how the Henry Hub price affects MCX natural gas India contracts is essential for anyone trading, importing, or hedging natural gas exposure on Indian exchanges. MCX natural gas does not ",
+    "date": "2026-07-27",
+    "edition": "keyword-brief",
+    "tags": [
+      "natgas",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "natgas",
+    "commodities": [
+      "natgas"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-071",
     "href": "/briefs/edition-071",
