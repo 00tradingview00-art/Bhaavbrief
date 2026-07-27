@@ -96,6 +96,20 @@ export default async function OptionsPage() {
         </p>
       )}
 
+      <div style={{ marginBottom: 20 }}>
+        <Link href="/options/strategy" style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '8px 16px', borderRadius: 6,
+          background: 'var(--gold)', color: '#fff',
+          fontSize: 13, fontWeight: 600, textDecoration: 'none',
+        }}>
+          Strategy Builder →
+        </Link>
+        <span style={{ marginLeft: 10, fontSize: 12, color: 'var(--ink-3)' }}>
+          Build multi-leg strategies · payoff diagrams · IV regime signal
+        </span>
+      </div>
+
       <OptionChain isPro={true} initialData={initialData} />
     </div>
   )
