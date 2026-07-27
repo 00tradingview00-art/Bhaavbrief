@@ -490,7 +490,7 @@ export default function StrategyBuilder() {
                         <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                           <span
                             title="Click: BUY CE | Shift+click: SELL CE"
-                            style={{ cursor: 'pointer', color: '#4f46e5', fontWeight: 600 }}
+                            style={{ cursor: 'pointer', fontWeight: 700, textDecoration: 'underline dotted' }}
                             onClick={e => addLeg(row, 'CE', e.shiftKey ? 'SELL' : 'BUY')}>
                             {row.CE.ltp > 0 ? fmt(row.CE.ltp) : '—'}
                           </span>
@@ -507,7 +507,7 @@ export default function StrategyBuilder() {
                         <td style={{ padding: '5px 8px', textAlign: 'left' }}>
                           <span
                             title="Click: BUY PE | Shift+click: SELL PE"
-                            style={{ cursor: 'pointer', color: '#dc2626', fontWeight: 600 }}
+                            style={{ cursor: 'pointer', fontWeight: 700, textDecoration: 'underline dotted' }}
                             onClick={e => addLeg(row, 'PE', e.shiftKey ? 'SELL' : 'BUY')}>
                             {row.PE.ltp > 0 ? fmt(row.PE.ltp) : '—'}
                           </span>
@@ -606,7 +606,7 @@ export default function StrategyBuilder() {
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartData} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
-                  <XAxis dataKey="F" tickFormatter={v => `₹${fmt(v)}`} tick={{ fontSize: 10 }} />
+                  <XAxis dataKey="F" tickFormatter={v => `₹${Math.round(Number(v) / 1000)}K`} tick={{ fontSize: 10 }} interval="preserveStartEnd" tickCount={7} />
                   <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 10 }} width={68} />
                   <Tooltip
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
