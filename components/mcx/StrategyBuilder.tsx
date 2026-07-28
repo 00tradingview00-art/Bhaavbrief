@@ -790,8 +790,8 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                 { label: 'Net Delta',    raw: netGreeks.delta,                       display: fmtGreek(netGreeks.delta, 2) },
                 { label: 'Delta ₹ Exp', raw: netGreeks.delta * futurePrice,         display: `₹${fmt(Math.round(netGreeks.delta * futurePrice))}` },
                 { label: 'Net Gamma',   raw: netGreeks.gamma,                       display: fmtGreek(netGreeks.gamma, 4) },
-                { label: 'Net Theta/day', raw: netGreeks.theta,                     display: `₹${fmtGreek(netGreeks.theta, 0)}` },
-                { label: 'Net Vega/1%', raw: netGreeks.vega,                        display: `₹${fmtGreek(netGreeks.vega, 0)}` },
+                { label: 'Net Theta/day', raw: netGreeks.theta,                     display: fmtPnlAxis(Math.round(netGreeks.theta)) },
+                { label: 'Net Vega/1%', raw: netGreeks.vega,                        display: fmtPnlAxis(Math.round(netGreeks.vega)) },
               ].map(g => (
                 <div key={g.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '6px 12px' }}>
