@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-28-mcx-silver-crashes-2-08-as-industrial-demand-outlook-dims",
+    "href": "/articles/2026-07-28-mcx-silver-crashes-2-08-as-industrial-demand-outlook-dims",
+    "title": "MCX Silver crashes 2.08% as industrial demand outlook dims",
+    "description": "MCX Silver plunges to ₹216,659/kg amid broad commodity selloff. Dollar strength and faltering China PMI signal weaker EV/solar demand ahead.",
+    "excerpt": "WHAT HAPPENED MCX Silver has broken below its 20-day moving average (₹222,461/kg) to trade at ₹216,659/kg, down 2.08% — a steeper fall than both gold (−0.90%) and copper (−1.00%). The divergence is th",
+    "date": "2026-07-28T11:06:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Nat Gas",
+      "industrial metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 216659
+  },
+  {
     "type": "brief",
     "slug": "edition-073",
     "href": "/briefs/edition-073",
