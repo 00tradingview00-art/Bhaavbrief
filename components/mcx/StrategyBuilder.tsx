@@ -788,7 +788,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 12 }}>
               {[
                 { label: 'Net Delta',    raw: netGreeks.delta,                       display: fmtGreek(netGreeks.delta, 2) },
-                { label: 'Delta ₹ Exp', raw: netGreeks.delta * futurePrice,         display: `₹${fmt(Math.round(netGreeks.delta * futurePrice))}` },
+                { label: 'Delta ₹ Exp', raw: netGreeks.delta * futurePrice,         display: fmtPnlAxis(Math.round(netGreeks.delta * futurePrice)) },
                 { label: 'Net Gamma',   raw: netGreeks.gamma,                       display: fmtGreek(netGreeks.gamma, 4) },
                 { label: 'Net Theta/day', raw: netGreeks.theta,                     display: fmtPnlAxis(Math.round(netGreeks.theta)) },
                 { label: 'Net Vega/1%', raw: netGreeks.vega,                        display: fmtPnlAxis(Math.round(netGreeks.vega)) },
@@ -808,31 +808,31 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartDataFull} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
-                  <XAxis dataKey="F" tickFormatter={v => `₹${Math.round(Number(v) / 1000)}K`} tick={{ fontSize: 10 }} interval="preserveStartEnd" tickCount={7} />
+                  <XAxis dataKey="F" tickFormatter={(v: number) => {
+                    const n = Number(v)
+                    if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
+                    if (futurePrice >= 1000)  return `₹${(n / 1000).toFixed(1)}K`
+                    return `₹${Math.round(n)}`
+                  }} tick={{ fontSize: 10 }} interval="preserveStartEnd" tickCount={7} />
                   <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 10 }} width={68} />
                   <Tooltip
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
                     labelFormatter={v => `P = ₹${fmt(Number(v))}`} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
                   <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
-                  {/* MCX circuit limit lines */}
+                  {/* Current price reference */}
                   {futurePrice > 0 && (
-                    <>
-                      <ReferenceLine x={Math.round(futurePrice * (1 + circuitLimit))} stroke="#fbbf24"
-                        strokeDasharray="3 2" label={{ value: 'Circuit ↑', fontSize: 9, fill: '#d97706' }} />
-                      <ReferenceLine x={Math.round(futurePrice * (1 - circuitLimit))} stroke="#fbbf24"
-                        strokeDasharray="3 2" label={{ value: 'Circuit ↓', fontSize: 9, fill: '#d97706' }} />
-                    </>
+                    <ReferenceLine x={futurePrice} stroke="#94a3b8" strokeDasharray="2 3" strokeWidth={1} />
                   )}
+                  {/* Breakeven lines — no label; values shown in stats below */}
                   {breakevens.map((be, i) => (
-                    <ReferenceLine key={i} x={Math.round(be)} stroke="#f59e0b"
-                      strokeDasharray="4 2" label={{ value: `BE ${fmt(Math.round(be))}`, fontSize: 10, fill: '#f59e0b' }} />
+                    <ReferenceLine key={i} x={Math.round(be)} stroke="#f97316" strokeDasharray="4 2" strokeWidth={1.5} />
                   ))}
                   <Line type="monotone" dataKey="Expiry" stroke="#6366f1" dot={false} strokeWidth={2} name="At Expiry" />
                   {T > 0 && <Line type="monotone" dataKey="Today" stroke="#22c55e" dot={false} strokeWidth={1.5}
                     strokeDasharray="5 3" name={`Today (${Math.round(dte)}d left)`} />}
                   {payoff2wk.length > 0 && <Line type="monotone" dataKey="TwoWeeks" stroke="#f59e0b" dot={false} strokeWidth={1}
-                    strokeDasharray="4 4" name="−2 weeks" />}
+                    strokeDasharray="4 4" name="−2 wks" />}
                   {payoff1wk.length > 0 && <Line type="monotone" dataKey="OneWeek" stroke="#fb923c" dot={false} strokeWidth={1}
                     strokeDasharray="2 4" name="−1 week" />}
                 </LineChart>
