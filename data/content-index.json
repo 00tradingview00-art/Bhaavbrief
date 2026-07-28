@@ -1,5 +1,24 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-28-mcx-crude-plunges-3-90-to-7506-session-5-67-on-global-demand",
+    "href": "/articles/2026-07-28-mcx-crude-plunges-3-90-to-7506-session-5-67-on-global-demand",
+    "title": "MCX Crude plunges 3.90% to ₹7506—session -5.67% on global demand softening",
+    "description": "MCX Crude ₹7506/bbl · -3.90% · WTI $78.21 session -5.67%. Trigger: Crude complex breaks on demand destruction signals amid disinflationary macro.",
+    "excerpt": "TRIGGER MCX Crude has fallen 3.90% to ₹7,506/bbl while WTI dropped 5.67% to $78.21—the session's largest losses, signalling a coordinated demand destruction narrative rather than supply disruption. PR",
+    "date": "2026-07-28T21:57:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7506
+  },
+  {
     "type": "article",
     "slug": "2026-07-28-mcx-silver-crashes-2-08-as-industrial-demand-outlook-dims",
     "href": "/articles/2026-07-28-mcx-silver-crashes-2-08-as-industrial-demand-outlook-dims",
