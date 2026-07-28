@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-28-us-weather-mcx-natural-gas-india",
+    "href": "/articles/2026-07-28-us-weather-mcx-natural-gas-india",
+    "title": "How US Weather Extremes Drive MCX Natural Gas Price Spikes",
+    "description": "Understand how US weather affects MCX natural gas in India — the Henry Hub transmission path, import parity formula, and key data points to track.",
+    "excerpt": "Understanding how US weather affects MCX natural gas India prices is essential for any trader holding overnight positions in this market. A polar vortex breaking over Chicago or a hurricane stalling o",
+    "date": "2026-07-28",
+    "edition": "keyword-brief",
+    "tags": [
+      "natgas",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "natgas",
+    "commodities": [
+      "natgas"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-07-27-hawk-scan-mcx-crude-6-13-to-8088-wti-breaks-85-on-demand-fad",
     "href": "/articles/2026-07-27-hawk-scan-mcx-crude-6-13-to-8088-wti-breaks-85-on-demand-fad",
