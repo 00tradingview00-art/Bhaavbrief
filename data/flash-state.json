@@ -30,10 +30,11 @@
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": "2026-07-21T10:53:13.274Z",
-    "lastFlashPrice": 1334.05,
+    "lastFlashAt": "2026-07-28T12:20:14.194Z",
+    "lastFlashPrice": 1313.8,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-07-28-17-50-mcx-copper-slides-0-80-as-risk-sentiment-cools",
       "2026-07-21-16-23-mcx-copper-rallies-1-51-on-global-risk-appetite"
     ]
   },
