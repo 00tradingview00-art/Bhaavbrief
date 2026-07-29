@@ -13,8 +13,8 @@ import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
-  weight: ['400', '700', '800'],
-  display: 'swap',
+  weight: ['800', '700', '400'],
+  display: 'optional',
 })
 
 const inter = Inter({
@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-dm-mono',
   weight: ['400', '500'],
-  display: 'swap',
+  display: 'optional',
 })
 
 const BASE = 'https://bhaavbrief.in'

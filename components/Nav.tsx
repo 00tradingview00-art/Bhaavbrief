@@ -61,7 +61,7 @@ export default function Nav() {
             alignItems: 'center',
             gap: 9,
           }}>
-            <Image src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} style={{ display: 'block' }} />
+            <Image src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} priority style={{ display: 'block' }} />
             <span style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 18,
