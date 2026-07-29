@@ -66,3 +66,25 @@ describe("classifySemanticIssue — regression tests for the checkmark-verified 
     expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-WARN");
   });
 });
+
+describe("classifySemanticIssue — regression tests for bare '✓ Consistent.' terminal verdicts", () => {
+  // Same day, a single run returned 6 blocking issues, each just a claim plus
+  // arithmetic plus a bare "✓ Consistent." with no complaint stated at all.
+  const realNonIssueDetails = [
+    "MCX Gold stated as 'down ₹197' in body ('MCX Gold at ₹141,406 is off ₹197'). Snapshot shows current 141406, prevClose 141603, difference = -197 ✓. Consistent.",
+    "MCX Silver stated as 'up ₹1,338' in body ('MCX Silver at ₹217,178, up ₹1,338'). Snapshot shows current 217178, prevClose 215840, difference = +1338 ✓. Consistent.",
+    "Brent Crude price movements: body states 'Brent up $3.17 to $87.26'. Snapshot shows current 87.26, prevClose 84.09, difference = +3.17 ✓. Consistent.",
+  ];
+
+  test.each(realNonIssueDetails)("detects self-contradiction: %s", (detail) => {
+    expect(isSelfContradicted(detail)).toBe(true);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-WARN");
+  });
+
+  test("a genuine block ending in '...is NOT correct.' style negation stays SEMANTIC-BLOCK", () => {
+    const detail =
+      "Brief states MCX Gold fell ₹500 to ₹141,000, but snapshot prevClose is ₹141,623 and current price is ₹141,406 — a ₹217 move, not ₹500. The stated figure is not correct.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+});

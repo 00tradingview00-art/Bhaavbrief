@@ -28,6 +28,13 @@
  * standalone (not requiring "clarity" nearby) because every observed
  * instance of that verb described a labeling/mixing complaint, never an
  * asserted numeric mismatch.
+ *
+ * A more blatant version blocked 6 issues in one run the same day: each
+ * detail was just "[claim]. [arithmetic]. ✓ Consistent." — Haiku's own
+ * terminal word, with no complaint stated at all. Matched narrowly
+ * (bare "consistent" at the very end of the string) rather than a broader
+ * "correct"/"confirmed" ending pattern, since a broad version risks
+ * matching a genuine "...is NOT correct." block on the trailing word alone.
  */
 
 const SELF_CONTRADICTION_PATTERNS = [
@@ -52,6 +59,10 @@ const SELF_CONTRADICTION_PATTERNS = [
   /\bwithout\s+clear\s+separation\b/i,
   /\bcreates?\s+ambiguity\b/i,
   /\bwithout\s+(?:clear\s+)?distinction\b/i,
+  // Bare terminal verdict — "... ✓ Consistent." with nothing else said.
+  // Anchored to end-of-string specifically so it can't match a "consistent"
+  // that appears mid-detail while a different, still-live issue follows.
+  /\bconsistent\.?\s*$/i,
 ];
 
 /** @param {string} detail */
