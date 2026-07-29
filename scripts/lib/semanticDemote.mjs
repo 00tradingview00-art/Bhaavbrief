@@ -12,6 +12,17 @@
  * The fix generalizes to a regex on "no block"/"no contradiction" as a
  * whole phrase (any punctuation/casing after it) instead of enumerating
  * exact substrings.
+ *
+ * Recurred 2026-07-27 to 2026-07-29 with phrasings the list above didn't
+ * catch — Haiku walked through the math, concluded "these are consistent"
+ * / "this checks out" / "acceptable as a multi-session reference", and
+ * still returned severity:"block". A distinct variant of the same bug also
+ * showed up: Haiku confirmed a price was "correct per snapshot" and then
+ * blocked anyway on pure narrative clarity ("conflates ... without
+ * clarity") — a style/tone objection its own system prompt forbids it from
+ * making. Both are the same failure mode (the severity label doesn't track
+ * the checker's own reasoning), just new vocabulary — see
+ * semanticDemote.test.mjs for the real detail strings this now covers.
  */
 
 const SELF_CONTRADICTION_PATTERNS = [
@@ -23,6 +34,16 @@ const SELF_CONTRADICTION_PATTERNS = [
   /\bwhich\s+matches\b/i,
   /\bconsistent\.?\s*pass\b/i,
   /\bpass\.?\s*$/i,
+  /\bchecks\s+out\b/i,
+  /\bis\s+acceptable\s+as\b/i,
+  /\b(?:is|are)\s+correct\s+per\s+snapshot\b/i,
+  /\bare\s+consistent\b/i,
+  // Style/tone objections the checker's system prompt explicitly forbids —
+  // only fires on the narrow phrasing Haiku has actually produced, not on
+  // any use of "clarify" (a genuine two-number contradiction that also asks
+  // the writer to "clarify which is correct" must stay blocked).
+  /\bwithout\s+clarity\b/i,
+  /\bconflates\b.*\bclarity\b/i,
 ];
 
 /** @param {string} detail */

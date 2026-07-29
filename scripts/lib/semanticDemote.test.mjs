@@ -29,3 +29,25 @@ describe("classifySemanticIssue — regression tests for missed self-contradicti
     expect(classifySemanticIssue("warn", "A specific rupee figure looks off.")).toBe("SEMANTIC-WARN");
   });
 });
+
+describe("classifySemanticIssue — regression tests for 2026-07-27 to 2026-07-29 phrasings", () => {
+  // Real detail strings from three separate blocked generate-brief.yml runs
+  // this week (digits approximated where CI log redaction obscured them —
+  // the fix only needs the qualitative phrasing to match).
+  const realNonIssueDetails = [
+    "Silver price contradiction: Brief states 'Silver dropped -1.69%' ... but then later says 'Silver dropped -1.69% while gold fell only -0.75%' — these are consistent. However, the brief also states silver 'fell ₹3,739 from its previous close' but MCX_SILVER shows prevClose 221173 and price 217434, which is a difference of ₹3,739. Verification: 221173 - 217434 = 3739. This checks out. However, the brief references 'near-₹9,024 peak' for crude oil ... this is acceptable as a multi-session reference.",
+    "WTI crude price change contradicts snapshot data. Brief states 'WTI crude up $3.86 to $82.58' but snapshot shows prevClose $79.16 and current $82.58, which is a change of $3.86. The $3.86 move is correct per snapshot (79.16→82.58). ... The brief conflates intraday floor language with session open/close moves without clarity.",
+  ];
+
+  test.each(realNonIssueDetails)("detects self-contradiction: %s", (detail) => {
+    expect(isSelfContradicted(detail)).toBe(true);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-WARN");
+  });
+
+  test("a genuine two-number block that also asks the writer to 'clarify' stays SEMANTIC-BLOCK", () => {
+    const detail =
+      "Brief states gold at ₹141,900 in the headline and ₹138,200 in the body — these cannot both be today's close; clarify which is correct.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+});
