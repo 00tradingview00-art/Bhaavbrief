@@ -88,3 +88,30 @@ describe("classifySemanticIssue — regression tests for bare '✓ Consistent.' 
     expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
   });
 });
+
+describe("classifySemanticIssue — structural numeric self-verification (valueA/valueB)", () => {
+  // The proper fix, 2026-07-29: instead of chasing every new phrasing Haiku
+  // invents for "these two numbers match," the checker now also emits the
+  // two numbers it claims conflict, and we check them arithmetically here —
+  // independent of whatever words appear in `detail`.
+  test("exactly equal values demote to warn even with a neutral detail string", () => {
+    expect(classifySemanticIssue("block", "some prose", 7857, 7857)).toBe("SEMANTIC-WARN");
+  });
+
+  test("values within tolerance (rounding) demote to warn", () => {
+    expect(classifySemanticIssue("block", "some prose", 4034.3, 4034)).toBe("SEMANTIC-WARN");
+  });
+
+  test("a real chained-arithmetic defect (8089 vs actual 7851) stays SEMANTIC-BLOCK even with neutral prose", () => {
+    expect(classifySemanticIssue("block", "some prose, no self-admission language", 8089, 7851)).toBe("SEMANTIC-BLOCK");
+  });
+
+  test("missing valueA/valueB falls back to the existing detail-text check", () => {
+    expect(classifySemanticIssue("block", "a genuine two-price contradiction with no resolution")).toBe("SEMANTIC-BLOCK");
+    expect(classifySemanticIssue("block", "checks out, no block")).toBe("SEMANTIC-WARN");
+  });
+
+  test("existing 2-argument call sites still work unchanged", () => {
+    expect(classifySemanticIssue("warn", "anything")).toBe("SEMANTIC-WARN");
+  });
+});

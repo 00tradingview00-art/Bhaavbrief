@@ -35,7 +35,32 @@
  * (bare "consistent" at the very end of the string) rather than a broader
  * "correct"/"confirmed" ending pattern, since a broad version risks
  * matching a genuine "...is NOT correct." block on the trailing word alone.
+ *
+ * 2026-07-29: patching one new phrasing at a time is fundamentally
+ * unbounded — there is always another way for Haiku to word "these two
+ * numbers match." classifySemanticIssue() now also takes the two numbers
+ * the checker claims are in conflict (valueA/valueB, from a schema change
+ * in validate-brief.mjs's attemptSemanticCheck) and checks them
+ * arithmetically in this file, in trusted code, instead of pattern-matching
+ * more prose. When they're actually equal (within a tight tolerance — every
+ * real defect observed so far differed by 50%+, nowhere near this), the
+ * issue is demoted regardless of what words Haiku used. The regex list
+ * above remains the fallback for non-numeric objections (event timing,
+ * headline direction, style/labeling complaints) where there's no pair of
+ * numbers to check.
  */
+
+// Two numbers the checker claims conflict are treated as "actually equal"
+// (i.e. not a real conflict) within 1% relative or 1 absolute unit,
+// whichever is larger — tight enough that rounding/formatting differences
+// pass, while every real defect seen in production (which differed by 50%
+// or more) stays outside it.
+function valuesEffectivelyEqual(a, b) {
+  if (typeof a !== "number" || typeof b !== "number" || !Number.isFinite(a) || !Number.isFinite(b)) {
+    return false;
+  }
+  return Math.abs(a - b) <= Math.max(1, Math.abs(b) * 0.01);
+}
 
 const SELF_CONTRADICTION_PATTERNS = [
   /\bno\s+block\b/i,
@@ -74,9 +99,13 @@ export function isSelfContradicted(detail) {
 /**
  * @param {"block"|"warn"} severity
  * @param {string} detail
+ * @param {number|null} [valueA] - one of the two numbers the checker claims conflict
+ * @param {number|null} [valueB] - the other
  * @returns {"SEMANTIC-BLOCK"|"SEMANTIC-WARN"}
  */
-export function classifySemanticIssue(severity, detail) {
-  const isBlock = severity === "block" && !isSelfContradicted(detail);
+export function classifySemanticIssue(severity, detail, valueA = null, valueB = null) {
+  if (severity !== "block") return "SEMANTIC-WARN";
+  if (valuesEffectivelyEqual(valueA, valueB)) return "SEMANTIC-WARN";
+  const isBlock = !isSelfContradicted(detail);
   return isBlock ? "SEMANTIC-BLOCK" : "SEMANTIC-WARN";
 }

@@ -511,7 +511,8 @@ async function attemptSemanticCheck() {
         "The \"issues\" array is a list of PROBLEMS ONLY. Do not walk through each check and report its outcome. " +
         "If a check passes, omit it entirely — do not add an entry that concludes 'PASS', 'consistent', or 'no contradiction'. " +
         "An empty issues array is the expected, common result for a correct brief. " +
-        "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"severity\": \"block\"|\"warn\", \"detail\": string}]}. " +
+        "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"severity\": \"block\"|\"warn\", \"detail\": string, \"valueA\": number|null, \"valueB\": number|null}]}. " +
+        "When a 'block' is based on two specific numbers conflicting (criteria 1 and 4 below), you MUST set valueA and valueB to those exact two numbers, parsed as plain numbers (no currency symbols or commas) — this lets the two figures you're comparing be checked mechanically. For any other issue (event timing, headline direction word, or anything that isn't a numeric mismatch), leave valueA and valueB as null. " +
         "No markdown fences, no preamble.",
       messages: [
         {
@@ -599,8 +600,9 @@ async function semanticCheck() {
   for (const it of result.verdict.issues ?? []) {
     // Haiku sometimes returns severity:"block" but then explains in the detail that
     // there is actually no contradiction. Demote those to warnings — see
-    // semanticDemote.mjs for the phrasings this needs to catch.
-    const prefix = classifySemanticIssue(it.severity, it.detail);
+    // semanticDemote.mjs: valueA/valueB (when Haiku provides them) are checked
+    // arithmetically first; the detail-text regex list is the fallback.
+    const prefix = classifySemanticIssue(it.severity, it.detail, it.valueA, it.valueB);
     issues.push(`${prefix}: ${it.detail}`);
   }
 }
