@@ -504,7 +504,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
             title="Back to Option Chain">
             ← Options
           </Link>
-          <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
+          <h1 className="sb-title" style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
         </div>
         <p style={{ color: '#6b7280', fontSize: 14, margin: 0 }}>
           Compose multi-leg strategies and visualise P&amp;L at expiry
@@ -670,15 +670,15 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
-                      <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE OI</th>
+                      <th className="sb-hide-mobile" style={{ padding: '6px 6px', textAlign: 'right' }}>CE OI</th>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE IV%</th>
-                      <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE Δ</th>
+                      <th className="sb-hide-mobile" style={{ padding: '6px 6px', textAlign: 'right' }}>CE Δ</th>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE LTP</th>
                       <th style={{ padding: '6px 6px', textAlign: 'center', fontWeight: 700 }}>Strike</th>
                       <th style={{ padding: '6px 6px', textAlign: 'left' }}>PE LTP</th>
-                      <th style={{ padding: '6px 6px', textAlign: 'left' }}>PE Δ</th>
+                      <th className="sb-hide-mobile" style={{ padding: '6px 6px', textAlign: 'left' }}>PE Δ</th>
                       <th style={{ padding: '6px 6px', textAlign: 'left' }}>PE IV%</th>
-                      <th style={{ padding: '6px 6px', textAlign: 'left' }}>PE OI</th>
+                      <th className="sb-hide-mobile" style={{ padding: '6px 6px', textAlign: 'left' }}>PE OI</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -689,7 +689,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           borderBottom: '1px solid #f3f4f6',
                         }}>
                         {/* CE OI */}
-                        <td style={{ padding: '5px 6px', textAlign: 'right', color: '#9ca3af', fontSize: 11 }}>
+                        <td className="sb-hide-mobile" style={{ padding: '5px 6px', textAlign: 'right', color: '#9ca3af', fontSize: 11 }}>
                           {fmtOI(row.CE.oi)}
                         </td>
                         {/* CE IV */}
@@ -697,7 +697,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           {row.CE.iv != null ? row.CE.iv.toFixed(1) : '—'}
                         </td>
                         {/* CE Delta */}
-                        <td style={{ padding: '5px 6px', textAlign: 'right', color: '#6b7280' }}>
+                        <td className="sb-hide-mobile" style={{ padding: '5px 6px', textAlign: 'right', color: '#6b7280' }}>
                           {row.CE.delta != null ? row.CE.delta.toFixed(2) : '—'}
                         </td>
                         {/* CE LTP + B/S */}
@@ -705,10 +705,10 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           <span style={{ fontWeight: 700 }}>{row.CE.ltp > 0 ? fmt(row.CE.ltp) : '—'}</span>
                           {row.CE.ltp > 0 && (
                             <span style={{ marginLeft: 4, display: 'inline-flex', gap: 2 }}>
-                              <button onClick={() => addLeg(row, 'CE', 'BUY')}
+                              <button className="sb-bs-btn" onClick={() => addLeg(row, 'CE', 'BUY')}
                                 style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #16a34a',
                                   color: '#15803d', background: '#dcfce7', cursor: 'pointer', lineHeight: 1.4 }}>B</button>
-                              <button onClick={() => addLeg(row, 'CE', 'SELL')}
+                              <button className="sb-bs-btn" onClick={() => addLeg(row, 'CE', 'SELL')}
                                 style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #dc2626',
                                   color: '#b91c1c', background: '#fee2e2', cursor: 'pointer', lineHeight: 1.4 }}>S</button>
                             </span>
@@ -722,10 +722,10 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                         <td style={{ padding: '5px 6px', textAlign: 'left', whiteSpace: 'nowrap' }}>
                           {row.PE.ltp > 0 && (
                             <span style={{ marginRight: 4, display: 'inline-flex', gap: 2 }}>
-                              <button onClick={() => addLeg(row, 'PE', 'BUY')}
+                              <button className="sb-bs-btn" onClick={() => addLeg(row, 'PE', 'BUY')}
                                 style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #16a34a',
                                   color: '#15803d', background: '#dcfce7', cursor: 'pointer', lineHeight: 1.4 }}>B</button>
-                              <button onClick={() => addLeg(row, 'PE', 'SELL')}
+                              <button className="sb-bs-btn" onClick={() => addLeg(row, 'PE', 'SELL')}
                                 style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #dc2626',
                                   color: '#b91c1c', background: '#fee2e2', cursor: 'pointer', lineHeight: 1.4 }}>S</button>
                             </span>
@@ -733,7 +733,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           <span style={{ fontWeight: 700 }}>{row.PE.ltp > 0 ? fmt(row.PE.ltp) : '—'}</span>
                         </td>
                         {/* PE Delta */}
-                        <td style={{ padding: '5px 6px', textAlign: 'left', color: '#6b7280' }}>
+                        <td className="sb-hide-mobile" style={{ padding: '5px 6px', textAlign: 'left', color: '#6b7280' }}>
                           {row.PE.delta != null ? row.PE.delta.toFixed(2) : '—'}
                         </td>
                         {/* PE IV */}
@@ -741,7 +741,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           {row.PE.iv != null ? row.PE.iv.toFixed(1) : '—'}
                         </td>
                         {/* PE OI */}
-                        <td style={{ padding: '5px 6px', textAlign: 'left', color: '#9ca3af', fontSize: 11 }}>
+                        <td className="sb-hide-mobile" style={{ padding: '5px 6px', textAlign: 'left', color: '#9ca3af', fontSize: 11 }}>
                           {fmtOI(row.PE.oi)}
                         </td>
                       </tr>
@@ -763,7 +763,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                     <th style={{ padding: '5px 8px', textAlign: 'left' }}>Type</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Strike</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Entry</th>
-                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>IV%</th>
+                    <th className="sb-hide-mobile" style={{ padding: '5px 8px', textAlign: 'right' }}>IV%</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Qty</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}></th>
                   </tr>
@@ -787,7 +787,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>{fmt(leg.strike)}</td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>₹{fmt(leg.premium)}</td>
-                      <td style={{ padding: '5px 8px', textAlign: 'right', color: '#6b7280' }}>
+                      <td className="sb-hide-mobile" style={{ padding: '5px 8px', textAlign: 'right', color: '#6b7280' }}>
                         {(leg.iv * 100).toFixed(1)}
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
@@ -988,7 +988,8 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                 placeholder={`Label (e.g. "${autoLabel(legs, instrument)}")`}
                 value={saveLabel}
                 onChange={e => setSaveLabel(e.target.value)}
-                style={{ padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 12, minWidth: 200 }}
+                className="sb-label-input"
+                style={{ padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 12, minWidth: 200, flex: '1 1 auto' }}
               />
               <button onClick={saveStrategy}
                 style={{
@@ -1100,6 +1101,15 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
       }}>
         <strong>Disclaimer:</strong> This tool is for educational and informational purposes only. It does not constitute investment advice or a recommendation to buy or sell any securities or commodity contracts. BhaavBrief is not a SEBI-registered Investment Adviser or Research Analyst. Option pricing shown is a mathematical model output — actual market prices may differ. Trading commodity derivatives involves substantial risk of loss.
       </div>
+
+      <style>{`
+        @media (max-width: 620px) {
+          .sb-hide-mobile { display: none !important; }
+          .sb-bs-btn { padding: 4px 8px !important; font-size: 12px !important; }
+          .sb-title { font-size: 17px !important; }
+          .sb-label-input { min-width: 0 !important; flex: 1 1 auto !important; }
+        }
+      `}</style>
     </div>
   )
 }
