@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141011,
-    "silver": 215352,
-    "crude": 8110,
-    "copper": 1312.3,
+    "gold": 141850,
+    "silver": 217737,
+    "crude": 8127,
+    "copper": 1313.5,
     "natgas": 262.7,
     "usdinr": 95.65
   },
-  "lastChecked": "2026-07-29T16:47:53.720Z",
+  "lastChecked": "2026-07-29T17:52:44.823Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-07-17",
-    "value": "202"
+    "period": "2026-07-24",
+    "value": "360"
   },
   "lastGeoNews": {
     "mideast": "Middle East war deepens 2026 oil deficit outlook, but 2027 glut still looms - Re",
