@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-07-29-mcx-crude-breaks-7-880-on-3-83-spike-wti-81-83-above-breakev",
+    "href": "/articles/2026-07-29-mcx-crude-breaks-7-880-on-3-83-spike-wti-81-83-above-breakev",
+    "title": "MCX Crude Breaks ₹7,880 on 3.83% Spike — WTI $81.83 Above Breakeven",
+    "description": "MCX Crude surged ₹293 to ₹7,880/bbl (3.83%) as WTI hits $81.83, breaching 20-day resistance. USD/INR ₹95.86 amplifies move.",
+    "excerpt": "TRIGGER MCX Crude has risen 3.83% to ₹7,880/bbl as WTI breaks $81.83, decisively above Permian shale breakeven of $45–55/bbl, signalling accelerating US rig count within 18 months. PRICE ₹7,880/bbl · ",
+    "date": "2026-07-29T05:40:55.799Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "MCX Silver"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7880
+  },
+  {
     "type": "brief",
     "slug": "edition-074",
     "href": "/briefs/edition-074",
