@@ -8,21 +8,18 @@ import '../styles/bhaav.css'
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
-  weight: ['800', '700', '400'],
-  display: 'optional',
+  display: 'swap',
 })
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-dm-sans',
-  weight: ['300', '400', '500', '600'],
   display: 'swap',
 })
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-dm-mono',
-  weight: ['400', '500'],
   display: 'optional',
 })
 
