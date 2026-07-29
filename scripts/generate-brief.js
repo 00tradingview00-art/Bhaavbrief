@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Part 8.2: bump this (and the prompts/brief_vN.md filename) on any material
 // prompt change — logged per generation call in data/gate-log.jsonl (8.4)
 // so any published brief can be traced to its exact prompt version.
-const PROMPT_VERSION = 'brief_v3'
+const PROMPT_VERSION = 'brief_v4'
 const envFile = path.join(__dirname, '../.env.local')
 if (fs.existsSync(envFile)) {
   for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
