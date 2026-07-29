@@ -233,6 +233,7 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
   const [saveLabel,     setSaveLabel]     = useState('')
   const [riskBudget,    setRiskBudget]    = useState('')
   const [briefEdge, setBriefEdge] = useState<{ edge: string; title: string; urlSlug: string; date: string } | null>(null)
+  const [copied,    setCopied]    = useState(false)
   // Cross-instrument chain data for My Strategies P&L
   const allChainDataRef = useRef<Record<string, ChainData>>({})
 
@@ -265,6 +266,17 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
     }, 1000)
     return () => clearInterval(id)
   }, [lastFetchedAt])
+
+  // Decode shared strategy from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const encoded = params.get('strategy')
+    if (!encoded) return
+    try {
+      const decoded: Leg[] = JSON.parse(decodeURIComponent(escape(atob(encoded))))
+      if (Array.isArray(decoded) && decoded.length > 0) setLegs(decoded)
+    } catch {/* invalid URL param — ignore */}
+  }, [])
 
   // Fetch chain + IV history
   const fetchData = useCallback(async (inst: string, exp?: string, preserveLegs = false) => {
@@ -358,6 +370,9 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
 
   const breakevens    = computeBreakevens(payoff)
   const maxProfitLoss = computeMaxProfitLoss(payoff)
+  const pop = payoff.length > 0
+    ? Math.round(payoff.filter(p => p.pnlExpiry >= 0).length / payoff.length * 100)
+    : null
   const netGreeks     = legs.length > 0 && futurePrice > 0 && T > 0
     ? computeNetGreeks(legs, futurePrice, T, r, lotSize)
     : null
@@ -434,6 +449,16 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
   function loadTemplate(templateId: TemplateId) {
     const newLegs = buildTemplateLegs(templateId, chain, futurePrice, currentIV || 0)
     if (newLegs.length > 0) setLegs(newLegs)
+  }
+
+  function copyShareUrl() {
+    if (legs.length === 0) return
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(legs))))
+    const url = `${window.location.origin}/options/strategy?instrument=${instrument}&strategy=${encoded}`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }).catch(() => {/* clipboard blocked */})
   }
 
   function saveStrategy() {
@@ -914,6 +939,12 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                   sub: '',
                   color: 'inherit',
                 },
+                ...(pop !== null ? [{
+                  label: 'Prob. of Profit',
+                  value: `~${pop}%`,
+                  sub: 'at expiry',
+                  color: pop >= 50 ? '#16a34a' : '#6b7280',
+                }] : []),
               ].map(s => (
                 <div key={s.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
@@ -972,6 +1003,15 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                   border: '1px solid #d1d5db', borderRadius: 6, cursor: 'pointer', fontSize: 13,
                 }}>
                 Clear
+              </button>
+              <button onClick={copyShareUrl}
+                style={{
+                  padding: '8px 16px', background: 'none',
+                  color: copied ? '#16a34a' : '#6b7280',
+                  border: `1px solid ${copied ? '#16a34a' : '#d1d5db'}`,
+                  borderRadius: 6, cursor: 'pointer', fontSize: 13,
+                }}>
+                {copied ? 'Link copied' : 'Share link'}
               </button>
             </div>
           )}
