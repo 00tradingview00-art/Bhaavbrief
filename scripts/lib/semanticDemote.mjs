@@ -17,12 +17,17 @@
  * catch — Haiku walked through the math, concluded "these are consistent"
  * / "this checks out" / "acceptable as a multi-session reference", and
  * still returned severity:"block". A distinct variant of the same bug also
- * showed up: Haiku confirmed a price was "correct per snapshot" and then
- * blocked anyway on pure narrative clarity ("conflates ... without
- * clarity") — a style/tone objection its own system prompt forbids it from
- * making. Both are the same failure mode (the severity label doesn't track
- * the checker's own reasoning), just new vocabulary — see
- * semanticDemote.test.mjs for the real detail strings this now covers.
+ * showed up repeatedly the same week: Haiku verifies every number with its
+ * own "✓" checkmarks, then blocks anyway on pure narrative clarity/labeling
+ * — "conflates ... without clarity", "without clear separation", "creates
+ * ambiguity about which market's move is being discussed" — style/tone
+ * objections its own system prompt forbids it from making. All of these are
+ * the same failure mode (the severity label doesn't track the checker's own
+ * reasoning), just new vocabulary each time — see semanticDemote.test.mjs
+ * for the real detail strings this now covers. "conflates" is matched
+ * standalone (not requiring "clarity" nearby) because every observed
+ * instance of that verb described a labeling/mixing complaint, never an
+ * asserted numeric mismatch.
  */
 
 const SELF_CONTRADICTION_PATTERNS = [
@@ -43,7 +48,10 @@ const SELF_CONTRADICTION_PATTERNS = [
   // any use of "clarify" (a genuine two-number contradiction that also asks
   // the writer to "clarify which is correct" must stay blocked).
   /\bwithout\s+clarity\b/i,
-  /\bconflates\b.*\bclarity\b/i,
+  /\bconflates\b/i,
+  /\bwithout\s+clear\s+separation\b/i,
+  /\bcreates?\s+ambiguity\b/i,
+  /\bwithout\s+(?:clear\s+)?distinction\b/i,
 ];
 
 /** @param {string} detail */

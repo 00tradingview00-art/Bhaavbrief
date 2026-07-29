@@ -51,3 +51,18 @@ describe("classifySemanticIssue — regression tests for 2026-07-27 to 2026-07-2
     expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
   });
 });
+
+describe("classifySemanticIssue — regression tests for the checkmark-verified 'conflates/ambiguity' variant", () => {
+  // Same session, same day (2026-07-29) — Haiku verified every individual
+  // number with its own ✓ checkmarks, then blocked on how the numbers were
+  // presented rather than on any actual mismatch.
+  const realNonIssueDetails = [
+    "WTI crude price change contradicts stated move. Snapshot shows WTI prevClose $79.16, current price $82.19, changePct +3.849% (rounds to +3.85%). Brief states 'WTI crude up $3.03 to $82.19' — but $79.16 + $3.03 = $82.19 ✓. However, brief also states crude moved up '$3.03' and separately 'crude absorbing the risk premium...crude +3.49%' — the +3.49% refers to MCX crude (snapshot: 3.4855%), not WTI. The text conflates WTI's +3.85% move with MCX's +3.49% move without distinction in the macro thread.",
+    "Crude price movement quantification inconsistency. Brief states 'The fact that crude is up ₹265 while gold is down ₹308' — MCX crude: prevClose ₹7603, current ₹7868, difference = ₹265 ✓. MCX gold: prevClose ₹141623, current ₹141315, difference = ₹308 ✓. However, the text then states 'crude +3.49% surge' and 'gold -0.2%' which are correct, but earlier states 'WTI crude up $3.03 to $82.19' — mixing WTI dollar moves with MCX rupee analysis in the same narrative without clear separation creates ambiguity about which market's move is being discussed.",
+  ];
+
+  test.each(realNonIssueDetails)("detects self-contradiction: %s", (detail) => {
+    expect(isSelfContradicted(detail)).toBe(true);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-WARN");
+  });
+});
