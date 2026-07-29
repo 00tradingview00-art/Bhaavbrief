@@ -195,7 +195,7 @@ function OIConcentrationChart({ chain }: { chain: ChainRow[] }) {
   )
 }
 
-// ── Volatility — today + 5-day ATM IV trend ────────────────────────────────────
+// ── Volatility — today + 10-day ATM IV trend ───────────────────────────────────
 
 const IV_LINE = '#6941c6' // matches the iVIX pill's color — same metric, same hue
 
@@ -251,11 +251,11 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
     return () => { cancelled = true }
   }, [instrument])
 
-  // Last 5 trading days with data — real gaps (missed cron days) are left as
-  // gaps, never interpolated or backfilled. The "5-Day" label names the
+  // Last 10 trading days with data — real gaps (missed cron days) are left as
+  // gaps, never interpolated or backfilled. The "10-Day" label names the
   // intended window even when fewer points exist; the point count itself
   // communicates sparseness.
-  const recent = history.slice(-5)
+  const recent = history.slice(-10)
   const ivValues = recent.map(d => d.iv)
   const minIV = ivValues.length ? Math.min(...ivValues) : 0
   const maxIV = ivValues.length ? Math.max(...ivValues) : 0
@@ -273,7 +273,7 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
       )}
 
       <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, margin: '14px 0 6px' }}>
-        ATM IV — 5-Day
+        ATM IV — 10-Day
       </div>
 
       {histLoading ? (
