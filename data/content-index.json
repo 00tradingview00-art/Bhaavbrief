@@ -1,6 +1,28 @@
 [
   {
     "type": "hawk-scan",
+    "slug": "2026-07-29-hawk-scan-mcx-crude-8158-bbl-3-84-365bn-import-shock",
+    "href": "/articles/2026-07-29-hawk-scan-mcx-crude-8158-bbl-3-84-365bn-import-shock",
+    "title": "HAWK-SCAN MCX Crude: ₹8158/bbl (+3.84%) — ₹365bn import shock",
+    "description": "MCX Crude SURGING ₹8158/bbl +3.84% — WTI $85.02 up 7.30% on supply tightness fears; MCX Silver -1.46%.",
+    "excerpt": "TRIGGER MCX Crude has spiked 3.84% to ₹8,158/bbl as WTI rallies 7.30% to $85.02/bbl — the largest intraday move in 18 days — on reports of OPEC+ production compliance beats and tightening spare capaci",
+    "date": "2026-07-29T20:12:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "OPEC+ Spare Capacity",
+      "MCX Silver",
+      "MCX Natural Gas"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8158
+  },
+  {
+    "type": "hawk-scan",
     "slug": "2026-07-29-mcx-crude-breaks-7-880-on-3-83-spike-wti-81-83-above-breakev",
     "href": "/articles/2026-07-29-mcx-crude-breaks-7-880-on-3-83-spike-wti-81-83-above-breakev",
     "title": "MCX Crude Breaks ₹7,880 on 3.83% Spike — WTI $81.83 Above Breakeven",
