@@ -1,12 +1,12 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-07-23T12:54:41.783Z",
-    "lastFlashPrice": 143424,
+    "lastFlashAt": "2026-07-29T06:05:33.820Z",
+    "lastFlashPrice": 141791,
     "lastRoundLevel": 145000,
     "recentFlashIds": [
+      "2026-07-29-11-35-mcx-gold-edges-higher-on-broad-commodity-strength",
       "2026-07-23-18-24-mcx-gold-slides-1-55-on-broad-commodity-pullback",
-      "2026-07-22-20-20-mcx-gold-breaks-145000-round-level-on-commodity-rally",
-      "2026-07-22-14-12-mcx-gold-rallies-1-19-on-risk-appetite-rebound"
+      "2026-07-22-20-20-mcx-gold-breaks-145000-round-level-on-commodity-rally"
     ]
   },
   "MCX_SILVER": {
