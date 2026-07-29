@@ -19,6 +19,7 @@ import { checkWeekday } from "./lib/weekdayCheck.js";
 import { checkClaims } from "./lib/claimsCheck.mjs";
 import { appendGateLogEntry } from "./lib/gateLog.mjs";
 import { classifySemanticIssue } from "./lib/semanticDemote.mjs";
+import { checkStaleInstruments } from "./lib/staleInstrumentCheck.mjs";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -296,6 +297,20 @@ for (const re of banned) {
       `STALE: snapshot is ${Number.isFinite(ageMinutes) ? ageMinutes.toFixed(1) : "an unparseable number of"} minutes old (generatedAt=${snapshot.generatedAt}) — must be <20 min at publish`
     );
   }
+}
+
+// 7b. Per-instrument staleness: a single instrument's live fetch can fail
+//     (e.g. an expired MCX contract token pending rollover) while the rest
+//     of the snapshot is fresh — the whole-snapshot check above wouldn't
+//     catch that. Extracted to scripts/lib/staleInstrumentCheck.mjs so this
+//     doesn't depend on the Layer 2 LLM noticing by chance (see that file's
+//     header comment for the 2026-07-29 MCX_NATGAS incident this closes).
+try {
+  for (const msg of checkStaleInstruments(brief, snapshot.instruments)) {
+    issues.push(msg);
+  }
+} catch (e) {
+  pushInternalError(`stale instrument check threw: ${e.message}`);
 }
 
 // 8. Price Bridge foot (G-04): the "## Price Bridge" table's Global/FX/MCX
