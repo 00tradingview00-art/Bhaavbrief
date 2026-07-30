@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-30-india-monsoon-commodity-prices-mcx",
+    "href": "/articles/2026-07-30-india-monsoon-commodity-prices-mcx",
+    "title": "How India's Monsoon Forecast Drives MCX Commodity Prices",
+    "description": "Understand how India monsoon forecast affects commodity prices on MCX — from IMD outlook to agri futures, edible oils, and rupee-linked metals moves.",
+    "excerpt": "Understanding how India's monsoon forecast affects commodity prices on MCX starts with a single fact: roughly 50% of India's agricultural output depends on kharif rainfall, making the IMD's seasonal o",
+    "date": "2026-07-30",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-07-29-hawk-scan-mcx-crude-8158-bbl-3-84-365bn-import-shock",
     "href": "/articles/2026-07-29-hawk-scan-mcx-crude-8158-bbl-3-84-365bn-import-shock",
