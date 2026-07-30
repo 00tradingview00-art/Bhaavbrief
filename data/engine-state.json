@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141850,
-    "silver": 217737,
-    "crude": 8127,
-    "copper": 1313.5,
-    "natgas": 262.7,
+    "gold": 141900,
+    "silver": 216350,
+    "crude": 8109,
+    "copper": 1317.8,
+    "natgas": 263.8,
     "usdinr": 95.65
   },
-  "lastChecked": "2026-07-29T17:52:44.823Z",
+  "lastChecked": "2026-07-30T05:29:53.727Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,10 +22,7 @@
     "mideast": "Middle East war deepens 2026 oil deficit outlook, but 2027 glut still looms - Re",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-07-29/2026-07-29-mcx-crude-breaks-7-880-on-3-83-spike-wti-81-83-above-breakev",
-    "2026-07-29/2026-07-29-hawk-scan-mcx-crude-8158-bbl-3-84-365bn-import-shock"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-07-29T14:42:22.593Z",
   "lastCoveredAt": {
     "crude": "2026-07-29T14:42:22.593Z",
