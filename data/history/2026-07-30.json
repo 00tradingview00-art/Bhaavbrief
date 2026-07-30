@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-30T06:02:05.677Z",
+  "generatedAt": "2026-07-30T06:02:09.349Z",
   "generatedAtIST": "2026-07-30 11:32 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -28,21 +28,21 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 263.7,
+      "price": 263.6,
       "prevClose": 262.8,
-      "changePct": 0.3425,
+      "changePct": 0.3044,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
       "price": 95.72,
       "prevClose": 95.6,
-      "changePct": 0.1269,
+      "changePct": 0.1295,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4092.2,
+      "price": 4091.7,
       "prevClose": 4034.7,
-      "changePct": 1.4251,
+      "changePct": 1.4127,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -116,8 +116,8 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 125936,
-    "mcxComexGoldSpreadPct": 12.56,
+    "importParityGoldINR": 125921,
+    "mcxComexGoldSpreadPct": 12.57,
     "importParitySilverINR": 176585,
     "mcxComexSilverSpreadPct": 22.13,
     "goldSilverRatio": 71.3
@@ -125,10 +125,10 @@
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 12.56% vs silver 22.13% — 9.57pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 12.56,
+      "detail": "Gold import-parity spread 12.57% vs silver 22.13% — 9.56pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 12.57,
       "silverSpreadPct": 22.13,
-      "deltaPts": 9.57
+      "deltaPts": 9.56
     }
   ]
 }
