@@ -5,6 +5,7 @@ on:
     paths:
       - 'content/briefs/**'
       - 'data/event-map.json'
+      - 'data/learn-topics.json'
       - 'scripts/compliance-lint.mjs'
       - 'scripts/**'
   push:
@@ -12,6 +13,7 @@ on:
     paths:
       - 'content/briefs/**'
       - 'data/event-map.json'
+      - 'data/learn-topics.json'
       - 'scripts/compliance-lint.mjs'
 
 permissions:

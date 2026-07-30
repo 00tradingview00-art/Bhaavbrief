@@ -1,0 +1,102 @@
+name: Generate Daily Learn Reel
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # 7:30 PM IST daily — evergreen content, not tied to trading days
+  workflow_dispatch:
+
+# One learn reel per run — queue rather than cancel if a run is somehow still going
+concurrency:
+  group: generate-learn-reel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Generate learn reel
+        id: reel
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: node scripts/generate-learn-reel.mjs
+
+      - name: Post reel to Instagram
+        if: steps.reel.outcome == 'success'
+        continue-on-error: true
+        env:
+          REEL_FILE:              ${{ steps.reel.outputs.reel_file }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/post-reel-instagram.mjs
+
+      # data/reel-history.json (written by generate-brief-reel.mjs + post-reel-instagram.mjs)
+      # and data/learn-reel-history.json (rotation state, written by generate-learn-reel.mjs)
+      # both live only on this runner until committed back — same save/rebase/restore-via-/tmp
+      # pattern as generate-brief.yml's "Persist reel history" step.
+      - name: Persist reel state
+        continue-on-error: true
+        run: |
+          [ -f data/reel-history.json ] && cp data/reel-history.json /tmp/bb-reel-history.json || true
+          [ -f data/learn-reel-history.json ] && cp data/learn-reel-history.json /tmp/bb-learn-reel-history.json || true
+          git checkout -- . 2>/dev/null || true
+          git pull --rebase origin main
+          [ -f /tmp/bb-reel-history.json ] && cp /tmp/bb-reel-history.json data/reel-history.json || true
+          [ -f /tmp/bb-learn-reel-history.json ] && cp /tmp/bb-learn-reel-history.json data/learn-reel-history.json || true
+          git add data/reel-history.json data/learn-reel-history.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Reel state unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Learn reel — $(date +'%d %b %Y')"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Learn reel pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Generate Daily Learn Reel</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/generate-learn-reel.yml\">Re-run workflow →</a></p>"
+            }'

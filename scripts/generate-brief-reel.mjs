@@ -15,7 +15,7 @@ import { createCanvas, GlobalFonts }          from '@napi-rs/canvas'
 import { readFileSync, writeFileSync,
          mkdirSync, existsSync, rmSync,
          readdirSync }                        from 'fs'
-import { join, dirname }                      from 'path'
+import { join, dirname, relative }            from 'path'
 import { fileURLToPath }                      from 'url'
 import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
@@ -219,6 +219,7 @@ const TRACKS = {
 }
 
 function classifyMood(data, snapshot) {
+  if (process.env.FORCE_MOOD) return process.env.FORCE_MOOD
   const tags     = data.tags ?? []
   const goldPct  = snapshot?.instruments?.MCX_GOLD?.changePct  ?? 0
   const crudePct = snapshot?.instruments?.MCX_CRUDE?.changePct ?? 0
@@ -465,7 +466,8 @@ function drawCover(ctx, copy, mood, edition) {
 // ── Phase 1a: HOOK — concept / explainer / trend / breaking ──────────────────
 function drawHookConcept(ctx, t, copy, mood, edition) {
   const isBreaking = copy.content_type === 'breaking'
-  const accentColor = isBreaking ? '#E74C3C' : GOLD
+  const isLearn101 = process.env.REEL_SERIES === 'learn101'
+  const accentColor = isBreaking ? '#E74C3C' : (isLearn101 ? '#2E86AB' : GOLD)
   const bg = isBreaking ? '#1A0505' : (MOOD_BG[mood] ?? '#18180F')
 
   ctx.fillStyle = bg
@@ -492,6 +494,16 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
     ctx.font = 'bold 19px "NotoSans", "Inter", sans-serif'
     ctx.letterSpacing = '4px'
     ctx.fillText('BREAKING', W / 2, by + 28)
+    ctx.letterSpacing = '0px'
+  } else if (isLearn101) {
+    ctx.globalAlpha = easeOut(Math.min(1, t * 12))
+    const bw = 150, bh = 40, bx = W / 2 - bw / 2, by = TOP_SAFE + 44
+    ctx.fillStyle = '#2E86AB'
+    roundRect(ctx, bx, by, bw, bh, 6); ctx.fill()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = 'bold 19px "NotoSans", "Inter", sans-serif'
+    ctx.letterSpacing = '3px'
+    ctx.fillText('MCX 101', W / 2, by + 28)
     ctx.letterSpacing = '0px'
   } else {
     ctx.globalAlpha = easeOut(Math.max(0, t * 8 - 0.3))
@@ -947,7 +959,9 @@ const hashtags = [
 
 const briefLink = !isNewsMode
   ? `\nFull brief → bhaavbrief.in/briefs/${data.urlSlug ?? `edition-${padded}`} 👇\n`
-  : `\nbhaavbrief.in 👇\n`
+  : process.env.LEARN_URL
+    ? `\nFull guide → ${process.env.LEARN_URL} 👇\n`
+    : `\nbhaavbrief.in 👇\n`
 
 const caption = [
   copy.hook_caption ?? copy.stat_line ?? data.title,
@@ -978,6 +992,13 @@ appendHistory({
   generated_at:  new Date().toISOString(),
   edition:       edition ?? null,
 })
+
+// Report the resolved output path back to a caller (e.g. generate-learn-reel.mjs,
+// which shells out to this script and can't independently recompute the filename
+// without risking drift from the slugify logic above). ROOT-relative, matching
+// the REEL_FILE convention post-reel-instagram.mjs expects (it does join(ROOT, REEL_FILE)
+// — an absolute path there would double up into a broken, nonexistent path).
+writeFileSync(join(ROOT, '.reel-output-path.txt'), relative(ROOT, OUT_FILE), 'utf8')
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  ✅  ${OUT_FILE}`)

@@ -1,0 +1,239 @@
+{
+  "_note": "Curated per-slug talking points for the daily /learn Instagram Reel (scripts/generate-learn-reel.mjs). Hand-maintained — keep in sync with app/learn/<slug>/page.tsx when page content changes. Numbers here are fed verbatim into the Haiku prompt; do not add anything not already true on the live page.",
+  "topics": {
+    "best-time-to-trade-mcx": {
+      "title": "Best Time to Trade MCX in India",
+      "hook": "MCX gold barely moves in the morning — the real action doesn't start until 7 PM, when COMEX and NYMEX open for the day.",
+      "facts": [
+        "MCX trades 9:00 AM to 11:30 PM IST, a 14.5-hour window",
+        "Best window for gold, silver and crude is 7:00 PM to 11:30 PM IST — when the US market is open",
+        "Base metals (copper, zinc, lead) peak earlier, 3:30 PM to 6:30 PM IST, around LME Ring close",
+        "MCX crude has two peak windows: 6:30–7:30 PM IST at US market open, and Wednesdays 8:00–8:30 PM IST for the EIA inventory report",
+        "Beginners should start in the calmer morning session (9 AM–1 PM IST) before trading the volatile evening session"
+      ],
+      "url": "https://bhaavbrief.in/learn/best-time-to-trade-mcx",
+      "livePriceInstrument": null
+    },
+    "comex-vs-mcx-gold": {
+      "title": "COMEX vs MCX Gold Price",
+      "hook": "MCX gold isn't priced by India at all — it's COMEX New York's dollar price run through a currency and duty formula.",
+      "facts": [
+        "MCX gold price = (COMEX $/oz ÷ 31.1035 × 10 × USD/INR) plus import duties plus a market premium",
+        "Import duties add roughly 12–13%: 6% Basic Customs Duty + 3% AIDC + 3% GST",
+        "A domestic physical market premium of ₹200–600 per 10g is added on top of import parity",
+        "Every ₹1 move in USD/INR shifts MCX gold by roughly ₹1,000–1,300 per 10 grams",
+        "India's July 2024 Budget cut gold BCD from 15% to 6%, and MCX gold fell ₹5,000–6,000/10g on that single day"
+      ],
+      "url": "https://bhaavbrief.in/learn/comex-vs-mcx-gold",
+      "livePriceInstrument": null
+    },
+    "gold-etf-vs-mcx-gold": {
+      "title": "MCX Gold vs Gold ETF",
+      "hook": "MCX gold futures profits are always taxed at your slab rate — up to 30% — while a Gold ETF held over 12 months pays just 12.5%.",
+      "facts": [
+        "MCX gold offers roughly 14–20x leverage; Gold ETFs offer none — 1x price exposure only",
+        "MCX Gold Mini (100g) needs meaningful margin capital; Gold ETFs can be bought for ₹50–100 per unit, or via SIP from ₹500/month",
+        "MCX gold profits are taxed as business income at your slab rate with no LTCG benefit; Gold ETF held over 12 months gets 12.5% LTCG",
+        "MCX gold contracts expire monthly and must be rolled or squared off; Gold ETFs have no expiry",
+        "Sovereign Gold Bonds pay 2.5% p.a. interest and are tax-free at 8-year maturity, but have a 5-year lock-in before early redemption"
+      ],
+      "url": "https://bhaavbrief.in/learn/gold-etf-vs-mcx-gold",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "how-much-money-to-start-mcx-trading": {
+      "title": "How Much Money to Start MCX Trading",
+      "hook": "You can open an MCX Crude Oil Mini position with as little as ₹3,000 in margin — but trading with just the margin amount is how beginners get wiped out on trade one.",
+      "facts": [
+        "MCX Crude Oil Mini (10 barrels) needs ₹3,000–5,000 SPAN margin — the cheapest MCX entry point",
+        "MCX Gold Mini (100g) needs ₹55,000–75,000 SPAN margin",
+        "MCX Silver Micro (1 kg) needs ₹5,000–8,000 SPAN margin",
+        "Recommended practical starting capital is ₹8,000–15,000 for Crude Mini and ₹1,00,000–1,25,000 for Gold Mini — about 1.5–2x the margin",
+        "Always keep 1.5–2x the margin in your account to cover mark-to-market losses"
+      ],
+      "url": "https://bhaavbrief.in/learn/how-much-money-to-start-mcx-trading",
+      "livePriceInstrument": null
+    },
+    "mcx-circuit-limits": {
+      "title": "MCX Circuit Limits",
+      "hook": "If MCX gold moves 3% in a session, trading doesn't stop — it just pauses for 15 minutes before reopening at a wider band.",
+      "facts": [
+        "MCX uses a two-stage circuit system: Stage 1 is ±3% from previous close, Stage 2 is ±6%",
+        "Hitting Stage 1 triggers a 15-minute trading halt, after which trading resumes at the expanded ±6% Stage 2 band",
+        "MCX crude oil and natural gas can expand circuit limits to ±9% in high-volatility periods with SEBI approval",
+        "During a circuit halt, no new orders can be placed and existing pending orders are frozen — but open positions remain active",
+        "Gold and silver rarely hit even the Stage 1 circuit under normal market conditions"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-circuit-limits",
+      "livePriceInstrument": null
+    },
+    "mcx-commodity-tax-india": {
+      "title": "MCX Commodity Trading Tax in India",
+      "hook": "MCX trading profits get zero LTCG benefit — every rupee is taxed as business income at your slab rate, no matter how long you held the position.",
+      "facts": [
+        "MCX commodity futures profits are taxed as non-speculative business income at your income slab rate — up to 30%",
+        "CTT (Commodity Transaction Tax) is 0.01% on the sell value of non-agricultural MCX futures, deducted automatically by your broker",
+        "Commodity traders must file ITR-3, not ITR-1, ITR-2 or ITR-4",
+        "Turnover for tax audit = the absolute sum of all profits and losses; a tax audit is mandatory above ₹10 crore turnover, or below that if profit/loss is under 6% of turnover",
+        "Non-speculative business losses can be carried forward for 8 years but cannot be set off against salary income"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-commodity-tax-india",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-contract-expiry": {
+      "title": "MCX Contract Expiry Dates",
+      "hook": "Forget your MCX gold position past expiry and your broker won't just close it — it can go into a physical gold delivery process you never signed up for.",
+      "facts": [
+        "MCX Gold and Silver contracts expire on the 5th of the delivery month (or the prior trading day if the 5th is a holiday)",
+        "MCX Crude Oil expires on the 19th of the contract month, cash-settled against NYMEX WTI converted at the RBI reference rate",
+        "Copper, Zinc, Aluminium and Lead expire on the last day of the contract month",
+        "DVCAL is the volume-weighted average price MCX uses to cash-settle contracts on expiry day",
+        "Retail traders should square off or roll over 3–4 trading days before expiry, since liquidity drops sharply in the final days"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-contract-expiry",
+      "livePriceInstrument": null
+    },
+    "mcx-gold-contracts": {
+      "title": "MCX Gold Contracts: Standard, Mini, Guinea, Petal",
+      "hook": "MCX doesn't just have one gold contract — it has four, from a 1-gram Petal to a full 1-kilogram Standard, and picking the wrong one can 10x your capital requirement.",
+      "facts": [
+        "MCX Gold Mini lot size is 100 grams, one-tenth the size of the Standard 1 kg contract",
+        "MCX Gold Guinea is an 8-gram contract aimed at small participants and jewellers hedging small orders",
+        "MCX Gold Petal is a 1-gram contract, the smallest MCX gold contract available",
+        "Gold Standard and Gold Mini expire on the 5th of the contract month; Gold Guinea and Gold Petal expire on the last working day of the month",
+        "Physical delivery is compulsory if a position is held to expiry without squaring off, settled in 995 purity gold bars at MCX-accredited vaults in Ahmedabad, Mumbai and Delhi"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-gold-contracts",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-gold-vs-physical-gold": {
+      "title": "MCX Gold vs Physical Gold",
+      "hook": "When you buy MCX gold, you don't own a single gram of gold — you own a contract, and 99.9% of retail traders never take delivery.",
+      "facts": [
+        "MCX gold is a futures contract, not physical gold — the vast majority of retail traders settle in cash, never receiving metal",
+        "Taking physical delivery requires holding through the delivery period, paying the full contract value (not just margin), and receiving Electronic Gold Receipts via an NSDL vault account",
+        "MCX Gold Mini's minimum entry is about ₹55,000–75,000 in margin; physical/digital gold can be bought from as little as ₹500",
+        "MCX gold offers roughly 16x leverage on Gold Mini; physical gold has no leverage",
+        "MCX gold profits are taxed as business income at your slab rate; jewellery/coins get LTCG at 12.5% after 24 months"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-gold-vs-physical-gold",
+      "livePriceInstrument": null
+    },
+    "mcx-lot-sizes": {
+      "title": "MCX Lot Sizes",
+      "hook": "MCX Gold Mini is 100 grams and MCX Crude Mini is just 10 barrels — the 'Mini' contracts exist specifically so retail traders don't need lakhs of rupees just to place one trade.",
+      "facts": [
+        "MCX Gold Mini lot size is 100 grams, one-tenth of the 1 kg Standard contract, quoted in ₹ per 10 grams",
+        "MCX Crude Oil Mini lot size is 10 barrels versus the 100-barrel Standard lot",
+        "MCX Silver contracts come in three sizes: Standard (30 kg), Mini (5 kg) and Micro (1 kg)",
+        "Tick size for MCX Gold is ₹1 per 10g, worth ₹100 per tick on Standard and ₹10 per tick on Mini",
+        "Margin is typically 4–7% of contract value across MCX commodities"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-lot-sizes",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-margin-calculation": {
+      "title": "MCX Margin Calculation",
+      "hook": "Your MCX margin isn't one number — it's SPAN margin set by the exchange plus an extra exposure margin your broker bolts on top, and the two together usually run 6–9% of contract value.",
+      "facts": [
+        "Total initial MCX margin = SPAN margin (typically 4–6% of contract value) + broker exposure margin (typically 1–3%)",
+        "SPAN margin is updated twice daily by MCX using a risk model simulating extreme price scenarios over a one-day horizon",
+        "A margin call triggers when your account balance falls below the maintenance margin, typically 75% of the initial margin",
+        "MTM (mark-to-market) settlement happens every trading day — profits are credited and losses debited to your account overnight, they can't be deferred",
+        "If a margin call isn't met, the broker will square off the position at the prevailing market price"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-margin-calculation",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-margin-calculator": {
+      "title": "MCX Margin Calculator",
+      "hook": "SPAN margin is exactly the same at every SEBI-registered broker — it's the extra exposure margin on top that actually varies and changes what you pay to trade.",
+      "facts": [
+        "SPAN margin (also called initial margin) is the minimum deposit the exchange requires to open an MCX position, calculated daily based on volatility",
+        "Brokers typically add 2–5% exposure margin on top of SPAN as an additional buffer",
+        "MCX Gold Mini (100g) SPAN margin runs approximately 4–5% of contract value",
+        "MCX Crude Oil Mini (10 barrels) SPAN margin is roughly ₹3,000–5,000",
+        "MTM (mark-to-market) losses are debited from the account every evening, not just at contract expiry"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-margin-calculator",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-order-types": {
+      "title": "MCX Order Types Explained",
+      "hook": "Most beginners set their stop-loss as a plain 'SL' order — the one order type that can fail to fill exactly when you need it most, if price gaps past your limit.",
+      "facts": [
+        "MCX supports four main order types: Market, Limit, SL (Stop Loss Limit) and SL-M (Stop Loss Market)",
+        "SL-M requires only a trigger price and always executes as a market order once triggered — recommended for stop losses",
+        "SL requires both a trigger price and a limit price; if the market gaps past the limit, the order may never fill",
+        "If you're long, your stop loss must be a SELL order; if you're short, it must be a BUY order — placing it on the wrong side is a common beginner mistake",
+        "Cover Orders and Bracket Orders typically don't work in the last 20–30 minutes before MCX close"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-order-types",
+      "livePriceInstrument": null
+    },
+    "mcx-rollover": {
+      "title": "MCX Futures Rollover",
+      "hook": "Rolling over an MCX contract isn't free — it costs you the price gap between the two months, and if you wait until the final days, that spread can blow out on thin liquidity.",
+      "facts": [
+        "Rollover means selling your expiring near-month contract and buying the next month simultaneously, to keep exposure without taking delivery",
+        "The optimal rollover window is 5–7 trading days before expiry — for Crude, roll by the 16th–17th; for Gold, roll by the 2nd–3rd",
+        "Rollover cost = (next month price − near month price) × lot size, known as the contango cost",
+        "Failing to roll or square off before expiry triggers physical delivery settlement, requiring special KYC and full contract value payment",
+        "Transaction costs during rollover — brokerage, CTT, exchange charges — are deductible as business expenses in ITR-3"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-rollover",
+      "livePriceInstrument": "MCX_GOLD"
+    },
+    "mcx-trading-hours": {
+      "title": "MCX Trading Hours in India",
+      "hook": "MCX doesn't close at 3:30 PM like the stock market — it stays open until 11:30 PM IST, and most of the real price action happens after most traders have already logged off.",
+      "facts": [
+        "MCX trading hours are 9:00 AM to 11:30 PM IST, Monday to Friday, with no lunch break",
+        "The peak window is 7:00 PM to 11:30 PM IST, when COMEX gold, COMEX silver and NYMEX crude are all active simultaneously",
+        "The EIA Crude Oil Inventory report releases every Wednesday around 8:00–8:30 PM IST and causes sharp moves",
+        "The dead zone is roughly 12:00 PM to 4:30 PM IST, when European markets are quiet and US markets haven't opened",
+        "MCX is closed on Saturdays, Sundays, and roughly 14–16 declared holidays per year, but holds a special Diwali Muhurat trading session"
+      ],
+      "url": "https://bhaavbrief.in/learn/mcx-trading-hours",
+      "livePriceInstrument": null
+    },
+    "what-is-comex": {
+      "title": "What is COMEX?",
+      "hook": "MCX gold doesn't have a price of its own — every number you see is COMEX New York's dollar price, converted to rupees with Indian duties bolted on.",
+      "facts": [
+        "COMEX (Commodity Exchange, Inc.), based in New York, is a division of CME Group and sets the global reference price for gold, silver, copper and palladium",
+        "MCX gold = COMEX price ÷ 31.1035 × 10 × USD/INR × (1 + duties) — a mathematically derived price, not an independent one",
+        "The COMEX electronic (Globex) session runs nearly 24 hours; the highest-volume window for Indian traders is 7:00 PM–11:30 PM IST",
+        "Crude oil and natural gas actually trade on NYMEX, a sister exchange under the same CME Group, not COMEX itself",
+        "Copper, zinc, aluminium, lead and nickel on MCX derive their pricing from the London Metal Exchange (LME), not COMEX"
+      ],
+      "url": "https://bhaavbrief.in/learn/what-is-comex",
+      "livePriceInstrument": null
+    },
+    "which-mcx-commodity-to-trade": {
+      "title": "Which MCX Commodity Should I Trade?",
+      "hook": "With under ₹50,000, most beginners jump straight to gold — but MCX Crude Oil Mini needs as little as ₹3,000–5,000 in margin and is the more accessible starting point.",
+      "facts": [
+        "Under ₹25,000 capital: MCX Crude Oil Mini is recommended for its low margin and manageable ₹710 P&L per 1% move",
+        "₹75,000–1,50,000 capital: MCX Gold Mini is recommended as the most liquid MCX contract, tracking COMEX cleanly",
+        "MCX Silver Micro (1 kg) costs about ₹2,470 per 1% move and is not recommended for beginners due to 3–5% daily volatility",
+        "MCX Natural Gas can see 5–10% daily moves and 15–20% moves several times a year — strongly avoid as a beginner",
+        "Best trading windows: Crude Mini 7:30–9:30 PM IST, Gold Mini 7:30–11:30 PM IST, Copper/Zinc 2:00–6:00 PM IST"
+      ],
+      "url": "https://bhaavbrief.in/learn/which-mcx-commodity-to-trade",
+      "livePriceInstrument": null
+    },
+    "why-usdinr-affects-mcx-gold": {
+      "title": "Why USD/INR Affects MCX Gold Price",
+      "hook": "MCX gold can rise even on a day when international gold is completely flat — all it takes is the rupee weakening against the dollar.",
+      "facts": [
+        "A 1% rupee depreciation adds roughly ₹1,000–1,500 per 10 grams to MCX gold, even if COMEX gold is unchanged",
+        "MCX gold price = (COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + duty factor), where the duty factor is approximately 1.154",
+        "India imports over 700–800 tonnes of gold per year, making the import parity price the anchor for MCX pricing",
+        "On a Gold Mini lot (100g), a 1% rupee move creates roughly ₹10,000–15,000 in P&L impact purely from currency",
+        "Crude oil, silver and MCX base metals are all similarly exposed to USD/INR since they are dollar-priced and largely imported"
+      ],
+      "url": "https://bhaavbrief.in/learn/why-usdinr-affects-mcx-gold",
+      "livePriceInstrument": "MCX_GOLD"
+    }
+  }
+}

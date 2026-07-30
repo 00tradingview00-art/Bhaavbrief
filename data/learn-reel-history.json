@@ -1,0 +1,5 @@
+{
+  "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
+  "lastSlug": null,
+  "log": []
+}
