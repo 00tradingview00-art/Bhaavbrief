@@ -184,7 +184,7 @@ async function ensureMusic(mood) {
 // ── ElevenLabs voiceover ──────────────────────────────────────────────────────
 async function generateVoiceover(script, outputPath) {
   const apiKey  = process.env.ELEVENLABS_API_KEY
-  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'pNInz6obpgDQGcFmaJgB'
+  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'EXAVITQu4vr4xnSDxMaL' // Sarah
   if (!apiKey) { console.warn('  ⚠️  ELEVENLABS_API_KEY not set'); return null }
 
   const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
