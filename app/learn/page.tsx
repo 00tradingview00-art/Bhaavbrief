@@ -188,6 +188,24 @@ const MORE_GUIDES = [
     href: '/learn/mcx-order-types',
     tag: 'Beginner',
   },
+  {
+    title: 'MCX Gold Contracts — Standard, Mini, Guinea & Petal',
+    desc: 'All four MCX gold contracts compared: Gold Standard (1 kg), Gold Mini (100g), Gold Guinea (8g), Gold Petal (1g). Lot sizes, live contract values, margin, and which one to trade.',
+    href: '/learn/mcx-gold-contracts',
+    tag: 'Reference',
+  },
+  {
+    title: 'MCX Margin Calculation Explained',
+    desc: 'SPAN margin vs exposure margin, worked examples for Gold Mini, Crude Mini, Silver and Copper, and how MCX margin calls actually work.',
+    href: '/learn/mcx-margin-calculation',
+    tag: 'Education',
+  },
+  {
+    title: 'MCX Gold vs Gold ETF — Which Is Better?',
+    desc: 'Tax treatment, capital requirements, leverage, liquidity, SIP options, and the LTCG rules — a full comparison for Indian investors deciding between MCX gold futures and a Gold ETF.',
+    href: '/learn/gold-etf-vs-mcx-gold',
+    tag: 'Education',
+  },
 ]
 
 export default function Page() {

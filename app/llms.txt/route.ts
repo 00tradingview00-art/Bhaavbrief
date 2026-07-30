@@ -65,6 +65,9 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 - [MCX Futures Rollover Guide](${BASE}/learn/mcx-rollover): When to rollover, rollover cost calculation, contango vs backwardation
 - [MCX Commodity Tax India](${BASE}/learn/mcx-commodity-tax-india): Business income taxation, CTT, ITR-3 filing, loss carry-forward
 - [MCX Lot Sizes 2026](${BASE}/learn/mcx-lot-sizes): Every contract lot size, tick size, contract value
+- [MCX Gold Contracts](${BASE}/learn/mcx-gold-contracts): Standard (1kg), Mini (100g), Guinea (8g), Petal (1g) — lot sizes, live contract values, margin, which to trade
+- [MCX Margin Calculation Explained](${BASE}/learn/mcx-margin-calculation): SPAN vs exposure margin, worked examples for Gold Mini, Crude Mini, Silver and Copper, how margin calls work
+- [MCX Gold vs Gold ETF](${BASE}/learn/gold-etf-vs-mcx-gold): Tax treatment, capital, leverage, liquidity, SIP options, LTCG rules — futures vs ETF comparison
 
 ## Recent Daily Briefs
 
