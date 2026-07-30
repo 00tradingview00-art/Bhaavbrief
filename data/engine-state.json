@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 142500,
-    "silver": 217673,
-    "crude": 8100,
-    "copper": 1327.85,
-    "natgas": 262.3,
-    "usdinr": 95.65
+    "gold": 142499,
+    "silver": 218708,
+    "crude": 8019,
+    "copper": 1328.8,
+    "natgas": 260.3,
+    "usdinr": 95.76
   },
-  "lastChecked": "2026-07-30T10:08:42.663Z",
+  "lastChecked": "2026-07-30T12:02:31.654Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "360"
   },
   "lastGeoNews": {
-    "mideast": "Middle East war deepens 2026 oil deficit outlook, but 2027 glut still looms - Re",
+    "mideast": "Oil steady as traders assess US-Iran conflict - Reuters",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
