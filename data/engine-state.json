@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 142499,
-    "silver": 218708,
-    "crude": 8019,
-    "copper": 1328.8,
-    "natgas": 260.3,
-    "usdinr": 95.76
+    "gold": 142690,
+    "silver": 219241,
+    "crude": 8006,
+    "copper": 1328.65,
+    "natgas": 260.1,
+    "usdinr": 95.65
   },
-  "lastChecked": "2026-07-30T12:02:31.654Z",
+  "lastChecked": "2026-07-30T12:11:15.557Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "360"
   },
   "lastGeoNews": {
-    "mideast": "Oil steady as traders assess US-Iran conflict - Reuters",
+    "mideast": "Iran Says Two Oil Tankers Ditched Attempt to Transit Hormuz - Crude Oil Prices T",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
