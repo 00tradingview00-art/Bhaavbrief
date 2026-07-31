@@ -68,6 +68,13 @@ const SELF_CONTRADICTION_PATTERNS = [
   /\bnot\s+a\s+contradiction\b/i,
   /\bconsistent\s+with\b/i,
   /\bmatches\s+snapshot\b/i,
+  // "not a contradiction" broadened to tolerate an intervening qualifier —
+  // 2026-07-31: "not a factual contradiction" missed the exact-adjacency
+  // version of this pattern and blocked an otherwise-clean brief.
+  /\bnot\s+a\s+\w+\s+contradiction\b/i,
+  // Bare terminal "No issue." — same failure mode as the "Consistent."
+  // terminal pattern below, anchored to end-of-string for the same reason.
+  /\bno\s+issue\.?\s*$/i,
   /\bwhich\s+matches\b/i,
   /\bconsistent\.?\s*pass\b/i,
   /\bpass\.?\s*$/i,

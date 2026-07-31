@@ -89,6 +89,29 @@ describe("classifySemanticIssue — regression tests for bare '✓ Consistent.' 
   });
 });
 
+describe("classifySemanticIssue — regression test for the 2026-07-31 'not a factual contradiction / No issue.' phrasing", () => {
+  // Real detail string from a blocked generate-brief.yml run (edition #76,
+  // 2026-07-31) — Haiku verified both percentages independently, called the
+  // comparison "valid analysis," explicitly said it was not a contradiction,
+  // and still returned severity:"block". "not a contradiction" missed because
+  // the qualifier "factual" sits between "a" and "contradiction"; the bare
+  // "No issue." close matched no existing pattern.
+  const realNonIssueDetail =
+    "MCX Crude percentage calculation vs stated move: brief states MCX crude 'is down -2.03%' and snapshot changePct = -2.0281, rounding to -2.03% (correct). Brief also states 'tracking WTI's -1.39% slide with additional amplification' — WTI snapshot changePct = -1.3877, rounding to -1.39% (correct). The concept of 'additional amplification' (-2.03% vs -1.39%) is valid analysis and not a factual contradiction. No issue.";
+
+  test("detects self-contradiction and demotes to warn", () => {
+    expect(isSelfContradicted(realNonIssueDetail)).toBe(true);
+    expect(classifySemanticIssue("block", realNonIssueDetail)).toBe("SEMANTIC-WARN");
+  });
+
+  test("a genuine block that happens to contain 'contradiction' elsewhere still blocks", () => {
+    const detail =
+      "Headline states gold at ₹141,900 but the body says ₹138,200 — this is a genuine contradiction between two current-session prices with no support/resistance label on either.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+});
+
 describe("classifySemanticIssue — structural numeric self-verification (valueA/valueB)", () => {
   // The proper fix, 2026-07-29: instead of chasing every new phrasing Haiku
   // invents for "these two numbers match," the checker now also emits the
