@@ -4,6 +4,23 @@
     "topic": "MCX Circuit Limits",
     "content_type": "explainer",
     "mood": "CALM",
+    "hook_caption": "Before your next MCX trade, know when it stops.",
+    "stat_line": "15 minutes. That's how long trading freezes.",
+    "payoff": "Your open position stays live while you're locked out.",
+    "beat1": "Hit a circuit limit, your orders lock. No exits. No entries. Just waiting.",
+    "beat2": "MCX has two stages: ±3% first, then ±6%. Stage 1 halt is 15 minutes.",
+    "beat3": "Gold and silver almost never hit these limits. Crude can expand to ±9% with SEBI approval.",
+    "instagram_id": "18087436019171293",
+    "generated_at": "2026-07-31T16:08:12.753Z",
+    "edition": null,
+    "posted_at": "2026-07-31T16:09:31.566Z",
+    "_note": "manual run, race with the same-day automated cron run below"
+  },
+  {
+    "file": "news-20260731-mcx-circuit-limits",
+    "topic": "MCX Circuit Limits",
+    "content_type": "explainer",
+    "mood": "CALM",
     "hook_caption": "Your gold order just froze. Here's why.",
     "stat_line": "±3% drop triggers 15-minute halt.",
     "payoff": "The halt isn't punishment—it's the market buying you time to think clearly.",
@@ -13,7 +30,8 @@
     "instagram_id": "17980544856109709",
     "generated_at": "2026-07-31T16:06:42.081Z",
     "edition": null,
-    "posted_at": "2026-07-31T16:07:27.853Z"
+    "posted_at": "2026-07-31T16:07:27.853Z",
+    "_note": "automated cron run (generate-learn-reel.yml), raced with the manual run above — same rotation slug picked independently before either had pushed"
   },
   {
     "file": "news-20260731-how-much-money-to-start-mcx-trading",

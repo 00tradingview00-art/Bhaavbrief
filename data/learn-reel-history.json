@@ -6,7 +6,15 @@
       "slug": "mcx-circuit-limits",
       "date": "2026-07-31",
       "file": "public/reels/news-20260731-mcx-circuit-limits.mp4",
-      "generated_at": "2026-07-31T16:06:42.344Z"
+      "generated_at": "2026-07-31T16:08:12.856Z",
+      "_note": "manual run, race with the same-day automated cron run below"
+    },
+    {
+      "slug": "mcx-circuit-limits",
+      "date": "2026-07-31",
+      "file": "public/reels/news-20260731-mcx-circuit-limits.mp4",
+      "generated_at": "2026-07-31T16:06:42.344Z",
+      "_note": "automated cron run (generate-learn-reel.yml), raced with the manual run above — same rotation slug picked independently before either had pushed"
     },
     {
       "slug": "how-much-money-to-start-mcx-trading",
