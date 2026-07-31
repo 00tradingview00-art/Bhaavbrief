@@ -89,6 +89,26 @@ Currency: USD/INR
 Data points per brief: Open, High, Low, Close, % Change, Open Interest, Volume
 Scheduled events tracked: EIA Natural Gas Storage, EIA Petroleum Status, API Crude Inventories, OPEC+/JMMC, US CPI, FOMC, US Non-Farm Payrolls, China NBS/Caixin PMI, USDA WASDE, MPOB Palm Oil, Baker Hughes Rig Count, India CPI/WPI, RBI MPC, Union Budget of India, CFTC Commitment of Traders, MCX contract expiry — see /calendar
 
+## Frequently Asked
+
+Q: Why does MCX gold price differ from COMEX gold price?
+A: MCX Gold (quoted in ₹ per 10 grams) is the COMEX Gold price (quoted in $ per troy ounce) converted through the USD/INR exchange rate, plus India's import duty structure — 6% Basic Customs Duty, 3% Agriculture Infrastructure and Development Cess, and 3% GST. This duty-and-currency stack is why MCX gold trades at a premium (import parity) over the raw USD-to-INR converted COMEX price. Full formula: ${BASE}/learn/comex-vs-mcx-gold
+
+Q: What are the MCX Gold contract lot sizes?
+A: MCX Gold trades in four contract sizes: Gold (1 kg, the standard contract), Gold Mini (100 g), Gold Guinea (8 g), and Gold Petal (1 g) — each with its own margin and minimum capital requirement. Detail and live contract values: ${BASE}/learn/mcx-gold-contracts
+
+Q: What are MCX trading hours in India?
+A: MCX is open 9:00 AM to 11:30 PM IST on trading days (11:55 PM on days the US observes Daylight Saving Time). Session-by-session quality and best times per commodity: ${BASE}/learn/mcx-trading-hours
+
+Q: How much money do I need to start MCX trading?
+A: It depends on the contract — roughly ₹8,000–15,000 of margin for Crude Oil Mini, versus ₹1,00,000+ for a standard Gold contract. Exact capital needed by contract: ${BASE}/learn/how-much-money-to-start-mcx-trading
+
+Q: Why does MCX use the Black-76 model instead of Black-Scholes for options pricing?
+A: MCX options are options on futures contracts, not on spot. Black-76 prices options directly off the futures price and is the standard for commodity and futures options worldwide, whereas Black-Scholes assumes an option on a spot asset with a continuous dividend/cost-of-carry adjustment — Black-76 gives more accurate implied volatility and Greeks for MCX Gold, Silver, Crude Oil and other futures-based options. Live chain: ${BASE}/options
+
+Q: Is BhaavBrief SEBI registered, or does it give trading advice?
+A: No. BhaavBrief is not registered with SEBI or any regulatory authority. It publishes market data and context, not personalized investment advice or buy/sell recommendations. Full methodology and disclaimer: ${BASE}/methodology
+
 ## Contact
 
 Email: brief@bhaavbrief.in
