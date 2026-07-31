@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-076",
+    "href": "/briefs/edition-076",
+    "title": "Gold Holds $4,133 While Crude Drops ₹169 — Two Stories, One Session",
+    "description": "COMEX gold climbs to $4,133 as WTI slides to $82.33, splitting the commodity complex between safe-haven demand and fading supply-fear in oil.",
+    "excerpt": "MCX Gold ₹142380 | Crude ₹7868 | USDINR ₹95.34 — Gold -0.59% | Crude -2.10% | Silver -0.53% Yesterday's Edge — Result: Edition #75 watched whether COMEX GOLD would close above 4,140.5. Rejected ✗, now",
+    "date": "2026-07-31T04:07:04.376Z",
+    "edition": "76",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-075",
     "href": "/briefs/edition-075",
     "title": "Gold Surges Past $4,140 as Crude Reclaims $83 in One Session",
