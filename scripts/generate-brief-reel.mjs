@@ -19,6 +19,8 @@ import { join, dirname, relative }            from 'path'
 import { fileURLToPath }                      from 'url'
 import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
+import { drawSparkline }                      from './lib/charts.mjs'
+import { getCloses }                          from './lib/historyReader.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
@@ -567,7 +569,7 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
 }
 
 // ── Phase 1b: HOOK — price move (animated delta count-up) ────────────────────
-function drawHook(ctx, t, copy, snapshot, mood, edition) {
+function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
@@ -634,6 +636,26 @@ function drawHook(ctx, t, copy, snapshot, mood, edition) {
   const hookLines = wrapText(ctx, copy?.stat_line ?? '', W - 160)
   let hy = 890
   for (const l of hookLines.slice(0, 2)) { ctx.fillText(l, W/2, hy); hy += 70 }
+
+  // 7-day trend sparkline — the big count-up number above is one day's
+  // move; this shows the shape of the week behind it. Not LLM-gated (no
+  // hallucination risk, pure data) — drawSparkline itself no-ops (returns
+  // false) when fewer than 2 real closes exist, e.g. right after an
+  // instrument-token rollover, so this is always safe to call unconditionally.
+  const sparkW = 700, sparkH = 160
+  const sparkX = (W - sparkW) / 2
+  const sparkY = 1080
+  ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.0))
+  ctx.fillStyle   = INK_6
+  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
+  ctx.textAlign   = 'center'
+  ctx.letterSpacing = '2px'
+  ctx.fillText('7-DAY TREND', W / 2, sparkY - 20)
+  ctx.letterSpacing = '0px'
+  drawSparkline(ctx, {
+    x: sparkX, y: sparkY, w: sparkW, h: sparkH,
+    closes, upColor: '#2ECC71', downColor: '#E74C3C', lineWidth: 3,
+  })
 
   // Edition chip — inside bottom safe zone
   ctx.globalAlpha = easeOut(Math.max(0, t * 3 - 1.5))
@@ -811,7 +833,7 @@ function drawCTA(ctx, t, mood, edition) {
 }
 
 // ── Frame dispatcher ──────────────────────────────────────────────────────────
-function renderFrame(frame, copy, data, snapshot, mood) {
+function renderFrame(frame, copy, data, snapshot, mood, hookCloses) {
   const canvas = createCanvas(W, H)
   const ctx    = canvas.getContext('2d')
   // Deliberately NOT coalesced to a placeholder like '?' — null means "no
@@ -827,7 +849,7 @@ function renderFrame(frame, copy, data, snapshot, mood) {
   } else if (frame < HOOK_END) {
     const t = (frame - COVER_END) / (HOOK_END - COVER_END)
     if (copy.content_type === 'price_move') {
-      drawHook(ctx, t, copy, snapshot, mood, edition)
+      drawHook(ctx, t, copy, snapshot, mood, edition, hookCloses)
     } else {
       drawHookConcept(ctx, t, copy, mood, edition)
     }
@@ -925,6 +947,15 @@ console.log(`  beat1:        "${copy.beat1}"`)
 console.log(`  beat2:        "${copy.beat2}"`)
 console.log(`  beat3:        "${copy.beat3}"`)
 console.log(`  payoff:       "${copy.payoff}"`)
+
+// Computed once (not per-frame — the hook phase alone is ~90 frames) for
+// drawHook's 7-day trend sparkline. Only meaningful for price_move reels;
+// dominantMover() is cheap (no I/O, just comparing up to 4 candidates) so
+// calling it here once for its resolved `.key` and again per-frame inside
+// drawHook itself (as it already did before this) is negligible overhead.
+const hookCloses = copy.content_type === 'price_move'
+  ? getCloses(dominantMover(snapshot, copy?.dominant_instrument).key, 7)
+  : []
 console.log(`  voice:        "${copy.voiceover}"\n`)
 
 const VO_FILE = join(ROOT, `.reel-vo-${padded}.mp3`)
@@ -994,7 +1025,7 @@ const t0 = Date.now()
 for (let f = 0; f < TOTAL_FRAMES; f++) {
   writeFileSync(
     join(FRAMES_DIR, `f${String(f).padStart(4,'0')}.png`),
-    renderFrame(f, copy, data, snapshot, mood)
+    renderFrame(f, copy, data, snapshot, mood, hookCloses)
   )
   if (f % 100 === 0) process.stdout.write(`  ${f}/${TOTAL_FRAMES}\n`)
 }
