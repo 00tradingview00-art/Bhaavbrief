@@ -20,6 +20,7 @@ import { checkClaims } from "./lib/claimsCheck.mjs";
 import { appendGateLogEntry } from "./lib/gateLog.mjs";
 import { classifySemanticIssue } from "./lib/semanticDemote.mjs";
 import { checkStaleInstruments } from "./lib/staleInstrumentCheck.mjs";
+import { briefExcerptForSemanticCheck } from "./lib/briefExcerpt.mjs";
 
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
@@ -536,7 +537,7 @@ async function attemptSemanticCheck() {
             `Today's date (IST): ${istDate}\n\n` +
             `MARKET SNAPSHOT (MCX closing prices only — see scope note below):\n${JSON.stringify(snapshot.instruments, null, 2)}\n\n` +
             `DERIVED VALUES (pre-computed — trust these, never recompute them yourself):\n${JSON.stringify(snapshot.derived ?? {}, null, 2)}\n\n` +
-            `DRAFT BRIEF (first 3000 chars):\n${brief.slice(0, 3000)}\n\n` +
+            `DRAFT BRIEF (full text):\n${briefExcerptForSemanticCheck(brief)}\n\n` +
             "SNAPSHOT SCOPE — understand this before flagging anything:\n" +
             "The snapshot contains ONLY: MCX last traded price, previous close, and % change for 9 MCX commodities and 4 currency pairs.\n" +
             "The snapshot does NOT contain (these come from separate sources and are always valid):\n" +
