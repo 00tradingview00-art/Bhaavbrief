@@ -1130,7 +1130,13 @@ args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv
   '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', OUT_FILE)
 
 execFileSync('ffmpeg', args, { stdio: 'pipe' })
-rmSync(FRAMES_DIR, { recursive: true })
+// KEEP_FRAMES=1 leaves the rendered PNGs behind for visual inspection (e.g.
+// via the Read tool on specific f%04d.png files) after a real end-to-end
+// run — the standalone scripts/dev-preview-chart.mjs harness is faster for
+// iterating on a single chart, but a real run is still what confirms actual
+// Haiku-emitted chart data renders correctly in situ.
+if (!process.env.KEEP_FRAMES) rmSync(FRAMES_DIR, { recursive: true })
+else console.log(`  🗂️   KEEP_FRAMES set — frames left in ${FRAMES_DIR}`)
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
 // Caption

@@ -20,3 +20,13 @@ data/last-gate-result.json
 # validation — debug artifacts, not canonical data. Job logs already
 # capture the specific violations; these just aren't meant to be committed.
 data/quarantine/
+
+# scripts/dev-preview-chart.mjs's throwaway output — regenerate on demand,
+# never meant to be committed.
+.dev-chart-preview.png
+
+# scripts/generate-brief-reel.mjs writes this to hand its resolved output
+# path back to a caller (scripts/generate-learn-reel.mjs) that shells out to
+# it — normally consumed and deleted by that caller, but left behind as a
+# stray untracked file if the script is ever run standalone/interrupted.
+.reel-output-path.txt
