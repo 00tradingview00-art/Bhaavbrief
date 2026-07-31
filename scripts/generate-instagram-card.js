@@ -3,6 +3,8 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import matter from 'gray-matter'
+import { drawSparkline } from './lib/charts.mjs'
+import { getCloses } from './lib/historyReader.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const envFile = join(__dirname, '../.env.local')
@@ -165,29 +167,39 @@ async function main() {
   if (prices) {
     const colW = (W - PAD * 2) / 3
     const cols = [
-      { label: 'MCX GOLD',   d: prices.gold,   x: PAD },
-      { label: 'MCX CRUDE',  d: prices.crude,  x: PAD + colW },
-      { label: 'MCX SILVER', d: prices.silver, x: PAD + colW * 2 },
+      { label: 'MCX GOLD',   key: 'MCX_GOLD',   d: prices.gold,   x: PAD },
+      { label: 'MCX CRUDE',  key: 'MCX_CRUDE',  d: prices.crude,  x: PAD + colW },
+      { label: 'MCX SILVER', key: 'MCX_SILVER', d: prices.silver, x: PAD + colW * 2 },
     ]
 
     for (const col of cols) {
       ctx.fillStyle = INK_4
       ctx.font = sans(17, 'bold')
       ctx.letterSpacing = '2px'
-      ctx.fillText(col.label, col.x, priceTop + 46)
+      ctx.fillText(col.label, col.x, priceTop + 42)
       ctx.letterSpacing = '0px'
 
       ctx.fillStyle = INK
       ctx.font = sans(38, 'bold')
       const p = col.d?.price
-      ctx.fillText(p != null ? `₹${Math.round(p).toLocaleString('en-IN')}` : '—', col.x, priceTop + 96)
+      ctx.fillText(p != null ? `₹${Math.round(p).toLocaleString('en-IN')}` : '—', col.x, priceTop + 84)
+
+      // 7-day sparkline — shows shape; the % text below keeps the precise
+      // number. Falls back to no sparkline (charts.mjs returns false) when
+      // fewer than 2 days of real history exist for this instrument, e.g.
+      // right after a fresh instrument-token rollover.
+      drawSparkline(ctx, {
+        x: col.x, y: priceTop + 94, w: colW - 24, h: 26,
+        closes: getCloses(col.key, 7),
+        upColor: GREEN, downColor: RED, lineWidth: 2, showArea: true, showDot: true,
+      })
 
       const pct = col.d?.pct
       if (pct != null) {
         const n = parseFloat(pct)
         ctx.fillStyle = n >= 0 ? GREEN : RED
         ctx.font = sans(24)
-        ctx.fillText(`${n >= 0 ? '▲' : '▼'} ${Math.abs(n).toFixed(2)}%`, col.x, priceTop + 134)
+        ctx.fillText(`${n >= 0 ? '▲' : '▼'} ${Math.abs(n).toFixed(2)}%`, col.x, priceTop + 150)
       }
     }
   } else {
