@@ -19,8 +19,9 @@ import { join, dirname, relative }            from 'path'
 import { fileURLToPath }                      from 'url'
 import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
-import { drawSparkline }                      from './lib/charts.mjs'
+import { drawSparkline, drawIconArray, drawComparisonBars } from './lib/charts.mjs'
 import { getCloses }                          from './lib/historyReader.mjs'
+import { validateChart }                      from './lib/chartValidation.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
@@ -115,6 +116,7 @@ Rules:
 - Vary your hook structure from past reels
 - The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
 - If today's move is small or flat, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
+- If one beat states two directly comparable numbers already present in the market data or excerpt above (a ratio, margin, or "X vs Y" comparison), fill in the chart field naming that beat and the two numbers. Never invent a number or ratio that isn't already stated above. Use "icon_array" only when both numbers are whole numbers ≤20 (e.g. pick one concrete value like 17 from a stated range like "14-20x"). Use "two_bar" for any other comparable pair (rupee amounts, percentages, larger counts). If no beat has a genuinely comparable pair, set chart.type to "none" — do not force a chart onto content that isn't shaped like one.
 
 Return ONLY this JSON:
 {
@@ -132,7 +134,14 @@ Return ONLY this JSON:
 
   "payoff": "The most surprising or counter-intuitive fact. Under 12 words. Makes people think.",
 
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm. Contractions only. Sentences 1-2: everyday impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm. Contractions only. Sentences 1-2: everyday impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause.",
+
+  "chart": {
+    "type": "icon_array | two_bar | none",
+    "beat": 1 or 2 or 3,
+    "icon_array": { "filled": integer, "total": integer, "unit_label": "short label, e.g. 'x leverage'" } or null,
+    "two_bar": { "labelA": string, "valueA": number, "labelB": string, "valueB": number, "unit": "e.g. '₹' or 'x'" } or null
+  }
 }`,
     }],
   })
@@ -179,6 +188,7 @@ Rules:
 - Vary your hook and payoff angle from past reels listed above
 - The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
 - If the topic has no sharp move, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
+- If one beat states two directly comparable numbers already present in the facts/context above (a ratio, margin, or "X vs Y" comparison — this is common in Learn-topic facts, e.g. leverage ratios and margin requirements), fill in the chart field naming that beat and the two numbers. Never invent a number or ratio that isn't already stated above. Use "icon_array" only when both numbers are whole numbers ≤20 (e.g. pick one concrete value like 17 from a stated range like "14-20x"). Use "two_bar" for any other comparable pair (rupee amounts, percentages, larger counts). If no beat has a genuinely comparable pair, set chart.type to "none" — do not force a chart onto content that isn't shaped like one.
 
 Return ONLY this JSON:
 {
@@ -196,7 +206,14 @@ Return ONLY this JSON:
 
   "payoff": "The most counter-intuitive or surprising angle. Under 12 words. Makes people think.",
 
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause."
+  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause.",
+
+  "chart": {
+    "type": "icon_array | two_bar | none",
+    "beat": 1 or 2 or 3,
+    "icon_array": { "filled": integer, "total": integer, "unit_label": "short label, e.g. 'x leverage'" } or null,
+    "two_bar": { "labelA": string, "valueA": number, "labelB": string, "valueB": number, "unit": "e.g. '₹' or 'x'" } or null
+  }
 }`,
     }],
   })
@@ -669,7 +686,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
 }
 
 // ── Phase 2-4: BEAT screens — one idea per screen, lines animate in ───────────
-function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
+function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null) {
   const PAD = 68
 
   ctx.fillStyle = CREAM
@@ -706,15 +723,24 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
   ctx.fillStyle = GOLD
   roundRect(ctx, barX, barY, Math.max(0, fill), barH, 2); ctx.fill()
 
-  // Main text — large, vertically centered in safe zone, lines animate in
+  // Main text — lines animate in. When this beat hosts a chart, text is
+  // vertically centered within the TOP ~45% of the content region instead
+  // of the whole thing, leaving the bottom for the chart — a layout change
+  // inside drawBeat rather than a new phase, so beat pacing/animation stays
+  // unified with the no-chart case.
+  const hasChart   = !!chart && chart.beat === beatIndex && chart.type !== 'none'
+  const contentTop = HEADER_BOTTOM + 20
+  const contentBot = BOT_SAFE - 80
+  const fullH       = contentBot - contentTop
+  const textBot     = hasChart ? contentTop + fullH * 0.45 : contentBot
+  const chartTop    = hasChart ? textBot + 60 : null
+
   ctx.font = 'bold 56px "NotoSans", "Inter", sans-serif'
   ctx.textAlign = 'left'
   const lines = wrapText(ctx, text, W - PAD * 2)
   const lineHeight = 76
   const totalTextH = lines.length * lineHeight
-  const contentTop = HEADER_BOTTOM + 20
-  const contentBot = BOT_SAFE - 80
-  const startY = contentTop + (contentBot - contentTop - totalTextH) / 2 + lineHeight
+  const startY = contentTop + (textBot - contentTop - totalTextH) / 2 + lineHeight
 
   lines.forEach((line, i) => {
     // Each line appears at t = i/lines.length * 0.55, fully visible by t=0.7
@@ -729,6 +755,36 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
   })
 
   ctx.globalAlpha = 1
+
+  // Chart — fades in after the text lines have mostly settled (t≈0.7 per
+  // the comment above), not simultaneously with them.
+  if (hasChart) {
+    const chartX = PAD, chartW = W - PAD * 2, chartH = contentBot - chartTop
+    ctx.globalAlpha = easeOut(Math.max(0, t * 2.5 - 0.6))
+    ctx.textAlign = 'center'
+
+    if (chart.type === 'icon_array') {
+      drawIconArray(ctx, {
+        x: chartX, y: chartTop, w: chartW,
+        filled: chart.icon_array.filled, total: chart.icon_array.total,
+        unitLabel: chart.icon_array.unit_label ?? '',
+        filledColor: GOLD, emptyColor: BORDER, textColor: INK,
+      })
+    } else if (chart.type === 'two_bar') {
+      const tb = chart.two_bar
+      const unit = tb.unit ?? ''
+      const fmt = v => unit === '₹' ? `₹${Math.round(v).toLocaleString('en-IN')}` : `${v.toLocaleString('en-IN')}${unit}`
+      drawComparisonBars(ctx, {
+        x: chartX, y: chartTop, w: chartW, h: chartH,
+        bars: [
+          { label: tb.labelA, value: tb.valueA, fmt, color: GOLD, emphasis: true },
+          { label: tb.labelB, value: tb.valueB, fmt, color: INK_4 },
+        ],
+        mutedColor: INK_4, textColor: INK,
+      })
+    }
+    ctx.globalAlpha = 1
+  }
 }
 
 // ── Phase 5: PAYOFF ───────────────────────────────────────────────────────────
@@ -854,11 +910,11 @@ function renderFrame(frame, copy, data, snapshot, mood, hookCloses) {
       drawHookConcept(ctx, t, copy, mood, edition)
     }
   } else if (frame < BEAT1_END) {
-    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood)
+    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood, copy.chart)
   } else if (frame < BEAT2_END) {
-    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood)
+    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood, copy.chart)
   } else if (frame < BEAT3_END) {
-    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood)
+    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood, copy.chart)
   } else if (frame < PAYOFF_END) {
     drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood)
   } else {
@@ -940,6 +996,20 @@ if (history.length) console.log(`  📚  Learning from ${Math.min(history.length
 const copy = isNewsMode
   ? await extractNewsReelCopy(TOPIC, CONTEXT, snapshot, history)
   : await extractReelCopy({ data, content }, snapshot, history)
+
+// Deterministic guard on the chart Haiku just emitted — see
+// scripts/lib/chartValidation.mjs's header for why a prompt instruction
+// alone isn't trusted to keep a number from being fabricated. Demotes to
+// type:'none' (drawBeat falls back to its existing plain-text rendering)
+// if the structure is invalid or the numbers don't trace back to the
+// source material. Uses the full brief content (not the 1000-char excerpt
+// actually sent to Haiku) / full CONTEXT text as the source-of-truth pool —
+// a superset of what the prompt saw, so this can only be more permissive
+// toward genuine numbers, never reject something Haiku legitimately saw.
+copy.chart = validateChart(copy.chart, {
+  facts: [isNewsMode ? (CONTEXT ?? '') : content],
+  snapshot,
+})
 console.log(`  type:         "${copy.content_type}"`)
 console.log(`  hook_caption: "${copy.hook_caption}"`)
 console.log(`  stat:         "${copy.stat_line}"`)
@@ -947,6 +1017,7 @@ console.log(`  beat1:        "${copy.beat1}"`)
 console.log(`  beat2:        "${copy.beat2}"`)
 console.log(`  beat3:        "${copy.beat3}"`)
 console.log(`  payoff:       "${copy.payoff}"`)
+console.log(`  chart:        ${copy.chart?.type ?? 'none'}${copy.chart?.type !== 'none' ? ` (beat ${copy.chart.beat})` : ''}`)
 
 // Computed once (not per-frame — the hook phase alone is ~90 frames) for
 // drawHook's 7-day trend sparkline. Only meaningful for price_move reels;
