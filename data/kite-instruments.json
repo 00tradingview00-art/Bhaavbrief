@@ -50,27 +50,27 @@
     "symbol": "NICKEL26AUGFUT",
     "expiry": "2026-08-19"
   },
-  "updatedAt": "2026-07-31T06:23:55.723Z",
+  "updatedAt": "2026-07-31T06:34:27.169Z",
   "currencies": {
     "usdinr": {
-      "token": 323843,
-      "symbol": "USDINR26JULFUT",
-      "expiry": "2026-07-29"
+      "token": 282371,
+      "symbol": "USDINR26AUGFUT",
+      "expiry": "2026-08-27"
     },
     "eurinr": {
-      "token": 298243,
-      "symbol": "EURINR26JULFUT",
-      "expiry": "2026-07-29"
+      "token": 263171,
+      "symbol": "EURINR26AUGFUT",
+      "expiry": "2026-08-27"
     },
     "gbpinr": {
-      "token": 303107,
-      "symbol": "GBPINR26JULFUT",
-      "expiry": "2026-07-29"
+      "token": 278531,
+      "symbol": "GBPINR26AUGFUT",
+      "expiry": "2026-08-27"
     },
     "jpyinr": {
-      "token": 322563,
-      "symbol": "JPYINR26JULFUT",
-      "expiry": "2026-07-29"
+      "token": 281859,
+      "symbol": "JPYINR26AUGFUT",
+      "expiry": "2026-08-27"
     }
   }
 }
