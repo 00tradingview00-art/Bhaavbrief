@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "comex-vs-mcx-gold",
+  "lastSlug": "how-much-money-to-start-mcx-trading",
   "log": [
+    {
+      "slug": "how-much-money-to-start-mcx-trading",
+      "date": "2026-07-31",
+      "file": "public/reels/news-20260731-how-much-money-to-start-mcx-trading.mp4",
+      "generated_at": "2026-07-31T14:11:13.827Z"
+    },
     {
       "slug": "comex-vs-mcx-gold",
       "date": "2026-07-30",

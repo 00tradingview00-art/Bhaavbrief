@@ -280,26 +280,42 @@ async function generateVoiceover(script, outputPath) {
 // ── Canvas constants ──────────────────────────────────────────────────────────
 const W = 1080, H = 1920, FPS = 30
 
-// Timing in seconds
+// Timing in seconds — these are the PLANNED baseline, used for the initial
+// console log and as the fallback when there's no voiceover to measure.
+// They get rescaled to the real ElevenLabs audio length once it's generated
+// (see "Voiceover-driven timing rescale" below) — a duration assumed here at
+// script-writing time is a guess; the TTS provider's actual output is the
+// ground truth. Previously this was fixed and the render loop always
+// produced exactly TOTAL_FRAMES frames while the audio mix hard-trimmed the
+// voiceover to fit (`atrim=0:${DUR-1.5}`), silently cutting off whatever the
+// voice hadn't finished saying by then — the same bug class documented in
+// generate-ivix-reel.mjs's history, now fixed at the source (this file is
+// the shared engine both scripts/generate-brief-reel.mjs's own callers and
+// scripts/generate-learn-reel.mjs render through).
 const COVER_DUR  = 0     // cover removed — hook renders from frame 0 (first-frame value rule);
                          // drawCover() kept below but never dispatched while this is 0
-const HOOK_DUR   = 3.0
-const BEAT1_DUR  = 8.0
-const BEAT2_DUR  = 8.0
-const BEAT3_DUR  = 7.0
-const PAYOFF_DUR = 5.0
-const CTA_DUR    = 4.0
+let   HOOK_DUR   = 3.0
+let   BEAT1_DUR  = 8.0
+let   BEAT2_DUR  = 8.0
+let   BEAT3_DUR  = 7.0
+let   PAYOFF_DUR = 5.0
+const CTA_DUR    = 4.0   // silent/music-only outro tail — not part of the spoken script, stays fixed
 const TOTAL_DUR  = COVER_DUR + HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
+// The portion of the video the voiceover actually speaks over (everything
+// except the silent CTA outro) — rescaling target for the real audio length.
+const SPEECH_DUR_BASELINE = HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR
 
-// Frame boundaries
-const COVER_END  = Math.round(COVER_DUR  * FPS)
-const HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
-const BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
-const BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
-const BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
-const PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
-const CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
-const TOTAL_FRAMES = CTA_END
+// Frame boundaries — recomputed after the rescale below; declared here as
+// the planned baseline so renderFrame()'s dispatch logic has valid values
+// even when there's no voiceover (silent fallback keeps the old fixed pacing).
+let COVER_END  = Math.round(COVER_DUR  * FPS)
+let HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
+let BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
+let BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
+let BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
+let PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
+let CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
+let TOTAL_FRAMES = CTA_END
 
 // Palette
 const CREAM  = '#FAFAF6'
@@ -625,7 +641,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition) {
   roundRect(ctx, W/2 - 80, BOT_SAFE - 56, 160, 42, 21); ctx.fill()
   ctx.fillStyle   = INK_6
   ctx.font        = '18px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(`Edition #${edition}`, W/2, BOT_SAFE - 26)
+  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W/2, BOT_SAFE - 26)
 
   ctx.globalAlpha = 1
 }
@@ -648,21 +664,25 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood) {
   ctx.fillText(`0${beatIndex} / 03`, W - PAD, TOP_SAFE + 28)
   ctx.letterSpacing = '0px'
 
-  // Progress bar — inside bottom safe zone
-  const barY = BOT_SAFE - 36, barH = 5, barX = PAD, barW = W - PAD * 2
+  // Footer — inside bottom safe zone
+  ctx.strokeStyle = BORDER; ctx.lineWidth = 1
+  ctx.beginPath(); ctx.moveTo(PAD, BOT_SAFE - 58); ctx.lineTo(W - PAD, BOT_SAFE - 58); ctx.stroke()
+  ctx.fillStyle = INK_4; ctx.font = '18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'left'
+  ctx.fillText('bhaavbrief.in', PAD, BOT_SAFE - 38)
+  ctx.fillStyle = GOLD; ctx.font = 'bold 18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'right'
+  ctx.fillText('Daily MCX Intelligence', W - PAD, BOT_SAFE - 38)
+
+  // Progress bar — moved below the footer text (previously sat at
+  // BOT_SAFE-36, only 6px from the footer text's baseline at BOT_SAFE-30,
+  // so the gold fill visually struck through "bhaavbrief.in" — confirmed via
+  // a real rendered frame, 2026-07-31). Now sits in the clear ~20px gap
+  // between the footer and the true bottom safe-zone edge.
+  const barY = BOT_SAFE - 14, barH = 5, barX = PAD, barW = W - PAD * 2
   ctx.fillStyle = BORDER
   roundRect(ctx, barX, barY, barW, barH, 2); ctx.fill()
   const fill = ((beatIndex - 1) / 3 + t / 3) * barW
   ctx.fillStyle = GOLD
   roundRect(ctx, barX, barY, Math.max(0, fill), barH, 2); ctx.fill()
-
-  // Footer — inside bottom safe zone
-  ctx.strokeStyle = BORDER; ctx.lineWidth = 1
-  ctx.beginPath(); ctx.moveTo(PAD, BOT_SAFE - 58); ctx.lineTo(W - PAD, BOT_SAFE - 58); ctx.stroke()
-  ctx.fillStyle = INK_4; ctx.font = '18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'left'
-  ctx.fillText('bhaavbrief.in', PAD, BOT_SAFE - 30)
-  ctx.fillStyle = GOLD; ctx.font = 'bold 18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'right'
-  ctx.fillText('Daily MCX Intelligence', W - PAD, BOT_SAFE - 30)
 
   // Main text — large, vertically centered in safe zone, lines animate in
   ctx.font = 'bold 56px "NotoSans", "Inter", sans-serif'
@@ -711,7 +731,13 @@ function drawPayoff(ctx, t, copy, mood) {
   ctx.strokeStyle = '#FFFFFF15'; ctx.lineWidth = 1
   ctx.beginPath(); ctx.moveTo(140, TOP_SAFE + 46); ctx.lineTo(W-140, TOP_SAFE + 46); ctx.stroke()
 
-  // Payoff text — centered within safe zone
+  // Payoff text — centered within safe zone. ctx.font MUST be set to the
+  // actual rendering size before wrapText() measures it — it was previously
+  // still 'bold 24px' here (leftover from the wordmark above), so lines got
+  // wrapped as if they'd render at 24px, then were actually drawn at 68px:
+  // massive horizontal overflow off both edges of the canvas. Confirmed via
+  // a real rendered frame (2026-07-31) before this fix.
+  ctx.font = 'bold 68px "NotoSans", "Inter", sans-serif'
   const payLines = wrapText(ctx, copy.payoff ?? '', W - 140)
   const lineH    = 90
   const safeH    = BOT_SAFE - TOP_SAFE
@@ -779,7 +805,7 @@ function drawCTA(ctx, t, mood, edition) {
   ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.2))
   ctx.fillStyle   = INK_4
   ctx.font        = '20px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(`Edition #${edition}`, W/2, midY + 156)
+  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W/2, midY + 156)
 
   ctx.globalAlpha = 1
 }
@@ -788,7 +814,13 @@ function drawCTA(ctx, t, mood, edition) {
 function renderFrame(frame, copy, data, snapshot, mood) {
   const canvas = createCanvas(W, H)
   const ctx    = canvas.getContext('2d')
-  const edition = data.edition ?? '?'
+  // Deliberately NOT coalesced to a placeholder like '?' — null means "no
+  // edition" (news/topic/learn-reel mode), and every draw*() function below
+  // checks `edition != null` to show 'Market Update' instead. Coalescing
+  // here to '?' made that check always true and rendered a literal
+  // "Edition #?" on screen for every non-brief reel — confirmed via a real
+  // rendered frame, 2026-07-31.
+  const edition = data.edition ?? null
 
   if (frame < COVER_END) {
     drawCover(ctx, copy, mood, edition)
@@ -900,6 +932,54 @@ console.log('🎙️   Generating voiceover...')
 const voiceoverPath = copy.voiceover ? await generateVoiceover(copy.voiceover, VO_FILE) : null
 console.log()
 
+// ── Voiceover-driven timing rescale ────────────────────────────────────────
+// The planned HOOK/BEAT1-3/PAYOFF durations above are a guess made before
+// the voiceover exists. Measure what ElevenLabs actually produced and
+// rescale those phases (proportionally, keeping their relative weight) to
+// match — this is what actually prevents the video cutting the voiceover
+// off, rather than hoping the guess was close enough. CTA_DUR is excluded
+// on purpose: it's a silent/music-only outro, not part of the spoken script.
+let measuredVoiceDur = null
+if (voiceoverPath && existsSync(voiceoverPath)) {
+  try {
+    const probeOut = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', voiceoverPath],
+      { encoding: 'utf8' }
+    ).trim()
+    const probed = parseFloat(probeOut)
+    if (Number.isFinite(probed) && probed > 0) {
+      measuredVoiceDur = probed
+      // Clamp the rescale factor — a wildly small/large factor almost
+      // certainly means something else went wrong (empty/garbled audio),
+      // not a legitimately fast/slow read of this particular script.
+      const rawScale = probed / SPEECH_DUR_BASELINE
+      const scale    = clamp(rawScale, 0.7, 1.8)
+      if (Math.abs(rawScale - scale) > 0.01) {
+        console.warn(`  ⚠️  Voiceover implies a ${rawScale.toFixed(2)}x scale — clamped to ${scale.toFixed(2)}x (measured ${probed.toFixed(1)}s)`)
+      }
+      HOOK_DUR   *= scale
+      BEAT1_DUR  *= scale
+      BEAT2_DUR  *= scale
+      BEAT3_DUR  *= scale
+      PAYOFF_DUR *= scale
+      COVER_END  = Math.round(COVER_DUR  * FPS)
+      HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
+      BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
+      BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
+      BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
+      PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
+      CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
+      TOTAL_FRAMES = CTA_END
+      console.log(`  🎯  Voiceover measured ${probed.toFixed(1)}s (planned ${SPEECH_DUR_BASELINE.toFixed(1)}s) — video rescaled to ${(TOTAL_FRAMES / FPS).toFixed(1)}s total`)
+    } else {
+      console.warn(`  ⚠️  ffprobe returned an unusable duration ("${probeOut}") — keeping planned ${TOTAL_DUR.toFixed(1)}s timing`)
+    }
+  } catch (e) {
+    console.warn(`  ⚠️  ffprobe failed on the voiceover file (${e.message}) — keeping planned ${TOTAL_DUR.toFixed(1)}s timing`)
+  }
+}
+
 const FRAMES_DIR = join(ROOT, '.reel-frames-tmp')
 const OUT_DIR    = join(ROOT, 'public/reels')
 const OUT_FILE   = join(OUT_DIR, `${filePrefix}-${padded}.mp4`)
@@ -925,10 +1005,16 @@ const DUR  = TOTAL_FRAMES / FPS
 const args = ['-y', '-framerate', String(FPS), '-i', join(FRAMES_DIR, 'f%04d.png')]
 
 if (voiceoverPath) {
+  // Trim the voice track to its own real measured length (not a guessed
+  // DUR-1.5) — DUR was itself derived from this same measurement above, so
+  // this no longer cuts off speech; it's just a safety bound against the
+  // odd extra frame ffmpeg's own decode might disagree with ffprobe on.
+  // Falls back to the old DUR-1.5 heuristic only if measurement failed.
+  const voiceTrim = measuredVoiceDur != null ? Math.min(measuredVoiceDur + 0.1, DUR) : DUR - 1.5
   args.push('-i', musicPath, '-i', voiceoverPath,
     '-filter_complex',
     `[1:a]atrim=0:${DUR},afade=t=out:st=${DUR-2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
-    `[2:a]atrim=0:${DUR-1.5},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
+    `[2:a]atrim=0:${voiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
     `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
     '-map', '0:v', '-map', '[aout]'
   )
