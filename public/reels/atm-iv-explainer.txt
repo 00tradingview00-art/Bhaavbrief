@@ -1,0 +1,11 @@
+The option chain shows 20 IV% numbers. Only one prices the move: ATM IV. 📈
+
+It's the implied vol at the strike closest to the futures price — and it carries the most vega in the whole chain, so it swings premiums more than any other strike.
+
+Multiply Price × ATM IV × √(days to expiry ÷ 365) and you get the Expected Move — the range the market is pricing before that date.
+
+It runs up into Fed / OPEC+ / RBI dates and crushes right after. Compare it to realized vol (AAV) and you know if options are cheap or expensive — that's BhaavBrief's Vol Premium metric.
+
+Series 2 of our options-education line. Series 1 was iVIX — this is what feeds it.
+
+#MCX #OptionsTrading #ImpliedVolatility #ATMIV #ExpectedMove #IndianCommodities #BhaavBrief

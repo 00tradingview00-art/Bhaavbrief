@@ -72,6 +72,18 @@ const FAQ_SCHEMA = {
   ],
 }
 
+const WEBAPP_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'MCX Option Chain',
+  url: 'https://bhaavbrief.in/options',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any (web browser)',
+  description: 'Live MCX option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio for Gold, Silver, Crude Oil, Natural Gas and Copper.',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+  provider: { '@id': 'https://bhaavbrief.in/#organization' },
+}
+
 const VALID_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']
 const INSTRUMENT_LABELS: Record<string, string> = {
   GOLD: 'Gold', SILVER: 'Silver', CRUDEOIL: 'Crude Oil', NATURALGAS: 'Natural Gas', COPPER: 'Copper',
@@ -92,6 +104,7 @@ export default async function OptionsPage({
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBAPP_SCHEMA) }} />
 
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>

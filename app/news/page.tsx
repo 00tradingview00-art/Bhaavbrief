@@ -96,8 +96,31 @@ export default async function NewsPage() {
       })),
   ]
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type':     'CollectionPage',
+        '@id':       'https://bhaavbrief.in/news',
+        name:        'MCX Commodity Intelligence Feed',
+        description: 'Real-time MCX commodity intelligence — why gold, crude oil, silver and copper are moving.',
+        url:         'https://bhaavbrief.in/news',
+      },
+      {
+        '@type': 'ItemList',
+        itemListElement: serverItems.slice(0, 20).map((item, i) => ({
+          '@type':  'ListItem',
+          position: i + 1,
+          url:      `https://bhaavbrief.in${item.href}`,
+          name:     item.title,
+        })),
+      },
+    ],
+  }
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <SectionTabs
         active="/news"
         tabs={[

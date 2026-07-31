@@ -31,6 +31,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { meta } = article
   const canonical = `https://bhaavbrief.in/articles/${slug}`
+  const ogParams = new URLSearchParams({
+    title: meta.title,
+    tags:  (meta.tags ?? []).slice(0, 3).join(','),
+    type:  'flash',
+  })
+  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
 
   return {
     title:       meta.title,
@@ -44,11 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type:        'article',
       publishedTime: meta.date,
       tags:        meta.tags,
+      images:      [{ url: ogImage, width: 1200, height: 630, alt: meta.title }],
     },
     twitter: {
       card:        'summary_large_image',
       title:       meta.title,
       description: meta.description,
+      images:      [ogImage],
     },
   }
 }
@@ -67,6 +75,12 @@ export default async function ArticlePage({ params }: Props) {
 
   // JSON-LD schema for SEO
   const articleUrl = `https://bhaavbrief.in/articles/${slug}`
+  const ogParams = new URLSearchParams({
+    title: meta.title,
+    tags:  (meta.tags ?? []).slice(0, 3).join(','),
+    type:  'flash',
+  })
+  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -77,6 +91,7 @@ export default async function ArticlePage({ params }: Props) {
         datePublished: meta.date,
         dateModified:  meta.date,
         url:           articleUrl,
+        image:         [{ '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 }],
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
         author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' }],
         publisher: {

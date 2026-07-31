@@ -42,10 +42,32 @@ const AUDIENCES = [
   { icon: '○', label: 'Analysts & Students',   desc: 'Learning futures, options, and commodity economics through real MCX market context every weekday.' },
 ]
 
+const ABOUT_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type':     'AboutPage',
+      '@id':       'https://bhaavbrief.in/about',
+      url:         'https://bhaavbrief.in/about',
+      name:        'About BhaavBrief',
+      description: 'BhaavBrief publishes daily MCX commodity briefs at 9:30 AM — gold, silver, crude, copper, natgas — with global context, open interest, and what moves each price.',
+      mainEntity:  { '@id': 'https://bhaavbrief.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home',  item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'About' },
+      ],
+    },
+  ],
+}
+
 export default async function AboutPage() {
   const briefs = await getAllBriefs()
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_SCHEMA) }} />
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '3rem 1.25rem 4rem' }}>
 
         {/* Header */}

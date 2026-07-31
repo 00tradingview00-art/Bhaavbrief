@@ -15,8 +15,31 @@ export const metadata: Metadata = {
 export default async function EventsIndexPage() {
   const events = await getAllEvents()
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type':     'CollectionPage',
+        '@id':       'https://bhaavbrief.in/events',
+        name:        'Event Results — MCX Economic Calendar Outcomes',
+        description: 'A permanent archive of scheduled macro events — EIA inventories, FOMC, CPI — and exactly how MCX commodity prices reacted at time of print.',
+        url:         'https://bhaavbrief.in/events',
+      },
+      {
+        '@type': 'ItemList',
+        itemListElement: events.slice(0, 20).map((e, i) => ({
+          '@type':   'ListItem',
+          position:  i + 1,
+          url:       `https://bhaavbrief.in/events/${e.slug}`,
+          name:      e.title,
+        })),
+      },
+    ],
+  }
+
   return (
     <div style={{ maxWidth: 780 }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <h1 style={{
         fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500,
         color: 'var(--ink)', margin: '0 0 8px',

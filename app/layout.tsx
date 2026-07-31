@@ -96,6 +96,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         name: 'BhaavBrief',
         url: BASE,
         description: 'Independent commodity intelligence for Indian traders, investors and merchants.',
+        logo: { '@type': 'ImageObject', url: `${BASE}/logo.png`, width: 500, height: 500 },
+        sameAs: ['https://twitter.com/bhaavbrief', 'https://instagram.com/bhaavbrief'],
         contactPoint: { '@type': 'ContactPoint', email: 'brief@bhaavbrief.in', contactType: 'Customer Support' },
       },
       {

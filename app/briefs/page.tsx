@@ -49,8 +49,31 @@ export default async function BriefsPage() {
   const briefs = await getAllBriefs()
   const delayed = isTodaysBriefDelayed(briefs[0]?.date)
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type':      'CollectionPage',
+        '@id':        'https://bhaavbrief.in/briefs',
+        name:         'MCX Daily Commodity Briefs',
+        description:  'Daily MCX commodity briefs for Indian traders — what moved gold, crude oil, silver and copper, and why.',
+        url:          'https://bhaavbrief.in/briefs',
+      },
+      {
+        '@type': 'ItemList',
+        itemListElement: briefs.slice(0, 20).map((b, i) => ({
+          '@type':   'ListItem',
+          position:  i + 1,
+          url:       `https://bhaavbrief.in/briefs/${b.slug}`,
+          name:      b.title,
+        })),
+      },
+    ],
+  }
+
   return (
     <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       {/* Main — briefs list */}
       <main>

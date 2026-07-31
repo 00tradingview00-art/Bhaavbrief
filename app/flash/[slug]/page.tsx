@@ -88,9 +88,11 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
       '@context':    'https://schema.org',
       '@type':       'NewsArticle',
       headline:      flash.title,
+      description:   flash.excerpt,
       datePublished: flash.date,
       dateModified:  flash.date,
       url,
+      mainEntityOfPage: { '@type': 'WebPage', '@id': url },
       ...(flash.coverImage && {
         image: [{ '@type': 'ImageObject', url: flash.coverImage, width: 1200, height: 630 }],
       }),

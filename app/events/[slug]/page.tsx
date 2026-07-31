@@ -27,6 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!event) return {}
 
   const canonical = `https://bhaavbrief.in/events/${slug}`
+  const ogParams = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
+  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
   return {
     title:       event.title,
     description: event.description,
@@ -38,11 +40,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName:      'BhaavBrief',
       type:          'article',
       publishedTime: event.date,
+      images:        [{ url: ogImage, width: 1200, height: 630, alt: event.title }],
     },
     twitter: {
       card:        'summary_large_image',
       title:       event.title,
       description: event.description,
+      images:      [ogImage],
     },
   }
 }
@@ -60,6 +64,8 @@ export default async function EventResultPage({ params }: Props) {
   const commodityLabel = COMMODITY_LABELS[event.commodity] ?? event.commodity
   const up           = event.mcxChangePct >= 0
   const eventUrl     = `https://bhaavbrief.in/events/${slug}`
+  const ogParams     = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
+  const ogImage      = `https://bhaavbrief.in/api/og?${ogParams}`
 
   const schema = {
     '@context': 'https://schema.org',
@@ -71,6 +77,7 @@ export default async function EventResultPage({ params }: Props) {
         datePublished: event.date,
         dateModified:  event.date,
         url:           eventUrl,
+        image:         [{ '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 }],
         mainEntityOfPage: { '@type': 'WebPage', '@id': eventUrl },
         author:    [{ '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' }],
         publisher: {
