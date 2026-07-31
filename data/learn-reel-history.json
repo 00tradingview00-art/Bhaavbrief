@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "how-much-money-to-start-mcx-trading",
+  "lastSlug": "mcx-circuit-limits",
   "log": [
+    {
+      "slug": "mcx-circuit-limits",
+      "date": "2026-07-31",
+      "file": "public/reels/news-20260731-mcx-circuit-limits.mp4",
+      "generated_at": "2026-07-31T16:06:42.344Z"
+    },
     {
       "slug": "how-much-money-to-start-mcx-trading",
       "date": "2026-07-31",

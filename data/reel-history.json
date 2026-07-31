@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260731-mcx-circuit-limits",
+    "topic": "MCX Circuit Limits",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold order just froze. Here's why.",
+    "stat_line": "±3% drop triggers 15-minute halt.",
+    "payoff": "The halt isn't punishment—it's the market buying you time to think clearly.",
+    "beat1": "When gold or crude swings 3% in one direction, MCX stops all new orders for 15 minutes. Your open positions stay live—but you're locked out.",
+    "beat2": "Two-stage circuit exists to pause panic selling. Stage 1 at ±3% halts trading. Stage 2 at ±6% lets it resume with wider breathing room.",
+    "beat3": "Crude can hit ±9% limits during extreme volatility with SEBI approval. Gold and silver rarely breach Stage 1 under normal conditions.",
+    "instagram_id": "17980544856109709",
+    "generated_at": "2026-07-31T16:06:42.081Z",
+    "edition": null,
+    "posted_at": "2026-07-31T16:07:27.853Z"
+  },
+  {
     "file": "news-20260731-how-much-money-to-start-mcx-trading",
     "topic": "How Much Money to Start MCX Trading",
     "content_type": "explainer",
