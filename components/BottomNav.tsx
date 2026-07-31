@@ -102,6 +102,7 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
+              prefetch={false}
               style={{
                 flex: 1,
                 display: 'flex',
