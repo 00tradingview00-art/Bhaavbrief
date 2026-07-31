@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-07-31-mcx-crude-slides-2-85-on-us-demand-softening-signal",
+    "href": "/articles/2026-07-31-mcx-crude-slides-2-85-on-us-demand-softening-signal",
+    "title": "MCX Crude Slides 2.85% on US Demand Softening Signal",
+    "description": "MCX Crude ₹7800/bbl, -2.85%. WTI weakness reflects fading summer driving demand and rising rate-cut expectations pressuring energy demand outlook.",
+    "excerpt": "WHAT HAPPENED MCX Crude collapsed to ₹7800/bbl, down 2.85% in a move that isolates energy from the broader commodity complex — gold and silver both posted single-digit losses, while crude hemorrhaged.",
+    "date": "2026-07-31T05:53:59.013Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7800
+  },
+  {
     "type": "brief",
     "slug": "edition-076",
     "href": "/briefs/edition-076",
