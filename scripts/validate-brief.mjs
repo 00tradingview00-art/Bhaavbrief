@@ -504,6 +504,19 @@ try {
 // A single attempt at the semantic check. Returns:
 //   { ok: true, verdict }                       — got a parsed verdict, may still contain issues
 //   { ok: false, retryable, reason }             — failed; retryable failures get one retry in semanticCheck()
+//
+// The requested JSON key order for each issue (detail, valueA, valueB, THEN
+// severity) is deliberate, not cosmetic: Claude generates JSON tokens in the
+// order the schema asks for them, so asking for severity first — as this
+// prompt used to — let the model commit to "block" before it had written a
+// single word of reasoning. semanticDemote.mjs's whole history (see its
+// header) is four separate rounds of patching new phrasings of "detail
+// concludes no problem, severity still says block," most recently 2026-07-31.
+// Asking for severity LAST forces it to be the conclusion of the reasoning in
+// detail rather than a premature label the reasoning then has to contradict.
+// This doesn't replace semanticDemote.mjs's regex/arithmetic safety net
+// below — defense in depth, since a prompt instruction is not a guarantee —
+// but it should sharply reduce how often that net needs to catch anything.
 async function attemptSemanticCheck() {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -527,7 +540,8 @@ async function attemptSemanticCheck() {
         "The \"issues\" array is a list of PROBLEMS ONLY. Do not walk through each check and report its outcome. " +
         "If a check passes, omit it entirely — do not add an entry that concludes 'PASS', 'consistent', or 'no contradiction'. " +
         "An empty issues array is the expected, common result for a correct brief. " +
-        "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"severity\": \"block\"|\"warn\", \"detail\": string, \"valueA\": number|null, \"valueB\": number|null}]}. " +
+        "Respond ONLY with JSON: {\"pass\": boolean, \"issues\": [{\"detail\": string, \"valueA\": number|null, \"valueB\": number|null, \"severity\": \"block\"|\"warn\"}]}. " +
+        "Write each issue object's fields in EXACTLY that order — detail, then valueA, then valueB, then severity LAST. Decide severity only after you have finished writing detail; it must be the conclusion that follows from what you just wrote, never a label you commit to before reasoning it out. If, by the end of detail, the numbers or facts actually match, are consistent, check out, or there is no real unresolved problem, severity MUST be \"warn\" — never \"block\", regardless of how the issue initially looked. Only use \"block\" when detail itself asserts a genuine factual conflict a reader could not reconcile. " +
         "When a 'block' is based on two specific numbers conflicting (criteria 1 and 4 below), you MUST set valueA and valueB to those exact two numbers, parsed as plain numbers (no currency symbols or commas) — this lets the two figures you're comparing be checked mechanically. For any other issue (event timing, headline direction word, or anything that isn't a numeric mismatch), leave valueA and valueB as null. " +
         "No markdown fences, no preamble.",
       messages: [
