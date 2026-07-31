@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-07-31-rbi-policy-mcx-gold-silver",
+    "href": "/articles/2026-07-31-rbi-policy-mcx-gold-silver",
+    "title": "How RBI Monetary Policy Decisions Move MCX Gold and Silver in India",
+    "description": "Understand how RBI monetary policy affects MCX gold and silver in India — covering rate transmission, rupee impact, and historical price moves.",
+    "excerpt": "How RBI monetary policy affects MCX gold and silver in India is a question every serious commodity trader must understand, because domestic prices respond to both global signals and local policy shift",
+    "date": "2026-07-31",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-075",
     "href": "/briefs/edition-075",
