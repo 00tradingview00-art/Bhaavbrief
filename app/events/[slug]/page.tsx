@@ -214,7 +214,7 @@ export default async function EventResultPage({ params }: Props) {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
             Found this useful? Share with your trading circle.
           </span>
-          <CopyLinkButton url={eventUrl} title={event.title} />
+          <CopyLinkButton url={eventUrl} title={event.title} location="event_page" />
         </div>
 
         {/* More from BhaavBrief */}

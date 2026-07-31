@@ -167,7 +167,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
 
         <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
-          <CopyLinkButton url={url} title={flash.title} />
+          <CopyLinkButton url={url} title={flash.title} location="flash_page" />
         </div>
 
         {CATEGORY_TO_INSTRUMENT[flash.category] && (

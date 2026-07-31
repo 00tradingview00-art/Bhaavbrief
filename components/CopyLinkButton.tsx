@@ -34,14 +34,24 @@ const BTN: React.CSSProperties = {
 }
 
 interface Props {
-  url:   string
-  title: string
+  url:      string
+  title:    string
+  location?: string // e.g. 'brief_page', 'article_page' — which page this share happened on
 }
 
-export default function CopyLinkButton({ url, title }: Props) {
+// Same dynamic-import pattern as components/SubscribeForm.tsx — posthog-js is
+// already loaded by PostHogProvider by the time a user clicks share, so this
+// just resolves the cached module rather than triggering a new fetch.
+async function captureShareClick(channel: string, location?: string) {
+  const ph = await import('posthog-js').then(m => m.default).catch(() => null)
+  ph?.capture('share_click', { channel, location })
+}
+
+export default function CopyLinkButton({ url, title, location }: Props) {
   const [copied, setCopied] = useState(false)
 
   function shareX() {
+    captureShareClick('x', location)
     const text = encodeURIComponent(`${title}\n\n${url}`)
     window.open(
       `https://twitter.com/intent/tweet?text=${text}`,
@@ -50,11 +60,13 @@ export default function CopyLinkButton({ url, title }: Props) {
   }
 
   function shareWA() {
+    captureShareClick('whatsapp', location)
     const text = encodeURIComponent(`${title}\n\n${url}`)
     window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener,noreferrer')
   }
 
   async function copyLink() {
+    captureShareClick('copy_link', location)
     try {
       await navigator.clipboard.writeText(url)
     } catch {

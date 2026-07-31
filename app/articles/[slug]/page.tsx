@@ -205,7 +205,7 @@ export default async function ArticlePage({ params }: Props) {
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
             Found this useful? Share with your trading circle.
           </span>
-          <CopyLinkButton url={`https://bhaavbrief.in/articles/${slug}`} title={meta.title} />
+          <CopyLinkButton url={`https://bhaavbrief.in/articles/${slug}`} title={meta.title} location="article_page" />
         </div>
 
         {/* More from BhaavBrief — related briefs */}
