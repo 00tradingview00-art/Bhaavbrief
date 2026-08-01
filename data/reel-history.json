@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260801-mcx-commodity-trading-tax-in-india",
+    "topic": "MCX Commodity Trading Tax in India",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX gold profit just got taxed. Here's the real hit.",
+    "stat_line": "Up to 30% on profits. Plus 0.01% on every sell.",
+    "payoff": "Losses carry forward 8 years—but can't offset your salary. Plan accordingly.",
+    "beat1": "MCX commodity profits aren't capital gains—they're taxed as business income at your full tax slab, up to 30%.",
+    "beat2": "Every time you sell, your broker auto-deducts 0.01% CTT on the sell value. That's before you even file taxes.",
+    "beat3": "File ITR-3, not ITR-2. Above ₹10 crore turnover? Mandatory tax audit applies instantly.",
+    "instagram_id": "18325705729279293",
+    "generated_at": "2026-08-01T15:09:30.003Z",
+    "edition": null,
+    "posted_at": "2026-08-01T15:10:14.872Z"
+  },
+  {
     "file": "news-20260731-mcx-circuit-limits",
     "topic": "MCX Circuit Limits",
     "content_type": "explainer",
