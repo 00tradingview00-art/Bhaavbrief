@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260802-mcx-contract-expiry-dates",
+    "topic": "MCX Contract Expiry Dates",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX gold expires sooner than you think.",
+    "stat_line": "5th of each month—then liquidity dies.",
+    "payoff": "Perfect entry doesn't matter if you're trapped in thin liquidity.",
+    "beat1": "If you're holding gold futures, your contract vanishes on the 5th of delivery month. Most traders don't plan for that.",
+    "beat2": "MCX settles gold at DVCAL—volume-weighted average price on expiry day. Last-minute trades can kill your exit price.",
+    "beat3": "Exit 3–4 trading days before the 5th. That's when real buyers and sellers leave. Spreads widen fast.",
+    "instagram_id": "18111744590283161",
+    "generated_at": "2026-08-02T15:09:22.544Z",
+    "edition": null,
+    "posted_at": "2026-08-02T15:10:03.665Z"
+  },
+  {
     "file": "news-20260801-mcx-commodity-trading-tax-in-india",
     "topic": "MCX Commodity Trading Tax in India",
     "content_type": "explainer",

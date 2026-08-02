@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-commodity-tax-india",
+  "lastSlug": "mcx-contract-expiry",
   "log": [
+    {
+      "slug": "mcx-contract-expiry",
+      "date": "2026-08-02",
+      "file": "public/reels/news-20260802-mcx-contract-expiry-dates.mp4",
+      "generated_at": "2026-08-02T15:09:22.718Z"
+    },
     {
       "slug": "mcx-commodity-tax-india",
       "date": "2026-08-01",
