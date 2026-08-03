@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-08-03-us-inflation-cpi-mcx-gold-india",
+    "href": "/articles/2026-08-03-us-inflation-cpi-mcx-gold-india",
+    "title": "How US Inflation (CPI) Data Moves MCX Gold Prices in India",
+    "description": "Learn how US inflation CPI data affects MCX gold prices in India through a step-by-step transmission covering COMEX, real yields, and USD/INR conversion.",
+    "excerpt": "Understanding how US inflation CPI data affects MCX gold prices in India is essential for any trader managing positions across the COMEX-to-MCX transmission chain. When the US Bureau of Labor Statisti",
+    "date": "2026-08-03",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "macro"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-07-31-mcx-crude-slides-2-85-on-us-demand-softening-signal",
     "href": "/articles/2026-07-31-mcx-crude-slides-2-85-on-us-demand-softening-signal",
     "title": "MCX Crude Slides 2.85% on US Demand Softening Signal",
