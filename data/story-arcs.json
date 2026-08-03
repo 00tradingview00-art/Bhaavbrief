@@ -140,6 +140,25 @@
       ],
       "endDate": "2026-07-15",
       "outcome": "The precious metals unwind reversed as weakening US employment data reassessed FOMC rate-cut expectations, lifting gold from ₹141506/10g to ₹1,41,900 before the narrative faded after eight days without new editions."
+    },
+    {
+      "id": "us-iran-military-pause-crude-relief",
+      "title": "US-Iran Military Pause: War Premium Strips from Crude",
+      "startDate": "2026-08-03",
+      "status": "active",
+      "editions": [
+        77
+      ],
+      "latestDay": 1,
+      "summary": "US-Iran announce pause in direct military strikes, removing key supply-disruption fear and sending WTI down $5.32 to $79.35 as geopolitical risk premium unwinds.",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹7565",
+      "tags": [
+        "MCX Crude",
+        "Geopolitics",
+        "Iran",
+        "US-Iran Relations"
+      ]
     }
   ]
 }
