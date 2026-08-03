@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141474,
-    "silver": 216398,
-    "crude": 8109,
-    "copper": 1334.5,
-    "natgas": 262.4,
+    "gold": 141895,
+    "silver": 218362,
+    "crude": 7589,
+    "copper": 0,
+    "natgas": 264.9,
     "usdinr": 95.39
   },
-  "lastChecked": "2026-07-31T17:02:32.134Z",
+  "lastChecked": "2026-08-03T06:08:09.249Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -23,11 +23,11 @@
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [
-    "2026-07-31/2026-07-31-mcx-crude-slides-2-85-on-us-demand-softening-signal"
+    "2026-08-03/2026-08-03-mcx-crude-plunges-6-41-to-7-589-bbl-wti-breaks-80"
   ],
-  "lastArticleAt": "2026-07-31T05:54:12.547Z",
+  "lastArticleAt": "2026-08-03T06:08:17.458Z",
   "lastCoveredAt": {
-    "crude": "2026-07-31T05:54:12.547Z",
+    "crude": "2026-08-03T06:08:17.458Z",
     "silver": "2026-07-28T05:36:23.461Z",
     "natgas": "2026-07-09T15:45:42.151Z"
   }
