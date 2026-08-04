@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-078",
+    "href": "/briefs/edition-078",
+    "title": "War Premium Returns: WTI Reclaims $81 as Ceasefire Doubts Grow",
+    "description": "Crude rebounds sharply from last session's ceasefire unwind while gold quietly climbs — two separate stories, one unsettled market.",
+    "excerpt": "MCX Gold ₹141095 | Crude ₹7645 | USDINR ₹95.32 Yesterday's Edge — Result: Edition #77 watched whether WTI would close below 79.35. Rejected ✗, now at 81.26. | Commodity | Global Price | USD/INR | MCX ",
+    "date": "2026-08-04T03:19:01.234Z",
+    "edition": "78",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-077",
     "href": "/briefs/edition-077",
     "title": "WTI Drops $5.32 as US-Iran Pause Strips the War Premium",
