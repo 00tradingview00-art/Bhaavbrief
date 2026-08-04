@@ -24,6 +24,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { PriceData } from './prices'
+import { isTradingDay, todayIST } from './tradingCalendar'
 
 export interface SnapshotInstrument {
   price:     number
@@ -71,6 +72,7 @@ export function snapshotAgeMinutes(snap: Snapshot): number {
 }
 
 export function isMCXOpenNow(): boolean {
+  if (!isTradingDay(todayIST())) return false
   const ist = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
   const day = ist.getDay()
   if (day === 0 || day === 6) return false
