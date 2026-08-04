@@ -311,7 +311,7 @@ function loadMCXCache(): MCXCache | null {
 
 const USDINR_MIN = 82, USDINR_MAX = 110
 
-function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallback = 0) {
+export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallback = 0) {
   const yahooUsd = yahoo['USDINR=X']?.regularMarketPrice ?? 0
   // Prefer Frankfurter (daily ECB rate, reliable) over Yahoo FX which can be stale.
   // Reject either value if outside the plausible ₹82–₹110 range.
@@ -434,7 +434,7 @@ export interface PriceData {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: number, info: InstrumentInfo): MCXData {
+export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: number, info: InstrumentInfo): MCXData {
   const hasLive = !!(q && q.last_price > 0)
   const prevClose = q?.ohlc?.close ?? 0
   return {
@@ -452,7 +452,7 @@ function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbackPct: n
   }
 }
 
-function buildForexData(q: KiteQuote | null, info: InstrumentInfo): ForexData {
+export function buildForexData(q: KiteQuote | null, info: InstrumentInfo): ForexData {
   const hasLive = !!(q && q.last_price > 0)
   return {
     ltp:       hasLive ? q!.last_price           : 0,
