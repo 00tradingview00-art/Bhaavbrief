@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-08-04-contango-backwardation-mcx-india",
+    "href": "/articles/2026-08-04-contango-backwardation-mcx-india",
+    "title": "Contango and Backwardation in MCX Futures — What Indian Traders Need to Know",
+    "description": "Understand what is contango backwardation MCX commodities India with this clear guide to futures curve mechanics for Indian traders and jewellers.",
+    "excerpt": "Understanding what is contango backwardation MCX commodities India is essential for anyone trading futures contracts on the Multi Commodity Exchange, where the shape of the forward curve directly affe",
+    "date": "2026-08-04",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-077",
     "href": "/briefs/edition-077",
