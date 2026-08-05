@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-08-05-mcx-crude-plunges-7-39-to-7-129-bbl-breaks-below-20-sma",
+    "href": "/articles/2026-08-05-mcx-crude-plunges-7-39-to-7-129-bbl-breaks-below-20-sma",
+    "title": "MCX Crude plunges 7.39% to ₹7,129/bbl — breaks below 20-SMA",
+    "description": "MCX Crude ₹7,129/bbl (-7.39%) as WTI slides 1.18% amid demand destruction signals and US refinery maintenance ramp.",
+    "excerpt": "TRIGGER MCX Crude has fallen 7.39% to ₹7,129/bbl as WTI retreated 1.18% to $75.22/bbl, breaking below the 20-day simple moving average of ₹7,920 for the first time in two weeks. PRICE ₹7,129/bbl · –7.",
+    "date": "2026-08-05T05:35:06.533Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Nat Gas",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7129
+  },
+  {
     "type": "brief",
     "slug": "edition-079",
     "href": "/briefs/edition-079",
