@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-08-05T11:11:59.958Z",
-    "lastFlashPrice": 7250,
+    "lastFlashAt": "2026-08-05T16:59:56.515Z",
+    "lastFlashPrice": 7134,
     "lastRoundLevel": 8000,
     "recentFlashIds": [
+      "2026-08-05-22-29-mcx-crude-slides-1-11-as-recovery-unwinds",
       "2026-08-05-16-41-mcx-crude-edges-higher-on-consolidation-recovery",
-      "2026-08-05-11-23-mcx-crude-falls-1-07-as-pullback-extends-from-january-p",
-      "2026-08-04-01-30-mcx-crude-slides-0-07-as-consolidation-deepens"
+      "2026-08-05-11-23-mcx-crude-falls-1-07-as-pullback-extends-from-january-p"
     ]
   },
   "MCX_COPPER": {
