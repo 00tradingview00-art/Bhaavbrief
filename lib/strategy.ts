@@ -5,11 +5,11 @@ export type OptionType = 'CE' | 'PE'
 
 export interface Leg {
   strike:  number
-  type:    OptionType
+  type:    OptionType | 'FUT'
   action:  Action
   qty:     number    // lots
-  premium: number    // entry premium per unit (not per lot)
-  iv:      number    // entry IV as decimal (e.g. 0.25 = 25%)
+  premium: number    // entry premium per unit (not per lot); for FUT, entry futures price
+  iv:      number    // entry IV as decimal (e.g. 0.25 = 25%); unused for FUT, store 0
 }
 
 export interface SavedStrategy {
@@ -54,11 +54,18 @@ export function computePayoff(
   const liveIvDecimal = liveIV != null && liveIV > 0 ? liveIV / 100 : undefined
   return FRange.map(F => {
     const pnlExpiry = legs.reduce((sum, leg) => {
+      if (leg.type === 'FUT') {
+        return sum + sign(leg.action) * leg.qty * lotSize * (F - leg.premium)
+      }
       return sum + sign(leg.action) * leg.qty * lotSize * (intrinsic(leg.type, F, leg.strike) - leg.premium)
     }, 0)
 
     const pnlToday = T > 0
       ? legs.reduce((sum, leg) => {
+          if (leg.type === 'FUT') {
+            // Linear instrument — no time value, same P&L today as at expiry
+            return sum + sign(leg.action) * leg.qty * lotSize * (F - leg.premium)
+          }
           const ivToUse      = liveIvDecimal ?? leg.iv
           const currentPrice = black76(F, leg.strike, T, r, ivToUse, leg.type).price
           return sum + sign(leg.action) * leg.qty * lotSize * (currentPrice - leg.premium)
@@ -78,8 +85,12 @@ export function computeNetGreeks(
 ): NetGreeks {
   return legs.reduce(
     (acc, leg) => {
-      const g = black76(F, leg.strike, T, r, leg.iv, leg.type)
       const s = sign(leg.action) * leg.qty * lotSize
+      if (leg.type === 'FUT') {
+        // Linear instrument — delta of 1 per unit, zero gamma/theta/vega
+        return { ...acc, delta: acc.delta + s }
+      }
+      const g = black76(F, leg.strike, T, r, leg.iv, leg.type)
       return {
         delta: acc.delta + s * g.delta,
         gamma: acc.gamma + s * g.gamma,

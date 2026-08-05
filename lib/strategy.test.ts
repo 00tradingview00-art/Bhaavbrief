@@ -97,6 +97,72 @@ describe('computePayoff — at-expiry (T = 0)', () => {
   })
 })
 
+describe('computePayoff — futures leg', () => {
+  test('long futures: linear payoff, no premium/time-value component', () => {
+    const legs: Leg[] = [{ strike: F, type: 'FUT', action: 'BUY', qty: 1, premium: F, iv: 0 }]
+    const payoff = computePayoff(legs, range(F), LOT, 0, R)
+
+    const atEntry = payoff.find(p => Math.abs(p.F - F) < F * 0.002)!
+    expect(atEntry.pnlExpiry).toBeCloseTo(0, -2)
+
+    const up = payoff[payoff.length - 1]
+    const down = payoff[0]
+    expect(up.pnlExpiry).toBeCloseTo((up.F - F) * LOT, -2)
+    expect(down.pnlExpiry).toBeCloseTo((down.F - F) * LOT, -2)
+  })
+
+  test('short futures: payoff is the mirror image of long futures', () => {
+    const long: Leg[]  = [{ strike: F, type: 'FUT', action: 'BUY',  qty: 1, premium: F, iv: 0 }]
+    const short: Leg[] = [{ strike: F, type: 'FUT', action: 'SELL', qty: 1, premium: F, iv: 0 }]
+    const payoffLong  = computePayoff(long, range(F), LOT, 0, R)
+    const payoffShort = computePayoff(short, range(F), LOT, 0, R)
+
+    payoffLong.forEach((p, i) => {
+      expect(payoffShort[i].pnlExpiry).toBeCloseTo(-p.pnlExpiry, -2)
+    })
+  })
+
+  test('a futures leg has no time value: pnlToday equals pnlExpiry', () => {
+    const legs: Leg[] = [{ strike: F, type: 'FUT', action: 'BUY', qty: 1, premium: F, iv: 0 }]
+    const payoff = computePayoff(legs, range(F), LOT, T, R)
+    payoff.forEach(p => expect(p.pnlToday).toBeCloseTo(p.pnlExpiry, -2))
+  })
+
+  test('covered call: capped upside, uncapped downside (minus the credit received)', () => {
+    const callStrike = F * 1.03
+    const premium = 500
+    const legs: Leg[] = [
+      { strike: F, type: 'FUT', action: 'BUY',  qty: 1, premium: F, iv: 0 },
+      { strike: callStrike, type: 'CE', action: 'SELL', qty: 1, premium, iv: IV },
+    ]
+    const payoff = computePayoff(legs, range(F, 0.10), LOT, 0, R)
+    const deepITM = payoff[payoff.length - 1]
+    const deepOTM = payoff[0]
+
+    // Upside is capped at (callStrike - F + premium) * lot
+    expect(deepITM.pnlExpiry).toBeCloseTo((callStrike - F + premium) * LOT, -1)
+    // Downside keeps falling with the futures leg (only cushioned by the premium)
+    expect(deepOTM.pnlExpiry).toBeCloseTo((deepOTM.F - F + premium) * LOT, -1)
+  })
+
+  test('protective put: floored downside, uncapped upside (minus the debit paid)', () => {
+    const putStrike = F * 0.97
+    const premium = 500
+    const legs: Leg[] = [
+      { strike: F, type: 'FUT', action: 'BUY', qty: 1, premium: F, iv: 0 },
+      { strike: putStrike, type: 'PE', action: 'BUY', qty: 1, premium, iv: IV },
+    ]
+    const payoff = computePayoff(legs, range(F, 0.10), LOT, 0, R)
+    const deepITM = payoff[payoff.length - 1]
+    const deepOTM = payoff[0]
+
+    // Downside is floored at (putStrike - F - premium) * lot
+    expect(deepOTM.pnlExpiry).toBeCloseTo((putStrike - F - premium) * LOT, -1)
+    // Upside keeps rising with the futures leg (only reduced by the premium)
+    expect(deepITM.pnlExpiry).toBeCloseTo((deepITM.F - F - premium) * LOT, -1)
+  })
+})
+
 describe('computeBreakevens', () => {
   test('long straddle has two breakevens', () => {
     const prem = 500
@@ -145,7 +211,47 @@ describe('computeMaxProfitLoss', () => {
   })
 })
 
+describe('computeMaxProfitLoss — futures leg', () => {
+  test('a lone long futures position is unlimited in both directions', () => {
+    const legs: Leg[] = [{ strike: F, type: 'FUT', action: 'BUY', qty: 1, premium: F, iv: 0 }]
+    const payoff = computePayoff(legs, range(F, 0.15, 200), LOT, 0, R)
+    const { maxProfit, maxLoss } = computeMaxProfitLoss(payoff)
+    expect(maxProfit).toBeNull()
+    expect(maxLoss).toBeNull()
+  })
+})
+
 describe('computeNetGreeks', () => {
+  test('futures leg: delta equals signed lot size, all other Greeks are zero', () => {
+    const long: Leg[]  = [{ strike: F, type: 'FUT', action: 'BUY',  qty: 2, premium: F, iv: 0 }]
+    const short: Leg[] = [{ strike: F, type: 'FUT', action: 'SELL', qty: 2, premium: F, iv: 0 }]
+    const gLong  = computeNetGreeks(long, F, T, R, LOT)
+    const gShort = computeNetGreeks(short, F, T, R, LOT)
+
+    expect(gLong.delta).toBeCloseTo(2 * LOT, -6)
+    expect(gLong.gamma).toBe(0)
+    expect(gLong.theta).toBe(0)
+    expect(gLong.vega).toBe(0)
+
+    expect(gShort.delta).toBeCloseTo(-2 * LOT, -6)
+    expect(gShort.gamma).toBe(0)
+    expect(gShort.theta).toBe(0)
+    expect(gShort.vega).toBe(0)
+  })
+
+  test('covered call: net delta is futures delta minus the short call\'s delta', () => {
+    const legs: Leg[] = [
+      { strike: F, type: 'FUT', action: 'BUY',  qty: 1, premium: F, iv: 0 },
+      { strike: F, type: 'CE', action: 'SELL', qty: 1, premium: 500, iv: IV },
+    ]
+    const g = computeNetGreeks(legs, F, T, R, LOT)
+    // Long futures delta (+lot) minus a roughly-ATM short call's delta (~0.5*lot) → positive but less than the lone futures delta
+    expect(g.delta).toBeGreaterThan(0)
+    expect(g.delta).toBeLessThan(LOT)
+  })
+})
+
+describe('computeNetGreeks — options only', () => {
   test('delta-neutral straddle: net delta near zero at ATM', () => {
     const legs: Leg[] = [
       { strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: IV },
