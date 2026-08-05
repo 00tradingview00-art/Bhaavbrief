@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-05T19:44:34.960Z",
-  "generatedAtIST": "2026-08-06 01:14 IST",
+  "generatedAt": "2026-08-05T19:57:26.246Z",
+  "generatedAtIST": "2026-08-06 01:27 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -36,31 +36,31 @@
     "USDINR": {
       "price": 95.11,
       "prevClose": 95.33,
-      "changePct": -0.2325,
+      "changePct": -0.2356,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4310.7,
+      "price": 4311.8,
       "prevClose": 4095.4,
-      "changePct": 5.2571,
+      "changePct": 5.284,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 62.26,
+      "price": 62.3,
       "prevClose": 60.06,
-      "changePct": 3.6699,
+      "changePct": 3.7282,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 75.25,
+      "price": 75.16,
       "prevClose": 75.77,
-      "changePct": -0.6863,
+      "changePct": -0.8051,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 79.51,
+      "price": 79.41,
       "prevClose": 79.36,
-      "changePct": 0.189,
+      "changePct": 0.063,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 131815,
-    "mcxComexGoldSpreadPct": 11.06,
-    "importParitySilverINR": 190382,
-    "mcxComexSilverSpreadPct": 19.54,
+    "importParityGoldINR": 131849,
+    "mcxComexGoldSpreadPct": 11.04,
+    "importParitySilverINR": 190504,
+    "mcxComexSilverSpreadPct": 19.47,
     "goldSilverRatio": 69.2
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 11.06% vs silver 19.54% — 8.48pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 11.06,
-      "silverSpreadPct": 19.54,
-      "deltaPts": 8.48
+      "detail": "Gold import-parity spread 11.04% vs silver 19.47% — 8.43pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 11.04,
+      "silverSpreadPct": 19.47,
+      "deltaPts": 8.43
     }
   ]
 }
