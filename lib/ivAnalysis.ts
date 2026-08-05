@@ -58,6 +58,9 @@ export type TemplateId =
   | 'IRON_CONDOR'
   | 'BULL_PUT_SPREAD'
   | 'BEAR_CALL_SPREAD'
+  | 'COVERED_CALL'
+  | 'PROTECTIVE_PUT'
+  | 'COLLAR'
 
 export interface StrategyTemplate {
   name: string
