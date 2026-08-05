@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-079",
+    "href": "/briefs/edition-079",
+    "title": "Gold Breaks ₹143814 as Crude Slips — Fear and Supply Tell Different Stories",
+    "description": "COMEX gold at $4195 signals deepening fear trade even as crude softens, splitting the geopolitical narrative in two.",
+    "excerpt": "MCX Gold ₹143814 | Crude ₹7153 | USDINR ₹95.07 — Gold +0.86% | Crude -0.85% | Silver +1.25% Yesterday's Edge — Result: Edition #78 watched whether WTI would close above 81.26. Rejected ✗, now at 75.16",
+    "date": "2026-08-05T05:27:35.338Z",
+    "edition": "79",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-078",
     "href": "/briefs/edition-078",
     "title": "War Premium Returns: WTI Reclaims $81 as Ceasefire Doubts Grow",
