@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import type { PriceBridgeRow } from '@/lib/parseBriefSections'
 
 // Part 12 §12.10.4 — Commodity | Global Price | FX Rate | MCX Price | Direction.
@@ -45,6 +46,15 @@ export default function PriceBridgeTable({ heading, rows }: { heading: string; r
           </tbody>
         </table>
       </div>
+      <p style={{
+        fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)',
+        margin: '0.5rem 0 0',
+      }}>
+        Full settlement data (OHLC, volume, OI) →{' '}
+        <Link href="/articles/2026-07-03-mcx-bhavcopy" style={{ color: 'var(--ink-3)' }}>
+          MCX Bhavcopy Explained
+        </Link>
+      </p>
     </div>
   )
 }
