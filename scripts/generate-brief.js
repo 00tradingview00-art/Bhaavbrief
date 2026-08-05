@@ -4,6 +4,7 @@ import * as path from 'path'
 import { fileURLToPath } from 'url'
 import { isTradingHoliday, todayIST, getHolidayName } from './lib/holidays.js'
 import { deriveCommodityLabelsFromTags } from './lib/commodity-tags.js'
+import { getRelatedLink } from './lib/commodity-to-learn-slug.js'
 import { resolveEdge, formatEdgeResultBlock, appendToLedger } from './lib/edgeLedger.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { appendGateLogEntry, hashPayload } from './lib/gateLog.mjs'
@@ -632,6 +633,14 @@ async function main() {
     if (commodities.length > 0) {
       const commoditiesYaml = commodities.map(c => `"${c}"`).join(', ')
       mdx = mdx.replace(/^(---\n)/, `$1commodities: [${commoditiesYaml}]\n`)
+    }
+
+    // Related-reading link — closes the "briefs never link to /learn" gap
+    // (docs/LEARN_SEO_ARCHITECTURE.md) and routes gold/copper to the specific
+    // pages/articles that best match real GSC query demand for each.
+    const related = getRelatedLink(commodities, EDITION)
+    if (related) {
+      mdx = mdx.trimEnd() + `\n\n[Related: ${related.label}](${related.href})\n`
     }
   }
 
