@@ -128,7 +128,7 @@ function LegButton({ action, onClick }: { action: Action; onClick: () => void })
   return (
     <button onClick={onClick}
       style={{
-        fontSize: 10, padding: '1px 4px', borderRadius: 3,
+        fontSize: 12, padding: '1px 4px', borderRadius: 3,
         border: `1px solid ${isBuy ? '#16a34a' : '#dc2626'}`,
         color: isBuy ? '#15803d' : '#b91c1c',
         background: isBuy ? '#dcfce7' : '#fee2e2',
@@ -503,6 +503,31 @@ export default function StrategyBuilder({
     }))
   }
 
+  // Walks the full chain (not just the ±5-strike visible window) to the next
+  // strike with a live quote in the given direction, skipping illiquid strikes
+  // the same way the option-chain B/S buttons already refuse to render for a
+  // zero-price cell.
+  function findNextLiquidStrike(currentStrike: number, type: 'CE' | 'PE', direction: 1 | -1): ChainRow | null {
+    const sortedStrikes = [...new Set(chain.map(r => r.strike))].sort((a, b) => a - b)
+    const curIdx = sortedStrikes.indexOf(currentStrike)
+    if (curIdx === -1) return null
+    for (let i = curIdx + direction; i >= 0 && i < sortedStrikes.length; i += direction) {
+      const row = chain.find(r => r.strike === sortedStrikes[i])
+      if (row && row[type].ltp > 0) return row
+    }
+    return null
+  }
+
+  function stepStrike(idx: number, direction: 1 | -1) {
+    setLegs(prev => prev.map((l, i) => {
+      if (i !== idx || l.type === 'FUT') return l
+      const next = findNextLiquidStrike(l.strike, l.type, direction)
+      if (!next) return l
+      const side = next[l.type]
+      return { ...l, strike: next.strike, premium: side.ltp, iv: (side.iv ?? l.iv * 100) / 100 }
+    }))
+  }
+
   function applyAllQty(qty: number) {
     setLegs(prev => prev.map(l => ({ ...l, qty: Math.max(1, qty) })))
   }
@@ -565,13 +590,13 @@ export default function StrategyBuilder({
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-          <Link href="/options" style={{ color: '#6b7280', fontSize: 14, textDecoration: 'none', lineHeight: 1 }}
+          <Link href="/options" style={{ color: '#6b7280', fontSize: 16, textDecoration: 'none', lineHeight: 1 }}
             title="Back to Option Chain">
             ← Options
           </Link>
-          <h1 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}>MCX Options Strategy Builder</h1>
         </div>
-        <p style={{ color: '#6b7280', fontSize: 14, margin: 0 }}>
+        <p style={{ color: '#6b7280', fontSize: 16, margin: 0 }}>
           Compose multi-leg strategies and visualise P&amp;L at expiry
         </p>
       </div>
@@ -583,7 +608,7 @@ export default function StrategyBuilder({
             onClick={() => { setInstrument(inst.key); setLegs([]) }}
             style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
-              cursor: 'pointer', fontSize: 13, fontWeight: instrument === inst.key ? 700 : 400,
+              cursor: 'pointer', fontSize: 15, fontWeight: instrument === inst.key ? 700 : 400,
               borderColor: instrument === inst.key ? '#6366f1' : '#d1d5db',
               background: instrument === inst.key ? '#6366f1' : 'transparent',
               color: instrument === inst.key ? '#fff' : 'inherit',
@@ -594,12 +619,12 @@ export default function StrategyBuilder({
       </div>
 
       {error && (
-        <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: '#dc2626', fontSize: 13 }}>
+        <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: '#dc2626', fontSize: 15 }}>
           {error} — check that Kite credentials are configured.
         </div>
       )}
 
-      {loading && <div style={{ color: '#6b7280', fontSize: 13, marginBottom: 12 }}>Loading chain…</div>}
+      {loading && <div style={{ color: '#6b7280', fontSize: 15, marginBottom: 12 }}>Loading chain…</div>}
 
       {/* IV Regime Banner */}
       {ivRegime && (
@@ -610,15 +635,15 @@ export default function StrategyBuilder({
         }}>
           <div style={{
             background: regimeColors[ivRegime.regime], color: '#fff',
-            borderRadius: 4, padding: '2px 8px', fontWeight: 700, fontSize: 12,
+            borderRadius: 4, padding: '2px 8px', fontWeight: 700, fontSize: 14,
           }}>
             {ivRegime.regime}
           </div>
-          <div style={{ fontSize: 14 }}>
+          <div style={{ fontSize: 16 }}>
             <strong>IV {ivRegime.currentIV.toFixed(1)}%</strong>
             {' — '}{ivRegime.label}
           </div>
-          <div style={{ fontSize: 12, color: '#6b7280' }}>
+          <div style={{ fontSize: 14, color: '#6b7280' }}>
             IV Rank {ivRegime.ivRank}
           </div>
         </div>
@@ -627,7 +652,7 @@ export default function StrategyBuilder({
       {/* Quick Setup — all templates, no IV-based filtering */}
       {chainData && (
         <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 6 }}>
             {([
               { id: 'ATM_STRADDLE',     name: 'ATM Straddle',      desc: 'Buy call + put, same strike — bet on a big move, either direction' },
@@ -648,12 +673,12 @@ export default function StrategyBuilder({
                   padding: '6px 10px', borderRadius: 6, border: '1px solid #d1d5db',
                   background: '#fff', cursor: 'pointer', textAlign: 'left',
                 }}>
-                <div style={{ fontSize: 12, fontWeight: 600 }}>{t.name}</div>
-                <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 2, lineHeight: 1.3 }}>{t.desc}</div>
+                <div style={{ fontSize: 14, fontWeight: 600 }}>{t.name}</div>
+                <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 2, lineHeight: 1.3 }}>{t.desc}</div>
               </button>
             ))}
           </div>
-          <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: '#9ca3af', marginTop: 4 }}>
             Or use B/S buttons in the chain below to add legs manually
           </div>
         </div>
@@ -665,7 +690,7 @@ export default function StrategyBuilder({
           <button key={t} onClick={() => setTab(t)}
             style={{
               padding: '8px 16px', border: 'none', background: 'none', cursor: 'pointer',
-              fontWeight: tab === t ? 600 : 400, fontSize: 14,
+              fontWeight: tab === t ? 600 : 400, fontSize: 16,
               borderBottom: tab === t ? '2px solid #6366f1' : '2px solid transparent',
               color: tab === t ? '#4f46e5' : '#6b7280', marginBottom: -1,
             }}>
@@ -679,28 +704,28 @@ export default function StrategyBuilder({
         <>
           {/* Expiry selector + Refresh */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 13, color: '#6b7280' }}>Expiry:</span>
+            <span style={{ fontSize: 15, color: '#6b7280' }}>Expiry:</span>
             <select value={expiry}
               onChange={e => { fetchData(instrument, e.target.value); setLegs([]) }}
-              style={{ padding: '4px 8px', borderRadius: 5, border: '1px solid #d1d5db', fontSize: 13 }}>
+              style={{ padding: '4px 8px', borderRadius: 5, border: '1px solid #d1d5db', fontSize: 15 }}>
               {expiries.map(ex => <option key={ex} value={ex}>{ex}</option>)}
             </select>
-            <span style={{ fontSize: 13, color: '#6b7280', marginLeft: 4 }}>
+            <span style={{ fontSize: 15, color: '#6b7280', marginLeft: 4 }}>
               Futures: <strong>₹{fmt(futurePrice)}</strong>
             </span>
-            <span style={{ fontSize: 12, color: '#6b7280' }}>
+            <span style={{ fontSize: 14, color: '#6b7280' }}>
               · Lot: <strong>{lotSize}</strong>
             </span>
             <button
               onClick={() => fetchData(instrument, expiry, true)}
               style={{
-                marginLeft: 'auto', fontSize: 11, padding: '3px 10px', borderRadius: 5,
+                marginLeft: 'auto', fontSize: 13, padding: '3px 10px', borderRadius: 5,
                 border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer', color: '#6b7280',
               }}>
               ↺ Refresh
             </button>
             {lastFetchedAt && (
-              <span style={{ fontSize: 11, color: '#9ca3af' }}>
+              <span style={{ fontSize: 13, color: '#9ca3af' }}>
                 {secondsAgo < 60 ? `${secondsAgo}s ago` : `${Math.round(secondsAgo / 60)}m ago`}
               </span>
             )}
@@ -712,8 +737,8 @@ export default function StrategyBuilder({
               display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
               padding: '8px 12px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 6,
             }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#0369a1' }}>Futures Position</span>
-              <span style={{ fontSize: 12, color: '#6b7280' }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#0369a1' }}>Futures Position</span>
+              <span style={{ fontSize: 14, color: '#6b7280' }}>
                 Add the underlying futures contract as a leg — for covered calls, protective puts, collars:
               </span>
               <LegButton action="BUY"  onClick={() => addFutLeg('BUY')} />
@@ -725,14 +750,14 @@ export default function StrategyBuilder({
           {briefEdge && (
             <div style={{ margin: '0 0 14px', padding: '10px 14px', background: '#FFFBF0', border: '0.5px solid rgba(181,134,42,0.3)', borderRadius: 6 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', fontWeight: 700 }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', fontWeight: 700 }}>
                   Today&apos;s Edge
                 </span>
-                <a href={`/briefs/${briefEdge.urlSlug}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#9ca3af', textDecoration: 'none', letterSpacing: '0.04em' }}>
+                <a href={`/briefs/${briefEdge.urlSlug}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#9ca3af', textDecoration: 'none', letterSpacing: '0.04em' }}>
                   {briefEdge.date} →
                 </a>
               </div>
-              <p style={{ margin: 0, fontSize: 12, color: '#48483A', lineHeight: 1.55 }}>{briefEdge.edge}</p>
+              <p style={{ margin: 0, fontSize: 14, color: '#48483A', lineHeight: 1.55 }}>{briefEdge.edge}</p>
             </div>
           )}
 
@@ -751,7 +776,7 @@ export default function StrategyBuilder({
             const visible = chain.slice(start, end + 1)
             return (
               <div style={{ overflowX: 'auto', marginBottom: 16 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE OI</th>
@@ -773,7 +798,7 @@ export default function StrategyBuilder({
                           borderBottom: '1px solid #f3f4f6',
                         }}>
                         {/* CE OI */}
-                        <td style={{ padding: '5px 6px', textAlign: 'right', color: '#9ca3af', fontSize: 11 }}>
+                        <td style={{ padding: '5px 6px', textAlign: 'right', color: '#9ca3af', fontSize: 13 }}>
                           {fmtOI(row.CE.oi)}
                         </td>
                         {/* CE IV */}
@@ -817,7 +842,7 @@ export default function StrategyBuilder({
                           {row.PE.iv != null ? row.PE.iv.toFixed(1) : '—'}
                         </td>
                         {/* PE OI */}
-                        <td style={{ padding: '5px 6px', textAlign: 'left', color: '#9ca3af', fontSize: 11 }}>
+                        <td style={{ padding: '5px 6px', textAlign: 'left', color: '#9ca3af', fontSize: 13 }}>
                           {fmtOI(row.PE.oi)}
                         </td>
                       </tr>
@@ -831,8 +856,8 @@ export default function StrategyBuilder({
           {/* Leg table */}
           {legs.length > 0 && (
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Selected Legs</div>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Selected Legs</div>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
                     <th style={{ padding: '5px 8px', textAlign: 'left' }}>Action</th>
@@ -850,7 +875,7 @@ export default function StrategyBuilder({
                       <td style={{ padding: '5px 8px' }}>
                         <button onClick={() => toggleAction(i)}
                           style={{
-                            padding: '2px 8px', borderRadius: 4, border: '1px solid', cursor: 'pointer', fontSize: 11,
+                            padding: '2px 8px', borderRadius: 4, border: '1px solid', cursor: 'pointer', fontSize: 13,
                             background: leg.action === 'BUY' ? '#dcfce7' : '#fee2e2',
                             borderColor: leg.action === 'BUY' ? '#16a34a' : '#dc2626',
                             color: leg.action === 'BUY' ? '#15803d' : '#b91c1c', fontWeight: 600,
@@ -862,13 +887,35 @@ export default function StrategyBuilder({
                         {leg.type}
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
-                        {leg.type === 'FUT' ? '—' : fmt(leg.strike)}
+                        {leg.type === 'FUT' ? '—' : (() => {
+                          const canDown = findNextLiquidStrike(leg.strike, leg.type, -1) !== null
+                          const canUp   = findNextLiquidStrike(leg.strike, leg.type, 1) !== null
+                          return (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <button onClick={() => stepStrike(i, -1)} disabled={!canDown}
+                                style={{
+                                  fontSize: 12, width: 16, height: 16, lineHeight: 1, padding: 0,
+                                  borderRadius: 3, border: '1px solid #d1d5db', background: '#fff',
+                                  color: '#6b7280', cursor: canDown ? 'pointer' : 'not-allowed',
+                                  opacity: canDown ? 1 : 0.3,
+                                }}>−</button>
+                              <span>{fmt(leg.strike)}</span>
+                              <button onClick={() => stepStrike(i, 1)} disabled={!canUp}
+                                style={{
+                                  fontSize: 12, width: 16, height: 16, lineHeight: 1, padding: 0,
+                                  borderRadius: 3, border: '1px solid #d1d5db', background: '#fff',
+                                  color: '#6b7280', cursor: canUp ? 'pointer' : 'not-allowed',
+                                  opacity: canUp ? 1 : 0.3,
+                                }}>+</button>
+                            </span>
+                          )
+                        })()}
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         ₹<input type="number" min={0} step="0.05" value={leg.premium}
                           onChange={e => updatePremium(i, parseFloat(e.target.value) || 0)}
                           title="Edit to model a position entered at a different price than today's live quote"
-                          style={{ width: 64, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 12, textAlign: 'right' }} />
+                          style={{ width: 64, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right', color: '#6b7280' }}>
                         {leg.type === 'FUT' ? '—' : (leg.iv * 100).toFixed(1)}
@@ -876,11 +923,11 @@ export default function StrategyBuilder({
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <input type="number" min={1} max={100} value={leg.qty}
                           onChange={e => updateQty(i, parseInt(e.target.value) || 1)}
-                          style={{ width: 48, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 12, textAlign: 'right' }} />
+                          style={{ width: 48, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <button onClick={() => removeLeg(i)}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 14 }}>
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 16 }}>
                           ×
                         </button>
                       </td>
@@ -893,7 +940,7 @@ export default function StrategyBuilder({
 
           {/* Net Greeks — color-coded by sign */}
           {netGreeks && legs.length > 0 && (
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 12 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 14 }}>
               {[
                 { label: 'Net Delta',    raw: netGreeks.delta,                       display: fmtGreek(netGreeks.delta, 2) },
                 { label: 'Delta ₹ Exp', raw: netGreeks.delta * futurePrice,         display: fmtPnlAxis(Math.round(netGreeks.delta * futurePrice)) },
@@ -913,7 +960,7 @@ export default function StrategyBuilder({
           {/* Payoff chart */}
           {chartDataFull.length > 0 && (
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartDataFull} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
                   <XAxis dataKey="F" tickFormatter={(v: number) => {
@@ -921,12 +968,12 @@ export default function StrategyBuilder({
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
                     if (futurePrice >= 1000)  return `₹${(n / 1000).toFixed(1)}K`
                     return `₹${Math.round(n)}`
-                  }} tick={{ fontSize: 10 }} interval="preserveStartEnd" tickCount={7} />
-                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 10 }} width={68} />
+                  }} tick={{ fontSize: 12 }} interval="preserveStartEnd" tickCount={7} />
+                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12 }} width={68} />
                   <Tooltip
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
                     labelFormatter={v => `P = ₹${fmt(Number(v))}`} />
-                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Legend wrapperStyle={{ fontSize: 14 }} />
                   <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
                   {/* Current price reference */}
                   {futurePrice > 0 && (
@@ -951,8 +998,8 @@ export default function StrategyBuilder({
           {/* P&L Scenario Table */}
           {scenarios.length > 0 && (
             <div style={{ marginBottom: 16, overflowX: 'auto' }}>
-              <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>P&amp;L Scenarios at Expiry</div>
-              <table style={{ borderCollapse: 'collapse', fontSize: 12, minWidth: 340 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>P&amp;L Scenarios at Expiry</div>
+              <table style={{ borderCollapse: 'collapse', fontSize: 14, minWidth: 340 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid #e5e7eb', color: '#6b7280' }}>
                     <th style={{ padding: '5px 12px', textAlign: 'left' }}>Move</th>
@@ -988,7 +1035,7 @@ export default function StrategyBuilder({
 
           {/* Stats row */}
           {legs.length > 0 && (
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 13 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 15 }}>
               {[
                 {
                   label: netCostINR >= 0 ? 'Net Debit' : 'Net Credit',
@@ -1037,13 +1084,13 @@ export default function StrategyBuilder({
               ].map(s => (
                 <div key={s.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
-                  <div style={{ color: '#6b7280', fontSize: 11, marginBottom: 2 }}>
+                  <div style={{ color: '#6b7280', fontSize: 13, marginBottom: 2 }}>
                     {s.label === 'Approx Margin'
                       ? <Link href="/learn/mcx-margin-calculation" style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{s.label}</Link>
                       : s.label}
                   </div>
                   <div style={{ fontWeight: 700, color: s.color }}>{s.value}</div>
-                  {s.sub && <div style={{ fontSize: 10, color: '#9ca3af' }}>{s.sub}</div>}
+                  {s.sub && <div style={{ fontSize: 12, color: '#9ca3af' }}>{s.sub}</div>}
                 </div>
               ))}
             </div>
@@ -1052,19 +1099,19 @@ export default function StrategyBuilder({
           {/* Risk budget sizing */}
           {maxLossPerLot !== null && maxLossPerLot < 0 && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 12, color: '#6b7280' }}>Risk budget ₹</span>
+              <span style={{ fontSize: 14, color: '#6b7280' }}>Risk budget ₹</span>
               <input
                 type="number" min={0} placeholder="e.g. 50000"
                 value={riskBudget}
                 onChange={e => setRiskBudget(e.target.value)}
-                style={{ width: 110, padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: 5, fontSize: 12 }}
+                style={{ width: 110, padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: 5, fontSize: 14 }}
               />
               {suggestedLots !== null && (
                 <>
-                  <span style={{ fontSize: 12, color: '#6b7280' }}>→ <strong>{suggestedLots} lot{suggestedLots !== 1 ? 's' : ''}</strong></span>
+                  <span style={{ fontSize: 14, color: '#6b7280' }}>→ <strong>{suggestedLots} lot{suggestedLots !== 1 ? 's' : ''}</strong></span>
                   <button
                     onClick={() => applyAllQty(suggestedLots)}
-                    style={{ fontSize: 12, padding: '4px 10px', borderRadius: 5, border: '1px solid #6366f1',
+                    style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid #6366f1',
                       background: '#6366f1', color: '#fff', cursor: 'pointer' }}>
                     Apply
                   </button>
@@ -1081,19 +1128,19 @@ export default function StrategyBuilder({
                 placeholder={`Label (e.g. "${autoLabel(legs, instrument)}")`}
                 value={saveLabel}
                 onChange={e => setSaveLabel(e.target.value)}
-                style={{ padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 12, minWidth: 200 }}
+                style={{ padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 14, minWidth: 200 }}
               />
               <button onClick={saveStrategy}
                 style={{
                   padding: '8px 20px', background: '#6366f1', color: '#fff',
-                  border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600,
+                  border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 15, fontWeight: 600,
                 }}>
                 Save →
               </button>
               <button onClick={() => setLegs([])}
                 style={{
                   padding: '8px 16px', background: 'none', color: '#6b7280',
-                  border: '1px solid #d1d5db', borderRadius: 6, cursor: 'pointer', fontSize: 13,
+                  border: '1px solid #d1d5db', borderRadius: 6, cursor: 'pointer', fontSize: 15,
                 }}>
                 Clear
               </button>
@@ -1102,7 +1149,7 @@ export default function StrategyBuilder({
                   padding: '8px 16px', background: 'none',
                   color: copied ? '#16a34a' : '#6b7280',
                   border: `1px solid ${copied ? '#16a34a' : '#d1d5db'}`,
-                  borderRadius: 6, cursor: 'pointer', fontSize: 13,
+                  borderRadius: 6, cursor: 'pointer', fontSize: 15,
                 }}>
                 {copied ? 'Link copied' : 'Share link'}
               </button>
@@ -1115,7 +1162,7 @@ export default function StrategyBuilder({
       {tab === 'saved' && (
         <div>
           {saved.length === 0 && (
-            <div style={{ color: '#6b7280', fontSize: 14, padding: '24px 0' }}>
+            <div style={{ color: '#6b7280', fontSize: 16, padding: '24px 0' }}>
               No saved strategies yet. Build one and click &ldquo;Save →&rdquo;
             </div>
           )}
@@ -1132,17 +1179,17 @@ export default function StrategyBuilder({
                 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>
+                    <div style={{ fontWeight: 700, fontSize: 16 }}>
                       {s.label ?? (MCX_INSTRUMENTS[s.instrument]?.label ?? s.instrument)}
                       {' '}
-                      <span style={{ fontWeight: 400, color: '#6b7280', fontSize: 12 }}>
+                      <span style={{ fontWeight: 400, color: '#6b7280', fontSize: 14 }}>
                         expiry {s.expiry}
                       </span>
                     </div>
-                    <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>
+                    <div style={{ fontSize: 14, color: '#6b7280', marginTop: 2 }}>
                       Entry {new Date(s.entryDate).toLocaleDateString('en-IN')} · F₀ ₹{fmt(s.entryFutures)}
                     </div>
-                    <div style={{ marginTop: 6, fontSize: 12 }}>
+                    <div style={{ marginTop: 6, fontSize: 14 }}>
                       {s.legs.map((leg, i) => (
                         <span key={i} style={{
                           marginRight: 6, padding: '1px 6px', borderRadius: 4,
@@ -1156,25 +1203,25 @@ export default function StrategyBuilder({
                   </div>
                   <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: 12 }}>
                     {expired
-                      ? <div style={{ color: '#9ca3af', fontSize: 12 }}>Expired</div>
+                      ? <div style={{ color: '#9ca3af', fontSize: 14 }}>Expired</div>
                       : livePnl != null
                         ? (
                           <div>
-                            <div style={{ fontWeight: 700, color: pnlColor, fontSize: 15 }}>
+                            <div style={{ fontWeight: 700, color: pnlColor, fontSize: 17 }}>
                               {livePnl >= 0 ? '+' : ''}₹{fmt(livePnl)}
                             </div>
                             {entryTotal !== 0 && (
-                              <div style={{ fontSize: 11, color: pnlColor }}>
+                              <div style={{ fontSize: 13, color: pnlColor }}>
                                 {(livePnl / Math.abs(entryTotal) * 100).toFixed(1)}%
                               </div>
                             )}
-                            <div style={{ fontSize: 11, color: '#9ca3af' }}>live P&L</div>
+                            <div style={{ fontSize: 13, color: '#9ca3af' }}>live P&L</div>
                           </div>
                         )
-                        : <div style={{ fontSize: 12, color: '#9ca3af' }}>loading…</div>
+                        : <div style={{ fontSize: 14, color: '#9ca3af' }}>loading…</div>
                     }
                     <button onClick={() => deleteSaved(s.id)}
-                      style={{ marginTop: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 11 }}>
+                      style={{ marginTop: 6, background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 13 }}>
                       Remove
                     </button>
                   </div>
@@ -1189,7 +1236,7 @@ export default function StrategyBuilder({
       <div style={{
         marginTop: 32, padding: '10px 14px',
         background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6,
-        fontSize: 11, color: '#9ca3af', lineHeight: 1.5,
+        fontSize: 13, color: '#9ca3af', lineHeight: 1.5,
       }}>
         <strong>Disclaimer:</strong> This tool is for educational and informational purposes only. It does not constitute investment advice or a recommendation to buy or sell any securities or commodity contracts. BhaavBrief is not a SEBI-registered Investment Adviser or Research Analyst. Option pricing shown is a mathematical model output — actual market prices may differ. Trading commodity derivatives involves substantial risk of loss.
       </div>
