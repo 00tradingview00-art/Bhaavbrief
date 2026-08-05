@@ -6,7 +6,7 @@ import {
 } from 'recharts'
 import {
   computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
-  type Leg, type SavedStrategy, type PayoffPoint,
+  type Leg, type SavedStrategy, type PayoffPoint, type Action,
 } from '@/lib/strategy'
 import {
   computeIVRegime,
@@ -122,8 +122,31 @@ function greekColor(label: string, raw: number): string {
   return 'inherit'
 }
 
+// Shared B/S leg-add button — used for CE, PE, and futures legs alike
+function LegButton({ action, onClick }: { action: Action; onClick: () => void }) {
+  const isBuy = action === 'BUY'
+  return (
+    <button onClick={onClick}
+      style={{
+        fontSize: 10, padding: '1px 4px', borderRadius: 3,
+        border: `1px solid ${isBuy ? '#16a34a' : '#dc2626'}`,
+        color: isBuy ? '#15803d' : '#b91c1c',
+        background: isBuy ? '#dcfce7' : '#fee2e2',
+        cursor: 'pointer', lineHeight: 1.4,
+      }}>
+      {isBuy ? 'B' : 'S'}
+    </button>
+  )
+}
+
 function autoLabel(legs: Leg[], instrument: string): string {
   const inst = INSTRUMENTS.find(i => i.key === instrument)?.label ?? instrument
+  const hasLongFut = legs.some(l => l.type === 'FUT' && l.action === 'BUY')
+  const hasShortCall = legs.some(l => l.type === 'CE' && l.action === 'SELL')
+  const hasLongPut = legs.some(l => l.type === 'PE' && l.action === 'BUY')
+  if (legs.length === 3 && hasLongFut && hasShortCall && hasLongPut) return `${inst} Collar`
+  if (legs.length === 2 && hasLongFut && hasShortCall) return `${inst} Covered Call`
+  if (legs.length === 2 && hasLongFut && hasLongPut) return `${inst} Protective Put`
   if (legs.length === 2 && legs[0].type === 'CE' && legs[1].type === 'PE' && legs[0].action === 'BUY' && legs[1].action === 'BUY' && legs[0].strike === legs[1].strike) return `${inst} Straddle`
   if (legs.length === 2 && legs[0].type === 'CE' && legs[1].type === 'PE' && legs[0].action === 'BUY' && legs[1].action === 'BUY') return `${inst} Strangle`
   if (legs.length === 1 && legs[0].type === 'CE' && legs[0].action === 'BUY') return `${inst} Long Call`
@@ -158,6 +181,10 @@ function buildTemplateLegs(templateId: TemplateId, chain: ChainRow[], futurePric
     qty:     1,
     premium: row[type].ltp,
     iv:      (row[type].iv ?? fallbackIV) / 100,
+  })
+
+  const makeFutLeg = (action: Action): Leg => ({
+    strike: futurePrice, type: 'FUT', action, qty: 1, premium: futurePrice, iv: 0,
   })
 
   switch (templateId) {
@@ -199,6 +226,15 @@ function buildTemplateLegs(templateId: TemplateId, chain: ChainRow[], futurePric
       if (!otm1CE) return [makeLeg(atm, 'CE', 'SELL')]
       return [makeLeg(otm1CE, 'CE', 'SELL'), makeLeg(otm2CE ?? otm1CE, 'CE', 'BUY')]
 
+    case 'COVERED_CALL':
+      return [makeFutLeg('BUY'), makeLeg(atm, 'CE', 'SELL')]
+
+    case 'PROTECTIVE_PUT':
+      return [makeFutLeg('BUY'), makeLeg(atm, 'PE', 'BUY')]
+
+    case 'COLLAR':
+      return [makeFutLeg('BUY'), makeLeg(otm1CE ?? atm, 'CE', 'SELL'), makeLeg(otm1PE ?? atm, 'PE', 'BUY')]
+
     default:
       return []
   }
@@ -218,7 +254,13 @@ function persistSaved(strategies: SavedStrategy[]): void {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaultInstrument?: string }) {
+export default function StrategyBuilder({
+  defaultInstrument = 'GOLD',
+  marginByInstrument,
+}: {
+  defaultInstrument?: string
+  marginByInstrument?: Record<string, string | null>
+}) {
   const [instrument,    setInstrument]    = useState(defaultInstrument)
   const [chainData,     setChainData]     = useState<ChainData | null>(null)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
@@ -351,10 +393,13 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
       if (!cd) { pnls[s.id] = null; continue }
       const ls = MCX_INSTRUMENTS[s.instrument]?.lotSize ?? 1
       const currentPnl = s.legs.reduce((sum, leg) => {
+        const sign = leg.action === 'BUY' ? 1 : -1
+        if (leg.type === 'FUT') {
+          return sum + sign * leg.qty * ls * (cd.futurePrice - leg.premium)
+        }
         const row = cd.chain.find(r => r.strike === leg.strike)
         if (!row) return sum
         const currentPremium = row[leg.type].ltp
-        const sign = leg.action === 'BUY' ? 1 : -1
         return sum + sign * leg.qty * ls * (currentPremium - leg.premium)
       }, 0)
       pnls[s.id] = currentPnl
@@ -430,12 +475,32 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
     ])
   }
 
+  function addFutLeg(action: Action) {
+    if (futurePrice <= 0) return
+    setLegs(prev => [
+      ...prev,
+      { strike: futurePrice, type: 'FUT', action, qty: 1, premium: futurePrice, iv: 0 },
+    ])
+  }
+
   function removeLeg(idx: number) {
     setLegs(prev => prev.filter((_, i) => i !== idx))
   }
 
   function updateQty(idx: number, qty: number) {
     setLegs(prev => prev.map((l, i) => i === idx ? { ...l, qty: Math.max(1, qty) } : l))
+  }
+
+  // Lets a trader model a position they already hold (e.g. futures bought weeks
+  // ago) instead of always being locked to the live price at the moment a leg
+  // was added. For a FUT leg, `strike` mirrors `premium` purely for display —
+  // keep them in sync so the saved-strategy chip renderer shows a consistent number.
+  function updatePremium(idx: number, premium: number) {
+    setLegs(prev => prev.map((l, i) => {
+      if (i !== idx) return l
+      const p = Math.max(0, premium)
+      return l.type === 'FUT' ? { ...l, premium: p, strike: p } : { ...l, premium: p }
+    }))
   }
 
   function applyAllQty(qty: number) {
@@ -563,24 +628,28 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
       {chainData && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 6 }}>
             {([
-              { id: 'ATM_STRADDLE',     name: 'ATM Straddle'      },
-              { id: 'OTM_STRANGLE',     name: 'OTM Strangle'      },
-              { id: 'LONG_CALL',        name: 'Long Call'          },
-              { id: 'LONG_PUT',         name: 'Long Put'           },
-              { id: 'BULL_CALL_SPREAD', name: 'Bull Call Spread'   },
-              { id: 'BEAR_PUT_SPREAD',  name: 'Bear Put Spread'    },
-              { id: 'IRON_CONDOR',      name: 'Iron Condor'        },
-              { id: 'BULL_PUT_SPREAD',  name: 'Bull Put Spread'    },
-              { id: 'BEAR_CALL_SPREAD', name: 'Bear Call Spread'   },
-            ] as { id: TemplateId; name: string }[]).map(t => (
+              { id: 'ATM_STRADDLE',     name: 'ATM Straddle',      desc: 'Buy call + put, same strike — bet on a big move, either direction' },
+              { id: 'OTM_STRANGLE',     name: 'OTM Strangle',      desc: 'Cheaper big-move bet than a straddle — needs a bigger move to profit' },
+              { id: 'LONG_CALL',        name: 'Long Call',         desc: 'Bullish, limited risk, unlimited upside' },
+              { id: 'LONG_PUT',         name: 'Long Put',          desc: 'Bearish, limited risk, large downside payoff' },
+              { id: 'BULL_CALL_SPREAD', name: 'Bull Call Spread',  desc: 'Capped bullish bet — cheaper than a long call' },
+              { id: 'BEAR_PUT_SPREAD',  name: 'Bear Put Spread',   desc: 'Capped bearish bet — cheaper than a long put' },
+              { id: 'IRON_CONDOR',      name: 'Iron Condor',       desc: 'Profit if price stays in a range' },
+              { id: 'BULL_PUT_SPREAD',  name: 'Bull Put Spread',   desc: 'Sell puts for credit — bullish, defined risk' },
+              { id: 'BEAR_CALL_SPREAD', name: 'Bear Call Spread',  desc: 'Sell calls for credit — bearish, defined risk' },
+              { id: 'COVERED_CALL',     name: 'Covered Call',      desc: 'Hold futures, sell a call — earn income on a position you hold' },
+              { id: 'PROTECTIVE_PUT',   name: 'Protective Put',    desc: 'Hold futures, buy a put — insure against a drop' },
+              { id: 'COLLAR',           name: 'Collar',            desc: 'Hold futures + sell call + buy put — cap both gains and losses' },
+            ] as { id: TemplateId; name: string; desc: string }[]).map(t => (
               <button key={t.id} onClick={() => loadTemplate(t.id)}
                 style={{
-                  padding: '5px 10px', borderRadius: 5, border: '1px solid #d1d5db',
-                  background: '#fff', cursor: 'pointer', fontSize: 12, fontWeight: 500,
+                  padding: '6px 10px', borderRadius: 6, border: '1px solid #d1d5db',
+                  background: '#fff', cursor: 'pointer', textAlign: 'left',
                 }}>
-                {t.name}
+                <div style={{ fontSize: 12, fontWeight: 600 }}>{t.name}</div>
+                <div style={{ fontSize: 10, color: '#9ca3af', marginTop: 2, lineHeight: 1.3 }}>{t.desc}</div>
               </button>
             ))}
           </div>
@@ -636,6 +705,21 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
               </span>
             )}
           </div>
+
+          {/* Futures leg — its own row so it isn't buried inline with other header text */}
+          {futurePrice > 0 && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14,
+              padding: '8px 12px', background: '#f0f9ff', border: '1px solid #bae6fd', borderRadius: 6,
+            }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#0369a1' }}>Futures Position</span>
+              <span style={{ fontSize: 12, color: '#6b7280' }}>
+                Add the underlying futures contract as a leg — for covered calls, protective puts, collars:
+              </span>
+              <LegButton action="BUY"  onClick={() => addFutLeg('BUY')} />
+              <LegButton action="SELL" onClick={() => addFutLeg('SELL')} />
+            </div>
+          )}
 
           {/* Today's Edge of Day from the morning brief */}
           {briefEdge && (
@@ -705,12 +789,8 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           <span style={{ fontWeight: 700 }}>{row.CE.ltp > 0 ? fmt(row.CE.ltp) : '—'}</span>
                           {row.CE.ltp > 0 && (
                             <span style={{ marginLeft: 4, display: 'inline-flex', gap: 2 }}>
-                              <button onClick={() => addLeg(row, 'CE', 'BUY')}
-                                style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #16a34a',
-                                  color: '#15803d', background: '#dcfce7', cursor: 'pointer', lineHeight: 1.4 }}>B</button>
-                              <button onClick={() => addLeg(row, 'CE', 'SELL')}
-                                style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #dc2626',
-                                  color: '#b91c1c', background: '#fee2e2', cursor: 'pointer', lineHeight: 1.4 }}>S</button>
+                              <LegButton action="BUY"  onClick={() => addLeg(row, 'CE', 'BUY')} />
+                              <LegButton action="SELL" onClick={() => addLeg(row, 'CE', 'SELL')} />
                             </span>
                           )}
                         </td>
@@ -722,12 +802,8 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                         <td style={{ padding: '5px 6px', textAlign: 'left', whiteSpace: 'nowrap' }}>
                           {row.PE.ltp > 0 && (
                             <span style={{ marginRight: 4, display: 'inline-flex', gap: 2 }}>
-                              <button onClick={() => addLeg(row, 'PE', 'BUY')}
-                                style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #16a34a',
-                                  color: '#15803d', background: '#dcfce7', cursor: 'pointer', lineHeight: 1.4 }}>B</button>
-                              <button onClick={() => addLeg(row, 'PE', 'SELL')}
-                                style={{ fontSize: 10, padding: '1px 4px', borderRadius: 3, border: '1px solid #dc2626',
-                                  color: '#b91c1c', background: '#fee2e2', cursor: 'pointer', lineHeight: 1.4 }}>S</button>
+                              <LegButton action="BUY"  onClick={() => addLeg(row, 'PE', 'BUY')} />
+                              <LegButton action="SELL" onClick={() => addLeg(row, 'PE', 'SELL')} />
                             </span>
                           )}
                           <span style={{ fontWeight: 700 }}>{row.PE.ltp > 0 ? fmt(row.PE.ltp) : '—'}</span>
@@ -782,13 +858,20 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                           {leg.action}
                         </button>
                       </td>
-                      <td style={{ padding: '5px 8px', fontWeight: 600, color: leg.type === 'CE' ? '#4f46e5' : '#dc2626' }}>
+                      <td style={{ padding: '5px 8px', fontWeight: 600, color: leg.type === 'CE' ? '#4f46e5' : leg.type === 'PE' ? '#dc2626' : '#0891b2' }}>
                         {leg.type}
                       </td>
-                      <td style={{ padding: '5px 8px', textAlign: 'right' }}>{fmt(leg.strike)}</td>
-                      <td style={{ padding: '5px 8px', textAlign: 'right' }}>₹{fmt(leg.premium)}</td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right' }}>
+                        {leg.type === 'FUT' ? '—' : fmt(leg.strike)}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right' }}>
+                        ₹<input type="number" min={0} step="0.05" value={leg.premium}
+                          onChange={e => updatePremium(i, parseFloat(e.target.value) || 0)}
+                          title="Edit to model a position entered at a different price than today's live quote"
+                          style={{ width: 64, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 12, textAlign: 'right' }} />
+                      </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right', color: '#6b7280' }}>
-                        {(leg.iv * 100).toFixed(1)}
+                        {leg.type === 'FUT' ? '—' : (leg.iv * 100).toFixed(1)}
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <input type="number" min={1} max={100} value={leg.qty}
@@ -913,6 +996,12 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
                   sub:   `per 1 lot (×${lotSize})`,
                   color: 'inherit',
                 },
+                ...(legs.some(l => l.type === 'FUT') ? [{
+                  label: 'Approx Margin',
+                  value: marginByInstrument?.[instrument] ?? '—',
+                  sub:   'futures leg — SPAN + exposure',
+                  color: 'inherit',
+                }] : []),
                 {
                   label: 'Max Profit',
                   value: fmtPnl(maxProfitLoss.maxProfit),
@@ -948,7 +1037,11 @@ export default function StrategyBuilder({ defaultInstrument = 'GOLD' }: { defaul
               ].map(s => (
                 <div key={s.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
-                  <div style={{ color: '#6b7280', fontSize: 11, marginBottom: 2 }}>{s.label}</div>
+                  <div style={{ color: '#6b7280', fontSize: 11, marginBottom: 2 }}>
+                    {s.label === 'Approx Margin'
+                      ? <Link href="/learn/mcx-margin-calculation" style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{s.label}</Link>
+                      : s.label}
+                  </div>
                   <div style={{ fontWeight: 700, color: s.color }}>{s.value}</div>
                   {s.sub && <div style={{ fontSize: 10, color: '#9ca3af' }}>{s.sub}</div>}
                 </div>
