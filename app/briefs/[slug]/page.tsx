@@ -47,6 +47,7 @@ export async function generateMetadata(
   if (!brief) return { title: 'Brief not found' }
 
   const title       = brief.title
+  const seoTitle    = `${brief.title} — MCX Outlook ${formatDate(brief.date)}`
   const description = brief.description || brief.summary || `MCX commodity intelligence — ${(brief.tags ?? []).join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.urlSlug}`
 
@@ -59,7 +60,7 @@ export async function generateMetadata(
   const ogImage = `${BASE_URL}/api/og?${ogParams}`
 
   return {
-    title,
+    title: seoTitle,
     description,
     alternates: { canonical: url },
     openGraph: {
