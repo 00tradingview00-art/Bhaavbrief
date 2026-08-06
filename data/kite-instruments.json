@@ -1,14 +1,14 @@
 {
   "_note": "Auto-updated by morning auth. Do not edit manually.",
   "gold": {
-    "token": 119445255,
-    "symbol": "GOLD26AUGFUT",
-    "expiry": "2026-08-05"
+    "token": 123668231,
+    "symbol": "GOLD26OCTFUT",
+    "expiry": "2026-10-05"
   },
   "goldMini": {
-    "token": 142316039,
-    "symbol": "GOLDM26AUGFUT",
-    "expiry": "2026-08-05"
+    "token": 144370183,
+    "symbol": "GOLDM26SEPFUT",
+    "expiry": "2026-09-04"
   },
   "silver": {
     "token": 120761607,
@@ -50,7 +50,7 @@
     "symbol": "NICKEL26AUGFUT",
     "expiry": "2026-08-19"
   },
-  "updatedAt": "2026-08-05T06:02:22.397Z",
+  "updatedAt": "2026-08-06T04:58:34.753Z",
   "currencies": {
     "usdinr": {
       "token": 282371,
