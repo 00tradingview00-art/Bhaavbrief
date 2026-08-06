@@ -108,11 +108,23 @@ function daysToExpiry(expiry: string): number {
   return Math.max(0, (new Date(expiry).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
 }
 
-function buildFRange(futurePrice: number, payoffWidth: number): number[] {
-  return Array.from(
+function buildFRange(futurePrice: number, payoffWidth: number, legs: Leg[]): number[] {
+  const base = Array.from(
     { length: PAYOFF_POINTS },
     (_, i) => futurePrice * (1 - payoffWidth) + (i / (PAYOFF_POINTS - 1)) * futurePrice * 2 * payoffWidth,
   )
+  const lo = base[0], hi = base[base.length - 1]
+  // Extra fine-grained points (±1% of spot) around every distinct option
+  // strike, so a tight multi-leg spread (e.g. adjacent-strike vertical spread)
+  // is never under-sampled by the coarse background grid — regardless of how
+  // wide the overall window is. FUT legs have no strike to add points around.
+  const strikes = [...new Set(legs.filter(l => l.type !== 'FUT').map(l => l.strike))]
+  const fineRadius = futurePrice * 0.01
+  const finePoints = strikes.flatMap(K =>
+    Array.from({ length: 21 }, (_, i) => K - fineRadius + (i / 20) * 2 * fineRadius),
+  )
+  const merged = [...base, ...finePoints].filter(F => F >= lo && F <= hi)
+  return [...new Set(merged.map(f => +f.toFixed(4)))].sort((a, b) => a - b)
 }
 
 function greekColor(label: string, raw: number): string {
@@ -408,7 +420,7 @@ export default function StrategyBuilder({
   }, [saved, chainData, instrument])
 
   // Payoff chart data — "today" line uses current live IV
-  const fRange      = futurePrice > 0 ? buildFRange(futurePrice, payoffWidth) : []
+  const fRange      = futurePrice > 0 ? buildFRange(futurePrice, payoffWidth, legs) : []
   const payoff: PayoffPoint[] = legs.length > 0 && futurePrice > 0
     ? computePayoff(legs, fRange, lotSize, T, r, currentIV > 0 ? currentIV : undefined)
     : []
@@ -963,7 +975,7 @@ export default function StrategyBuilder({
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={chartDataFull} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
-                  <XAxis dataKey="F" tickFormatter={(v: number) => {
+                  <XAxis dataKey="F" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(v: number) => {
                     const n = Number(v)
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
                     if (futurePrice >= 1000)  return `₹${(n / 1000).toFixed(1)}K`
@@ -974,22 +986,27 @@ export default function StrategyBuilder({
                     formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
                     labelFormatter={v => `P = ₹${fmt(Number(v))}`} />
                   <Legend wrapperStyle={{ fontSize: 14 }} />
-                  <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
+                  <ReferenceLine y={0} stroke="var(--ink-4, #B8B4A8)" strokeDasharray="3 3" />
                   {/* Current price reference */}
                   {futurePrice > 0 && (
-                    <ReferenceLine x={futurePrice} stroke="#94a3b8" strokeDasharray="2 3" strokeWidth={1} />
+                    <ReferenceLine x={futurePrice} stroke="var(--border-2, #D4CFC0)" strokeDasharray="2 3" strokeWidth={1} />
                   )}
-                  {/* Breakeven lines — no label; values shown in stats below */}
+                  {/* Breakeven lines — no label; values shown in stats below. Exact
+                      value now that the axis is numeric (no need to snap to a grid point). */}
                   {breakevens.map((be, i) => (
-                    <ReferenceLine key={i} x={Math.round(be)} stroke="#f97316" strokeDasharray="4 2" strokeWidth={1.5} />
+                    <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.5} />
                   ))}
-                  <Line type="monotone" dataKey="Expiry" stroke="#6366f1" dot={false} strokeWidth={2} name="At Expiry" />
-                  {T > 0 && <Line type="monotone" dataKey="Today" stroke="#22c55e" dot={false} strokeWidth={1.5}
-                    strokeDasharray="5 3" name={`Today (${Math.round(dte)}d left)`} />}
-                  {payoff2wk.length > 0 && <Line type="monotone" dataKey="TwoWeeks" stroke="#f59e0b" dot={false} strokeWidth={1}
+                  {/* Sequential ramp by time-to-expiry, lightest→darkest: Today has the
+                      most time remaining, "-1 week"/"-2 wks" are progressively closer to
+                      expiry (T minus 7/14 days from today, not "weeks before expiry"),
+                      At Expiry is T=0 — darkest, the final/most important answer. */}
+                  <Line type="monotone" dataKey="Expiry" stroke="#0d366b" dot={false} strokeWidth={2} name="At Expiry" />
+                  {payoff2wk.length > 0 && <Line type="monotone" dataKey="TwoWeeks" stroke="#256abf" dot={false} strokeWidth={1}
                     strokeDasharray="4 4" name="−2 wks" />}
-                  {payoff1wk.length > 0 && <Line type="monotone" dataKey="OneWeek" stroke="#fb923c" dot={false} strokeWidth={1}
+                  {payoff1wk.length > 0 && <Line type="monotone" dataKey="OneWeek" stroke="#5598e7" dot={false} strokeWidth={1}
                     strokeDasharray="2 4" name="−1 week" />}
+                  {T > 0 && <Line type="monotone" dataKey="Today" stroke="#86b6ef" dot={false} strokeWidth={1.5}
+                    strokeDasharray="5 3" name={`Today (${Math.round(dte)}d left)`} />}
                 </LineChart>
               </ResponsiveContainer>
             </div>
