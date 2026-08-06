@@ -11,10 +11,12 @@
  * C-01 note atop lib/snapshot.ts for the full honest picture.
  *
  * Exit 0 = snapshot written cleanly (or with acceptable stale count).
- * Exit 1 = >3 instruments have no data at all, OR the assembled snapshot
- *          fails its C-02 schema/plausible-range contract (scripts/lib/
- *          snapshotSchema.mjs) — the bad payload is saved to
- *          data/quarantine/ and the last good snapshot is left untouched.
+ * Exit 1 = a core instrument's cached contract has expired (needs
+ *          kite-morning-auth.yml to roll it), OR >3 instruments have no
+ *          data at all, OR the assembled snapshot fails its C-02
+ *          schema/plausible-range contract (scripts/lib/snapshotSchema.mjs)
+ *          — the bad payload is saved to data/quarantine/ and the last good
+ *          snapshot is left untouched.
  *
  * Stale handling (rule 3 of the spec):
  *   - If a live fetch fails, carry forward the last good value and mark stale:true.
@@ -34,6 +36,7 @@ import {
 import { validateSnapshot } from './lib/snapshotSchema.mjs'
 import { appendDailySnapshot } from './lib/historicalStore.mjs'
 import { todayIST } from './lib/holidays.js'
+import { getExpiredCoreInstruments } from './lib/instrumentExpiryCheck.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -201,8 +204,21 @@ async function fetchFrankfurterUSDINR() {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
+function checkExpiredCoreInstruments() {
+  return getExpiredCoreInstruments(loadJSON(INSTRUMENTS_FILE), todayIST())
+}
+
 async function main() {
   console.log(`\nBhaavBrief fetch-snapshot — ${new Date().toISOString()}\n`)
+
+  const expired = checkExpiredCoreInstruments()
+  if (expired.length) {
+    console.error(`\nFATAL: expired instrument contract(s) — run kite-morning-auth.yml to roll to the next front-month contract, then retry:`)
+    for (const { key, symbol, expiry } of expired) {
+      console.error(`  - ${key}: ${symbol ?? '(unknown symbol)'} expired ${expiry}`)
+    }
+    process.exit(1)
+  }
 
   const existing = loadJSON(SNAPSHOT_FILE)  // last good snapshot for stale fallback
   const mcxCache = loadJSON(MCX_CACHE_FILE)  // intelligence-engine cache (refreshes every 15 min)
