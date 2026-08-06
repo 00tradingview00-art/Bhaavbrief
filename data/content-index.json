@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-080",
+    "href": "/briefs/edition-080",
+    "title": "Gold at ₹149483 — Safe-Haven Demand Decouples from Crude's Slide",
+    "description": "COMEX gold surged $73.9 overnight while crude fell; fear is buying gold without needing an oil shock to justify it.",
+    "excerpt": "MCX Gold ₹149483 | Crude ₹7130 | USDINR ₹95.15 — Gold +0.67% | Crude +0.30% | Silver +0.15% Yesterday's Edge — Result: Edition #79 watched whether COMEX GOLD would close above 4,194.5. Confirmed ✓, no",
+    "date": "2026-08-06T05:00:03.004Z",
+    "edition": "80",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-06-china-pmi-mcx-base-metals-india",
     "href": "/articles/2026-08-06-china-pmi-mcx-base-metals-india",
