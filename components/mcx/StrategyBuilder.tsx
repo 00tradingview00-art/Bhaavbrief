@@ -1231,15 +1231,6 @@ export default function StrategyBuilder({
           })}
         </div>
       )}
-
-      {/* SEBI Disclaimer */}
-      <div style={{
-        marginTop: 32, padding: '10px 14px',
-        background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6,
-        fontSize: 13, color: '#9ca3af', lineHeight: 1.5,
-      }}>
-        <strong>Disclaimer:</strong> This tool is for educational and informational purposes only. It does not constitute investment advice or a recommendation to buy or sell any securities or commodity contracts. BhaavBrief is not a SEBI-registered Investment Adviser or Research Analyst. Option pricing shown is a mathematical model output — actual market prices may differ. Trading commodity derivatives involves substantial risk of loss.
-      </div>
     </div>
   )
 }
