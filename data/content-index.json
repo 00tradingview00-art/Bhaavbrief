@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-07-mcx-crude-rallies-2-38-on-dollar-weakness-demand-hold",
+    "href": "/articles/2026-08-07-mcx-crude-rallies-2-38-on-dollar-weakness-demand-hold",
+    "title": "MCX Crude Rallies 2.38% on Dollar Weakness, Demand Hold",
+    "description": "MCX Crude at ₹7485/bbl (+2.38%) as broad commodity rally extends. WTI $78.31 signals soft-landing reflationary trade; watch ₹7500 resistance.",
+    "excerpt": "WHAT HAPPENED MCX Crude surged 2.38% to ₹7485/bbl in this morning's session, following a ₹78.31 WTI print (Brent ₹83.75) and broad-based commodity strength in gold, silver, and copper. The trigger is ",
+    "date": "2026-08-07T04:45:19.956Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Dollar Weakness",
+      "Reflationary"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7485
+  },
+  {
     "type": "brief",
     "slug": "edition-081",
     "href": "/briefs/edition-081",
