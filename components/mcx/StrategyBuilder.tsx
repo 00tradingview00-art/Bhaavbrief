@@ -340,16 +340,21 @@ export default function StrategyBuilder({
       const chainUrl = `/api/options?instrument=${inst}${exp ? `&expiry=${exp}` : ''}`
       const ivUrl    = `/api/options/iv-history?instrument=${inst}`
       const [chainRes, ivRes] = await Promise.all([fetch(chainUrl), fetch(ivUrl)])
+
+      // Set independently of the chain outcome below — these come from two
+      // unrelated sources (Redis vs Kite), and a chain failure shouldn't
+      // erase IV history that was fetched successfully in parallel.
+      if (ivRes.ok) {
+        const ivJson = await ivRes.json()
+        setIvHistory(ivJson.history ?? [])
+      }
+
       if (!chainRes.ok) throw new Error('Failed to load options chain')
       const chainJson = await chainRes.json()
       setChainData(chainJson)
       allChainDataRef.current[inst] = chainJson
       setLastFetchedAt(new Date())
       if (!preserveLegs) setLegs([])
-      if (ivRes.ok) {
-        const ivJson = await ivRes.json()
-        setIvHistory(ivJson.history ?? [])
-      }
     } catch (e) {
       setError((e as Error).message)
     } finally {
