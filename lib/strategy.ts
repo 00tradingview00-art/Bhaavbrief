@@ -102,6 +102,30 @@ export function computeNetGreeks(
   )
 }
 
+export interface ExpectedMoveCone {
+  sigmaT:   number             // annualized IV (decimal) × sqrt(T) — the log-return std dev to expiry
+  oneSigma: [number, number]   // ~68% expected range
+  twoSigma: [number, number]   // ~95% expected range
+}
+
+// Lognormal expected-move band around the current futures price — the same
+// distributional assumption Black-76 (lib/black76.ts) already prices under,
+// so this cone is internally consistent with the rest of the pricer rather
+// than a naive linear F±sigma approximation.
+export function computeExpectedMoveCone(
+  futurePrice: number,
+  ivPct: number,
+  T: number,
+): ExpectedMoveCone | null {
+  if (!(futurePrice > 0) || !(ivPct > 0) || !(T > 0)) return null
+  const sigmaT = (ivPct / 100) * Math.sqrt(T)
+  const band = (z: number): [number, number] => [
+    futurePrice * Math.exp(-z * sigmaT),
+    futurePrice * Math.exp(z * sigmaT),
+  ]
+  return { sigmaT, oneSigma: band(1), twoSigma: band(2) }
+}
+
 export function computeBreakevens(payoff: PayoffPoint[]): number[] {
   const breakevens: number[] = []
   for (let i = 0; i < payoff.length - 1; i++) {

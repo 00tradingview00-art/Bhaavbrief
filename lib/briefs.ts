@@ -48,6 +48,11 @@ export interface BriefMeta {
   corrected:      boolean
   correctedAt:    string | null
   correctionNote: string | null
+  // Structured "Edge of the Day" thesis (see scripts/lib/edgeLedger.mjs) —
+  // present on a minority of editions; consumers must handle null.
+  edgeMetric:    string | null
+  edgeLevel:     number | null
+  edgeCondition: 'above' | 'below' | null
 }
 
 export interface Brief extends BriefMeta {
@@ -85,6 +90,9 @@ function parseBriefFile(filename: string): BriefMeta | null {
     corrected:      data.corrected === true,
     correctedAt:    data.correctedAt ?? null,
     correctionNote: data.correctionNote ?? null,
+    edgeMetric:    data.edgeMetric    ?? null,
+    edgeLevel:     data.edgeLevel     ?? null,
+    edgeCondition: data.edgeCondition ?? null,
   }
 }
 
@@ -158,6 +166,9 @@ export function getBrief(slug: string): Brief | null {
       corrected:      data.corrected === true,
       correctedAt:    data.correctedAt ?? null,
       correctionNote: data.correctionNote ?? null,
+      edgeMetric:    data.edgeMetric    ?? null,
+      edgeLevel:     data.edgeLevel     ?? null,
+      edgeCondition: data.edgeCondition ?? null,
       content,
     }
   }

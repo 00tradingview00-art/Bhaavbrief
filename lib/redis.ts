@@ -1,5 +1,7 @@
 // Thin wrapper around the Upstash Redis REST API (single-command form).
 
+export { todayIST } from './tradingCalendar'
+
 const REDIS_URL   = process.env.UPSTASH_REDIS_REST_URL
 const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
 
@@ -12,8 +14,4 @@ export async function redisCommand(cmd: string, ...args: string[]): Promise<unkn
   if (!res.ok) throw new Error(`Redis ${cmd} failed: ${res.status} ${await res.text()}`)
   const json = await res.json() as { result?: unknown }
   return json.result ?? null
-}
-
-export function todayIST(): string {
-  return new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
 }

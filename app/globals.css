@@ -32,6 +32,18 @@ body {
   border-bottom: 3px double var(--rule2);
 }
 
+/* Suppress native number-input spinner UI so digits never clip against the
+   arrows — used on Strategy Builder price inputs. */
+.no-spinner {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Brief prose styles */
 .brief-prose h2 {
   font-family: var(--font-serif);

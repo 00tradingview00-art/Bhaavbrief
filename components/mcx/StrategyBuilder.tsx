@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Legend,
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceArea, Legend,
   AreaChart, Area,
 } from 'recharts'
 import {
   computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
+  computeExpectedMoveCone,
   type Leg, type SavedStrategy, type PayoffPoint, type Action,
 } from '@/lib/strategy'
 import {
@@ -15,6 +16,7 @@ import {
 } from '@/lib/ivAnalysis'
 import Link from 'next/link'
 import { MCX_INSTRUMENTS } from '@/lib/options'
+import type { EventMapEntry } from '@/lib/eventMapTypes'
 
 // ── Types mirrored from getOptionsChain return shape ─────────────────────────
 
@@ -46,6 +48,23 @@ interface ChainData {
   chain:        ChainRow[]
 }
 
+interface EdgeResolution {
+  verdict:       'confirmed' | 'rejected' | 'unresolved'
+  resolvedValue: number | null
+  reason:        string | null
+}
+
+interface BriefEdge {
+  edge:          string
+  title:         string
+  urlSlug:       string
+  date:          string
+  edgeMetric?:    string | null
+  edgeLevel?:     number | null
+  edgeCondition?: 'above' | 'below' | null
+  resolution?:    EdgeResolution | null
+}
+
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const INSTRUMENTS = [
@@ -55,6 +74,15 @@ const INSTRUMENTS = [
   { key: 'NATURALGAS', label: 'Nat Gas'   },
   { key: 'COPPER',     label: 'Copper'    },
 ]
+
+// Only these editions' structured Edge-of-Day metrics have a real underlying
+// market for the currently-supported instruments — COPPER/NATURALGAS
+// deliberately have no entry here (fail open, never fabricate a mapping).
+const EDGE_METRIC_TO_INSTRUMENT: Record<string, string> = {
+  COMEX_GOLD:   'GOLD',
+  COMEX_SILVER: 'SILVER',
+  WTI:          'CRUDEOIL',
+}
 
 // Instrument-appropriate chart ranges — wider for high-vol commodities
 const PAYOFF_WIDTH_BY_INST: Record<string, number> = {
@@ -291,6 +319,107 @@ function IVHistoryTooltip({ active, payload, color }: IVHistoryTooltipProps) {
   )
 }
 
+interface PayoffTooltipProps {
+  active?:     boolean
+  payload?:    { dataKey: string; value: number; color: string; name: string }[]
+  label?:      number
+  netCostINR:  number
+  futurePrice: number
+  sigmaT:      number | null
+}
+
+// Shows ₹ + % P&L per line (the original ask), plus how many standard
+// deviations the hovered price is from the current price — the piece a
+// generic tooltip can't show, since it needs our own IV-regime math.
+function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT }: PayoffTooltipProps) {
+  if (!active || !payload?.length || label == null) return null
+  const movePct = futurePrice > 0 ? ((label - futurePrice) / futurePrice) * 100 : null
+  const sigmasAway = sigmaT && sigmaT > 0 && futurePrice > 0
+    ? Math.log(label / futurePrice) / sigmaT
+    : null
+  return (
+    <div style={{
+      background: '#111827', color: '#fff', border: '1px solid #374151',
+      padding: '6px 10px', borderRadius: 4, fontSize: 12, minWidth: 160,
+    }}>
+      <div style={{ opacity: 0.7, marginBottom: 4 }}>
+        F = ₹{fmt(label)}
+        {movePct !== null && (
+          <span style={{ color: movePct >= 0 ? '#16a34a' : '#dc2626' }}>
+            {' '}({movePct >= 0 ? '+' : ''}{movePct.toFixed(1)}%)
+          </span>
+        )}
+        {sigmasAway !== null && (
+          <span style={{ opacity: 0.6 }}> · {Math.abs(sigmasAway).toFixed(1)}σ {sigmasAway >= 0 ? 'above' : 'below'}</span>
+        )}
+      </div>
+      {payload.map(p => {
+        const v = Number(p.value)
+        const pct = netCostINR !== 0 ? (v / Math.abs(netCostINR)) * 100 : null
+        return (
+          <div key={p.dataKey} style={{ fontWeight: 700, color: p.color }}>
+            {p.name}: {v >= 0 ? '+' : ''}₹{fmt(v)}
+            {pct !== null ? ` (${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%)` : ''}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+// Slim proportional strip from today to expiry, marking real upcoming events
+// for the current commodity. Clicking one re-anchors the payoff chart's
+// second line to that date instead of "now".
+function EventTimeline({
+  events, expiry, targetDate, onSelect,
+}: {
+  events: EventMapEntry[]
+  expiry: string
+  targetDate: string | null
+  onSelect: (date: string | null) => void
+}) {
+  const now       = Date.now()
+  const expiryMs  = new Date(expiry).getTime()
+  const span      = Math.max(1, expiryMs - now)
+  const impactColor: Record<string, string> = {
+    high: '#dc2626', medium: '#d97706', low: '#9ca3af', context: '#9ca3af', structural: '#9ca3af',
+  }
+  return (
+    <div style={{ marginTop: 10 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#9ca3af', marginBottom: 4 }}>
+        <span>Today</span>
+        <span>Expiry {new Date(expiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+      </div>
+      <div style={{ position: 'relative', height: 20, background: '#f3f4f6', borderRadius: 3 }}>
+        {events.map(e => {
+          const pct = Math.min(100, Math.max(0, ((new Date(e.next_release_utc).getTime() - now) / span) * 100))
+          const selected = targetDate === e.next_release_utc
+          return (
+            <button
+              key={e.id + e.next_release_utc}
+              title={`${e.name} — ${new Date(e.next_release_utc).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}`}
+              onClick={() => onSelect(selected ? null : e.next_release_utc)}
+              style={{
+                position: 'absolute', left: `${pct}%`, top: 2, transform: 'translateX(-50%)',
+                width: selected ? 12 : 10, height: selected ? 12 : 10, borderRadius: '50%',
+                background: impactColor[e.impact_tier] ?? '#9ca3af',
+                border: selected ? '2px solid #111827' : '1px solid #fff',
+                cursor: 'pointer', padding: 0,
+              }}
+            />
+          )
+        })}
+      </div>
+      {targetDate && (
+        <button onClick={() => onSelect(null)}
+          style={{ marginTop: 4, fontSize: 12, color: '#4f46e5', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          Reset to Today
+        </button>
+      )}
+    </div>
+  )
+}
+
 // Last 10 trading days of ATM IV, same convention as OptionChain.tsx's
 // IVHistoryChart — real gaps (missed cron snapshot days) are left as gaps,
 // never interpolated.
@@ -372,8 +501,10 @@ export default function StrategyBuilder({
   const [secondsAgo,    setSecondsAgo]    = useState(0)
   const [saveLabel,     setSaveLabel]     = useState('')
   const [riskBudget,    setRiskBudget]    = useState('')
-  const [briefEdge, setBriefEdge] = useState<{ edge: string; title: string; urlSlug: string; date: string } | null>(null)
+  const [briefEdge, setBriefEdge] = useState<BriefEdge | null>(null)
   const [copied,    setCopied]    = useState(false)
+  const [events,     setEvents]     = useState<EventMapEntry[]>([])
+  const [targetDate, setTargetDate] = useState<string | null>(null)  // null = "now"
   // Cross-instrument chain data for My Strategies P&L
   const allChainDataRef = useRef<Record<string, ChainData>>({})
 
@@ -472,6 +603,16 @@ export default function StrategyBuilder({
       .catch(() => {/* silent */})
   }, [instrument])
 
+  // Fetch upcoming events for the selected instrument (used by the target-date timeline)
+  useEffect(() => {
+    setEvents([])
+    setTargetDate(null)
+    fetch(`/api/events?instrument=${instrument}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (Array.isArray(d?.events)) setEvents(d.events) })
+      .catch(() => {/* silent */})
+  }, [instrument])
+
   // Fetch cross-instrument chains for My Strategies P&L when tab switches to saved
   useEffect(() => {
     if (tab !== 'saved' || saved.length === 0) return
@@ -548,26 +689,43 @@ export default function StrategyBuilder({
     ? Math.max(1, Math.ceil(Number(riskBudget) / Math.abs(maxLossPerLot)))
     : null
 
-  const chartData = payoff.map(p => ({
+  const dte = expiry ? daysToExpiry(expiry) : 0
+
+  // Target-date second line — defaults to "now" (T years out); clicking an
+  // event marker on the timeline below re-anchors it to that event's date.
+  const targetDaysOut = targetDate ? Math.max(0, (new Date(targetDate).getTime() - Date.now()) / 86400000) : 0
+  const targetT        = targetDate ? Math.max(0, T - targetDaysOut / 365) : T
+  const secondaryPayoff: PayoffPoint[] = targetDate && legs.length > 0 && futurePrice > 0
+    ? computePayoff(legs, fRange, lotSize, targetT, r, currentIV > 0 ? currentIV : undefined)
+    : payoff
+  const secondaryLabel = targetDate
+    ? `As of ${new Date(targetDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
+    : `Today (${Math.round(dte)}d left)`
+
+  const chartData = payoff.map((p, i) => ({
     F:      Math.round(p.F),
     Expiry: Math.round(p.pnlExpiry),
-    Today:  T > 0 ? Math.round(p.pnlToday) : undefined,
+    AsOf:   targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
   }))
 
-  // Extra time-horizon lines (only when > 21 DTE)
-  const dte = expiry ? daysToExpiry(expiry) : 0
-  const payoff2wk: PayoffPoint[] = (dte > 21 && legs.length > 0 && futurePrice > 0)
-    ? computePayoff(legs, fRange, lotSize, Math.max(0, T - 14 / 365), r, currentIV > 0 ? currentIV : undefined)
-    : []
-  const payoff1wk: PayoffPoint[] = (dte > 21 && legs.length > 0 && futurePrice > 0)
-    ? computePayoff(legs, fRange, lotSize, Math.max(0, T - 7 / 365), r, currentIV > 0 ? currentIV : undefined)
-    : []
+  // ±1σ/±2σ expected-move cone from the site's own tracked IV — clamped to
+  // the chart's visible price domain so it never overflows the axis.
+  const rawCone = computeExpectedMoveCone(futurePrice, currentIV, T)
+  const cone = rawCone && fRange.length > 0
+    ? {
+        sigmaT:   rawCone.sigmaT,
+        oneSigma: [Math.max(fRange[0], rawCone.oneSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.oneSigma[1])] as [number, number],
+        twoSigma: [Math.max(fRange[0], rawCone.twoSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.twoSigma[1])] as [number, number],
+      }
+    : null
 
-  const chartDataFull = chartData.map((pt, i) => ({
-    ...pt,
-    TwoWeeks: payoff2wk[i] != null ? Math.round(payoff2wk[i].pnlToday) : undefined,
-    OneWeek:  payoff1wk[i] != null ? Math.round(payoff1wk[i].pnlToday) : undefined,
-  }))
+  // Events between today and expiry, for the target-date timeline
+  const upcomingEvents = expiry
+    ? events.filter(e => {
+        const t = new Date(e.next_release_utc).getTime()
+        return t > Date.now() && t <= new Date(expiry).getTime()
+      }).sort((a, b) => new Date(a.next_release_utc).getTime() - new Date(b.next_release_utc).getTime())
+    : []
 
   function addLeg(row: ChainRow, type: 'CE' | 'PE', action: 'BUY' | 'SELL') {
     const side = row[type]
@@ -865,6 +1023,19 @@ export default function StrategyBuilder({
                 </a>
               </div>
               <p style={{ margin: 0, fontSize: 14, color: '#48483A', lineHeight: 1.55 }}>{briefEdge.edge}</p>
+              {briefEdge.resolution && briefEdge.edgeMetric && EDGE_METRIC_TO_INSTRUMENT[briefEdge.edgeMetric] === instrument && (
+                <div style={{
+                  marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6,
+                  fontSize: 12, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
+                  color: '#fff',
+                  background: { confirmed: '#16a34a', rejected: '#dc2626', unresolved: '#d97706' }[briefEdge.resolution.verdict],
+                }}>
+                  {briefEdge.edgeMetric.replace(/_/g, ' ')} {briefEdge.edgeCondition} {briefEdge.edgeLevel != null ? fmt(briefEdge.edgeLevel) : ''}
+                  {' — '}
+                  {{ confirmed: 'Confirmed ✓', rejected: 'Rejected ✗', unresolved: 'Pending —' }[briefEdge.resolution.verdict]}
+                  {briefEdge.resolution.resolvedValue != null ? `, now ${fmt(briefEdge.resolution.resolvedValue)}` : ''}
+                </div>
+              )}
             </div>
           )}
 
@@ -1022,7 +1193,8 @@ export default function StrategyBuilder({
                         ₹<input type="number" min={0} step="0.05" value={leg.premium}
                           onChange={e => updatePremium(i, parseFloat(e.target.value) || 0)}
                           title="Edit to model a position entered at a different price than today's live quote"
-                          style={{ width: 64, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
+                          className="no-spinner"
+                          style={{ width: 88, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right', color: '#6b7280' }}>
                         {leg.type === 'FUT' ? '—' : (leg.iv * 100).toFixed(1)}
@@ -1065,11 +1237,16 @@ export default function StrategyBuilder({
           )}
 
           {/* Payoff chart */}
-          {chartDataFull.length > 0 && (
+          {chartData.length > 0 && (
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Payoff Diagram</div>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>Payoff Diagram</div>
+              {cone && ivRegime && (
+                <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>
+                  Shaded: ±1σ/±2σ expected range · IV {currentIV.toFixed(1)}% ({ivRegime.regime.toLowerCase()}, {ivRegime.label})
+                </div>
+              )}
               <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={chartDataFull} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
+                <LineChart data={chartData} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
                   <XAxis dataKey="F" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(v: number) => {
                     const n = Number(v)
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
@@ -1077,10 +1254,14 @@ export default function StrategyBuilder({
                     return `₹${Math.round(n)}`
                   }} tick={{ fontSize: 12 }} interval="preserveStartEnd" tickCount={7} />
                   <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12 }} width={68} />
-                  <Tooltip
-                    formatter={(v, name) => [`₹${fmt(Number(v))}`, String(name)]}
-                    labelFormatter={v => `P = ₹${fmt(Number(v))}`} />
+                  <Tooltip content={<PayoffTooltip netCostINR={netCostINR} futurePrice={futurePrice} sigmaT={cone?.sigmaT ?? null} />} />
                   <Legend wrapperStyle={{ fontSize: 14 }} />
+                  {cone && ivRegime && (
+                    <>
+                      <ReferenceArea x1={cone.twoSigma[0]} x2={cone.twoSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.06} ifOverflow="hidden" />
+                      <ReferenceArea x1={cone.oneSigma[0]} x2={cone.oneSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.13} ifOverflow="hidden" />
+                    </>
+                  )}
                   <ReferenceLine y={0} stroke="var(--ink-4, #B8B4A8)" strokeDasharray="3 3" />
                   {/* Current price reference */}
                   {futurePrice > 0 && (
@@ -1091,19 +1272,19 @@ export default function StrategyBuilder({
                   {breakevens.map((be, i) => (
                     <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.5} />
                   ))}
-                  {/* Sequential ramp by time-to-expiry, lightest→darkest: Today has the
-                      most time remaining, "-1 week"/"-2 wks" are progressively closer to
-                      expiry (T minus 7/14 days from today, not "weeks before expiry"),
-                      At Expiry is T=0 — darkest, the final/most important answer. */}
                   <Line type="monotone" dataKey="Expiry" stroke="#0d366b" dot={false} strokeWidth={2} name="At Expiry" />
-                  {payoff2wk.length > 0 && <Line type="monotone" dataKey="TwoWeeks" stroke="#256abf" dot={false} strokeWidth={1}
-                    strokeDasharray="4 4" name="−2 wks" />}
-                  {payoff1wk.length > 0 && <Line type="monotone" dataKey="OneWeek" stroke="#5598e7" dot={false} strokeWidth={1}
-                    strokeDasharray="2 4" name="−1 week" />}
-                  {T > 0 && <Line type="monotone" dataKey="Today" stroke="#86b6ef" dot={false} strokeWidth={1.5}
-                    strokeDasharray="5 3" name={`Today (${Math.round(dte)}d left)`} />}
+                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="#86b6ef" dot={false} strokeWidth={1.5}
+                    strokeDasharray="5 3" name={secondaryLabel} />}
                 </LineChart>
               </ResponsiveContainer>
+              {upcomingEvents.length > 0 && expiry && (
+                <EventTimeline
+                  events={upcomingEvents}
+                  expiry={expiry}
+                  targetDate={targetDate}
+                  onSelect={setTargetDate}
+                />
+              )}
             </div>
           )}
 

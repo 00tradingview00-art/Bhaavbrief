@@ -5,6 +5,7 @@ import {
   computeBreakevens,
   computeMaxProfitLoss,
   computeNetCost,
+  computeExpectedMoveCone,
   type Leg,
 } from './strategy'
 
@@ -277,6 +278,39 @@ describe('computeNetGreeks — options only', () => {
     ]
     const g = computeNetGreeks(legs, F, T, R, LOT)
     expect(g.vega).toBeLessThan(0)
+  })
+})
+
+describe('computeExpectedMoveCone', () => {
+  test('returns null when futurePrice, ivPct, or T is non-positive', () => {
+    expect(computeExpectedMoveCone(0, 20, 30 / 365)).toBeNull()
+    expect(computeExpectedMoveCone(F, 0, 30 / 365)).toBeNull()
+    expect(computeExpectedMoveCone(F, 20, 0)).toBeNull()
+    expect(computeExpectedMoveCone(-F, 20, 30 / 365)).toBeNull()
+  })
+
+  test('band is symmetric in log-space around the current price and widens with sigma', () => {
+    const cone = computeExpectedMoveCone(F, 20, 30 / 365)!
+    expect(cone).not.toBeNull()
+    // geometric mean of the band bounds equals F (lognormal symmetry)
+    expect(Math.sqrt(cone.oneSigma[0] * cone.oneSigma[1])).toBeCloseTo(F, 0)
+    expect(Math.sqrt(cone.twoSigma[0] * cone.twoSigma[1])).toBeCloseTo(F, 0)
+    // 2-sigma band strictly contains the 1-sigma band
+    expect(cone.twoSigma[0]).toBeLessThan(cone.oneSigma[0])
+    expect(cone.twoSigma[1]).toBeGreaterThan(cone.oneSigma[1])
+    // matches the closed-form F * exp(±z * sigma_T)
+    const sigmaT = 0.20 * Math.sqrt(30 / 365)
+    expect(cone.sigmaT).toBeCloseTo(sigmaT, 6)
+    expect(cone.oneSigma[1]).toBeCloseTo(F * Math.exp(sigmaT), 2)
+    expect(cone.oneSigma[0]).toBeCloseTo(F * Math.exp(-sigmaT), 2)
+  })
+
+  test('higher IV or longer time-to-expiry widens the band', () => {
+    const base   = computeExpectedMoveCone(F, 20, 30 / 365)!
+    const higherIV = computeExpectedMoveCone(F, 40, 30 / 365)!
+    const longerT  = computeExpectedMoveCone(F, 20, 90 / 365)!
+    expect(higherIV.oneSigma[1] - higherIV.oneSigma[0]).toBeGreaterThan(base.oneSigma[1] - base.oneSigma[0])
+    expect(longerT.oneSigma[1] - longerT.oneSigma[0]).toBeGreaterThan(base.oneSigma[1] - base.oneSigma[0])
   })
 })
 
