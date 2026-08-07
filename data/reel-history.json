@@ -1,5 +1,20 @@
 [
   {
+    "file": "news-20260807-mcx-lot-sizes",
+    "topic": "MCX Lot Sizes",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Before you trade MCX gold, know your lot size game.",
+    "stat_line": "100 grams versus 1 kg—same gold, different risk.",
+    "payoff": "Smaller lot doesn't mean safer—it means faster losses if you're wrong.",
+    "beat1": "MCX Gold Mini is 100 grams. Standard is 1 kg. Ten times smaller means ten times less capital locked up.",
+    "beat2": "Mini contracts quote in rupees per 10 grams. One tick moves ₹10 on Mini, ₹100 on Standard. Precision matters.",
+    "beat3": "Margin stays 4–7% across both. Smaller contract, smaller margin bill. Watch your position size, not just entry price.",
+    "instagram_id": null,
+    "generated_at": "2026-08-07T15:02:44.409Z",
+    "edition": null
+  },
+  {
     "file": "brief-edition-081",
     "topic": "Gold at $4308 While Crude Surges — Two Fears, One Market",
     "content_type": "macro_trend",
