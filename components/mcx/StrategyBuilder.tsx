@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Legend,
+  AreaChart, Area,
 } from 'recharts'
 import {
   computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
@@ -262,6 +263,91 @@ function loadSaved(): SavedStrategy[] {
 
 function persistSaved(strategies: SavedStrategy[]): void {
   try { localStorage.setItem(LS_KEY, JSON.stringify(strategies)) } catch { /* quota */ }
+}
+
+// ── IV history chart — trend behind the regime banner ─────────────────────────
+
+function fmtIVDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+}
+
+interface IVHistoryTooltipProps {
+  active?:  boolean
+  payload?: { payload: { date: string; iv: number } }[]
+  color: string
+}
+
+function IVHistoryTooltip({ active, payload, color }: IVHistoryTooltipProps) {
+  if (!active || !payload?.length) return null
+  const d = payload[0].payload
+  return (
+    <div style={{
+      background: '#111827', color: '#fff', border: '1px solid #374151',
+      padding: '6px 10px', borderRadius: 4, fontSize: 12,
+    }}>
+      <div style={{ opacity: 0.7, marginBottom: 2 }}>{fmtIVDate(d.date)}</div>
+      <div style={{ fontWeight: 700, color }}>{d.iv}%</div>
+    </div>
+  )
+}
+
+// Last 10 trading days of ATM IV, same convention as OptionChain.tsx's
+// IVHistoryChart — real gaps (missed cron snapshot days) are left as gaps,
+// never interpolated.
+function IVHistorySparkline({ history, color }: { history: { date: string; iv: number }[]; color: string }) {
+  const recent = history.slice(-10)
+  if (recent.length < 2) {
+    return (
+      <div style={{ fontSize: 13, color: '#9ca3af', marginBottom: 16 }}>
+        ATM IV trend chart returns once enough daily history has built up.
+      </div>
+    )
+  }
+
+  const ivValues = recent.map(d => d.iv)
+  const minIV = Math.min(...ivValues)
+  const maxIV = Math.max(...ivValues)
+  const gradId = `grad-strategy-iv-${color.replace('#', '')}`
+
+  return (
+    <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 14px', marginBottom: 16 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', marginBottom: 6 }}>
+        ATM IV — 10-Day
+      </div>
+      <div style={{ height: 110 }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={recent} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor={color} stopOpacity={0.18} />
+                <stop offset="100%" stopColor={color} stopOpacity={0}    />
+              </linearGradient>
+            </defs>
+
+            <XAxis dataKey="date" hide />
+            <YAxis domain={[minIV * 0.98, maxIV * 1.02]} hide />
+
+            <Tooltip
+              content={<IVHistoryTooltip color={color} />}
+              cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: '3 3' }}
+            />
+
+            <ReferenceLine y={recent[0].iv} stroke="#d1d5db" strokeDasharray="2 4" strokeWidth={0.8} />
+
+            <Area
+              type="monotone"
+              dataKey="iv"
+              stroke={color}
+              strokeWidth={1.5}
+              fill={`url(#${gradId})`}
+              dot={{ r: 2.5, fill: color, stroke: '#f9fafb', strokeWidth: 1 }}
+              activeDot={{ r: 3.5, fill: color, stroke: '#fff', strokeWidth: 1.5 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  )
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -664,6 +750,10 @@ export default function StrategyBuilder({
             IV Rank {ivRegime.ivRank}
           </div>
         </div>
+      )}
+
+      {ivRegime && ivHistory.length > 0 && (
+        <IVHistorySparkline history={ivHistory} color={regimeColors[ivRegime.regime]} />
       )}
 
       {/* Quick Setup — all templates, no IV-based filtering */}
