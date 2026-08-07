@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-081",
+    "href": "/briefs/edition-081",
+    "title": "Gold at $4308 While Crude Surges — Two Fears, One Market",
+    "description": "WTI jumps sharply on renewed Middle East tensions while gold holds near record highs, creating a rare simultaneous safe-haven and supply-shock signal.",
+    "excerpt": "MCX Gold ₹148858 | Crude ₹7377 | USDINR ₹95.12 Yesterday's Edge — Result: Edition #80 watched whether COMEX GOLD would close above 4,319.7. Rejected ✗, now at 4,308.3. | Commodity | Global Price | USD",
+    "date": "2026-08-07T03:10:37.713Z",
+    "edition": "81",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-080",
     "href": "/briefs/edition-080",
     "title": "Gold at ₹149483 — Safe-Haven Demand Decouples from Crude's Slide",
