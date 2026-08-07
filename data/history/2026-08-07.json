@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-08-07T00:17:06.432Z",
+=======
+  "generatedAt": "2026-08-07T00:17:22.213Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-08-07 05:47 IST",
   "source": "stale-cache+yahoo",
   "instruments": {
@@ -45,9 +49,15 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
+<<<<<<< Updated upstream
       "price": 4308.9,
       "prevClose": 4245.8,
       "changePct": 1.4862,
+=======
+      "price": 4308.6,
+      "prevClose": 4245.8,
+      "changePct": 1.4791,
+>>>>>>> Stashed changes
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -57,9 +67,15 @@
       "unit": "USD/oz"
     },
     "WTI": {
+<<<<<<< Updated upstream
       "price": 78.16,
       "prevClose": 75.22,
       "changePct": 3.9085,
+=======
+      "price": 78.15,
+      "prevClose": 75.22,
+      "changePct": 3.8952,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "BRENT": {
@@ -125,7 +141,11 @@
     }
   },
   "derived": {
+<<<<<<< Updated upstream
     "importParityGoldINR": 131774,
+=======
+    "importParityGoldINR": 131765,
+>>>>>>> Stashed changes
     "mcxComexGoldSpreadPct": 13.47,
     "importParitySilverINR": 189362,
     "mcxComexSilverSpreadPct": 19.49,
