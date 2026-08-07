@@ -27,9 +27,14 @@ jobs:
       - name: Check morning brief (9:45 AM IST run only)
         id: brief_check
         run: |
-          UTC_HOUR=$(date -u +%H)
-          if [ "$UTC_HOUR" != "04" ]; then
-            echo "Not the 9:45 AM check — skipping brief check"
+          # Gate on which cron *expression* fired (github.event.schedule), not
+          # wall-clock hour — scheduled runs routinely start 1-2h late, so a
+          # UTC_HOUR match against the exact scheduled hour never fired in
+          # practice and this check silently no-op'd on every run. An empty
+          # SCHEDULE means workflow_dispatch (manual run) — always check then.
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping brief check"
             echo "brief_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -51,9 +56,11 @@ jobs:
       - name: Check intelligence engine (2:00 PM IST run only)
         id: engine_check
         run: |
-          UTC_HOUR=$(date -u +%H)
-          if [ "$UTC_HOUR" != "08" ]; then
-            echo "Not the 2:00 PM check — skipping engine check"
+          # See brief_check above — gate on the triggering cron expression,
+          # not wall-clock hour, since scheduled runs start late.
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "30 8 * * 1-5" ]; then
+            echo "Not the 2:00 PM run — skipping engine check"
             echo "engine_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -76,9 +83,11 @@ jobs:
       - name: Check ATM IV snapshot (9:45 AM IST run only)
         id: iv_check
         run: |
-          UTC_HOUR=$(date -u +%H)
-          if [ "$UTC_HOUR" != "04" ]; then
-            echo "Not the 9:45 AM check — skipping IV snapshot check"
+          # See brief_check above — gate on the triggering cron expression,
+          # not wall-clock hour, since scheduled runs start late.
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping IV snapshot check"
             echo "iv_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
