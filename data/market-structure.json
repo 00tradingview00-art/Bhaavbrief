@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.4–4.8 lakh",
-    "contractValue": "~₹67.9 lakh at ₹2,26,300/kg",
+    "contractValue": "~₹67.9 lakh at ₹2,26,260/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -131,7 +131,7 @@
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
     "typicalMargin": "₹1.7–2.4 lakh",
-    "contractValue": "~₹34.5 lakh at ₹1,381.5/kg",
+    "contractValue": "~₹34.5 lakh at ₹1,381.2/kg",
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
     "keyBodies": [
