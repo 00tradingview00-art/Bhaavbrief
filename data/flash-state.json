@@ -10,13 +10,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-08-05T05:53:09.678Z",
-    "lastFlashPrice": 226300,
-    "lastRoundLevel": 220000,
+    "lastFlashAt": "2026-08-07T07:49:10.017Z",
+    "lastFlashPrice": 232300,
+    "lastRoundLevel": 230000,
     "recentFlashIds": [
+      "2026-08-07-13-19-mcx-silver-surges-2-86-on-safe-haven-demand-resurgence",
       "2026-08-05-11-23-mcx-silver-surges-2-11-on-safe-haven-momentum",
-      "2026-07-28-12-39-mcx-silver-falls-1-73-on-broad-commodity-weakness",
-      "2026-07-24-21-23-mcx-silver-surges-1-58-on-safe-haven-demand-reversal"
+      "2026-07-28-12-39-mcx-silver-falls-1-73-on-broad-commodity-weakness"
     ]
   },
   "MCX_CRUDE": {
