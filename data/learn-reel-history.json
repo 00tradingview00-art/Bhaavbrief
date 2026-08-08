@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-lot-sizes",
+  "lastSlug": "mcx-margin-calculation",
   "log": [
+    {
+      "slug": "mcx-margin-calculation",
+      "date": "2026-08-08",
+      "file": "public/reels/news-20260808-mcx-margin-calculation.mp4",
+      "generated_at": "2026-08-08T14:40:24.667Z"
+    },
     {
       "slug": "mcx-lot-sizes",
       "date": "2026-08-07",
