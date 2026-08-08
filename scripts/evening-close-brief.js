@@ -169,7 +169,7 @@ async function fetchUSDINR(snapshot) {
 
 // ── Identify the day's top movers ─────────────────────────────────────────────
 function buildDayMoverSummary(kitePrices) {
-  if (!kitePrices) return 'Kite prices unavailable — MCX session data not accessible.'
+  if (!kitePrices) return 'MCX session data not accessible.'
   const labels = { gold: 'MCX Gold', silver: 'MCX Silver', crude: 'MCX Crude', copper: 'MCX Copper', natgas: 'MCX NatGas' }
   const units  = { gold: '/10g',     silver: '/kg',        crude: '/bbl',      copper: '/kg',        natgas: '/mmBtu'   }
 

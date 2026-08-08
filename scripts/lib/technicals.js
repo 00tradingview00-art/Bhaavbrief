@@ -108,7 +108,7 @@ export function formatTechnicalBlock(label, unit, currentPrice, levels) {
   const s2    = levels.support2    ?? '—'
 
   return [
-    `${label} (${unit}) — Kite OHLC 20-day:`,
+    `${label} (${unit}) — 20-day OHLC:`,
     `  Current: ${price} | Prev Close: ${levels.prevClose} | Day range: ${levels.prevLow}–${levels.prevHigh}`,
     `  Week:  ${levels.weekLow}–${levels.weekHigh} | Month: ${levels.monthLow}–${levels.monthHigh} | 20-SMA: ${levels.sma20}`,
     `  Resistance: ${r1}${r2 !== '—' ? ` → ${r2}` : ''} | Support: ${s1}${s2 !== '—' ? ` → ${s2}` : ''}`,

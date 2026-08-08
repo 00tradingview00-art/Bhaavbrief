@@ -911,7 +911,7 @@ SESSION: ${session.toUpperCase()} — ${SESSION_FOCUS[session]}
 WHAT FIRED THIS ARTICLE:
 ${moveBlock}
 
-MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE KITE' : 'ESTIMATED'}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
+MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE MCX' : 'ESTIMATED'}, USD/INR ₹${prices.usdinr?.toFixed(2)}]:
 ${priceBlock}
 
 CONTEXT: ${narrative}
@@ -1457,7 +1457,7 @@ async function main() {
       )
       const validBlocks = techBlocks.filter(Boolean)
       if (validBlocks.length > 0) {
-        technicalLevels = `TECHNICAL LEVELS (Kite MCX 20-day OHLC — use these exact numbers, do not invent levels):\n${validBlocks.join('\n')}`
+        technicalLevels = `TECHNICAL LEVELS (MCX 20-day OHLC — use these exact numbers, do not invent levels):\n${validBlocks.join('\n')}`
         console.log(`  Technical levels fetched for: ${moves.slice(0, 2).map(m => m.label).join(', ')}`)
       }
     } catch (err) {
