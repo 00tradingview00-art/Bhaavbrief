@@ -44,7 +44,7 @@ const METHODOLOGY_SCHEMA = {
           name: 'Where does BhaavBrief get its price data from?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'MCX and NSE prices come from Kite Connect. COMEX, LME, WTI/Brent and USD/INR reference prices come from Yahoo Finance, used as the fallback source when a live Kite feed for a given instrument is unavailable.',
+            text: 'MCX and NSE prices are read from a live exchange data feed. COMEX, LME, WTI/Brent and USD/INR reference prices come from a global market data feed, which also serves as the fallback source when a live exchange feed for a given instrument is unavailable.',
           },
         },
         {
@@ -95,7 +95,7 @@ const SECTIONS = [
   {
     title: 'Where the numbers come from',
     body: [
-      'MCX and NSE prices — spot, futures, open interest — are read live from Kite Connect. Global reference prices (COMEX gold and silver, LME copper, WTI and Brent crude, USD/INR) come from Yahoo Finance, which also serves as the fallback source whenever a live Kite feed for a specific MCX instrument is temporarily unavailable.',
+      'MCX and NSE prices — spot, futures, open interest — are read live from an exchange data feed. Global reference prices (COMEX gold and silver, LME copper, WTI and Brent crude, USD/INR) come from a separate global market data feed, which also serves as the fallback source whenever the live exchange feed for a specific MCX instrument is temporarily unavailable.',
       'Every price snapshot carries a timestamp. If a feed fails, the brief shows the last known value with an explicit "stale" marker rather than silently reusing an old number as if it were current — a brief is never allowed to present carried-forward data as live.',
       'Import-parity figures (the MCX price versus the landed-cost equivalent of the global price, converted through USD/INR) use a single conversion module shared by the Price Bridge, the publish gate, and the brief generator itself, so the same number can\'t drift between where it\'s shown and where it\'s checked.',
     ],
@@ -148,7 +148,7 @@ export default function MethodologyPage() {
           {[
             { label: 'Editions published', value: `${briefsCount}+` },
             { label: 'Ledgered claims', value: claimsCount },
-            { label: 'Data sources', value: 'Kite + Yahoo Finance' },
+            { label: 'Data sources', value: 'Live exchange + global feeds' },
           ].map((s) => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1rem' }}>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 800, color: '#18180F' }}>{s.value}</div>

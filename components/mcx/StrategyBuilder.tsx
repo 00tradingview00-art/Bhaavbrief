@@ -881,7 +881,7 @@ export default function StrategyBuilder({
 
       {error && (
         <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: '#dc2626', fontSize: 15 }}>
-          {error} — check that Kite credentials are configured.
+          {error} — please try again in a moment.
         </div>
       )}
 
