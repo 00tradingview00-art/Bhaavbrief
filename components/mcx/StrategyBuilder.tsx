@@ -157,22 +157,33 @@ function buildFRange(futurePrice: number, payoffWidth: number, legs: Leg[]): num
 }
 
 function greekColor(label: string, raw: number): string {
-  if (label.includes('Theta')) return raw < 0 ? '#dc2626' : '#16a34a'
-  if (label.includes('Vega'))  return raw < 0 ? '#dc2626' : '#16a34a'
+  if (label.includes('Theta')) return raw < 0 ? 'var(--down, #B53A2A)' : 'var(--up, #1B7A4A)'
+  if (label.includes('Vega'))  return raw < 0 ? 'var(--down, #B53A2A)' : 'var(--up, #1B7A4A)'
   if (label.includes('Delta')) return raw > 0.001 ? '#2563eb' : raw < -0.001 ? '#7c3aed' : 'inherit'
   return 'inherit'
+}
+
+// BUY/SELL color triple — shared by LegButton, the Selected Legs badge, and saved-strategy chips
+function actionStyle(action: Action) {
+  const isBuy = action === 'BUY'
+  return {
+    border: isBuy ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)',
+    color: isBuy ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)',
+    background: isBuy ? 'var(--up-bg, #EBF5EF)' : 'var(--down-bg, #FAF0EE)',
+  }
 }
 
 // Shared B/S leg-add button — used for CE, PE, and futures legs alike
 function LegButton({ action, onClick }: { action: Action; onClick: () => void }) {
   const isBuy = action === 'BUY'
+  const s = actionStyle(action)
   return (
     <button onClick={onClick}
       style={{
         fontSize: 12, padding: '1px 4px', borderRadius: 3,
-        border: `1px solid ${isBuy ? '#16a34a' : '#dc2626'}`,
-        color: isBuy ? '#15803d' : '#b91c1c',
-        background: isBuy ? '#dcfce7' : '#fee2e2',
+        border: `1px solid ${s.border}`,
+        color: s.color,
+        background: s.background,
         cursor: 'pointer', lineHeight: 1.4,
       }}>
       {isBuy ? 'B' : 'S'}
@@ -310,7 +321,7 @@ function IVHistoryTooltip({ active, payload, color }: IVHistoryTooltipProps) {
   const d = payload[0].payload
   return (
     <div style={{
-      background: '#111827', color: '#fff', border: '1px solid #374151',
+      background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
       padding: '6px 10px', borderRadius: 4, fontSize: 12,
     }}>
       <div style={{ opacity: 0.7, marginBottom: 2 }}>{fmtIVDate(d.date)}</div>
@@ -339,13 +350,13 @@ function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT
     : null
   return (
     <div style={{
-      background: '#111827', color: '#fff', border: '1px solid #374151',
+      background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
       padding: '6px 10px', borderRadius: 4, fontSize: 12, minWidth: 160,
     }}>
       <div style={{ opacity: 0.7, marginBottom: 4 }}>
         F = ₹{fmt(label)}
         {movePct !== null && (
-          <span style={{ color: movePct >= 0 ? '#16a34a' : '#dc2626' }}>
+          <span style={{ color: movePct >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
             {' '}({movePct >= 0 ? '+' : ''}{movePct.toFixed(1)}%)
           </span>
         )}
@@ -382,7 +393,7 @@ function EventTimeline({
   const expiryMs  = new Date(expiry).getTime()
   const span      = Math.max(1, expiryMs - now)
   const impactColor: Record<string, string> = {
-    high: '#dc2626', medium: '#d97706', low: '#9ca3af', context: '#9ca3af', structural: '#9ca3af',
+    high: 'var(--down, #B53A2A)', medium: 'var(--gold, #B5862A)', low: 'var(--ink-4, #B8B4A8)', context: 'var(--ink-4, #B8B4A8)', structural: 'var(--ink-4, #B8B4A8)',
   }
   return (
     <div style={{ marginTop: 10 }}>
@@ -402,8 +413,8 @@ function EventTimeline({
               style={{
                 position: 'absolute', left: `${pct}%`, top: 2, transform: 'translateX(-50%)',
                 width: selected ? 12 : 10, height: selected ? 12 : 10, borderRadius: '50%',
-                background: impactColor[e.impact_tier] ?? '#9ca3af',
-                border: selected ? '2px solid #111827' : '1px solid #fff',
+                background: impactColor[e.impact_tier] ?? 'var(--ink-4, #B8B4A8)',
+                border: selected ? '2px solid var(--ink, #0E0D0A)' : '1px solid #fff',
                 cursor: 'pointer', padding: 0,
               }}
             />
@@ -412,7 +423,7 @@ function EventTimeline({
       </div>
       {targetDate && (
         <button onClick={() => onSelect(null)}
-          style={{ marginTop: 4, fontSize: 12, color: '#4f46e5', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+          style={{ marginTop: 4, fontSize: 12, color: 'var(--gold-dark, #8B6520)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
           Reset to Today
         </button>
       )}
@@ -836,9 +847,9 @@ export default function StrategyBuilder({
   }
 
   const regimeColors: Record<string, string> = {
-    CHEAP:  '#22c55e',
-    NORMAL: '#eab308',
-    RICH:   '#ef4444',
+    CHEAP:  'var(--up, #1B7A4A)',
+    NORMAL: 'var(--gold, #B5862A)',
+    RICH:   'var(--down, #B53A2A)',
   }
 
   const circuitLimit = CIRCUIT_LIMITS[instrument] ?? 0.06
@@ -870,8 +881,8 @@ export default function StrategyBuilder({
             style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
               cursor: 'pointer', fontSize: 15, fontWeight: instrument === inst.key ? 700 : 400,
-              borderColor: instrument === inst.key ? '#6366f1' : '#d1d5db',
-              background: instrument === inst.key ? '#6366f1' : 'transparent',
+              borderColor: instrument === inst.key ? 'var(--gold, #B5862A)' : '#d1d5db',
+              background: instrument === inst.key ? 'var(--gold, #B5862A)' : 'transparent',
               color: instrument === inst.key ? '#fff' : 'inherit',
             }}>
             {inst.label}
@@ -880,7 +891,7 @@ export default function StrategyBuilder({
       </div>
 
       {error && (
-        <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: '#dc2626', fontSize: 15 }}>
+        <div style={{ background: 'var(--down-bg, #FAF0EE)', border: '1px solid var(--down, #B53A2A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--down, #B53A2A)', fontSize: 15 }}>
           {error} — please try again in a moment.
         </div>
       )}
@@ -956,8 +967,8 @@ export default function StrategyBuilder({
             style={{
               padding: '8px 16px', border: 'none', background: 'none', cursor: 'pointer',
               fontWeight: tab === t ? 600 : 400, fontSize: 16,
-              borderBottom: tab === t ? '2px solid #6366f1' : '2px solid transparent',
-              color: tab === t ? '#4f46e5' : '#6b7280', marginBottom: -1,
+              borderBottom: tab === t ? '2px solid var(--gold, #B5862A)' : '2px solid transparent',
+              color: tab === t ? 'var(--gold-dark, #8B6520)' : '#6b7280', marginBottom: -1,
             }}>
             {label}
           </button>
@@ -1028,7 +1039,7 @@ export default function StrategyBuilder({
                   marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6,
                   fontSize: 12, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
                   color: '#fff',
-                  background: { confirmed: '#16a34a', rejected: '#dc2626', unresolved: '#d97706' }[briefEdge.resolution.verdict],
+                  background: { confirmed: 'var(--up, #1B7A4A)', rejected: 'var(--down, #B53A2A)', unresolved: 'var(--gold, #B5862A)' }[briefEdge.resolution.verdict],
                 }}>
                   {briefEdge.edgeMetric.replace(/_/g, ' ')} {briefEdge.edgeCondition} {briefEdge.edgeLevel != null ? fmt(briefEdge.edgeLevel) : ''}
                   {' — '}
@@ -1072,7 +1083,7 @@ export default function StrategyBuilder({
                     {visible.map(row => (
                       <tr key={row.strike}
                         style={{
-                          background: row.isATM ? '#eef2ff' : 'transparent',
+                          background: row.isATM ? 'var(--gold-pale, #F9F4EC)' : 'transparent',
                           borderBottom: '1px solid #f3f4f6',
                         }}>
                         {/* CE OI */}
@@ -1154,14 +1165,14 @@ export default function StrategyBuilder({
                         <button onClick={() => toggleAction(i)}
                           style={{
                             padding: '2px 8px', borderRadius: 4, border: '1px solid', cursor: 'pointer', fontSize: 13,
-                            background: leg.action === 'BUY' ? '#dcfce7' : '#fee2e2',
-                            borderColor: leg.action === 'BUY' ? '#16a34a' : '#dc2626',
-                            color: leg.action === 'BUY' ? '#15803d' : '#b91c1c', fontWeight: 600,
+                            background: actionStyle(leg.action).background,
+                            borderColor: actionStyle(leg.action).border,
+                            color: actionStyle(leg.action).color, fontWeight: 600,
                           }}>
                           {leg.action}
                         </button>
                       </td>
-                      <td style={{ padding: '5px 8px', fontWeight: 600, color: leg.type === 'CE' ? '#4f46e5' : leg.type === 'PE' ? '#dc2626' : '#0891b2' }}>
+                      <td style={{ padding: '5px 8px', fontWeight: 600, color: 'var(--ink-2, #3A3830)' }}>
                         {leg.type}
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
@@ -1272,8 +1283,8 @@ export default function StrategyBuilder({
                   {breakevens.map((be, i) => (
                     <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.5} />
                   ))}
-                  <Line type="monotone" dataKey="Expiry" stroke="#0d366b" dot={false} strokeWidth={2} name="At Expiry" />
-                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="#86b6ef" dot={false} strokeWidth={1.5}
+                  <Line type="monotone" dataKey="Expiry" stroke="var(--ink, #0E0D0A)" dot={false} strokeWidth={2} name="At Expiry" />
+                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" dot={false} strokeWidth={1.5}
                     strokeDasharray="5 3" name={secondaryLabel} />}
                 </LineChart>
               </ResponsiveContainer>
@@ -1311,11 +1322,11 @@ export default function StrategyBuilder({
                       }}>
                       <td style={{ padding: '5px 12px', color: '#6b7280' }}>{s.label}</td>
                       <td style={{ padding: '5px 12px', textAlign: 'right' }}>₹{fmt(Math.round(s.F))}</td>
-                      <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnl >= 0 ? '#16a34a' : '#dc2626' }}>
+                      <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnl >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
                         {s.pnl >= 0 ? '+' : ''}₹{fmt(Math.abs(Math.round(s.pnl)))}
                       </td>
                       {s.pnlPct !== null && (
-                        <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnlPct >= 0 ? '#16a34a' : '#dc2626' }}>
+                        <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnlPct >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
                           {s.pnlPct >= 0 ? '+' : ''}{s.pnlPct.toFixed(0)}%
                         </td>
                       )}
@@ -1346,13 +1357,13 @@ export default function StrategyBuilder({
                   label: 'Max Profit',
                   value: fmtPnl(maxProfitLoss.maxProfit),
                   sub: '',
-                  color: maxProfitLoss.maxProfit != null && maxProfitLoss.maxProfit > 0 ? '#16a34a' : 'inherit',
+                  color: maxProfitLoss.maxProfit != null && maxProfitLoss.maxProfit > 0 ? 'var(--up, #1B7A4A)' : 'inherit',
                 },
                 {
                   label: 'Max Loss',
                   value: fmtPnl(maxProfitLoss.maxLoss),
                   sub: '',
-                  color: maxProfitLoss.maxLoss != null && maxProfitLoss.maxLoss < 0 ? '#dc2626' : 'inherit',
+                  color: maxProfitLoss.maxLoss != null && maxProfitLoss.maxLoss < 0 ? 'var(--down, #B53A2A)' : 'inherit',
                 },
                 ...(maxProfitLoss.maxProfit !== null && maxProfitLoss.maxLoss !== null && maxProfitLoss.maxLoss < 0
                   ? [{ label: 'Risk/Reward', value: `1 : ${(Math.abs(maxProfitLoss.maxProfit) / Math.abs(maxProfitLoss.maxLoss)).toFixed(2)}`, sub: '', color: 'inherit' }]
@@ -1372,7 +1383,7 @@ export default function StrategyBuilder({
                   label: 'Prob. of Profit',
                   value: `~${pop}%`,
                   sub: 'at expiry',
-                  color: pop >= 50 ? '#16a34a' : '#6b7280',
+                  color: pop >= 50 ? 'var(--up, #1B7A4A)' : '#6b7280',
                 }] : []),
               ].map(s => (
                 <div key={s.label}
@@ -1404,8 +1415,8 @@ export default function StrategyBuilder({
                   <span style={{ fontSize: 14, color: '#6b7280' }}>→ <strong>{suggestedLots} lot{suggestedLots !== 1 ? 's' : ''}</strong></span>
                   <button
                     onClick={() => applyAllQty(suggestedLots)}
-                    style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid #6366f1',
-                      background: '#6366f1', color: '#fff', cursor: 'pointer' }}>
+                    style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid var(--gold, #B5862A)',
+                      background: 'var(--gold, #B5862A)', color: '#fff', cursor: 'pointer' }}>
                     Apply
                   </button>
                 </>
@@ -1425,7 +1436,7 @@ export default function StrategyBuilder({
               />
               <button onClick={saveStrategy}
                 style={{
-                  padding: '8px 20px', background: '#6366f1', color: '#fff',
+                  padding: '8px 20px', background: 'var(--gold, #B5862A)', color: '#fff',
                   border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 15, fontWeight: 600,
                 }}>
                 Save →
@@ -1440,8 +1451,8 @@ export default function StrategyBuilder({
               <button onClick={copyShareUrl}
                 style={{
                   padding: '8px 16px', background: 'none',
-                  color: copied ? '#16a34a' : '#6b7280',
-                  border: `1px solid ${copied ? '#16a34a' : '#d1d5db'}`,
+                  color: copied ? 'var(--up, #1B7A4A)' : '#6b7280',
+                  border: `1px solid ${copied ? 'var(--up, #1B7A4A)' : '#d1d5db'}`,
                   borderRadius: 6, cursor: 'pointer', fontSize: 15,
                 }}>
                 {copied ? 'Link copied' : 'Share link'}
@@ -1462,7 +1473,7 @@ export default function StrategyBuilder({
           {saved.map(s => {
             const expired  = new Date(s.expiry) < new Date()
             const livePnl  = savedPnls[s.id]
-            const pnlColor = livePnl == null ? '#6b7280' : livePnl >= 0 ? '#16a34a' : '#dc2626'
+            const pnlColor = livePnl == null ? '#6b7280' : livePnl >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)'
             const entryTotal = s.legs.reduce((sum, l) => sum + l.qty * (MCX_INSTRUMENTS[s.instrument]?.lotSize ?? 1) * l.premium * (l.action === 'BUY' ? 1 : -1), 0)
             return (
               <div key={s.id}
@@ -1486,8 +1497,8 @@ export default function StrategyBuilder({
                       {s.legs.map((leg, i) => (
                         <span key={i} style={{
                           marginRight: 6, padding: '1px 6px', borderRadius: 4,
-                          background: leg.action === 'BUY' ? '#dcfce7' : '#fee2e2',
-                          color: leg.action === 'BUY' ? '#15803d' : '#b91c1c',
+                          background: actionStyle(leg.action).background,
+                          color: actionStyle(leg.action).color,
                         }}>
                           {leg.action} {leg.qty}× {leg.type} {fmt(leg.strike)} @ {fmt(leg.premium)}
                         </span>
