@@ -1,5 +1,20 @@
 [
   {
+    "file": "brief-edition-082",
+    "topic": "Natural Gas Jumps 2.23% as Heat Demand Meets Supply Anxiety",
+    "content_type": "macro_trend",
+    "mood": "CALM",
+    "hook_caption": "Your winter heating bill just got a reality check.",
+    "stat_line": "Natural gas jumps 2.23% — storage anxiety is real.",
+    "payoff": "When storage gets nervous, your heating cost moves before your thermostat does.",
+    "beat1": "MCX Natural Gas jumped to ₹261.30/mmBtu overnight as US storage levels fell below what winter normally needs.",
+    "beat2": "Heat demand is climbing, but supply isn't keeping pace — the market's pricing scarcity, not comfort.",
+    "beat3": "Watch if Henry Hub holds above $2.73 today; a drop signals this was just positioning, not structural tightness.",
+    "instagram_id": null,
+    "generated_at": "2026-08-10T05:05:19.360Z",
+    "edition": 82
+  },
+  {
     "file": "news-20260809-mcx-margin-calculator",
     "topic": "MCX Margin Calculator",
     "content_type": "explainer",
