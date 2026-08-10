@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260810-mcx-order-types-explained",
+    "topic": "MCX Order Types Explained",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your stop loss order just became a liability—here's why.",
+    "stat_line": "Four order types. One wrong move. Game over.",
+    "payoff": "Your stop loss can protect you—or execute exactly when you don't want it to.",
+    "beat1": "MCX gives you four ways to place an order—market, limit, stop-loss limit, stop-loss market. Pick wrong, your protection becomes a trap.",
+    "beat2": "SL-M executes instantly when triggered; SL waits for your limit price and might never fill if the market gaps past it.",
+    "beat3": "Long position? Stop loss must be a SELL order. Short? Must be a BUY. Backwards placement wipes accounts daily.",
+    "instagram_id": "18105818804605858",
+    "generated_at": "2026-08-10T15:07:39.129Z",
+    "edition": null,
+    "posted_at": "2026-08-10T15:08:26.030Z"
+  },
+  {
     "file": "brief-edition-082",
     "topic": "Natural Gas Jumps 2.23% as Heat Demand Meets Supply Anxiety",
     "content_type": "macro_trend",
