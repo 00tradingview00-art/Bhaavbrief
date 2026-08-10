@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useId } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceArea, Legend,
   AreaChart, Area,
@@ -367,8 +367,12 @@ function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT
       {payload.map(p => {
         const v = Number(p.value)
         const pct = netCostINR !== 0 ? (v / Math.abs(netCostINR)) * 100 : null
+        // The lines' own stroke colors (gold-dark / ink-3) are tuned for
+        // contrast against the white chart background, not this dark
+        // tooltip — use lighter tokens here so the text stays readable.
+        const tooltipColor = p.dataKey === 'Expiry' ? 'var(--gold-light, #D4A853)' : 'var(--ink-4, #B8B4A8)'
         return (
-          <div key={p.dataKey} style={{ fontWeight: 700, color: p.color }}>
+          <div key={p.dataKey} style={{ fontWeight: 700, color: tooltipColor }}>
             {p.name}: {v >= 0 ? '+' : ''}₹{fmt(v)}
             {pct !== null ? ` (${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%)` : ''}
           </div>
@@ -435,6 +439,11 @@ function EventTimeline({
 // IVHistoryChart — real gaps (missed cron snapshot days) are left as gaps,
 // never interpolated.
 function IVHistorySparkline({ history, color }: { history: { date: string; iv: number }[]; color: string }) {
+  // Stable per-instance id — `color` is now a `var(--x, #hex)` CSS token
+  // string, not a plain hex, so deriving the gradient id from it (as this
+  // used to) left spaces/parens/commas in the id, breaking the url(#...)
+  // fragment reference and silently falling back to a solid black fill.
+  const gradId = `grad-strategy-iv-${useId()}`
   const recent = history.slice(-10)
   if (recent.length < 2) {
     return (
@@ -447,7 +456,6 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
   const ivValues = recent.map(d => d.iv)
   const minIV = Math.min(...ivValues)
   const maxIV = Math.max(...ivValues)
-  const gradId = `grad-strategy-iv-${color.replace('#', '')}`
 
   return (
     <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 14px', marginBottom: 16 }}>
