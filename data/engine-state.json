@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 151985,
-    "silver": 231804,
-    "crude": 7439,
-    "copper": 1366.8,
-    "natgas": 256.1,
+    "gold": 152153,
+    "silver": 233914,
+    "crude": 7511,
+    "copper": 1373.75,
+    "natgas": 261,
     "usdinr": 95.21
   },
-  "lastChecked": "2026-08-07T18:12:58.406Z",
+  "lastChecked": "2026-08-10T04:20:48.641Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,9 +22,7 @@
     "mideast": "Iran Says Two Oil Tankers Ditched Attempt to Transit Hormuz - Crude Oil Prices T",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-08-07/2026-08-07-mcx-crude-rallies-2-38-on-dollar-weakness-demand-hold"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-08-07T04:45:34.166Z",
   "lastCoveredAt": {
     "crude": "2026-08-07T04:45:34.166Z",

@@ -145,7 +145,7 @@
       "id": "us-iran-military-pause-crude-relief",
       "title": "US-Iran Military Pause: War Premium Strips from Crude",
       "startDate": "2026-08-03",
-      "status": "active",
+      "status": "closed",
       "editions": [
         77
       ],
@@ -158,7 +158,9 @@
         "Geopolitics",
         "Iran",
         "US-Iran Relations"
-      ]
+      ],
+      "endDate": "2026-08-10",
+      "outcome": "The US-Iran military pause unwound geopolitical risk premium in crude markets, pulling MCX Crude down ₹54 from the ₹7,565 key level to ₹7,511 as WTI fell $5.32 to $79.35."
     }
   ]
 }
