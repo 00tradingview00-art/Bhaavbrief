@@ -5,7 +5,6 @@
  */
 
 import crypto from 'crypto'
-import { unstable_cache } from 'next/cache'
 
 const KITE_BASE   = 'https://api.kite.trade'
 const KITE_V      = '3'
@@ -287,16 +286,29 @@ export function getLoginUrl(apiKey: string): string {
 // ── Cached instrument discovery ────────────────────────────────────────────────
 // getFullMCXInstruments() re-fetches and re-parses the entire MCX instruments CSV
 // (every commodity, every FUT+CE+PE contract) on every call. Which strikes/expiries/
-// tokens exist changes rarely intraday — cache it. Credentials are read from
-// process.env inside the function (not passed as arguments) so a live secret never
-// gets serialized into the unstable_cache key.
-export const getFullMCXInstrumentsCached = unstable_cache(
-  async () => {
-    const apiKey      = process.env.KITE_API_KEY
-    const accessToken = process.env.KITE_ACCESS_TOKEN
-    if (!apiKey || !accessToken) throw new Error('Kite credentials not configured')
-    return new KiteClient(apiKey, accessToken).getFullMCXInstruments()
-  },
-  ['mcx-full-instruments'],
-  { revalidate: 3600 },
-)
+// tokens exist changes rarely intraday — cache it.
+//
+// Plain in-memory cache, not Next's unstable_cache: the parsed payload is several
+// MB (every commodity's FUT+CE+PE contracts), past unstable_cache's data-cache
+// size ceiling, which made every cache-repopulate attempt throw instead of
+// caching — taking down every caller (the options chain API, the ATM IV snapshot
+// cron) whenever the hourly revalidate window expired, even though the
+// underlying Kite fetch itself had already succeeded. An in-memory cache has no
+// serialization/size limit to hit, and still avoids re-fetching the CSV on every
+// request within the same warm serverless instance.
+let cachedInstruments: MCXInstrument[] | null = null
+let cachedInstrumentsAt = 0
+const INSTRUMENTS_CACHE_TTL_MS = 3600_000
+
+export async function getFullMCXInstrumentsCached(): Promise<MCXInstrument[]> {
+  if (cachedInstruments && Date.now() - cachedInstrumentsAt < INSTRUMENTS_CACHE_TTL_MS) {
+    return cachedInstruments
+  }
+  const apiKey      = process.env.KITE_API_KEY
+  const accessToken = process.env.KITE_ACCESS_TOKEN
+  if (!apiKey || !accessToken) throw new Error('Kite credentials not configured')
+  const instruments = await new KiteClient(apiKey, accessToken).getFullMCXInstruments()
+  cachedInstruments   = instruments
+  cachedInstrumentsAt = Date.now()
+  return instruments
+}
