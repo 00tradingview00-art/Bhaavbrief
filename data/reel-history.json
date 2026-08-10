@@ -1,5 +1,35 @@
 [
   {
+    "file": "news-20260809-mcx-margin-calculator",
+    "topic": "MCX Margin Calculator",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹1,51,985 gold position needs cash daily—not just at expiry.",
+    "stat_line": "MTM losses debit every evening automatically.",
+    "payoff": "You can be fully funded and still get wiped out between market close and morning.",
+    "beat1": "You're right on gold direction, but the exchange pulls cash from your account each night for losses. That's MTM—mark-to-market settlement happening live.",
+    "beat2": "SPAN margin (4–5% of contract value) is just the entry fee. Brokers add 2–5% more as buffer. But real damage comes from daily MTM swings eating into available balance.",
+    "beat3": "If MCX Gold dips ₹500 tomorrow, you don't wait for expiry—₹500 loss hits your account by evening settlement. Account balance must stay above margin requirements.",
+    "instagram_id": null,
+    "generated_at": "2026-08-09T14:43:24.843Z",
+    "edition": null
+  },
+  {
+    "file": "news-20260808-mcx-margin-calculation",
+    "topic": "MCX Margin Calculation",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹1,51,985 gold trade just demanded more cash. Here's why.",
+    "stat_line": "Margin call: when your ₹4–9% buffer vanishes overnight.",
+    "payoff": "You can be right on direction—and still get wiped out by margin math.",
+    "beat1": "Every MCX gold position locks up 4–9% of its value as margin—your trading cushion. When MTM losses eat into that daily, brokers demand top-up cash or they close your position at market price.",
+    "beat2": "MCX updates margin twice daily using extreme price scenarios. SPAN margin (4–6%) plus broker exposure (1–3%) move independently. Your maintenance buffer is just 75% of that initial amount.",
+    "beat3": "Hit 75% of initial margin? Broker forces exit at prevailing price. No negotiation. No tomorrow. Position gone.",
+    "instagram_id": null,
+    "generated_at": "2026-08-08T14:40:24.443Z",
+    "edition": null
+  },
+  {
     "file": "news-20260807-mcx-lot-sizes",
     "topic": "MCX Lot Sizes",
     "content_type": "explainer",
