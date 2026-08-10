@@ -10,23 +10,23 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-08-07T07:49:10.017Z",
-    "lastFlashPrice": 232300,
+    "lastFlashAt": "2026-08-10T17:40:21.655Z",
+    "lastFlashPrice": 236969,
     "lastRoundLevel": 230000,
     "recentFlashIds": [
+      "2026-08-10-23-10-mcx-silver-surges-2-38-on-broad-commodity-strength",
       "2026-08-07-13-19-mcx-silver-surges-2-86-on-safe-haven-demand-resurgence",
-      "2026-08-05-11-23-mcx-silver-surges-2-11-on-safe-haven-momentum",
-      "2026-07-28-12-39-mcx-silver-falls-1-73-on-broad-commodity-weakness"
+      "2026-08-05-11-23-mcx-silver-surges-2-11-on-safe-haven-momentum"
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-08-10T13:53:22.947Z",
-    "lastFlashPrice": 7683,
+    "lastFlashAt": "2026-08-10T17:40:21.655Z",
+    "lastFlashPrice": 7803,
     "lastRoundLevel": 7500,
     "recentFlashIds": [
+      "2026-08-10-23-10-mcx-crude-surges-5-11-on-supply-stabilisation-momentum",
       "2026-08-10-19-23-mcx-crude-surges-3-49-on-sustained-supply-stabilisation",
-      "2026-08-10-16-22-mcx-crude-surges-1-93-on-supply-stabilisation-momentum",
-      "2026-08-07-13-20-mcx-crude-edges-higher-on-supply-stabilisation-continua"
+      "2026-08-10-16-22-mcx-crude-surges-1-93-on-supply-stabilisation-momentum"
     ]
   },
   "MCX_COPPER": {
