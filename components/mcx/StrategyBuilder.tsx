@@ -1304,9 +1304,13 @@ export default function StrategyBuilder({
                   {breakevens.map((be, i) => (
                     <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.5} />
                   ))}
-                  <Line type="monotone" dataKey="Expiry" stroke="var(--ink, #0E0D0A)" dot={false} strokeWidth={2} name="At Expiry" />
+                  {/* "Today" drawn first so "At Expiry" paints on top when they
+                      coincide exactly (e.g. a futures-only position has no time
+                      value, so the two lines are pixel-identical) — otherwise
+                      the fainter secondary line fully occludes the primary one. */}
                   {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" dot={false} strokeWidth={1.5}
                     strokeDasharray="5 3" name={secondaryLabel} />}
+                  <Line type="monotone" dataKey="Expiry" stroke="var(--gold-dark, #8B6520)" dot={false} strokeWidth={2} name="At Expiry" />
                 </LineChart>
               </ResponsiveContainer>
               {upcomingEvents.length > 0 && expiry && (
