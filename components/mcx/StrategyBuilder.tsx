@@ -7,7 +7,7 @@ import {
 } from 'recharts'
 import {
   computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
-  computeExpectedMoveCone,
+  computeExpectedMoveCone, computeProbOfProfit,
   type Leg, type SavedStrategy, type PayoffPoint, type Action,
 } from '@/lib/strategy'
 import {
@@ -516,8 +516,12 @@ export default function StrategyBuilder({
   const [copied,    setCopied]    = useState(false)
   const [events,     setEvents]     = useState<EventMapEntry[]>([])
   const [targetDate, setTargetDate] = useState<string | null>(null)  // null = "now"
-  // Cross-instrument chain data for My Strategies P&L
+  // Cross-instrument/cross-expiry chain data for My Strategies P&L, keyed by
+  // `${instrument}:${expiry}`. It's a ref (not state) so writes don't cause a
+  // re-render on their own — chainVersion is bumped alongside every write so
+  // the live-P&L effect below actually re-runs once fresh data lands.
   const allChainDataRef = useRef<Record<string, ChainData>>({})
+  const [chainVersion, setChainVersion] = useState(0)
 
   const payoffWidth = PAYOFF_WIDTH_BY_INST[instrument] ?? 0.15
   const lotSize     = MCX_INSTRUMENTS[instrument]?.lotSize ?? 1
@@ -580,7 +584,8 @@ export default function StrategyBuilder({
       if (!chainRes.ok) throw new Error('Failed to load options chain')
       const chainJson = await chainRes.json()
       setChainData(chainJson)
-      allChainDataRef.current[inst] = chainJson
+      allChainDataRef.current[`${inst}:${chainJson.expiry}`] = chainJson
+      setChainVersion(v => v + 1)
       setLastFetchedAt(new Date())
       if (!preserveLegs) setLegs([])
     } catch (e) {
@@ -624,19 +629,28 @@ export default function StrategyBuilder({
       .catch(() => {/* silent */})
   }, [instrument])
 
-  // Fetch cross-instrument chains for My Strategies P&L when tab switches to saved
+  // Fetch cross-instrument/cross-expiry chains for My Strategies P&L when tab
+  // switches to saved. Each saved strategy's OWN expiry is requested and
+  // cached explicitly — never assumed to match whatever expiry is currently
+  // selected on-screen, which used to silently price a saved strategy's legs
+  // against a different contract month's premiums.
   useEffect(() => {
     if (tab !== 'saved' || saved.length === 0) return
-    const needed = [...new Set(saved.map(s => s.instrument))].filter(
-      inst => inst !== instrument && !allChainDataRef.current[inst],
-    )
-    needed.forEach(inst => {
-      fetch(`/api/options?instrument=${inst}`)
+    const needed = [...new Set(saved.map(s => `${s.instrument}:${s.expiry}`))]
+      .filter(key => !allChainDataRef.current[key])
+    needed.forEach(key => {
+      const [inst, exp] = key.split(':')
+      fetch(`/api/options?instrument=${inst}&expiry=${exp}`)
         .then(r => r.ok ? r.json() : null)
-        .then(data => { if (data) allChainDataRef.current[inst] = data })
+        .then(data => {
+          if (data) {
+            allChainDataRef.current[`${inst}:${data.expiry}`] = data
+            setChainVersion(v => v + 1)
+          }
+        })
         .catch(() => {/* silent */})
     })
-  }, [tab, saved, instrument])
+  }, [tab, saved])
 
   // Compute live P&L for saved strategies using allChainDataRef
   useEffect(() => {
@@ -644,7 +658,7 @@ export default function StrategyBuilder({
     const pnls: Record<string, number | null> = {}
     for (const s of saved) {
       if (new Date(s.expiry) < new Date()) { pnls[s.id] = null; continue }
-      const cd = allChainDataRef.current[s.instrument] ?? (s.instrument === instrument ? chainData : null)
+      const cd = allChainDataRef.current[`${s.instrument}:${s.expiry}`] ?? null
       if (!cd) { pnls[s.id] = null; continue }
       const ls = MCX_INSTRUMENTS[s.instrument]?.lotSize ?? 1
       const currentPnl = s.legs.reduce((sum, leg) => {
@@ -660,7 +674,7 @@ export default function StrategyBuilder({
       pnls[s.id] = currentPnl
     }
     setSavedPnls(pnls)
-  }, [saved, chainData, instrument])
+  }, [saved, chainVersion])
 
   // Payoff chart data — "today" line uses current live IV
   const fRange      = futurePrice > 0 ? buildFRange(futurePrice, payoffWidth, legs) : []
@@ -668,10 +682,22 @@ export default function StrategyBuilder({
     ? computePayoff(legs, fRange, lotSize, T, r, currentIV > 0 ? currentIV : undefined)
     : []
 
+  // ±1σ/±2σ expected-move cone from the site's own tracked IV — clamped to
+  // the chart's visible price domain so it never overflows the axis. Also
+  // supplies sigmaT for the lognormal-weighted Prob. of Profit below.
+  const rawCone = computeExpectedMoveCone(futurePrice, currentIV, T)
+  const cone = rawCone && fRange.length > 0
+    ? {
+        sigmaT:   rawCone.sigmaT,
+        oneSigma: [Math.max(fRange[0], rawCone.oneSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.oneSigma[1])] as [number, number],
+        twoSigma: [Math.max(fRange[0], rawCone.twoSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.twoSigma[1])] as [number, number],
+      }
+    : null
+
   const breakevens    = computeBreakevens(payoff)
   const maxProfitLoss = computeMaxProfitLoss(payoff)
-  const pop = payoff.length > 0
-    ? Math.round(payoff.filter(p => p.pnlExpiry >= 0).length / payoff.length * 100)
+  const pop = (payoff.length > 0 && cone)
+    ? Math.round(computeProbOfProfit(payoff, breakevens, futurePrice, cone.sigmaT) * 100)
     : null
   const netGreeks     = legs.length > 0 && futurePrice > 0 && T > 0
     ? computeNetGreeks(legs, futurePrice, T, r, lotSize)
@@ -679,26 +705,31 @@ export default function StrategyBuilder({
   const netCost    = computeNetCost(legs)
   const netCostINR = netCost * lotSize
 
-  // P&L scenario table — pick 5 price points from payoff array
+  // P&L scenario table — pick 5 price points from payoff array. payoff is
+  // sorted ascending by F but NOT uniformly spaced (buildFRange injects extra
+  // points near strikes), so find the nearest real point rather than assuming
+  // a uniform-index formula — that used to silently read the wrong price.
   const scenarios = (payoff.length > 0 && futurePrice > 0)
     ? [-0.10, -0.05, 0, 0.05, 0.10].map(pct => {
-        const F   = futurePrice * (1 + pct)
-        const idx = Math.round((pct + payoffWidth) / (2 * payoffWidth) * (PAYOFF_POINTS - 1))
-        const pt  = payoff[Math.max(0, Math.min(PAYOFF_POINTS - 1, idx))]
-        const pnlVal = pt?.pnlExpiry ?? 0
-        const pnlPct = netCostINR !== 0 ? (pnlVal / Math.abs(netCostINR) * 100) : null
+        const F  = futurePrice * (1 + pct)
+        const pt = payoff.reduce((best, p) => Math.abs(p.F - F) < Math.abs(best.F - F) ? p : best, payoff[0])
+        const pnlVal = pt.pnlExpiry
+        // Guard against a near-zero (not just exact-zero) net cost producing
+        // an arithmetically "correct" but meaningless percentage like +40000%.
+        const pnlPct = Math.abs(netCostINR) > futurePrice * lotSize * 0.001
+          ? (pnlVal / Math.abs(netCostINR) * 100)
+          : null
         return { label: `${pct >= 0 ? '+' : ''}${(pct * 100).toFixed(0)}%`, F, pnl: pnlVal, pnlPct, isATM: pct === 0 }
       })
     : []
 
-  // Risk budget sizing
-  const totalLots = legs.reduce((s, l) => s + l.qty, 0)
-  const maxLossPerLot = (maxProfitLoss.maxLoss !== null && totalLots > 0)
-    ? maxProfitLoss.maxLoss / totalLots
+  // Risk budget sizing — scale the CURRENT leg structure (preserving any ratio
+  // between legs, e.g. a 1x2 backspread) so its max loss matches the stated
+  // budget, rather than setting every leg to the same absolute quantity.
+  const riskScaleFactor = (riskBudget && maxProfitLoss.maxLoss !== null && maxProfitLoss.maxLoss < 0)
+    ? Number(riskBudget) / Math.abs(maxProfitLoss.maxLoss)
     : null
-  const suggestedLots = (riskBudget && maxLossPerLot !== null && maxLossPerLot < 0)
-    ? Math.max(1, Math.ceil(Number(riskBudget) / Math.abs(maxLossPerLot)))
-    : null
+  const suggestedLots = riskScaleFactor !== null ? Math.max(1, Math.round(riskScaleFactor)) : null
 
   const dte = expiry ? daysToExpiry(expiry) : 0
 
@@ -719,16 +750,6 @@ export default function StrategyBuilder({
     AsOf:   targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
   }))
 
-  // ±1σ/±2σ expected-move cone from the site's own tracked IV — clamped to
-  // the chart's visible price domain so it never overflows the axis.
-  const rawCone = computeExpectedMoveCone(futurePrice, currentIV, T)
-  const cone = rawCone && fRange.length > 0
-    ? {
-        sigmaT:   rawCone.sigmaT,
-        oneSigma: [Math.max(fRange[0], rawCone.oneSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.oneSigma[1])] as [number, number],
-        twoSigma: [Math.max(fRange[0], rawCone.twoSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.twoSigma[1])] as [number, number],
-      }
-    : null
 
   // Events between today and expiry, for the target-date timeline
   const upcomingEvents = expiry
@@ -800,8 +821,8 @@ export default function StrategyBuilder({
     }))
   }
 
-  function applyAllQty(qty: number) {
-    setLegs(prev => prev.map(l => ({ ...l, qty: Math.max(1, qty) })))
+  function applyRiskScale(factor: number) {
+    setLegs(prev => prev.map(l => ({ ...l, qty: Math.max(1, Math.round(l.qty * factor)) })))
   }
 
   function toggleAction(idx: number) {
@@ -1401,7 +1422,7 @@ export default function StrategyBuilder({
           )}
 
           {/* Risk budget sizing */}
-          {maxLossPerLot !== null && maxLossPerLot < 0 && (
+          {maxProfitLoss.maxLoss !== null && maxProfitLoss.maxLoss < 0 && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 14, color: '#6b7280' }}>Risk budget ₹</span>
               <input
@@ -1414,7 +1435,7 @@ export default function StrategyBuilder({
                 <>
                   <span style={{ fontSize: 14, color: '#6b7280' }}>→ <strong>{suggestedLots} lot{suggestedLots !== 1 ? 's' : ''}</strong></span>
                   <button
-                    onClick={() => applyAllQty(suggestedLots)}
+                    onClick={() => riskScaleFactor !== null && applyRiskScale(riskScaleFactor)}
                     style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid var(--gold, #B5862A)',
                       background: 'var(--gold, #B5862A)', color: '#fff', cursor: 'pointer' }}>
                     Apply

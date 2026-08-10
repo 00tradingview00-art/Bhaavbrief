@@ -1,4 +1,4 @@
-import { black76 } from '@/lib/black76'
+import { black76, normalCDF } from '@/lib/black76'
 
 export type Action     = 'BUY' | 'SELL'
 export type OptionType = 'CE' | 'PE'
@@ -137,6 +137,38 @@ export function computeBreakevens(payoff: PayoffPoint[]): number[] {
     }
   }
   return breakevens
+}
+
+// Real probability of profit at expiry, weighted by the zero-drift lognormal
+// distribution the site's own Black-76 pricer and expected-move cone already
+// assume for F_T — not a naive count of sampled payoff points, which is both
+// biased by buildFRange's non-uniform strike-clustered sampling density and,
+// even on a uniform grid, implicitly (and wrongly) assumes F is uniformly
+// distributed at expiry rather than lognormal.
+export function computeProbOfProfit(
+  payoff:      PayoffPoint[],
+  breakevens:  number[],
+  futurePrice: number,
+  sigmaT:      number,
+): number {
+  if (payoff.length === 0) return 0
+  if (!(sigmaT > 0) || !(futurePrice > 0)) {
+    // Fallback when IV/T aren't available yet — naive fraction, better than nothing
+    return payoff.filter(p => p.pnlExpiry >= 0).length / payoff.length
+  }
+  const sorted = [...breakevens].sort((a, b) => a - b)
+  const bounds = [-Infinity, ...sorted, Infinity]
+  const cdf = (F: number) =>
+    F === -Infinity ? 0 : F === Infinity ? 1 : normalCDF(Math.log(F / futurePrice) / sigmaT)
+
+  let profitProb = 0
+  for (let i = 0; i < bounds.length - 1; i++) {
+    const lo = bounds[i], hi = bounds[i + 1]
+    const sampleF = lo === -Infinity ? payoff[0].F : hi === Infinity ? payoff[payoff.length - 1].F : (lo + hi) / 2
+    const nearest = payoff.reduce((best, p) => Math.abs(p.F - sampleF) < Math.abs(best.F - sampleF) ? p : best, payoff[0])
+    if (nearest.pnlExpiry >= 0) profitProb += cdf(hi) - cdf(lo)
+  }
+  return profitProb
 }
 
 export interface MaxProfitLoss {

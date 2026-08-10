@@ -6,8 +6,10 @@ import {
   computeMaxProfitLoss,
   computeNetCost,
   computeExpectedMoveCone,
+  computeProbOfProfit,
   type Leg,
 } from './strategy'
+import { normalCDF } from './black76'
 
 // 101-point range — odd count ensures the exact center (ATM) is always a grid point
 const range = (center: number, width = 0.15, points = 101): number[] =>
@@ -185,6 +187,50 @@ describe('computeBreakevens', () => {
     const bes = computeBreakevens(payoff)
     expect(bes.length).toBe(1)
     expect(bes[0]).toBeCloseTo(F + 500, -2)
+  })
+})
+
+describe('computeProbOfProfit', () => {
+  const sigmaT = IV * Math.sqrt(T) // matches computeExpectedMoveCone's zero-drift sigmaT
+
+  test('long call: matches the hand-computed lognormal tail probability past the single breakeven', () => {
+    const legs: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: IV }]
+    const payoff = computePayoff(legs, range(F, 0.12, 200), LOT, 0, R)
+    const bes = computeBreakevens(payoff)
+    expect(bes.length).toBe(1)
+
+    const pop = computeProbOfProfit(payoff, bes, F, sigmaT)
+    const expected = 1 - normalCDF(Math.log(bes[0] / F) / sigmaT)
+    expect(pop).toBeCloseTo(expected, 4)
+  })
+
+  test('long straddle: matches the hand-computed lognormal probability outside both breakevens', () => {
+    const prem = 500
+    const legs: Leg[] = [
+      { strike: F, type: 'CE', action: 'BUY', qty: 1, premium: prem, iv: IV },
+      { strike: F, type: 'PE', action: 'BUY', qty: 1, premium: prem, iv: IV },
+    ]
+    const payoff = computePayoff(legs, range(F, 0.12, 200), LOT, 0, R)
+    const bes = computeBreakevens(payoff)
+    expect(bes.length).toBe(2)
+
+    const pop = computeProbOfProfit(payoff, bes, F, sigmaT)
+    const lossProb = normalCDF(Math.log(bes[1] / F) / sigmaT) - normalCDF(Math.log(bes[0] / F) / sigmaT)
+    expect(pop).toBeCloseTo(1 - lossProb, 4)
+  })
+
+  test('falls back to naive point-count when sigmaT is unavailable (e.g. IV/T not yet loaded)', () => {
+    const legs: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: IV }]
+    const payoff = computePayoff(legs, range(F, 0.12, 200), LOT, 0, R)
+    const bes = computeBreakevens(payoff)
+
+    const pop = computeProbOfProfit(payoff, bes, F, 0)
+    const naive = payoff.filter(p => p.pnlExpiry >= 0).length / payoff.length
+    expect(pop).toBe(naive)
+  })
+
+  test('empty payoff returns 0 rather than NaN', () => {
+    expect(computeProbOfProfit([], [], F, sigmaT)).toBe(0)
   })
 })
 
