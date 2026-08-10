@@ -66,7 +66,14 @@ export function computePayoff(
             // Linear instrument — no time value, same P&L today as at expiry
             return sum + sign(leg.action) * leg.qty * lotSize * (F - leg.premium)
           }
-          const ivToUse      = liveIvDecimal ?? leg.iv
+          const ivToUse = liveIvDecimal ?? leg.iv
+          // No usable IV from either source — black76's sigma<=0 guard would price this leg
+          // at a flat zero regardless of days-to-expiry, collapsing "Today" to "100% lost"
+          // even with real time value left. Fall back to intrinsic value instead — the same
+          // honest treatment pnlExpiry already gives it.
+          if (!(ivToUse > 0)) {
+            return sum + sign(leg.action) * leg.qty * lotSize * (intrinsic(leg.type, F, leg.strike) - leg.premium)
+          }
           const currentPrice = black76(F, leg.strike, T, r, ivToUse, leg.type).price
           return sum + sign(leg.action) * leg.qty * lotSize * (currentPrice - leg.premium)
         }, 0)
@@ -82,7 +89,9 @@ export function computeNetGreeks(
   T:       number,
   r:       number,
   lotSize: number,
+  liveIV?: number,   // current ATM IV as %; overrides a corrupted/unusable leg.iv, same as computePayoff
 ): NetGreeks {
+  const liveIvDecimal = liveIV != null && liveIV > 0 ? liveIV / 100 : undefined
   return legs.reduce(
     (acc, leg) => {
       const s = sign(leg.action) * leg.qty * lotSize
@@ -90,7 +99,11 @@ export function computeNetGreeks(
         // Linear instrument — delta of 1 per unit, zero gamma/theta/vega
         return { ...acc, delta: acc.delta + s }
       }
-      const g = black76(F, leg.strike, T, r, leg.iv, leg.type)
+      const ivToUse = liveIvDecimal ?? leg.iv
+      // No usable IV from either source — contribute nothing rather than let black76
+      // degenerate this leg's Greeks to a flat, misleading zero.
+      if (!(ivToUse > 0)) return acc
+      const g = black76(F, leg.strike, T, r, ivToUse, leg.type)
       return {
         delta: acc.delta + s * g.delta,
         gamma: acc.gamma + s * g.gamma,

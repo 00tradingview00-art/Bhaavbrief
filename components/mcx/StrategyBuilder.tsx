@@ -543,14 +543,23 @@ export default function StrategyBuilder({
   const r           = chainData?.riskFreeRate ?? 0.065
   const T           = expiry ? daysToExpiry(expiry) / 365 : 0
 
-  // IV regime from history + current chain — only LIVE-tier sides, matching IVHistoryChart
+  // IV regime from history + current chain — only LIVE-tier sides, matching IVHistoryChart.
+  // Falls back from the ATM strike's own quote to the whole chain's average when the ATM
+  // strike itself is illiquid (no LIVE-tier quote) — otherwise currentIV silently resolves to
+  // the bare number 0 (not null), which every leg built from it inherits via `?? currentIV`,
+  // and 0 IV makes black76() price that leg at a flat zero regardless of days-to-expiry —
+  // collapsing the "Today" P&L line to "100% lost" and Net Gamma/Theta/Vega to exactly 0, even
+  // with real time value left. A whole-chain average is a far better stand-in than 0.
   const atmRows  = chain.filter(r => r.isATM)
+  const liveIVsIn = (rows: typeof chain) => rows.flatMap(r => [
+    r.CE.tier === 'LIVE' ? r.CE.iv : null,
+    r.PE.tier === 'LIVE' ? r.PE.iv : null,
+  ]).filter((v): v is number => v != null && v > 0)
   const currentIV = (() => {
-    const vals = atmRows.flatMap(r => [
-      r.CE.tier === 'LIVE' ? r.CE.iv : null,
-      r.PE.tier === 'LIVE' ? r.PE.iv : null,
-    ]).filter((v): v is number => v != null && v > 0)
-    return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0
+    const atmVals = liveIVsIn(atmRows)
+    if (atmVals.length > 0) return atmVals.reduce((a, b) => a + b, 0) / atmVals.length
+    const chainVals = liveIVsIn(chain)
+    return chainVals.length > 0 ? chainVals.reduce((a, b) => a + b, 0) / chainVals.length : 0
   })()
   const ivRegime: IVRegime | null = currentIV > 0 && ivHistory.length > 0
     ? computeIVRegime(ivHistory, currentIV)
@@ -711,7 +720,7 @@ export default function StrategyBuilder({
     ? Math.round(computeProbOfProfit(payoff, breakevens, futurePrice, cone.sigmaT) * 100)
     : null
   const netGreeks     = legs.length > 0 && futurePrice > 0 && T > 0
-    ? computeNetGreeks(legs, futurePrice, T, r, lotSize)
+    ? computeNetGreeks(legs, futurePrice, T, r, lotSize, currentIV)
     : null
   const netCost    = computeNetCost(legs)
   const netCostINR = netCost * lotSize

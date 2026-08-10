@@ -166,6 +166,48 @@ describe('computePayoff — futures leg', () => {
   })
 })
 
+describe('computePayoff — pnlToday with an unusable leg IV', () => {
+  test('a CE/PE leg with iv:0 and no liveIV override falls back to intrinsic value, not a fabricated zero price', () => {
+    // Regression test: leg.iv can end up 0 (not null) for a leg built on an
+    // illiquid strike. Feeding 0 straight into black76() would price the leg
+    // at a flat zero regardless of time-to-expiry, making pnlToday collapse
+    // to exactly -premium (as if the position were already worthless) even
+    // with real time value left. It should fall back to intrinsic instead —
+    // the same treatment pnlExpiry already gets.
+    const legs: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: 0 }]
+    const payoff = computePayoff(legs, range(F), LOT, T, R)
+
+    const deepITM = payoff[payoff.length - 1]
+    expect(deepITM.pnlToday).toBeCloseTo(deepITM.pnlExpiry, -2)
+    expect(deepITM.pnlToday).not.toBeCloseTo(-500 * LOT, -2)
+  })
+
+  test('a leg with iv:0 is healed by a liveIV override, same as computePayoff already does for a healthy leg', () => {
+    const withRealIV: Leg[]  = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: IV }]
+    const withZeroIV: Leg[]  = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: 0 }]
+    const payoffReal = computePayoff(withRealIV, range(F), LOT, T, R, IV * 100)
+    const payoffHealed = computePayoff(withZeroIV, range(F), LOT, T, R, IV * 100)
+
+    payoffHealed.forEach((p, i) => expect(p.pnlToday).toBeCloseTo(payoffReal[i].pnlToday, -6))
+  })
+})
+
+describe('computeNetGreeks — unusable leg IV', () => {
+  test('a leg with iv:0 and no liveIV override contributes nothing, rather than degenerating via black76', () => {
+    const legs: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: 0 }]
+    const g = computeNetGreeks(legs, F, T, R, LOT)
+    expect(g).toEqual({ delta: 0, gamma: 0, theta: 0, vega: 0 })
+  })
+
+  test('a leg with iv:0 is healed by a liveIV override — closes the share-link gap where a corrupted leg.iv would otherwise stay broken even in a healthy session', () => {
+    const withRealIV: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: IV }]
+    const withZeroIV: Leg[] = [{ strike: F, type: 'CE', action: 'BUY', qty: 1, premium: 500, iv: 0 }]
+    const gReal   = computeNetGreeks(withRealIV, F, T, R, LOT)
+    const gHealed = computeNetGreeks(withZeroIV, F, T, R, LOT, IV * 100)
+    expect(gHealed).toEqual(gReal)
+  })
+})
+
 describe('computeBreakevens', () => {
   test('long straddle has two breakevens', () => {
     const prem = 500
