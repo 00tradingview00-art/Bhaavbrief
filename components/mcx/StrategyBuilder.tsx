@@ -125,7 +125,10 @@ function fmtPnlAxis(v: number): string {
 
 function fmtPnl(n: number | null): string {
   if (n === null) return 'Unlimited'
-  const sign = n >= 0 ? '+' : ''
+  // Always show an explicit sign — dropping it for negative values let a
+  // guaranteed-loss spread's negative "Max Profit" render as an unsigned,
+  // uncolored number indistinguishable from a real positive profit ceiling.
+  const sign = n >= 0 ? '+' : '-'
   return `${sign}₹${fmt(Math.abs(n))}`
 }
 
@@ -1393,7 +1396,14 @@ export default function StrategyBuilder({
                   label: 'Max Profit',
                   value: fmtPnl(maxProfitLoss.maxProfit),
                   sub: '',
-                  color: maxProfitLoss.maxProfit != null && maxProfitLoss.maxProfit > 0 ? 'var(--up, #1B7A4A)' : 'inherit',
+                  // A negative "Max Profit" means even the best case loses
+                  // money (net debit exceeds the max possible payout) — flag
+                  // it red like Max Loss, not neutral, so it doesn't read as
+                  // a positive profit ceiling.
+                  color: maxProfitLoss.maxProfit == null ? 'inherit'
+                    : maxProfitLoss.maxProfit > 0 ? 'var(--up, #1B7A4A)'
+                    : maxProfitLoss.maxProfit < 0 ? 'var(--down, #B53A2A)'
+                    : 'inherit',
                 },
                 {
                   label: 'Max Loss',
@@ -1401,7 +1411,11 @@ export default function StrategyBuilder({
                   sub: '',
                   color: maxProfitLoss.maxLoss != null && maxProfitLoss.maxLoss < 0 ? 'var(--down, #B53A2A)' : 'inherit',
                 },
-                ...(maxProfitLoss.maxProfit !== null && maxProfitLoss.maxLoss !== null && maxProfitLoss.maxLoss < 0
+                // Only a real risk/reward ratio when there's genuine upside —
+                // if maxProfit is negative (net debit exceeds the max
+                // possible payout), there's no "reward" to size against the
+                // risk, and "1 : 0.45" would misleadingly suggest one.
+                ...(maxProfitLoss.maxProfit !== null && maxProfitLoss.maxProfit > 0 && maxProfitLoss.maxLoss !== null && maxProfitLoss.maxLoss < 0
                   ? [{ label: 'Risk/Reward', value: `1 : ${(Math.abs(maxProfitLoss.maxProfit) / Math.abs(maxProfitLoss.maxLoss)).toFixed(2)}`, sub: '', color: 'inherit' }]
                   : []),
                 {
