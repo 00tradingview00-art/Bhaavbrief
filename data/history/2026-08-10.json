@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-08-10T04:58:31.164Z",
+=======
+  "generatedAt": "2026-08-10T04:58:27.136Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-08-10 10:28 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -28,9 +32,15 @@
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
+<<<<<<< Updated upstream
       "price": 261.4,
       "prevClose": 255.6,
       "changePct": 2.2692,
+=======
+      "price": 261.3,
+      "prevClose": 255.6,
+      "changePct": 2.23,
+>>>>>>> Stashed changes
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -52,9 +62,15 @@
       "unit": "USD/oz"
     },
     "WTI": {
+<<<<<<< Updated upstream
       "price": 78.56,
       "prevClose": 78.18,
       "changePct": 0.4861,
+=======
+      "price": 78.57,
+      "prevClose": 78.18,
+      "changePct": 0.4988,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "BRENT": {
@@ -66,7 +82,11 @@
     "HENRY_HUB": {
       "price": 2.73,
       "prevClose": 2.66,
+<<<<<<< Updated upstream
       "changePct": 2.592,
+=======
+      "changePct": 2.6296,
+>>>>>>> Stashed changes
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
