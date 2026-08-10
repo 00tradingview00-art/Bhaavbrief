@@ -18,5 +18,15 @@
     "verdict": "confirmed",
     "resolvedValue": 79.35,
     "resolvedAt": "2026-08-03T06:40:45.266Z"
+  },
+  {
+    "forEdition": 81,
+    "resolvedByEdition": 82,
+    "edgeMetric": "COMEX_GOLD",
+    "edgeLevel": 4308.3,
+    "edgeCondition": "above",
+    "verdict": "confirmed",
+    "resolvedValue": 4394.6,
+    "resolvedAt": "2026-08-10T04:58:27.261Z"
   }
 ]

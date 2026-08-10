@@ -161,6 +161,25 @@
       ],
       "endDate": "2026-08-10",
       "outcome": "The US-Iran military pause unwound geopolitical risk premium in crude markets, pulling MCX Crude down ₹54 from the ₹7,565 key level to ₹7,511 as WTI fell $5.32 to $79.35."
+    },
+    {
+      "id": "natgas-supply-anxiety-heat-demand",
+      "title": "Natural Gas Supply Anxiety: Heat Demand vs Storage Draw",
+      "startDate": "2026-08-10",
+      "status": "active",
+      "editions": [
+        82
+      ],
+      "latestDay": 1,
+      "summary": "Henry Hub natural gas surged 2.23% to $2.73/mmBtu on sharpest single-session move in weeks, driven by US storage draw estimates amid rising heat demand.",
+      "primaryCommodity": "MCX NatGas",
+      "keyLevel": "₹261.30/mmBtu",
+      "tags": [
+        "MCX NatGas",
+        "Supply Shock",
+        "Seasonal Demand",
+        "Henry Hub"
+      ]
     }
   ]
 }

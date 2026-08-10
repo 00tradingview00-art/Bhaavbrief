@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-082",
+    "href": "/briefs/edition-082",
+    "title": "Natural Gas Jumps 2.23% as Heat Demand Meets Supply Anxiety",
+    "description": "Henry Hub surges on draw fears while crude's geopolitical premium quietly rebuilds above $84 Brent.",
+    "excerpt": "MCX Gold ₹152200 | Crude ₹7477 | USDINR ₹95.21 — Gold +0.25% | Crude +0.71% | Silver +1.10% Yesterday's Edge — Result: Edition #81 watched whether COMEX GOLD would close above 4,308.3. Confirmed ✓, no",
+    "date": "2026-08-10T04:58:28.535Z",
+    "edition": "82",
+    "tags": [
+      "MCX NatGas",
+      "MCX Crude",
+      "MCX Silver"
+    ],
+    "commodities": [
+      "MCX NatGas",
+      "MCX Crude",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-10-export-ban-agri-commodity-india",
     "href": "/articles/2026-08-10-export-ban-agri-commodity-india",
