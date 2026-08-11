@@ -70,7 +70,7 @@
       "source_url": "https://www.opec.org/opec_web/en/press_room/28.htm",
       "frequency": "irregular",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-03T13:00:00Z",
+      "next_release_utc": "2026-09-06T13:00:00Z",
       "affected_contracts": [
         "crude"
       ],
@@ -91,7 +91,7 @@
       "source_url": "https://www.bls.gov/cpi/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-07-14T12:30:00Z",
+      "next_release_utc": "2026-09-11T12:30:00Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -114,7 +114,7 @@
       "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
       "frequency": "8x/year",
       "cadence_type": "manual",
-      "next_release_utc": "2026-07-29T18:00:00Z",
+      "next_release_utc": "2026-09-16T18:00:00Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -138,7 +138,7 @@
       "source_url": "https://www.bls.gov/ces/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-07T12:30:00Z",
+      "next_release_utc": "2026-09-04T12:30:00Z",
       "affected_contracts": [
         "gold",
         "silver"
@@ -355,7 +355,7 @@
       "source_url": "https://www.rbi.org.in/",
       "frequency": "6x/year",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-06T04:30:00Z",
+      "next_release_utc": "2026-10-07T04:30:00Z",
       "affected_contracts": [
         "gold",
         "silver",

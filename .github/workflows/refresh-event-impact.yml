@@ -28,6 +28,8 @@ jobs:
       - run: npm ci
 
       - name: Fetch EIA actuals
+        id: eia_fetch
+        continue-on-error: true
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: node scripts/fetch-eia-data.mjs
@@ -53,3 +55,9 @@ jobs:
             git commit -m "chore: refresh event impact stats [skip ci]"
           git pull --rebase origin main
           git push
+
+      - name: Surface EIA fetch failure
+        if: steps.eia_fetch.outcome == 'failure'
+        run: |
+          echo "::warning::EIA_API_KEY appears invalid (fetch-eia-data.mjs failed) — event actuals not refreshed. Rotate the secret."
+          exit 1
