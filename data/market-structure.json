@@ -7,7 +7,7 @@
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹7.7–10.8 lakh",
     "contractValue": "~₹1.5 crore at ₹1,53,957/10g",
-    "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
+    "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
       "World Gold Council",
