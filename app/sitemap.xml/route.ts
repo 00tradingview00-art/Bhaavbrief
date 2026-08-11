@@ -97,10 +97,10 @@ ${[...staticEntries, ...briefEntries, ...arcEntries, ...eventEntries].join('\n')
     })
   } catch (err) {
     console.error('Sitemap generation failed:', err)
-    // Always return valid XML — never HTML — so Google never sees a broken sitemap
+    // Return an empty-but-valid sitemap so Google sees zero URLs, not one
+    // stale URL that would cause it to de-index everything else.
     const fallback = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>${BASE}</loc></url>
 </urlset>`
     return new Response(fallback, {
       headers: { 'Content-Type': 'application/xml; charset=utf-8' },
