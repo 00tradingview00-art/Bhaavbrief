@@ -136,7 +136,7 @@ function getAnalystContext(commodityKey, geoTopics = []) {
   return `\nANALYST STRUCTURAL KNOWLEDGE (connect dots — use specific facts, not generic language):\n${sections.join('\n\n')}\n`
 }
 
-function getEventContext(headlines, commodityKey) {
+function getEventContext(headlines, commodityKey, usdinr = 0) {
   const map = loadImpactMap()
   const text = (Array.isArray(headlines) ? headlines.join(' ') : headlines).toLowerCase()
 
@@ -149,6 +149,20 @@ function getEventContext(headlines, commodityKey) {
   const commodityCtx = map.commodities?.[commodityKey]
 
   const sections = []
+
+  // For crude: inject live-computed transmission arithmetic so the model never
+  // has to guess or use a stale static rate. Also enforce catalyst priority order.
+  if (commodityKey === 'crude' && usdinr > 0) {
+    const perDollar = usdinr.toFixed(1)
+    const geoActive = ['hormuz', 'iran', 'opec', 'houthi', 'red sea', 'russia', 'ukraine', 'supply cut', 'sanctions'].some(kw => text.includes(kw))
+    const catalystNote = geoActive
+      ? 'CATALYST PRIORITY: Active geopolitical/supply-disruption signal detected in today\'s context — name it as the PRIMARY driver first. Only layer in seasonal refinery-maintenance if it is explicitly corroborating the geo catalyst, not as a standalone explanation.'
+      : 'CATALYST PRIORITY: No active geopolitical supply signal detected. If attributing to seasonal refinery-maintenance or demand-side factors, confirm that no Hormuz/OPEC/sanctions narrative is active in today\'s headlines before leading with that explanation.'
+    sections.push(`CRUDE WTI → MCX LIVE TRANSMISSION ARITHMETIC:
+$1/bbl WTI move ≈ ₹${perDollar}/bbl MCX  (= $1 × live USD/INR ₹${perDollar})
+Use ONLY this figure for any "X WTI move = Y MCX headwind/tailwind" calculation in the article.
+${catalystNote}`)
+  }
 
   for (const [eventKey, ev] of matchedEvents) {
     const mechanismText = Object.entries(ev.mechanism ?? {})
@@ -780,7 +794,8 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents
 
   const impactContext = getEventContext(
     [hawkTrigger, eia?.summary ?? ''].join(' '),
-    primaryMove?.key ?? 'crude'
+    primaryMove?.key ?? 'crude',
+    prices.usdinr ?? 0
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
@@ -899,7 +914,8 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
 
   const impactContext = getEventContext(
     [narrative, circularBlock, eiaBlock].filter(Boolean).join(' '),
-    primaryMove?.key ?? 'crude'
+    primaryMove?.key ?? 'crude',
+    prices.usdinr ?? 0
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
@@ -1018,7 +1034,7 @@ async function generateGeoArticle({ geoEvents, prices }) {
   const primaryLabel = { gold: 'MCX Gold', silver: 'MCX Silver', crude: 'MCX Crude', copper: 'MCX Copper', natgas: 'MCX NatGas' }[primaryKey]
   const primaryPrice = { gold: prices.mcxGold, crude: prices.mcxCrude, copper: prices.mcxCopper }[primaryKey] ?? 0
 
-  const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey)
+  const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey, prices.usdinr ?? 0)
   const analystContext = getAnalystContext(primaryKey, geoEvents.map(e => e.topic))
 
   const prompt = `You are BhaavBrief's market reporter. Write a macro-context intelligence article for Indian commodity traders.

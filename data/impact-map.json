@@ -6,7 +6,7 @@
       "keywords": ["iran", "israel", "strike", "attack", "escalat", "tehran", "tel aviv"],
       "primary_commodities": ["crude", "gold"],
       "mechanism": {
-        "crude": "Hormuz Strait carries ~20% of global seaborne oil (17–20 mb/d). Any credible blockade risk adds a war premium of $5–15/bbl to WTI/Brent within hours. MCX crude amplifies this by USD/INR — every $1/bbl on WTI = ~₹130–160/bbl on MCX at current exchange rates.",
+        "crude": "Hormuz Strait carries ~20% of global seaborne oil (17–20 mb/d). Any credible blockade risk adds a war premium of $5–15/bbl to WTI/Brent within hours. MCX crude amplifies this by USD/INR — every $1/bbl on WTI ≈ ₹[live USD/INR rate]/bbl on MCX (formula: $1 × USD/INR; use the live rate from the prompt for exact arithmetic).",
         "gold": "Classic safe-haven bid. Past Iran escalations drove gold +2–4% in the first 48 hours before fading as premiums compress. Silver moves in sympathy but with higher volatility."
       },
       "india_affected": {
@@ -211,7 +211,7 @@
     "crude": {
       "mcx_contract": "MCX Crude Oil — NYMEX WTI-linked. Lot size: 100 barrels. Pricing in ₹/barrel.",
       "india_import_dependency": "India imports ~85% of crude requirements (~5 mb/d). Second-largest crude importer after China.",
-      "transmission": "WTI $1/bbl move = MCX ₹130–160/bbl at USD/INR 84–86. USD/INR amplifies or dampens the move.",
+      "transmission": "WTI $1/bbl move ≈ MCX ₹[live USD/INR]/bbl — the formula is $1 × USD/INR rate (e.g. at ₹95 per USD, $1 WTI = ₹95 MCX). USD/INR amplifies (rupee weak) or dampens (rupee strong) the dollar-priced move. Always use the live USD/INR provided in the prompt for all transmission arithmetic; never use a static stale figure.",
       "key_data_releases": ["EIA weekly (Wed 8PM IST)", "API weekly (Tue night)", "OPEC MOMR (monthly)", "IEA OMR (monthly)", "Baker Hughes rig count (Fri night)"],
       "major_producers": "Saudi Arabia, Russia, USA, UAE, Iraq. OPEC+ collectively ~40% of global supply.",
       "india_price_mechanism": "Retail petrol/diesel revised fortnightly by OMCs (Indian Oil, BPCL, HPCL) based on 15-day rolling average of benchmark crude + exchange rate."
