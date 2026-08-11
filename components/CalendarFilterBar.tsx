@@ -8,6 +8,12 @@ import {
   COMMODITY_LABELS,
 } from '@/lib/eventMapTypes'
 
+type EventImpactEntry = {
+  avgAbsMovePct: number
+  maxAbsMovePct: number
+  sampleSize:    number
+}
+
 const TIER_STYLES: Record<string, { background: string; color: string }> = {
   high:       { background: '#FDF0F0', color: '#991818' },
   medium:     { background: '#FFF7E0', color: '#996600' },
@@ -36,9 +42,30 @@ function formatPrior(event: EventMapEntry): string | null {
   return `Prior: ${p.value}${unit}${period}`
 }
 
-function EventCard({ event }: { event: EventMapEntry }) {
+function EventCard({
+  event,
+  eventImpact,
+  tickValues,
+}: {
+  event: EventMapEntry
+  eventImpact: Record<string, EventImpactEntry>
+  tickValues: Record<string, number>
+}) {
   const tierStyle = TIER_STYLES[event.impact_tier] ?? TIER_STYLES.low
   const prior = formatPrior(event)
+
+  // Build per-commodity historical reaction summary
+  const impactLines = event.affected_contracts
+    .map(c => {
+      const s = eventImpact[c]
+      if (!s) return null
+      const tv = tickValues[c]
+      const lotNote = tv
+        ? ` · ₹${tv}/lot per ₹1 move`
+        : ''
+      return `${COMMODITY_LABELS[c] ?? c}: avg ±${s.avgAbsMovePct.toFixed(2)}% · max ±${s.maxAbsMovePct.toFixed(2)}% (${s.sampleSize} events)${lotNote}`
+    })
+    .filter(Boolean) as string[]
 
   return (
     <div
@@ -78,6 +105,22 @@ function EventCard({ event }: { event: EventMapEntry }) {
         </div>
       )}
 
+      {impactLines.length > 0 && (
+        <div style={{
+          background: 'var(--surface-2)', borderLeft: '2px solid var(--border)',
+          padding: '8px 10px', marginBottom: 8, borderRadius: '0 4px 4px 0',
+        }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+            Historical reaction
+          </div>
+          {impactLines.map((line, i) => (
+            <div key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>
+              {line}
+            </div>
+          ))}
+        </div>
+      )}
+
       {event.affected_contracts.length > 0 && (
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
           {event.affected_contracts.map(c => (
@@ -99,7 +142,15 @@ function EventCard({ event }: { event: EventMapEntry }) {
   )
 }
 
-export default function CalendarFilterBar({ events }: { events: EventMapEntry[] }) {
+export default function CalendarFilterBar({
+  events,
+  impactStats = {},
+  tickValues = {},
+}: {
+  events: EventMapEntry[]
+  impactStats?: Record<string, Record<string, EventImpactEntry>>
+  tickValues?: Record<string, number>
+}) {
   const [active, setActive] = useState<string>('all')
 
   const commodities = useMemo(() => {
@@ -147,7 +198,14 @@ export default function CalendarFilterBar({ events }: { events: EventMapEntry[] 
       </div>
 
       <div className="calendar-week-grid">
-        {filtered.map(event => <EventCard key={event.id} event={event} />)}
+        {filtered.map(event => (
+          <EventCard
+            key={event.id}
+            event={event}
+            eventImpact={impactStats[event.id] ?? {}}
+            tickValues={tickValues}
+          />
+        ))}
       </div>
     </div>
   )

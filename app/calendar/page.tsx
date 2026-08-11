@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import fs from 'fs'
+import path from 'path'
 import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import CountdownTimer from '@/components/CountdownTimer'
 import CalendarFilterBar from '@/components/CalendarFilterBar'
 import { getUpcomingEvents, getNextHighImpactEvent } from '@/lib/eventMap'
+import { getImpactStats, type EventImpactEntry } from '@/lib/eventImpactStats'
 
 export const revalidate = 900
 
@@ -47,6 +50,27 @@ const BASE = BASE_URL
 export default function CalendarPage() {
   const events = getUpcomingEvents()
   const nextHighImpact = getNextHighImpactEvent()
+
+  // Pre-fetch impact stats for all events × affected contracts
+  const impactStatsMap: Record<string, Record<string, EventImpactEntry>> = {}
+  for (const event of events) {
+    const eventStats: Record<string, EventImpactEntry> = {}
+    for (const commodity of event.affected_contracts) {
+      const s = getImpactStats(event.id, commodity)
+      if (s) eventStats[commodity] = s
+    }
+    if (Object.keys(eventStats).length > 0) impactStatsMap[event.id] = eventStats
+  }
+
+  // Load tick values (₹/lot per ₹1 move) for lot-level impact context
+  const tickValues: Record<string, number> = {}
+  try {
+    const c = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/commodity-constants.json'), 'utf8'))
+    for (const [key, val] of Object.entries(c) as [string, Record<string, unknown>][]) {
+      const tv = val?.tickValuePerLotINR
+      if (typeof tv === 'number') tickValues[key] = tv
+    }
+  } catch { /* degrades gracefully */ }
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -115,7 +139,7 @@ export default function CalendarPage() {
           />
         )}
 
-        <CalendarFilterBar events={events} />
+        <CalendarFilterBar events={events} impactStats={impactStatsMap} tickValues={tickValues} />
       </div>
     </div>
   )
