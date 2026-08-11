@@ -71,6 +71,16 @@ function loadAnalystKb() {
   return _analystKb
 }
 
+// ── Commodity Constants — single source of truth for duty factors + lot sizes ─
+const COMMODITY_CONSTANTS_FILE = path.join(ROOT, 'data/commodity-constants.json')
+let _commodityConstants = null
+function loadCommodityConstants() {
+  if (_commodityConstants) return _commodityConstants
+  try { _commodityConstants = JSON.parse(fs.readFileSync(COMMODITY_CONSTANTS_FILE, 'utf8')) }
+  catch { _commodityConstants = {} }
+  return _commodityConstants
+}
+
 function getAnalystContext(commodityKey, geoTopics = []) {
   const kb = loadAnalystKb()
   if (!kb || Object.keys(kb).length === 0) return ''
@@ -799,6 +809,12 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
+  // Pre-compute crude import parity so Haiku doesn't do arithmetic (it gets it wrong)
+  const crudeDutyFactor = loadCommodityConstants().crude?.importDutyFactor ?? 1.025
+  const wtiParityINR = prices.wti && prices.usdinr
+    ? (prices.wti * prices.usdinr / 159 * crudeDutyFactor).toFixed(2)
+    : null
+
   const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
 A HAWK-SCAN fires only on extreme market events (>3% move or major EIA data). This is one.
@@ -816,6 +832,10 @@ SEBI COMPLIANCE — NON-NEGOTIABLE:
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, act
 - No price targets. Historical patterns only: "In past supply shocks, crude rose 8–12%" ✓
 - Technical levels are observations: "Price broke ₹74,000 for the first time in 6 weeks" ✓ | "Strong support, accumulate" ✗
+
+FACT vs INFERENCE — MANDATORY DISCIPLINE:
+- TRIGGER/PRICE/CROSS-ASSET: state only what is directly supported by the CURRENT PRICES block above. Never assert a causal driver without naming the exact event or data point.
+- SIGNAL/TWIST: frame inferences explicitly — "This is consistent with...", "Historically [X], though today's context differs in [Y]". Never write "The market has front-run X" as fact; write "This is consistent with markets anticipating X."
 
 RETURN EXACTLY THIS STRUCTURE — no extra prose, no section reordering:
 
@@ -846,13 +866,13 @@ TWIST — One sentence contrarian signal. Historical framing only (SEBI). Do NOT
 BAD: "The twist: gold is falling into an escalation — historically..."
 GOOD: "Gold is falling INTO a live escalation — historically, the metal holds or rises in the first 48 hours of geopolitical shock; a breakdown here signals institutional rebalancing, not receding fear."
 BAD: "The twist: OPEC spare capacity at 3.2mb/d historically caps rallies."
-GOOD: "OPEC spare capacity at **3.2mb/d** has historically triggered member quota cheating within 6–8 weeks whenever crude has sustained above **$95** — every prior spike above this level since 2022 reversed within two months."
+GOOD: "OPEC spare capacity at **[spare capacity figure from ANALYST_CONTEXT above]** has historically triggered member quota cheating within **[timeframe from ANALYST_CONTEXT; KB: 3–6 months for fiscal-pressure-driven cheating]** whenever crude sustained above **[fiscal breakeven from ANALYST_CONTEXT]** — back-test the current setup against that historical pattern."
 
 CROSS-ASSET — One sentence. Name at least two other assets and their exact moves right now. Show the direction and magnitude.
 BAD: "Other commodities are also under pressure amid broad risk-off sentiment."
 GOOD: "MCX Gold is down **1.2% to ₹1,51,200/10g** while the dollar index rose **0.6%** to 104.8 — metals and energy moving together."
 
-IMPORT COST — One line of real arithmetic: [COMEX/benchmark price] × [USD/INR rate] × [duty factor if applicable] = ₹[MCX parity]. For crude: WTI $X × ₹${prices.usdinr?.toFixed(2)} ÷ 159 litres × 1.025 (customs) = ₹Y/litre or ₹Z/bbl.
+IMPORT COST — Pre-computed: ₹${wtiParityINR ?? 'N/A'}/litre parity (= WTI $${prices.wti?.toFixed(2)} × ₹${prices.usdinr?.toFixed(2)}/USD ÷ 159L × ${crudeDutyFactor} duty factor). Use this figure directly — do not recompute.
 
 TECHNICAL — One sentence. Use exact numbers from the OHLC data above. Name the level and how many times price has tested it.
 If no OHLC available, say "No intraday OHLC data — nearest round-number [support/resistance] at ₹X."
@@ -936,6 +956,10 @@ SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment adv
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
 - Technical levels are observations: "Gold has held ₹74,000 four times" ✓ | "Strong support, consider buying" ✗
+
+FACT vs INFERENCE — MANDATORY DISCIPLINE:
+- WHAT HAPPENED: state only what is directly supported by the CURRENT PRICES / EIA DATA blocks above. Name the exact catalyst (named event, data print, policy decision) — never "macro headwinds" or "risk-off" without identifying the specific cause.
+- WHAT IT MEANS / WHO IS AFFECTED / BOTTOM LINE: frame inferences explicitly — "This is consistent with...", "Historically [X], though today's context differs in [Y]", "Based on [named data point]...". Never write "The market has front-run X" as fact; write "This is consistent with markets anticipating X."
 
 WRITE IN THIS EXACT STRUCTURE with 5 bold-header sections. Each section must have substance — 2–3 sentences minimum per section:
 
