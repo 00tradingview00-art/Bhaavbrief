@@ -303,7 +303,7 @@ function drawCTA(ctx) {
 
   ctx.fillStyle = '#FFFFFF'
   ctx.font = bold(50)
-  const lines = wrapText(ctx, 'We track all 5 at 9:30 AM, every morning — before MCX opens.', W - PAD * 2)
+  const lines = wrapText(ctx, 'We track all 5 at 9:30 AM, every morning — before the session finds direction.', W - PAD * 2)
   let y = 310
   for (const line of lines.slice(0, 4)) { ctx.fillText(line, PAD, y); y += 66 }
 

@@ -572,7 +572,7 @@ export default async function CommodityPage({ params }: Props) {
               background: 'var(--surface-3)', borderRadius: 4, padding: '20px 24px',
               fontSize: 14, color: 'var(--ink-4)', marginBottom: 32,
             }}>
-              No recent articles — check back after 9 AM IST when the daily brief publishes.
+              No recent articles — check back after 9:30 AM IST when the daily brief publishes.
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
