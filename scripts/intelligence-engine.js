@@ -939,6 +939,35 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
 
+  // Pre-compute lot-level impact for the primary commodity
+  const consts = loadCommodityConstants()
+  let lotImpactBlock = ''
+  if (primaryMove && prices.usdinr) {
+    const key = primaryMove.key
+    const pct = primaryMove.absPct ?? 0
+    if (key === 'crude' && prices.mcxCrude) {
+      const tickVal = consts.crude?.tickValuePerLotINR ?? 100
+      const lotSize = consts.crude?.mcxLotSizeBarrels ?? 100
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxCrude * lotSize)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): CRUDEOIL futures — ${pct.toFixed(2)}% move on ₹${prices.mcxCrude.toFixed(0)}/bbl contract = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSize} bbl × ₹${(pct / 100 * prices.mcxCrude).toFixed(0)}/bbl move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'gold' && prices.mcxGold) {
+      const tickVal = consts.gold?.tickValuePerLotINR ?? 100
+      const lotSizeUnits = 100  // 100 units of 10g
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxGold * lotSizeUnits)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): GOLD futures — ${pct.toFixed(2)}% move on ₹${prices.mcxGold.toFixed(0)}/10g = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (100 units × ₹${(pct / 100 * prices.mcxGold).toFixed(0)}/10g move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'silver' && prices.mcxSilver) {
+      const tickVal = consts.silver?.tickValuePerLotINR ?? 30
+      const lotSizeKg = consts.silver?.mcxLotSizeKg ?? 30
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxSilver * lotSizeKg)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): SILVER futures — ${pct.toFixed(2)}% move on ₹${prices.mcxSilver.toFixed(0)}/kg = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSizeKg} kg × ₹${(pct / 100 * prices.mcxSilver).toFixed(0)}/kg move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'copper' && prices.mcxCopper) {
+      const tickVal = consts.copper?.tickValuePerLotINR ?? 125
+      const lotSizeKg = consts.copper?.mcxLotSizeKg ?? 2500
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxCopper * lotSizeKg)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): COPPER futures — ${pct.toFixed(2)}% move on ₹${prices.mcxCopper.toFixed(2)}/kg = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSizeKg} kg × ₹${(pct / 100 * prices.mcxCopper).toFixed(2)}/kg move). Tick value: ₹${tickVal}/lot per ₹0.05 move. Translate this to lot-level INR in your article.`
+    }
+  }
+
   const prompt = `You are BhaavBrief's market reporter. Write a flash intelligence article for Indian commodity traders and merchants.
 
 TRIGGERED AT: ${timeStr} IST, ${dateStr}
@@ -951,7 +980,7 @@ MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE MCX' : 'ESTIMATED'}, US
 ${priceBlock}
 
 CONTEXT: ${narrative}
-${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}${analystContext}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}${analystContext}${lotImpactBlock ? '\n' + lotImpactBlock : ''}
 SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
