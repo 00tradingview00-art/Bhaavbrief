@@ -184,6 +184,22 @@ jobs:
           done
           echo "published=true" >> $GITHUB_OUTPUT
 
+      - name: Ping Google Indexing API
+        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
+        continue-on-error: true
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+          GOOGLE_INDEXING_SA_KEY: ${{ secrets.GOOGLE_INDEXING_SA_KEY }}
+        run: |
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          SLUG=$(grep '^urlSlug:' "$BRIEF" | head -1 | sed 's/^urlSlug: *//;s/["]//g')
+          if [ -z "$SLUG" ]; then
+            echo "urlSlug not found in frontmatter — skipping indexing ping"
+            exit 0
+          fi
+          node scripts/ping-indexing-api.mjs "https://bhaavbrief.in/briefs/$SLUG"
+
       - name: Wait for Vercel deploy then send newsletter
         if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
         continue-on-error: true

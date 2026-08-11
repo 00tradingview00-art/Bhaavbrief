@@ -463,10 +463,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
-                { label: 'Why commodity prices move', href: '/learn' },
-                { label: 'MCX lot sizes & margins',   href: '/learn' },
-                { label: 'OPEC, Fed & geopolitics',   href: '/learn' },
-                { label: 'How to hedge price risk',   href: '/learn' },
+                { label: 'MCX lot sizes & margins',      href: '/learn/mcx-lot-sizes' },
+                { label: 'MCX trading hours',            href: '/learn/mcx-trading-hours' },
+                { label: 'MCX margin calculator',        href: '/learn/mcx-margin-calculator' },
+                { label: 'Which commodity to trade',     href: '/learn/which-mcx-commodity-to-trade' },
               ].map(l => (
                 <Link key={l.label} href={l.href} style={{
                   fontFamily: 'var(--font-mono)', fontSize: 11,
