@@ -57,3 +57,6 @@ jobs:
 
       - name: Commodity constants consistency check
         run: node scripts/check-commodity-constants.mjs
+
+      - name: KB freshness check
+        run: node scripts/check-kb-freshness.mjs
