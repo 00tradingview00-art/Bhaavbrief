@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-11-mcx-crude-falls-2-4-as-us-demand-signals-weaken",
+    "href": "/articles/2026-08-11-mcx-crude-falls-2-4-as-us-demand-signals-weaken",
+    "title": "MCX Crude Falls 2.4% as US Demand Signals Weaken",
+    "description": "MCX Crude ₹7794/bbl, down 2.44%. WTI $82.50 signals demand destruction ahead of US refinery maintenance season.",
+    "excerpt": "WHAT HAPPENED MCX Crude has collapsed ₹190/bbl to ₹7794 (down 2.44%) in this afternoon session, with WTI sliding to $82.50/bbl — the lowest close in 11 trading days. The trigger is not geopolitical bu",
+    "date": "2026-08-11T16:43:35.022Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7794
+  },
+  {
     "type": "brief",
     "slug": "edition-083",
     "href": "/briefs/edition-083",
