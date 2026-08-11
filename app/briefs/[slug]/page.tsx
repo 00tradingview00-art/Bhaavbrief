@@ -206,11 +206,11 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                   {formatDate(brief.date)}
                 </time>
               </div>
-              <h1 itemProp="headline" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.75rem' }}>
+              <h1 itemProp="headline" style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.75rem', overflowWrap: 'break-word' }}>
                 {brief.title}
               </h1>
               {brief.summary && (
-                <p itemProp="description" style={{ fontSize: '1rem', color: '#48483A', lineHeight: 1.7, fontWeight: 300, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', margin: 0 }}>
+                <p itemProp="description" style={{ fontSize: '1rem', color: '#48483A', lineHeight: 1.7, fontWeight: 300, paddingLeft: '1rem', borderLeft: '0.5px solid #C8C8B8', margin: 0, overflowWrap: 'break-word' }}>
                   {brief.summary}
                 </p>
               )}

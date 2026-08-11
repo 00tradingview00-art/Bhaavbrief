@@ -170,6 +170,13 @@ body {
   grid-template-columns: 1fr;
   gap: 2rem;
 }
+/* Grid items default to min-width:auto, so unwrapped content (e.g. the price
+   bridge table) can force this track wider than the viewport; combined with
+   overflow-x:hidden on html/body that shows up as silent right-edge clipping
+   instead of a scrollbar. min-width:0 lets the item shrink to the track. */
+.layout-brief-page > * {
+  min-width: 0;
+}
 
 @media (min-width: 768px) {
   .layout-hero             { grid-template-columns: 1fr 320px; gap: 3rem; }
