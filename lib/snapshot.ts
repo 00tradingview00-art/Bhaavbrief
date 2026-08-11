@@ -53,9 +53,11 @@ export interface Snapshot {
     [key: string]: SnapshotInstrument
   }
   derived: {
-    importParityGoldINR:   number
-    mcxComexGoldSpreadPct: number
-    goldSilverRatio:       number
+    importParityGoldINR:    number
+    mcxComexGoldSpreadPct:  number
+    importParitySilverINR?: number
+    mcxComexSilverSpreadPct?: number
+    goldSilverRatio:        number
   }
 }
 
