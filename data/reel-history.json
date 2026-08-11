@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260811-mcx-futures-rollover",
+    "topic": "MCX Futures Rollover",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold futures expire soon — here's what happens if you ignore it.",
+    "stat_line": "Roll by the 2nd–3rd or face forced delivery.",
+    "payoff": "You can be winning on the trade and still get trapped into unwanted physical settlement.",
+    "beat1": "If you don't roll or exit before expiry, MCX forces physical gold settlement on you—meaning full KYC, full cash outlay, actual metal delivery.",
+    "beat2": "Rollover means selling your near-month contract and buying next month simultaneously—keeping your exposure alive without touching bullion.",
+    "beat3": "Gold traders: roll by the 2nd–3rd of expiry month. Crude traders: roll by 16th–17th. Miss it, and settlement rules change.",
+    "instagram_id": "18003142469783234",
+    "generated_at": "2026-08-11T15:07:07.987Z",
+    "edition": null,
+    "posted_at": "2026-08-11T15:07:54.442Z"
+  },
+  {
     "file": "brief-edition-083",
     "topic": "Gold Breaks ₹154991 as COMEX Surges Past $4475",
     "content_type": "price_move",
