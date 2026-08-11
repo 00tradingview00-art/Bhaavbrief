@@ -24,6 +24,7 @@ import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
+import { formatApprovedLinks } from '../lib/learn-link-map.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -879,6 +880,10 @@ If no OHLC available, say "No intraday OHLC data — nearest round-number [suppo
 
 WATCH — One specific price level OR one data release in the next 48 hours that confirms or negates this move.
 
+LEARN MORE (optional — one line only after WATCH, only if a page below directly covers the primary mechanism; omit if no match):
+→ [page title](https://bhaavbrief.in/learn/slug)
+APPROVED: ${formatApprovedLinks()}
+
 Total body: 80–130 words across all sections. Each section: one sentence or one line only.`
 
   const response = await client.messages.create({
@@ -1013,6 +1018,11 @@ GOOD: "Waaree Energies, which locks in silver-paste procurement quarterly, faces
 BAD: "Watch ₹74,000 support on MCX Gold."
 GOOD: "Watch COMEX silver **$62/oz** — the last time it closed below this level in Jan 2026, MCX silver followed with a 5-session, 8% decline; a close above tonight keeps this as a one-day event."
 
+LEARN MORE LINK (optional — append one line after WHAT TO WATCH content, only if a page below directly covers the primary mechanism of this article; omit if no match):
+→ Learn more: [page title](https://bhaavbrief.in/learn/slug)
+APPROVED_LEARN_LINKS (pick only from these — no other URLs):
+${formatApprovedLinks()}
+
 TOTAL: 270–380 words across all sections. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers themselves (they already render bold from the **).
 
 SEO:
@@ -1126,6 +1136,11 @@ GOOD: "HPCL's refining margin desk faces a choice between locking in forward cru
 
 **WHAT TO WATCH**
 1–2 sentences. One specific trigger — a ceasefire signal, a price level breach, or a named scheduled data release — that would reverse or confirm this move. Include exact timing where possible.
+
+LEARN MORE LINK (optional — append one line after WHAT TO WATCH content, only if a page below directly covers the primary mechanism of this article; omit if no match):
+→ Learn more: [page title](https://bhaavbrief.in/learn/slug)
+APPROVED_LEARN_LINKS (pick only from these — no other URLs):
+${formatApprovedLinks()}
 
 TOTAL: 270–380 words. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers.
 
