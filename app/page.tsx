@@ -604,6 +604,12 @@ export default async function HomePage() {
         </div>
 
       </div>
+
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.25rem 2rem' }}>
+        <p style={{ fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6 }}>
+          For educational and informational purposes only. Not registered with SEBI or any regulatory authority. Nothing here constitutes investment advice or a solicitation to trade.
+        </p>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,10 @@
 {
   "_note": "Analyst-grade structural knowledge base. Content is editorial truth — update when world changes. Injected into Claude prompts to give top-analyst depth. Each string value is a prompt-ready sentence or paragraph.",
-
   "crude": {
+    "_meta": {
+      "lastVerified": "2026-08",
+      "primarySource": "EIA/OPEC/CME"
+    },
     "supply_stack": {
       "swing_producer": "The marginal barrel of crude is US Permian shale with a breakeven of $45–55/bbl WTI. Eagle Ford runs $52–62/bbl. This means any sustained WTI move below $50 chokes new US supply within 12–18 months; any move above $75 accelerates US rig count and adds 0.8–1.0 mb/d within 18 months.",
       "opec_spare_capacity": "OPEC+ spare capacity is ~3.2 mb/d (mid-2026), concentrated almost entirely in Saudi Arabia and UAE. Below 1.5 mb/d spare capacity, OPEC loses its price-setter role. Above 4 mb/d, the cartel can flood the market to punish cheaters. Current ~3.2 mb/d means Saudi Arabia has credible but not overwhelming leverage.",
@@ -12,9 +15,9 @@
     },
     "demand_destruction": {
       "threshold_aviation": "WTI at $90–100: Indian aviation ATF cost rises but IndiGo/Air India absorb via hedges. WTI >$100 sustained: aviation yields suffer; Indian carriers face ₹8–12/litre ATF under-recovery against IATA parity. WTI >$120: visible capacity cuts and ticket price hikes within 2 quarters.",
-      "threshold_road": "WTI $100–110: Indian petrol retail at ~₹120–130/litre; OMCs (HPCL, BPCL, IOC) absorb under-recovery initially. WTI >$110 for 30+ days: government authorizes petrol/diesel price hike; demand elasticity kicks in. Historical: 2022 Ukraine-driven spike above $120 destroyed 0.5–1.0 mb/d globally.",
+      "threshold_road": "WTI $100–110: Indian petrol retail at ~₹120–130/litre at ₹84–86/USD (calibrated 2022–23 baseline; at current ₹95+/USD, the same WTI range implies ~₹135–145/litre — use the live USD/INR rate from the prompt for any calculation). OMCs (HPCL, BPCL, IOC) absorb under-recovery initially. WTI >$110 for 30+ days: government authorizes petrol/diesel price hike; demand elasticity kicks in. Historical: 2022 Ukraine-driven spike above $120 destroyed 0.5–1.0 mb/d globally.",
       "duration_lag": "Demand destruction from high prices takes 6–9 months to fully register in inventory draws. This is why crude can stay elevated long after the 'rational' price level — demand destruction is slow and behavioural.",
-      "india_import_math": "India imports 85% of crude needs (~4.5 mb/d). Every $10/bbl WTI rise = ~₹1.2 lakh crore additional annual import bill at current volumes and ₹84 USD/INR. This feeds into India's current account deficit, rupee pressure, and inflation — the full macro chain."
+      "india_import_math": "India imports 85% of crude needs (~4.5 mb/d). Every $10/bbl WTI rise = additional annual import bill of ~(4.5M × 365 × $10 × live USD/INR) — at ₹95/USD that is ~₹1.56 lakh crore. Compute using the live USD/INR from the prompt; do not cite ₹84 or any stale rate. This feeds into India's current account deficit, rupee pressure, and inflation — the full macro chain."
     },
     "market_structure": {
       "grm_complex_vs_simple": "Complex refiners (Reliance, BPCL Kochi) benefit when crude grades diverge: they can run heavy/sour crude at a discount vs Brent and sell refined products at international prices, expanding GRM. Simple refiners (most PSU units) are squeezed when light-heavy differentials narrow.",
@@ -27,8 +30,11 @@
       "india_monsoon": "Indian fuel demand dips during monsoon (June–September) as agricultural and road transport slows. MCX crude typically underperforms COMEX in monsoon months by 50–100 basis points on lower domestic demand signal."
     }
   },
-
   "gold": {
+    "_meta": {
+      "lastVerified": "2026-08",
+      "primarySource": "LBMA/COMEX/World Gold Council"
+    },
     "real_rates_relationship": {
       "primary_driver": "Gold's primary macro driver is the US 10-year TIPS yield (real interest rate). Gold is a zero-yield asset: when real yields rise, the opportunity cost of holding gold rises. Rule: 100bps rise in 10Y TIPS → gold -8% to -12% over 3–6 months in normal macro regimes.",
       "when_breaks_down": "The real-rates relationship breaks down during: (1) central bank reserve diversification buying, (2) tail risk events where gold functions as systemic hedge, (3) de-dollarization flows. 2022–2024 is the canonical example: Fed hiked 525bps but gold held near $2,000 because central banks were buying 1,000+ tonnes/year.",
@@ -53,8 +59,11 @@
       "all_in_sustaining_cost": "Global average AISC: $1,100–1,300/oz. Marginal mine cost: $1,400–1,600/oz. Gold below $1,500 for 12+ months would cause meaningful mine supply curtailment — creates a structural floor that crude (with lower marginal cost) does not have."
     }
   },
-
   "silver": {
+    "_meta": {
+      "lastVerified": "2026-08",
+      "primarySource": "LBMA/COMEX/Silver Institute"
+    },
     "industrial_demand_stack": {
       "split": "Silver demand: ~54% industrial, ~25% jewellery/silverware, ~20% investment (ETF + coins). The industrial share is rising: solar photovoltaics, EV charging infrastructure, semiconductor manufacturing are all growing.",
       "solar_demand": "Each GW of solar capacity requires ~0.6–1.0 tonnes of silver in photovoltaic cells (silver paste for conductivity). India targets 500 GW solar by 2030 from ~80 GW in 2024 = structural demand of 250,000–420,000 tonnes over 6 years (vs current global silver mine supply of ~26,000 tonnes/year). This is the largest structural demand driver in silver's history.",
@@ -72,8 +81,11 @@
       "flow_signal": "Silver ETF inflows in rising-price environment = investment demand is additive to industrial demand = sustained move. ETF outflows despite rising prices = institutional distribution, move likely to fade."
     }
   },
-
   "copper": {
+    "_meta": {
+      "lastVerified": "2026-08",
+      "primarySource": "LME/COMEX/ICSG"
+    },
     "structural_balance": {
       "long_term_deficit": "Energy transition (EVs, grid upgrades, solar, wind) requires 25–40% more copper than a fossil-fuel economy. CRU Group forecasts a 4–8 million tonne cumulative supply deficit by 2030. This structural deficit is not priced in to current spot copper — it's a 5-year tailwind.",
       "ev_intensity": "An EV requires 4× more copper than an internal combustion vehicle (83kg vs 23kg). Global EV penetration rising from 15% of new car sales (2024) toward 40–50% (2030) is a multi-year copper demand multiplier.",
@@ -102,8 +114,11 @@
       "cancelled_warrant_ratio": "Cancelled warrants (copper that's been ordered for delivery, leaving the LME system) as % of total warrants: >50% is a squeeze alert."
     }
   },
-
   "natgas": {
+    "_meta": {
+      "lastVerified": "2026-08",
+      "primarySource": "EIA/CME/IEA"
+    },
     "storage_cycle": {
       "us_seasonality": "Henry Hub natural gas: injection season (May–October), withdrawal season (November–March). EIA reports weekly storage every Thursday (~8:30 PM IST). Storage draw vs 5-year average is the key signal: a draw of 80+ Bcf above seasonal norms = bullish; 80+ Bcf below norms = bearish.",
       "storage_level_context": "US gas storage: 5-year average at any given week is the baseline. Storage at 10%+ deficit vs 5-year avg = bullish pressure. Storage at 10%+ surplus = price suppression. Spring (March–May): storage refill begins; price seasonally weak even without bearish news.",
@@ -120,7 +135,6 @@
       "fertilizer_link": "Natural gas is the feedstock for urea production (60% of India's fertilizer consumption). Gas price spike → urea production cost rises → either fertilizer subsidy burden on government rises or gas-based plants curtail production."
     }
   },
-
   "macro_regimes": {
     "current_regime": "Mid-2026: Disinflationary with nascent rate-cut cycle beginning. US CPI declining from 2022–2023 peak; Fed has cut 75–100bps from peak. Growth slowing but not contracting. Dollar weakening from 2022 highs. This is the 'soft landing' regime — moderately bullish for gold and copper; crude depends on demand outlook.",
     "regime_types": {
@@ -132,7 +146,6 @@
     "regime_signal_checklist": "Check: (1) US CPI trend — rising or falling? (2) ISM Manufacturing PMI — expanding (>50) or contracting (<50)? (3) DXY (dollar index) — rising or falling? (4) US 10Y-2Y yield curve — inverted or normalizing? (5) Commodity-equity correlation — positive (reflationary) or negative (stagflationary)?",
     "india_overlay": "India has its own macro cycle that sometimes diverges from global. Key: RBI repo rate trend, India CPI vs target (4%), rupee trend vs dollar, RBI reserves level, current account deficit/surplus. India domestic commodity prices can diverge from global due to import duties, government intervention, and monsoon-driven food prices feeding into headline CPI."
   },
-
   "geopolitical_playbooks": {
     "iran_hormuz": {
       "historical_record": "0 of 14 major Iran escalation events since 1984 (including the Tanker War, 2019 drone strike on Abqaiq, 2020 Soleimani assassination, 2024 direct Iran-Israel exchange) resulted in an actual Strait of Hormuz blockade. The Strait has never been physically closed to commercial shipping in recorded modern history.",
@@ -157,7 +170,6 @@
       "duration_effect": "Red Sea disruption that persists >4 weeks causes rerouting to become structural (shipping companies adjust schedules). Commodity price effects: crude +$2–4/bbl embedded in European import cost; base metals, chemicals, and manufactured goods see freight cost passed through in 1–2 quarters."
     }
   },
-
   "correlation_regimes": {
     "gold_dollar": {
       "normal": "Gold and the US dollar index (DXY) are normally inversely correlated (r ≈ -0.6 to -0.8). Stronger dollar → more expensive gold for non-dollar buyers → demand falls → gold price falls.",

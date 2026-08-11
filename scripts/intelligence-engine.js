@@ -24,6 +24,7 @@ import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
+import { formatApprovedLinks } from '../lib/learn-link-map.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -69,6 +70,16 @@ function loadAnalystKb() {
   try { _analystKb = JSON.parse(fs.readFileSync(ANALYST_KB_FILE, 'utf8')) }
   catch { _analystKb = {} }
   return _analystKb
+}
+
+// ── Commodity Constants — single source of truth for duty factors + lot sizes ─
+const COMMODITY_CONSTANTS_FILE = path.join(ROOT, 'data/commodity-constants.json')
+let _commodityConstants = null
+function loadCommodityConstants() {
+  if (_commodityConstants) return _commodityConstants
+  try { _commodityConstants = JSON.parse(fs.readFileSync(COMMODITY_CONSTANTS_FILE, 'utf8')) }
+  catch { _commodityConstants = {} }
+  return _commodityConstants
 }
 
 function getAnalystContext(commodityKey, geoTopics = []) {
@@ -136,7 +147,7 @@ function getAnalystContext(commodityKey, geoTopics = []) {
   return `\nANALYST STRUCTURAL KNOWLEDGE (connect dots — use specific facts, not generic language):\n${sections.join('\n\n')}\n`
 }
 
-function getEventContext(headlines, commodityKey) {
+function getEventContext(headlines, commodityKey, usdinr = 0) {
   const map = loadImpactMap()
   const text = (Array.isArray(headlines) ? headlines.join(' ') : headlines).toLowerCase()
 
@@ -149,6 +160,20 @@ function getEventContext(headlines, commodityKey) {
   const commodityCtx = map.commodities?.[commodityKey]
 
   const sections = []
+
+  // For crude: inject live-computed transmission arithmetic so the model never
+  // has to guess or use a stale static rate. Also enforce catalyst priority order.
+  if (commodityKey === 'crude' && usdinr > 0) {
+    const perDollar = usdinr.toFixed(1)
+    const geoActive = ['hormuz', 'iran', 'opec', 'houthi', 'red sea', 'russia', 'ukraine', 'supply cut', 'sanctions'].some(kw => text.includes(kw))
+    const catalystNote = geoActive
+      ? 'CATALYST PRIORITY: Active geopolitical/supply-disruption signal detected in today\'s context — name it as the PRIMARY driver first. Only layer in seasonal refinery-maintenance if it is explicitly corroborating the geo catalyst, not as a standalone explanation.'
+      : 'CATALYST PRIORITY: No active geopolitical supply signal detected. If attributing to seasonal refinery-maintenance or demand-side factors, confirm that no Hormuz/OPEC/sanctions narrative is active in today\'s headlines before leading with that explanation.'
+    sections.push(`CRUDE WTI → MCX LIVE TRANSMISSION ARITHMETIC:
+$1/bbl WTI move ≈ ₹${perDollar}/bbl MCX  (= $1 × live USD/INR ₹${perDollar})
+Use ONLY this figure for any "X WTI move = Y MCX headwind/tailwind" calculation in the article.
+${catalystNote}`)
+  }
 
   for (const [eventKey, ev] of matchedEvents) {
     const mechanismText = Object.entries(ev.mechanism ?? {})
@@ -780,9 +805,16 @@ async function generateHawkScan({ moves, eia, prices, technicalLevels, geoEvents
 
   const impactContext = getEventContext(
     [hawkTrigger, eia?.summary ?? ''].join(' '),
-    primaryMove?.key ?? 'crude'
+    primaryMove?.key ?? 'crude',
+    prices.usdinr ?? 0
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
+
+  // Pre-compute crude import parity so Haiku doesn't do arithmetic (it gets it wrong)
+  const crudeDutyFactor = loadCommodityConstants().crude?.importDutyFactor ?? 1.025
+  const wtiParityINR = prices.wti && prices.usdinr
+    ? (prices.wti * prices.usdinr / 159 * crudeDutyFactor).toFixed(2)
+    : null
 
   const prompt = `You are BhaavBrief's Hawk-Scan system — India's highest-urgency commodity intelligence format for MCX traders.
 
@@ -801,6 +833,10 @@ SEBI COMPLIANCE — NON-NEGOTIABLE:
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, act
 - No price targets. Historical patterns only: "In past supply shocks, crude rose 8–12%" ✓
 - Technical levels are observations: "Price broke ₹74,000 for the first time in 6 weeks" ✓ | "Strong support, accumulate" ✗
+
+FACT vs INFERENCE — MANDATORY DISCIPLINE:
+- TRIGGER/PRICE/CROSS-ASSET: state only what is directly supported by the CURRENT PRICES block above. Never assert a causal driver without naming the exact event or data point.
+- SIGNAL/TWIST: frame inferences explicitly — "This is consistent with...", "Historically [X], though today's context differs in [Y]". Never write "The market has front-run X" as fact; write "This is consistent with markets anticipating X."
 
 RETURN EXACTLY THIS STRUCTURE — no extra prose, no section reordering:
 
@@ -831,18 +867,22 @@ TWIST — One sentence contrarian signal. Historical framing only (SEBI). Do NOT
 BAD: "The twist: gold is falling into an escalation — historically..."
 GOOD: "Gold is falling INTO a live escalation — historically, the metal holds or rises in the first 48 hours of geopolitical shock; a breakdown here signals institutional rebalancing, not receding fear."
 BAD: "The twist: OPEC spare capacity at 3.2mb/d historically caps rallies."
-GOOD: "OPEC spare capacity at **3.2mb/d** has historically triggered member quota cheating within 6–8 weeks whenever crude has sustained above **$95** — every prior spike above this level since 2022 reversed within two months."
+GOOD: "OPEC spare capacity at **[spare capacity figure from ANALYST_CONTEXT above]** has historically triggered member quota cheating within **[timeframe from ANALYST_CONTEXT; KB: 3–6 months for fiscal-pressure-driven cheating]** whenever crude sustained above **[fiscal breakeven from ANALYST_CONTEXT]** — back-test the current setup against that historical pattern."
 
 CROSS-ASSET — One sentence. Name at least two other assets and their exact moves right now. Show the direction and magnitude.
 BAD: "Other commodities are also under pressure amid broad risk-off sentiment."
 GOOD: "MCX Gold is down **1.2% to ₹1,51,200/10g** while the dollar index rose **0.6%** to 104.8 — metals and energy moving together."
 
-IMPORT COST — One line of real arithmetic: [COMEX/benchmark price] × [USD/INR rate] × [duty factor if applicable] = ₹[MCX parity]. For crude: WTI $X × ₹${prices.usdinr?.toFixed(2)} ÷ 159 litres × 1.025 (customs) = ₹Y/litre or ₹Z/bbl.
+IMPORT COST — Pre-computed: ₹${wtiParityINR ?? 'N/A'}/litre parity (= WTI $${prices.wti?.toFixed(2)} × ₹${prices.usdinr?.toFixed(2)}/USD ÷ 159L × ${crudeDutyFactor} duty factor). Use this figure directly — do not recompute.
 
 TECHNICAL — One sentence. Use exact numbers from the OHLC data above. Name the level and how many times price has tested it.
 If no OHLC available, say "No intraday OHLC data — nearest round-number [support/resistance] at ₹X."
 
 WATCH — One specific price level OR one data release in the next 48 hours that confirms or negates this move.
+
+LEARN MORE (optional — one line only after WATCH, only if a page below directly covers the primary mechanism; omit if no match):
+→ [page title](https://bhaavbrief.in/learn/slug)
+APPROVED: ${formatApprovedLinks()}
 
 Total body: 80–130 words across all sections. Each section: one sentence or one line only.`
 
@@ -899,9 +939,39 @@ CURRENT MCX PRICES [${dataLabel}, ${timeStr} IST, USD/INR ₹${prices.usdinr?.to
 
   const impactContext = getEventContext(
     [narrative, circularBlock, eiaBlock].filter(Boolean).join(' '),
-    primaryMove?.key ?? 'crude'
+    primaryMove?.key ?? 'crude',
+    prices.usdinr ?? 0
   )
   const analystContext = getAnalystContext(primaryMove?.key ?? 'crude', geoEvents.map(e => e.topic))
+
+  // Pre-compute lot-level impact for the primary commodity
+  const consts = loadCommodityConstants()
+  let lotImpactBlock = ''
+  if (primaryMove && prices.usdinr) {
+    const key = primaryMove.key
+    const pct = primaryMove.absPct ?? 0
+    if (key === 'crude' && prices.mcxCrude) {
+      const tickVal = consts.crude?.tickValuePerLotINR ?? 100
+      const lotSize = consts.crude?.mcxLotSizeBarrels ?? 100
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxCrude * lotSize)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): CRUDEOIL futures — ${pct.toFixed(2)}% move on ₹${prices.mcxCrude.toFixed(0)}/bbl contract = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSize} bbl × ₹${(pct / 100 * prices.mcxCrude).toFixed(0)}/bbl move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'gold' && prices.mcxGold) {
+      const tickVal = consts.gold?.tickValuePerLotINR ?? 100
+      const lotSizeUnits = 100  // 100 units of 10g
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxGold * lotSizeUnits)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): GOLD futures — ${pct.toFixed(2)}% move on ₹${prices.mcxGold.toFixed(0)}/10g = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (100 units × ₹${(pct / 100 * prices.mcxGold).toFixed(0)}/10g move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'silver' && prices.mcxSilver) {
+      const tickVal = consts.silver?.tickValuePerLotINR ?? 30
+      const lotSizeKg = consts.silver?.mcxLotSizeKg ?? 30
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxSilver * lotSizeKg)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): SILVER futures — ${pct.toFixed(2)}% move on ₹${prices.mcxSilver.toFixed(0)}/kg = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSizeKg} kg × ₹${(pct / 100 * prices.mcxSilver).toFixed(0)}/kg move). Tick value: ₹${tickVal}/lot per ₹1 move. Translate this to lot-level INR in your article.`
+    } else if (key === 'copper' && prices.mcxCopper) {
+      const tickVal = consts.copper?.tickValuePerLotINR ?? 125
+      const lotSizeKg = consts.copper?.mcxLotSizeKg ?? 2500
+      const inrMovePerLot = Math.round((pct / 100) * prices.mcxCopper * lotSizeKg)
+      lotImpactBlock = `TRADER IMPACT (pre-computed): COPPER futures — ${pct.toFixed(2)}% move on ₹${prices.mcxCopper.toFixed(2)}/kg = ≈₹${inrMovePerLot.toLocaleString('en-IN')}/lot (${lotSizeKg} kg × ₹${(pct / 100 * prices.mcxCopper).toFixed(2)}/kg move). Tick value: ₹${tickVal}/lot per ₹0.05 move. Translate this to lot-level INR in your article.`
+    }
+  }
 
   const prompt = `You are BhaavBrief's market reporter. Write a flash intelligence article for Indian commodity traders and merchants.
 
@@ -915,11 +985,15 @@ MCX PRICES [${prices.priceSource === 'kite-live' ? 'LIVE MCX' : 'ESTIMATED'}, US
 ${priceBlock}
 
 CONTEXT: ${narrative}
-${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}${analystContext}
+${circularBlock ? '\nNEW REGULATORY SIGNAL:\n' + circularBlock : ''}${eiaBlock ? '\n' + eiaBlock : ''}${geoBlock ? '\n' + geoBlock : ''}${techBlock}${impactContext}${analystContext}${lotImpactBlock ? '\n' + lotImpactBlock : ''}
 SEBI COMPLIANCE — NON-NEGOTIABLE (educational content only, not investment advice):
 - BANNED words directed at reader: buy, sell, accumulate, avoid, exit, enter, hold, switch, book profits
 - No price targets: "In past dollar-strength episodes, MCX gold fell 2–4%" ✓ | "MCX gold will fall to ₹X" ✗
 - Technical levels are observations: "Gold has held ₹74,000 four times" ✓ | "Strong support, consider buying" ✗
+
+FACT vs INFERENCE — MANDATORY DISCIPLINE:
+- WHAT HAPPENED: state only what is directly supported by the CURRENT PRICES / EIA DATA blocks above. Name the exact catalyst (named event, data print, policy decision) — never "macro headwinds" or "risk-off" without identifying the specific cause.
+- WHAT IT MEANS / WHO IS AFFECTED / BOTTOM LINE: frame inferences explicitly — "This is consistent with...", "Historically [X], though today's context differs in [Y]", "Based on [named data point]...". Never write "The market has front-run X" as fact; write "This is consistent with markets anticipating X."
 
 WRITE IN THIS EXACT STRUCTURE with 5 bold-header sections. Each section must have substance — 2–3 sentences minimum per section:
 
@@ -943,6 +1017,11 @@ GOOD: "Waaree Energies, which locks in silver-paste procurement quarterly, faces
 1–2 sentences. One specific price level OR one upcoming data release (name the exact event, exact timing in IST) — and precisely why it confirms or negates this particular move.
 BAD: "Watch ₹74,000 support on MCX Gold."
 GOOD: "Watch COMEX silver **$62/oz** — the last time it closed below this level in Jan 2026, MCX silver followed with a 5-session, 8% decline; a close above tonight keeps this as a one-day event."
+
+LEARN MORE LINK (optional — append one line after WHAT TO WATCH content, only if a page below directly covers the primary mechanism of this article; omit if no match):
+→ Learn more: [page title](https://bhaavbrief.in/learn/slug)
+APPROVED_LEARN_LINKS (pick only from these — no other URLs):
+${formatApprovedLinks()}
 
 TOTAL: 270–380 words across all sections. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers themselves (they already render bold from the **).
 
@@ -1018,7 +1097,7 @@ async function generateGeoArticle({ geoEvents, prices }) {
   const primaryLabel = { gold: 'MCX Gold', silver: 'MCX Silver', crude: 'MCX Crude', copper: 'MCX Copper', natgas: 'MCX NatGas' }[primaryKey]
   const primaryPrice = { gold: prices.mcxGold, crude: prices.mcxCrude, copper: prices.mcxCopper }[primaryKey] ?? 0
 
-  const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey)
+  const impactContext = getEventContext(geoEvents.map(e => e.title), primaryKey, prices.usdinr ?? 0)
   const analystContext = getAnalystContext(primaryKey, geoEvents.map(e => e.topic))
 
   const prompt = `You are BhaavBrief's market reporter. Write a macro-context intelligence article for Indian commodity traders.
@@ -1057,6 +1136,11 @@ GOOD: "HPCL's refining margin desk faces a choice between locking in forward cru
 
 **WHAT TO WATCH**
 1–2 sentences. One specific trigger — a ceasefire signal, a price level breach, or a named scheduled data release — that would reverse or confirm this move. Include exact timing where possible.
+
+LEARN MORE LINK (optional — append one line after WHAT TO WATCH content, only if a page below directly covers the primary mechanism of this article; omit if no match):
+→ Learn more: [page title](https://bhaavbrief.in/learn/slug)
+APPROVED_LEARN_LINKS (pick only from these — no other URLs):
+${formatApprovedLinks()}
 
 TOTAL: 270–380 words. Use **bold** only for key numbers (₹ prices, percentages, company names, named thresholds). Never bold whole sentences or the section headers.
 

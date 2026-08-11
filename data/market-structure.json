@@ -7,7 +7,7 @@
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹7.7–10.8 lakh",
     "contractValue": "~₹1.5 crore at ₹1,53,825/10g",
-    "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.15 (import duty 15% + GST)",
+    "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
       "World Gold Council",
@@ -31,7 +31,7 @@
       "Indian rupee — a weaker INR amplifies MCX gold price even when COMEX is flat"
     ],
     "keyRisk": "MCX-COMEX spread can widen when Indian import duty changes or USD/INR moves sharply — watch basis risk.",
-    "taxNote": "Gold ETF LTCG: 12.5% after 12 months (Budget 2024). Physical gold LTCG: 12.5% without indexation after 2 years. MCX futures gains: taxed as business income or STCG at slab rate. CTT 0.01% on sell side.",
+    "taxNote": "Gold ETF LTCG: 12.5% after 12 months (Budget 2024). Physical gold LTCG: 12.5% without indexation after 2 years. MCX futures gains: non-speculative business income at slab rate. CTT 0.01% on sell side.",
     "macroLinks": [
       "USD/INR",
       "US 10Y real yield",
@@ -88,8 +88,8 @@
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹40–55K",
     "contractValue": "~₹7.9 lakh at ₹7,920/bbl",
-    "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.02 (includes import duty differential)",
-    "supplyControl": "OPEC+ (13 OPEC members + Russia + 9 allies) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
+    "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.025 (includes import duty differential)",
+    "supplyControl": "OPEC+ (12 OPEC members + Russia + allied non-OPEC producers — Angola exited Jan 2024) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
       "OPEC+ (Vienna Group)",
       "International Energy Agency (IEA)",
@@ -113,7 +113,7 @@
       "Seasonal: US driving season (Memorial Day–Labor Day) lifts gasoline/crude"
     ],
     "keyRisk": "Crude is the most geopolitically sensitive commodity. Weekend OPEC+ surprises and Middle East flare-ups cause gap opens on Monday. Retail traders should avoid holding large overnight positions before OPEC+ meetings.",
-    "taxNote": "MCX crude futures gains: business income or STCG. CTT 0.01% on sell. Petrol/diesel prices in India are state-controlled and do not move with MCX crude in real time.",
+    "taxNote": "MCX crude futures gains: non-speculative business income. CTT 0.01% on sell. Petrol/diesel prices in India are state-controlled and do not move with MCX crude in real time.",
     "macroLinks": [
       "WTI Crude",
       "Brent Crude",

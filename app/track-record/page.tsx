@@ -43,6 +43,12 @@ export default function TrackRecordPage() {
   const unresolved = ledger.filter((e) => e.verdict === 'unresolved').length
   const resolved = confirmed + rejected
   const hitRate = resolved > 0 ? Math.round((confirmed / resolved) * 100) : null
+  const avgMove = resolved > 0
+    ? (ledger
+        .filter(e => e.verdict !== 'unresolved' && e.resolvedValue != null)
+        .reduce((sum, e) => sum + Math.abs((e.resolvedValue! - e.edgeLevel) / e.edgeLevel * 100), 0)
+      / resolved).toFixed(1)
+    : null
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
@@ -59,13 +65,14 @@ export default function TrackRecordPage() {
           anything new. Misses stay on this page; nothing gets quietly deleted.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
           {[
             { label: 'Resolved calls', value: resolved },
             { label: 'Confirmed', value: confirmed },
             { label: 'Rejected', value: rejected },
             { label: 'Unresolved', value: unresolved },
             { label: 'Hit rate', value: hitRate != null ? `${hitRate}%` : '—' },
+            { label: 'Avg move', value: avgMove != null ? `${avgMove}%` : '—' },
           ].map((s) => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1rem' }}>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 800, color: '#18180F' }}>{s.value}</div>
@@ -73,6 +80,12 @@ export default function TrackRecordPage() {
             </div>
           ))}
         </div>
+
+        {resolved > 0 && resolved < 20 && (
+          <p style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 16 }}>
+            Early data — {resolved} resolved {resolved === 1 ? 'call' : 'calls'} is a small sample. Statistical significance builds after ~20 observations.
+          </p>
+        )}
 
         {ledger.length === 0 ? (
           <p style={{ fontSize: 14, color: '#8A8A7A', fontStyle: 'italic' }}>

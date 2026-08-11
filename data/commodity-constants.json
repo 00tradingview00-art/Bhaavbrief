@@ -1,0 +1,83 @@
+{
+  "_note": "Canonical source of truth for all hard commodity facts. Every duty factor, lot size, tax note, and structural constant used anywhere in this codebase must match what is here. market-structure.json, analyst-kb.json, and intelligence-engine.js must never contradict this file. Updated manually when world facts change; CI script check-commodity-constants.mjs validates consistency with contract-specs.json.",
+  "_lastVerified": "2026-08",
+
+  "crude": {
+    "mcxSymbol": "CRUDEOIL",
+    "importDutyFactor": 1.025,
+    "importDutyNote": "Includes import duty differential on crude oil imports. Used in hawk-scan import parity formula: WTI ($/bbl) × USD/INR ÷ 159 × 1.025 = ₹/litre.",
+    "litresPerBarrel": 159,
+    "mcxLotSizeBarrels": 100,
+    "tickSize": 1,
+    "tickValuePerLotINR": 100,
+    "quotedUnit": "₹/bbl",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures.",
+    "opec": {
+      "memberCount": 12,
+      "totalNations": 23,
+      "note": "Angola exited OPEC in January 2024, reducing member count from 13 to 12. Total OPEC+ = 12 OPEC members + Russia + allied non-OPEC producers = 23 nations."
+    }
+  },
+
+  "gold": {
+    "mcxSymbol": "GOLD",
+    "importDutyBreakdown": "6% BCD + 3% AIDC + 3% GST",
+    "importDutyFactorEffective": 1.12,
+    "importDutyNote": "Post-July 2024 budget. Previously 12.5% BCD + 3% AIDC = ~15.5% (pre-2024). Canonical source: app/learn/comex-vs-mcx-gold and data/analyst-kb.json.",
+    "mcxContractSizeGrams": 1000,
+    "mcxLotUnits": "100 units of 10 grams",
+    "tickSize": 1,
+    "tickValuePerLotINR": 100,
+    "quotedUnit": "₹/10g",
+    "taxTreatment": "MCX gold futures: non-speculative business income at slab rate (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures. Note: physical gold and gold ETF have different tax treatment — see market-structure.json taxNote for those."
+  },
+
+  "silver": {
+    "mcxSymbol": "SILVER",
+    "importDutyFactor": 1.10,
+    "importDutyNote": "~10% effective duty on silver imports. Verify if July 2024 budget changed silver duty (gold was cut from 12.5% to 6% BCD; silver duty may differ).",
+    "mcxLotSizeKg": 30,
+    "tickSize": 1,
+    "tickValuePerLotINR": 30,
+    "quotedUnit": "₹/kg",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "copper": {
+    "mcxSymbol": "COPPER",
+    "mcxLotSizeKg": 2500,
+    "tickSize": 0.05,
+    "tickValuePerLotINR": 125,
+    "quotedUnit": "₹/kg",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "natgas": {
+    "mcxSymbol": "NATURALGAS",
+    "mcxLotSizeMMBtu": 1250,
+    "tickSize": 0.10,
+    "tickValuePerLotINR": 125,
+    "quotedUnit": "₹/mmBtu",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "zinc": {
+    "mcxSymbol": "ZINC",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "aluminium": {
+    "mcxSymbol": "ALUMINIUM",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "lead": {
+    "mcxSymbol": "LEAD",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "nickel": {
+    "mcxSymbol": "NICKEL",
+    "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  }
+}

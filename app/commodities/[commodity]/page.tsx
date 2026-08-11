@@ -29,6 +29,22 @@ function loadMarketStructure(): Record<string, CommodityInfo> {
   return JSON.parse(fs.readFileSync(file, 'utf8'))
 }
 
+type CommodityConstants = {
+  importDutyFactorEffective?: number
+  importDutyFactor?: number
+  importDutyBreakdown?: string
+  importDutyNote?: string
+  mcxLotSizeBarrels?: number
+  tickValuePerLotINR?: number
+  litresPerBarrel?: number
+}
+function loadCommodityConstants(): Record<string, CommodityConstants> {
+  try {
+    const file = path.join(process.cwd(), 'data/commodity-constants.json')
+    return JSON.parse(fs.readFileSync(file, 'utf8'))
+  } catch { return {} }
+}
+
 // ── Slug → internal key mapping ───────────────────────────────────────────────
 
 const SLUG_MAP: Record<string, { key: string; priceKey: string; color: string }> = {
@@ -310,6 +326,52 @@ export default async function CommodityPage({ params }: Props) {
   const low       = priceData?.mcxLow       ?? 0
   const prevClose = priceData?.mcxPrevClose  ?? 0
 
+  // ── Live import parity computation ──────────────────────────────────────────
+  const commodityConsts = loadCommodityConstants()
+  let liveParity: { dutyInclusivePrice: number; premiumPct: number; formula: string; dutyNote: string } | null = null
+
+  if (snap) {
+    const usdinr = snap.instruments?.USDINR?.price ?? 0
+    if (entry.key === 'gold' && snap.derived?.importParityGoldINR && usdinr > 0) {
+      const dutyFactor = commodityConsts.gold?.importDutyFactorEffective ?? 1.12
+      const base       = snap.derived.importParityGoldINR
+      const dutyInclusive = Math.round(base * dutyFactor)
+      const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
+      const comexGold     = snap.instruments?.COMEX_GOLD?.price ?? 0
+      liveParity = {
+        dutyInclusivePrice: dutyInclusive,
+        premiumPct,
+        formula: `COMEX $${comexGold.toFixed(0)}/oz ÷ 31.10 × 10 × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty`,
+        dutyNote: commodityConsts.gold?.importDutyBreakdown ?? '6% BCD + 3% AIDC + 3% GST',
+      }
+    } else if (entry.key === 'silver' && snap.derived?.importParitySilverINR && usdinr > 0) {
+      const dutyFactor = commodityConsts.silver?.importDutyFactor ?? 1.10
+      const base       = snap.derived.importParitySilverINR
+      const dutyInclusive = Math.round(base * dutyFactor)
+      const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
+      const comexSilver   = snap.instruments?.COMEX_SILVER?.price ?? 0
+      liveParity = {
+        dutyInclusivePrice: dutyInclusive,
+        premiumPct,
+        formula: `COMEX $${comexSilver.toFixed(2)}/oz ÷ 31.10 × 1000 × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty`,
+        dutyNote: '~10% effective import duty',
+      }
+    } else if (entry.key === 'crude') {
+      const wti = snap.instruments?.WTI?.price ?? 0
+      if (wti > 0 && usdinr > 0) {
+        const dutyFactor = commodityConsts.crude?.importDutyFactor ?? 1.025
+        const dutyInclusive = Math.round(wti * usdinr * dutyFactor)
+        const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
+        liveParity = {
+          dutyInclusivePrice: dutyInclusive,
+          premiumPct,
+          formula: `WTI $${wti.toFixed(2)}/bbl × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty factor`,
+          dutyNote: 'Import duty differential (~2.5%)',
+        }
+      }
+    }
+  }
+
   const commodityArticles = articles
     .filter(a => normalizeCommodityValue(a.commodity) === entry.key)
     .slice(0, 6)
@@ -499,6 +561,42 @@ export default async function CommodityPage({ params }: Props) {
         )}
       </div>
 
+      {/* Live Import Parity */}
+      {liveParity && ltp > 0 && (
+        <div style={{
+          background: 'var(--surface-2)', border: '1px solid var(--border)',
+          borderRadius: 8, padding: '14px 20px', marginBottom: 20,
+          display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 32px',
+        }}>
+          <div>
+            <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
+              Duty-inclusive import parity
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
+              ₹{fmt(liveParity.dutyInclusivePrice)}
+              <span style={{ fontSize: 12, color: 'var(--ink-4)', marginLeft: 6 }}>{info.unit}</span>
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
+              MCX vs parity
+            </div>
+            <div style={{
+              fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600,
+              color: liveParity.premiumPct > 0 ? '#D97706' : '#2B7A0B',
+            }}>
+              {liveParity.premiumPct > 0 ? '+' : ''}{liveParity.premiumPct.toFixed(1)}%
+              <span style={{ fontSize: 12, color: 'var(--ink-4)', marginLeft: 6, fontWeight: 400 }}>
+                {liveParity.premiumPct > 0 ? 'premium' : 'discount'}
+              </span>
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6, flexBasis: '100%' }}>
+            {liveParity.formula} · {liveParity.dutyNote} · For education only, not a trading signal
+          </div>
+        </div>
+      )}
+
       {/* Historical chart */}
       <CommodityChartWrapper commodity={commodity} color={color} unit={info.unit} />
 
@@ -572,7 +670,7 @@ export default async function CommodityPage({ params }: Props) {
               background: 'var(--surface-3)', borderRadius: 4, padding: '20px 24px',
               fontSize: 14, color: 'var(--ink-4)', marginBottom: 32,
             }}>
-              No recent articles — check back after 9 AM IST when the daily brief publishes.
+              No recent articles — check back after 9:30 AM IST when the daily brief publishes.
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>

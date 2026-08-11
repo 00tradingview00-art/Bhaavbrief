@@ -696,7 +696,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
       {data?.chain && (
         <div style={{ padding: '4px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: C.ink4, fontFamily: C.sans, background: C.surf2 }}>
           <span style={{ display: 'inline-block', width: 10, height: 10, background: ITM_BG, border: `1px solid ${C.gold}`, borderRadius: 2, opacity: 0.7 }} />
-          Highlighted rows are in-the-money · ATM = nearest to futures price · MAX PAIN = max option writer profit
+          Highlighted rows are in-the-money · ATM = nearest to futures price · MAX PAIN = strike where aggregate option-holder payout is minimized at expiry (writer losses minimized, excluding premiums paid/received)
         </div>
       )}
 

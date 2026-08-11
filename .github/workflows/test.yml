@@ -8,6 +8,7 @@ on:
       - 'app/**'
       - 'components/**'
       - 'config/**'
+      - 'data/**'
       - 'package.json'
       - 'package-lock.json'
       - 'vitest.config.ts'
@@ -19,6 +20,7 @@ on:
       - 'app/**'
       - 'components/**'
       - 'config/**'
+      - 'data/**'
       - 'package.json'
       - 'package-lock.json'
       - 'vitest.config.ts'
@@ -52,3 +54,9 @@ jobs:
 
       - name: P-03 ISR revalidate policy check
         run: node scripts/check-revalidate-policy.mjs
+
+      - name: Commodity constants consistency check
+        run: node scripts/check-commodity-constants.mjs
+
+      - name: KB freshness check
+        run: node scripts/check-kb-freshness.mjs
