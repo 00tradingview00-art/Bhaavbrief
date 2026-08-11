@@ -11,12 +11,11 @@ function loadPrices(): Prices {
     if (i?.MCX_GOLD?.price) {
       const comex = i.COMEX_GOLD?.price ?? 3200
       const gold  = i.MCX_GOLD.price
-      // back-calculate implied USD/INR: MCX = (COMEX/31.1035) × 10 × USDINR × 1.154
-      const usdinr = i.USD_INR?.price ?? (gold / ((comex / 31.1035) * 10 * 1.154))
+      const usdinr = i.USDINR?.price ?? 85.0
       return { gold, usdinr: parseFloat(usdinr.toFixed(2)), comexGold: comex }
     }
   } catch { /* fall through */ }
-  return { gold: 152000, usdinr: 84.5, comexGold: 3200 }
+  return { gold: 152000, usdinr: 85.0, comexGold: 3200 }
 }
 
 function fmt(n: number, decimals = 0) {
@@ -73,7 +72,7 @@ const FAQ_SCHEMA = {
     {
       '@type': 'Question',
       name: 'What is the MCX gold import parity formula?',
-      acceptedAnswer: { '@type': 'Answer', text: 'MCX gold theoretical price = (COMEX gold price in $/oz ÷ 31.1035 troy oz per kg) × 10 × USD/INR rate × (1 + import duty + GST adjustment). At mid-2026 levels: ($3,200/oz ÷ 31.1035) × 10 × ₹84.5 × 1.154 = approximately ₹1,41,000/10g. If MCX is trading above this level, it indicates domestic demand premium. Below this level indicates arbitrage opportunity or rupee is strengthening faster than international prices.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'MCX gold theoretical price = (COMEX gold price in $/oz ÷ 31.1035 troy oz per kg) × 10 × USD/INR rate × import duty factor. Post-July 2024 budget duty factor is 1.12 (6% BCD + 3% AIDC + 3% GST). At reference levels of $3,200/oz COMEX and ₹85/USD: ($3,200 ÷ 31.1035) × 10 × ₹85 × 1.12 ≈ ₹98,000/10g as import parity. If MCX is trading above this level, it indicates domestic demand premium. Below this level indicates arbitrage opportunity or rupee is strengthening faster than international prices.' },
     },
     {
       '@type': 'Question',
@@ -97,11 +96,11 @@ export default function Page() {
   const p = loadPrices()
 
   // Live worked example
-  const basePrice = Math.round((p.comexGold / 31.1035) * 10 * p.usdinr * 1.154)
-  const rupeeDown1 = Math.round((p.comexGold / 31.1035) * 10 * (p.usdinr * 1.01) * 1.154)
-  const rupeeUp1   = Math.round((p.comexGold / 31.1035) * 10 * (p.usdinr * 0.99) * 1.154)
-  const comexUp1   = Math.round(((p.comexGold * 1.01) / 31.1035) * 10 * p.usdinr * 1.154)
-  const bothDown   = Math.round(((p.comexGold * 0.99) / 31.1035) * 10 * (p.usdinr * 1.01) * 1.154)
+  const basePrice = Math.round((p.comexGold / 31.1035) * 10 * p.usdinr * 1.12)
+  const rupeeDown1 = Math.round((p.comexGold / 31.1035) * 10 * (p.usdinr * 1.01) * 1.12)
+  const rupeeUp1   = Math.round((p.comexGold / 31.1035) * 10 * (p.usdinr * 0.99) * 1.12)
+  const comexUp1   = Math.round(((p.comexGold * 1.01) / 31.1035) * 10 * p.usdinr * 1.12)
+  const bothDown   = Math.round(((p.comexGold * 0.99) / 31.1035) * 10 * (p.usdinr * 1.01) * 1.12)
 
   const h2: React.CSSProperties = { fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#18180F', marginBottom: 12, marginTop: 40 }
   const h3: React.CSSProperties = { fontFamily: 'var(--font-serif)', fontSize: 17, fontWeight: 500, color: '#18180F', marginBottom: 8, marginTop: 24 }
@@ -146,13 +145,13 @@ export default function Page() {
         <ol style={{ fontSize: 15, color: '#48483A', lineHeight: 2, paddingLeft: 24, marginBottom: 20 }}>
           <li><strong>COMEX gold price</strong> (international benchmark, in $/troy ounce)</li>
           <li><strong>USD/INR exchange rate</strong> (how many rupees per dollar)</li>
-          <li><strong>Indian import duty + GST</strong> (currently ~12.5% basic customs duty + 3% AIDC + GST adjustments, effective ~15.4%)</li>
+          <li><strong>Indian import duty + GST</strong> (currently 6% BCD + 3% AIDC + 3% GST, effective ~12%, post-July 2024 budget)</li>
         </ol>
         <div style={{ background: '#18180F', color: '#F0EFE6', padding: '20px 24px', borderRadius: 6, marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 14, lineHeight: 2 }}>
           <div style={{ color: '#C8720A', fontWeight: 700, marginBottom: 8, fontSize: 12, letterSpacing: 1 }}>FORMULA</div>
           <div>MCX Gold (₹/10g) =</div>
           <div style={{ marginLeft: 24 }}>(COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + duty factor)</div>
-          <div style={{ marginTop: 12, color: '#8A8A7A', fontSize: 13 }}>Where: 31.1035 = troy ounces per kg | duty factor ≈ 1.154</div>
+          <div style={{ marginTop: 12, color: '#8A8A7A', fontSize: 13 }}>Where: 31.1035 = troy ounces per kg | duty factor ≈ 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)</div>
         </div>
 
         <h2 style={h2}>Live Example (Today&apos;s Prices)</h2>
