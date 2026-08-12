@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-084",
+    "href": "/briefs/edition-084",
+    "title": "Gold at $4467 While Crude Jumps — War Premium Is Now One Trade",
+    "description": "Middle East tensions are driving gold and crude higher together, collapsing the usual inverse relationship into a single fear trade.",
+    "excerpt": "MCX Gold ₹154685 | Crude ₹8020 | USDINR ₹95.40 — Gold +0.60% | Crude +1.01% | Silver +0.86% Yesterday's Edge — Result: Edition #83 watched whether COMEX GOLD would close above 4,475.9. Rejected ✗, now",
+    "date": "2026-08-12T03:35:08.364Z",
+    "edition": "84",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-12-mcx-basis-explained-india",
     "href": "/articles/2026-08-12-mcx-basis-explained-india",
