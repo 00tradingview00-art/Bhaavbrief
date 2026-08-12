@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 155525,
-    "silver": 239450,
-    "crude": 7874,
-    "copper": 1382,
-    "natgas": 267.7,
+    "gold": 155416,
+    "silver": 239099,
+    "crude": 7912,
+    "copper": 1382.25,
+    "natgas": 269.3,
     "usdinr": 95.44
   },
-  "lastChecked": "2026-08-12T13:56:01.528Z",
+  "lastChecked": "2026-08-12T14:49:21.804Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "244"
   },
   "lastGeoNews": {
-    "mideast": "IEA slashes 2026 supply forecast as Hormuz reopening remains elusive - Reuters",
+    "mideast": "Global 2026 oil supply shortfall to deepen as Hormuz reopening remains elusive, ",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
