@@ -2,8 +2,8 @@ name: BhaavBrief Evening MCX Close Brief
 
 on:
   schedule:
-    # 11:45 PM IST = 6:15 PM UTC, Mon–Fri (15 min after MCX close at 11:30 PM)
-    - cron: '15 18 * * 1-5'
+    # 9:00 PM IST = 3:30 PM UTC, Mon–Fri (COMEX/NYMEX in full session)
+    - cron: '30 15 * * 1-5'
   workflow_dispatch:
 
 # Only one evening brief per run — queue if a manual dispatch overlaps the
