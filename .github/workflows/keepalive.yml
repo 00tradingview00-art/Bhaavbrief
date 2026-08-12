@@ -16,7 +16,7 @@ on:
   schedule:
     - cron: '25 3 * * 1-5'     # 8:55 AM IST — pre-market full trigger
     - cron: '30 4-17 * * 1-5'  # Every hour 10:00 AM – 11:00 PM IST — trading-hours backstop
-    - cron: '20 18 * * 1-5'    # 11:50 PM IST — post-close evening brief rescue
+    - cron: '35 15 * * 1-5'    # 9:05 PM IST — evening brief rescue
   workflow_dispatch:
 
 permissions:
@@ -58,7 +58,7 @@ jobs:
           echo "Intelligence Engine triggered"
 
       - name: Trigger Evening Close Brief (post-close only)
-        if: github.event.schedule == '20 18 * * 1-5'
+        if: github.event.schedule == '35 15 * * 1-5'
         run: |
           curl -s -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \

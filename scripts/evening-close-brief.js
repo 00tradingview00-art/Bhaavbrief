@@ -2,13 +2,13 @@
 /**
  * BhaavBrief — Evening MCX Close Brief
  *
- * Runs at 11:00 PM IST Monday–Friday (5:30 PM UTC) — 30 min before MCX close.
- * Publishes a day-end intelligence article: what moved, what drove it, what to
- * watch overnight in COMEX/NYMEX.
+ * Runs at 9:00 PM IST Monday–Friday (3:30 PM UTC) — when COMEX/NYMEX are fully active.
+ * Publishes a session-intelligence article: what's moving, what's driving it, what to
+ * watch in the COMEX/NYMEX overnight session.
  *
  * Distinct from the morning brief:
  *   Morning = "here's what happened overnight, here are today's MCX open levels"
- *   Evening = "here's what today's session did, here's the overnight watch list"
+ *   Evening = "here's what the session is doing as COMEX/NYMEX open, here's the overnight watch list"
  */
 
 import fs from 'fs'
