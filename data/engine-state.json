@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 155010,
-    "silver": 237988,
-    "crude": 7908,
-    "copper": 1375.7,
-    "natgas": 268.1,
+    "gold": 154945,
+    "silver": 237859,
+    "crude": 7934,
+    "copper": 1376,
+    "natgas": 268.6,
     "usdinr": 95.34
   },
-  "lastChecked": "2026-08-12T17:27:58.284Z",
+  "lastChecked": "2026-08-12T17:40:57.228Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-07-31",
-    "value": "244"
+    "period": "2026-08-07",
+    "value": "276"
   },
   "lastGeoNews": {
     "mideast": "Global 2026 oil supply shortfall to deepen as Hormuz reopening remains elusive, ",
