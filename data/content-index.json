@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-08-12-mcx-basis-explained-india",
+    "href": "/articles/2026-08-12-mcx-basis-explained-india",
+    "title": "What Is MCX Basis and How Traders Use It as a Market Signal in India",
+    "description": "Learn what is MCX basis and how to use it for trading in India — the formula, India-specific drivers, real market episodes, and signals to watch.",
+    "excerpt": "Understanding what is MCX basis and how to use it for trading in India is essential for any trader who wants to move beyond watching spot prices in isolation. MCX basis — the difference between the MC",
+    "date": "2026-08-12",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-08-11-mcx-crude-falls-2-4-as-us-demand-signals-weaken",
     "href": "/articles/2026-08-11-mcx-crude-falls-2-4-as-us-demand-signals-weaken",
     "title": "MCX Crude Falls 2.4% as US Demand Signals Weaken",
