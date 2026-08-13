@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260813-what-is-comex",
+    "topic": "What is COMEX?",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Before you buy gold tomorrow, know where its price actually comes from.",
+    "stat_line": "COMEX sets it. MCX just translates it to rupees.",
+    "payoff": "You're not trading Indian gold. You're trading New York gold in rupees.",
+    "beat1": "Your ₹1,53,657 gold price isn't decided in Mumbai—it's decided in New York every second.",
+    "beat2": "COMEX, the global gold referee under CME Group, feeds a formula that MCX plugs into automatically.",
+    "beat3": "The best Indian trading window is 7 PM–11:30 PM IST—when COMEX volume peaks and spreads tighten.",
+    "instagram_id": "18098329493460148",
+    "generated_at": "2026-08-13T15:06:15.625Z",
+    "edition": null,
+    "posted_at": "2026-08-13T15:07:06.041Z"
+  },
+  {
     "file": "brief-edition-085",
     "topic": "War Premium Cracks — Gold and Crude Both Retreat on the Same Morning",
     "content_type": "macro_trend",
