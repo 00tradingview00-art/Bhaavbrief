@@ -1157,6 +1157,12 @@ const briefLink = !isNewsMode
     ? `\nFull guide → ${process.env.LEARN_URL} 👇\n`
     : `\nbhaavbrief.in 👇\n`
 
+const followCta = !isNewsMode
+  ? 'Follow @bhaavbrief for the next one before market open. 🔔'
+  : process.env.LEARN_URL
+    ? 'Follow @bhaavbrief for the next explainer. 🔔'
+    : 'Follow @bhaavbrief for the next update. 🔔'
+
 const caption = [
   copy.hook_caption ?? copy.stat_line ?? data.title,
   '',
@@ -1165,6 +1171,7 @@ const caption = [
   '',
   `Watch: ${copy.beat3}`,
   briefLink,
+  followCta,
   hashtags,
 ].join('\n')
 
