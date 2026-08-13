@@ -1,0 +1,120 @@
+name: Post Flash Reel to Instagram
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/flash/**'
+  workflow_dispatch:
+
+# Serialize — avoid two flash articles racing to post simultaneously
+concurrency:
+  group: post-flash-reel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-post:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Generate flash reels (today only, skip already-rendered)
+        id: generate
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: |
+          # Stamp time before generating so we can find new files afterward
+          touch /tmp/before-batch
+          node scripts/generate-flash-reels-batch.mjs
+          # Collect all flash reels generated during this run
+          NEW_REELS=$(find public/reels -name 'flash-*.mp4' -newer /tmp/before-batch -type f 2>/dev/null | sort)
+          if [ -z "$NEW_REELS" ]; then
+            echo "No new flash reels generated — nothing to post"
+            echo "has_reels=false" >> $GITHUB_OUTPUT
+          else
+            echo "New reels generated:"
+            echo "$NEW_REELS"
+            # Write list to file for next step
+            echo "$NEW_REELS" > /tmp/new-reels.txt
+            echo "has_reels=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Post each new reel to Instagram
+        if: steps.generate.outputs.has_reels == 'true'
+        continue-on-error: true
+        env:
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: |
+          while IFS= read -r reel_path; do
+            [ -z "$reel_path" ] && continue
+            echo "Posting: $reel_path"
+            REEL_FILE="$reel_path" node scripts/post-reel-instagram.mjs
+            # Small gap between posts to avoid Instagram rate limits
+            sleep 10
+          done < /tmp/new-reels.txt
+
+      - name: Persist reel history
+        if: steps.generate.outputs.has_reels == 'true'
+        continue-on-error: true
+        run: |
+          [ -f data/reel-history.json ] && cp data/reel-history.json /tmp/bb-reel-history.json || true
+          git checkout -- . 2>/dev/null || true
+          git pull --rebase origin main
+          [ -f /tmp/bb-reel-history.json ] && cp /tmp/bb-reel-history.json data/reel-history.json || true
+          git add data/reel-history.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Reel history unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Flash reel history — $(TZ=Asia/Kolkata date +'%d %b %Y')"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "Flash reel pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Post Flash Reel</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/post-flash-reel.yml\">Re-run workflow →</a></p>"
+            }'

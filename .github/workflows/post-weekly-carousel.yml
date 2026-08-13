@@ -1,0 +1,87 @@
+name: Post Weekly Carousel to Instagram
+
+on:
+  schedule:
+    - cron: '0 7 * * 0'  # Sunday 7:00 UTC = 12:30 PM IST — traders review their week
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Carousel topic (defaults to what-moves-mcx)'
+        required: false
+        default: 'what-moves-mcx'
+
+concurrency:
+  group: post-weekly-carousel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  carousel:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate carousel slides with live prices
+        run: node scripts/generate-instagram-carousel-slides.js
+        env:
+          TOPIC: ${{ github.event.inputs.topic || 'what-moves-mcx' }}
+
+      - name: Commit updated slides to repo
+        continue-on-error: true
+        run: |
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/instagram/carousel-*.jpg 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Carousel slides unchanged — no commit needed"
+          else
+            git commit -m "Weekly carousel slides — $(TZ=Asia/Kolkata date +'%d %b %Y')"
+            for attempt in 1 2 3; do
+              git push origin main && break
+              if [ $attempt -lt 3 ]; then
+                git pull --rebase origin main || { git rebase --abort; exit 1; }
+                sleep $((attempt * 3))
+              else
+                echo "::warning::Slide commit push failed — continuing to post anyway"
+              fi
+            done
+          fi
+
+      - name: Post carousel to Instagram
+        env:
+          TOPIC:                  ${{ github.event.inputs.topic || 'what-moves-mcx' }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/post-instagram-carousel.js
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "Weekly carousel pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Post Weekly Carousel</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/post-weekly-carousel.yml\">Re-run workflow →</a></p>"
+            }'

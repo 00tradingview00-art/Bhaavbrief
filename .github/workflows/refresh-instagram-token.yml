@@ -52,6 +52,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
 
+      - name: Validate new token
+        if: steps.refresh.outputs.new_token != ''
+        run: |
+          VALIDATION=$(curl -sf "https://graph.facebook.com/v22.0/me?access_token=${{ steps.refresh.outputs.new_token }}")
+          if ! echo "$VALIDATION" | jq -e '.id' > /dev/null 2>&1; then
+            echo "::error::Token validation failed — the refreshed token does not work. Manual refresh required."
+            exit 1
+          fi
+          echo "Token validated successfully (ID: $(echo "$VALIDATION" | jq -r '.id'))"
+
       - name: Alert on failure
         if: failure()
         run: |

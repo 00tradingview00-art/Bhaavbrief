@@ -125,26 +125,25 @@ function drawDots(ctx, active, total, dark = false) {
 const fmtINR = n => n == null ? '—' : `₹${Math.round(n).toLocaleString('en-IN')}`
 const fmtPct = n => n == null ? '—' : `${n >= 0 ? '+' : ''}${n.toFixed(2)}%`
 
-// ── Real sourced timeline — pulled directly from content/flash/*.mdx, dates and
-// headlines verbatim. Do not alter — this is what makes the reel "real news",
-// not a scripted summary.
-const TIMELINE = [
-  {
-    date: 'JUL 08',
-    headline: 'Iran Strikes Trigger Crude, Gold Rally; MCX Traders Brace',
-    takeaway: 'US strikes hit Iran after vessel attacks in the Strait of Hormuz — Crude and Gold rally together.',
-  },
-  {
-    date: 'JUL 13',
-    headline: 'Crude rallies 2.7% on Iran tensions; Gold retreats as geopolitical premium priced in',
-    takeaway: 'Same headline, opposite moves — gold had already priced the risk in.',
-  },
-  {
-    date: 'JUL 15',
-    headline: 'US launches fresh strikes on Iran as IRGC threatens to block Mideast energy exports',
-    takeaway: 'IRGC threatens the Hormuz chokepoint — Crude and Gold spike together again as risk peaks.',
-  },
-]
+// ── Timeline — loaded from data/world-watch-events.json so it can be updated
+// without editing this script. Keep 3 events that tell a connected story.
+function loadTimeline() {
+  const p = join(ROOT, 'data/world-watch-events.json')
+  try {
+    const data = JSON.parse(readFileSync(p, 'utf8'))
+    if (Array.isArray(data.events) && data.events.length > 0) {
+      console.log(`  📅  Timeline loaded (updated_at: ${data.updated_at ?? 'unknown'})`)
+      return data.events
+    }
+  } catch (e) { console.warn(`  ⚠️  Could not load world-watch-events.json: ${e.message}`) }
+  // Hard fallback so the script still runs if the file is missing
+  return [
+    { date: 'JUL 08', headline: 'Iran Strikes Trigger Crude, Gold Rally', takeaway: 'Crude and Gold rally together on Hormuz threat.' },
+    { date: 'JUL 13', headline: 'Crude rallies; Gold retreats as risk premium priced in', takeaway: 'Same headline, opposite moves.' },
+    { date: 'JUL 15', headline: 'Fresh US strikes on Iran; Hormuz threat peaks', takeaway: 'Crude and Gold spike together again.' },
+  ]
+}
+const TIMELINE = loadTimeline()
 
 // ── Live data ─────────────────────────────────────────────────────────────────
 // Real numbers, fetched from production at render time — never hardcoded. Same

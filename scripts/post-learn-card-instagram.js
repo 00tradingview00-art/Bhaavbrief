@@ -3,7 +3,8 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const envFile = join(__dirname, '../.env.local')
+const ROOT    = join(__dirname, '..')
+const envFile = join(ROOT, '.env.local')
 if (existsSync(envFile)) {
   for (const line of readFileSync(envFile, 'utf8').split('\n')) {
     const [k, ...v] = line.split('=')
@@ -12,11 +13,67 @@ if (existsSync(envFile)) {
   }
 }
 
-const TOPIC    = process.env.TOPIC ?? process.argv[2]
 const IG_USER  = process.env.INSTAGRAM_USER_ID
 const IG_TOKEN = process.env.INSTAGRAM_ACCESS_TOKEN
 
-const CAPTIONS = {
+// Auto-pick topic from learn-reel-history.json when TOPIC is not explicitly set,
+// keeping the learn card and reel rotation in sync.
+function pickTopic() {
+  if (process.env.TOPIC) return process.env.TOPIC
+  if (process.argv[2]) return process.argv[2]
+  const historyPath = join(ROOT, 'data/learn-reel-history.json')
+  if (existsSync(historyPath)) {
+    try {
+      const h = JSON.parse(readFileSync(historyPath, 'utf8'))
+      if (h.lastSlug) return h.lastSlug
+    } catch {}
+  }
+  return null
+}
+
+const TOPIC = pickTopic()
+
+// Load learn-topics.json for all topic metadata (hook, facts, url)
+function loadTopics() {
+  const p = join(ROOT, 'data/learn-topics.json')
+  if (!existsSync(p)) return {}
+  try { return JSON.parse(readFileSync(p, 'utf8')).topics ?? {} } catch { return {} }
+}
+
+// Per-instrument hashtag clusters — mirrors post-instagram.js
+const INSTRUMENT_HASHTAGS = {
+  'MCX_GOLD':   '#MCXGold #GoldIndia #GoldFutures #SonaChandiBhav',
+  'MCX_SILVER': '#MCXSilver #SilverIndia #SilverFutures #ChandiBhav',
+  'MCX_CRUDE':  '#MCXCrude #CrudeOilIndia #CrudeFutures #OilAndGas',
+  'MCX_COPPER': '#MCXCopper #CopperIndia #BaseMetals #CopperFutures',
+  'MCX_NATGAS': '#MCXNatGas #NaturalGasIndia #NatGasFutures #EnergyMarkets',
+}
+
+// Build caption from topic data when no curated caption exists.
+// Falls back to generic hashtags when no instrument is specified.
+function buildCaption(slug, topic) {
+  const hook   = topic.hook ?? slug
+  const facts  = (topic.facts ?? []).slice(0, 4).map(f => `• ${f}`).join('\n')
+  const url    = topic.url ?? `https://bhaavbrief.in/learn/${slug}`
+  const instrTags = INSTRUMENT_HASHTAGS[topic.livePriceInstrument] ?? ''
+  const hashBlock = [
+    instrTags,
+    '#BhaavBrief #MCX #CommodityMarkets #TradingEducation #IndianMarkets #MCXTrading #MCXIntelligence',
+  ].filter(Boolean).join(' ')
+
+  return [
+    hook, '',
+    facts, '',
+    `Learn more → ${url}`, '',
+    hashBlock,
+  ].join('\n').trim()
+}
+
+// Curated long-form captions for topics that have them — kept inline because
+// they're carefully crafted 200-word educational threads that lose quality if
+// auto-generated from short fact bullets. New topics without a curated caption
+// fall through to buildCaption() above.
+const CURATED_CAPTIONS = {
   'how-prices-move': `Most MCX traders are watching the wrong screen.
 
 They track COMEX gold — and miss the ₹2,200 swing hiding inside USD/INR.
@@ -238,20 +295,25 @@ async function main() {
   }
   if (!TOPIC) {
     console.error('Usage: TOPIC=<slug> node scripts/post-learn-card-instagram.js')
-    console.error('Available topics:', Object.keys(CAPTIONS).join(', '))
+    console.error('Or ensure data/learn-reel-history.json has a lastSlug entry for auto-selection.')
     process.exit(1)
   }
 
-  const caption = CAPTIONS[TOPIC]
+  const topics  = loadTopics()
+  const topicDef = topics[TOPIC]
+
+  // Caption: curated long-form if available, else auto-build from topic data
+  const caption = CURATED_CAPTIONS[TOPIC] ?? (topicDef ? buildCaption(TOPIC, topicDef) : null)
   if (!caption) {
-    console.error(`No caption defined for topic: ${TOPIC}`)
-    console.error('Available topics:', Object.keys(CAPTIONS).join(', '))
+    console.error(`No caption or topic definition found for: ${TOPIC}`)
+    console.error('Known topics:', Object.keys(topics).join(', '))
     process.exit(1)
   }
 
   const imageUrl = `https://bhaavbrief.in/api/learn-card/${TOPIC}`
   console.log(`Posting learn card: ${TOPIC}`)
   console.log(`Image: ${imageUrl}`)
+  if (!CURATED_CAPTIONS[TOPIC]) console.log('  (caption auto-generated from learn-topics.json)')
 
   // Step 1 — Create media container
   const createRes = await fetch(`https://graph.facebook.com/v22.0/${IG_USER}/media`, {

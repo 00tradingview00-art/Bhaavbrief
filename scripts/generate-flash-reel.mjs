@@ -206,12 +206,22 @@ async function generateVoiceover(script, outputPath) {
 }
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
-const W = 1080, H = 1920, FPS = 30, TOTAL_FRAMES = 20 * FPS
+const W = 1080, H = 1920, FPS = 30
 
-const HOOK_END     = Math.round(2.5 * FPS)   // 0–2.5s
-const BEAT1_END    = Math.round(8.5 * FPS)   // 2.5–8.5s
-const BEAT2_END    = Math.round(14.5 * FPS)  // 8.5–14.5s
-const SIGNAL_END   = TOTAL_FRAMES             // 14.5–20s
+// Base phase durations (seconds). Rescaled to actual voiceover length after
+// ElevenLabs responds — see "Voiceover-driven timing rescale" in main().
+const HOOK_BASE   = 2.5
+const BEAT1_BASE  = 6.0   // 8.5 - 2.5
+const BEAT2_BASE  = 6.0   // 14.5 - 8.5
+const SIGNAL_BASE = 5.5   // 20 - 14.5
+const SPEECH_DUR_BASELINE = HOOK_BASE + BEAT1_BASE + BEAT2_BASE + SIGNAL_BASE  // 20s
+
+// Declared as let — recomputed after voiceover measurement in main()
+let HOOK_END     = Math.round(HOOK_BASE * FPS)
+let BEAT1_END    = Math.round((HOOK_BASE + BEAT1_BASE) * FPS)
+let BEAT2_END    = Math.round((HOOK_BASE + BEAT1_BASE + BEAT2_BASE) * FPS)
+let SIGNAL_END   = Math.round(SPEECH_DUR_BASELINE * FPS)
+let TOTAL_FRAMES = SIGNAL_END
 
 const CREAM  = '#FAFAF6'
 const INK    = '#18180F'
@@ -522,6 +532,43 @@ console.log('🎙️   Generating voiceover...')
 const voiceoverPath = copy.voiceover ? await generateVoiceover(copy.voiceover, VO_FILE) : null
 console.log()
 
+// ── Voiceover-driven timing rescale ──────────────────────────────────────────
+// Measure what ElevenLabs actually produced and rescale phase boundaries to
+// match — prevents the hard atrim from cutting off speech mid-sentence.
+let measuredVoiceDur = null
+if (voiceoverPath && existsSync(voiceoverPath)) {
+  try {
+    const probeOut = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', voiceoverPath],
+      { encoding: 'utf8' }
+    ).trim()
+    const probed = parseFloat(probeOut)
+    if (Number.isFinite(probed) && probed > 0) {
+      measuredVoiceDur = probed
+      const rawScale = probed / SPEECH_DUR_BASELINE
+      const scale    = Math.max(0.75, Math.min(1.5, rawScale))
+      if (Math.abs(rawScale - scale) > 0.01) {
+        console.warn(`  ⚠️  Voiceover implies ${rawScale.toFixed(2)}x scale — clamped to ${scale.toFixed(2)}x`)
+      }
+      const hookDur   = HOOK_BASE   * scale
+      const beat1Dur  = BEAT1_BASE  * scale
+      const beat2Dur  = BEAT2_BASE  * scale
+      const signalDur = SIGNAL_BASE * scale
+      HOOK_END     = Math.round(hookDur * FPS)
+      BEAT1_END    = HOOK_END   + Math.round(beat1Dur  * FPS)
+      BEAT2_END    = BEAT1_END  + Math.round(beat2Dur  * FPS)
+      SIGNAL_END   = BEAT2_END  + Math.round(signalDur * FPS)
+      TOTAL_FRAMES = SIGNAL_END
+      console.log(`  🎯  Voiceover ${probed.toFixed(1)}s (planned ${SPEECH_DUR_BASELINE}s) — rescaled to ${(TOTAL_FRAMES / FPS).toFixed(1)}s`)
+    } else {
+      console.warn(`  ⚠️  ffprobe returned "${probeOut}" — keeping planned ${SPEECH_DUR_BASELINE}s timing`)
+    }
+  } catch (e) {
+    console.warn(`  ⚠️  ffprobe failed (${e.message}) — keeping planned ${SPEECH_DUR_BASELINE}s timing`)
+  }
+}
+
 const FRAMES_DIR = join(ROOT, '.flash-frames-tmp')
 const OUT_DIR    = join(ROOT, 'public/reels')
 const OUT_FILE   = join(OUT_DIR, `flash-${flash.slug}.mp4`)
@@ -547,16 +594,19 @@ console.log(`⚙️   Encoding...`)
 const args = ['-y', '-framerate', String(FPS), '-i', join(FRAMES_DIR, 'f%04d.png')]
 
 if (voiceoverPath) {
+  // Use measured duration + small buffer; falls back to DUR-1.5 only if
+  // measurement failed (measuredVoiceDur is null).
+  const voiceTrim = measuredVoiceDur != null ? Math.min(measuredVoiceDur + 0.1, DUR) : DUR - 1.5
   args.push('-i', musicPath, '-i', voiceoverPath,
     '-filter_complex',
-    `[1:a]atrim=0:${DUR},afade=t=out:st=${DUR-2.0}:d=2.0,asetpts=PTS-STARTPTS,volume=0.18[music];` +
-    `[2:a]atrim=0:${DUR-1.5},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
+    `[1:a]atrim=0:${DUR},afade=t=out:st=${Math.max(DUR-2.0, 0)}:d=2.0,asetpts=PTS-STARTPTS,volume=0.18[music];` +
+    `[2:a]atrim=0:${voiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
     `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
     '-map', '0:v', '-map', '[aout]'
   )
 } else {
   args.push('-i', musicPath,
-    '-af', `atrim=0:${DUR},afade=t=out:st=${DUR-2.0}:d=2.0,asetpts=PTS-STARTPTS`
+    '-af', `atrim=0:${DUR},afade=t=out:st=${Math.max(DUR-2.0, 0)}:d=2.0,asetpts=PTS-STARTPTS`
   )
 }
 
@@ -567,14 +617,25 @@ execFileSync('ffmpeg', args, { stdio: 'pipe' })
 rmSync(FRAMES_DIR, { recursive: true })
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
-// Caption sidecar
+// Caption sidecar — instrument-specific hashtags based on dominant_instrument
+const INSTRUMENT_HASHTAGS = {
+  'MCX GOLD':   '#MCXGold #GoldIndia #GoldFutures #SonaChandiBhav',
+  'MCX SILVER': '#MCXSilver #SilverIndia #SilverFutures #ChandiBhav',
+  'MCX CRUDE':  '#MCXCrude #CrudeOilIndia #CrudeFutures #OilAndGas',
+  'MCX COPPER': '#MCXCopper #CopperIndia #BaseMetals #CopperFutures',
+  'MCX NATGAS': '#MCXNatGas #NaturalGasIndia #NatGasFutures #EnergyMarkets',
+}
+const instrKey    = (copy.dominant_instrument ?? '').toUpperCase()
+const instrTags   = INSTRUMENT_HASHTAGS[instrKey] ?? ''
+const hashtagLine = [instrTags, '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #MCXIntelligence'].filter(Boolean).join(' ')
+
 const caption = [
   copy.payoff ?? flash.title, '',
   copy.beat1, '',
   copy.beat2, '',
   `Watch: ${copy.watch_level}`, '',
   `Full analysis → bhaavbrief.in/news 👇`, '',
-  '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #MCXIntelligence',
+  hashtagLine,
 ].join('\n')
 
 writeFileSync(CAP_FILE, caption, 'utf8')

@@ -1,0 +1,21 @@
+{
+  "_note": "Timeline events for the World Watch reel (scripts/generate-world-watch-reel.mjs). Update this file with fresh real-world headlines — keep exactly 3 events that tell a connected story across 2–3 weeks. Headlines and takeaways are read verbatim into the reel.",
+  "updated_at": "2026-08-13",
+  "events": [
+    {
+      "date": "JUL 08",
+      "headline": "Iran Strikes Trigger Crude, Gold Rally; MCX Traders Brace",
+      "takeaway": "US strikes hit Iran after vessel attacks in the Strait of Hormuz — Crude and Gold rally together."
+    },
+    {
+      "date": "JUL 13",
+      "headline": "Crude rallies 2.7% on Iran tensions; Gold retreats as geopolitical premium priced in",
+      "takeaway": "Same headline, opposite moves — gold had already priced the risk in."
+    },
+    {
+      "date": "JUL 15",
+      "headline": "US launches fresh strikes on Iran as IRGC threatens to block Mideast energy exports",
+      "takeaway": "IRGC threatens the Hormuz chokepoint — Crude and Gold spike together again as risk peaks."
+    }
+  ]
+}

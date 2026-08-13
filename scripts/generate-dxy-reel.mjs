@@ -50,13 +50,14 @@ const BORDER = '#E0DFD5'
 const DARK   = '#121209'
 
 // ── Canvas constants ──────────────────────────────────────────────────────────
-const W = 1080, H = 1920, FPS = 30, DURATION = 25
-const TOTAL_FRAMES = DURATION * FPS   // 750
+const W = 1080, H = 1920, FPS = 30
+let DURATION     = 25
+let TOTAL_FRAMES = DURATION * FPS   // 750 at baseline
 
-// Phase boundaries (in frames)
-const HOOK_END  = Math.round(3.5 * FPS)   //  0–3.5s  — hook
-const MECH_END  = Math.round(11.5 * FPS)  //  3.5–11.5s — mechanism
-const TWIST_END = Math.round(19.5 * FPS)  // 11.5–19.5s — rupee offset
+// Phase boundaries (in frames) — recomputed after voiceover if ElevenLabs is available
+let HOOK_END  = Math.round(3.5 * FPS)   //  0–3.5s  — hook
+let MECH_END  = Math.round(11.5 * FPS)  //  3.5–11.5s — mechanism
+let TWIST_END = Math.round(19.5 * FPS)  // 11.5–19.5s — rupee offset
 // 19.5–25s — watch signals
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -505,6 +506,18 @@ async function ensureMusic() {
   return null
 }
 
+// ── Audio duration helper ─────────────────────────────────────────────────────
+function getAudioDuration(path) {
+  try {
+    const out = execFileSync('ffprobe', [
+      '-v', 'error', '-show_entries', 'format=duration',
+      '-of', 'default=noprint_wrappers=1:nokey=1', path,
+    ], { encoding: 'utf8' })
+    const seconds = parseFloat(out.trim())
+    return isNaN(seconds) ? null : seconds
+  } catch { return null }
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 const FRAMES_DIR  = join(ROOT, '.dxy-reel-frames-tmp')
 const OUTPUT_DIR  = join(ROOT, 'public/reels')
@@ -514,6 +527,24 @@ const VOICE_FILE  = join(OUTPUT_DIR, 'dxy-mcx-explainer-voice.mp3')
 mkdirSync(FRAMES_DIR,  { recursive: true })
 mkdirSync(OUTPUT_DIR,  { recursive: true })
 
+// Voiceover first — so actual audio duration can drive frame count
+console.log('🎙️   Generating voiceover...')
+const voicePath = await generateVoiceover(VOICE_FILE)
+
+if (voicePath) {
+  const voiceDuration = getAudioDuration(voicePath)
+  if (voiceDuration) {
+    const rawScale = voiceDuration / 25
+    const scale    = Math.max(0.75, Math.min(1.5, rawScale))
+    DURATION        = Math.ceil(voiceDuration + 1.5)
+    TOTAL_FRAMES    = DURATION * FPS
+    HOOK_END        = Math.round(3.5  * scale * FPS)
+    MECH_END        = Math.round(11.5 * scale * FPS)
+    TWIST_END       = Math.round(19.5 * scale * FPS)
+    console.log(`  ⏱️   Voiceover is ${voiceDuration.toFixed(1)}s — video set to ${DURATION}s`)
+  }
+}
+
 console.log(`🎬  Rendering ${TOTAL_FRAMES} frames (${DURATION}s @ ${FPS}fps)...`)
 for (let i = 0; i < TOTAL_FRAMES; i++) {
   if (i % 75 === 0) process.stdout.write(`  frame ${i}/${TOTAL_FRAMES}\r`)
@@ -522,9 +553,6 @@ for (let i = 0; i < TOTAL_FRAMES; i++) {
   writeFileSync(join(FRAMES_DIR, `f${pad}.png`), buf)
 }
 console.log(`  ✅  ${TOTAL_FRAMES} frames rendered`)
-
-console.log('🎙️   Generating voiceover...')
-const voicePath = await generateVoiceover(VOICE_FILE)
 
 console.log('🎵  Finding music track...')
 const musicPath = await ensureMusic()
