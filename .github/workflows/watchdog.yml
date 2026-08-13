@@ -18,32 +18,48 @@ jobs:
   watchdog:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          # FIX: always fetch the current HEAD of main, not the trigger-time SHA.
+          # GitHub Actions locks GITHUB_SHA when the scheduled trigger fires, but
+          # the actual runner may start 30–90 min later. Without ref: main, the
+          # checkout uses the stale SHA and won't see content committed by
+          # generate-brief between trigger time and execution time — causing false
+          # "brief missing" alerts even when the brief is live on the site.
+          ref: main
 
       - name: Check morning brief (9:45 AM IST run only)
         id: brief_check
         run: |
-          # Gate on which cron *expression* fired (github.event.schedule), not
-          # wall-clock hour — scheduled runs routinely start 1-2h late, so a
-          # UTC_HOUR match against the exact scheduled hour never fired in
-          # practice and this check silently no-op'd on every run. An empty
-          # SCHEDULE means workflow_dispatch (manual run) — always check then.
           SCHEDULE="${{ github.event.schedule }}"
           if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
             echo "Not the 9:45 AM run — skipping brief check"
             echo "brief_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
-
           TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+
+          # MCX holiday guard: generate-brief.js skips generation outright on
+          # a market holiday (see scripts/generate-brief.js "MCX holiday
+          # today ... skipping brief generation"), so an absent brief on a
+          # holiday is correct behavior, not a failure. Same holiday source
+          # the iv_check step below already uses.
+          IS_HOLIDAY=$(jq --arg d "$TODAY" \
+            '[.[] | select(.date == $d)] | length' \
+            data/market-holidays.json 2>/dev/null || echo "0")
+          IS_HOLIDAY="${IS_HOLIDAY:-0}"
+          if [ "$IS_HOLIDAY" != "0" ]; then
+            echo "MCX holiday today ($TODAY) — skipping brief check"
+            echo "brief_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           echo "Checking for brief dated $TODAY..."
-
-          FOUND=$(grep -rl "date: \"$TODAY\"" content/briefs/ 2>/dev/null | head -1)
-
+          # Brief frontmatter stores an ISO timestamp: date: "2026-08-13T04:27:40.394Z"
+          # Grep for the date prefix (no closing quote) to match ISO timestamps.
+          FOUND=$(grep -rl "date: \"${TODAY}" content/briefs/ 2>/dev/null | head -1)
           if [ -z "$FOUND" ]; then
             echo "brief_ok=false" >> $GITHUB_OUTPUT
             echo "brief_date=$TODAY" >> $GITHUB_OUTPUT
@@ -56,26 +72,37 @@ jobs:
       - name: Check intelligence engine (2:00 PM IST run only)
         id: engine_check
         run: |
-          # See brief_check above — gate on the triggering cron expression,
-          # not wall-clock hour, since scheduled runs start late.
           SCHEDULE="${{ github.event.schedule }}"
           if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "30 8 * * 1-5" ]; then
             echo "Not the 2:00 PM run — skipping engine check"
             echo "engine_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
-
           TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+
+          # MCX holiday guard: intelligence-engine.js sleeps outright on a
+          # market holiday (see scripts/intelligence-engine.js "MCX holiday
+          # ... engine sleeping"), so zero articles on a holiday is correct
+          # behavior, not a failure. Same holiday source as iv_check below.
+          IS_HOLIDAY=$(jq --arg d "$TODAY" \
+            '[.[] | select(.date == $d)] | length' \
+            data/market-holidays.json 2>/dev/null || echo "0")
+          IS_HOLIDAY="${IS_HOLIDAY:-0}"
+          if [ "$IS_HOLIDAY" != "0" ]; then
+            echo "MCX holiday today ($TODAY) — skipping engine check"
+            echo "engine_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           echo "Checking for intelligence articles dated $TODAY..."
-
-          FOUND=$(grep -rl "date: \"$TODAY\"" content/articles/ 2>/dev/null | head -1)
-
+          # Same ISO-timestamp prefix match as brief check
+          FOUND=$(grep -rl "date: \"${TODAY}" content/articles/ 2>/dev/null | head -1)
           if [ -z "$FOUND" ]; then
             echo "engine_ok=false" >> $GITHUB_OUTPUT
             echo "engine_date=$TODAY" >> $GITHUB_OUTPUT
             echo "::error::Intelligence engine has NOT published any articles for $TODAY by 2:00 PM IST"
           else
-            COUNT=$(grep -rl "date: \"$TODAY\"" content/articles/ 2>/dev/null | wc -l | tr -d ' ')
+            COUNT=$(grep -rl "date: \"${TODAY}" content/articles/ 2>/dev/null | wc -l | tr -d ' ')
             echo "engine_ok=true" >> $GITHUB_OUTPUT
             echo "✓ Engine articles today: $COUNT"
           fi
@@ -83,8 +110,6 @@ jobs:
       - name: Check ATM IV snapshot (9:45 AM IST run only)
         id: iv_check
         run: |
-          # See brief_check above — gate on the triggering cron expression,
-          # not wall-clock hour, since scheduled runs start late.
           SCHEDULE="${{ github.event.schedule }}"
           if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
             echo "Not the 9:45 AM run — skipping IV snapshot check"
@@ -92,28 +117,59 @@ jobs:
             exit 0
           fi
 
-          # iv-snapshot cron runs at 23:35 IST the previous night. Walk back from
-          # yesterday to the most recent real trading day — skipping weekends AND
-          # MCX holidays from data/market-holidays.json — so Mondays and holidays
-          # don't false-alarm.
           CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
           for i in 1 2 3 4 5; do
-            DOW=$(date -d "$CHECK_DATE" +%u)  # 1=Mon .. 7=Sun
-            IS_HOLIDAY=$(jq --arg d "$CHECK_DATE" '[.[] | select(.date == $d)] | length' data/market-holidays.json)
+            DOW=$(date -d "$CHECK_DATE" +%u)
+            # Suppress jq errors and default to 0 if market-holidays.json is missing
+            IS_HOLIDAY=$(jq --arg d "$CHECK_DATE" \
+              '[.[] | select(.date == $d)] | length' \
+              data/market-holidays.json 2>/dev/null || echo "0")
+            IS_HOLIDAY="${IS_HOLIDAY:-0}"
             if [ "$DOW" -ge 6 ] || [ "$IS_HOLIDAY" != "0" ]; then
               CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
             else
               break
             fi
           done
-          echo "Checking ATM IV snapshot for $CHECK_DATE (last trading day)..."
+          echo "Target date: $CHECK_DATE (last trading day)"
+
+          # ── Bootstrap guard ────────────────────────────────────────────────────
+          # If the iv-snapshot Vercel cron has never written any data to Redis,
+          # ALL date checks will fail — this is a setup issue, not a monitoring
+          # alert. Warn and skip rather than hard-fail on first-run or
+          # misconfigured CRON_SECRET.
+          GOLD_RESP=$(curl -s --max-time 10 \
+            "https://bhaavbrief.in/api/options/iv-history?instrument=GOLD" || echo "")
+          GOLD_TOTAL=$(echo "$GOLD_RESP" \
+            | jq '.history | length' 2>/dev/null || echo "")
+          if [ -z "$GOLD_TOTAL" ] || [ "$GOLD_TOTAL" = "0" ]; then
+            echo "::warning::IV history is empty for GOLD — iv-snapshot Vercel cron may not" \
+                 "be active yet, or CRON_SECRET is not set in Vercel env vars." \
+                 "Skipping IV date check to avoid false alarms."
+            echo "iv_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "IV history has ${GOLD_TOTAL} total entries for GOLD — proceeding with date check"
+          # ── End bootstrap guard ────────────────────────────────────────────────
 
           MISSING=""
           for INSTRUMENT in GOLD SILVER CRUDEOIL NATURALGAS COPPER; do
-            COUNT=$(curl -s "https://bhaavbrief.in/api/options/iv-history?instrument=$INSTRUMENT" \
-              | jq --arg d "$CHECK_DATE" '[.history[]? | select(.date == $d)] | length' 2>/dev/null)
-            if [ -z "$COUNT" ] || [ "$COUNT" = "0" ]; then
+            RESPONSE=$(curl -s --max-time 10 \
+              "https://bhaavbrief.in/api/options/iv-history?instrument=$INSTRUMENT" || echo "")
+            COUNT=$(echo "$RESPONSE" \
+              | jq --arg d "$CHECK_DATE" \
+                '[.history[]? | select(.date == $d)] | length' 2>/dev/null || echo "")
+            COUNT="${COUNT:-0}"
+            if [ "$COUNT" = "0" ]; then
               MISSING="$MISSING $INSTRUMENT"
+              # Show the most recent dates stored so we can distinguish
+              # "never populated" from "yesterday specifically missing"
+              LATEST=$(echo "$RESPONSE" \
+                | jq -r '[.history[-3:][]?.date] | join(", ")' 2>/dev/null \
+                || echo "unable to parse")
+              echo "  ✗ $INSTRUMENT — no entry for $CHECK_DATE (most recent dates: ${LATEST:-none})"
+            else
+              echo "  ✓ $INSTRUMENT — IV snapshot present for $CHECK_DATE"
             fi
           done
 
@@ -141,11 +197,10 @@ jobs:
         if: steps.brief_check.outputs.brief_ok == 'false'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
         run: |
           DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
           RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/generate-brief.yml"
-
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
@@ -155,18 +210,16 @@ jobs:
               \"subject\": \"Brief missing at 9:30 AM — auto-triggered at 9:45 AM | ${DATE_LABEL}\",
               \"htmlContent\": \"<p>The morning brief was not found by 9:45 AM IST on <strong>${DATE_LABEL}</strong>.</p><p><strong>Auto-recovery triggered.</strong> generate-brief has been dispatched and should publish within 5–10 minutes. No action needed unless this email is followed by a failure alert.</p><p><a href='${RUN_URL}'>Monitor workflow →</a></p>\"
             }"
-
           echo "Recovery notification sent"
 
       - name: Alert — engine silent
         if: steps.engine_check.outputs.engine_ok == 'false'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
         run: |
           DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
           RUN_URL="https://github.com/${{ github.repository }}/actions/workflows/intelligence-engine.yml"
-
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
@@ -176,7 +229,6 @@ jobs:
               \"subject\": \"⚠️ Intelligence engine silent — ${DATE_LABEL}\",
               \"htmlContent\": \"<p>No intelligence articles found for <strong>${DATE_LABEL}</strong> by 2:00 PM IST.</p><p>The engine has been running since 9:00 AM but published nothing — possible Kite auth failure, Claude API error, or price threshold not triggered.</p><p><a href='${RUN_URL}'>Check engine workflow →</a></p>\"
             }"
-
           echo "Alert sent for silent engine"
           exit 1
 
@@ -184,11 +236,10 @@ jobs:
         if: steps.iv_check.outputs.iv_ok == 'false'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
-          SENDER_EMAIL:  ${{ secrets.SENDER_EMAIL }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
         run: |
           DATE_LABEL="${{ steps.iv_check.outputs.iv_date }}"
           MISSING="${{ steps.iv_check.outputs.iv_missing }}"
-
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
@@ -198,6 +249,5 @@ jobs:
               \"subject\": \"⚠️ ATM IV snapshot missing for ${DATE_LABEL} —${MISSING}\",
               \"htmlContent\": \"<p>The daily ATM IV snapshot (Vercel Cron → /api/cron/iv-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>Likely a silent skip (no futures price / no ATM IV from Kite at 23:35 IST) or an unhandled error — check the Vercel dashboard function logs for this route, since nothing else surfaces its failures.</p>\"
             }"
-
           echo "Alert sent for missing ATM IV snapshot"
           exit 1
