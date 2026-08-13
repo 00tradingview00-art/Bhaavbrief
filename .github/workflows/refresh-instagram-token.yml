@@ -1,8 +1,14 @@
 name: Refresh Instagram Token
 
+# Scheduled trigger disabled 2026-08-10: INSTAGRAM_ACCESS_TOKEN is now a
+# never-expiring Page token (derived from a long-lived User token via the
+# Facebook Login flow, not the Instagram Login flow). Re-exchanging an
+# already-long-lived token via fb_exchange_token does NOT reset its clock —
+# that's what caused the silent ~60-day expiry cycle this workflow "solved"
+# every 15 days without ever actually extending anything. Kept as
+# workflow_dispatch only, in case the token is ever invalidated manually
+# (e.g. password change) and a one-off refresh attempt is worth trying.
 on:
-  schedule:
-    - cron: '0 6 */15 * *'  # Every 15 days — refreshes well before 60-day expiry
   workflow_dispatch:
 
 jobs:
