@@ -49,9 +49,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Post to Instagram
+      - name: Post edition card to Instagram
         env:
           EDITION:                ${{ steps.edition.outputs.number }}
           INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js
+
+      - name: Post P&L card to Instagram
+        continue-on-error: true
+        env:
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: |
+          EDITION="${{ steps.edition.outputs.number }}"
+          SLUG="edition-$(printf '%03d' "$EDITION")-pnl"
+          export IMAGE_URL="https://bhaavbrief.in/instagram/${SLUG}.jpg?v=${{ github.run_id }}"
+          export CAPTION="Today's move, in your pocket.
+
+What 1 MCX Mini lot would have made or lost today — before you analyse the chart.
+
+Full brief → bhaavbrief.in/briefs/edition-$(printf '%03d' "$EDITION")
+
+#BhaavBrief #MCX #MCXGold #MCXCrude #MCXSilver #CommodityMarkets #MCXTrading #IndianMarkets #MCXIntelligence"
+          node scripts/post-image-instagram.js

@@ -1,0 +1,175 @@
+{
+  "_note": "Weekly MCX Myth Buster carousel content. Generator picks next slug from rotation[] unless TOPIC env is set. History tracked in data/mythbuster-history.json.",
+  "rotation": [
+    "gold-price-set-in-india",
+    "mcx-closes-at-5pm",
+    "crude-follows-brent-exactly",
+    "need-1-lakh-to-trade-mcx",
+    "commodities-riskier-than-stocks",
+    "physical-gold-cheaper-than-mcx",
+    "tax-on-mcx-same-as-equity"
+  ],
+  "myths": {
+    "gold-price-set-in-india": {
+      "myth": "MCX gold price is decided in India.",
+      "cover_lines": ["Everyone thinks", "MCX gold is", "priced in India.", "They're wrong."],
+      "slides": [
+        {
+          "title": "It starts in New York",
+          "body": "COMEX gold futures on the New York Mercantile Exchange set the overnight reference price. By 6 AM IST, the global gold price has already moved — driven by US jobs data, Fed signals, and dollar strength. India has zero say in this.",
+          "callout": "India's contribution to the MCX gold price: 0%"
+        },
+        {
+          "title": "The rupee does the multiplying",
+          "body": "MCX gold price = COMEX $/oz ÷ 31.1035 × 10 × USD/INR + import duties. When the rupee falls 2%, MCX gold rises ~2% — even if COMEX is completely flat. The currency does the moving, not India.",
+          "callout": "₹1 USD/INR move = ₹1,000–1,300 MCX gold move"
+        },
+        {
+          "title": "Import duties add a fixed layer",
+          "body": "India adds 6% BCD + 3% AIDC + 3% GST on gold imports (~12–13%). When Budget 2024 cut the duty from 15% to 6%, MCX gold fell ₹5,000–6,000 per 10g in a single trading day.",
+          "callout": "Budget 2024 duty cut → ₹5,000 drop in one trading day"
+        }
+      ],
+      "punchline": "Watch COMEX. Watch USD/INR. Not Dalal Street.",
+      "hashtags": "#MCXGold #GoldIndia #COMEX #USDINR #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster"
+    },
+    "mcx-closes-at-5pm": {
+      "myth": "MCX closes at 5 PM like the stock market.",
+      "cover_lines": ["Everyone thinks", "MCX closes", "at 5 PM.", "They're wrong."],
+      "slides": [
+        {
+          "title": "MCX trades until 11:30 PM IST",
+          "body": "NSE and BSE close at 3:30 PM. MCX runs from 9:00 AM to 11:30 PM IST — a 14.5-hour window. The real gold and crude moves happen after 7 PM, when the US market opens. If you're closing at 5 PM, you're missing most of the action.",
+          "callout": "MCX hours: 9:00 AM – 11:30 PM IST (14.5 hours)"
+        },
+        {
+          "title": "The US session is where gold moves",
+          "body": "Gold, silver and crude make their biggest daily moves during the US market session. COMEX opens at ~6:30 PM IST. The EIA crude inventory report drops every Wednesday at ~8:00 PM IST. This is when positions are made or broken.",
+          "callout": "Best hours for gold, silver & crude: 7 PM – 11:30 PM IST"
+        },
+        {
+          "title": "Base metals peak earlier",
+          "body": "Copper, Zinc, Lead and Aluminium track the London Metal Exchange (LME). Their peak volatility window is 3:30 PM to 6:30 PM IST, around the LME Ring close — well before the US session starts.",
+          "callout": "Copper & base metals peak: 3:30 PM – 6:30 PM IST"
+        }
+      ],
+      "punchline": "MCX is an evening game. 7 PM is when it starts for gold and crude.",
+      "hashtags": "#MCX #MCXGold #MCXCrude #MCXSilver #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster"
+    },
+    "crude-follows-brent-exactly": {
+      "myth": "MCX Crude Oil exactly tracks Brent crude.",
+      "cover_lines": ["Everyone thinks", "MCX Crude tracks", "Brent exactly.", "They're wrong."],
+      "slides": [
+        {
+          "title": "MCX tracks WTI — not Brent",
+          "body": "MCX Crude Oil is benchmarked to WTI (West Texas Intermediate) futures on NYMEX, not Brent on ICE London. The two prices diverge by $2–8 per barrel on a regular basis. When WTI and Brent move differently, MCX follows WTI — not what you see on the news.",
+          "callout": "MCX crude benchmark: WTI (NYMEX), not Brent (ICE London)"
+        },
+        {
+          "title": "USD/INR runs through the middle",
+          "body": "Even when WTI moves exactly 1%, MCX crude may move 0.5% or 1.5% depending on what the rupee does. The conversion is: MCX ₹/bbl = WTI $/bbl × USD/INR. Two numbers, one MCX price. A weak rupee amplifies every WTI move.",
+          "callout": "MCX ₹/bbl = WTI $/bbl × USD/INR — currency always in the formula"
+        },
+        {
+          "title": "A 6.5-hour gap creates daily surprises",
+          "body": "WTI closes for active trading at ~2:30 AM IST. MCX reopens at 9 AM IST. During that 6.5-hour gap, the price is static on MCX while WTI continues to move. The first MCX crude candle often gaps significantly from the previous MCX close.",
+          "callout": "6.5-hour gap: WTI close (2:30 AM IST) → MCX open (9 AM IST)"
+        }
+      ],
+      "punchline": "Watch WTI. Track USD/INR. Account for the session gap.",
+      "hashtags": "#MCXCrude #CrudeOil #WTI #Brent #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster"
+    },
+    "need-1-lakh-to-trade-mcx": {
+      "myth": "You need ₹1 lakh to start trading MCX.",
+      "cover_lines": ["Everyone thinks", "you need ₹1 lakh", "to trade MCX.", "They're wrong."],
+      "slides": [
+        {
+          "title": "Crude Mini starts at ₹3,000",
+          "body": "MCX Crude Oil Mini (10 barrels) requires just ₹3,000–5,000 in SPAN margin — the cheapest entry point in Indian commodity markets. One lot controls ₹65,000–80,000 of crude, giving roughly 13–20× leverage from a few thousand rupees.",
+          "callout": "MCX Crude Oil Mini: ₹3,000–5,000 SPAN margin required"
+        },
+        {
+          "title": "Silver Micro is ₹5,000",
+          "body": "MCX Silver Micro (1 kg lot) costs ₹5,000–8,000 in margin. This gives you direct silver price exposure without the ₹1.5 lakh needed for a full Silver contract (30 kg). India's smallest silver lot is designed for retail traders.",
+          "callout": "MCX Silver Micro (1 kg): ₹5,000–8,000 SPAN margin"
+        },
+        {
+          "title": "The real minimum is 1.5–2× margin",
+          "body": "Opening a position with just the margin amount is how beginners get forcibly squared off on the first significant move. Recommended starting capital: 1.5–2× the margin in your account to absorb intraday mark-to-market swings without a broker closeout.",
+          "callout": "Rule: Always keep 1.5–2× margin in account — never just the margin"
+        }
+      ],
+      "punchline": "Start small, trade micro. Build experience before size.",
+      "hashtags": "#MCX #MCXCrude #MCXSilver #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster #Margin"
+    },
+    "commodities-riskier-than-stocks": {
+      "myth": "Trading MCX is much riskier than stocks.",
+      "cover_lines": ["Everyone thinks", "MCX is far", "riskier than stocks.", "They're wrong."],
+      "slides": [
+        {
+          "title": "Leverage is the risk — not the commodity",
+          "body": "A small-cap stock can fall 20% in a week. MCX gold rarely moves more than 1–2% in a day. Commodity trading feels riskier because of leverage: you put up 5–8% margin to control 100% of the contract value. The underlying commodity is often less volatile than equities.",
+          "callout": "MCX gold typical daily move: 0.3–1.5%"
+        },
+        {
+          "title": "Commodity prices have physical floors",
+          "body": "A small-cap stock can go to zero — the company can fail. MCX gold cannot go to zero: it has a global industrial and monetary floor. Crude Oil cannot stay below global production cost for long. Physical fundamentals cap commodity downside in ways equities don't have.",
+          "callout": "Stocks can go to ₹0. Commodities have physical value floors."
+        },
+        {
+          "title": "Compare futures to futures",
+          "body": "If you compare MCX futures to equity futures — same leverage structure, same margin system — the volatility is similar. Nifty futures can gap 2–3% on a bad day. A 2% MCX crude move is not unusual. The structure is identical; only the underlying changes.",
+          "callout": "Nifty futures vs. MCX crude: comparable daily volatility"
+        }
+      ],
+      "punchline": "Manage the leverage. The commodity itself isn't the enemy.",
+      "hashtags": "#MCX #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster #Leverage #RiskManagement"
+    },
+    "physical-gold-cheaper-than-mcx": {
+      "myth": "Buying physical gold is cheaper than MCX.",
+      "cover_lines": ["Everyone thinks", "physical gold is", "cheaper than MCX.", "They're wrong."],
+      "slides": [
+        {
+          "title": "Making charges: 8–25% on top",
+          "body": "Jewellery carries making charges of 8–25% on top of the gold rate. A ₹92,000/10g gold price becomes ₹99,000–1,15,000/10g by the time you hold the jewellery. MCX futures: zero making charges. Pure price exposure.",
+          "callout": "Physical jewellery markup: 8–25% making charges above gold rate"
+        },
+        {
+          "title": "3% GST is a permanent cost",
+          "body": "Buying physical gold — jewellery, bars, or coins — attracts 3% GST, paid upfront at purchase. This 3% is not recovered when you sell. MCX futures have no GST on the commodity itself, only on brokerage fees.",
+          "callout": "GST on physical gold: 3% upfront (not recovered on resale)"
+        },
+        {
+          "title": "MCX gives pure price exposure",
+          "body": "MCX Gold Mini (100g) tracks the 999.9 purity spot price — no making charges, no metal GST, no storage cost. For anyone who wants to profit from gold price moves, MCX is structurally far cheaper than buying physical gold.",
+          "callout": "MCX Gold Mini: pure 999.9 purity price — no making charges"
+        }
+      ],
+      "punchline": "Physical gold is for gifting. MCX is for trading.",
+      "hashtags": "#MCXGold #GoldIndia #PhysicalGold #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster"
+    },
+    "tax-on-mcx-same-as-equity": {
+      "myth": "MCX profits are taxed at 15% STCG like stocks.",
+      "cover_lines": ["Everyone thinks", "MCX profits are", "taxed at 15%.", "They're wrong."],
+      "slides": [
+        {
+          "title": "MCX = business income at slab rate",
+          "body": "MCX commodity futures profits are classified as non-speculative business income by the Income Tax Act. You pay tax at your full income slab rate — up to 30%. There is no 15% STCG or 12.5% LTCG benefit that equity traders enjoy.",
+          "callout": "MCX profit tax: your full income slab rate — up to 30%"
+        },
+        {
+          "title": "CTT not STT — and it's deductible",
+          "body": "Equity trades attract STT (Securities Transaction Tax), which is not deductible. MCX trades attract CTT (Commodity Transaction Tax) at 0.01% on the sell side. The key advantage: CTT is fully deductible as a business expense. STT is not.",
+          "callout": "CTT 0.01% (sell side only) — deductible as business expense"
+        },
+        {
+          "title": "Losses carry forward 8 years — but file ITR-3",
+          "body": "MCX trading losses can be carried forward for 8 years to offset future commodity trading profits. They can only offset non-speculative business income — not salary income. You must file ITR-3, not ITR-2. Get a CA who knows derivatives.",
+          "callout": "Loss carry forward: 8 years | File: ITR-3 (not ITR-2 or ITR-1)"
+        }
+      ],
+      "punchline": "Factor your full slab rate into every P&L calculation before you trade.",
+      "hashtags": "#MCX #TaxIndia #CommodityMarkets #BhaavBrief #TradingEducation #MCXTrading #IndianMarkets #MCXMythBuster #IncomeTax #ITR3"
+    }
+  }
+}

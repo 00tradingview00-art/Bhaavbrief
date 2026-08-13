@@ -141,6 +141,12 @@ jobs:
         run: node scripts/generate-instagram-card.js
         continue-on-error: true
 
+      - name: Generate P&L impact card
+        env:
+          EDITION: ${{ steps.edition.outputs.number }}
+        run: node scripts/generate-pnl-card.js
+        continue-on-error: true
+
       - name: Commit brief to main
         id: commit
         env:
