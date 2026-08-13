@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-13-how-to-read-mcx-open-interest-india",
+    "href": "/articles/2026-08-13-how-to-read-mcx-open-interest-india",
+    "title": "How to Read MCX Open Interest Data and What It Tells You About Market Direction",
+    "description": "Learn how to read MCX open interest data India traders rely on to gauge market conviction, spot trend exhaustion, and track price direction shifts.",
+    "excerpt": "Knowing how to read MCX open interest data India-wide requires understanding that open interest measures the total number of outstanding contracts not yet settled — it is the market's live scorecard o",
+    "date": "2026-08-13",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-084",
     "href": "/briefs/edition-084",
