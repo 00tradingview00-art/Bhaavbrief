@@ -6,7 +6,7 @@
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹7.7–10.8 lakh",
-    "contractValue": "~₹1.5 crore at ₹1,53,643/10g",
+    "contractValue": "~₹1.5 crore at ₹1,53,573/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.5–4.9 lakh",
-    "contractValue": "~₹70.5 lakh at ₹2,34,900/kg",
+    "contractValue": "~₹70.5 lakh at ₹2,34,959/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -87,7 +87,7 @@
     "lotSize": "100 barrels",
     "tickSize": "₹1 per barrel = ₹100/lot",
     "typicalMargin": "₹39–55K",
-    "contractValue": "~₹7.9 lakh at ₹7,879/bbl",
+    "contractValue": "~₹7.9 lakh at ₹7,872/bbl",
     "importParity": "MCX Crude = WTI ($/bbl) × USD/INR × 1.025 (includes import duty differential)",
     "supplyControl": "OPEC+ (12 OPEC members + Russia + allied non-OPEC producers — Angola exited Jan 2024) controls ~40% of global oil supply and sets production quotas quarterly. Saudi Arabia is the swing producer — can flood or restrict supply unilaterally within limits. US shale (Permian Basin) is the marginal supplier that caps upside.",
     "keyBodies": [
@@ -131,7 +131,7 @@
     "lotSize": "2,500 kg",
     "tickSize": "₹0.05 per kg = ₹125/lot",
     "typicalMargin": "₹1.7–2.4 lakh",
-    "contractValue": "~₹34.4 lakh at ₹1,375.45/kg",
+    "contractValue": "~₹34.4 lakh at ₹1,375.05/kg",
     "importParity": "MCX Copper = COMEX copper (¢/lb) ÷ 100 × 2.20462 × USD/INR × 1.05",
     "supplyControl": "Chile (25%) and Peru (11%) together control 36% of global mined copper supply. Congo (DRC) is rising fast. The Democratic Republic of Congo + Zambia control 70% of global cobalt (copper by-product). China controls 40% of global copper smelting/refining capacity — a chokepoint even when mines are elsewhere.",
     "keyBodies": [
@@ -174,7 +174,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹1.0–1.4 lakh",
-    "contractValue": "~₹19.7 lakh at ₹394.6/kg",
+    "contractValue": "~₹19.8 lakh at ₹395/kg",
     "importParity": "MCX Zinc = LME Zinc ($/tonne) ÷ 1000 × USD/INR × 1.068 (Basic Customs Duty 5% + IGST ~18%)",
     "supplyControl": "China mines 31% and refines 44% of global zinc. Peru (11%) and Australia (10%) are the next largest miners. India's Hindustan Zinc (Vedanta subsidiary) is among the world's top five zinc-lead miners and supplies roughly 75% of India's primary zinc needs — making it the single most important stock to watch for MCX zinc price direction.",
     "keyBodies": [
@@ -215,7 +215,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹0.9–1.2 lakh",
-    "contractValue": "~₹17.4 lakh at ₹348.4/kg",
+    "contractValue": "~₹17.4 lakh at ₹347.65/kg",
     "importParity": "MCX Aluminium = LME Aluminium ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 7.5% + IGST)",
     "supplyControl": "China produces 58% of global primary aluminium — the highest concentration of any major metal. Russia (Rusal, 6%) and Canada (5%) are the next largest. Aluminium smelting is extremely electricity-intensive (15,000 kWh per tonne), so cheap hydropower nations (China, Russia, Iceland, Norway) dominate. Power costs determine who runs and who shuts.",
     "keyBodies": [
@@ -257,7 +257,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹49–69K",
-    "contractValue": "~₹9.8 lakh at ₹197/kg",
+    "contractValue": "~₹9.8 lakh at ₹196.9/kg",
     "importParity": "MCX Lead = LME Lead ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST)",
     "supplyControl": "China dominates global lead smelting (45% of refined output). Australia (14%) and Peru (8%) are the top miners. India's Hindustan Zinc is also a major lead producer — lead is mined alongside zinc at Hindustan Zinc's Rajasthan operations. Secondary (recycled) lead from scrap batteries accounts for 60% of global supply — the auto scrappage cycle is critical.",
     "keyBodies": [
@@ -299,7 +299,7 @@
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
     "typicalMargin": "₹1.2–1.7 lakh",
-    "contractValue": "~₹24.1 lakh at ₹1,604/kg",
+    "contractValue": "~₹24.1 lakh at ₹1,606.1/kg",
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
     "keyBodies": [
@@ -342,7 +342,7 @@
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
     "typicalMargin": "₹16–23K",
-    "contractValue": "~₹3.3 lakh at ₹263.3/mmBtu",
+    "contractValue": "~₹3.3 lakh at ₹263.4/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
