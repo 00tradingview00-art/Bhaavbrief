@@ -65,11 +65,9 @@ jobs:
           EDITION="${{ steps.edition.outputs.number }}"
           SLUG="edition-$(printf '%03d' "$EDITION")-pnl"
           export IMAGE_URL="https://bhaavbrief.in/instagram/${SLUG}.jpg?v=${{ github.run_id }}"
-          export CAPTION="Today's move, in your pocket.
-
-What 1 MCX Mini lot would have made or lost today — before you analyse the chart.
-
-Full brief → bhaavbrief.in/briefs/edition-$(printf '%03d' "$EDITION")
-
-#BhaavBrief #MCX #MCXGold #MCXCrude #MCXSilver #CommodityMarkets #MCXTrading #IndianMarkets #MCXIntelligence"
+          export CAPTION="$(printf '%s\n\n%s\n\n%s\n\n%s' \
+            "Today's move, in your pocket." \
+            "What 1 MCX Mini lot would have made or lost today — before you analyse the chart." \
+            "Full brief → bhaavbrief.in/briefs/edition-$(printf '%03d' "$EDITION")" \
+            "#BhaavBrief #MCX #MCXGold #MCXCrude #MCXSilver #CommodityMarkets #MCXTrading #IndianMarkets #MCXIntelligence")"
           node scripts/post-image-instagram.js
