@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-08-14-mcx-delivery-vs-cash-settlement-india",
+    "href": "/articles/2026-08-14-mcx-delivery-vs-cash-settlement-india",
+    "title": "MCX Physical Delivery vs Cash Settlement — How Commodity Contracts Expire in India",
+    "description": "Understand MCX delivery vs cash settlement commodity India: how contracts expire, prices are calculated, and what traders must watch at expiry.",
+    "excerpt": "The choice between MCX delivery vs cash settlement commodity India contracts determines whether a position closes with physical goods changing hands or simply a cash difference — and the mechanism beh",
+    "date": "2026-08-14",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-085",
     "href": "/briefs/edition-085",
