@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-086",
+    "href": "/briefs/edition-086",
+    "title": "War Premium Unwinds — Silver and Crude Lead the Retreat",
+    "description": "Geopolitical fear trade is fading fast as COMEX silver drops over 2% and crude slides below $82, pressuring MCX at Monday's open.",
+    "excerpt": "MCX Gold ₹153466 | Crude ₹7821 | USDINR ₹95.43 Yesterday's Edge — Result: Edition #85 watched whether COMEX GOLD would close above 4,452.7. Rejected ✗, now at 4,376.3. | Commodity | Global Price | USD",
+    "date": "2026-08-14T02:48:05.869Z",
+    "edition": "86",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-085",
     "href": "/briefs/edition-085",
     "title": "War Premium Cracks — Gold and Crude Both Retreat on the Same Morning",
