@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-08-14T11:13:15.599Z",
-  "generatedAtIST": "2026-08-14 16:43 IST",
+  "generatedAt": "2026-08-14T11:28:27.341Z",
+  "generatedAtIST": "2026-08-14 16:58 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 153250,
+      "price": 153359,
       "prevClose": 153466,
-      "changePct": -0.1407,
+      "changePct": -0.0697,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 234780,
+      "price": 235100,
       "prevClose": 235447,
-      "changePct": -0.2833,
+      "changePct": -0.1474,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7808,
+      "price": 7790,
       "prevClose": 7821,
-      "changePct": -0.1662,
+      "changePct": -0.3964,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1373.55,
+      "price": 1375,
       "prevClose": 1375.85,
-      "changePct": -0.1672,
+      "changePct": -0.0618,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 262.7,
+      "price": 263,
       "prevClose": 260.6,
-      "changePct": 0.8058,
+      "changePct": 0.921,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -40,51 +40,51 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4406.6,
+      "price": 4410.3,
       "prevClose": 4363.6,
-      "changePct": 0.9854,
+      "changePct": 1.0702,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 64.81,
+      "price": 64.88,
       "prevClose": 64.87,
-      "changePct": -0.1048,
+      "changePct": 0.0108,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 81.66,
+      "price": 81.73,
       "prevClose": 81.25,
-      "changePct": 0.5046,
+      "changePct": 0.5908,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 87.13,
+      "price": 87.23,
       "prevClose": 87.07,
-      "changePct": 0.0689,
+      "changePct": 0.1838,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.74,
       "prevClose": 2.73,
-      "changePct": 0.4767,
+      "changePct": 0.5134,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 397.95,
+      "price": 398.35,
       "prevClose": 395.2,
-      "changePct": 0.6959,
+      "changePct": 0.7971,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 196.95,
+      "price": 196.75,
       "prevClose": 197.35,
-      "changePct": -0.2027,
+      "changePct": -0.304,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 347.25,
+      "price": 347.2,
       "prevClose": 346.8,
-      "changePct": 0.1298,
+      "changePct": 0.1153,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
@@ -94,15 +94,15 @@
       "unit": "INR/kg"
     },
     "EURINR": {
-      "price": 110.375,
+      "price": 110.45,
       "prevClose": 110.2425,
-      "changePct": 0.1202,
+      "changePct": 0.1882,
       "unit": "INR"
     },
     "GBPINR": {
-      "price": 129.1975,
+      "price": 129.2775,
       "prevClose": 129.045,
-      "changePct": 0.1182,
+      "changePct": 0.1802,
       "unit": "INR"
     },
     "JPYINR": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 135187,
-    "mcxComexGoldSpreadPct": 13.36,
-    "importParitySilverINR": 198826,
-    "mcxComexSilverSpreadPct": 18.08,
+    "importParityGoldINR": 135300,
+    "mcxComexGoldSpreadPct": 13.35,
+    "importParitySilverINR": 199040,
+    "mcxComexSilverSpreadPct": 18.12,
     "goldSilverRatio": 68
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.36% vs silver 18.08% — 4.72pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.36,
-      "silverSpreadPct": 18.08,
-      "deltaPts": 4.72
+      "detail": "Gold import-parity spread 13.35% vs silver 18.12% — 4.77pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.35,
+      "silverSpreadPct": 18.12,
+      "deltaPts": 4.77
     }
   ]
 }
