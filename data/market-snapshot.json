@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-08-14T17:26:28.258Z",
-  "generatedAtIST": "2026-08-14 22:56 IST",
+  "generatedAt": "2026-08-14T18:03:28.678Z",
+  "generatedAtIST": "2026-08-14 23:33 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 154629,
-      "prevClose": 153466,
-      "changePct": 0.7578,
+      "price": 154590,
+      "prevClose": 154506,
+      "changePct": 0.0544,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 236145,
-      "prevClose": 235447,
-      "changePct": 0.2965,
+      "price": 236272,
+      "prevClose": 235924,
+      "changePct": 0.1475,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7855,
-      "prevClose": 7821,
-      "changePct": 0.4347,
+      "price": 7878,
+      "prevClose": 7870,
+      "changePct": 0.1017,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1378.55,
-      "prevClose": 1375.85,
-      "changePct": 0.1962,
+      "price": 1379,
+      "prevClose": 1378.3,
+      "changePct": 0.0508,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 263.6,
-      "prevClose": 260.6,
-      "changePct": 1.1512,
+      "price": 263.4,
+      "prevClose": 263.7,
+      "changePct": -0.1138,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -40,57 +40,57 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4441.5,
+      "price": 4436.1,
       "prevClose": 4363.6,
-      "changePct": 1.7852,
+      "changePct": 1.6615,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 65.14,
+      "price": 64.95,
       "prevClose": 64.87,
-      "changePct": 0.4116,
+      "changePct": 0.1187,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 82.25,
+      "price": 82.37,
       "prevClose": 81.25,
-      "changePct": 1.2308,
+      "changePct": 1.3785,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 88.31,
+      "price": 88.47,
       "prevClose": 87.07,
-      "changePct": 1.4241,
+      "changePct": 1.6079,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.75,
       "prevClose": 2.73,
-      "changePct": 0.7701,
+      "changePct": 0.6967,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 399.4,
-      "prevClose": 395.2,
-      "changePct": 1.0628,
+      "price": 400,
+      "prevClose": 399.6,
+      "changePct": 0.1001,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 197.5,
-      "prevClose": 197.35,
-      "changePct": 0.076,
+      "price": 198,
+      "prevClose": 198.1,
+      "changePct": -0.0505,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 348.45,
-      "prevClose": 346.8,
-      "changePct": 0.4758,
+      "price": 348.8,
+      "prevClose": 348.55,
+      "changePct": 0.0717,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1580.5,
-      "prevClose": 1604,
-      "changePct": -1.4651,
+      "price": 1577,
+      "prevClose": 1576,
+      "changePct": 0.0635,
       "unit": "INR/kg"
     },
     "EURINR": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 136257,
-    "mcxComexGoldSpreadPct": 13.48,
-    "importParitySilverINR": 199838,
-    "mcxComexSilverSpreadPct": 18.17,
-    "goldSilverRatio": 68.2
+    "importParityGoldINR": 136092,
+    "mcxComexGoldSpreadPct": 13.59,
+    "importParitySilverINR": 199255,
+    "mcxComexSilverSpreadPct": 18.58,
+    "goldSilverRatio": 68.3
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.48% vs silver 18.17% — 4.69pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.48,
-      "silverSpreadPct": 18.17,
-      "deltaPts": 4.69
+      "detail": "Gold import-parity spread 13.59% vs silver 18.58% — 4.99pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.59,
+      "silverSpreadPct": 18.58,
+      "deltaPts": 4.99
     }
   ]
 }
