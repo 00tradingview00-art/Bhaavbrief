@@ -70,7 +70,7 @@ jobs:
             # failure) — see validate-brief.mjs and generate-brief.yml for the
             # full rationale. Same fix applied here for consistency.
             set +e
-            node scripts/validate-brief.mjs data/market-snapshot.json "${{ steps.generate.outputs.brief_file }}"
+            node scripts/validate-brief.mjs data/market-snapshot.json "${{ steps.generate.outputs.brief_file }}" evening-close
             CODE=$?
             set -e
             echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"

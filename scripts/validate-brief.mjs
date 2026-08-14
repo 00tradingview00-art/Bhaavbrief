@@ -22,11 +22,22 @@ import { classifySemanticIssue } from "./lib/semanticDemote.mjs";
 import { checkStaleInstruments } from "./lib/staleInstrumentCheck.mjs";
 import { briefExcerptForSemanticCheck } from "./lib/briefExcerpt.mjs";
 
-const [, , snapshotPath, briefPath] = process.argv;
+const [, , snapshotPath, briefPath, briefTypeArg] = process.argv;
 if (!snapshotPath || !briefPath) {
-  console.error("usage: node validate-brief.mjs <snapshot.json> <brief.mdx>");
+  console.error("usage: node validate-brief.mjs <snapshot.json> <brief.mdx> [briefType]");
   process.exit(2); // can't even start — never a content rejection
 }
+
+// Brief type gate: G-04 (Price Bridge), G-11 (STRUCTURE), and G-08
+// (CONTINUITY/edition numbering) were written for the morning daily brief's
+// 9-section, numbered-edition format (scripts/generate-brief.js). Evening
+// close briefs (scripts/evening-close-brief.js) are a deliberately different,
+// shorter 4-section format with no numeric edition — they were never meant
+// to satisfy these three checks, which is why every evening brief has been
+// silently rejected since these checks were added (2026-07-17). Defaults to
+// "morning" so the existing generate-brief.yml call site is unaffected.
+const briefType = (briefTypeArg || process.env.BRIEF_TYPE || "morning").toLowerCase();
+const isEveningClose = briefType === "evening-close";
 
 if (!fs.existsSync(snapshotPath)) {
   console.error(`Snapshot not found: ${snapshotPath} — run fetch-snapshot.mjs first`);
@@ -320,8 +331,8 @@ try {
 //    so they get a much tighter tolerance (0.5%) than the general NUMBER
 //    check (15%). Catches the class of bug where the table itself doesn't
 //    reconcile even though every individual number, read in isolation, looks
-//    plausible.
-{
+//    plausible. Morning-brief-only — see briefType gate above.
+if (!isEveningClose) {
   const bridgeMatch = brief.match(/##\s*Price Bridge[\s\S]*?(?=\n##|\n---|\n\*\*BhaavBrief|$)/i);
   if (!bridgeMatch) {
     issues.push("STRUCTURE: required section \"Price Bridge\" is missing");
@@ -397,8 +408,9 @@ try {
 
 // 11. Structure (G-11): every required section must be present — a
 //     generation truncation or format drift should never silently ship a
-//     brief missing "Who Is Affected" or "Edge of the Day".
-{
+//     brief missing "Who Is Affected" or "Edge of the Day". Morning-brief-
+//     only — see briefType gate above.
+if (!isEveningClose) {
   const requiredSections = [
     { name: "Macro Thread",                          re: /##\s*Macro Thread/i },
     { name: "Narrative header (BUILDING/FADING/SHIFTING)", re: /##[^\n]*—\s*(BUILDING|FADING|SHIFTING)/i },
@@ -422,8 +434,10 @@ try {
 //      Independently re-verifies what generate-brief.js's own
 //      "next edition = max+1" logic computed, rather than trusting it — the
 //      D-04/D-05 defect class was exactly a generator-side assumption not
-//      being independently checked at the gate.
-try {
+//      being independently checked at the gate. Morning-brief-only — evening
+//      close briefs use a non-numeric `edition: "evening-brief"` and were
+//      never part of this numbered sequence. See briefType gate above.
+if (!isEveningClose) try {
   const briefsDir = path.join(process.cwd(), "content/briefs");
   const files = fs.existsSync(briefsDir)
     ? fs.readdirSync(briefsDir).filter((f) => /^edition-\d+\.mdx$/.test(f))
