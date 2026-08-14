@@ -29,6 +29,12 @@ async function mostRecentIV(instrument: string): Promise<number | null> {
 export async function GET(req: Request) {
   const auth = req.headers.get('authorization')
   if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
+    // A rejected invocation here writes nothing to Redis and returns before
+    // the results-logging line below ever runs, so this was previously the
+    // one failure mode in this route with zero trace in Vercel function logs
+    // — a missing/rotated CRON_SECRET could silently blank out days of IV
+    // history with nothing to grep for.
+    console.error('[cron/iv-snapshot] Unauthorized —', process.env.CRON_SECRET ? 'bearer token mismatch' : 'CRON_SECRET not set')
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
