@@ -112,6 +112,38 @@ describe("classifySemanticIssue — regression test for the 2026-07-31 'not a fa
   });
 });
 
+describe("classifySemanticIssue — regression test for the 2026-08-14 unguarded 'pass'/'consistent' terminal patterns", () => {
+  // The bare terminal "pass."/"consistent." patterns above had no negation
+  // guard, so a genuine contradiction the checker phrased as "...do not
+  // pass." or "...are not consistent." was misread as the checker's own
+  // "no issue" conclusion and silently demoted from block to warn.
+  test("a genuine block ending in 'do not pass.' stays SEMANTIC-BLOCK", () => {
+    const detail =
+      "MCX gold's stated move and the snapshot figure do not pass verification: brief says down ₹500, snapshot shows a ₹217 move. These do not pass.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+
+  test("a genuine block ending in 'are not consistent.' stays SEMANTIC-BLOCK", () => {
+    const detail =
+      "Headline states silver up 1.2% while the body states silver down 0.8% — these are not consistent.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+
+  test("a genuine block ending in \"aren't consistent.\" stays SEMANTIC-BLOCK", () => {
+    const detail =
+      "The headline figure and the body figure aren't consistent.";
+    expect(isSelfContradicted(detail)).toBe(false);
+    expect(classifySemanticIssue("block", detail)).toBe("SEMANTIC-BLOCK");
+  });
+
+  test("the legitimate bare 'pass.'/'consistent.' non-issue phrasings still demote to warn", () => {
+    expect(isSelfContradicted("Verification: 79.16 + 3.03 = 82.19. Pass.")).toBe(true);
+    expect(isSelfContradicted("Snapshot values match the brief. Consistent.")).toBe(true);
+  });
+});
+
 describe("classifySemanticIssue — structural numeric self-verification (valueA/valueB)", () => {
   // The proper fix, 2026-07-29: instead of chasing every new phrasing Haiku
   // invents for "these two numbers match," the checker now also emits the

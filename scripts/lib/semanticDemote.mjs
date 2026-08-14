@@ -77,7 +77,11 @@ const SELF_CONTRADICTION_PATTERNS = [
   /\bno\s+issue\.?\s*$/i,
   /\bwhich\s+matches\b/i,
   /\bconsistent\.?\s*pass\b/i,
-  /\bpass\.?\s*$/i,
+  // Negative lookbehind so "do not pass."/"cannot pass." (a genuine failed
+  // check) isn't matched by the bare terminal "pass." this pattern targets —
+  // 2026-08-14: an unguarded version of this regex silently demoted a real
+  // contradiction ending in that phrasing.
+  /(?<!not\s)(?<!n't\s)\bpass\.?\s*$/i,
   /\bchecks\s+out\b/i,
   /\bis\s+acceptable\s+as\b/i,
   /\b(?:is|are)\s+correct\s+per\s+snapshot\b/i,
@@ -94,7 +98,9 @@ const SELF_CONTRADICTION_PATTERNS = [
   // Bare terminal verdict — "... ✓ Consistent." with nothing else said.
   // Anchored to end-of-string specifically so it can't match a "consistent"
   // that appears mid-detail while a different, still-live issue follows.
-  /\bconsistent\.?\s*$/i,
+  // Same negation guard as the "pass" pattern above, for the same reason —
+  // "are not consistent."/"aren't consistent." must stay blocked.
+  /(?<!not\s)(?<!n't\s)\bconsistent\.?\s*$/i,
 ];
 
 /** @param {string} detail */
