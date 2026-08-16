@@ -29,7 +29,14 @@
     "instagram_id": "18126814612743192",
     "generated_at": "2026-08-14T15:00:37.484Z",
     "edition": null,
-    "posted_at": "2026-08-14T15:01:27.176Z"
+    "posted_at": "2026-08-14T15:01:27.176Z",
+    "insights": {
+      "views": 45,
+      "reach": 38,
+      "ig_reels_avg_watch_time": 8465,
+      "ig_reels_video_view_total_time": 338626,
+      "fetched_at": "2026-08-16T05:20:08.047Z"
+    }
   },
   {
     "file": "brief-edition-086",
@@ -45,7 +52,14 @@
     "instagram_id": "18402525283093739",
     "generated_at": "2026-08-14T02:55:24.319Z",
     "edition": 86,
-    "posted_at": "2026-08-14T02:56:06.170Z"
+    "posted_at": "2026-08-14T02:56:06.170Z",
+    "insights": {
+      "views": 36,
+      "reach": 29,
+      "ig_reels_avg_watch_time": 1317,
+      "ig_reels_video_view_total_time": 43485,
+      "fetched_at": "2026-08-16T05:20:08.565Z"
+    }
   },
   {
     "file": "news-20260813-what-is-comex",
@@ -61,7 +75,14 @@
     "instagram_id": "18098329493460148",
     "generated_at": "2026-08-13T15:06:15.625Z",
     "edition": null,
-    "posted_at": "2026-08-13T15:07:06.041Z"
+    "posted_at": "2026-08-13T15:07:06.041Z",
+    "insights": {
+      "views": 104,
+      "reach": 95,
+      "ig_reels_avg_watch_time": 1846,
+      "ig_reels_video_view_total_time": 184669,
+      "fetched_at": "2026-08-16T05:20:09.070Z"
+    }
   },
   {
     "file": "brief-edition-085",
