@@ -1,0 +1,52 @@
+---
+title: "How MCX SPAN Margin Works and Why It Changes During Volatile Markets in India"
+description: "Learn how MCX SPAN margin works in India, why it spikes during volatile markets, and what triggers MCX to revise margin requirements overnight."
+date: "2026-08-17"
+commodity: macro
+tags: ["macro", "mcx", "india", "metals"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["how does mcx span margin work india"]
+---
+
+## Introduction
+
+Understanding how MCX SPAN margin works in India is essential for any trader who has ever woken up to a margin call without a clear sense of why their overnight position suddenly required additional funds. SPAN — Standard Portfolio Analysis of Risk — is the margin methodology MCX uses to calculate the minimum collateral a trader must hold against open futures and options positions, and it recalibrates dynamically as volatility conditions change.
+
+## The Mechanism
+
+SPAN margin on MCX is computed using a risk array model originally developed by the Chicago Mercantile Exchange and licensed globally. The core calculation runs through the following pathway:
+
+1. **Volatility input:** MCX's risk management team feeds current implied and historical volatility of each commodity contract into the SPAN engine — typically updated at end-of-day, but intraday during stressed sessions.
+2. **Scenario scanning:** SPAN simulates 16 price-and-volatility scenarios for each contract — combinations of price moving up or down by a defined range (usually 3σ) and volatility shifting by ±25%.
+3. **Worst-case loss:** The largest loss across all 16 scenarios becomes the **Scan Risk** for that position.
+4. **Inter-commodity credit:** Correlated positions (e.g., gold and silver) receive a partial offset, reducing total margin.
+5. **Final margin:** SPAN Margin = Scan Risk − Inter-commodity Credit + Delivery Margin (if near expiry).
+
+The formula that governs the price range used in scanning is:
+
+> **Price Scan Range = Settlement Price × Volatility (%) × Coverage Factor**
+
+When MCX's risk department increases the coverage factor or feeds in a higher volatility reading, the scan range widens, and every trader holding open positions faces a higher SPAN requirement — sometimes overnight.
+
+## India-Specific Context
+
+India-specific factors create a layer of margin sensitivity that traders on COMEX or LME do not face. MCX contracts are INR-denominated, so rupee depreciation against the dollar directly inflates the INR settlement price of dollar-priced commodities like crude oil, gold, and copper — widening the price scan range even when the dollar-price of the commodity is unchanged. SEBI mandates that exchanges maintain margin coverage at a minimum 99% VaR confidence level, which means MCX must raise SPAN quickly if its backtesting shows recent breaches. Import duty changes on commodities like gold (currently 15% basic customs duty plus 5% AIDC) also create discrete price jumps that feed into volatility calculations. Additionally, MCX circuit filter limits — typically ±4% to ±6% intraday — interact with SPAN by capping observable price moves, which can cause volatility to be slightly understated during limit-hit sessions.
+
+## Historical Episodes
+
+**Gold, 2020:** When global uncertainty spiked in March–April 2020, MCX gold futures moved from approximately ₹40,000 per 10g to over ₹56,000 by August — a move exceeding 40%. MCX revised SPAN margins for gold multiple times during this period, with requirements for a standard 1kg contract at times exceeding ₹1.5 lakh.
+
+**Crude Oil, 2022:** Following Russia's invasion of Ukraine, MCX crude oil futures surged past ₹9,000 per barrel in March 2022 — roughly doubling from ₹4,500 levels seen six months prior. Exchange margins were hiked sharply within days, catching several leveraged traders with inadequate collateral.
+
+**Natural Gas, 2022:** European energy disruption drove MCX natural gas futures from approximately ₹400 to over ₹800 per MMBtu within weeks. MCX imposed additional ad-hoc margins mid-session on multiple occasions during this episode.
+
+## What to Watch
+
+These are the specific signals that precede a SPAN margin revision on MCX:
+
+- **EIA Weekly Petroleum Report** (every Wednesday, 9:00 PM IST) — large inventory surprises drive crude volatility
+- **RBI MPC policy dates** — rupee movement around decisions affects INR-denominated commodity margins
+- **COMEX/LME settlement volatility** — a 2%+ single-session move on global benchmarks historically triggers MCX risk review
+- **MCX margin circulars** — published on MCX website under "Circulars → Risk Management," often released after market hours
+- **India Union Budget date** — import duty revisions on gold and silver cause discrete contract repricing overnight

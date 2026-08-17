@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-17-mcx-span-margin-india",
+    "href": "/articles/2026-08-17-mcx-span-margin-india",
+    "title": "How MCX SPAN Margin Works and Why It Changes During Volatile Markets in India",
+    "description": "Learn how MCX SPAN margin works in India, why it spikes during volatile markets, and what triggers MCX to revise margin requirements overnight.",
+    "excerpt": "Understanding how MCX SPAN margin works in India is essential for any trader who has ever woken up to a margin call without a clear sense of why their overnight position suddenly required additional f",
+    "date": "2026-08-17",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-086",
     "href": "/briefs/edition-086",
