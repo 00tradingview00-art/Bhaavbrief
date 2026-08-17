@@ -10,16 +10,16 @@
       "claimId": "cftc_cot_report__silver"
     },
     "crude": {
-      "rotationIndex": 2,
-      "claimId": "baker_hughes_rig_count__crude"
+      "rotationIndex": 3,
+      "claimId": "cftc_cot_report__crude"
     },
     "copper": {
       "rotationIndex": 0,
       "claimId": "cftc_cot_report__copper"
     },
     "natgas": {
-      "rotationIndex": 2,
-      "claimId": "cftc_cot_report__natgas"
+      "rotationIndex": 0,
+      "claimId": "eia_natural_gas_storage__natgas"
     }
   }
 }
