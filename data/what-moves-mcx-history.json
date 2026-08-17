@@ -1,0 +1,25 @@
+{
+  "lastDate": "2026-08-17",
+  "commodities": {
+    "gold": {
+      "rotationIndex": 0,
+      "claimId": "cftc_cot_report__gold"
+    },
+    "silver": {
+      "rotationIndex": 0,
+      "claimId": "cftc_cot_report__silver"
+    },
+    "crude": {
+      "rotationIndex": 2,
+      "claimId": "baker_hughes_rig_count__crude"
+    },
+    "copper": {
+      "rotationIndex": 0,
+      "claimId": "cftc_cot_report__copper"
+    },
+    "natgas": {
+      "rotationIndex": 2,
+      "claimId": "cftc_cot_report__natgas"
+    }
+  }
+}

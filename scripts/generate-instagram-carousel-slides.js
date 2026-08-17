@@ -8,7 +8,8 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const envFile = join(__dirname, '../.env.local')
+const ROOT = join(__dirname, '..')
+const envFile = join(ROOT, '.env.local')
 if (existsSync(envFile)) {
   for (const line of readFileSync(envFile, 'utf8').split('\n')) {
     const [k, ...v] = line.split('=')
@@ -200,7 +201,57 @@ const COMMODITIES = [
   },
 ]
 
-function drawCommoditySlide(ctx, def, prices, slideNum, total) {
+// ── Claims-sourced insight rotation ─────────────────────────────────────────
+// Replaces the (previously static) per-commodity insight line with a real
+// stat pulled from data/claims.json, rotating week-to-week where more than
+// one claim exists for a commodity. Falls back to the hardcoded `insight`
+// above if claims.json is missing or has no match for that commodity.
+const HISTORY_PATH = join(ROOT, 'data/what-moves-mcx-history.json')
+
+function loadClaims() {
+  const p = join(ROOT, 'data/claims.json')
+  if (!existsSync(p)) return []
+  try { return JSON.parse(readFileSync(p, 'utf8')).claims ?? [] } catch { return [] }
+}
+
+function claimsForCommodity(claims, priceKey) {
+  return claims.filter(c => c.claim_id.endsWith(`__${priceKey}`))
+}
+
+function substituteTemplate(template, values) {
+  return template.replace(/\{(\w+)\}/g, (_, k) => values[k] ?? `{${k}}`)
+}
+
+function loadHistory() {
+  if (!existsSync(HISTORY_PATH)) return {}
+  try { return JSON.parse(readFileSync(HISTORY_PATH, 'utf8')) } catch { return {} }
+}
+
+function pickInsights(claims) {
+  const history = loadHistory()
+  const nextHistory = { lastDate: new Date().toISOString().slice(0, 10), commodities: {} }
+  const insights = {}
+
+  for (const def of COMMODITIES) {
+    const pool = claimsForCommodity(claims, def.priceKey)
+    if (pool.length === 0) continue // keep hardcoded fallback insight
+
+    const lastIdx = history.commodities?.[def.priceKey]?.rotationIndex ?? -1
+    const nextIdx = (lastIdx + 1) % pool.length
+    const claim = pool[nextIdx]
+
+    insights[def.priceKey] = substituteTemplate(claim.statement_template, claim.values)
+    nextHistory.commodities[def.priceKey] = { rotationIndex: nextIdx, claimId: claim.claim_id }
+  }
+
+  return { insights, nextHistory }
+}
+
+function saveHistory(nextHistory) {
+  writeFileSync(HISTORY_PATH, JSON.stringify(nextHistory, null, 2))
+}
+
+function drawCommoditySlide(ctx, def, prices, slideNum, total, insightOverride) {
   ctx.fillStyle = CREAM
   ctx.fillRect(0, 0, W, H)
   drawBrandBar(ctx)
@@ -268,17 +319,21 @@ function drawCommoditySlide(ctx, def, prices, slideNum, total) {
 
   y += 8
 
-  // Insight box
+  // Insight box (claims-sourced stat, sized to fit — these run longer than
+  // the old hardcoded one-liners)
+  ctx.font = bold(17)
+  const insightText  = insightOverride ?? def.insight
+  const insightLines = wrapText(ctx, insightText, W - PAD * 2 - 28).slice(0, 3)
+  const boxH = Math.max(insightLines.length * 24 + 44, 64)
+
   ctx.fillStyle = ACCENT
-  const boxH = 64
   ctx.fillRect(PAD, y, W - PAD * 2, boxH)
   ctx.fillStyle = GOLD
   ctx.fillRect(PAD, y, 4, boxH)
   ctx.fillStyle = INK
   ctx.font = bold(17)
-  const insightLines = wrapText(ctx, def.insight, W - PAD * 2 - 28)
   let iy = y + 22
-  for (const line of insightLines.slice(0, 2)) { ctx.fillText(line, PAD + 18, iy); iy += 24 }
+  for (const line of insightLines) { ctx.fillText(line, PAD + 18, iy); iy += 24 }
 
   drawFooter(ctx, `${slideNum} / ${total}`, 'bhaavbrief.in')
 }
@@ -335,6 +390,10 @@ async function main() {
   const prices = await fetchPrices()
   if (!prices) console.warn('Could not fetch prices — slides will show placeholder')
 
+  const claims = loadClaims()
+  if (claims.length === 0) console.warn('No data/claims.json found — using hardcoded insight fallback')
+  const { insights, nextHistory } = pickInsights(claims)
+
   const TOTAL = 7
 
   // Slide 1 — Cover
@@ -348,12 +407,15 @@ async function main() {
 
   // Slides 2-6 — Commodities
   for (let i = 0; i < COMMODITIES.length; i++) {
+    const def = COMMODITIES[i]
     const canvas = createCanvas(W, H)
-    drawCommoditySlide(canvas.getContext('2d'), COMMODITIES[i], prices, i + 2, TOTAL)
+    drawCommoditySlide(canvas.getContext('2d'), def, prices, i + 2, TOTAL, insights[def.priceKey])
     const out = join(OUT_DIR, `carousel-what-moves-mcx-slide-${i + 2}.jpg`)
     writeFileSync(out, canvas.toBuffer('image/jpeg', { quality: 95 }))
     console.log(`Saved slide ${i + 2}/7: ${out}`)
   }
+
+  saveHistory(nextHistory)
 
   // Slide 7 — CTA
   {
