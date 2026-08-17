@@ -1,0 +1,11 @@
+{
+  "rotationIndex": 9,
+  "lastClaimIds": [
+    "cftc_cot_report__gold",
+    "cftc_cot_report__silver",
+    "cftc_cot_report__crude",
+    "cftc_cot_report__copper",
+    "cftc_cot_report__natgas"
+  ],
+  "lastDate": "2026-08-17"
+}
