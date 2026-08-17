@@ -30,13 +30,13 @@
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": "2026-08-07T13:55:56.022Z",
-    "lastFlashPrice": 1371.1,
+    "lastFlashAt": "2026-08-17T04:06:53.226Z",
+    "lastFlashPrice": 1393.05,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-08-17-09-36-mcx-copper-rallies-1-07-on-broad-metal-strength",
       "2026-08-07-19-25-mcx-copper-falls-0-36-as-precious-metals-surge",
-      "2026-08-06-15-37-mcx-copper-surges-1-34-on-cross-asset-momentum",
-      "2026-08-04-11-32-mcx-copper-rallies-on-cross-asset-strength-momentum"
+      "2026-08-06-15-37-mcx-copper-surges-1-34-on-cross-asset-momentum"
     ]
   },
   "MCX_NATGAS": {
