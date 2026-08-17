@@ -166,7 +166,7 @@
       "id": "natgas-supply-anxiety-heat-demand",
       "title": "Natural Gas Supply Anxiety: Heat Demand vs Storage Draw",
       "startDate": "2026-08-10",
-      "status": "active",
+      "status": "closed",
       "editions": [
         82
       ],
@@ -179,7 +179,9 @@
         "Supply Shock",
         "Seasonal Demand",
         "Henry Hub"
-      ]
+      ],
+      "endDate": "2026-08-17",
+      "outcome": "The natural gas market narrative dissipated after seven days without updates as prices remained below the ₹261.30 key level at ₹255.7, failing to sustain the initial 2.23% surge driven by storage draw concerns."
     }
   ]
 }

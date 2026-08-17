@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 154590,
-    "silver": 236272,
-    "crude": 7878,
-    "copper": 1379,
-    "natgas": 263.4,
+    "gold": 154925,
+    "silver": 237700,
+    "crude": 7887,
+    "copper": 1395,
+    "natgas": 255.7,
     "usdinr": 95.43
   },
-  "lastChecked": "2026-08-14T18:24:01.488Z",
+  "lastChecked": "2026-08-17T03:38:45.604Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,14 +19,16 @@
     "value": "276"
   },
   "lastGeoNews": {
-    "mideast": "Global 2026 oil supply shortfall to deepen as Hormuz reopening remains elusive, ",
+    "mideast": "US-Iran war: Secret shipping through Strait of Hormuz? Report hints at what's ke",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-08-11T11:13:48.691Z",
+  "articlesToday": [
+    "2026-08-17/2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks"
+  ],
+  "lastArticleAt": "2026-08-17T03:39:00.927Z",
   "lastCoveredAt": {
     "crude": "2026-08-11T11:13:48.691Z",
     "silver": "2026-07-28T05:36:23.461Z",
-    "natgas": "2026-07-09T15:45:42.151Z"
+    "natgas": "2026-08-17T03:39:00.927Z"
   }
 }

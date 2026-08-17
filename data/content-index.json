@@ -1,5 +1,27 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
+    "href": "/articles/2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
+    "title": "MCX Nat Gas Crashes 2.92% as Summer Supply Surplus Peaks",
+    "description": "MCX Natural Gas tumbles to ₹256/mmBtu amid seasonal injection glut. Henry Hub weakness signals oversupply; implications for fertilizer, power, CGD margins tighten.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has broken below its 20-SMA of ₹262, closing intraday at ₹256/mmBtu (−2.92%) — the sharpest single-session loss in two weeks. The trigger is Henry Hub's collapse to $2.66",
+    "date": "2026-08-17T03:38:45.917Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Copper",
+      "Henry Hub",
+      "India LNG",
+      "Fertilizer"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 256
+  },
+  {
     "type": "brief",
     "slug": "edition-087",
     "href": "/briefs/edition-087",
