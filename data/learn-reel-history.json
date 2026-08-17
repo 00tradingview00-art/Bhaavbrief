@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "best-time-to-trade-mcx",
+  "lastSlug": "comex-vs-mcx-gold",
   "log": [
+    {
+      "slug": "comex-vs-mcx-gold",
+      "date": "2026-08-17",
+      "file": "public/reels/news-20260817-comex-vs-mcx-gold-price.mp4",
+      "generated_at": "2026-08-17T14:36:45.345Z"
+    },
     {
       "slug": "best-time-to-trade-mcx",
       "date": "2026-08-16",

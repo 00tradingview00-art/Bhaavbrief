@@ -1,5 +1,20 @@
 [
   {
+    "file": "news-20260817-comex-vs-mcx-gold-price",
+    "topic": "COMEX vs MCX Gold Price",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹1,55,600 gold price isn't actually set in Mumbai.",
+    "stat_line": "It's calculated from New York, then taxed 12–13%.",
+    "payoff": "You're not a gold trader. You're a rupee trader wearing gold's mask.",
+    "beat1": "MCX gold follows COMEX prices in dollars, then gets hit with import duties and GST before it reaches your jeweller.",
+    "beat2": "Every ₹1 rupee falls against the dollar, your gold climbs ₹1,000–1,300 per 10 grams—you're trading currency weakness, not just metal.",
+    "beat3": "Budget cuts can wipe ₹5,000–6,000 overnight: July 2024 tariff drop proved it. Watch duty changes, not just price charts.",
+    "instagram_id": null,
+    "generated_at": "2026-08-17T14:36:45.089Z",
+    "edition": null
+  },
+  {
     "file": "brief-edition-087",
     "topic": "Gold Snaps Back to $4449 — War Premium Finds Its Floor",
     "content_type": "macro_trend",
