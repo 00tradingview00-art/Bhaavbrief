@@ -1,50 +1,19 @@
 {
-  "generatedAt": "2026-08-16T01:10:23.935Z",
+  "generatedAt": "2026-08-17T01:08:05.090Z",
   "overallStatus": "yellow",
   "health": {
-    "status": "green",
-    "issues": []
-  },
-  "audit": {
-    "learnIssues": [
+    "status": "yellow",
+    "issues": [
       {
-        "field": "Gold Mini lot size",
-        "currentValue": "100g",
-        "correctValue": "Not specified in ground-truth contract-specs.json; only standard 1kg contract defined",
-        "location": "FAQ_SCHEMA - Gold lot size answer"
-      },
-      {
-        "field": "Gold Mini margin estimate",
-        "currentValue": "approximately ₹55,000–₹75,000",
-        "correctValue": "Cannot verify from provided ground-truth data",
-        "location": "FAQ_SCHEMA - Gold lot size answer"
-      },
-      {
-        "field": "Crude rollover cost estimate",
-        "currentValue": "₹1,000–₹3,000 per lot",
-        "correctValue": "Cannot verify from provided ground-truth data",
-        "location": "FAQ_SCHEMA - Rollover answer"
-      },
-      {
-        "field": "NSE Gold launch date",
-        "currentValue": "November 2023",
-        "correctValue": "Cannot verify as historical data not provided",
-        "location": "FAQ_SCHEMA - NSE vs MCX Gold answer"
-      },
-      {
-        "field": "MCX Gold trading hours cutoff",
-        "currentValue": "11:30 PM IST",
-        "correctValue": "Cannot verify from provided ground-truth data",
-        "location": "FAQ_SCHEMA - NSE vs MCX Gold answer"
-      }
-    ],
-    "investIssues": [],
-    "circularImpact": [
-      {
-        "circular": "Sebi reviews margin framework to improve commodity market efficiency (2026-08-12)",
-        "affectedPage": "Learn page",
-        "change": "Margin estimates and framework may be outdated pending SEBI's margin review announcement; recommend flagging for confirmation of current margin rates"
+        "level": "yellow",
+        "component": "content/briefs",
+        "message": "No brief dated 2026-08-17 or 2026-08-16"
       }
     ]
+  },
+  "audit": {
+    "learnIssues": [],
+    "investIssues": [],
+    "circularImpact": []
   }
 }
