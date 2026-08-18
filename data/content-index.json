@@ -1,5 +1,68 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-088",
+    "href": "/briefs/edition-088",
+    "title": "Oil Climbs to $91 as Fed Fears Cool Gold's War Premium",
+    "description": "Crude rises on geopolitical supply fears while gold retreats as rate-cut hopes fade, splitting commodity markets in two.",
+    "excerpt": "MCX Gold ₹155940 | Crude ₹8063 | USDINR ₹95.59 Yesterday's Edge — Result: Edition #87 watched whether COMEX GOLD would close above 4,448.9. Confirmed ✓, now at 4,453.1. | Commodity | Global Price | US",
+    "date": "2026-08-18T03:01:49.701Z",
+    "edition": "88",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics",
+      "Fed"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-08-18-mcx-commodity-tax-income-tax-india",
+    "href": "/articles/2026-08-18-mcx-commodity-tax-income-tax-india",
+    "title": "MCX Commodity Futures Tax Treatment in India — CTT, Capital Gains and Income Tax Guide",
+    "description": "Understand MCX commodity tax treatment income tax India 2026 — CTT rates, capital gains classification, and how futures profits are taxed under Indian law.",
+    "excerpt": "MCX commodity tax treatment income tax India 2026 rules classify futures profits as non-speculative business income, making them taxable at slab rates with CTT (Commodity Transaction Tax) deductible a",
+    "date": "2026-08-18",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "policy"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
+    "slug": "2026-08-18-mcx-close-18aug2026-energy-leads",
+    "href": "/articles/2026-08-18-mcx-close-18aug2026-energy-leads",
+    "title": "MCX Close 18 Aug: Energy Leads, Metals Fade",
+    "description": "MCX evening close 18 Aug 2026: Crude +1.65%, NatGas +1.78% lead; Silver, Gold slide. COMEX fades overnight.",
+    "excerpt": "Energy dominated MCX's close. MCX Crude rallied ₹8196/bbl, +1.65% on supply-side tightness and production concerns. MCX NatGas climbed ₹262.5/mmBtu, +1.78%, driven by weather-driven demand expectation",
+    "date": "2026-08-17T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Energy Outperform",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "article",
     "slug": "2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
     "href": "/articles/2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
