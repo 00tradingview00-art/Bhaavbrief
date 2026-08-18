@@ -384,9 +384,9 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
       {/* ── MCX Option Chain ── */}
       <div style={{ marginBottom: 32 }}>
         <SectionHeader label="MCX Option Chain" right={
-          <a href="/options" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
+          <Link href="/options" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
             View full chain →
-          </a>
+          </Link>
         } />
         <OptionChain isPro={true} preview />
       </div>

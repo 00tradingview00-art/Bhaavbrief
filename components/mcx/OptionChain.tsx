@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
@@ -229,12 +230,31 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
   // can be wildly wrong — averaging one in unfiltered dragged this number off
   // by tens of points on a real ATM-strike case (2026-07-21, Silver: a clean
   // 37% LIVE call averaged with a stale ~95% put read as "66% today").
-  const atmRows = chain.filter(r => r.isATM)
-  const liveIVs = atmRows
-    .flatMap(r => [r.CE, r.PE])
-    .filter(side => side.tier === 'LIVE' && side.iv != null && side.iv > 0)
-    .map(side => side.iv as number)
-  const liveIV  = liveIVs.length ? parseFloat((liveIVs.reduce((s, v) => s + v, 0) / liveIVs.length).toFixed(2)) : null
+  //
+  // The ATM strike itself is sometimes the illiquid one (zero OI/volume, or a
+  // bad print that fails the no-arbitrage check) while strikes one or two away
+  // trade fine — that produced "no data" headlines even with a healthy chain
+  // (2026-08-18: Gold/Crude ATM strikes both non-LIVE while iVIX, which pools
+  // across many strikes, read normally). Walk outward from the ATM row and use
+  // the nearest strike that has a LIVE-tier side, never averaging non-LIVE data.
+  const atmIdx = chain.findIndex(r => r.isATM)
+  let liveIV: number | null = null
+  let liveIVAtStrike: number | null = null
+  if (atmIdx !== -1) {
+    const order = chain.map((_, i) => i).sort((a, b) => Math.abs(a - atmIdx) - Math.abs(b - atmIdx))
+    for (const idx of order) {
+      const row = chain[idx]
+      const ivs = [row.CE, row.PE]
+        .filter(side => side.tier === 'LIVE' && side.iv != null && side.iv > 0)
+        .map(side => side.iv as number)
+      if (ivs.length) {
+        liveIV = parseFloat((ivs.reduce((s, v) => s + v, 0) / ivs.length).toFixed(2))
+        liveIVAtStrike = row.strike
+        break
+      }
+    }
+  }
+  const liveIVIsExactATM = atmIdx !== -1 && liveIVAtStrike === chain[atmIdx].strike
 
   const [history, setHistory]       = useState<{ date: string; iv: number }[]>([])
   const [histLoading, setHistLoading] = useState(true)
@@ -267,7 +287,14 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
         Volatility — today
       </div>
       {liveIV != null ? (
-        <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{liveIV}%</div>
+        <>
+          <div style={{ fontSize: 28, fontWeight: 600, color: IV_LINE, fontFamily: C.sans, ...numStyle }}>{liveIV}%</div>
+          {!liveIVIsExactATM && (
+            <div style={{ fontSize: 10, color: C.ink4, fontFamily: C.sans, marginTop: 2 }}>
+              ATM strike had no live market — using nearest liquid strike (₹{liveIVAtStrike?.toLocaleString('en-IN')}) instead.
+            </div>
+          )}
+        </>
       ) : (
         <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No volatility data available right now.</div>
       )}
@@ -938,13 +965,13 @@ export default function OptionChain({ isPro, preview = false, initialData = null
 
       {/* ── Footer ── */}
       {preview ? (
-        <a href="/options" style={{
+        <Link href="/options" style={{
           display: 'block', padding: '10px 14px', textAlign: 'center', textDecoration: 'none',
           borderTop: `1px solid ${C.bdr}`, background: C.surf2, color: C.gold,
           fontSize: 12, fontWeight: 600, fontFamily: C.sans,
         }}>
           View full option chain — Greeks, iVIX & Max Pain →
-        </a>
+        </Link>
       ) : (
         <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
           <span>Black-76 · {data ? (data.riskFreeRate * 100).toFixed(1) : '6.5'}% risk-free rate (as of {data?.riskFreeRateAsOf ?? '—'}) · 30s cache</span>
