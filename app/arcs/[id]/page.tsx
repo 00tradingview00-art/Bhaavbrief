@@ -3,6 +3,8 @@ import { Metadata }   from 'next'
 import Link           from 'next/link'
 import { getArcById, getAllArcs } from '@/lib/arcs'
 import { getBrief }   from '@/lib/briefs'
+import { safeJsonLd } from '@/lib/seo'
+import { COMMODITY_PAGE_MAP } from '@/lib/commodityPages'
 
 export const revalidate = 3600
 
@@ -44,8 +46,41 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
   const statusBg     = arc.status === 'active' ? 'var(--up-bg)' : 'var(--surface-3)'
   const statusLabel  = arc.status === 'active' ? `ACTIVE · Day ${arc.latestDay}` : 'RESOLVED'
 
+  const arcUrl = `${BASE_URL}/arcs/${arc.id}`
+  const articleSchema = {
+    '@context':          'https://schema.org',
+    '@type':              'NewsArticle',
+    headline:             arc.title,
+    description:          arc.summary,
+    datePublished:        arc.startDate,
+    dateModified:         arc.endDate ?? arc.startDate,
+    url:                  arcUrl,
+    mainEntityOfPage:     { '@type': 'WebPage', '@id': arcUrl },
+    isAccessibleForFree:  true,
+    inLanguage:           'en-IN',
+    keywords:             [arc.primaryCommodity, ...(arc.tags ?? [])].join(', '),
+    articleSection:       arc.primaryCommodity,
+    author: [{ '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL }],
+    publisher: {
+      '@type': 'Organization', name: 'BhaavBrief', url: BASE_URL,
+      logo: { '@type': 'ImageObject', url: `${BASE_URL}/logo.png`, width: 500, height: 500 },
+    },
+    about: [{ '@type': 'Thing', name: arc.primaryCommodity }],
+  }
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type':    'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',   item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Briefs', item: `${BASE_URL}/briefs` },
+      { '@type': 'ListItem', position: 3, name: arc.title, item: arcUrl },
+    ],
+  }
+
   return (
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '2rem 1.25rem 4rem' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
 
       {/* Breadcrumb */}
       <nav style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: '2rem' }}>
@@ -125,6 +160,13 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
         {arc.summary && (
           <p style={{ fontSize: 14, color: 'var(--ink-3)', lineHeight: 1.65, margin: 0 }}>
             {arc.summary}
+          </p>
+        )}
+
+        {arc.outcome && (
+          <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.65, margin: '10px 0 0', fontWeight: 500 }}>
+            <span style={{ color: 'var(--ink-4)', fontWeight: 400 }}>Outcome: </span>
+            {arc.outcome}
           </p>
         )}
 
@@ -241,6 +283,40 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
           </div>
         )}
       </div>
+
+      {/* Related content — was a single link to /briefs plus nav chrome;
+          adds real destinations for the commodity this arc is about. */}
+      {(() => {
+        const page = COMMODITY_PAGE_MAP[arc.primaryCommodity]
+        if (!page) return null
+        return (
+          <div style={{ marginTop: 32, border: '0.5px solid var(--border)', borderRadius: 4, padding: '1.25rem' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
+              Related
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <Link href={`/commodities/${page.slug}`} style={{
+                fontFamily: 'var(--font-mono)', fontSize: 11,
+                color: 'var(--gold)', textDecoration: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '6px 0', borderBottom: '0.5px solid var(--border)',
+              }}>
+                <span>Why {page.label} Is Moving</span>
+                <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>→</span>
+              </Link>
+              <Link href={`/options/${page.slug}`} style={{
+                fontFamily: 'var(--font-mono)', fontSize: 11,
+                color: 'var(--gold)', textDecoration: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '6px 0',
+              }}>
+                <span>{page.label} Option Chain</span>
+                <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>→</span>
+              </Link>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Back */}
       <div style={{ marginTop: 40 }}>

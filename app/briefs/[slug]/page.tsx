@@ -18,23 +18,7 @@ import MarketIsSayingModule from '@/components/brief/MarketIsSayingModule'
 import WhatKillsItBlock from '@/components/brief/WhatKillsItBlock'
 import EdgeOfDayCallout from '@/components/brief/EdgeOfDayCallout'
 import { safeJsonLd } from '@/lib/seo'
-
-const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
-  'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
-  'MCX Silver':      { slug: 'silver',      label: 'MCX Silver' },
-  'MCX Crude':       { slug: 'crude-oil',   label: 'MCX Crude Oil' },
-  'MCX Copper':      { slug: 'copper',      label: 'MCX Copper' },
-  'MCX Natural Gas': { slug: 'natural-gas', label: 'MCX Natural Gas' },
-}
-
-// Map from commodity page slug → MCX options API instrument key
-const SLUG_TO_INSTRUMENT: Record<string, string> = {
-  'gold':        'GOLD',
-  'silver':      'SILVER',
-  'crude-oil':   'CRUDEOIL',
-  'copper':      'COPPER',
-  'natural-gas': 'NATURALGAS',
-}
+import { COMMODITY_PAGE_MAP, SLUG_TO_INSTRUMENT } from '@/lib/commodityPages'
 
 export const revalidate = 3600
 
