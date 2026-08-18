@@ -67,6 +67,11 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
     title: 'Why MCX Gold Is Moving Today — Live Price & Analysis',
     description: 'MCX gold price live today — why gold is up or down: Fed policy, rupee-dollar moves, COMEX spread and geopolitics. OHLC, import parity and daily intelligence for Indian traders.',
     keywords: [
+      // Verified via Keyword Overview (not just Keyword Gap volume): Commercial
+      // intent, KD52, ~15 referring domains to compete — a real target gated on
+      // Part 2's backlink work, not a quick win from metadata alone.
+      'gold mcx live',
+      'mcx gold live',
       'why is MCX gold moving today',
       'MCX gold price today analysis India',
       'why MCX gold up today',
@@ -88,6 +93,11 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
     title: 'Why MCX Silver Is Moving Today — Live Price & Analysis',
     description: 'MCX silver price live today — why silver is up or down: gold-silver ratio, industrial demand, COMEX moves and rupee impact. OHLC and daily intelligence for Indian traders.',
     keywords: [
+      // Verified via Keyword Overview: "mcx silver live" is Informational/
+      // Commercial intent, KD54, ~15 referring domains to compete; "silver mcx
+      // live" is the lowest-KD (42) of the three real head-term targets found.
+      'mcx silver live',
+      'silver mcx live',
       'why is MCX silver moving today',
       'MCX silver price today analysis India',
       'MCX silver lot size margin 2026',
