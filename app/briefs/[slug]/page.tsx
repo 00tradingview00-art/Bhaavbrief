@@ -456,7 +456,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {optPages.map(p => (
-                    <Link key={p.slug} href={`/options?commodity=${SLUG_TO_INSTRUMENT[p.slug]}`} style={{
+                    <Link key={p.slug} href={`/options/${p.slug}`} style={{
                       fontFamily: 'var(--font-mono)', fontSize: 11,
                       color: '#C8720A', textDecoration: 'none',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',

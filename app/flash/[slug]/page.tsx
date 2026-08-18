@@ -20,9 +20,9 @@ const CAT_STYLES: Record<string, React.CSSProperties> = {
 
 // energy and metals categories map to liquid MCX options instruments;
 // forex and macro don't have a single clear MCX options surface.
-const CATEGORY_TO_INSTRUMENT: Record<string, { key: string; label: string } | null> = {
-  energy:  { key: 'CRUDEOIL', label: 'Crude Oil' },
-  metals:  { key: 'GOLD',     label: 'Gold'      },
+const CATEGORY_TO_INSTRUMENT: Record<string, { slug: string; label: string } | null> = {
+  energy:  { slug: 'crude-oil', label: 'Crude Oil' },
+  metals:  { slug: 'gold',      label: 'Gold'      },
   forex:   null,
   macro:   null,
 }
@@ -177,7 +177,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
         {CATEGORY_TO_INSTRUMENT[flash.category] && (
           <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
             <Link
-              href={`/options?commodity=${CATEGORY_TO_INSTRUMENT[flash.category]!.key}`}
+              href={`/options/${CATEGORY_TO_INSTRUMENT[flash.category]!.slug}`}
               style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}
             >
               Analyze {CATEGORY_TO_INSTRUMENT[flash.category]!.label} Options →
