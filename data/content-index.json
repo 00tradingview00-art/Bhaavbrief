@@ -43,6 +43,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-08-18-mcx-close-18aug2026-energy-leads",
+    "href": "/articles/2026-08-18-mcx-close-18aug2026-energy-leads",
+    "title": "MCX Close 18 Aug: Energy Leads, Metals Fade",
+    "description": "MCX evening close 18 Aug 2026: Crude +1.65%, NatGas +1.78% lead; Silver, Gold slide. COMEX fades overnight.",
+    "excerpt": "Energy dominated MCX's close. MCX Crude rallied ₹8196/bbl, +1.65% on supply-side tightness and production concerns. MCX NatGas climbed ₹262.5/mmBtu, +1.78%, driven by weather-driven demand expectation",
+    "date": "2026-08-17T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Energy Outperform",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
     "href": "/articles/2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks",
     "title": "MCX Nat Gas Crashes 2.92% as Summer Supply Surplus Peaks",
