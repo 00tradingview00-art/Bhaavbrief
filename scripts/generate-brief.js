@@ -8,6 +8,7 @@ import { getRelatedLink } from './lib/commodity-to-learn-slug.js'
 import { resolveEdge, formatEdgeResultBlock, appendToLedger } from './lib/edgeLedger.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { appendGateLogEntry, hashPayload } from './lib/gateLog.mjs'
+import { SEO_TITLE_MAX } from './lib/seo-title.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -612,6 +613,14 @@ async function main() {
   // Inject urlSlug derived from date + title for SEO-friendly URLs
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
   const dateVal    = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+  if (titleMatch?.[1] && titleMatch[1].length > SEO_TITLE_MAX) {
+    // Non-blocking: app/briefs/[slug]/page.tsx already truncates the rendered
+    // <title> tag regardless of source length (see lib/seo.ts buildBriefTitle),
+    // so this can't cause a publish failure — it's a heads-up that the raw
+    // title (still shown in full on the page's <h1> and in OG images) is
+    // longer than ideal, in case that's worth tightening in the prompt.
+    console.warn(`[generate-brief] title is ${titleMatch[1].length} chars (SEO guideline: ${SEO_TITLE_MAX}): "${titleMatch[1]}"`)
+  }
   if (titleMatch?.[1]) {
     const raw = titleMatch[1]
       .toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-')

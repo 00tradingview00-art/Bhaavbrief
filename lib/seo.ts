@@ -3,6 +3,8 @@
  * Centralises all keyword and metadata logic
  */
 
+import { truncateSeoTitle } from '../scripts/lib/seo-title.js'
+
 export const BASE_URL = 'https://bhaavbrief.in'
 
 // High-intent keywords for commodity intelligence in India
@@ -36,16 +38,12 @@ export const CORE_KEYWORDS = {
   ],
 }
 
-// SEO guideline is ~60 chars before Google truncates in the SERP. Brief titles
-// are full AI-generated headlines — trim at a word boundary rather than mid-word.
 // Rendered via title:{absolute} in app/briefs/[slug]/page.tsx so layout.tsx's
-// "%s | BhaavBrief" template suffix doesn't add back the length this removes.
-const SEO_TITLE_MAX = 60
+// "%s | BhaavBrief" template suffix doesn't add back the length truncateSeoTitle
+// removes. Truncation logic lives in scripts/lib/seo-title.js so the plain-Node
+// brief generator can share it too (can't import this .ts file directly).
 export function buildBriefTitle(title: string): string {
-  if (title.length <= SEO_TITLE_MAX) return title
-  const cut = title.slice(0, SEO_TITLE_MAX)
-  const lastSpace = cut.lastIndexOf(' ')
-  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…'
+  return truncateSeoTitle(title)
 }
 
 // Generate keyword-rich description
