@@ -3,6 +3,7 @@ import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
 import Tag from '@/components/Tag'
 import Link from 'next/link'
 import SectionTabs from '@/components/SectionTabs'
+import { safeJsonLd } from '@/lib/seo'
 
 // P-03: was undeclared (full-SSG, only refreshes on redeploy) despite reading
 // live edition data and computing the delayed-edition banner — the exact
@@ -73,7 +74,7 @@ export default async function BriefsPage() {
 
   return (
     <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
 
       {/* Main — briefs list */}
       <main>

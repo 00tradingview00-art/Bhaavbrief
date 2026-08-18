@@ -3,6 +3,7 @@ import { COMMODITY_LABELS } from '@/lib/eventMap'
 import { COMMODITY_ACCENT_COLORS } from '@/lib/commodityTags'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 300
 
@@ -39,7 +40,7 @@ export default async function EventsIndexPage() {
 
   return (
     <div style={{ maxWidth: 780 }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
       <h1 style={{
         fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500,
         color: 'var(--ink)', margin: '0 0 8px',

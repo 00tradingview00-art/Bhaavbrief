@@ -2,6 +2,7 @@ import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 import SectionTabs from '@/components/SectionTabs'
+import { safeJsonLd } from '@/lib/seo'
 
 export const metadata = {
   title: 'MCX Commodity Intelligence Feed — Why Prices Are Moving Today',
@@ -120,7 +121,7 @@ export default async function NewsPage() {
 
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
       <SectionTabs
         active="/news"
         tabs={[

@@ -57,6 +57,14 @@ export function canonicalUrl(path: string): string {
   return `${BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+// Safely serialize a schema.org object for a <script type="application/ld+json"> tag.
+// JSON.stringify escapes JSON syntax but not HTML — a stray "<" in AI-generated text
+// (e.g. a brief title or FAQ answer) can prematurely close the </script> tag and corrupt
+// the block. Escaping "<" to its unicode form prevents that without altering the JSON value.
+export function safeJsonLd(schema: unknown): string {
+  return JSON.stringify(schema).replace(/</g, '\\u003c')
+}
+
 // OpenGraph image URL builder
 export function ogImageUrl(slug?: string): string {
   if (slug) return `${BASE_URL}/og/briefs/${slug}.png`

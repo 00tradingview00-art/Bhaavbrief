@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
+import { safeJsonLd } from '@/lib/seo'
 
 // Allow slugs not pre-rendered at build time (new articles published by GitHub Actions)
 export const dynamicParams = true
@@ -117,7 +118,7 @@ export default async function ArticlePage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
 
       <article style={{ maxWidth: 720 }}>

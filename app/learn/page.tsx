@@ -4,6 +4,7 @@ import Link from 'next/link'
 import LearnPage from '@/components/LearnPage'
 import type { ContractSpecs } from '@/components/LearnPage'
 import SectionTabs from '@/components/SectionTabs'
+import { safeJsonLd } from '@/lib/seo'
 
 export const metadata = {
   title: 'Learn MCX Trading — All Contracts, Lot Sizes, Margins & Taxation',
@@ -212,7 +213,7 @@ export default function Page() {
   const specs = loadContractSpecs()
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(FAQ_SCHEMA) }} />
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '24px 16px 0' }}>
         <SectionTabs
           active="/learn"

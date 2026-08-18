@@ -5,6 +5,7 @@ import Link              from 'next/link'
 import Masthead          from '@/components/Masthead'
 import CopyLinkButton    from '@/components/CopyLinkButton'
 import { getFlash, getAllFlash, getAdjacentFlash } from '@/lib/flash'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 300
 
@@ -116,7 +117,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
       <Masthead />
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>

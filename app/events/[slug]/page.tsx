@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
+import { safeJsonLd } from '@/lib/seo'
 
 export const dynamicParams = true
 // P-03: without this, a slug rendered on-demand (dynamicParams path) caches
@@ -100,7 +101,7 @@ export default async function EventResultPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
 
       <article style={{ maxWidth: 720 }}>
         {/* Breadcrumb */}

@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import fs from 'fs'
 import path from 'path'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 300
 
@@ -130,7 +131,7 @@ export default function MethodologyPage() {
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(METHODOLOGY_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(METHODOLOGY_SCHEMA) }} />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '3rem 1.25rem 5rem' }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>
           Methodology

@@ -17,6 +17,7 @@ import PriceBridgeTable from '@/components/brief/PriceBridgeTable'
 import MarketIsSayingModule from '@/components/brief/MarketIsSayingModule'
 import WhatKillsItBlock from '@/components/brief/WhatKillsItBlock'
 import EdgeOfDayCallout from '@/components/brief/EdgeOfDayCallout'
+import { safeJsonLd } from '@/lib/seo'
 
 const COMMODITY_PAGE_MAP: Record<string, { slug: string; label: string }> = {
   'MCX Gold':        { slug: 'gold',        label: 'MCX Gold' },
@@ -174,8 +175,8 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
 
       <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[

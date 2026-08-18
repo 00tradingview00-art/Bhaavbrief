@@ -9,6 +9,7 @@ import BottomNav from '@/components/BottomNav'
 import TickerStrip from '@/components/TickerStrip'
 import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import { safeJsonLd } from '@/lib/seo'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -122,7 +123,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
         <Nav />
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
         <div style={{ position: 'sticky', top: 56, zIndex: 39 }}>

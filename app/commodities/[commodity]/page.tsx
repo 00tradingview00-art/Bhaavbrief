@@ -13,6 +13,7 @@ import path                 from 'path'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
 import UpcomingEventsForCommodity from '@/components/UpcomingEventsForCommodity'
 import CommodityVisitTracker from '@/components/CommodityVisitTracker'
+import { safeJsonLd } from '@/lib/seo'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -486,8 +487,8 @@ export default async function CommodityPage({ params }: Props) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(speakableSchema) }} />
       <CommodityVisitTracker slug={commodity} name={info.name} />
 
       {/* Breadcrumb */}

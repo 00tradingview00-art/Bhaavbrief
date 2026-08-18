@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/seo'
 
 interface Prices {
   gold: number; silver: number; crude: number; copper: number
@@ -168,9 +169,9 @@ export default function Page() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOWTO_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(HOWTO_SCHEMA) }} />
 
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 16px 64px' }}>
 

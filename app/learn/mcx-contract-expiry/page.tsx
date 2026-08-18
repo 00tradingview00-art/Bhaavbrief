@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/seo'
 
 export const metadata = {
   title: 'MCX Contract Expiry 2026 — Gold, Silver, Crude Oil & Copper Expiry Dates',
@@ -86,8 +87,8 @@ export default function Page() {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(FAQ_SCHEMA) }} />
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 

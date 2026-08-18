@@ -2,6 +2,7 @@ import Link from 'next/link'
 import OptionChain from '@/components/mcx/OptionChain'
 import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getOptionsChain } from '@/lib/options'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 60
 
@@ -103,9 +104,9 @@ export default async function OptionsPage({
 
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBAPP_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(FAQ_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(WEBAPP_SCHEMA) }} />
 
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>

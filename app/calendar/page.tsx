@@ -6,6 +6,7 @@ import CountdownTimer from '@/components/CountdownTimer'
 import CalendarFilterBar from '@/components/CalendarFilterBar'
 import { getUpcomingEvents, getNextHighImpactEvent } from '@/lib/eventMap'
 import { getImpactStats, type EventImpactEntry } from '@/lib/eventImpactStats'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 900
 
@@ -102,8 +103,8 @@ export default function CalendarPage() {
 
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventListSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(eventListSchema) }} />
 
       <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[

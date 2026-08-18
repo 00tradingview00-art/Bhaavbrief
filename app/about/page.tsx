@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import SubscribeForm from '@/components/SubscribeForm'
 import AboutSearch from '@/components/AboutSearch'
 import { getAllBriefs } from '@/lib/briefs'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 60
 
@@ -67,7 +68,7 @@ export default async function AboutPage() {
   const briefs = await getAllBriefs()
   return (
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(ABOUT_SCHEMA) }} />
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '3rem 1.25rem 4rem' }}>
 
         {/* Header */}
