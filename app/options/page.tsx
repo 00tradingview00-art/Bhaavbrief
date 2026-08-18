@@ -144,6 +144,22 @@ export default async function OptionsPage({
       </div>
 
       <OptionChain isPro={true} initialData={initialData} />
+
+      <div style={{ marginTop: 32 }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: 'var(--ink)', margin: '0 0 12px' }}>
+          Frequently Asked Questions
+        </h2>
+        {FAQ_SCHEMA.mainEntity.map(item => (
+          <details key={item.name} style={{ padding: '12px 0', borderBottom: '0.5px solid var(--border)' }}>
+            <summary style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)', cursor: 'pointer' }}>
+              {item.name}
+            </summary>
+            <p style={{ fontSize: 13.5, color: 'var(--ink-3)', lineHeight: 1.7, margin: '8px 0 0' }}>
+              {item.acceptedAnswer.text}
+            </p>
+          </details>
+        ))}
+      </div>
     </div>
   )
 }
