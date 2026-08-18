@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 155930,
-    "silver": 238086,
-    "crude": 8110,
-    "copper": 1383.7,
-    "natgas": 258.1,
+    "gold": 155366,
+    "silver": 235955,
+    "crude": 8146,
+    "copper": 1376.65,
+    "natgas": 258.8,
     "usdinr": 95.61
   },
-  "lastChecked": "2026-08-17T18:03:17.168Z",
+  "lastChecked": "2026-08-18T03:34:06.443Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,9 +22,7 @@
     "mideast": "US-Iran war: Secret shipping through Strait of Hormuz? Report hints at what's ke",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-08-17/2026-08-17-mcx-nat-gas-crashes-2-92-as-summer-supply-surplus-peaks"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-08-17T03:39:00.927Z",
   "lastCoveredAt": {
     "crude": "2026-08-11T11:13:48.691Z",
