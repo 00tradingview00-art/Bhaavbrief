@@ -26,6 +26,16 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // www.bhaavbrief.in and bhaavbrief.in were both indexable, splitting authority
+      // and duplicating pages (e.g. /learn showed as two separate URLs in Semrush).
+      // The primary fix is a Vercel dashboard domain redirect; this is the fallback
+      // for any request that reaches the app on the www host regardless.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.bhaavbrief.in' }],
+        destination: 'https://bhaavbrief.in/:path*',
+        permanent: true,
+      },
       { source: '/articles', destination: '/news', permanent: true },
       // Instagram bio link — sends visitors to markets
       { source: '/ig', destination: '/markets', permanent: false },
