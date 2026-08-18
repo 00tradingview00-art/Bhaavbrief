@@ -36,13 +36,16 @@ export const CORE_KEYWORDS = {
   ],
 }
 
-// Generate commodity-specific page title
-export function buildBriefTitle(title: string, edition: number, commodities: string[]): string {
-  const primaryCommodity = commodities?.[0]
-  if (primaryCommodity) {
-    return `${title} | ${primaryCommodity} Analysis — Edition ${edition}`
-  }
-  return `${title} | BhaavBrief Edition ${edition}`
+// SEO guideline is ~60 chars before Google truncates in the SERP. Brief titles
+// are full AI-generated headlines — trim at a word boundary rather than mid-word.
+// Rendered via title:{absolute} in app/briefs/[slug]/page.tsx so layout.tsx's
+// "%s | BhaavBrief" template suffix doesn't add back the length this removes.
+const SEO_TITLE_MAX = 60
+export function buildBriefTitle(title: string): string {
+  if (title.length <= SEO_TITLE_MAX) return title
+  const cut = title.slice(0, SEO_TITLE_MAX)
+  const lastSpace = cut.lastIndexOf(' ')
+  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…'
 }
 
 // Generate keyword-rich description
