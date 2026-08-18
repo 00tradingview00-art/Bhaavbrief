@@ -65,7 +65,7 @@ export default async function BriefsPage() {
         itemListElement: briefs.slice(0, 20).map((b, i) => ({
           '@type':   'ListItem',
           position:  i + 1,
-          url:       `https://bhaavbrief.in/briefs/${b.slug}`,
+          url:       `https://bhaavbrief.in/briefs/${b.urlSlug}`,
           name:      b.title,
         })),
       },
@@ -109,7 +109,7 @@ export default async function BriefsPage() {
           briefs.map((brief) => (
             <Link
               key={brief.slug}
-              href={`/briefs/${brief.slug}`}
+              href={`/briefs/${brief.urlSlug}`}
               style={{ display: 'block', textDecoration: 'none', padding: '20px 0', borderBottom: '1px solid var(--border)' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
