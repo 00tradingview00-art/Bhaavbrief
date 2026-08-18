@@ -40,6 +40,16 @@ export const revalidate = 3600
 
 const BASE_URL = 'https://bhaavbrief.in'
 
+// SEO guideline is ~60 chars before Google truncates in the SERP. Brief titles are
+// full AI-generated headlines — trim at a word boundary rather than mid-word.
+const SEO_TITLE_MAX = 60
+function truncateSeoTitle(title: string): string {
+  if (title.length <= SEO_TITLE_MAX) return title
+  const cut = title.slice(0, SEO_TITLE_MAX)
+  const lastSpace = cut.lastIndexOf(' ')
+  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…'
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
@@ -48,7 +58,11 @@ export async function generateMetadata(
   if (!brief) return { title: 'Brief not found' }
 
   const title       = brief.title
-  const seoTitle    = `${brief.title} — MCX Outlook ${formatDate(brief.date)}`
+  // Render-time <title> fix: dropped the "— MCX Outlook {date}" suffix (already visible
+  // on-page via <time> and in the breadcrumb) and use { absolute } to skip layout.tsx's
+  // "%s | BhaavBrief" template suffix — together these were pushing rendered titles to
+  // 84–119 chars across all 87 briefs. OG/Twitter titles keep the full untruncated title.
+  const seoTitle    = truncateSeoTitle(brief.title)
   const description = brief.description || brief.summary || `MCX commodity intelligence — ${(brief.tags ?? []).join(', ')} analysis for Indian traders.`
   const url         = `${BASE_URL}/briefs/${brief.urlSlug}`
 
@@ -61,7 +75,7 @@ export async function generateMetadata(
   const ogImage = `${BASE_URL}/api/og?${ogParams}`
 
   return {
-    title: seoTitle,
+    title: { absolute: seoTitle },
     description,
     alternates: { canonical: url },
     openGraph: {
