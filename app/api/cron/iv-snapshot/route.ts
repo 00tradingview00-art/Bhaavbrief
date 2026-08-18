@@ -7,10 +7,36 @@ export const dynamic  = 'force-dynamic'
 
 /**
  * Daily EOD snapshot of ATM implied volatility, per MCX instrument.
- * ATM IV = average of the ATM strike's Call IV and Put IV (nearest-expiry chain).
- * Written to a Redis hash `iv-hist:{instrument}` keyed by IST trading date,
- * so /api/options/iv-history can serve a 5/10/30/60-day series with zero backfill lag.
+ * ATM IV = average of the nearest LIVE-tier strike's Call IV and Put IV
+ * (nearest-expiry chain). Written to a Redis hash `iv-hist:{instrument}` keyed
+ * by IST trading date, so /api/options/iv-history can serve a 5/10/30/60-day
+ * series with zero backfill lag.
  */
+
+// Mirrors the client-side fallback in components/mcx/OptionChain.tsx
+// (IVHistoryChart): the ATM strike's own IV is only trustworthy when at least
+// one side classified LIVE (traded today, tight two-sided spread) — a
+// STALE-tier side still gets a Black-76 IV computed from a thin/stale quote
+// and can be wildly wrong (2026-07-21, Silver: a clean 37% LIVE call averaged
+// with a stale ~95% put read as "66%"). This route previously averaged
+// CE.iv/PE.iv straight off the ATM row with no tier check at all, so a bad
+// ATM print could get written into Redis permanently rather than just
+// flashing on one page load. Walk outward from the ATM row to the nearest
+// strike with a LIVE side instead of averaging non-LIVE data.
+function nearestLiveATMIV(chain: Awaited<ReturnType<typeof getOptionsChain>>['chain']): number | null {
+  const atmIdx = chain.findIndex(r => r.isATM)
+  if (atmIdx === -1) return null
+
+  const order = chain.map((_, i) => i).sort((a, b) => Math.abs(a - atmIdx) - Math.abs(b - atmIdx))
+  for (const idx of order) {
+    const row = chain[idx]
+    const ivs = [row.CE, row.PE]
+      .filter(side => side.tier === 'LIVE' && side.iv != null && side.iv > 0)
+      .map(side => side.iv as number)
+    if (ivs.length) return parseFloat((ivs.reduce((s, v) => s + v, 0) / ivs.length).toFixed(2))
+  }
+  return null
+}
 
 // Most recent stored IV for an instrument, or null if none exists yet.
 async function mostRecentIV(instrument: string): Promise<number | null> {
@@ -55,23 +81,19 @@ export async function GET(req: Request) {
         continue
       }
 
-      const atmIVs = chain
-        .filter(r => r.isATM)
-        .flatMap(r => [r.CE.iv, r.PE.iv])
-        .filter((v): v is number => v != null && v > 0)
+      const atmIV = nearestLiveATMIV(chain)
 
-      if (!atmIVs.length) {
+      if (atmIV == null) {
         const carried = await mostRecentIV(instrument)
         if (carried != null) {
           await redisCommand('hset', `iv-hist:${instrument}`, date, String(carried))
-          results[instrument] = `carried-forward: ${carried} (no ATM IV today)`
+          results[instrument] = `carried-forward: ${carried} (no LIVE-tier ATM IV today)`
         } else {
-          results[instrument] = 'skipped (no ATM IV, no prior history to carry forward)'
+          results[instrument] = 'skipped (no LIVE-tier ATM IV, no prior history to carry forward)'
         }
         continue
       }
 
-      const atmIV = parseFloat((atmIVs.reduce((s, v) => s + v, 0) / atmIVs.length).toFixed(2))
       await redisCommand('hset', `iv-hist:${instrument}`, date, String(atmIV))
       results[instrument] = atmIV
     } catch (e) {
