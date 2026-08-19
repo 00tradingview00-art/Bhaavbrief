@@ -41,6 +41,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-19-mcx-close-19aug2026-natgas-weather",
+    "href": "/articles/2026-08-19-mcx-close-19aug2026-natgas-weather",
+    "title": "MCX Close 19 Aug: NatGas Surges on Weather Data",
+    "description": "19 Aug 2026: NatGas +2.23%, Gold +2.43% lead MCX rally. COMEX Gold extends +4.23% overnight. Overnight watch: US crude inventory & NatGas storage update.",
+    "excerpt": "NatGas dominated MCX's final hour, surging ₹270.7/mmBtu (+2.23%) on weather forecast revisions signaling higher cooling demand across North America. Gold rallied alongside, closing ₹158010/10g (+2.43%",
+    "date": "2026-08-18T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-088",
     "href": "/briefs/edition-088",
