@@ -138,7 +138,14 @@ jobs:
       - name: Generate Instagram card
         env:
           EDITION: ${{ steps.edition.outputs.number }}
-        run: node scripts/generate-instagram-card.js
+        run: |
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ ! -f "$BRIEF" ]; then
+            echo "No new brief generated — skipping Instagram card"
+            exit 0
+          fi
+          node scripts/generate-instagram-card.js
         continue-on-error: true
 
       - name: Generate P&L impact card
@@ -188,7 +195,25 @@ jobs:
               exit 1
             fi
           done
-          echo "published=true" >> $GITHUB_OUTPUT
+          # A non-empty diff doesn't mean a new article was published — the
+          # edition counter (Get next edition number) just scans the highest
+          # existing file and always returns last+1 with no memory of "already
+          # tried and skipped today", so a second same-day trigger recomputes
+          # the same number generate-brief.js already declined to write. That
+          # run still has a real diff to commit (market-snapshot.json/P&L card
+          # refresh with live prices) and used to fall through to here and set
+          # published=true anyway, which fired the newsletter/Instagram/reel
+          # steps for an article that was never written (2026-08-19: caught
+          # when a redundant trigger left "Brief not found" failures in
+          # Generate Instagram card / Post to Instagram / Generate brief reel).
+          PADDED=$(printf '%03d' $EDITION)
+          BRIEF="content/briefs/edition-${PADDED}.mdx"
+          if [ -f "$BRIEF" ]; then
+            echo "published=true" >> $GITHUB_OUTPUT
+          else
+            echo "Commit was data-only (no new brief article) — not marking published"
+            echo "published=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Wait for Vercel deploy then send newsletter
         if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
