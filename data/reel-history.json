@@ -1,5 +1,21 @@
 [
   {
+    "file": "brief-edition-089",
+    "topic": "Silver Drops 4.5% as Oil Climbs — The Premium is Splitting",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Silver's falling—but your import bill just got messier.",
+    "stat_line": "Silver -4.5%, oil +2.3%, premium splits.",
+    "payoff": "You were right on war risk. Your hedge just stopped talking to your portfolio.",
+    "beat1": "Silver dropped ₹10,609 per kg overnight as oil climbed—breaking a three-week correlation that protected both together.",
+    "beat2": "Oil's geopolitical floor held while industrial demand for silver evaporated; Fed rate fears killed the carry trade together.",
+    "beat3": "Watch COMEX silver defend $63.11 today; a close below signals industrial buyers have truly stepped back.",
+    "instagram_id": "17873589795562406",
+    "generated_at": "2026-08-19T03:30:02.037Z",
+    "edition": 89,
+    "posted_at": "2026-08-19T03:30:42.788Z"
+  },
+  {
     "file": "news-20260818-mcx-gold-vs-gold-etf",
     "topic": "MCX Gold vs Gold ETF",
     "content_type": "explainer",
@@ -29,7 +45,14 @@
     "instagram_id": "17987329505892758",
     "generated_at": "2026-08-18T03:09:02.364Z",
     "edition": 88,
-    "posted_at": "2026-08-18T03:09:44.923Z"
+    "posted_at": "2026-08-18T03:09:44.923Z",
+    "insights": {
+      "views": 24,
+      "reach": 23,
+      "ig_reels_avg_watch_time": 3156,
+      "ig_reels_video_view_total_time": 75758,
+      "fetched_at": "2026-08-19T03:22:56.446Z"
+    }
   },
   {
     "file": "news-20260817-comex-vs-mcx-gold-price",
