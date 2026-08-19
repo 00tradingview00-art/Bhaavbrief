@@ -41,8 +41,14 @@ function parseInstrumentsCsv(csv) {
 const today = new Date(); today.setHours(0, 0, 0, 0)
 
 function frontMonth(instruments, name) {
+  // Strictly > today, not >=: a contract expiring today is what
+  // fetch-snapshot.mjs's getExpiredCoreInstruments() already treats as
+  // expired (expiry <= today). Using >= here picked that same expiring
+  // contract right back (it's still the earliest future-or-today expiry),
+  // so on the exact expiry date this and the fail-fast check disagreed
+  // forever — the rollover ran clean but never actually rolled.
   return instruments
-    .filter(i => i.name === name && new Date(i.expiry) >= today)
+    .filter(i => i.name === name && new Date(i.expiry) > today)
     .sort((a, b) => new Date(a.expiry) - new Date(b.expiry))[0] ?? null
 }
 
