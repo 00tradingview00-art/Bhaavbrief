@@ -16,9 +16,9 @@
     "expiry": "2026-09-04"
   },
   "crude": {
-    "token": 143610119,
-    "symbol": "CRUDEOIL26AUGFUT",
-    "expiry": "2026-08-19"
+    "token": 144870151,
+    "symbol": "CRUDEOIL26SEPFUT",
+    "expiry": "2026-09-21"
   },
   "copper": {
     "token": 145620743,
@@ -46,11 +46,11 @@
     "expiry": "2026-08-31"
   },
   "nickel": {
-    "token": 145622279,
-    "symbol": "NICKEL26AUGFUT",
-    "expiry": "2026-08-19"
+    "token": 146253831,
+    "symbol": "NICKEL26SEPFUT",
+    "expiry": "2026-09-16"
   },
-  "updatedAt": "2026-08-19T03:18:13.465Z",
+  "updatedAt": "2026-08-19T03:22:07.242Z",
   "currencies": {
     "usdinr": {
       "token": 282371,
