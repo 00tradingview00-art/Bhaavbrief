@@ -10,13 +10,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-08-19T04:03:34.989Z",
-    "lastFlashPrice": 229594,
+    "lastFlashAt": "2026-08-19T14:05:24.329Z",
+    "lastFlashPrice": 235358,
     "lastRoundLevel": 230000,
     "recentFlashIds": [
+      "2026-08-19-19-35-mcx-silver-rallies-1-26-on-risk-on-momentum",
       "2026-08-19-09-33-mcx-silver-falls-1-22-as-recovery-momentum-stalls",
-      "2026-08-13-21-44-mcx-silver-slips-1-23-as-broader-commodity-retreat-take",
-      "2026-08-12-15-08-mcx-silver-breaks-240000-round-level-commodity-rally-mo"
+      "2026-08-13-21-44-mcx-silver-slips-1-23-as-broader-commodity-retreat-take"
     ]
   },
   "MCX_CRUDE": {
