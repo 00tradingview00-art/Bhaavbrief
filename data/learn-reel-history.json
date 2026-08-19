@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "gold-etf-vs-mcx-gold",
+  "lastSlug": "how-much-money-to-start-mcx-trading",
   "log": [
+    {
+      "slug": "how-much-money-to-start-mcx-trading",
+      "date": "2026-08-19",
+      "file": "public/reels/news-20260819-how-much-money-to-start-mcx-trading.mp4",
+      "generated_at": "2026-08-19T14:43:39.701Z"
+    },
     {
       "slug": "gold-etf-vs-mcx-gold",
       "date": "2026-08-18",
