@@ -29,7 +29,7 @@ function loadCurrentMyth() {
     process.exit(1)
   }
   const hist = JSON.parse(readFileSync(histPath, 'utf8'))
-  const slug = process.env.TOPIC ?? hist.lastSlug
+  const slug = process.env.TOPIC || hist.lastSlug
   if (!slug) {
     console.error('No topic slug in history or TOPIC env var')
     process.exit(1)
