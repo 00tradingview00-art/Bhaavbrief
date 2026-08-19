@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-19-mcx-circuit-breaker-limit-india",
+    "href": "/articles/2026-08-19-mcx-circuit-breaker-limit-india",
+    "title": "How MCX Circuit Breaker Limits Work and What Happens When a Commodity Hits the Limit",
+    "description": "Learn how MCX circuit breaker limit works in India, what triggers a halt, and what happens to commodity prices when the limit is hit.",
+    "excerpt": "Understanding how the MCX circuit breaker limit works in India is essential for any trader or merchant holding open positions in gold, silver, crude oil, or base metals. When a commodity contract move",
+    "date": "2026-08-19",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-088",
     "href": "/briefs/edition-088",

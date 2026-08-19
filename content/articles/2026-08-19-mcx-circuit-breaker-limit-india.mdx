@@ -1,0 +1,60 @@
+---
+title: "How MCX Circuit Breaker Limits Work and What Happens When a Commodity Hits the Limit"
+description: "Learn how MCX circuit breaker limit works in India, what triggers a halt, and what happens to commodity prices when the limit is hit."
+date: "2026-08-19"
+commodity: macro
+tags: ["macro", "mcx", "india", "metals"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["how does mcx circuit breaker limit work india"]
+---
+
+## Introduction
+
+Understanding how the MCX circuit breaker limit works in India is essential for any trader or merchant holding open positions in gold, silver, crude oil, or base metals. When a commodity contract moves beyond a pre-set percentage threshold within a single session, MCX activates a price band mechanism that temporarily halts or restricts further trading.
+
+## The Mechanism
+
+MCX operates under a tiered circuit breaker system mandated by SEBI. Each commodity contract carries a predefined daily price limit — typically expressed as a percentage of the previous day's settlement price. For most metals, this sits at ±3% to ±6%, while crude oil contracts can carry limits up to ±5%.
+
+The transmission works as follows:
+
+1. **Trigger**: The contract's last traded price (LTP) touches the upper or lower circuit limit.
+2. **First halt**: Trading pauses for 15 minutes. MCX resets the band by expanding it — usually by an additional 1–3 percentage points.
+3. **Second breach**: If price again hits the expanded limit, a second 15-minute halt is called.
+4. **Final cap**: If the expanded band is breached a third time, trading in that contract stops for the remainder of the session at the final circuit level. No further orders execute beyond that price.
+
+The circuit price itself is calculated as:
+
+> **Circuit Price = Previous Day Settlement Price × (1 ± Circuit Limit %)**
+
+For agri-commodities under SEBI's special provisions, the percentage bands are tighter and the expansion steps are smaller, reflecting their sensitivity to domestic food inflation policy.
+
+## India-Specific Context
+
+India's MCX prices do not mirror global benchmarks in real time — several structural layers sit between COMEX gold or NYMEX crude and what an Indian trader sees on screen.
+
+The import parity price for gold, for instance, is calculated as:
+
+> **MCX Gold Price ≈ COMEX Price × USD/INR Rate × (1 + Import Duty %) × (1 + GST %)**
+
+Currently, gold carries a 15% import duty and 3% GST, meaning a 1% move in COMEX or a 1% rupee depreciation creates an amplified INR price move. For crude oil, the MCX contract references NYMEX WTI, converted at the prevailing USD/INR rate, with no import duty buffer but significant state-level cess affecting downstream sentiment. SEBI's commodity derivatives regulations also prohibit certain participants — including banks — from freely hedging on MCX, which can reduce liquidity precisely when circuits are most likely to fire.
+
+## Historical Episodes
+
+In March 2020, MCX crude oil futures hit lower circuits repeatedly as global demand collapsed during COVID-19 lockdowns. The April 2020 WTI negative-price event caused MCX crude to fall approximately 30–35% within days, triggering circuit halts across multiple sessions before MCX revised its settlement framework.
+
+In 2022, following Russia's invasion of Ukraine, MCX natural gas futures surged over 20% in a compressed two-week window, hitting upper circuits on several consecutive days as European supply anxiety fed through USD/INR conversion.
+
+In 2023, gold on MCX breached its upper circuit intraday on at least two occasions when the rupee depreciated sharply alongside a spike in COMEX prices, with single-session moves exceeding ₹1,500 per 10 grams.
+
+## What to Watch
+
+These specific data points signal that the MCX circuit breaker limit mechanism is under stress:
+
+- **USD/INR spot rate** — sharp intraday moves of ₹0.50 or more amplify import parity prices immediately
+- **RBI MPC meeting dates** — rate decisions shift rupee volatility windows
+- **NYMEX/COMEX settlement times** — MCX prices gap at opening when overnight moves are large
+- **EIA weekly inventory report** (every Wednesday, 8:00 PM IST) — primary crude circuit trigger
+- **SEBI's commodity circuit limit circulars** — periodically revised; check before major macro events
+- **MCX daily margin report** — rising margins often precede circuit-prone sessions
