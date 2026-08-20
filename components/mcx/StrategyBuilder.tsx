@@ -525,6 +525,10 @@ export default function StrategyBuilder({
   const [riskBudget,    setRiskBudget]    = useState('')
   const [briefEdge, setBriefEdge] = useState<BriefEdge | null>(null)
   const [copied,    setCopied]    = useState(false)
+  const [liveMargin,       setLiveMargin]       = useState<{ total: number; span: number | null; exposure: number | null } | null>(null)
+  const [liveMarginLoading, setLiveMarginLoading] = useState(false)
+  const [liveMarginFailed,  setLiveMarginFailed]  = useState(false)
+  const marginCacheRef = useRef<Record<string, { total: number; span: number | null; exposure: number | null }>>({})
   const [events,     setEvents]     = useState<EventMapEntry[]>([])
   const [targetDate, setTargetDate] = useState<string | null>(null)  // null = "now"
   // Cross-instrument/cross-expiry chain data for My Strategies P&L, keyed by
@@ -626,6 +630,47 @@ export default function StrategyBuilder({
     }, 60000)
     return () => clearInterval(id)
   }, [instrument, expiry, fetchData])
+
+  // Real exchange margin for the current legs, via Kite's basket margin
+  // endpoint (SPAN + exposure with spread/hedge benefit already netted in —
+  // not an approximation). Only worth calling when the position could
+  // plausibly need margin: any futures leg (margin applies regardless of buy/
+  // sell direction), or any short option leg — a pure long strategy's only
+  // risk is the premium already shown as Net Debit. Debounced, and cached per
+  // exact leg signature so flipping between two already-seen states doesn't
+  // re-fire.
+  useEffect(() => {
+    setLiveMargin(null)
+    setLiveMarginFailed(false)
+    const needsMargin = legs.some(l => l.type === 'FUT' || l.action === 'SELL')
+    if (!needsMargin || !expiry) return
+
+    const key = `${instrument}:${expiry}:${JSON.stringify(legs.map(l => [l.strike, l.type, l.action, l.qty]))}`
+    const cached = marginCacheRef.current[key]
+    if (cached) { setLiveMargin(cached); return }
+
+    let cancelled = false
+    setLiveMarginLoading(true)
+    const timer = setTimeout(() => {
+      fetch('/api/options/strategy-margin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instrument, expiry,
+          legs: legs.map(l => ({ strike: l.strike, type: l.type, action: l.action, qty: l.qty })),
+        }),
+      })
+        .then(res => { if (!res.ok) throw new Error('unavailable'); return res.json() })
+        .then((d: { total: number; span: number | null; exposure: number | null }) => {
+          if (cancelled) return
+          marginCacheRef.current[key] = d
+          setLiveMargin(d)
+        })
+        .catch(() => { if (!cancelled) setLiveMarginFailed(true) })
+        .finally(() => { if (!cancelled) setLiveMarginLoading(false) })
+    }, 500)
+    return () => { cancelled = true; clearTimeout(timer) }
+  }, [legs, instrument, expiry])
 
   // Load saved strategies from localStorage on mount
   useEffect(() => { setSaved(loadSaved()) }, [])
@@ -1395,10 +1440,25 @@ export default function StrategyBuilder({
                   sub:   `per 1 lot (×${lotSize})`,
                   color: 'inherit',
                 },
-                ...(legs.some(l => l.type === 'FUT') ? [{
+                ...(liveMargin && liveMargin.total > 0 ? [{
+                  label: 'Margin Needed',
+                  value: `₹${fmt(Math.round(liveMargin.total))}`,
+                  sub:   'live — SPAN + exposure, spread benefit applied',
+                  color: 'inherit',
+                }] : liveMarginLoading ? [{
+                  label: 'Margin Needed',
+                  value: 'Calculating…',
+                  sub:   '',
+                  color: 'inherit',
+                }] : liveMarginFailed && legs.some(l => l.type === 'FUT') ? [{
                   label: 'Approx Margin',
                   value: marginByInstrument?.[instrument] ?? '—',
-                  sub:   'futures leg — SPAN + exposure',
+                  sub:   '≈ typical futures margin — live margin unavailable',
+                  color: 'inherit',
+                }] : liveMarginFailed ? [{
+                  label: 'Margin Needed',
+                  value: 'Unavailable right now',
+                  sub:   '',
                   color: 'inherit',
                 }] : []),
                 {
@@ -1448,7 +1508,7 @@ export default function StrategyBuilder({
                 <div key={s.label}
                   style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
                   <div style={{ color: '#6b7280', fontSize: 13, marginBottom: 2 }}>
-                    {s.label === 'Approx Margin'
+                    {s.label === 'Approx Margin' || s.label === 'Margin Needed'
                       ? <Link href="/learn/mcx-margin-calculation" style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{s.label}</Link>
                       : s.label}
                   </div>

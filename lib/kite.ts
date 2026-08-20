@@ -40,6 +40,24 @@ export interface KiteQuote {
   }
 }
 
+export interface KiteBasketOrder {
+  exchange:          string
+  tradingsymbol:     string
+  transaction_type:  'BUY' | 'SELL'
+  variety:           string
+  product:           string
+  order_type:        string
+  quantity:          number
+  price:             number
+  trigger_price:     number
+}
+
+export interface KiteBasketMargin {
+  total:    number
+  span:     number | null
+  exposure: number | null
+}
+
 export interface InstrumentInfo {
   token:  number
   symbol: string
@@ -134,6 +152,37 @@ export class KiteClient {
   static changePct(quote: KiteQuote): number {
     if (!quote.ohlc?.close || quote.ohlc.close === 0) return 0
     return ((quote.last_price - quote.ohlc.close) / quote.ohlc.close) * 100
+  }
+
+  // ── Basket Margin ─────────────────────────────────────────────────────────────
+  // Real exchange-computed SPAN + exposure margin for a set of order legs, with
+  // spread/hedge benefit already netted in (final.total) — not an approximation.
+  // mode=compact strips the per-leg/charges breakdown we don't need.
+
+  async basketMargin(orders: KiteBasketOrder[]): Promise<KiteBasketMargin> {
+    if (!orders.length) throw new Error('No legs to price')
+
+    const res = await fetch(`${KITE_BASE}/margins/basket?mode=compact`, {
+      method: 'POST',
+      headers: {
+        'X-Kite-Version': KITE_V,
+        'Authorization': `token ${this.apiKey}:${this.accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orders),
+      signal: AbortSignal.timeout(8000),
+    })
+
+    if (res.status === 403) throw new Error('Kite access token expired — run kite-morning-auth.js')
+    if (!res.ok)            throw new Error(`Kite margin API: ${res.status}`)
+
+    const data = await res.json()
+    if (data.status !== 'success') throw new Error(data.message ?? 'Margin calculation failed')
+
+    const final = data.data?.final
+    if (!final || typeof final.total !== 'number') throw new Error('Unexpected margin response shape')
+
+    return { total: final.total, span: final.span ?? null, exposure: final.exposure ?? null }
   }
 
   // ── Historical Data ──────────────────────────────────────────────────────────
