@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 158250,
-    "silver": 239549,
-    "crude": 8093,
+    "gold": 158375,
+    "silver": 239848,
+    "crude": 8094,
     "copper": 1374,
-    "natgas": 267.5,
+    "natgas": 267.7,
     "usdinr": 95.76
   },
-  "lastChecked": "2026-08-20T04:59:51.624Z",
+  "lastChecked": "2026-08-20T05:03:17.318Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-08-07",
-    "value": "276"
+    "period": "2026-08-14",
+    "value": "230"
   },
   "lastGeoNews": {
     "mideast": "China's state shippers deploy oil tankers outside Gulf, avoid chokepoints, sourc",
