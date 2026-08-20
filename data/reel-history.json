@@ -1,5 +1,21 @@
 [
   {
+    "file": "brief-edition-090",
+    "topic": "Gold Surges $183 Overnight — Safe-Haven Bid Overwhelms Oil Noise",
+    "content_type": "price_move",
+    "mood": "VOLATILE",
+    "hook_caption": "Your gold just got ₹2,200 more expensive overnight.",
+    "stat_line": "$183 safe-haven bid in one session.",
+    "payoff": "You were right on geopolitics. Your hedge just stopped being optional.",
+    "beat1": "COMEX gold jumped $183 to $4,549/oz as Middle East tensions flared—your MCX gold feels that pressure at open today.",
+    "beat2": "War risk sends money into gold, not away from it—even crude climbed alongside, proving fear trumps oil narratives.",
+    "beat3": "Watch if COMEX holds above $4,549 at US close; drop below $4,450 signals short-covering, not real safe-haven demand.",
+    "instagram_id": "18610680988065470",
+    "generated_at": "2026-08-20T03:01:05.055Z",
+    "edition": 90,
+    "posted_at": "2026-08-20T03:01:42.553Z"
+  },
+  {
     "file": "news-20260819-how-much-money-to-start-mcx-trading",
     "topic": "How Much Money to Start MCX Trading",
     "content_type": "explainer",
@@ -45,7 +61,14 @@
     "instagram_id": "18458923660189389",
     "generated_at": "2026-08-18T14:41:51.564Z",
     "edition": null,
-    "posted_at": "2026-08-18T14:42:36.712Z"
+    "posted_at": "2026-08-18T14:42:36.712Z",
+    "insights": {
+      "views": 34,
+      "reach": 29,
+      "ig_reels_avg_watch_time": 1583,
+      "ig_reels_video_view_total_time": 49090,
+      "fetched_at": "2026-08-20T02:53:44.556Z"
+    }
   },
   {
     "file": "brief-edition-088",
