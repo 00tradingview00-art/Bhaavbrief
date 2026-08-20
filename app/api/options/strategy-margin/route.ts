@@ -61,7 +61,6 @@ export async function POST(request: Request) {
       .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
       .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())[0]
 
-    const lotSize = MCX_INSTRUMENTS[instrument].lotSize
     const orders: KiteBasketOrder[] = []
 
     for (const leg of legs as LegInput[]) {
@@ -85,7 +84,7 @@ export async function POST(request: Request) {
         variety:           'regular',
         product:            'NRML',
         order_type:         'MARKET',
-        quantity:           leg.qty * lotSize,
+        quantity:           leg.qty,
         price:              0,
         trigger_price:      0,
       })
