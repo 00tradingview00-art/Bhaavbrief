@@ -41,6 +41,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-20-mcx-close-20aug2026-natgas-precious-metals",
+    "href": "/articles/2026-08-20-mcx-close-20aug2026-natgas-precious-metals",
+    "title": "MCX Close 20Aug: NatGas Breaks, Precious Metals Rally",
+    "description": "20 Aug 2026: NatGas fell 3.14% to ₹262.3, while Silver surged 2.77% to ₹243350. COMEX extends gains overnight.",
+    "excerpt": "Natural Gas led the sell-off, closing at ₹262.3/mmBtu, down 3.14% from the previous close. Silver reversed weakness to post the session's strongest gain, closing at ₹243350/kg, up 2.77%. Crude Oil fol",
+    "date": "2026-08-19T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Natural Gas",
+      "Silver",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-089",
     "href": "/briefs/edition-089",
