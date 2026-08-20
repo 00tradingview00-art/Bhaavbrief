@@ -211,7 +211,13 @@ export function computeMaxProfitLoss(payoff: PayoffPoint[]): MaxProfitLoss {
   return { maxProfit, maxLoss }
 }
 
-// Net cost of the strategy in points (positive = debit, negative = credit)
+// Net cost of the strategy in points (positive = debit, negative = credit).
+// FUT legs contribute nothing here — a futures leg's `premium` is its entry
+// price, not an option premium, and entering one isn't a cash debit (only
+// margin is required, shown separately). Only real CE/PE premium counts.
 export function computeNetCost(legs: Leg[]): number {
-  return legs.reduce((sum, leg) => sum + sign(leg.action) * leg.qty * leg.premium, 0)
+  return legs.reduce((sum, leg) => {
+    if (leg.type === 'FUT') return sum
+    return sum + sign(leg.action) * leg.qty * leg.premium
+  }, 0)
 }

@@ -418,4 +418,21 @@ describe('computeNetCost', () => {
     ]
     expect(computeNetCost(legs)).toBeCloseTo(-300)
   })
+
+  test('covered call: FUT leg contributes zero — only the short call premium counts', () => {
+    // FUT leg.premium is the entry futures price (~90000), not an option
+    // premium — entering a futures leg isn't a cash debit, only margin is
+    // required (surfaced separately). Only the short call's real premium
+    // should show up as a credit.
+    const legs: Leg[] = [
+      { strike: F,     type: 'FUT', action: 'BUY',  qty: 1, premium: F,   iv: 0  },
+      { strike: F * 1.02, type: 'CE', action: 'SELL', qty: 1, premium: 400, iv: IV },
+    ]
+    expect(computeNetCost(legs)).toBeCloseTo(-400)
+  })
+
+  test('pure FUT position: net cost is zero', () => {
+    const legs: Leg[] = [{ strike: F, type: 'FUT', action: 'BUY', qty: 1, premium: F, iv: 0 }]
+    expect(computeNetCost(legs)).toBe(0)
+  })
 })
