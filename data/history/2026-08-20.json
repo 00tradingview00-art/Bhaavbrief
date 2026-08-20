@@ -1,66 +1,66 @@
 {
-  "generatedAt": "2026-08-20T07:56:09.672Z",
-  "generatedAtIST": "2026-08-20 13:26 IST",
+  "generatedAt": "2026-08-20T08:04:33.794Z",
+  "generatedAtIST": "2026-08-20 13:34 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 158190,
+      "price": 158255,
       "prevClose": 157996,
-      "changePct": 0.1228,
+      "changePct": 0.1639,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 239161,
+      "price": 239144,
       "prevClose": 236787,
-      "changePct": 1.0026,
+      "changePct": 0.9954,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8218,
+      "price": 8181,
       "prevClose": 8151,
-      "changePct": 0.822,
+      "changePct": 0.3681,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1369.65,
+      "price": 1369,
       "prevClose": 1372.1,
-      "changePct": -0.1786,
+      "changePct": -0.2259,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 263.9,
+      "price": 262.8,
       "prevClose": 270.8,
-      "changePct": -2.548,
+      "changePct": -2.9542,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
-      "price": 95.68,
+      "price": 95.67,
       "prevClose": 95.82,
-      "changePct": -0.145,
+      "changePct": -0.158,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4549,
+      "price": 4546.8,
       "prevClose": 4489.4,
-      "changePct": 1.3276,
+      "changePct": 1.2786,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 66.76,
+      "price": 66.73,
       "prevClose": 65.73,
-      "changePct": 1.5532,
+      "changePct": 1.5152,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 85.69,
+      "price": 85.72,
       "prevClose": 85.83,
-      "changePct": -0.1631,
+      "changePct": -0.1282,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 92.96,
+      "price": 93.05,
       "prevClose": 91.62,
-      "changePct": 1.4626,
+      "changePct": 1.5608,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -70,21 +70,21 @@
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 399,
+      "price": 399.9,
       "prevClose": 399.2,
-      "changePct": -0.0501,
+      "changePct": 0.1754,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 197.45,
+      "price": 197.6,
       "prevClose": 197.65,
-      "changePct": -0.1012,
+      "changePct": -0.0253,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 347,
+      "price": 347.5,
       "prevClose": 348.65,
-      "changePct": -0.4733,
+      "changePct": -0.3298,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
@@ -94,15 +94,15 @@
       "unit": "INR/kg"
     },
     "EURINR": {
-      "price": 111.7,
+      "price": 111.7025,
       "prevClose": 111.0875,
-      "changePct": 0.5514,
+      "changePct": 0.5536,
       "unit": "INR"
     },
     "GBPINR": {
-      "price": 130.4475,
+      "price": 130.2225,
       "prevClose": 129.9675,
-      "changePct": 0.3693,
+      "changePct": 0.1962,
       "unit": "INR"
     },
     "JPYINR": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 139935,
-    "mcxComexGoldSpreadPct": 13.05,
-    "importParitySilverINR": 205366,
-    "mcxComexSilverSpreadPct": 16.46,
+    "importParityGoldINR": 139853,
+    "mcxComexGoldSpreadPct": 13.16,
+    "importParitySilverINR": 205252,
+    "mcxComexSilverSpreadPct": 16.51,
     "goldSilverRatio": 68.1
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.05% vs silver 16.46% — 3.41pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.05,
-      "silverSpreadPct": 16.46,
-      "deltaPts": 3.41
+      "detail": "Gold import-parity spread 13.16% vs silver 16.51% — 3.35pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.16,
+      "silverSpreadPct": 16.51,
+      "deltaPts": 3.35
     }
   ]
 }
