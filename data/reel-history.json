@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260820-mcx-circuit-limits",
+    "topic": "MCX Circuit Limits",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Before you place that MCX order, know the circuit breaker rules.",
+    "stat_line": "Hit ±3%? Trading locks for 15 minutes.",
+    "payoff": "Your open positions stay active. Your pending orders just sit frozen.",
+    "beat1": "MCX stops you from panic-selling or panic-buying by freezing the market when price moves too fast.",
+    "beat2": "Two-stage circuit system: Stage 1 at ±3% triggers 15-minute halt, then Stage 2 expands to ±6%.",
+    "beat3": "Crude and natural gas can hit ±9% limits during volatility spikes with SEBI approval.",
+    "instagram_id": "18063300242771593",
+    "generated_at": "2026-08-20T14:44:26.059Z",
+    "edition": null,
+    "posted_at": "2026-08-20T14:45:20.877Z"
+  },
+  {
     "file": "brief-edition-090",
     "topic": "Gold Surges $183 Overnight — Safe-Haven Bid Overwhelms Oil Noise",
     "content_type": "price_move",
