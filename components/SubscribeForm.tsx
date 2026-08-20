@@ -69,7 +69,7 @@ export default function SubscribeForm({ compact = false, primary = false, locati
     ? {
         display: 'block', width: '100%',
         background: status === 'loading' ? 'var(--ink-4)' : 'var(--gold)',
-        color: '#080A0C', fontFamily: 'system-ui, sans-serif',
+        color: '#080A0C', fontFamily: 'var(--font-sans)',
         fontSize: 14, fontWeight: 800, letterSpacing: '0.01em', padding: '13px 20px',
         borderRadius: 9, border: 'none', cursor: status === 'loading' ? 'not-allowed' : 'pointer',
         transition: 'background 0.15s',

@@ -943,7 +943,7 @@ export default function StrategyBuilder({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', maxWidth: 900, margin: '0 auto', padding: '16px' }}>
+    <div style={{ fontFamily: 'var(--font-sans)', maxWidth: 900, margin: '0 auto', padding: '16px' }}>
 
       {/* Header */}
       <div style={{ marginBottom: 20 }}>

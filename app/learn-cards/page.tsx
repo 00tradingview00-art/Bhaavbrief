@@ -15,7 +15,7 @@ export default function LearnCardsPage() {
   }
 
   return (
-    <main style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px', fontFamily: 'system-ui, sans-serif' }}>
+    <main style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px', fontFamily: 'var(--font-sans)' }}>
       <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8, color: '#18180F' }}>
         Learn Cards — Instagram Stories
       </h1>

@@ -117,7 +117,7 @@ export default function BottomNav() {
               <span
                 className="bb-tab-label"
                 style={{
-                  fontFamily: 'system-ui, sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10,
                   fontWeight: 600,
                   color: active ? 'var(--gold)' : 'var(--ink-4)',

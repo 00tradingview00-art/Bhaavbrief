@@ -21,11 +21,6 @@ module.exports = {
         'up':     '#1E6630',
         'dn':     '#991818',
       },
-      fontFamily: {
-        serif: ['Playfair Display', 'Georgia', 'serif'],
-        sans:  ['IBM Plex Sans', 'system-ui', 'sans-serif'],
-        mono:  ['IBM Plex Mono', 'monospace'],
-      },
     },
   },
   plugins: [],
