@@ -6,7 +6,7 @@
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹8.0–11.2 lakh",
-    "contractValue": "~₹1.6 crore at ₹1,59,427/10g",
+    "contractValue": "~₹1.6 crore at ₹1,59,544/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.6–5.1 lakh",
-    "contractValue": "~₹73.0 lakh at ₹2,43,245/kg",
+    "contractValue": "~₹73.0 lakh at ₹2,43,298/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -174,7 +174,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹1.0–1.4 lakh",
-    "contractValue": "~₹20.1 lakh at ₹402.4/kg",
+    "contractValue": "~₹20.1 lakh at ₹402.5/kg",
     "importParity": "MCX Zinc = LME Zinc ($/tonne) ÷ 1000 × USD/INR × 1.068 (Basic Customs Duty 5% + IGST ~18%)",
     "supplyControl": "China mines 31% and refines 44% of global zinc. Peru (11%) and Australia (10%) are the next largest miners. India's Hindustan Zinc (Vedanta subsidiary) is among the world's top five zinc-lead miners and supplies roughly 75% of India's primary zinc needs — making it the single most important stock to watch for MCX zinc price direction.",
     "keyBodies": [
@@ -257,7 +257,7 @@
     "lotSize": "1,000 kg",
     "tickSize": "₹0.05 per kg = ₹50/lot",
     "typicalMargin": "₹49–69K",
-    "contractValue": "~₹9.9 lakh at ₹197.7/kg",
+    "contractValue": "~₹9.9 lakh at ₹197.8/kg",
     "importParity": "MCX Lead = LME Lead ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST)",
     "supplyControl": "China dominates global lead smelting (45% of refined output). Australia (14%) and Peru (8%) are the top miners. India's Hindustan Zinc is also a major lead producer — lead is mined alongside zinc at Hindustan Zinc's Rajasthan operations. Secondary (recycled) lead from scrap batteries accounts for 60% of global supply — the auto scrappage cycle is critical.",
     "keyBodies": [
@@ -342,7 +342,7 @@
     "lotSize": "1,250 mmBtu",
     "tickSize": "₹0.10 per mmBtu = ₹125/lot",
     "typicalMargin": "₹16–23K",
-    "contractValue": "~₹3.3 lakh at ₹261.1/mmBtu",
+    "contractValue": "~₹3.3 lakh at ₹261/mmBtu",
     "importParity": "MCX NatGas = Henry Hub ($/mmBtu) × USD/INR. Indian LNG import prices track JCC (Japan Crude Cocktail) and long-term contracts — not Henry Hub directly.",
     "supplyControl": "Russia was Europe's dominant gas supplier (pre-2022); now LNG from US, Qatar, Australia fills the gap. The US is the world's largest natural gas producer. Qatar controls ~25% of global LNG trade. Russia's Gazprom still controls the pipelines to much of Eastern Europe. Australia is Asia's largest LNG exporter.",
     "keyBodies": [
