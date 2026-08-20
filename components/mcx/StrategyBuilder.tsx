@@ -1416,7 +1416,7 @@ export default function StrategyBuilder({
                       <td style={{ padding: '5px 12px', color: 'var(--ink-2, #3A3830)' }}>{s.label}</td>
                       <td style={{ padding: '5px 12px', textAlign: 'right' }}>₹{fmt(Math.round(s.F))}</td>
                       <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnl >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
-                        {s.pnl >= 0 ? '+' : ''}₹{fmt(Math.abs(Math.round(s.pnl)))}
+                        {fmtPnl(s.pnl)}
                       </td>
                       {s.pnlPct !== null && (
                         <td style={{ padding: '5px 12px', textAlign: 'right', color: s.pnlPct >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
