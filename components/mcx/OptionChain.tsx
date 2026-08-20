@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
+import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
+import { useIVHistory } from '@/lib/useIVHistory'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -256,20 +258,11 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
   }
   const liveIVIsExactATM = atmIdx !== -1 && liveIVAtStrike === chain[atmIdx].strike
 
-  const [history, setHistory]       = useState<{ date: string; iv: number }[]>([])
-  const [histLoading, setHistLoading] = useState(true)
-  const [histError, setHistError]     = useState<string|null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    setHistLoading(true); setHistError(null)
-    fetch(`/api/options/iv-history?instrument=${instrument}`)
-      .then(res => { if (!res.ok) throw new Error('bad response'); return res.json() })
-      .then((json: { history: { date: string; iv: number }[] }) => { if (!cancelled) setHistory(json.history ?? []) })
-      .catch(() => { if (!cancelled) setHistError('unavailable') })
-      .finally(() => { if (!cancelled) setHistLoading(false) })
-    return () => { cancelled = true }
-  }, [instrument])
+  const { history, loading: histLoading, error: histError } = useIVHistory(instrument)
+  const ivRegime: IVRegime | null = liveIV != null && history.length > 0
+    ? computeIVRegime(history, liveIV)
+    : null
+  const regimeColors: Record<IVRegime['regime'], string> = { CHEAP: C.up, NORMAL: C.gold, RICH: C.dn }
 
   // Last 10 trading days with data — real gaps (missed cron days) are left as
   // gaps, never interpolated or backfilled. The "10-Day" label names the
@@ -297,6 +290,23 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
         </>
       ) : (
         <div style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>No volatility data available right now.</div>
+      )}
+
+      {ivRegime && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+          marginTop: 8, padding: '6px 10px', borderRadius: 6,
+          border: `1px solid ${regimeColors[ivRegime.regime]}`, background: C.surf2,
+        }}>
+          <span style={{
+            background: regimeColors[ivRegime.regime], color: '#fff', fontFamily: C.sans,
+            borderRadius: 4, padding: '1px 7px', fontWeight: 700, fontSize: 11,
+          }}>
+            {ivRegime.regime}
+          </span>
+          <span style={{ fontSize: 12, color: C.ink2, fontFamily: C.sans }}>{ivRegime.label}</span>
+          <span style={{ fontSize: 12, color: C.ink4, fontFamily: C.sans }}>· IV Rank {ivRegime.ivRank}</span>
+        </div>
       )}
 
       <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, margin: '14px 0 6px' }}>
