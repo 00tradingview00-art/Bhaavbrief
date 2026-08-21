@@ -41,6 +41,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-21-mcx-close-21aug2026-metals-rally",
+    "href": "/articles/2026-08-21-mcx-close-21aug2026-metals-rally",
+    "title": "MCX Close 21Aug: Metals Rally on Dollar Weakness",
+    "description": "MCX closes Friday with gold +1.75% to ₹162217/10g, silver +1.43% as COMEX extends gains +3.3%. Crude flat, NatGas +1.57%. US session bullish for overnight.",
+    "excerpt": "MCX metals complex closed decisively higher on Friday, driven by broad dollar weakness and a reflation bid across precious metals. Gold led gains, advancing 1.75% to close at ₹162217/10g, while silver",
+    "date": "2026-08-20T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Metals",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-090",
     "href": "/briefs/edition-090",
