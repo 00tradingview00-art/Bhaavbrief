@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-091",
+    "href": "/briefs/edition-091",
+    "title": "Gold Hits $4583 as Safe-Haven Surge Leaves Oil Behind",
+    "description": "COMEX gold surged $93 overnight while crude rose modestly — the safe-haven bid is now running ahead of the geopolitical oil premium.",
+    "excerpt": "MCX Gold ₹159425 | Crude ₹8304 | USDINR ₹95.69 Yesterday's Edge — Result: Edition #90 watched whether COMEX GOLD would close above 4,549.4. Confirmed ✓, now at 4,582.6. | Commodity | Global Price | US",
+    "date": "2026-08-21T02:47:08.859Z",
+    "edition": "91",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-21-how-to-hedge-mcx-commodity-futures-india",
     "href": "/articles/2026-08-21-how-to-hedge-mcx-commodity-futures-india",
