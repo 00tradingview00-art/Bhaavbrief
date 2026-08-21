@@ -1349,10 +1349,16 @@ export default function StrategyBuilder({
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
                     if (futurePrice >= 1000)  return `₹${(n / 1000).toFixed(1)}K`
                     return `₹${Math.round(n)}`
-                  }} tick={{ fontSize: 12 }} interval="preserveStartEnd" tickCount={7} />
-                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12 }} width={68} />
+                  }} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} interval="preserveStartEnd" tickCount={7} />
+                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} width={68} />
                   <Tooltip content={<PayoffTooltip netCostINR={netCostINR} futurePrice={futurePrice} sigmaT={cone?.sigmaT ?? null} />} />
-                  <Legend wrapperStyle={{ fontSize: 14 }} />
+                  {/* Legend text color is forced independent of each line's own stroke —
+                      Recharts defaults legend labels to match their series' stroke, which
+                      made "Today (Nd left)" (intentionally the fainter, dashed reference
+                      line — see comment below) unreadable as label text too. */}
+                  <Legend wrapperStyle={{ fontSize: 14 }} formatter={(value: string) => (
+                    <span style={{ color: 'var(--ink-2, #3A3830)' }}>{value}</span>
+                  )} />
                   {cone && ivRegime && (
                     <>
                       <ReferenceArea x1={cone.twoSigma[0]} x2={cone.twoSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.06} ifOverflow="hidden" />
