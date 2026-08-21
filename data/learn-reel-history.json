@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-circuit-limits",
+  "lastSlug": "mcx-commodity-tax-india",
   "log": [
+    {
+      "slug": "mcx-commodity-tax-india",
+      "date": "2026-08-21",
+      "file": "public/reels/news-20260821-mcx-commodity-trading-tax-in-india.mp4",
+      "generated_at": "2026-08-21T14:43:43.549Z"
+    },
     {
       "slug": "mcx-circuit-limits",
       "date": "2026-08-20",

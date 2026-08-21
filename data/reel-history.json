@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260821-mcx-commodity-trading-tax-in-india",
+    "topic": "MCX Commodity Trading Tax in India",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX gold profit just got taxed at your slab rate.",
+    "stat_line": "Non-speculative income. Up to 30%. File ITR-3, not ITR-1.",
+    "payoff": "Same gold. Different tax bracket. Your accountant needs to know this.",
+    "beat1": "MCX commodity futures aren't capital gains. They're taxed as business income at your full slab rate—up to 30%.",
+    "beat2": "India taxes speculative trading differently. Non-speculative MCX profits fall under business income rules, not securities tax brackets.",
+    "beat3": "Turnover above ₹10 crore triggers mandatory tax audit. Below that, audit required only if profit/loss drops under 6% of turnover.",
+    "instagram_id": "18198867355375120",
+    "generated_at": "2026-08-21T14:43:43.262Z",
+    "edition": null,
+    "posted_at": "2026-08-21T14:44:28.833Z"
+  },
+  {
     "file": "brief-edition-091",
     "topic": "Gold Hits $4583 as Safe-Haven Surge Leaves Oil Behind",
     "content_type": "price_move",
