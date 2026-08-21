@@ -1,11 +1,11 @@
 {
-  "rotationIndex": 9,
+  "rotationIndex": 0,
   "lastClaimIds": [
-    "cftc_cot_report__gold",
-    "cftc_cot_report__silver",
-    "cftc_cot_report__crude",
-    "cftc_cot_report__copper",
-    "cftc_cot_report__natgas"
+    "cftc_cot_report__zinc",
+    "cftc_cot_report__aluminium",
+    "cftc_cot_report__lead",
+    "cftc_cot_report__nickel",
+    "eia_natural_gas_storage__natgas"
   ],
-  "lastDate": "2026-08-17"
+  "lastDate": "2026-08-21"
 }
