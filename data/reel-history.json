@@ -1,5 +1,21 @@
 [
   {
+    "file": "brief-edition-091",
+    "topic": "Gold Hits $4583 as Safe-Haven Surge Leaves Oil Behind",
+    "content_type": "price_move",
+    "mood": "VOLATILE",
+    "hook_caption": "Your gold jewellery just got ₹2,200 more expensive overnight.",
+    "stat_line": "Safe-haven surge leaves oil completely behind.",
+    "payoff": "Gold's premium over import parity just hit 13.08%. Your wedding budget is getting squeezed by geopolitics.",
+    "beat1": "COMEX gold jumped $93.2 in one session—the sharpest move in days. Your ₹159,425/10g price is climbing as traders flee to safety.",
+    "beat2": "Middle East tensions and the upcoming Fed rate decision are pushing traders into gold as a fortress. Oil can't compete with fear.",
+    "beat3": "Watch if gold holds above $4,582.6 into the US close. A dip below signals positioning, not real conviction.",
+    "instagram_id": "18087206729272020",
+    "generated_at": "2026-08-21T02:54:28.405Z",
+    "edition": 91,
+    "posted_at": "2026-08-21T02:55:10.250Z"
+  },
+  {
     "file": "news-20260820-mcx-circuit-limits",
     "topic": "MCX Circuit Limits",
     "content_type": "explainer",
@@ -45,7 +61,14 @@
     "instagram_id": "18129275308710168",
     "generated_at": "2026-08-19T14:43:39.416Z",
     "edition": null,
-    "posted_at": "2026-08-19T14:44:19.859Z"
+    "posted_at": "2026-08-19T14:44:19.859Z",
+    "insights": {
+      "views": 76,
+      "reach": 69,
+      "ig_reels_avg_watch_time": 2428,
+      "ig_reels_video_view_total_time": 174871,
+      "fetched_at": "2026-08-21T02:47:05.961Z"
+    }
   },
   {
     "file": "brief-edition-089",
