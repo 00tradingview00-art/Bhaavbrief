@@ -6,7 +6,7 @@
     "lotSize": "1 kg (100 units of 10g)",
     "tickSize": "₹1 per 10g = ₹100/lot",
     "typicalMargin": "₹8.1–11.3 lakh",
-    "contractValue": "~₹1.6 crore at ₹1,61,620/10g",
+    "contractValue": "~₹1.6 crore at ₹1,61,604/10g",
     "importParity": "MCX Gold = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12 (6% BCD + 3% AIDC + 3% GST, post-July 2024 budget)",
     "supplyControl": "No single entity controls gold supply. Top producers: China 11%, Russia 10%, Australia 10%, Canada 5%. Central banks are the dominant holders.",
     "keyBodies": [
@@ -48,7 +48,7 @@
     "lotSize": "30 kg",
     "tickSize": "₹1 per kg = ₹30/lot",
     "typicalMargin": "₹3.7–5.2 lakh",
-    "contractValue": "~₹74.0 lakh at ₹2,46,715/kg",
+    "contractValue": "~₹74.1 lakh at ₹2,46,993/kg",
     "importParity": "MCX Silver = (COMEX silver $/troy oz ÷ 31.1035) × 1000 × USD/INR × 1.10",
     "supplyControl": "Top producers: Mexico 22%, Peru 14%, China 13%, Russia 7%. Unlike gold, 70% of silver supply comes as a by-product of mining other metals (copper, zinc, lead) — supply is inelastic.",
     "keyBodies": [
@@ -299,7 +299,7 @@
     "lotSize": "250 kg",
     "tickSize": "₹0.10 per kg = ₹25/lot",
     "typicalMargin": "₹1.2–1.7 lakh",
-    "contractValue": "~₹24.5 lakh at ₹1,632.5/kg",
+    "contractValue": "~₹24.5 lakh at ₹1,630.2/kg",
     "importParity": "MCX Nickel = LME Nickel ($/tonne) ÷ 1000 × USD/INR × 1.068 (BCD 5% + IGST ~18%)",
     "supplyControl": "Indonesia banned nickel ore exports in 2020 and now controls the fastest-growing nickel supply chain. Indonesia (48%) and Philippines (12%) dominate mined supply. Russia's Norilsk Nickel (Nornickel) produces ~7% of global nickel and ~35% of high-purity Class 1 nickel used for stainless steel and EV batteries. Indonesia's HPAL (High Pressure Acid Leach) plants supply battery-grade nickel for EV manufacturers directly.",
     "keyBodies": [
