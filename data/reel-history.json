@@ -29,7 +29,14 @@
     "instagram_id": "18087206729272020",
     "generated_at": "2026-08-21T02:54:28.405Z",
     "edition": 91,
-    "posted_at": "2026-08-21T02:55:10.250Z"
+    "posted_at": "2026-08-21T02:55:10.250Z",
+    "insights": {
+      "views": 44,
+      "reach": 39,
+      "ig_reels_avg_watch_time": 1818,
+      "ig_reels_video_view_total_time": 72746,
+      "fetched_at": "2026-08-22T03:28:42.832Z"
+    }
   },
   {
     "file": "news-20260820-mcx-circuit-limits",
@@ -45,7 +52,14 @@
     "instagram_id": "18063300242771593",
     "generated_at": "2026-08-20T14:44:26.059Z",
     "edition": null,
-    "posted_at": "2026-08-20T14:45:20.877Z"
+    "posted_at": "2026-08-20T14:45:20.877Z",
+    "insights": {
+      "views": 105,
+      "reach": 99,
+      "ig_reels_avg_watch_time": 2025,
+      "ig_reels_video_view_total_time": 200513,
+      "fetched_at": "2026-08-22T03:28:43.457Z"
+    }
   },
   {
     "file": "brief-edition-090",
