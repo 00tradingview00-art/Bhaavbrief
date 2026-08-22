@@ -1,5 +1,20 @@
 [
   {
+    "file": "news-20260822-mcx-contract-expiry-dates",
+    "topic": "MCX Contract Expiry Dates",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX gold contract expires in days—not weeks.",
+    "stat_line": "5th of delivery month. Mark your calendar now.",
+    "payoff": "You own the contract. The contract doesn't own you past the 5th.",
+    "beat1": "Gold and silver contracts on MCX don't roll forever—they expire on the 5th of their delivery month, or the day before if that's a holiday.",
+    "beat2": "After expiry, your contract settles at DVCAL—the volume-weighted average price that day—not the price you watched all week.",
+    "beat3": "Exit or roll 3–4 trading days before expiry. Liquidity dries up fast, and slippage will cost you real rupees.",
+    "instagram_id": null,
+    "generated_at": "2026-08-22T14:29:59.730Z",
+    "edition": null
+  },
+  {
     "file": "news-20260821-mcx-commodity-trading-tax-in-india",
     "topic": "MCX Commodity Trading Tax in India",
     "content_type": "explainer",
