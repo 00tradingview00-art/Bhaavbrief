@@ -58,7 +58,6 @@ export async function GET() {
       <category>${b.tags?.[0] ?? 'Commodities'}</category>
       ${(b.tags ?? []).slice(1).map((t: string) => `<category>${escapeXml(t)}</category>`).join('\n      ')}
 ${newsBlock(b.title, iso)}
-      <author>00tradingview00@gmail.com (BhaavBrief)</author>
     </item>`,
     }
   })
@@ -78,7 +77,6 @@ ${newsBlock(b.title, iso)}
       <description><![CDATA[${f.excerpt ?? ''}]]></description>
       <category>${f.category}</category>
 ${newsBlock(f.title, iso)}
-      <author>00tradingview00@gmail.com (BhaavBrief)</author>
     </item>`,
     }]
   })
@@ -99,7 +97,6 @@ ${newsBlock(f.title, iso)}
       <category>${escapeXml(a.commodity ?? '')}</category>
       ${a.tags.map((t: string) => `<category>${escapeXml(t)}</category>`).join('\n      ')}
 ${newsBlock(a.title, iso)}
-      <author>00tradingview00@gmail.com (BhaavBrief)</author>
     </item>`,
     }]
   })
@@ -130,8 +127,6 @@ ${newsBlock(a.title, iso)}
       <title>${SITE_NAME}</title>
       <link>${BASE_URL}</link>
     </image>
-    <managingEditor>00tradingview00@gmail.com (BhaavBrief)</managingEditor>
-    <webMaster>00tradingview00@gmail.com (BhaavBrief)</webMaster>
     <category>Business/Finance</category>
     <ttl>60</ttl>
     ${allItems}

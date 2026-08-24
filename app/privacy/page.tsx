@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 }
 
 const LAST_UPDATED = 'May 21, 2026'
-const CONTACT_EMAIL = '00tradingview00@gmail.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -97,8 +96,8 @@ export default function PrivacyPage() {
           <p>You have the right to:</p>
           <ul style={{ paddingLeft: '1.25rem', marginTop: '0.4rem' }}>
             <li><strong>Unsubscribe</strong> at any time — every email contains an unsubscribe link</li>
-            <li><strong>Request deletion</strong> of your data by emailing us at{' '}
-              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#C8720A' }}>{CONTACT_EMAIL}</a>
+            <li><strong>Request deletion</strong> of your data via our{' '}
+              <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>
             </li>
             <li><strong>Request a copy</strong> of the data we hold about you</li>
           </ul>
@@ -134,8 +133,8 @@ export default function PrivacyPage() {
 
         <Section title="9. Contact">
           <p>
-            For any privacy-related questions or requests, email us at{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#C8720A' }}>{CONTACT_EMAIL}</a>.
+            For any privacy-related questions or requests, reach us via our{' '}
+            <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>.
           </p>
         </Section>
 

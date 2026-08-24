@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 }
 
 const LAST_UPDATED = 'May 2026'
-const CONTACT_EMAIL = '00tradingview00@gmail.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -143,8 +142,8 @@ export default function TermsPage() {
 
         <Section title="10. Contact">
           <p>
-            For questions about these terms, email{' '}
-            <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#C8720A' }}>{CONTACT_EMAIL}</a>.
+            For questions about these terms, reach us via our{' '}
+            <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>.
           </p>
         </Section>
 

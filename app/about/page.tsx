@@ -354,10 +354,10 @@ export default async function AboutPage() {
                 Get in touch
               </div>
               <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>
-                Questions, feedback, or a story tip? We read every email.
+                Questions, feedback, or a story tip? We read every submission.
               </p>
-              <a href="mailto:00tradingview00@gmail.com" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
-                00tradingview00@gmail.com
+              <a href="/feedback" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+                Share feedback →
               </a>
             </div>
 

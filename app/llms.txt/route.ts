@@ -111,7 +111,7 @@ A: No. BhaavBrief is not registered with SEBI or any regulatory authority. It pu
 
 ## Contact
 
-Email: 00tradingview00@gmail.com
+Contact: ${BASE}/feedback
 Twitter/X: @bhaavbrief
 Launched: May 2026
 `

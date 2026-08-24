@@ -99,7 +99,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         description: 'Independent commodity intelligence for Indian traders, investors and merchants.',
         logo: { '@type': 'ImageObject', url: `${BASE}/logo.png`, width: 500, height: 500 },
         sameAs: ['https://twitter.com/bhaavbrief', 'https://instagram.com/bhaavbrief'],
-        contactPoint: { '@type': 'ContactPoint', email: '00tradingview00@gmail.com', contactType: 'Customer Support' },
+        contactPoint: { '@type': 'ContactPoint', url: `${BASE}/feedback`, contactType: 'Customer Support' },
       },
       {
         '@type': 'WebSite',
@@ -140,13 +140,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Independent commodity intelligence for India&apos;s traders, investors and merchants.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
-            © {new Date().getFullYear()} BhaavBrief · 00tradingview00@gmail.com ·{' '}
-            <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>About</a>{' '}·{' '}
-            <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Track Record</a>{' '}·{' '}
-            <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>{' '}·{' '}
-            <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Terms of Use</a>{' '}·{' '}
-            <a href="https://instagram.com/bhaavbrief" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Instagram</a>{' '}·{' '}
-            <a href="/feedback" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Feedback</a>
+            © {new Date().getFullYear()} BhaavBrief ·{' '}
+            <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>About</a>{' '}·{' '}
+            <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Track Record</a>{' '}·{' '}
+            <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Privacy Policy</a>{' '}·{' '}
+            <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Terms of Use</a>{' '}·{' '}
+            <a href="https://instagram.com/bhaavbrief" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Instagram</a>{' '}·{' '}
+            <a href="/feedback" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Feedback</a>
           </p>
           <p style={{
             fontSize: 11,
