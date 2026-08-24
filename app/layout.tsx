@@ -144,7 +144,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>About</a>{' '}·{' '}
             <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Track Record</a>{' '}·{' '}
             <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>{' '}·{' '}
-            <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Terms of Use</a>
+            <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Terms of Use</a>{' '}·{' '}
+            <a href="https://instagram.com/bhaavbrief" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Instagram</a>{' '}·{' '}
+            <a href="/feedback" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Feedback</a>
           </p>
           <p style={{
             fontSize: 11,
