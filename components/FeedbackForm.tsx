@@ -135,15 +135,11 @@ export default function FeedbackForm() {
   }))
   const setRating = (k: RatingKey, v: number) => setF(p => ({ ...p, [k]: v }))
 
-  const ok = () => {
-    if (step === 0) return f.userType && f.duration
-    if (step === 1) return f.r1 && f.r2 && f.r3 && f.r4
-    if (step === 2) return f.testimonial.trim().length > 10 && f.permission
-    return false
-  }
-
+  // Every field is optional — someone using this purely as a contact channel
+  // (e.g. a privacy/data-deletion request) shouldn't be blocked by ratings or
+  // a testimonial they have no reason to fill in.
   const next = async () => {
-    if (!ok() || sending) return
+    if (sending) return
     if (step < 2) { setStep(s => s + 1); return }
     setSending(true)
     setError('')
@@ -170,7 +166,7 @@ export default function FeedbackForm() {
           <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: C.successDim, color: C.success, fontSize: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>✓</div>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', fontWeight: 500, color: C.text, marginBottom: '10px' }}>Received. Thank you.</h2>
           <p style={{ fontSize: '14px', color: C.textSub, lineHeight: '1.6', marginBottom: '24px' }}>
-            {f.permission === 'no' ? 'Your feedback will shape what we build next.' : "We'll feature your response on bhaavbrief.in soon."}
+            {showQuote ? "We'll feature your response on bhaavbrief.in soon." : 'Your feedback will shape what we build next.'}
           </p>
           {showQuote && (
             <div style={{
@@ -242,7 +238,7 @@ export default function FeedbackForm() {
         {/* Step 1 */}
         {step === 1 && <>
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 500, color: C.text, marginBottom: '6px' }}>Rate the product</h3>
-          <p style={{ fontSize: '14px', color: C.textSub, lineHeight: '1.5', marginBottom: '20px' }}>Be honest. One star is valid feedback too. All four rows required.</p>
+          <p style={{ fontSize: '14px', color: C.textSub, lineHeight: '1.5', marginBottom: '20px' }}>Be honest. One star is valid feedback too — or skip straight to the next step.</p>
           <div style={{ marginBottom: '20px' }}>
             {STAR_ROWS.map(r => <StarRow key={r.key} value={f[r.key]} onChange={v => setRating(r.key, v)} label={r.label} sub={r.sub} />)}
           </div>
@@ -265,7 +261,7 @@ export default function FeedbackForm() {
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontWeight: 500, color: C.text, marginBottom: '6px' }}>In your own words</h3>
           <p style={{ fontSize: '14px', color: C.textSub, lineHeight: '1.5', marginBottom: '24px' }}>This one question shapes how others find BhaavBrief. Specific beats generic every time.</p>
           <div style={{ marginBottom: '24px' }}>
-            {label('In one sentence, what does BhaavBrief do for you?')}
+            {label('In one sentence, what does BhaavBrief do for you? (optional)')}
             <textarea rows={3} value={f.testimonial} onChange={e => set('testimonial', e.target.value)}
               placeholder="e.g. I open BhaavBrief before my terminal every morning — it gives me the why before the market gives me the what."
               style={{ ...fieldStyle, resize: 'vertical', borderColor: f.testimonial.trim().length > 10 ? C.accent : C.border }} />
@@ -307,11 +303,11 @@ export default function FeedbackForm() {
           {step > 0
             ? <button onClick={() => setStep(s => s - 1)} style={{ background: 'none', border: 'none', color: C.textSub, fontSize: '13px', cursor: 'pointer' }}>← Back</button>
             : <div />}
-          <button onClick={next} disabled={!ok() || sending} style={{
+          <button onClick={next} disabled={sending} style={{
             padding: '10px 22px', borderRadius: '8px', border: 'none',
-            background: ok() && !sending ? C.accent : C.border,
-            color: ok() && !sending ? '#080A0C' : C.textMuted,
-            fontSize: '13px', fontWeight: 600, cursor: ok() && !sending ? 'pointer' : 'default',
+            background: !sending ? C.accent : C.border,
+            color: !sending ? '#080A0C' : C.textMuted,
+            fontSize: '13px', fontWeight: 600, cursor: !sending ? 'pointer' : 'default',
             fontFamily: 'var(--font-sans)', transition: 'all .15s',
           }}>
             {step < 2 ? 'Continue →' : sending ? 'Sending…' : 'Submit feedback →'}
