@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 164442,
-    "silver": 247440,
-    "crude": 8230,
-    "copper": 1391,
-    "natgas": 269.1,
-    "usdinr": 95.7
+    "gold": 164450,
+    "silver": 247001,
+    "crude": 8186,
+    "copper": 1388.5,
+    "natgas": 268.8,
+    "usdinr": 95.76
   },
-  "lastChecked": "2026-08-24T13:40:22.365Z",
+  "lastChecked": "2026-08-24T14:13:47.052Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "230"
   },
   "lastGeoNews": {
-    "mideast": "China's state shippers deploy oil tankers outside Gulf, avoid chokepoints, sourc",
+    "mideast": "Iran threatens 45 tankers with fines, confiscation in Hormuz escalation - Reuter",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
