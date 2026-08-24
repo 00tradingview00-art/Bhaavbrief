@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T04:10:15.366Z",
+  "generatedAt": "2026-08-24T04:10:16.268Z",
   "generatedAtIST": "2026-08-24 09:40 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -22,9 +22,9 @@
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1377.35,
+      "price": 1377.1,
       "prevClose": 1385.35,
-      "changePct": -0.5775,
+      "changePct": -0.5955,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
