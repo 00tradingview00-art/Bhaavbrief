@@ -41,6 +41,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-24-mcx-close-24aug2026-gold-rally-crude-decline",
+    "href": "/articles/2026-08-24-mcx-close-24aug2026-gold-rally-crude-decline",
+    "title": "MCX Close 24Aug: Gold +0.99%, Crude -2.62% in Risk-Off Session",
+    "description": "MCX evening close 24 Aug 2026: Gold rallied ₹164041/10g (+0.99%), Crude fell to ₹8140/bbl (-2.62%). Risk-off positioning dominated as COMEX gold extends gains.",
+    "excerpt": "MCX traded in defensive mode as gold rallied while crude collapsed. Gold closed at ₹164041/10g, gaining 0.99% — the day's strongest performer — driven by safe-haven demand amid broader risk-off sentim",
+    "date": "2026-08-23T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Gold",
+      "Crude Oil",
+      "Risk-Off"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-091",
     "href": "/briefs/edition-091",
