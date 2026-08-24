@@ -32,6 +32,7 @@ export const ROUTES = [
   '/api/options',
   '/api/options/aav-history',
   '/api/options/iv-history',
+  '/api/options/strategy-margin',
   '/api/prices',
   '/api/search',
   '/api/subscribe',
