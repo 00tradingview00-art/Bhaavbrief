@@ -99,7 +99,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         description: 'Independent commodity intelligence for Indian traders, investors and merchants.',
         logo: { '@type': 'ImageObject', url: `${BASE}/logo.png`, width: 500, height: 500 },
         sameAs: ['https://twitter.com/bhaavbrief', 'https://instagram.com/bhaavbrief'],
-        contactPoint: { '@type': 'ContactPoint', email: 'brief@bhaavbrief.in', contactType: 'Customer Support' },
+        contactPoint: { '@type': 'ContactPoint', email: '00tradingview00@gmail.com', contactType: 'Customer Support' },
       },
       {
         '@type': 'WebSite',
@@ -140,7 +140,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             Independent commodity intelligence for India&apos;s traders, investors and merchants.
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
-            © {new Date().getFullYear()} BhaavBrief · brief@bhaavbrief.in ·{' '}
+            © {new Date().getFullYear()} BhaavBrief · 00tradingview00@gmail.com ·{' '}
             <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>About</a>{' '}·{' '}
             <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Track Record</a>{' '}·{' '}
             <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline' }}>Privacy Policy</a>{' '}·{' '}

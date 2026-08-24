@@ -356,8 +356,8 @@ export default async function AboutPage() {
               <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>
                 Questions, feedback, or a story tip? We read every email.
               </p>
-              <a href="mailto:brief@bhaavbrief.in" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
-                brief@bhaavbrief.in
+              <a href="mailto:00tradingview00@gmail.com" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+                00tradingview00@gmail.com
               </a>
             </div>
 

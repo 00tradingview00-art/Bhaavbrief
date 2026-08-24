@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 const LAST_UPDATED = 'May 2026'
-const CONTACT_EMAIL = 'brief@bhaavbrief.in'
+const CONTACT_EMAIL = '00tradingview00@gmail.com'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
