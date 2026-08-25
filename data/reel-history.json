@@ -1,5 +1,21 @@
 [
   {
+    "file": "brief-edition-093",
+    "topic": "Silver Diverges From Gold — The Industrial Half Is Speaking",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Silver just split from gold—your industrial costs are screaming.",
+    "stat_line": "Gold steady. Silver down ₹58. Same safe-haven? No.",
+    "payoff": "Same metal. Different story now. Gold protects money. Silver feeds factories—and factories aren't buying.",
+    "beat1": "Silver dropped ₹58 per kg while gold flatlined—first crack in the geopolitical lock that's held them together.",
+    "beat2": "Industrial demand is weakening. Factories, solar panels, electronics—they're pulling back harder than safe-haven buyers are pushing in.",
+    "beat3": "If WTI crude holds above ₹85 today, industrial silver weakness deepens. Below ₹85, geopolitical premium collapses entirely.",
+    "instagram_id": "18217052545338220",
+    "generated_at": "2026-08-25T02:55:21.815Z",
+    "edition": 93,
+    "posted_at": "2026-08-25T02:56:04.922Z"
+  },
+  {
     "file": "news-20260824-mcx-gold-vs-physical-gold",
     "topic": "MCX Gold vs Physical Gold",
     "content_type": "explainer",
@@ -45,7 +61,14 @@
     "instagram_id": "18115387564942883",
     "generated_at": "2026-08-23T14:31:40.261Z",
     "edition": null,
-    "posted_at": "2026-08-23T14:32:33.965Z"
+    "posted_at": "2026-08-23T14:32:33.965Z",
+    "insights": {
+      "views": 53,
+      "reach": 48,
+      "ig_reels_avg_watch_time": 3367,
+      "ig_reels_video_view_total_time": 165014,
+      "fetched_at": "2026-08-25T02:46:40.112Z"
+    }
   },
   {
     "file": "news-20260822-mcx-contract-expiry-dates",
