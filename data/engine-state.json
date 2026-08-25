@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 162800,
-    "silver": 243807,
-    "crude": 7831,
-    "copper": 1389.35,
-    "natgas": 264.9,
+    "gold": 162816,
+    "silver": 244103,
+    "crude": 7843,
+    "copper": 1388.8,
+    "natgas": 265.2,
     "usdinr": 95.42
   },
-  "lastChecked": "2026-08-25T17:04:34.257Z",
+  "lastChecked": "2026-08-25T17:42:42.735Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "230"
   },
   "lastGeoNews": {
-    "mideast": "Ship disabled by attack in Strait of Hormuz and other news from around the Middl",
+    "mideast": "An attack disables a ship in the Strait of Hormuz and other news from around the",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
