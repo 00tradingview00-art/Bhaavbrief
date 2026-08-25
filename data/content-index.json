@@ -1,5 +1,27 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-093",
+    "href": "/briefs/edition-093",
+    "title": "Silver Diverges From Gold — The Industrial Half Is Speaking",
+    "description": "Silver slips while gold holds at $4,701 — the gap between safe-haven and industrial demand is widening in real time.",
+    "excerpt": "MCX Gold ₹163229 | Crude ₹8135 | USDINR ₹95.74 Yesterday's Edge — Result: Edition #92 watched whether COMEX GOLD would close above 4,701.4. Rejected ✗, now at 4,700.7. | Commodity | Global Price | USD",
+    "date": "2026-08-25T02:46:42.743Z",
+    "edition": "93",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-25-nickel-indonesia-ban-mcx-india",
     "href": "/articles/2026-08-25-nickel-indonesia-ban-mcx-india",
