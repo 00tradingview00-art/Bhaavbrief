@@ -43,6 +43,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-25-mcx-close-25aug2026-crude-demand-retreat",
+    "href": "/articles/2026-08-25-mcx-close-25aug2026-crude-demand-retreat",
+    "title": "MCX Close 25Aug: Crude Slides 3.8% on US Demand Fears",
+    "description": "25 Aug 2026: MCX crude crashed 3.8% to ₹7828/bbl on demand weakness. COMEX gold rallying +1.48% signals safe-haven bid overnight. NatGas and precious metals mixed.",
+    "excerpt": "Crude dominated MCX's red finish, declining 3.8% to close at ₹7828/bbl as US demand signals weakened heading into the American close. The contract traded a 413-rupee range (high ₹8195, low ₹7782), ref",
+    "date": "2026-08-24T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Oil",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-092",
     "href": "/briefs/edition-092",
