@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260825-mcx-lot-sizes",
+    "topic": "MCX Lot Sizes",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹1,62,486 gold contract has a hidden choice built in.",
+    "stat_line": "Same gold. 100g Mini vs 1kg Standard. Pick wisely.",
+    "payoff": "Smaller lot doesn't mean safer. Just means tighter P&L swings per rupee risked.",
+    "beat1": "Gold Mini lets you start smaller—100 grams, one-tenth the commitment of Standard. Entry cost drops dramatically.",
+    "beat2": "But tick value changes too. Each ₹1 move costs ₹10 on Mini, ₹100 on Standard. Leverage flips.",
+    "beat3": "Margin stays 4–7% of contract value—so smaller contract means smaller margin required. Know your account size first.",
+    "instagram_id": "17880127608687525",
+    "generated_at": "2026-08-25T14:56:07.598Z",
+    "edition": null,
+    "posted_at": "2026-08-25T14:56:50.060Z"
+  },
+  {
     "file": "brief-edition-093",
     "topic": "Silver Diverges From Gold — The Industrial Half Is Speaking",
     "content_type": "macro_trend",

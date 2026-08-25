@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-gold-vs-physical-gold",
+  "lastSlug": "mcx-lot-sizes",
   "log": [
+    {
+      "slug": "mcx-lot-sizes",
+      "date": "2026-08-25",
+      "file": "public/reels/news-20260825-mcx-lot-sizes.mp4",
+      "generated_at": "2026-08-25T14:56:07.775Z"
+    },
     {
       "slug": "mcx-gold-vs-physical-gold",
       "date": "2026-08-24",
