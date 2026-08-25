@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 162950,
-    "silver": 242450,
-    "crude": 7870,
-    "copper": 1386.65,
-    "natgas": 260.5,
+    "gold": 162101,
+    "silver": 241075,
+    "crude": 7874,
+    "copper": 1384.35,
+    "natgas": 260.3,
     "usdinr": 95.76
   },
-  "lastChecked": "2026-08-25T12:21:51.296Z",
+  "lastChecked": "2026-08-25T13:25:29.092Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "230"
   },
   "lastGeoNews": {
-    "mideast": "Iran threatens 45 tankers with fines, confiscation in Hormuz escalation - Reuter",
+    "mideast": "Ship disabled by attack in Strait of Hormuz and other news from around the Middl",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [],
