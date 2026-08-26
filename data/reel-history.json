@@ -1,5 +1,20 @@
 [
   {
+    "file": "news-20260826-mcx-margin-calculation",
+    "topic": "MCX Margin Calculation",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹1,62,171 gold contract just demanded hidden money overnight.",
+    "stat_line": "4–6% upfront. 75% before you're forced out.",
+    "payoff": "You own the contract. Your account balance owns whether you stay in it.",
+    "beat1": "MCX gold isn't just the spot price—it's a margin game. You pay 4–6% of the contract upfront, not the full amount.",
+    "beat2": "MCX updates this margin twice daily using a risk model that simulates extreme price moves over one trading day.",
+    "beat3": "Your account balance drops below 75% of initial margin? Broker squares you off at market price. No negotiation.",
+    "instagram_id": null,
+    "generated_at": "2026-08-26T14:54:07.862Z",
+    "edition": null
+  },
+  {
     "file": "brief-edition-094",
     "topic": "Crude Drops $4.80 While Gold Holds — The Narrative Is Cracking",
     "content_type": "macro_trend",
