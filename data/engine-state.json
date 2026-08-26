@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 163029,
-    "silver": 244328,
-    "crude": 7834,
-    "copper": 1388,
-    "natgas": 265.2,
+    "gold": 162956,
+    "silver": 245511,
+    "crude": 7649,
+    "copper": 1394.5,
+    "natgas": 269.1,
     "usdinr": 95.42
   },
-  "lastChecked": "2026-08-25T18:02:45.843Z",
+  "lastChecked": "2026-08-26T03:42:21.156Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,13 +19,15 @@
     "value": "230"
   },
   "lastGeoNews": {
-    "mideast": "An attack disables a ship in the Strait of Hormuz and other news from around the",
+    "mideast": "Iran and Oman hold talks on managing the Strait of Hormuz and other news from ar",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-08-17T03:39:00.927Z",
+  "articlesToday": [
+    "2026-08-26/2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears"
+  ],
+  "lastArticleAt": "2026-08-26T03:42:36.457Z",
   "lastCoveredAt": {
-    "crude": "2026-08-11T11:13:48.691Z",
+    "crude": "2026-08-26T03:42:36.457Z",
     "silver": "2026-07-28T05:36:23.461Z",
     "natgas": "2026-08-17T03:39:00.927Z"
   }

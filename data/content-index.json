@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears",
+    "href": "/articles/2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears",
+    "title": "MCX Crude Slides 2.4% as Refinery Maintenance Season Nears",
+    "description": "MCX Crude ₹7649/bbl, -2.36%. WTI weakness signals early fade of summer demand; natural gas climbs on monsoon-driven power demand.",
+    "excerpt": "WHAT HAPPENED MCX Crude has fallen ₹181/bbl (-2.36%) to ₹7,649/bbl as of 09:12 am IST, mirroring a -2.40% session decline in WTI at $80.30/bbl. This translates to a $1.90/bbl drop in WTI, which at the",
+    "date": "2026-08-26T09:12:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7649
+  },
+  {
+    "type": "article",
     "slug": "2026-08-26-mcx-physical-delivery-gold-silver-india",
     "href": "/articles/2026-08-26-mcx-physical-delivery-gold-silver-india",
     "title": "How MCX Physical Delivery of Gold and Silver Works in India",
