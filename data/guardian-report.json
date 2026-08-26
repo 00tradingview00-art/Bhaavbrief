@@ -1,9 +1,15 @@
 {
-  "generatedAt": "2026-08-25T01:07:50.755Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-08-26T01:10:29.069Z",
+  "overallStatus": "yellow",
   "health": {
-    "status": "green",
-    "issues": []
+    "status": "yellow",
+    "issues": [
+      {
+        "level": "yellow",
+        "component": "market-snapshot.json",
+        "message": "Stale: 428 min old"
+      }
+    ]
   },
   "audit": {
     "learnIssues": [],
