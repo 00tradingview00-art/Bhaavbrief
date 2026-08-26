@@ -21,6 +21,26 @@
     "priceAtPublish": 7649
   },
   {
+    "type": "brief",
+    "slug": "edition-094",
+    "href": "/briefs/edition-094",
+    "title": "Crude Drops $4.80 While Gold Holds — The Narrative Is Cracking",
+    "description": "Brent fell sharply as geopolitical premium unwinds, but gold held near highs — a rare divergence that signals a narrative shift.",
+    "excerpt": "MCX Gold ₹162931 | Crude ₹7662 | USDINR ₹95.40 — Gold +0.03% | Crude -2.23% | Silver +0.55% Yesterday's Edge — Result: Edition #93 watched whether COMEX SILVER would close below 68.01. Rejected ✗, now",
+    "date": "2026-08-26T03:51:15.099Z",
+    "edition": "94",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-08-26-mcx-physical-delivery-gold-silver-india",
     "href": "/articles/2026-08-26-mcx-physical-delivery-gold-silver-india",
