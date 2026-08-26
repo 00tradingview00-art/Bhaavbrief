@@ -26,9 +26,9 @@
     "expiry": "2026-08-31"
   },
   "natgas": {
-    "token": 143742983,
-    "symbol": "NATURALGAS26AUGFUT",
-    "expiry": "2026-08-26"
+    "token": 145470727,
+    "symbol": "NATURALGAS26SEPFUT",
+    "expiry": "2026-09-25"
   },
   "zinc": {
     "token": 145622023,
@@ -50,7 +50,7 @@
     "symbol": "NICKEL26SEPFUT",
     "expiry": "2026-09-16"
   },
-  "updatedAt": "2026-08-25T03:59:58.381Z",
+  "updatedAt": "2026-08-26T03:50:28.755Z",
   "currencies": {
     "usdinr": {
       "token": 282371,
