@@ -62,6 +62,29 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-08-26-mcx-close-26aug2026-energy-monsoon",
+    "href": "/articles/2026-08-26-mcx-close-26aug2026-energy-monsoon",
+    "title": "MCX Close 26Aug: Energy Surges as Monsoon Lifts NatGas",
+    "description": "MCX NatGas +3.03% to ₹278.5/mmBtu, Crude +1.35% to ₹7943/bbl on weather-driven power demand. Gold, Silver weaken. COMEX gas rallies 4.80% overnight.",
+    "excerpt": "Energy dominated MCX today. MCX NatGas surged ₹278.5/mmBtu, +3.03%, climbing ₹7.7 off lows on monsoon-driven power demand signals. MCX Crude advanced ₹7943/bbl, +1.35%, gaining ₹106 from the session l",
+    "date": "2026-08-25T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "NatGas",
+      "Crude Oil",
+      "Gold",
+      "Silver"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-093",
     "href": "/briefs/edition-093",
