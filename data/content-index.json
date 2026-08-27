@@ -1,6 +1,26 @@
 [
   {
     "type": "article",
+    "slug": "2026-08-27-mcx-option-chain-how-to-read",
+    "href": "/articles/2026-08-27-mcx-option-chain-how-to-read",
+    "title": "How to Read the MCX Option Chain — A Complete Guide for Indian Traders",
+    "description": "Learn how to read MCX option chain data India traders rely on — OI, IV, PCR, and Greeks decoded for gold, silver, and crude markets.",
+    "excerpt": "Understanding how to read MCX option chain data India-wide is a foundational skill for any serious commodity trader operating on the Multi Commodity Exchange. The option chain is not a price predictor",
+    "date": "2026-08-27",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears",
     "href": "/articles/2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears",
     "title": "MCX Crude Slides 2.4% as Refinery Maintenance Season Nears",
