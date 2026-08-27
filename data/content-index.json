@@ -1,6 +1,26 @@
 [
   {
     "type": "article",
+    "slug": "2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
+    "href": "/articles/2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
+    "title": "MCX Nat Gas Rallies 2.5% as Henry Hub Defies Summer Weakness",
+    "description": "MCX Natural Gas surges to ₹285.20/mmBtu (+2.04%) while Henry Hub at $2.97 signals storage normalization. Key resistance at ₹286 ahead of 11:30 pm close.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas is the session leader at +2.04% to ₹285.20/mmBtu, outpacing a subdued commodity complex as Henry Hub strengthens to $2.97/mmBtu in the US afternoon. This move contradicts",
+    "date": "2026-08-27T19:50:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "Energy"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 285.2
+  },
+  {
+    "type": "article",
     "slug": "2026-08-27-mcx-option-chain-how-to-read",
     "href": "/articles/2026-08-27-mcx-option-chain-how-to-read",
     "title": "How to Read the MCX Option Chain — A Complete Guide for Indian Traders",

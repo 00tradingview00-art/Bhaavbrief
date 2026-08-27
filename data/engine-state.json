@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 158397,
-    "silver": 239094,
-    "crude": 7893,
-    "copper": 1378.55,
-    "natgas": 279.5,
-    "usdinr": 95.42
+    "gold": 158297,
+    "silver": 239034,
+    "crude": 7926,
+    "copper": 1378,
+    "natgas": 285.2,
+    "usdinr": 95.54
   },
-  "lastChecked": "2026-08-27T13:18:28.060Z",
+  "lastChecked": "2026-08-27T14:20:10.737Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,14 +19,16 @@
     "value": "395"
   },
   "lastGeoNews": {
-    "mideast": "Iran and Oman hold talks on managing the Strait of Hormuz and other news from ar",
+    "mideast": "Asia's crude oil imports stay soft in August, challenging US Hormuz claims - Reu",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-08-26T03:42:36.457Z",
+  "articlesToday": [
+    "2026-08-27/2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness"
+  ],
+  "lastArticleAt": "2026-08-27T14:20:23.540Z",
   "lastCoveredAt": {
     "crude": "2026-08-26T03:42:36.457Z",
     "silver": "2026-07-28T05:36:23.461Z",
-    "natgas": "2026-08-17T03:39:00.927Z"
+    "natgas": "2026-08-27T14:20:23.540Z"
   }
 }
