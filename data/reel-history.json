@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260827-mcx-margin-calculator",
+    "topic": "MCX Margin Calculator",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Before you margin-trade MCX gold, know what your broker actually demands.",
+    "stat_line": "₹3,000–5,000 deposit. Your contract just moved ₹2,000.",
+    "payoff": "Smallest margin doesn't mean safest trade. It means fastest margin call.",
+    "beat1": "SPAN margin is the exchange's minimum deposit to open a gold position—roughly 4–5% of what your contract costs.",
+    "beat2": "Your broker then adds 2–5% more on top as a safety buffer, because MTM losses hit your account every single evening.",
+    "beat3": "If gold swings ₹2,000 overnight, that's a real debit from your balance—not a paper loss you settle at expiry.",
+    "instagram_id": "17900743179354058",
+    "generated_at": "2026-08-27T23:43:53.079Z",
+    "edition": null,
+    "posted_at": "2026-08-27T23:44:41.893Z"
+  },
+  {
     "file": "news-20260826-mcx-margin-calculation",
     "topic": "MCX Margin Calculation",
     "content_type": "explainer",
