@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 159000,
-    "silver": 239000,
-    "crude": 7888,
-    "copper": 1381,
-    "natgas": 277.6,
+    "gold": 158397,
+    "silver": 239094,
+    "crude": 7893,
+    "copper": 1378.55,
+    "natgas": 279.5,
     "usdinr": 95.42
   },
-  "lastChecked": "2026-08-26T18:20:43.261Z",
+  "lastChecked": "2026-08-27T13:18:28.060Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,9 +22,7 @@
     "mideast": "Iran and Oman hold talks on managing the Strait of Hormuz and other news from ar",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-08-26/2026-08-26-mcx-crude-slides-2-4-as-refinery-maintenance-season-nears"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-08-26T03:42:36.457Z",
   "lastCoveredAt": {
     "crude": "2026-08-26T03:42:36.457Z",
