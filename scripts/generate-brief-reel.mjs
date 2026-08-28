@@ -952,7 +952,13 @@ if (isNewsMode) {
   const dateStamp = new Date().toISOString().slice(0, 10).replace(/-/g, '')
   padded     = `${dateStamp}-${slugify(TOPIC)}`
   filePrefix = 'news'
-  data       = { title: TOPIC, tags: [], edition: null }
+  // TAGS env (comma-separated, matching TAG_MAP keys below, e.g. "Fed,Inflation")
+  // lets a news-mode reel carry topical hashtags — brief mode gets these from
+  // the brief's frontmatter `tags`, but news mode has no such file to read
+  // from, so without this every TOPIC/CONTEXT reel silently fell back to only
+  // the 5 generic hashtags regardless of subject.
+  const tags = process.env.TAGS?.trim() ? process.env.TAGS.split(',').map(t => t.trim()) : []
+  data       = { title: TOPIC, tags, edition: null }
 } else {
   // Brief mode — EDITION env or auto-detect
   edition = process.env.EDITION ? parseInt(process.env.EDITION) : null
