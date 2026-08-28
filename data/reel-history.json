@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260828-mcx-order-types-explained",
+    "topic": "MCX Order Types Explained",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your stop loss order just failed silently—here's why.",
+    "stat_line": "Four order types. One wrong choice costs real money.",
+    "payoff": "Fastest order type doesn't mean safest. It means it actually executes when you need it to.",
+    "beat1": "Most traders place stop losses wrong—on the buying side when they're already long, locking them into the trade instead of out of it.",
+    "beat2": "MCX's four order types—Market, Limit, SL, SL-M—each behave differently when price gaps against you or market closes early.",
+    "beat3": "SL-M (Stop Loss Market) only needs trigger price; fills instantly once hit. SL needs trigger AND limit price—may never fill if market gaps.",
+    "instagram_id": "18114460202053903",
+    "generated_at": "2026-08-28T23:33:20.262Z",
+    "edition": null,
+    "posted_at": "2026-08-28T23:34:01.290Z"
+  },
+  {
     "file": "news-20260828-fed-chair-kevin-warsh-s-first-jackson-hole-s",
     "topic": "Fed Chair Kevin Warsh's first Jackson Hole speech",
     "content_type": "macro_trend",

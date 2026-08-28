@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-margin-calculator",
+  "lastSlug": "mcx-order-types",
   "log": [
+    {
+      "slug": "mcx-order-types",
+      "date": "2026-08-28",
+      "file": "public/reels/news-20260828-mcx-order-types-explained.mp4",
+      "generated_at": "2026-08-28T23:33:20.677Z"
+    },
     {
       "slug": "mcx-margin-calculator",
       "date": "2026-08-27",
