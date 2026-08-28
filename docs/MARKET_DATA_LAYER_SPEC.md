@@ -44,10 +44,13 @@ Committed to the repo by the pipeline (you're on static/ISR Vercel, so a commit 
 1. **`changePct` is computed once, at write time**, from each instrument's OWN price and
    prevClose. No component ever computes or copies a % change. This single rule kills the
    "WTI inherits MCX Crude's +2.77%" bug class.
-2. **USDINR is an instrument like any other.** It comes from `INR=X` in the same fetch.
-   Delete the hardcoded 96.33. Any code path that needs the rupee imports it from the
-   snapshot. The MCX–COMEX spread lives in `derived`, computed at write time from the
-   same numbers — so it can never disagree with the prices shown next to it.
+2. **USDINR is an instrument like any other.** It comes from Kite's CDS `USDINR<expiry>FUT`
+   front-month contract (same rollover mechanism as EUR/GBP/JPY-INR), falling back to
+   Yahoo's `INR=X` and then an ECB reference rate if Kite is unavailable — see
+   `scripts/lib/resolveUsdinr.mjs`. Delete the hardcoded 96.33. Any code path that needs
+   the rupee imports it from the snapshot. The MCX–COMEX spread lives in `derived`,
+   computed at write time from the same numbers — so it can never disagree with the
+   prices shown next to it.
 3. **If a fetch fails, keep the last good value and mark it.** Add `"stale": true` to that
    instrument. Never write 0, never write null into price, never fall back to a hardcoded
    constant. Brent showing "—" forever means there's no last-good-value handling.
