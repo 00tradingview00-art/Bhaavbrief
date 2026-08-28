@@ -21,6 +21,26 @@
   },
   {
     "type": "article",
+    "slug": "2026-08-28-max-pain-theory-mcx-options",
+    "href": "/articles/2026-08-28-max-pain-theory-mcx-options",
+    "title": "Max Pain Theory in MCX Options — What It Is and Why Price Gravitates There",
+    "description": "Understand what is max pain theory MCX options India — how strike price gravity works and why commodity prices cluster near expiry settlements.",
+    "excerpt": "What is max pain theory MCX options India traders keep referencing near expiry? It is the strike price at which the total monetary loss for all open option buyers — across both calls and puts — is mat",
+    "date": "2026-08-28",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
     "href": "/articles/2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
     "title": "MCX Nat Gas Rallies 2.5% as Henry Hub Defies Summer Weakness",
