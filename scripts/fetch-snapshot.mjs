@@ -33,6 +33,7 @@ import {
   computeGoldSilverRatio,
   checkParityWedge,
 } from '../lib/parity.mjs'
+import { resolveUsdinr } from './lib/resolveUsdinr.mjs'
 import { validateSnapshot } from './lib/snapshotSchema.mjs'
 import { appendDailySnapshot } from './lib/historicalStore.mjs'
 import { todayIST } from './lib/holidays.js'
@@ -114,7 +115,7 @@ async function fetchKiteCurrencies() {
   const instruments = loadJSON(INSTRUMENTS_FILE)
   if (!apiKey || !accessToken || !instruments?.currencies) return null
 
-  const pairs = ['eurinr', 'gbpinr', 'jpyinr']
+  const pairs = ['usdinr', 'eurinr', 'gbpinr', 'jpyinr']
   const qs = pairs
     .filter(k => instruments.currencies[k]?.symbol)
     .map(k => `i=CDS:${instruments.currencies[k].symbol}`)
@@ -261,19 +262,18 @@ async function main() {
     return null
   }
 
-  // USDINR: Yahoo preferred, Frankfurter fallback
+  // USDINR: Kite CDS preferred (see resolveUsdinr.mjs header for the
+  // 2026-08-27 Yahoo range=2d incident this replaces as primary), Yahoo then
+  // Frankfurter as fallbacks.
   function getUSDINR() {
-    if (yahooMap.USDINR) return yahooMap.USDINR
-    const rate = typeof frankfurterUSDINR === 'number' ? frankfurterUSDINR : null
-    if (!rate) return null
-    const prev = existing?.instruments?.USDINR?.price ?? rate
-    return {
-      price: rate,
-      prevClose: prev,
-      changePct: prev > 0 ? ((rate - prev) / prev) * 100 : 0,
-      unit: 'INR',
-    }
+    return resolveUsdinr(
+      kiteCDS?.usdinr,
+      yahooMap.USDINR,
+      frankfurterUSDINR,
+      existing?.instruments?.USDINR?.price
+    )
   }
+  console.log(`  USDINR source: ${kiteCDS?.usdinr?.price > 0 ? 'kite' : yahooMap.USDINR ? 'yahoo' : (typeof frankfurterUSDINR === 'number' ? 'frankfurter' : 'none')}`)
 
   let staleCount = 0
 
