@@ -108,6 +108,7 @@ export default function ToolsPage() {
             <Link
               key={t.href}
               href={t.href}
+              className="tools-card"
               style={{
                 display: 'block',
                 border: '1px solid #e5e7eb',
@@ -115,10 +116,7 @@ export default function ToolsPage() {
                 padding: '0.9rem 1rem',
                 textDecoration: 'none',
                 color: 'inherit',
-                transition: 'border-color 0.15s',
               }}
-              onMouseEnter={e => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#1a1a1a')}
-              onMouseLeave={e => ((e.currentTarget as HTMLAnchorElement).style.borderColor = '#e5e7eb')}
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.35rem' }}>
                 <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{t.label}</span>
@@ -169,6 +167,10 @@ export default function ToolsPage() {
           ))}
         </div>
       </section>
+
+      <style>{`
+        .tools-card:hover { border-color: #1a1a1a !important; }
+      `}</style>
     </main>
   )
 }
