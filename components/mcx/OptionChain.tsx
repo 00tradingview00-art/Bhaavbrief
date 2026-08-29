@@ -7,6 +7,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceL
 import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
 import { useIVHistory } from '@/lib/useIVHistory'
 import { useUser } from '@clerk/nextjs'
+import IVSkewChart from './IVSkewChart'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -474,7 +475,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
   const [error, setError]           = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
-  const [mapView, setMapView]       = useState<'oi'|'iv'|null>('oi')
+  const [mapView, setMapView]       = useState<'oi'|'iv'|'skew'|null>('oi')
   // D-06: strikes with zero liquidity / no-arbitrage violations are tiered
   // JUNK server-side (lib/options.ts) and hidden by default here — a row is
   // hidden only when BOTH sides are JUNK, so a genuinely liquid CE next to a
@@ -667,6 +668,21 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
           >
             Volatility
           </button>
+          {isPro && (
+            <button
+              onClick={() => setMapView(v => v === 'skew' ? null : 'skew')}
+              role="tab"
+              aria-selected={mapView === 'skew'}
+              style={{
+                padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
+                border: 'none',
+                background: mapView === 'skew' ? C.goldPl : 'transparent',
+                color: mapView === 'skew' ? C.gold : C.ink3,
+              }}
+            >
+              IV Skew
+            </button>
+          )}
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
@@ -734,6 +750,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
       {/* ── OI concentration map / IV skew chart ── */}
       {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
       {data?.chain && mapView === 'iv' && <IVHistoryChart chain={mainPage} instrument={instrument} />}
+      {data?.chain && mapView === 'skew' && <IVSkewChart chain={data.chain} isPro={isPro} />}
 
       {/* ── ITM note ── */}
       {data?.chain && (
