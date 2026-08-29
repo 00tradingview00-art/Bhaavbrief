@@ -91,6 +91,7 @@ export const ROUTES = [
   '/sign-up/[[...sign-up]]',
   '/sitemap.xml',
   '/terms',
+  '/tools',
   '/tools/mcx-basis',
   '/tools/mcx-bhavcopy',
   '/tools/mcx-greeks',

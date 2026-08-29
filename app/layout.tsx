@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
+import Link from 'next/link'
 import { ClerkProvider } from '@clerk/nextjs'
 import AuthNavChip from '@/components/AuthNavChip'
 import './globals.css'
@@ -145,6 +146,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
           <p style={{ fontSize: 15, color: 'var(--ink-4)', marginBottom: 4 }}>
             Independent commodity intelligence for India&apos;s traders, investors and merchants.
+          </p>
+          <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 8 }}>
+            <Link href="/tools" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Tools</Link>{' '}·{' '}
+            <Link href="/options" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Options Chain</Link>{' '}·{' '}
+            <Link href="/options/strategy" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Strategy Builder</Link>{' '}·{' '}
+            <Link href="/basis" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Basis</Link>{' '}·{' '}
+            <Link href="/research" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Research</Link>{' '}·{' '}
+            <Link href="/pro" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Pro</Link>
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief ·{' '}

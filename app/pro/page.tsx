@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import Link from 'next/link'
 import ProCheckout from './ProCheckout'
 
 export const revalidate = 3600
@@ -26,15 +27,17 @@ const FREE_FEATURES = [
   'Educational library (lot sizes, margin, Greeks basics)',
 ]
 
-const PRO_FEATURES = [
-  'Full option chain — all strikes, all expiries',
-  'Live Greeks (delta, gamma, theta, vega) per strike',
-  'Strategy Builder — 12 multi-leg templates with payoff charts',
-  'IV Skew Chart — CE vs PE implied volatility by strike',
-  'OI Buildup History — 90-day open interest by strike',
-  'Commodity Basis Dashboard — MCX vs COMEX spread, 30-day chart',
-  'Pro Research Articles — macro event analysis within hours of publication',
-  'FPI/DII positioning — institutional net long/short data (coming soon)',
+const PRO_FEATURES: { label: string; href?: string }[] = [
+  { label: 'Full option chain — all strikes, all expiries',                            href: '/options' },
+  { label: 'Live Greeks (delta, gamma, theta, vega) per strike',                       href: '/tools/mcx-greeks' },
+  { label: 'Strategy Builder — 12 multi-leg templates with payoff charts',             href: '/options/strategy' },
+  { label: 'IV Skew Chart — CE vs PE implied volatility by strike',                    href: '/options' },
+  { label: 'OI Buildup History — 90-day open interest by strike',                      href: '/tools/mcx-open-interest' },
+  { label: 'IV Rank & Percentile — 90-day history per instrument',                     href: '/tools/mcx-iv-rank' },
+  { label: 'Put-Call Ratio trend chart — 30-day CE vs PE OI history',                  href: '/tools/mcx-pcr' },
+  { label: 'Commodity Basis Dashboard — MCX vs COMEX spread, 30-day chart',            href: '/basis' },
+  { label: 'Pro Research Articles — macro event analysis within hours of publication', href: '/research' },
+  { label: 'FPI/DII positioning — institutional net long/short data (coming soon)' },
 ]
 
 export default function ProPage() {
@@ -74,8 +77,8 @@ export default function ProPage() {
 
         {/* Feature comparison */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
-          <FeatureList title="Free forever" features={FREE_FEATURES} accent="#16a34a" />
-          <FeatureList title="Pro" features={PRO_FEATURES} accent="#1a1a1a" bold />
+          <FreeFeatureList title="Free forever" features={FREE_FEATURES} />
+          <ProFeatureList title="Pro" features={PRO_FEATURES} />
         </div>
       </main>
     </>
@@ -120,22 +123,41 @@ function PricingCard({
   )
 }
 
-function FeatureList({ title, features, accent, bold }: {
-  title: string
-  features: string[]
-  accent: string
-  bold?: boolean
-}) {
+function FreeFeatureList({ title, features }: { title: string; features: string[] }) {
   return (
     <div>
-      <h2 style={{ fontSize: '1rem', fontWeight: bold ? 700 : 500, color: accent, marginBottom: '1rem' }}>
+      <h2 style={{ fontSize: '1rem', fontWeight: 500, color: '#16a34a', marginBottom: '1rem' }}>
         {title}
       </h2>
       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {features.map(f => (
           <li key={f} style={{ display: 'flex', gap: '0.6rem', marginBottom: '0.6rem', fontSize: '0.9rem', color: '#374151' }}>
-            <span style={{ color: accent, flexShrink: 0 }}>✓</span>
+            <span style={{ color: '#16a34a', flexShrink: 0 }}>✓</span>
             {f}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function ProFeatureList({ title, features }: { title: string; features: { label: string; href?: string }[] }) {
+  return (
+    <div>
+      <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '1rem' }}>
+        {title}
+      </h2>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {features.map(f => (
+          <li key={f.label} style={{ display: 'flex', gap: '0.6rem', marginBottom: '0.6rem', fontSize: '0.9rem', color: '#374151' }}>
+            <span style={{ color: '#1a1a1a', flexShrink: 0 }}>✓</span>
+            {f.href ? (
+              <Link href={f.href} style={{ color: '#1a1a1a', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                {f.label}
+              </Link>
+            ) : (
+              <span style={{ color: '#9ca3af' }}>{f.label}</span>
+            )}
           </li>
         ))}
       </ul>
