@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { safeJsonLd } from '@/lib/seo'
+import ProBlurGate from '@/components/ProBlurGate'
 
 export const dynamicParams = true
 export const revalidate = 3600
@@ -165,36 +166,12 @@ export default async function ResearchSlugPage({ params }: Props) {
               <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 300)}</p>
             </div>
 
-            {/* Paywall gate */}
-            <div style={{
-              border: '1px solid #e5e7eb',
-              borderRadius: 12,
-              padding: '1.5rem',
-              textAlign: 'center',
-              background: 'linear-gradient(to bottom, transparent, #f9fafb)',
-            }}>
-              <div style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>🔒</div>
-              <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: '0 0 0.4rem' }}>
-                This is a Pro Research article
-              </h2>
-              <p style={{ fontSize: '0.83rem', opacity: 0.65, margin: '0 0 1rem', maxWidth: 380, marginLeft: 'auto', marginRight: 'auto' }}>
-                MCX-specific event analysis, options chain data, and actionable implications — published within hours of the event. Pro subscribers get the full analysis.
-              </p>
-              <Link
-                href="/pro"
-                style={{
-                  display: 'inline-block', background: '#1a1a1a', color: '#fff',
-                  padding: '0.6rem 1.4rem', borderRadius: 8, fontSize: '0.88rem',
-                  fontWeight: 700, textDecoration: 'none',
-                }}
-              >
-                Unlock with Pro — ₹999/month
-              </Link>
-              <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', opacity: 0.5 }}>
-                Already a subscriber?{' '}
-                <Link href="/sign-in" style={{ color: 'inherit', fontWeight: 600 }}>Sign in</Link>
+            {/* Paywall gate — blurred article text preview */}
+            <ProBlurGate isPro={isPro} label="Full analysis — strategy, levels, options positioning">
+              <div style={{ fontSize: '0.9rem', lineHeight: 1.75, maxHeight: 200, overflow: 'hidden' }}>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 500).split(' ').slice(300).join(' ')}</p>
               </div>
-            </div>
+            </ProBlurGate>
           </>
         )}
 

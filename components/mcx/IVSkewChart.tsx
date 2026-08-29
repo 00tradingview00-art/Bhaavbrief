@@ -3,6 +3,7 @@
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, Legend,
 } from 'recharts'
+import ProBlurGate from '@/components/ProBlurGate'
 
 interface ChainRow {
   strike: number
@@ -16,8 +17,30 @@ interface Props {
   isPro: boolean
 }
 
+function IVSkewPlaceholder() {
+  return (
+    <svg width="100%" height="200" viewBox="0 0 400 200" style={{ display: 'block' }}>
+      <polyline points="0,160 80,130 160,100 240,80 320,65 400,55" fill="none" stroke="#22c55e" strokeWidth="2" opacity="0.9"/>
+      <polyline points="0,50 80,65 160,85 240,110 320,140 400,165" fill="none" stroke="#f97316" strokeWidth="2" opacity="0.9"/>
+      <line x1="200" y1="0" x2="200" y2="200" stroke="#888" strokeDasharray="4 3" strokeWidth="1"/>
+      <text x="202" y="12" fontSize="9" fill="#888">ATM</text>
+      <text x="6" y="196" fontSize="9" fill="#22c55e">Call IV</text>
+      <text x="6" y="46" fontSize="9" fill="#f97316">Put IV</text>
+    </svg>
+  )
+}
+
 export default function IVSkewChart({ chain, isPro }: Props) {
-  if (!isPro) return null
+  if (!isPro) {
+    return (
+      <div style={{ marginTop: '1.5rem' }}>
+        <h4 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', opacity: 0.75 }}>IV Skew</h4>
+        <ProBlurGate label="IV Skew — Call vs Put implied volatility by strike" timestamp="Live">
+          <IVSkewPlaceholder />
+        </ProBlurGate>
+      </div>
+    )
+  }
 
   const data = chain
     .filter(r => r.CE.tier !== 'JUNK' || r.PE.tier !== 'JUNK')

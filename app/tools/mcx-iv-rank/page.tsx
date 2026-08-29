@@ -3,6 +3,7 @@ import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
+import ProBlurGate from '@/components/ProBlurGate'
 
 export const revalidate = 900
 
@@ -80,6 +81,22 @@ export default async function MCXIVRankPage() {
           )
         })}
       </div>
+
+      <section style={{ marginTop: '2rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
+        <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
+          <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
+            {Object.keys(MCX_INSTRUMENTS).map((_, row) => (
+              <g key={row}>
+                {Array.from({ length: 20 }, (__, i) => {
+                  const h = 10 + Math.abs(Math.sin((i + row * 3) * 0.8)) * 18
+                  return <rect key={i} x={i * 24 + 4} y={row * 28 + 28 - h} width={18} height={h} rx="2" fill="#3b82f6" opacity={0.35 + i * 0.02}/>
+                })}
+              </g>
+            ))}
+          </svg>
+        </ProBlurGate>
+      </section>
 
       <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
         For full option chains, Greeks, and strategy builder →{' '}

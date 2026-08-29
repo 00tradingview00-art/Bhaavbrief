@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import ProBlurGate from '@/components/ProBlurGate'
 
 interface OIPoint {
   date: string
@@ -34,7 +35,24 @@ export default function OIBuildupChart({ instrument, strike, isPro }: Props) {
       .finally(() => setLoading(false))
   }, [instrument, strike, isPro])
 
-  if (!isPro) return null
+  if (!isPro) {
+    return (
+      <div style={{ marginTop: '1rem' }}>
+        <ProBlurGate label="OI Buildup — Call vs Put open interest by strike (30-day)" timestamp="Live">
+          <svg width="100%" height="180" viewBox="0 0 400 180" style={{ display: 'block' }}>
+            {[60, 110, 160, 210, 260, 310].map((x, i) => (
+              <g key={i}>
+                <rect x={x} y={180 - 40 - i * 12} width={14} height={40 + i * 12} fill="#22c55e" opacity="0.7"/>
+                <rect x={x + 16} y={180 - 30 - (5 - i) * 10} width={14} height={30 + (5 - i) * 10} fill="#f97316" opacity="0.7"/>
+              </g>
+            ))}
+            <text x="6" y="174" fontSize="9" fill="#22c55e">Call OI</text>
+            <text x="50" y="174" fontSize="9" fill="#f97316">Put OI</text>
+          </svg>
+        </ProBlurGate>
+      </div>
+    )
+  }
   if (loading) return <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Loading OI history…</p>
   if (error)   return <p style={{ fontSize: '0.8rem', color: '#ef4444' }}>{error}</p>
   if (data.length < 2) return <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>No OI history yet for this strike.</p>

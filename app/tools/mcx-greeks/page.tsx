@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import ProBlurGate from '@/components/ProBlurGate'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
 
@@ -97,6 +98,36 @@ export default async function MCXGreeksPage() {
           )
         })}
       </div>
+
+      <section style={{ marginTop: '2rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>Full Strike Greeks — OTM Depth</h2>
+        <ProBlurGate label="OTM strike Greeks — delta, gamma, theta, vega for all strikes" timestamp="Live">
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: '0.82rem' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid #e5e7eb', textAlign: 'right' }}>
+                  <th style={{ padding: '4px 8px', textAlign: 'left' }}>Strike</th>
+                  <th style={{ padding: '4px 8px' }}>Δ Delta</th>
+                  <th style={{ padding: '4px 8px' }}>Γ Gamma</th>
+                  <th style={{ padding: '4px 8px' }}>Θ Theta</th>
+                  <th style={{ padding: '4px 8px' }}>V Vega</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                    <td style={{ padding: '4px 8px', fontWeight: 600 }}>——</td>
+                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>0.{30 + i * 8}</td>
+                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>0.00{4 + i}</td>
+                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>-{12 + i * 3}</td>
+                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>{80 + i * 15}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </ProBlurGate>
+      </section>
 
       <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
         Full option chain with all strikes →{' '}

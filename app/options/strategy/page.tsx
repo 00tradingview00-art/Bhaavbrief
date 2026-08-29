@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import fs from 'fs'
 import path from 'path'
 import StrategyBuilder from '@/components/mcx/StrategyBuilder'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'MCX Options Strategy Builder — BhaavBrief',
@@ -44,5 +48,7 @@ export default async function StrategyPage({
     ? instrument!.toUpperCase()
     : 'GOLD'
   const marginByInstrument = loadMarginByInstrument()
-  return <StrategyBuilder defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} />
+  const { userId } = await auth()
+  const isPro = await isProUser(userId ?? null)
+  return <StrategyBuilder defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
 }

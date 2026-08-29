@@ -4,7 +4,7 @@ import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
 import type { BasisPoint } from '@/lib/basis'
-import Link from 'next/link'
+import ProBlurGate from '@/components/ProBlurGate'
 
 interface CommodityMeta {
   id: string
@@ -118,13 +118,23 @@ export default function BasisClient({ commodities, history, isPro }: Props) {
                 </AreaChart>
               </ResponsiveContainer>
             ) : !isPro && stats ? (
-              <div style={{
-                background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6,
-                padding: '0.75rem 1rem', textAlign: 'center', fontSize: '0.8rem', color: '#6b7280',
-              }}>
-                30-day spread chart with ±1σ/±2σ bands →{' '}
-                <Link href="/pro" style={{ color: '#1a1a1a', fontWeight: 600 }}>Upgrade to Pro</Link>
-              </div>
+              <ProBlurGate isPro={isPro} label="30-Day Spread Chart — ±1σ / ±2σ reference bands" timestamp="Live">
+                <svg width="100%" height="180" viewBox="0 0 400 180" style={{ display: 'block' }}>
+                  <defs>
+                    <linearGradient id="bbg" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={color} stopOpacity="0.3"/>
+                      <stop offset="100%" stopColor={color} stopOpacity="0.05"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="0" y="55" width="400" height="70" fill={color} fillOpacity="0.06"/>
+                  <rect x="0" y="70" width="400" height="40" fill={color} fillOpacity="0.1"/>
+                  <polyline
+                    points="0,100 40,95 80,88 120,105 160,78 200,82 240,92 280,75 320,88 360,80 400,85"
+                    fill="none" stroke={color} strokeWidth="2" opacity="0.85"
+                  />
+                  <line x1="0" y1="90" x2="400" y2="90" stroke="#d1d5db" strokeDasharray="4 3" strokeWidth="1"/>
+                </svg>
+              </ProBlurGate>
             ) : null}
 
             {!stats && (

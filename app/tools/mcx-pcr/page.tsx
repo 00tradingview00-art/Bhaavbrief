@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
+import ProBlurGate from '@/components/ProBlurGate'
 
 export const revalidate = 60
 
@@ -81,6 +82,26 @@ export default async function MCXPCRPage() {
           )
         })}
       </div>
+
+      <section style={{ marginTop: '2rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>PCR Trend — 30 Days</h2>
+        <ProBlurGate label="PCR trend chart — 30-day history of Call vs Put open interest ratio" timestamp="Live">
+          <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const ceH = 30 + Math.abs(Math.sin(i * 0.4)) * 40
+              const peH = 25 + Math.abs(Math.cos(i * 0.4 + 1)) * 45
+              return (
+                <g key={i}>
+                  <rect x={i * 16 + 2} y={140 - ceH} width={7} height={ceH} fill="#22c55e" opacity="0.7"/>
+                  <rect x={i * 16 + 9} y={140 - peH} width={7} height={peH} fill="#f97316" opacity="0.7"/>
+                </g>
+              )
+            })}
+            <text x="4" y="156" fontSize="9" fill="#22c55e">Call OI</text>
+            <text x="48" y="156" fontSize="9" fill="#f97316">Put OI</text>
+          </svg>
+        </ProBlurGate>
+      </section>
 
       <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
         PCR trend chart history →{' '}
