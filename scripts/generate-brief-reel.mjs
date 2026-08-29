@@ -296,6 +296,156 @@ async function generateVoiceover(script, outputPath) {
   return outputPath
 }
 
+// ── Hindi reel variant ────────────────────────────────────────────────────────
+async function generateHindiVariant(copy, padded, filePrefix, musicPath, framesDir, dur) {
+  const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const hindiVoiceId = process.env.ELEVENLABS_HINDI_VOICE_ID ?? 'XB0fDUnXU5powFXDhCwa'
+
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+  console.log('  🇮🇳  Generating Hindi variant...')
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+
+  // 1. Translate voiceover to Hindi
+  console.log('🔤  Translating voiceover to Hindi...')
+  let hindiVoiceover = copy.voiceover
+  try {
+    const transRes = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1024,
+      messages: [{
+        role: 'user',
+        content: `Translate this English voiceover to Hindi (Devanagari script).\nKeep all numbers, commodity names (MCX Gold, MCX Silver, MCX Crude, COMEX, OPEC, WTI, Federal Reserve, RBI, USDINR) in English — only translate the connecting narrative.\nOutput ONLY the Hindi voiceover text, nothing else.\n\nEnglish: ${copy.voiceover}`,
+      }],
+    })
+    hindiVoiceover = transRes.content[0].text.trim()
+    console.log(`  ✅  Translated (${hindiVoiceover.length} chars)`)
+  } catch (e) {
+    console.warn(`  ⚠️  Translation failed (${e.message}) — using English voiceover`)
+  }
+
+  // 2. Generate Hindi TTS
+  const HI_VO_FILE  = join(ROOT, `.reel-vo-${padded}-hi.mp3`)
+  const apiKey      = process.env.ELEVENLABS_API_KEY
+  let hindiVoicePath = null
+  if (apiKey) {
+    console.log('🎙️   Generating Hindi voiceover...')
+    try {
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${hindiVoiceId}`, {
+        method: 'POST',
+        headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: hindiVoiceover,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: { stability: 0.22, similarity_boost: 0.72, style: 0.28, use_speaker_boost: true },
+        }),
+        signal: AbortSignal.timeout(30000),
+      })
+      if (res.ok) {
+        const buf = Buffer.from(await res.arrayBuffer())
+        writeFileSync(HI_VO_FILE, buf)
+        console.log(`  ✅  Hindi voiceover (${(buf.length / 1024).toFixed(0)} KB)`)
+        hindiVoicePath = HI_VO_FILE
+      } else {
+        console.warn(`  ⚠️  ElevenLabs Hindi TTS failed (${res.status}) — encoding without voiceover`)
+      }
+    } catch (e) {
+      console.warn(`  ⚠️  ElevenLabs Hindi TTS error (${e.message}) — encoding without voiceover`)
+    }
+  } else {
+    console.warn('  ⚠️  ELEVENLABS_API_KEY not set — encoding Hindi without voiceover')
+  }
+
+  // 3. Measure Hindi audio duration (for trim bound)
+  let hindiVoiceTrim = dur
+  if (hindiVoicePath && existsSync(hindiVoicePath)) {
+    try {
+      const probeOut = execFileSync(
+        'ffprobe',
+        ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', hindiVoicePath],
+        { encoding: 'utf8' }
+      ).trim()
+      const probed = parseFloat(probeOut)
+      if (Number.isFinite(probed) && probed > 0) hindiVoiceTrim = Math.min(probed + 0.1, dur)
+    } catch {}
+  }
+
+  // 4. Encode Hindi MP4 (reuses same frames)
+  const HI_OUT_FILE = join(ROOT, 'public/reels', `${filePrefix}-${padded}-hi.mp4`)
+  const HI_CAP_FILE = join(ROOT, 'public/reels', `${filePrefix}-${padded}-hi.txt`)
+  console.log('⚙️   Encoding Hindi reel...')
+  const hiArgs = ['-y', '-framerate', '30', '-i', join(framesDir, 'f%04d.png')]
+  if (hindiVoicePath) {
+    hiArgs.push('-i', musicPath, '-i', hindiVoicePath,
+      '-filter_complex',
+      `[1:a]atrim=0:${dur},afade=t=out:st=${dur - 2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
+      `[2:a]atrim=0:${hindiVoiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
+      `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
+      '-map', '0:v', '-map', '[aout]'
+    )
+  } else {
+    hiArgs.push('-i', musicPath,
+      '-af', `atrim=0:${dur},afade=t=out:st=${dur - 2.0}:d=2.0,asetpts=PTS-STARTPTS`
+    )
+  }
+  hiArgs.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p',
+    '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', HI_OUT_FILE)
+  execFileSync('ffmpeg', hiArgs, { stdio: 'pipe' })
+  console.log(`  ✅  ${HI_OUT_FILE}`)
+  if (hindiVoicePath && existsSync(hindiVoicePath)) rmSync(hindiVoicePath)
+
+  // 5. Hindi caption — translate hook + beats, keep link/hashtags
+  console.log('📝  Translating caption...')
+  let hiHook  = copy.hook_caption ?? copy.stat_line ?? ''
+  let hiBeat1 = copy.beat1 ?? ''
+  let hiBeat2 = copy.beat2 ?? ''
+  try {
+    const capRes = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 512,
+      messages: [{
+        role: 'user',
+        content: `Translate these lines to Hindi (Devanagari script). Keep numbers and English terms (MCX, RBI, USDINR, COMEX, etc.) in English. Output ONLY the translations, one per line, in the same order.\n\nLine 1: ${hiHook}\nLine 2: ${hiBeat1}\nLine 3: ${hiBeat2}`,
+      }],
+    })
+    const lines = capRes.content[0].text.trim().split('\n')
+      .map(l => l.replace(/^Line \d+:\s*/i, '').trim()).filter(Boolean)
+    if (lines[0]) hiHook  = lines[0]
+    if (lines[1]) hiBeat1 = lines[1]
+    if (lines[2]) hiBeat2 = lines[2]
+  } catch {}
+
+  const hiHashtags = '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #हिंदी #कमोडिटीमार्केट'
+  const hiCaption = [
+    hiHook, '', hiBeat1, hiBeat2, '',
+    `Watch: ${copy.beat3 ?? ''}`,
+    '\nbhaavbrief.in 👇\n',
+    'Follow @bhaavbrief for daily MCX updates. 🔔',
+    hiHashtags,
+  ].join('\n')
+  writeFileSync(HI_CAP_FILE, hiCaption, 'utf8')
+  console.log(`  ✅  ${HI_CAP_FILE}`)
+
+  // 6. Write Hindi output path file
+  writeFileSync(join(ROOT, '.reel-hi-output-path.txt'), relative(ROOT, HI_OUT_FILE), 'utf8')
+
+  // 7. Tag existing history entry with hi_path
+  try {
+    const history = readHistory()
+    const entry   = history.find(h => h.file === `${filePrefix}-${padded}`)
+    if (entry) {
+      entry.hi_path = relative(ROOT, HI_OUT_FILE)
+      writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
+      console.log('  📚  History updated with hi_path')
+    }
+  } catch (e) {
+    console.warn(`  ⚠️  History hi_path update failed: ${e.message}`)
+  }
+
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+  console.log('  ✅  Hindi reel complete!')
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
+}
+
 // ── Canvas constants ──────────────────────────────────────────────────────────
 const W = 1080, H = 1920, FPS = 30
 
@@ -1141,8 +1291,9 @@ execFileSync('ffmpeg', args, { stdio: 'pipe' })
 // run — the standalone scripts/dev-preview-chart.mjs harness is faster for
 // iterating on a single chart, but a real run is still what confirms actual
 // Haiku-emitted chart data renders correctly in situ.
-if (!process.env.KEEP_FRAMES) rmSync(FRAMES_DIR, { recursive: true })
-else console.log(`  🗂️   KEEP_FRAMES set — frames left in ${FRAMES_DIR}`)
+const keepForHindi = process.env.GENERATE_HINDI_REEL === 'true'
+if (!process.env.KEEP_FRAMES && !keepForHindi) rmSync(FRAMES_DIR, { recursive: true })
+else if (process.env.KEEP_FRAMES) console.log(`  🗂️   KEEP_FRAMES set — frames left in ${FRAMES_DIR}`)
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
 // Caption
@@ -1206,6 +1357,11 @@ appendHistory({
 // the REEL_FILE convention post-reel-instagram.mjs expects (it does join(ROOT, REEL_FILE)
 // — an absolute path there would double up into a broken, nonexistent path).
 writeFileSync(join(ROOT, '.reel-output-path.txt'), relative(ROOT, OUT_FILE), 'utf8')
+
+if (keepForHindi) {
+  await generateHindiVariant(copy, padded, filePrefix, musicPath, FRAMES_DIR, DUR)
+  if (!process.env.KEEP_FRAMES && existsSync(FRAMES_DIR)) rmSync(FRAMES_DIR, { recursive: true })
+}
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  ✅  ${OUT_FILE}`)
