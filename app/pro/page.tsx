@@ -7,7 +7,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'BhaavBrief Pro — Full MCX Options Analytics',
-  description: 'Unlock the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data. ₹999/month or ₹8,999/year.',
+  description: 'Unlock the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data. ₹333/month or ₹2,999/year.',
   keywords: [
     'MCX options analytics India subscription',
     'BhaavBrief Pro',
@@ -60,16 +60,16 @@ export default function ProPage() {
           <PricingCard
             plan="monthly"
             label="Monthly"
-            price="₹999"
+            price="₹333"
             sub="/month"
             cta="Start Monthly"
           />
           <PricingCard
             plan="yearly"
             label="Annual"
-            price="₹8,999"
+            price="₹2,999"
             sub="/year"
-            note="Save ₹2,989 — ₹749/month"
+            note="Save ₹997 — ₹250/month"
             highlight
             cta="Start Annual"
           />

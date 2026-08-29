@@ -325,7 +325,7 @@ export default async function AboutPage() {
               {[
                 { label: 'Delivery time',   value: '9:30 AM IST' },
                 { label: 'Frequency',        value: 'Every weekday' },
-                { label: 'Price',            value: 'Free / ₹999 Pro' },
+                { label: 'Price',            value: 'Free / ₹333 Pro' },
                 { label: 'Format',           value: 'Email + Web' },
                 { label: 'Flash updates',    value: 'During mkt hours' },
                 { label: 'Geo Risk refresh', value: 'Every 15 min' },
