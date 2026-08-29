@@ -100,4 +100,6 @@ export const ROUTES = [
   '/tools/mcx-pcr',
   '/tools/mcx-pl-calculator',
   '/track-record',
+  '/research',
+  '/research/[slug]',
 ]
