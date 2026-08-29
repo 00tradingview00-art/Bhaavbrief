@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260829-mcx-futures-rollover",
+    "topic": "MCX Futures Rollover",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold contract expires in 10 days. You haven't rolled it yet.",
+    "stat_line": "Roll 5–7 days before expiry or lose ₹1,56,400 to delivery.",
+    "payoff": "Smallest rollover costs ₹0. Biggest rollover cost is your entire account frozen.",
+    "beat1": "Rollover means selling your expiring contract and buying next month instantly—without ever touching physical gold or your full account balance.",
+    "beat2": "The gap between near-month and next-month price is your actual rollover cost—sometimes ₹500, sometimes ₹5,000 per lot depending on contango.",
+    "beat3": "For gold, roll by the 2nd–3rd of expiry month. Miss it, and you settle physical delivery—full KYC, full payment demanded.",
+    "instagram_id": "18208735297362235",
+    "generated_at": "2026-08-29T17:39:39.427Z",
+    "edition": null,
+    "posted_at": "2026-08-29T17:40:24.165Z"
+  },
+  {
     "file": "news-20260828-mcx-order-types-explained",
     "topic": "MCX Order Types Explained",
     "content_type": "explainer",
