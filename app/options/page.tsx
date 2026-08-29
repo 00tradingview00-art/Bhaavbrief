@@ -82,7 +82,10 @@ const WEBAPP_SCHEMA = {
   applicationCategory: 'FinanceApplication',
   operatingSystem: 'Any (web browser)',
   description: 'Live MCX option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio for Gold, Silver, Crude Oil, Natural Gas and Copper.',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+  offers: [
+    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'INR', description: 'ATM row and summary statistics' },
+    { '@type': 'Offer', name: 'Pro', price: '999', priceCurrency: 'INR', description: 'Full option chain, Greeks, Strategy Builder, IV analytics' },
+  ],
   provider: { '@id': 'https://bhaavbrief.in/#organization' },
 }
 
@@ -143,7 +146,7 @@ export default async function OptionsPage({
         </span>
       </div>
 
-      <OptionChain isPro={true} initialData={initialData} />
+      <OptionChain isPro={false} initialData={initialData} />
 
       <div style={{ marginTop: 32 }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: 'var(--ink)', margin: '0 0 12px' }}>

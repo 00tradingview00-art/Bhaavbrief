@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
 import { useIVHistory } from '@/lib/useIVHistory'
+import { useUser } from '@clerk/nextjs'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -460,7 +461,12 @@ function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function OptionChain({ isPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
+export default function OptionChain({ isPro: serverIsPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
+  // ISR-safe Pro check: server always passes isPro=false (preserves revalidate=60 cache).
+  // Client reads Clerk publicMetadata.isPro to unlock the chain for Pro subscribers
+  // without a Redis call or breaking ISR. See plan §S-02.
+  const { user } = useUser()
+  const isPro = serverIsPro || (user?.publicMetadata?.isPro === true)
   const [instrument, setInstrument] = useState(initialData?.instrument ?? 'GOLD')
   const [expiry, setExpiry]         = useState<string|null>(null)
   const [data, setData]             = useState<OptionsData|null>(initialData)

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs'
+import Link from 'next/link'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
@@ -114,6 +116,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
+    <ClerkProvider>
     <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Rendered directly here (not via the Metadata API's `other` field) so it
@@ -123,6 +126,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>
+        {/* Auth nav chip — shown in top-right corner */}
+        <div style={{ position: 'fixed', top: 10, right: 16, zIndex: 100, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <SignedOut>
+            <Link href="/pro" style={{ fontSize: '0.78rem', background: '#1a1a1a', color: '#fff', padding: '4px 12px', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>
+              Pro
+            </Link>
+            <Link href="/sign-in" style={{ fontSize: '0.78rem', color: '#374151', padding: '4px 8px', borderRadius: 20, textDecoration: 'none' }}>
+              Sign in
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <Link href="/account" style={{ fontSize: '0.78rem', color: '#374151', padding: '4px 8px', borderRadius: 20, textDecoration: 'none' }}>
+              Account
+            </Link>
+          </SignedIn>
+        </div>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
         <Nav />
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
@@ -178,5 +197,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </PostHogProvider>
       </body>
     </html>
+    </ClerkProvider>
   )
 }

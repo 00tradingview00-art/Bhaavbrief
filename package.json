@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "@clerk/nextjs": "^7.8.3",
     "@napi-rs/canvas": "^1.0.0",
     "@vercel/analytics": "^2.0.1",
     "gray-matter": "^4.0.3",
@@ -20,6 +21,7 @@
     "next": "^15.5.18",
     "next-mdx-remote": "^6.0.0",
     "posthog-js": "^1.375.0",
+    "razorpay": "^2.9.8",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "recharts": "^3.8.1",
