@@ -26,7 +26,7 @@ export default function MCXBhavCopyPage() {
       <section style={{ marginBottom: '1.5rem' }}>
         <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>What is MCX Bhavcopy?</h2>
         <p style={{ fontSize: '0.88rem' }}>
-          "Bhavcopy" (Hindi: भाव copy, "price copy") is the official end-of-day settlement file
+          &ldquo;Bhavcopy&rdquo; (Hindi: भाव copy, &ldquo;price copy&rdquo;) is the official end-of-day settlement file
           published by MCX after market close (~23:30 IST). It contains the final settlement price,
           open interest, volume, and high/low for every commodity futures and options contract
           traded that session. It is the authoritative record of each day&apos;s trading activity.
