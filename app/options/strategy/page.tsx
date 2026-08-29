@@ -6,6 +6,17 @@ import StrategyBuilder from '@/components/mcx/StrategyBuilder'
 export const metadata: Metadata = {
   title: 'MCX Options Strategy Builder — BhaavBrief',
   description: 'Build and analyse multi-leg MCX commodity options strategies with live payoff diagrams and IV regime signals.',
+  keywords: [
+    'MCX options strategy India',
+    'MCX bull call spread',
+    'MCX straddle strangle',
+    'MCX options payoff calculator',
+    'MCX options strategy builder India',
+    'MCX commodity options hedging',
+    'MCX covered call India',
+    'MCX options multi-leg strategy',
+    'MCX gold silver crude options strategy',
+  ],
 }
 
 const VALID_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']

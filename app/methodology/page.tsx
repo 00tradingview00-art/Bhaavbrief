@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   title: 'Methodology — How BhaavBrief Sources, Generates and Gates Every Brief',
   description: 'Where BhaavBrief\'s data comes from, how each brief is generated and checked before publishing, and how "Edge of the Day" calls get resolved — in plain terms.',
   alternates: { canonical: 'https://bhaavbrief.in/methodology' },
+  keywords: [
+    'BhaavBrief methodology India',
+    'MCX AI brief methodology',
+    'commodity intelligence data sources India',
+    'MCX market analysis how it works',
+    'BhaavBrief data accuracy',
+  ],
   openGraph: {
     title: 'Methodology — How BhaavBrief Works',
     description: 'Data sources, the publish gate, and how every claim and Edge-of-the-Day call is checked before and after publication.',

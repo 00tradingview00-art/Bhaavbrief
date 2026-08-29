@@ -17,6 +17,17 @@ export const metadata = {
   title: 'BhaavBrief — Daily MCX Market Brief, Event Calendar & Commodity Intelligence',
   description: 'Daily MCX intelligence at 9:30 AM IST: an event calendar mapping EIA, OPEC, CPI, FOMC and RBI MPC releases to the MCX contracts they move, plus daily briefs for crude oil, natural gas, gold, silver and copper. Educational and informational only.',
   alternates: { canonical: 'https://bhaavbrief.in' },
+  keywords: [
+    'MCX commodity intelligence India',
+    'MCX daily brief India',
+    'BhaavBrief',
+    'MCX gold silver crude oil brief',
+    'MCX trading analysis India',
+    'commodity market India today',
+    'MCX options chain India',
+    'MCX market brief 9:30 AM IST',
+    'MCX event calendar India',
+  ],
 }
 
 // ── Market Snapshot ───────────────────────────────────────────────────────────

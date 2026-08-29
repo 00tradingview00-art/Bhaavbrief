@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: "Track Record — Yesterday's Edge, Resolved | BhaavBrief",
   description: "Every Edge of the Day call BhaavBrief has made, resolved against real market data the next morning. Wins and misses both stay on the record.",
   alternates: { canonical: 'https://bhaavbrief.in/track-record' },
+  keywords: [
+    'BhaavBrief track record India',
+    'MCX edge of the day results',
+    'commodity market calls India accuracy',
+    'MCX prediction accuracy India',
+    'BhaavBrief performance India',
+  ],
 }
 
 interface LedgerEntry {
