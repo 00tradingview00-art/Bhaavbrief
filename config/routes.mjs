@@ -91,5 +91,13 @@ export const ROUTES = [
   '/sign-up/[[...sign-up]]',
   '/sitemap.xml',
   '/terms',
+  '/tools/mcx-basis',
+  '/tools/mcx-bhavcopy',
+  '/tools/mcx-greeks',
+  '/tools/mcx-iv-rank',
+  '/tools/mcx-max-pain',
+  '/tools/mcx-open-interest',
+  '/tools/mcx-pcr',
+  '/tools/mcx-pl-calculator',
   '/track-record',
 ]
