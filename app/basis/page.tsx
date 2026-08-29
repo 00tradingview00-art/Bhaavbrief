@@ -1,0 +1,83 @@
+import { Suspense } from 'react'
+import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
+import { getBasisHistory, type BasisPoint } from '@/lib/basis'
+import BasisClient from './BasisClient'
+
+export const revalidate = 900
+
+export const metadata: Metadata = {
+  title:       'MCX Commodity Basis — BhaavBrief',
+  description: 'Live import-parity spread for MCX Gold, Silver, and Crude Oil vs COMEX/WTI benchmarks.',
+  keywords:    [
+    'MCX gold basis today India', 'MCX silver basis India', 'MCX crude oil basis today',
+    'MCX COMEX gold premium India', 'MCX import parity gold silver crude',
+    'MCX basis explained', 'commodity basis India',
+  ],
+}
+
+function calcStats(history: BasisPoint[], key: keyof BasisPoint) {
+  const vals = history.map(p => p[key]).filter((v): v is number => typeof v === 'number')
+  if (!vals.length) return null
+  const mean = vals.reduce((s, v) => s + v, 0) / vals.length
+  const variance = vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length
+  const std = Math.sqrt(variance)
+  return { mean, std, latest: vals[vals.length - 1] ?? null }
+}
+
+export default async function BasisPage() {
+  const { userId } = await auth()
+  const isPro = await isProUser(userId)
+  const history = getBasisHistory()
+
+  const commodities = [
+    {
+      id:    'gold',
+      label: 'Gold',
+      unit:  'INR/10g vs COMEX',
+      key:   'goldSpreadPct' as const,
+      stats: calcStats(history, 'goldSpreadPct'),
+    },
+    {
+      id:    'silver',
+      label: 'Silver',
+      unit:  'INR/kg vs COMEX',
+      key:   'silverSpreadPct' as const,
+      stats: calcStats(history, 'silverSpreadPct'),
+    },
+    {
+      id:    'crude',
+      label: 'Crude Oil',
+      unit:  'INR/bbl vs WTI',
+      key:   'crudeSpreadPct' as const,
+      stats: calcStats(history, 'crudeSpreadPct'),
+    },
+    {
+      id:    'copper',
+      label: 'Copper',
+      unit:  'INR/kg vs COMEX HG (coming soon)',
+      key:   'copperSpreadPct' as const,
+      stats: null,
+    },
+  ]
+
+  return (
+    <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
+      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+        MCX Commodity Basis
+      </h1>
+      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+        % premium / discount of MCX price vs import parity (COMEX × USDINR conversion)
+      </p>
+
+      <Suspense fallback={null}>
+        <BasisClient
+          commodities={commodities}
+          history={history}
+          isPro={isPro}
+        />
+      </Suspense>
+    </main>
+  )
+}

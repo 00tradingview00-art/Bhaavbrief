@@ -43,6 +43,7 @@ export const ROUTES = [
   '/api/subscribe',
   '/api/thesis',
   '/arcs/[id]',
+  '/basis',
   '/articles/[slug]',
   '/briefs',
   '/briefs/[slug]',
