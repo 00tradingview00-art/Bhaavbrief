@@ -1,12 +1,37 @@
 {
-  "generatedAt": "2026-08-29T05:40:14.051Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-08-30T03:40:47.420Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [],
+    "learnIssues": [
+      {
+        "field": "MCX Gold Mini lot size",
+        "currentValue": "100g",
+        "correctValue": "100g lot size not found in ground-truth contract-specs.json; only standard GOLD (1 kg) is listed",
+        "location": "FAQ_SCHEMA - 'What is the MCX Gold lot size in 2026?' answer"
+      },
+      {
+        "field": "MCX Gold Mini margin estimate",
+        "currentValue": "approximately ₹55,000–₹75,000",
+        "correctValue": "Cannot verify from ground-truth data; no Gold Mini contract in contract-specs.json",
+        "location": "FAQ_SCHEMA - 'What is the MCX Gold lot size in 2026?' answer"
+      },
+      {
+        "field": "MCX Crude rollover cost example",
+        "currentValue": "₹1,000–₹3,000 per lot",
+        "correctValue": "Cannot verify from ground-truth data; this is illustrative but no current market data provided",
+        "location": "FAQ_SCHEMA - 'How do you rollover an MCX futures contract?' answer"
+      },
+      {
+        "field": "MCX trading hours",
+        "currentValue": "trades until 11:30 PM IST",
+        "correctValue": "Cannot verify from ground-truth contract-specs.json; trading hours not provided in authoritative data",
+        "location": "FAQ_SCHEMA - 'What is the difference between NSE Gold Futures and MCX Gold?' answer"
+      }
+    ],
     "investIssues": [],
     "circularImpact": []
   }
