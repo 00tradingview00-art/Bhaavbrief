@@ -152,7 +152,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Link href="/options" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Options Chain</Link>{' '}·{' '}
             <Link href="/options/strategy" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Strategy Builder</Link>{' '}·{' '}
             <Link href="/basis" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Basis</Link>{' '}·{' '}
-            <Link href="/research" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Research</Link>{' '}·{' '}
             <Link href="/pro" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Pro</Link>
           </p>
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>

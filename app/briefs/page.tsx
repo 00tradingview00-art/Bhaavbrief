@@ -138,6 +138,17 @@ export default async function BriefsPage() {
 
       {/* Sidebar */}
       <aside className="brief-sidebar" style={{ borderLeft: '0.5px solid #DDDDD0', paddingLeft: '2rem', alignSelf: 'start' }}>
+        <Link href="/news" style={{
+          display: 'block', border: '0.5px solid var(--gold)', background: 'var(--gold-pale)',
+          padding: '1rem 1.25rem', marginBottom: '1.5rem', textDecoration: 'none',
+        }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold-dark)', marginBottom: '0.4rem', fontWeight: 700 }}>
+            Pro Research
+          </div>
+          <p style={{ fontSize: 13, color: 'var(--ink-2)', margin: 0, lineHeight: 1.5 }}>
+            Deep macro-event analysis — FOMC, OPEC+, RBI MPC — see this week&apos;s coverage in the Feed →
+          </p>
+        </Link>
         <div style={{ border: '0.5px solid var(--border)', padding: '1.25rem' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
             Learn
