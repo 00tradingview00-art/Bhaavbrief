@@ -25,29 +25,31 @@ export default async function AccountPage() {
     : null
 
   return (
-    <main style={{ maxWidth: 600, margin: '3rem auto', padding: '0 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem' }}>My Account</h1>
+    <main style={{ maxWidth: 600, margin: '3rem auto', padding: '0 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '2rem' }}>My Account</h1>
 
-      <section style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '1.5rem', marginBottom: '1.5rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem' }}>Subscription</h2>
+      <section style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '1.5rem', marginBottom: '1.5rem', background: 'var(--surface-2)' }}>
+        <h2 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)', marginBottom: '1rem' }}>Subscription</h2>
         {pro ? (
           <>
-            <p><strong>Plan:</strong> BhaavBrief Pro — {plan === 'yearly' ? 'Annual (₹2,999/year)' : 'Monthly (₹333/month)'}</p>
-            <p style={{ marginTop: '0.5rem' }}><strong>Renews:</strong> {expiryLabel}</p>
+            <p style={{ color: 'var(--ink)', marginBottom: '0.5rem' }}>
+              <strong>Plan:</strong> BhaavBrief Pro — {plan === 'yearly' ? 'Annual (₹2,999/year)' : 'Monthly (₹333/month)'}
+            </p>
+            <p style={{ color: 'var(--ink-2)' }}><strong>Renews:</strong> {expiryLabel}</p>
             {subId && (
-              <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#6b7280' }}>
-                To cancel, contact support with subscription ID: {subId}
+              <p style={{ marginTop: '1rem', fontSize: '0.82rem', color: 'var(--ink-3)', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+                To cancel, contact support with subscription ID: <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>{subId}</span>
               </p>
             )}
           </>
         ) : (
           <>
-            <p style={{ color: '#6b7280', marginBottom: '1rem' }}>You are on the free plan.</p>
+            <p style={{ color: 'var(--ink-3)', marginBottom: '1.25rem', fontSize: '0.9rem' }}>You are on the free plan.</p>
             <a
               href="/pro"
               style={{
-                display: 'inline-block', background: '#1a1a1a', color: '#fff',
-                padding: '0.6rem 1.25rem', borderRadius: 6, textDecoration: 'none', fontSize: '0.9rem',
+                display: 'inline-block', background: 'var(--ink)', color: '#fff',
+                padding: '0.6rem 1.4rem', borderRadius: 6, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600,
               }}
             >
               Upgrade to Pro →

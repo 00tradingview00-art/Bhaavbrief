@@ -27,36 +27,59 @@ const FREE_FEATURES = [
   'Educational library (lot sizes, margin, Greeks basics)',
 ]
 
-const PRO_FEATURES: { label: string; href?: string }[] = [
-  { label: 'Full option chain — all strikes, all expiries',                            href: '/options' },
-  { label: 'Live Greeks (delta, gamma, theta, vega) per strike',                       href: '/tools/mcx-greeks' },
-  { label: 'Strategy Builder — 12 multi-leg templates with payoff charts',             href: '/options/strategy' },
-  { label: 'IV Skew Chart — CE vs PE implied volatility by strike',                    href: '/options' },
-  { label: 'OI Buildup History — 90-day open interest by strike',                      href: '/tools/mcx-open-interest' },
-  { label: 'IV Rank & Percentile — 90-day history per instrument',                     href: '/tools/mcx-iv-rank' },
-  { label: 'Put-Call Ratio trend chart — 30-day CE vs PE OI history',                  href: '/tools/mcx-pcr' },
-  { label: 'Commodity Basis Dashboard — MCX vs COMEX spread, 30-day chart',            href: '/basis' },
-  { label: 'Pro Research Articles — macro event analysis within hours of publication', href: '/research' },
-  { label: 'FPI/DII positioning — institutional net long/short data (coming soon)' },
+const PRO_WORKFLOWS: {
+  title: string
+  description: string
+  chips: string[]
+  href: string
+}[] = [
+  {
+    title: 'Options Chain Terminal',
+    description: 'Full strike ladder with live Greeks, IV quality tiers, Max Pain and PCR — what a market maker sees.',
+    chips: ['All strikes & expiries', 'Delta · Gamma · Theta · Vega', 'IV quality tiers'],
+    href: '/options',
+  },
+  {
+    title: 'Volatility Analytics',
+    description: 'Know when to buy volatility and when to sell it. IV Rank, IV Percentile (90-day history), IV Skew chart, OI buildup.',
+    chips: ['IV Rank & Percentile', 'IV Skew CE vs PE', 'OI Buildup 90-day'],
+    href: '/tools/mcx-iv-rank',
+  },
+  {
+    title: 'Strategy Builder',
+    description: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table.',
+    chips: ['12 templates', 'Payoff chart', 'Greeks per leg'],
+    href: '/options/strategy',
+  },
+  {
+    title: 'Market Intelligence',
+    description: 'Commodity Basis Dashboard (MCX vs COMEX spread, 30-day chart) and Pro Research with MCX implications within hours of major macro events.',
+    chips: ['Basis Dashboard', 'Pro Research', 'PCR Trend 30-day'],
+    href: '/basis',
+  },
 ]
 
 export default function ProPage() {
   return (
     <>
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
-      <main style={{ maxWidth: 900, margin: '0 auto', padding: '3rem 1rem 5rem', fontFamily: 'system-ui, sans-serif' }}>
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.75rem' }}>
+      <main style={{ maxWidth: 900, margin: '0 auto', padding: '3rem 1rem 5rem', fontFamily: 'var(--font-sans)' }}>
+
+        {/* Hero */}
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.75rem' }}>
             BhaavBrief Pro
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2rem, 5vw, 2.75rem)', fontWeight: 700, color: 'var(--ink)', marginBottom: '1rem', lineHeight: 1.15 }}>
+            The MCX Options Terminal<br />India Has Been Missing
           </h1>
-          <p style={{ fontSize: '1.1rem', color: '#555', maxWidth: 560, margin: '0 auto' }}>
-            The only MCX-focused options analytics terminal in India.
-            No Sensibull equivalent exists for commodity options. Until now.
+          <p style={{ fontSize: '1.05rem', color: 'var(--ink-3)', maxWidth: 540, margin: '0 auto', lineHeight: 1.6 }}>
+            No Sensibull equivalent exists for commodity options. BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
           </p>
         </div>
 
         {/* Pricing cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
           <PricingCard
             plan="monthly"
             label="Monthly"
@@ -75,12 +98,65 @@ export default function ProPage() {
           />
         </div>
 
-        {/* Feature comparison */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
-          <FreeFeatureList title="Free forever" features={FREE_FEATURES} />
-          <ProFeatureList title="Pro" features={PRO_FEATURES} />
+        {/* Pro workflows */}
+        <div style={{ marginBottom: '4rem' }}>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>
+            What Pro Unlocks
+          </h2>
+          <p style={{ color: 'var(--ink-3)', fontSize: '0.9rem', marginBottom: '1.75rem' }}>
+            Four analyst workflows, built for MCX options traders.
+          </p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+            {PRO_WORKFLOWS.map(w => (
+              <Link key={w.href} href={w.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div style={{
+                  border: '1px solid var(--border)',
+                  borderRadius: 10,
+                  padding: '1.5rem',
+                  background: 'var(--surface-2)',
+                  transition: 'border-color 0.15s',
+                }} className="pro-workflow-card">
+                  <div style={{ fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '0.5rem' }}>
+                    Pro
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>
+                    {w.title}
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', lineHeight: 1.55, marginBottom: '1rem' }}>
+                    {w.description}
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                    {w.chips.map(c => (
+                      <span key={c} style={{ fontSize: '0.7rem', background: 'var(--gold-pale)', color: 'var(--gold-dark)', padding: '2px 9px', borderRadius: 20, fontWeight: 600 }}>
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Free tier */}
+        <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '2rem', background: 'var(--surface-3)' }}>
+          <h2 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--up)', marginBottom: '1rem' }}>
+            Free forever — no card needed
+          </h2>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.5rem' }}>
+            {FREE_FEATURES.map(f => (
+              <li key={f} style={{ display: 'flex', gap: '0.6rem', fontSize: '0.87rem', color: 'var(--ink-2)' }}>
+                <span style={{ color: 'var(--up)', flexShrink: 0, marginTop: 1 }}>✓</span>
+                {f}
+              </li>
+            ))}
+          </ul>
         </div>
       </main>
+
+      <style>{`
+        .pro-workflow-card:hover { border-color: var(--gold) !important; }
+      `}</style>
     </>
   )
 }
@@ -98,69 +174,29 @@ function PricingCard({
 }) {
   return (
     <div style={{
-      border: highlight ? '2px solid #1a1a1a' : '1px solid #e5e7eb',
+      border: highlight ? '2px solid var(--ink)' : '1px solid var(--border)',
       borderRadius: 10,
       padding: '1.75rem',
       position: 'relative',
+      background: highlight ? 'var(--surface-3)' : 'var(--surface)',
+      fontFamily: 'var(--font-sans)',
     }}>
       {highlight && (
         <span style={{
           position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
-          background: '#1a1a1a', color: '#fff', fontSize: '0.75rem', padding: '2px 12px', borderRadius: 20,
+          background: 'var(--ink)', color: '#fff', fontSize: '0.72rem', padding: '2px 12px', borderRadius: 20, fontWeight: 600, letterSpacing: '0.05em',
         }}>
           Best value
         </span>
       )}
-      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#6b7280', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ink-3)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
         {label}
       </div>
-      <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.25rem' }}>
-        {price}<span style={{ fontSize: '1rem', fontWeight: 400, color: '#6b7280' }}>{sub}</span>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
+        {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
       </div>
-      {note && <div style={{ fontSize: '0.85rem', color: '#16a34a', marginBottom: '1rem' }}>{note}</div>}
+      {note && <div style={{ fontSize: '0.85rem', color: 'var(--up)', marginBottom: '1rem', fontWeight: 500 }}>{note}</div>}
       <ProCheckout plan={plan} cta={cta} />
-    </div>
-  )
-}
-
-function FreeFeatureList({ title, features }: { title: string; features: string[] }) {
-  return (
-    <div>
-      <h2 style={{ fontSize: '1rem', fontWeight: 500, color: '#16a34a', marginBottom: '1rem' }}>
-        {title}
-      </h2>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {features.map(f => (
-          <li key={f} style={{ display: 'flex', gap: '0.6rem', marginBottom: '0.6rem', fontSize: '0.9rem', color: '#374151' }}>
-            <span style={{ color: '#16a34a', flexShrink: 0 }}>✓</span>
-            {f}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-function ProFeatureList({ title, features }: { title: string; features: { label: string; href?: string }[] }) {
-  return (
-    <div>
-      <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '1rem' }}>
-        {title}
-      </h2>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {features.map(f => (
-          <li key={f.label} style={{ display: 'flex', gap: '0.6rem', marginBottom: '0.6rem', fontSize: '0.9rem', color: '#374151' }}>
-            <span style={{ color: '#1a1a1a', flexShrink: 0 }}>✓</span>
-            {f.href ? (
-              <Link href={f.href} style={{ color: '#1a1a1a', textDecoration: 'underline', textUnderlineOffset: 3 }}>
-                {f.label}
-              </Link>
-            ) : (
-              <span style={{ color: '#9ca3af' }}>{f.label}</span>
-            )}
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }

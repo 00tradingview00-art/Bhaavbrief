@@ -15,57 +15,6 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/tools' },
 }
 
-const FREE_TOOLS = [
-  {
-    href: '/tools/mcx-iv-rank',
-    label: 'IV Rank & Percentile',
-    desc: 'Is MCX options cheap or expensive today? IV Rank + IV Percentile for Gold, Silver, Crude, Copper, Natural Gas.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-pcr',
-    label: 'Put-Call Ratio (PCR)',
-    desc: 'Live PCR and IVIX for all MCX instruments. PCR > 1.2 = contrarian bullish signal.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-open-interest',
-    label: 'Open Interest Analysis',
-    desc: 'Top-5 OI strikes by Call and Put for each instrument. High OI = strong support/resistance.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-greeks',
-    label: 'Options Greeks (ATM)',
-    desc: 'Black-76 delta, gamma, theta, and vega for the at-the-money strike. All 5 instruments.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-max-pain',
-    label: 'Max Pain',
-    desc: 'The strike at which option sellers lose the least. Updated live every 60 seconds.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-pl-calculator',
-    label: 'P&L Calculator',
-    desc: 'Calculate futures profit and loss in INR. Lot sizes and tick values built in for every MCX commodity.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-bhavcopy',
-    label: 'Bhavcopy Guide',
-    desc: 'What is MCX bhavcopy, how to download it, and what the settlement columns mean.',
-    badge: 'Free',
-  },
-  {
-    href: '/tools/mcx-basis',
-    label: 'Commodity Basis',
-    desc: 'MCX vs COMEX/international spread for Gold, Silver, Crude, and Copper. Updated every 15 minutes.',
-    badge: 'Free',
-  },
-]
-
 const PRO_TOOLS = [
   {
     href: '/options',
@@ -89,87 +38,139 @@ const PRO_TOOLS = [
   },
 ]
 
+const FREE_TOOLS = [
+  {
+    href: '/tools/mcx-iv-rank',
+    label: 'IV Rank & Percentile',
+    desc: 'Is MCX options cheap or expensive today? IV Rank + IV Percentile for Gold, Silver, Crude, Copper, Natural Gas.',
+  },
+  {
+    href: '/tools/mcx-pcr',
+    label: 'Put-Call Ratio (PCR)',
+    desc: 'Live PCR and IVIX for all MCX instruments. PCR > 1.2 = contrarian bullish signal.',
+  },
+  {
+    href: '/tools/mcx-open-interest',
+    label: 'Open Interest Analysis',
+    desc: 'Top-5 OI strikes by Call and Put for each instrument. High OI = strong support/resistance.',
+  },
+  {
+    href: '/tools/mcx-greeks',
+    label: 'Options Greeks (ATM)',
+    desc: 'Black-76 delta, gamma, theta, and vega for the at-the-money strike. All 5 instruments.',
+  },
+  {
+    href: '/tools/mcx-max-pain',
+    label: 'Max Pain',
+    desc: 'The strike at which option sellers lose the least. Updated live every 60 seconds.',
+  },
+  {
+    href: '/tools/mcx-pl-calculator',
+    label: 'P&L Calculator',
+    desc: 'Calculate futures profit and loss in INR. Lot sizes and tick values built in for every MCX commodity.',
+  },
+  {
+    href: '/tools/mcx-bhavcopy',
+    label: 'Bhavcopy Guide',
+    desc: 'What is MCX bhavcopy, how to download it, and what the settlement columns mean.',
+  },
+  {
+    href: '/tools/mcx-basis',
+    label: 'Commodity Basis',
+    desc: 'MCX vs COMEX/international spread for Gold, Silver, Crude, and Copper. Updated every 15 minutes.',
+  },
+]
+
 export default function ToolsPage() {
   return (
-    <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Analytics Tools
       </h1>
-      <p style={{ fontSize: '0.88rem', opacity: 0.65, marginBottom: '2rem' }}>
-        Live data tools for MCX commodity options traders. Free tools available to everyone — Pro tools unlock the full analytical depth.
+      <p style={{ fontSize: '0.88rem', color: 'var(--ink-3)', marginBottom: '2.5rem' }}>
+        Professional-grade tools for MCX commodity options traders. Pro analytics unlock the full analytical depth.
       </p>
 
-      <section style={{ marginBottom: '2.5rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem', color: '#16a34a' }}>
-          Free Tools
-        </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
-          {FREE_TOOLS.map(t => (
-            <Link
-              key={t.href}
-              href={t.href}
-              className="tools-card"
-              style={{
-                display: 'block',
-                border: '1px solid #e5e7eb',
-                borderRadius: 8,
-                padding: '0.9rem 1rem',
-                textDecoration: 'none',
-                color: 'inherit',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.35rem' }}>
-                <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{t.label}</span>
-                <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#16a34a', padding: '1px 7px', borderRadius: 20, fontWeight: 600 }}>
-                  {t.badge}
-                </span>
-              </div>
-              <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0, lineHeight: 1.4 }}>{t.desc}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Pro Tools</h2>
-          <Link href="/pro" style={{ fontSize: '0.78rem', background: '#1a1a1a', color: '#fff', padding: '2px 10px', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>
+      {/* Pro Analytics — shown first */}
+      <section style={{ marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>Pro Analytics</h2>
+          <Link href="/pro" style={{ fontSize: '0.75rem', background: 'var(--ink)', color: '#fff', padding: '2px 10px', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>
             Unlock — ₹33/day →
           </Link>
         </div>
+        <p style={{ fontSize: '0.82rem', color: 'var(--ink-3)', marginBottom: '1rem' }}>
+          Built for traders who use options — not just futures prices.
+        </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
           {PRO_TOOLS.map(t => (
             <Link
               key={t.href}
               href={t.href}
+              className="pro-tool-card"
               style={{
                 display: 'block',
-                border: '1px solid #1a1a1a',
+                border: '1px solid var(--border-2)',
                 borderRadius: 8,
                 padding: '0.9rem 1rem',
                 textDecoration: 'none',
                 color: 'inherit',
                 position: 'relative',
                 overflow: 'hidden',
+                background: 'var(--surface-3)',
               }}
             >
               <span style={{
                 position: 'absolute', top: 0, right: 0,
-                background: '#1a1a1a', color: '#fff',
+                background: 'var(--ink)', color: '#fff',
                 fontSize: '0.65rem', padding: '2px 8px',
-                borderBottomLeftRadius: 6, fontWeight: 600,
+                borderBottomLeftRadius: 6, fontWeight: 700, letterSpacing: '0.05em',
               }}>
-                Pro
+                PRO
               </span>
-              <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.35rem' }}>{t.label}</div>
-              <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0, lineHeight: 1.4 }}>{t.desc}</p>
+              <div style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>{t.label}</div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.45 }}>{t.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Free Tools */}
+      <section>
+        <h2 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--up)', marginBottom: '1rem' }}>
+          Free Data Tools
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
+          {FREE_TOOLS.map(t => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="free-tool-card"
+              style={{
+                display: 'block',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '0.9rem 1rem',
+                textDecoration: 'none',
+                color: 'inherit',
+                background: 'var(--surface)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>{t.label}</span>
+                <span style={{ fontSize: '0.65rem', background: '#EBF5EF', color: 'var(--up)', padding: '1px 7px', borderRadius: 20, fontWeight: 700 }}>
+                  FREE
+                </span>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.45 }}>{t.desc}</p>
             </Link>
           ))}
         </div>
       </section>
 
       <style>{`
-        .tools-card:hover { border-color: #1a1a1a !important; }
+        .free-tool-card:hover { border-color: var(--gold) !important; }
+        .pro-tool-card:hover  { border-color: var(--gold) !important; }
       `}</style>
     </main>
   )
