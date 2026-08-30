@@ -19,8 +19,8 @@ function isPriceUnusual(price: number, min: number, max: number) {
 export default function PLCalculatorClient() {
   const [instrument, setInstrument] = useState<InstrumentKey>('GOLD')
   const [lots,       setLots]       = useState(1)
-  const [buyPrice,   setBuyPrice]   = useState('')
-  const [sellPrice,  setSellPrice]  = useState('')
+  const [buyPrice,   setBuyPrice]   = useState<string>(INSTRUMENTS.GOLD.placeholder)
+  const [sellPrice,  setSellPrice]  = useState<string>(INSTRUMENTS.GOLD.placeholder)
   const [side,       setSide]       = useState<'long' | 'short'>('long')
 
   const meta   = INSTRUMENTS[instrument]

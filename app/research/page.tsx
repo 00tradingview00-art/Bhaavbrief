@@ -3,7 +3,7 @@ import { getAllResearch } from '@/lib/research'
 import { getAllArticles } from '@/lib/articles'
 import Link from 'next/link'
 
-export const revalidate = 3600
+export const revalidate = 900
 
 export const metadata: Metadata = {
   title:       'Pro Research — BhaavBrief',
