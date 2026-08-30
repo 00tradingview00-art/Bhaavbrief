@@ -33,21 +33,21 @@ async function getPCRData() {
 }
 
 function pcrSignal(pcr: number | null): { label: string; color: string } {
-  if (pcr === null) return { label: 'N/A', color: '#888' }
-  if (pcr > 1.2)   return { label: 'Bullish', color: '#22c55e' }
-  if (pcr > 0.8)   return { label: 'Neutral', color: '#6b7280' }
-  return { label: 'Bearish', color: '#ef4444' }
+  if (pcr === null) return { label: 'N/A', color: 'var(--ink-3)' }
+  if (pcr > 1.2)   return { label: 'Bullish', color: 'var(--up)' }
+  if (pcr > 0.8)   return { label: 'Neutral', color: 'var(--ink-3)' }
+  return { label: 'Bearish', color: 'var(--down)' }
 }
 
 export default async function MCXPCRPage() {
   const data = await getPCRData()
 
   return (
-    <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Put-Call Ratio (PCR)
       </h1>
-      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         PCR &gt; 1.2 = more puts than calls = market expects downside, short-sellers protecting = contrarian bullish signal.
         PCR &lt; 0.8 = complacency = contrarian bearish. Live data, updated every 60 seconds.
       </p>
@@ -57,22 +57,22 @@ export default async function MCXPCRPage() {
           const row = data[key]
           const { label, color } = pcrSignal(row?.pcr ?? null)
           return (
-            <div key={key} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+            <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{meta.label}</div>
-                <div style={{ fontSize: '0.72rem', opacity: 0.55 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{meta.label}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>
                   {row ? `Futures: ${row.futurePrice.toLocaleString()}` : '—'}
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 {row?.ivix !== null && row?.ivix !== undefined && (
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 700 }}>{row.ivix.toFixed(1)}</div>
-                    <div style={{ fontSize: '0.7rem', opacity: 0.55 }}>iVIX</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)' }}>{row.ivix.toFixed(1)}</div>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--ink-3)' }}>iVIX</div>
                   </div>
                 )}
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 800, color }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 700, color }}>
                     {row?.pcr !== null && row?.pcr !== undefined ? row.pcr.toFixed(2) : '—'}
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>{label}</div>
@@ -84,7 +84,7 @@ export default async function MCXPCRPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>PCR Trend — 30 Days</h2>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>PCR Trend — 30 Days</h2>
         <ProBlurGate label="PCR trend chart — 30-day history of Call vs Put open interest ratio" timestamp="Live">
           <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
             {Array.from({ length: 30 }, (_, i) => {
@@ -92,20 +92,20 @@ export default async function MCXPCRPage() {
               const peH = 25 + Math.abs(Math.cos(i * 0.4 + 1)) * 45
               return (
                 <g key={i}>
-                  <rect x={i * 16 + 2} y={140 - ceH} width={7} height={ceH} fill="#22c55e" opacity="0.7"/>
-                  <rect x={i * 16 + 9} y={140 - peH} width={7} height={peH} fill="#f97316" opacity="0.7"/>
+                  <rect x={i * 16 + 2} y={140 - ceH} width={7} height={ceH} fill="var(--up)" opacity="0.7"/>
+                  <rect x={i * 16 + 9} y={140 - peH} width={7} height={peH} fill="var(--gold-dark)" opacity="0.7"/>
                 </g>
               )
             })}
-            <text x="4" y="156" fontSize="9" fill="#22c55e">Call OI</text>
-            <text x="48" y="156" fontSize="9" fill="#f97316">Put OI</text>
+            <text x="4" y="156" fontSize="9" fill="var(--up)">Call OI</text>
+            <text x="48" y="156" fontSize="9" fill="var(--gold-dark)">Put OI</text>
           </svg>
         </ProBlurGate>
       </section>
 
-      <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
+      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
         PCR trend chart history →{' '}
-        <Link href="/options" style={{ color: '#1a1a1a' }}>MCX Options (Pro)</Link>
+        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options (Pro)</Link>
       </p>
     </main>
   )

@@ -40,21 +40,21 @@ async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null }>
 }
 
 function regimeColor(regime: string | undefined): string {
-  if (regime === 'HIGH')   return '#ef4444'
-  if (regime === 'NORMAL') return '#22c55e'
-  if (regime === 'LOW')    return '#3b82f6'
-  return '#6b7280'
+  if (regime === 'HIGH')   return 'var(--down)'
+  if (regime === 'NORMAL') return 'var(--up)'
+  if (regime === 'LOW')    return 'var(--gold-dark)'
+  return 'var(--ink-3)'
 }
 
 export default async function MCXIVRankPage() {
   const ivRanks = await getIVRanks()
 
   return (
-    <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Implied Volatility Rank
       </h1>
-      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         IV Rank 0–100: how current IV compares to the past year. &gt;70 = expensive options, &lt;30 = cheap options.
       </p>
 
@@ -63,19 +63,19 @@ export default async function MCXIVRankPage() {
           const { regime } = ivRanks[key] ?? { regime: null }
           const color = regimeColor(regime?.regime)
           return (
-            <div key={key} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+            <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{meta.label}</div>
-                <div style={{ fontSize: '0.75rem', opacity: 0.55 }}>{key}</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{meta.label}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{key}</div>
               </div>
               {regime ? (
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color }}>{regime.ivRank.toFixed(0)}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>IV Rank</div>
-                  <div style={{ fontSize: '0.72rem', opacity: 0.6 }}>Pctl: {regime.percentile.toFixed(0)} · {regime.label}</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>Pctl: {regime.percentile.toFixed(0)} · {regime.label}</div>
                 </div>
               ) : (
-                <div style={{ fontSize: '0.8rem', opacity: 0.5 }}>No history yet</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>No history yet</div>
               )}
             </div>
           )
@@ -83,14 +83,14 @@ export default async function MCXIVRankPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
         <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
           <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
             {Object.keys(MCX_INSTRUMENTS).map((_, row) => (
               <g key={row}>
                 {Array.from({ length: 20 }, (__, i) => {
                   const h = 10 + Math.abs(Math.sin((i + row * 3) * 0.8)) * 18
-                  return <rect key={i} x={i * 24 + 4} y={row * 28 + 28 - h} width={18} height={h} rx="2" fill="#3b82f6" opacity={0.35 + i * 0.02}/>
+                  return <rect key={i} x={i * 24 + 4} y={row * 28 + 28 - h} width={18} height={h} rx="2" fill="var(--gold)" opacity={0.35 + i * 0.02}/>
                 })}
               </g>
             ))}
@@ -98,9 +98,9 @@ export default async function MCXIVRankPage() {
         </ProBlurGate>
       </section>
 
-      <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
+      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
         For full option chains, Greeks, and strategy builder →{' '}
-        <Link href="/options" style={{ color: '#1a1a1a' }}>MCX Options</Link>
+        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options</Link>
       </p>
     </main>
   )

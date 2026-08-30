@@ -123,52 +123,52 @@ export default async function ResearchSlugPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
 
-      <article style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
+      <article style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
         {/* Breadcrumb */}
-        <div style={{ fontSize: '0.75rem', opacity: 0.55, marginBottom: '1.25rem', display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+        <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)', marginBottom: '1.25rem', display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
           <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
-          <Link href="/research" style={{ color: 'inherit', textDecoration: 'none' }}>Research</Link>
+          <Link href="/news" style={{ color: 'inherit', textDecoration: 'none' }}>Feed</Link>
           <span>›</span>
-          <span style={{ opacity: 0.7 }}>{meta.commodities.length > 0 ? meta.commodities[0].charAt(0).toUpperCase() + meta.commodities[0].slice(1) : 'Macro'}</span>
+          <span>{meta.commodities.length > 0 ? meta.commodities[0].charAt(0).toUpperCase() + meta.commodities[0].slice(1) : 'Macro'}</span>
         </div>
 
         {/* Header */}
         <header style={{ marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: '#1a1a1a', color: '#fff', padding: '2px 7px', borderRadius: 99 }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--ink)', color: '#fff', padding: '2px 7px', borderRadius: 99 }}>
               Pro Research
             </span>
-            <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>{meta.displayDate}</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{meta.displayDate}</span>
             {meta.commodities.length > 0 && (
-              <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>
+              <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>
                 · {meta.commodities.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}
               </span>
             )}
-            <span style={{ fontSize: '0.75rem', opacity: 0.5 }}>{meta.readingMinutes} min read</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{meta.readingMinutes} min read</span>
           </div>
-          <h1 style={{ fontSize: '1.4rem', fontWeight: 800, lineHeight: 1.3, margin: '0 0 0.6rem' }}>
+          <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', lineHeight: 1.25, margin: '0 0 0.6rem' }}>
             {meta.title}
           </h1>
-          <p style={{ fontSize: '0.88rem', opacity: 0.7, margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontSize: '0.95rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.6 }}>
             {meta.description}
           </p>
         </header>
 
         {isPro ? (
-          <div className="pro-content" style={{ fontSize: '0.9rem', lineHeight: 1.75 }}>
+          <div className="pro-content" style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75 }}>
             <MDXRemote source={content} />
           </div>
         ) : (
           <>
             {/* Teaser: always server-rendered so Google can index it */}
-            <div style={{ fontSize: '0.9rem', lineHeight: 1.75, marginBottom: '1.5rem' }}>
+            <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, marginBottom: '1.5rem' }}>
               <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 300)}</p>
             </div>
 
             {/* Paywall gate — blurred article text preview */}
             <ProBlurGate isPro={isPro} label="Full analysis — strategy, levels, options positioning">
-              <div style={{ fontSize: '0.9rem', lineHeight: 1.75, maxHeight: 200, overflow: 'hidden' }}>
+              <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, maxHeight: 200, overflow: 'hidden' }}>
                 <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 500).split(' ').slice(300).join(' ')}</p>
               </div>
             </ProBlurGate>
@@ -176,10 +176,10 @@ export default async function ResearchSlugPage({ params }: Props) {
         )}
 
         {/* Footer */}
-        <footer style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid #f3f4f6', fontSize: '0.75rem', opacity: 0.5, display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <footer style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid var(--border)', fontSize: '0.75rem', color: 'var(--ink-3)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <span>By Prabal · BhaavBrief</span>
           {meta.displayDate && <span>{meta.displayDate}</span>}
-          <Link href="/research" style={{ color: 'inherit' }}>← All Research</Link>
+          <Link href="/news" style={{ color: 'var(--gold)', fontWeight: 600 }}>← Back to Feed</Link>
         </footer>
       </article>
     </>

@@ -45,11 +45,11 @@ export default async function MCXOpenInterestPage() {
   const oi = await getOIData()
 
   return (
-    <main style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Open Interest Analysis
       </h1>
-      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         Top-5 OI strikes by Call and Put for each instrument. High OI = strong support/resistance.
       </p>
 
@@ -57,29 +57,29 @@ export default async function MCXOpenInterestPage() {
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
           const data = oi[key]
           return (
-            <div key={key} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '0.9rem 1.1rem' }}>
+            <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', background: 'var(--surface)' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <h2 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>{meta.label}</h2>
-                {data && <span style={{ fontSize: '0.75rem', opacity: 0.55 }}>Futures: {data.futurePrice.toLocaleString()}</span>}
+                <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>{meta.label}</h2>
+                {data && <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>Futures: {data.futurePrice.toLocaleString()}</span>}
               </div>
               {data ? (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                   {(['topCE', 'topPE'] as const).map(side => (
                     <div key={side}>
-                      <div style={{ fontSize: '0.78rem', fontWeight: 600, color: side === 'topCE' ? '#22c55e' : '#f97316', marginBottom: 4 }}>
+                      <div style={{ fontSize: '0.78rem', fontWeight: 600, color: side === 'topCE' ? 'var(--up)' : 'var(--gold-dark)', marginBottom: 4 }}>
                         {side === 'topCE' ? 'Call' : 'Put'} OI (Top 5)
                       </div>
                       {data[side].map(r => (
                         <div key={r.strike} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', padding: '2px 0' }}>
-                          <span style={{ fontWeight: 600 }}>{r.strike.toLocaleString()}</span>
-                          <span style={{ opacity: 0.7 }}>{r.oi.toLocaleString()}</span>
+                          <span style={{ fontWeight: 600, color: 'var(--ink)' }}>{r.strike.toLocaleString()}</span>
+                          <span style={{ color: 'var(--ink-3)' }}>{r.oi.toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p style={{ fontSize: '0.8rem', opacity: 0.5 }}>No live data available.</p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>No live data available.</p>
               )}
             </div>
           )
@@ -87,32 +87,32 @@ export default async function MCXOpenInterestPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.75rem' }}>OI Buildup History — 90 Days by Strike</h2>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>OI Buildup History — 90 Days by Strike</h2>
         <ProBlurGate label="OI buildup history — see how open interest has shifted across strikes over 90 days" timestamp="Updated today">
           <svg width="100%" height="180" viewBox="0 0 500 180" style={{ display: 'block' }}>
             <defs>
               <linearGradient id="oigrad1" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.6"/>
-                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.1"/>
+                <stop offset="0%" stopColor="var(--up)" stopOpacity="0.6"/>
+                <stop offset="100%" stopColor="var(--up)" stopOpacity="0.1"/>
               </linearGradient>
               <linearGradient id="oigrad2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f97316" stopOpacity="0.5"/>
-                <stop offset="100%" stopColor="#f97316" stopOpacity="0.05"/>
+                <stop offset="0%" stopColor="var(--gold-dark)" stopOpacity="0.5"/>
+                <stop offset="100%" stopColor="var(--gold-dark)" stopOpacity="0.05"/>
               </linearGradient>
             </defs>
             <polyline points="0,160 50,140 100,120 150,90 200,60 250,80 300,100 350,130 400,150 450,145 500,160"
-              fill="url(#oigrad1)" stroke="#22c55e" strokeWidth="2"/>
+              fill="url(#oigrad1)" stroke="var(--up)" strokeWidth="2"/>
             <polyline points="0,160 50,150 100,145 150,130 200,110 250,100 300,120 350,140 400,155 450,160 500,160"
-              fill="url(#oigrad2)" stroke="#f97316" strokeWidth="2"/>
-            <text x="6" y="170" fontSize="9" fill="#22c55e">Call OI concentration</text>
-            <text x="130" y="170" fontSize="9" fill="#f97316">Put OI concentration</text>
+              fill="url(#oigrad2)" stroke="var(--gold-dark)" strokeWidth="2"/>
+            <text x="6" y="170" fontSize="9" fill="var(--up)">Call OI concentration</text>
+            <text x="130" y="170" fontSize="9" fill="var(--gold-dark)">Put OI concentration</text>
           </svg>
         </ProBlurGate>
       </section>
 
-      <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
+      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
         90-day OI buildup history by strike →{' '}
-        <Link href="/options" style={{ color: '#1a1a1a' }}>MCX Options (Pro)</Link>
+        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options (Pro)</Link>
       </p>
     </main>
   )

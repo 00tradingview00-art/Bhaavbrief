@@ -26,11 +26,11 @@ export default function MCXBasisPage() {
   ] as const
 
   return (
-    <main style={{ maxWidth: 640, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 640, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Commodity Basis
       </h1>
-      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         How much MCX prices trade above (+) or below (−) their import-parity equivalent.
         {latest && <> Data as of {latest.date}.</>}
       </p>
@@ -38,14 +38,14 @@ export default function MCXBasisPage() {
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {items.map(({ label, key, unit }) => {
           const val = latest?.[key] ?? null
-          const color = val === null ? '#888' : val > 0 ? '#22c55e' : '#ef4444'
+          const color = val === null ? 'var(--ink-3)' : val > 0 ? 'var(--up)' : 'var(--down)'
           return (
-            <div key={key} style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--surface)' }}>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{label}</div>
-                <div style={{ fontSize: '0.72rem', opacity: 0.55 }}>{unit}</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{label}</div>
+                <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>{unit}</div>
               </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 800, color }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>
                 {val !== null ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : '—'}
               </div>
             </div>
@@ -53,9 +53,9 @@ export default function MCXBasisPage() {
         })}
       </div>
 
-      <p style={{ fontSize: '0.78rem', opacity: 0.55, marginTop: '1.5rem' }}>
+      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
         30-day spread history with ±1σ/±2σ bands →{' '}
-        <Link href="/basis" style={{ color: '#1a1a1a' }}>Full Basis Dashboard (Pro)</Link>
+        <Link href="/basis" style={{ color: 'var(--gold)', fontWeight: 600 }}>Full Basis Dashboard (Pro)</Link>
       </p>
     </main>
   )
