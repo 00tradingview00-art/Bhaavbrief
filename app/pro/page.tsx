@@ -80,7 +80,7 @@ export default function ProPage() {
             The MCX Options Terminal<br />India Has Been Missing
           </h1>
           <p style={{ fontSize: '1.05rem', color: 'var(--ink-3)', maxWidth: 540, margin: '0 auto', lineHeight: 1.6 }}>
-            No Sensibull equivalent exists for commodity options. BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
+            No dedicated options-analytics platform exists for MCX commodities. BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
           </p>
         </div>
 
