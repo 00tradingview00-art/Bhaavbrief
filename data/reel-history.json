@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260830-mcx-trading-hours-in-india",
+    "topic": "MCX Trading Hours in India",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold trade just died in the quiet hours—here's when.",
+    "stat_line": "12:00 PM to 4:30 PM IST: the graveyard shift.",
+    "payoff": "Trading during dead hours isn't brave. It's expensive.",
+    "beat1": "Between lunch and US market open, volume collapses. Your ₹1,56,400 gold position moves on fumes—spreads widen, slippage hits hard.",
+    "beat2": "Europe's asleep, America hasn't woken. MCX sits alone with thin liquidity and zero external price discovery happening.",
+    "beat3": "Wait for 7:00 PM onwards when COMEX gold, silver, and crude fire up simultaneously. That's when real volume returns.",
+    "instagram_id": "17886896964455292",
+    "generated_at": "2026-08-30T18:02:11.867Z",
+    "edition": null,
+    "posted_at": "2026-08-30T18:02:46.903Z"
+  },
+  {
     "file": "news-20260829-mcx-futures-rollover",
     "topic": "MCX Futures Rollover",
     "content_type": "explainer",

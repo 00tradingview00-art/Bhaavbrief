@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-rollover",
+  "lastSlug": "mcx-trading-hours",
   "log": [
+    {
+      "slug": "mcx-trading-hours",
+      "date": "2026-08-30",
+      "file": "public/reels/news-20260830-mcx-trading-hours-in-india.mp4",
+      "generated_at": "2026-08-30T18:02:12.047Z"
+    },
     {
       "slug": "mcx-rollover",
       "date": "2026-08-29",
