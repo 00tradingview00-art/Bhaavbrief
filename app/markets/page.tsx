@@ -1,4 +1,5 @@
 import MarketsClient from '@/components/markets/MarketsClient'
+import SectionTabs from '@/components/SectionTabs'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { loadEIA } from '@/lib/eia'
 import { getSparklineCloses } from '@/lib/history'
@@ -43,5 +44,16 @@ export default async function MarketsPage() {
   const sparklines = Object.fromEntries(
     SPARKLINE_COMMODITIES.map(key => [key, getSparklineCloses(key)])
   )
-  return <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} />
+  return (
+    <>
+      <SectionTabs
+        active="/markets"
+        tabs={[
+          { label: 'Futures', href: '/markets' },
+          { label: 'Basis',   href: '/basis' },
+        ]}
+      />
+      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} />
+    </>
+  )
 }

@@ -52,10 +52,16 @@ const PRO_WORKFLOWS: {
     href: '/options/strategy',
   },
   {
-    title: 'Market Intelligence',
-    description: 'Commodity Basis Dashboard (MCX vs COMEX spread, 30-day chart) and Pro Research with MCX implications within hours of major macro events.',
-    chips: ['Basis Dashboard', 'Pro Research', 'PCR Trend 30-day'],
+    title: 'Basis Dashboard',
+    description: 'Commodity arbitrage intelligence — MCX vs COMEX/WTI import-parity spread, 30-day chart with ±1σ / ±2σ reference bands.',
+    chips: ['30-day spread chart', 'MCX vs COMEX/WTI', '±1σ / ±2σ bands'],
     href: '/basis',
+  },
+  {
+    title: 'Pro Research',
+    description: 'Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours.',
+    chips: ['Macro event analysis', 'MCX implications', 'Published within hours'],
+    href: '/research',
   },
 ]
 
@@ -104,7 +110,7 @@ export default function ProPage() {
             What Pro Unlocks
           </h2>
           <p style={{ color: 'var(--ink-3)', fontSize: '0.9rem', marginBottom: '1.75rem' }}>
-            Four analyst workflows, built for MCX options traders.
+            Five analyst workflows, built for MCX options traders.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
             {PRO_WORKFLOWS.map(w => (

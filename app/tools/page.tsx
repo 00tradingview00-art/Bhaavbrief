@@ -15,29 +15,6 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/tools' },
 }
 
-const PRO_TOOLS = [
-  {
-    href: '/options',
-    label: 'Full Option Chain',
-    desc: 'All strikes, all expiries. Live Greeks (delta, gamma, theta, vega) per row. IV quality tiers.',
-  },
-  {
-    href: '/options/strategy',
-    label: 'Strategy Builder',
-    desc: '12 multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff chart + P&L table.',
-  },
-  {
-    href: '/basis',
-    label: 'Basis Dashboard',
-    desc: '30-day MCX vs import-parity spread chart with ±1σ / ±2σ reference bands. Commodity arbitrage intelligence.',
-  },
-  {
-    href: '/research',
-    label: 'Pro Research',
-    desc: 'Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours.',
-  },
-]
-
 const FREE_TOOLS = [
   {
     href: '/tools/mcx-iv-rank',
@@ -91,49 +68,29 @@ export default function ToolsPage() {
         Professional-grade tools for MCX commodity options traders. Pro analytics unlock the full analytical depth.
       </p>
 
-      {/* Pro Analytics — shown first */}
-      <section style={{ marginBottom: '3rem' }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem' }}>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>Pro Analytics</h2>
-          <Link href="/pro" style={{ fontSize: '0.75rem', background: 'var(--ink)', color: '#fff', padding: '2px 10px', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>
-            Unlock — ₹33/day →
-          </Link>
-        </div>
-        <p style={{ fontSize: '0.82rem', color: 'var(--ink-3)', marginBottom: '1rem' }}>
-          Built for traders who use options — not just futures prices.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
-          {PRO_TOOLS.map(t => (
-            <Link
-              key={t.href}
-              href={t.href}
-              className="pro-tool-card"
-              style={{
-                display: 'block',
-                border: '1px solid var(--border-2)',
-                borderRadius: 8,
-                padding: '0.9rem 1rem',
-                textDecoration: 'none',
-                color: 'inherit',
-                position: 'relative',
-                overflow: 'hidden',
-                background: 'var(--surface-3)',
-              }}
-            >
-              <span style={{
-                position: 'absolute', top: 0, right: 0,
-                background: 'var(--ink)', color: '#fff',
-                fontSize: '0.65rem', padding: '2px 8px',
-                borderBottomLeftRadius: 6, fontWeight: 700, letterSpacing: '0.05em',
-              }}>
-                PRO
-              </span>
-              <div style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)', marginBottom: '0.35rem' }}>{t.label}</div>
-              <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.45 }}>{t.desc}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* Pro banner */}
+      <Link
+        href="/pro"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '1rem',
+          border: '1px solid var(--border-2)',
+          borderRadius: 8,
+          padding: '1rem 1.25rem',
+          marginBottom: '2.5rem',
+          textDecoration: 'none',
+          background: 'var(--surface-3)',
+        }}
+      >
+        <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>
+          Want the full analytics suite? See everything BhaavBrief Pro unlocks
+        </span>
+        <span style={{ fontSize: '0.75rem', background: 'var(--ink)', color: '#fff', padding: '4px 12px', borderRadius: 20, fontWeight: 600, whiteSpace: 'nowrap' }}>
+          Unlock — ₹33/day →
+        </span>
+      </Link>
 
       {/* Free Tools */}
       <section>
@@ -170,7 +127,6 @@ export default function ToolsPage() {
 
       <style>{`
         .free-tool-card:hover { border-color: var(--gold) !important; }
-        .pro-tool-card:hover  { border-color: var(--gold) !important; }
       `}</style>
     </main>
   )

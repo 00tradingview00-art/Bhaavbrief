@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { getBasisHistory, type BasisPoint } from '@/lib/basis'
+import SectionTabs from '@/components/SectionTabs'
 import BasisClient from './BasisClient'
 
 export const revalidate = 900
@@ -63,11 +64,18 @@ export default async function BasisPage() {
   ]
 
   return (
-    <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '0.25rem' }}>
+    <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <SectionTabs
+        active="/basis"
+        tabs={[
+          { label: 'Futures', href: '/markets' },
+          { label: 'Basis',   href: '/basis' },
+        ]}
+      />
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Commodity Basis
       </h1>
-      <p style={{ fontSize: '0.85rem', opacity: 0.65, marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         % premium / discount of MCX price vs import parity (COMEX × USDINR conversion)
       </p>
 
