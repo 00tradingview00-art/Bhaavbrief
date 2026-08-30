@@ -239,3 +239,5 @@
 {"type":"gate_run","edition":null,"briefPath":"/tmp/validate-brief-test-jO6lVa/brief.mdx","clean":false,"issueCount":11,"blockerCount":11,"warningCount":0,"hasInternalError":true,"durationMs":17,"checkedAt":"2026-08-29T14:12:01.846Z"}
 {"type":"gate_run","edition":null,"briefPath":"/tmp/validate-brief-test-Lnrjpw/brief.mdx","clean":false,"issueCount":1,"blockerCount":1,"warningCount":0,"hasInternalError":true,"durationMs":18,"checkedAt":"2026-08-29T14:21:49.216Z"}
 {"type":"gate_run","edition":null,"briefPath":"/tmp/validate-brief-test-Lnrjpw/brief.mdx","clean":false,"issueCount":11,"blockerCount":11,"warningCount":0,"hasInternalError":true,"durationMs":19,"checkedAt":"2026-08-29T14:21:49.299Z"}
+{"type":"gate_run","edition":null,"briefPath":"/tmp/validate-brief-test-g8WDMv/brief.mdx","clean":false,"issueCount":1,"blockerCount":1,"warningCount":0,"hasInternalError":true,"durationMs":33,"checkedAt":"2026-08-30T07:58:43.463Z"}
+{"type":"gate_run","edition":null,"briefPath":"/tmp/validate-brief-test-g8WDMv/brief.mdx","clean":false,"issueCount":11,"blockerCount":11,"warningCount":0,"hasInternalError":true,"durationMs":22,"checkedAt":"2026-08-30T07:58:43.569Z"}
