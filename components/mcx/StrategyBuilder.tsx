@@ -47,6 +47,7 @@ interface ChainData {
   expiries:     string[]
   riskFreeRate: number
   chain:        ChainRow[]
+  stale?:       boolean
 }
 
 interface EdgeResolution {
@@ -982,6 +983,12 @@ export default function StrategyBuilder({
       {error && (
         <div style={{ background: 'var(--down-bg, #FAF0EE)', border: '1px solid var(--down, #B53A2A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--down, #B53A2A)', fontSize: 15 }}>
           {error} — please try again in a moment.
+        </div>
+      )}
+
+      {chainData?.stale && (
+        <div style={{ background: 'rgba(181, 134, 42, 0.08)', border: '1px solid var(--gold, #B5862A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--gold, #B5862A)', fontSize: 14 }}>
+          ⚠ Showing the last known chain — live data is temporarily unavailable and this may be out of date.
         </div>
       )}
 

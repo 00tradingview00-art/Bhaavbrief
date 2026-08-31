@@ -1,6 +1,39 @@
 import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
+import { redisCommand }                           from '@/lib/redis'
+
+// Last-known-good fallback cache — getOptionsChain() throws hard on any Kite
+// failure (expired token, API outage), and until this existed that meant a
+// straight 503 with no graceful degradation, unlike lib/prices.ts's
+// snapshot-fallback pattern for the ticker. Caching here (not in the route)
+// so the *full*, un-truncated chain is what's stored — free/Pro tier-limiting
+// is applied downstream in app/api/options/route.ts either way, live or stale.
+const CHAIN_CACHE_TTL_SECONDS = 24 * 60 * 60 // a day-old chain beats a 503
+
+function chainCacheKey(instrument: string): string {
+  return `options-chain-cache:${instrument}`
+}
+
+async function cacheOptionsChain(instrument: string, payload: unknown): Promise<void> {
+  try {
+    await redisCommand('SET', chainCacheKey(instrument), JSON.stringify(payload), 'EX', String(CHAIN_CACHE_TTL_SECONDS))
+  } catch (err) {
+    // Never let a cache-write failure break the live response it's caching.
+    console.error('[options] failed to cache chain for', instrument, err)
+  }
+}
+
+export async function getCachedOptionsChain(instrument: string): Promise<Record<string, unknown> | null> {
+  try {
+    const raw = await redisCommand('GET', chainCacheKey(instrument))
+    if (!raw || typeof raw !== 'string') return null
+    return JSON.parse(raw) as Record<string, unknown>
+  } catch (err) {
+    console.error('[options] failed to read cached chain for', instrument, err)
+    return null
+  }
+}
 
 // Code-review follow-up: these were all bare constants requiring a code
 // review + deploy to adjust, even though they're tuning knobs calibrated
@@ -285,7 +318,7 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     ? parseFloat((ivix - aav['20d']).toFixed(2))
     : null
 
-  return {
+  const result = {
     instrument,
     meta:        MCX_INSTRUMENTS[instrument],
     expiry:      activeExpiry,
@@ -302,4 +335,13 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     chain,
     lastUpdated: new Date().toISOString(),
   }
+
+  // Cache only the default (nearest-expiry) chain as the fallback — an
+  // explicit ?expiry= request is a less common case and not worth a cache
+  // key per expiry for what's meant to be a last-known-good safety net.
+  if (requestedExpiry === null) {
+    void cacheOptionsChain(instrument, result)
+  }
+
+  return result
 }
