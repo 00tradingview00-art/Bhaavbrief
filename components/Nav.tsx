@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
+import AuthNavChip from './AuthNavChip'
 
 const SearchModal = dynamic(() => import('./SearchModal'), { ssr: false })
 
@@ -168,6 +169,13 @@ export default function Nav() {
           >
             Subscribe →
           </Link>
+
+          {/* Auth/Pro chip — was a detached position:fixed overlay in
+              app/layout.tsx; folded into the nav's own flex row so it
+              inherits real sticky positioning instead of floating separately. */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 12, flexShrink: 0 }}>
+            <AuthNavChip />
+          </div>
         </div>
       </nav>
 

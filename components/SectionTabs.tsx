@@ -25,7 +25,7 @@ export default function SectionTabs({ tabs, active }: { tabs: Tab[]; active: str
               padding: '6px 14px',
               border: '1px solid var(--border)',
               textDecoration: 'none',
-              background: isActive ? 'var(--gold)' : 'var(--surface-1)',
+              background: isActive ? 'var(--gold)' : 'var(--surface)',
               color: isActive ? '#FAFAF6' : 'var(--ink-2)',
             }}
           >

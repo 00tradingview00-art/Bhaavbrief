@@ -2,6 +2,8 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
+import Card from '@/components/ui/Card'
+import Button from '@/components/ui/Button'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -9,6 +11,32 @@ export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'My Account — BhaavBrief',
   robots: { index: false },
+}
+
+const PLAN_LABEL: Record<string, string> = {
+  yearly: 'Annual',
+  daily: 'Daily',
+  monthly: 'Monthly',
+}
+
+const PLAN_PRICE: Record<string, string> = {
+  yearly: '₹2,999/year',
+  daily: '₹33/day',
+  monthly: '₹333/month',
+}
+
+function StatTile({ label, value, sub }: { label: string; value: string; sub?: string }) {
+  return (
+    <div style={{ flex: 1, minWidth: 160 }}>
+      <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--ink-3)', marginBottom: 'var(--space-1)' }}>
+        {label}
+      </div>
+      <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 600, color: 'var(--ink)' }}>
+        {value}
+      </div>
+      {sub && <div style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: 2 }}>{sub}</div>}
+    </div>
+  )
 }
 
 export default async function AccountPage() {
@@ -27,45 +55,57 @@ export default async function AccountPage() {
     ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
-  return (
-    <main style={{ maxWidth: 600, margin: '3rem auto', padding: '0 1rem', fontFamily: 'var(--font-sans)' }}>
-      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '2rem' }}>My Account</h1>
+  const planKey = plan && PLAN_LABEL[plan] ? plan : 'monthly'
 
-      <section style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '1.5rem', marginBottom: '1.5rem', background: 'var(--surface-2)' }}>
-        <h2 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)', marginBottom: '1rem' }}>Subscription</h2>
+  return (
+    <main style={{ maxWidth: 640, margin: '3rem auto', padding: '0 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.7rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 'var(--space-8)' }}>
+        My Account
+      </h1>
+
+      <Card padding="lg">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-5)' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)' }}>
+            Subscription
+          </div>
+          {pro && (
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              fontSize: '0.72rem', fontWeight: 700, color: 'var(--up)',
+              background: 'var(--up-bg)', padding: '3px 10px', borderRadius: 'var(--radius-pill)',
+            }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--up)', display: 'inline-block' }} />
+              Active
+            </span>
+          )}
+        </div>
+
         {pro ? (
           <>
-            <p style={{ color: 'var(--ink)', marginBottom: '0.5rem' }}>
-              <strong>Plan:</strong> BhaavBrief Pro — {
-                plan === 'yearly' ? 'Annual (₹2,999/year)' :
-                plan === 'daily'  ? 'Daily (₹33/day)' :
-                'Monthly (₹333/month)'
-              }
-            </p>
-            <p style={{ color: 'var(--ink-2)' }}><strong>Renews:</strong> {expiryLabel}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-6)', marginBottom: 'var(--space-6)' }}>
+              <StatTile label="Plan" value={`BhaavBrief Pro — ${PLAN_LABEL[planKey]}`} sub={PLAN_PRICE[planKey]} />
+              <StatTile label="Renews" value={expiryLabel ?? '—'} />
+            </div>
             {subId && (
-              <p style={{ marginTop: '1rem', fontSize: '0.82rem', color: 'var(--ink-3)', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
+              <div style={{
+                fontSize: '0.8rem', color: 'var(--ink-3)',
+                borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
+              }}>
                 To cancel, contact support with subscription ID
                 {provider ? ` (${provider})` : ''}:{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>{subId}</span>
-              </p>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
+              </div>
             )}
           </>
         ) : (
           <>
-            <p style={{ color: 'var(--ink-3)', marginBottom: '1.25rem', fontSize: '0.9rem' }}>You are on the free plan.</p>
-            <a
-              href="/pro"
-              style={{
-                display: 'inline-block', background: 'var(--ink)', color: '#fff',
-                padding: '0.6rem 1.4rem', borderRadius: 6, textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600,
-              }}
-            >
-              Upgrade to Pro →
-            </a>
+            <p style={{ color: 'var(--ink-3)', marginBottom: 'var(--space-5)', fontSize: '0.92rem' }}>
+              You are on the free plan.
+            </p>
+            <Button href="/pro" variant="primary">Upgrade to Pro →</Button>
           </>
         )}
-      </section>
+      </Card>
     </main>
   )
 }
