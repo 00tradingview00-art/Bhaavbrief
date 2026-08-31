@@ -183,6 +183,39 @@ jobs:
             echo "✓ ATM IV snapshot present for all instruments on $CHECK_DATE"
           fi
 
+      - name: Check Kite daily login (9:45 AM IST run only)
+        id: kite_check
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping Kite login check"
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+
+          # MCX holiday guard — same source as the brief/engine checks above.
+          # No trading today means no one needs to have logged in.
+          IS_HOLIDAY=$(jq --arg d "$TODAY" \
+            '[.[] | select(.date == $d)] | length' \
+            data/market-holidays.json 2>/dev/null || echo "0")
+          IS_HOLIDAY="${IS_HOLIDAY:-0}"
+          if [ "$IS_HOLIDAY" != "0" ]; then
+            echo "MCX holiday today ($TODAY) — skipping Kite login check"
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          LAST_AUTH=$(jq -r '.lastAuth // ""' data/last-kite-auth.json 2>/dev/null || echo "")
+          if [ "$LAST_AUTH" = "$TODAY" ]; then
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Kite login done today ($TODAY)"
+          else
+            echo "kite_ok=false" >> $GITHUB_OUTPUT
+            echo "kite_last_auth=${LAST_AUTH:-never}" >> $GITHUB_OUTPUT
+            echo "::error::Kite login not done today ($TODAY) — data/last-kite-auth.json shows lastAuth=${LAST_AUTH:-never}"
+          fi
+
       - name: Auto-recover — trigger generate-brief
         if: steps.brief_check.outputs.brief_ok == 'false'
         run: |
@@ -230,6 +263,26 @@ jobs:
               \"htmlContent\": \"<p>No intelligence articles found for <strong>${DATE_LABEL}</strong> by 2:00 PM IST.</p><p>The engine has been running since 9:00 AM but published nothing — possible Kite auth failure, Claude API error, or price threshold not triggered.</p><p><a href='${RUN_URL}'>Check engine workflow →</a></p>\"
             }"
           echo "Alert sent for silent engine"
+          exit 1
+
+      - name: Alert — Kite login not done today
+        if: steps.kite_check.outputs.kite_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
+          LAST_AUTH="${{ steps.kite_check.outputs.kite_last_auth }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Kite login not done today — ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The daily Kite Connect login has not been done today (<strong>${DATE_LABEL}</strong>) — data/last-kite-auth.json still shows lastAuth: <strong>${LAST_AUTH}</strong>.</p><p>Options Chain, Strategy Builder, and today's IV/OI snapshots will fail or serve stale data until this is done. Fix: run <code>node scripts/kite-morning-auth.js</code> and complete the login.</p>\"
+            }"
+          echo "Alert sent for missing Kite login"
           exit 1
 
       - name: Alert — ATM IV snapshot missing
