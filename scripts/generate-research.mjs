@@ -2,11 +2,13 @@
 /**
  * scripts/generate-research.mjs — Pro Research article draft generator
  *
- * Triggered manually (or via a future GitHub Actions workflow) after a major
- * macro event (FOMC, Jackson Hole, OPEC+, RBI MPC, EIA weekly). Produces an
- * MDX draft in content/research/ with published: false — Prabal reviews and
- * sets published: true before the article goes live. Same human-gate pattern
- * as the daily brief (G-12).
+ * Invoked programmatically by scripts/intelligence-engine.js's
+ * processResearchQueue() after a queued macro event (FOMC, Jackson Hole,
+ * OPEC+, RBI MPC, EIA weekly), or manually for testing. Produces an MDX
+ * draft in content/research/ with published: false; the caller runs it
+ * through scripts/validate-research.mjs and flips published: true on a
+ * clean pass — zero human review, unlike the daily brief's Telegram-tap
+ * G-12 gate (deliberate choice, see the automation plan).
  *
  * Usage:
  *   node scripts/generate-research.mjs --event fomc_rate_decision \
@@ -192,7 +194,7 @@ const apiResp = await fetch('https://api.anthropic.com/v1/messages', {
   },
   body: JSON.stringify({
     model:      'claude-opus-5',
-    max_tokens: 2048,
+    max_tokens: 4096,
     messages:   [{ role: 'user', content: prompt }],
   }),
 })
@@ -203,8 +205,21 @@ if (!apiResp.ok) {
   process.exit(1)
 }
 
-const apiData   = await apiResp.json()
-const bodyMdx   = apiData.content?.[0]?.text ?? ''
+const apiData = await apiResp.json()
+// claude-opus-5 reasons by default and can return a leading "thinking" block
+// before its "text" block — content[0] is not reliably the text, so find the
+// first block that actually is one. Assuming content[0].text (the prior
+// behavior) silently read undefined on any response that included thinking,
+// making this script exit 1 with "Empty response" on real runs — the actual
+// reason the auto-publish pipeline has never produced output in production.
+const textBlock = apiData.content?.find(b => b.type === 'text')
+const bodyMdx   = textBlock?.text ?? ''
+
+if (apiData.stop_reason === 'max_tokens') {
+  console.warn('Warning: Claude response was truncated at max_tokens — article may be incomplete.')
+}
+
+if (process.env.DEBUG_RESEARCH) console.error('DEBUG apiData:', JSON.stringify(apiData, null, 2))
 
 if (!bodyMdx.trim()) {
   console.error('Empty response from Claude API')
