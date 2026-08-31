@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
-import Link from 'next/link'
-import ProBlurGate from '@/components/ProBlurGate'
+import { getPCRHistory } from '@/lib/pcrAnalysis'
+import PCRTrendChart from './PCRTrendChart'
 
 export const revalidate = 60
 
@@ -40,7 +42,14 @@ function pcrSignal(pcr: number | null): { label: string; color: string } {
 }
 
 export default async function MCXPCRPage() {
+  const { userId } = await auth()
+  const isPro = await isProUser(userId)
   const data = await getPCRData()
+  const trends = await Promise.all(
+    Object.entries(MCX_INSTRUMENTS).map(async ([key, meta]) => ({
+      key, label: meta.label, history: await getPCRHistory(key),
+    })),
+  )
 
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
@@ -84,29 +93,11 @@ export default async function MCXPCRPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>PCR Trend — 30 Days</h2>
-        <ProBlurGate label="PCR trend chart — 30-day history of Call vs Put open interest ratio" timestamp="Live">
-          <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
-            {Array.from({ length: 30 }, (_, i) => {
-              const ceH = 30 + Math.abs(Math.sin(i * 0.4)) * 40
-              const peH = 25 + Math.abs(Math.cos(i * 0.4 + 1)) * 45
-              return (
-                <g key={i}>
-                  <rect x={i * 16 + 2} y={140 - ceH} width={7} height={ceH} fill="var(--up)" opacity="0.7"/>
-                  <rect x={i * 16 + 9} y={140 - peH} width={7} height={peH} fill="var(--gold-dark)" opacity="0.7"/>
-                </g>
-              )
-            })}
-            <text x="4" y="156" fontSize="9" fill="var(--up)">Call OI</text>
-            <text x="48" y="156" fontSize="9" fill="var(--gold-dark)">Put OI</text>
-          </svg>
-        </ProBlurGate>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>PCR Trend</h2>
+        {trends.map(t => (
+          <PCRTrendChart key={t.key} label={t.label} history={t.history} isPro={isPro} />
+        ))}
       </section>
-
-      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
-        PCR trend chart history →{' '}
-        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options (Pro)</Link>
-      </p>
     </main>
   )
 }

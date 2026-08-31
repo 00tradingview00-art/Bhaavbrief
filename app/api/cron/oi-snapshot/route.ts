@@ -42,7 +42,7 @@ export async function GET(req: Request) {
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
-      const { chain, expiry } = await getOptionsChain(instrument)
+      const { chain, expiry, pcr } = await getOptionsChain(instrument)
 
       // Top-10 OI strikes by combined CE+PE OI
       const top = chain
@@ -51,8 +51,13 @@ export async function GET(req: Request) {
         .slice(0, 10)
         .map(({ strike, ceOI, peOI }) => ({ strike, ceOI, peOI }))
 
+      // pcr is the same full-chain total-PE-OI/total-CE-OI figure getOptionsChain()
+      // already exposes live (lib/options.ts) — persisted here so /tools/mcx-pcr's
+      // trend chart matches the live PCR number shown elsewhere, not a top-10-strike
+      // approximation of it (which would silently disagree, the same class of bug
+      // fixed today for IV Rank's cross-page contradiction).
       const key   = `oi-snap:${instrument}:${date}`
-      const value = JSON.stringify({ expiry, chain: top })
+      const value = JSON.stringify({ expiry, chain: top, pcr })
       await redisCommand('set', key, value, 'EX', String(TTL_SECONDS))
 
       results[instrument] = top.length

@@ -15,11 +15,10 @@ export async function GET(request: Request) {
   const isMonitoring = process.env.CRON_SECRET
     && request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`
 
+  let isPro = true
   if (!isMonitoring) {
     const { userId } = await auth()
-    if (!await isProUser(userId)) {
-      return NextResponse.json({ error: 'Pro subscription required' }, { status: 403 })
-    }
+    isPro = await isProUser(userId)
   }
 
   const { searchParams } = new URL(request.url)
@@ -72,7 +71,12 @@ export async function GET(request: Request) {
 
     history.sort((a, b) => a.date.localeCompare(b.date))
 
-    return NextResponse.json({ instrument, strike, history }, {
+    // Non-Pro requests get a real (not fabricated) but short preview — the
+    // last 5 days only — so the free-tier teaser is honest data, not a fake
+    // shape, without handing over the full history for free.
+    const payload = isPro ? history : history.slice(-5)
+
+    return NextResponse.json({ instrument, strike, history: payload, preview: !isPro }, {
       headers: { 'Cache-Control': 'private, no-store' },
     })
   } catch (e) {

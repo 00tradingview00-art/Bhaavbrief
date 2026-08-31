@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import Link from 'next/link'
 import ProBlurGate from '@/components/ProBlurGate'
+import VolatilityHub from './VolatilityHub'
 
 export const revalidate = 900
 
@@ -77,7 +80,10 @@ function regimeColor(regime: string | undefined): string {
 }
 
 export default async function MCXIVRankPage() {
+  const { userId } = await auth()
+  const isPro = await isProUser(userId)
   const ivRanks = await getIVRanks()
+  const instrumentList = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({ key, label: meta.label }))
 
   // The comparison window grows daily as the IV-snapshot cron accumulates
   // history — state the real depth available today rather than a fixed
@@ -163,6 +169,13 @@ export default async function MCXIVRankPage() {
             })}
           </svg>
         </ProBlurGate>
+      </section>
+
+      <section style={{ marginTop: '2rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>
+          IV Skew &amp; OI Buildup
+        </h2>
+        <VolatilityHub instruments={instrumentList} isPro={isPro} />
       </section>
 
       <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>

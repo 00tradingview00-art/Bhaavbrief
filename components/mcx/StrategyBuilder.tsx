@@ -6,7 +6,7 @@ import {
   AreaChart, Area,
 } from 'recharts'
 import {
-  computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
+  computePayoff, computeNetGreeks, computeLegGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
   computeExpectedMoveCone, computeProbOfProfit,
   type Leg, type SavedStrategy, type PayoffPoint, type Action,
 } from '@/lib/strategy'
@@ -1251,11 +1251,19 @@ export default function StrategyBuilder({
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Entry</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>IV%</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Qty</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Delta</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Gamma</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Theta</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Vega</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {legs.map((leg, i) => (
+                  {legs.map((leg, i) => {
+                    const legGreeks = futurePrice > 0 && T > 0
+                      ? computeLegGreeks(leg, futurePrice, T, r, lotSize, currentIV)
+                      : null
+                    return (
                     <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
                       <td style={{ padding: '5px 8px' }}>
                         <button onClick={() => toggleAction(i)}
@@ -1311,6 +1319,18 @@ export default function StrategyBuilder({
                           onChange={e => updateQty(i, parseInt(e.target.value) || 1)}
                           style={{ width: 48, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.delta, 2) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.gamma, 4) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.theta, 2) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.vega, 2) : '—'}
+                      </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <button onClick={() => removeLeg(i)}
                           style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-2, #3A3830)', fontSize: 16 }}>
@@ -1318,7 +1338,8 @@ export default function StrategyBuilder({
                         </button>
                       </td>
                     </tr>
-                  ))}
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
@@ -1347,25 +1368,7 @@ export default function StrategyBuilder({
           {chartData.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>Payoff Diagram</div>
-              {!isPro && (
-                <ProBlurGate isPro={isPro} label="Payoff Diagram — P&L at expiry with IV cone" timestamp="Live">
-                  <svg width="100%" height="280" viewBox="0 0 500 280" style={{ display: 'block' }}>
-                    <defs>
-                      <linearGradient id="cone1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1"/>
-                        <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.04"/>
-                      </linearGradient>
-                    </defs>
-                    <rect x="120" y="0" width="260" height="280" fill="url(#cone1)"/>
-                    <rect x="170" y="0" width="160" height="280" fill="url(#cone1)"/>
-                    <line x1="0" y1="140" x2="500" y2="140" stroke="#d1d5db" strokeDasharray="4 3"/>
-                    <polyline points="0,200 100,180 200,140 250,80 300,140 400,100 500,90" fill="none" stroke="#b5862a" strokeWidth="2.5" opacity="0.85"/>
-                    <polyline points="0,210 100,190 200,150 250,100 300,150 400,120 500,110" fill="none" stroke="#888" strokeWidth="1.5" strokeDasharray="5 3" opacity="0.7"/>
-                    <line x1="250" y1="0" x2="250" y2="280" stroke="#d4cfc0" strokeDasharray="2 3" strokeWidth="1"/>
-                  </svg>
-                </ProBlurGate>
-              )}
-              {isPro && (<>
+              <ProBlurGate isPro={isPro} label="Payoff Diagram — P&L at expiry with IV cone" timestamp="Live">
               {cone && ivRegime && (
                 <div style={{ fontSize: 13, color: 'var(--ink-2, #3A3830)', marginBottom: 6, lineHeight: 1.4 }}>
                   Shaded: expected price range at expiry — ±1 and ±2 standard deviations (σ), based on today&apos;s IV shown above
@@ -1424,7 +1427,7 @@ export default function StrategyBuilder({
                   onSelect={setTargetDate}
                 />
               )}
-              </>)}
+              </ProBlurGate>
             </div>
           )}
 

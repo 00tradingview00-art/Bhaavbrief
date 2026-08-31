@@ -83,6 +83,33 @@ export function computePayoff(
   })
 }
 
+// Signed, position-scaled Greeks for a single leg — sign(action) × qty × lotSize
+// applied to the raw per-unit Black-76 Greeks, so each leg's numbers are directly
+// additive into the net position (same convention computeNetGreeks sums over all
+// legs). Shared by computeNetGreeks and the per-leg breakdown the Strategy Builder
+// UI shows next to each leg in the "Selected Legs" table.
+export function computeLegGreeks(
+  leg:     Leg,
+  F:       number,
+  T:       number,
+  r:       number,
+  lotSize: number,
+  liveIV?: number,
+): NetGreeks {
+  const liveIvDecimal = liveIV != null && liveIV > 0 ? liveIV / 100 : undefined
+  const s = sign(leg.action) * leg.qty * lotSize
+  if (leg.type === 'FUT') {
+    // Linear instrument — delta of 1 per unit, zero gamma/theta/vega
+    return { delta: s, gamma: 0, theta: 0, vega: 0 }
+  }
+  const ivToUse = liveIvDecimal ?? leg.iv
+  // No usable IV from either source — contribute nothing rather than let black76
+  // degenerate this leg's Greeks to a flat, misleading zero.
+  if (!(ivToUse > 0)) return { delta: 0, gamma: 0, theta: 0, vega: 0 }
+  const g = black76(F, leg.strike, T, r, ivToUse, leg.type)
+  return { delta: s * g.delta, gamma: s * g.gamma, theta: s * g.theta, vega: s * g.vega }
+}
+
 export function computeNetGreeks(
   legs:    Leg[],
   F:       number,
@@ -91,24 +118,14 @@ export function computeNetGreeks(
   lotSize: number,
   liveIV?: number,   // current ATM IV as %; overrides a corrupted/unusable leg.iv, same as computePayoff
 ): NetGreeks {
-  const liveIvDecimal = liveIV != null && liveIV > 0 ? liveIV / 100 : undefined
   return legs.reduce(
     (acc, leg) => {
-      const s = sign(leg.action) * leg.qty * lotSize
-      if (leg.type === 'FUT') {
-        // Linear instrument — delta of 1 per unit, zero gamma/theta/vega
-        return { ...acc, delta: acc.delta + s }
-      }
-      const ivToUse = liveIvDecimal ?? leg.iv
-      // No usable IV from either source — contribute nothing rather than let black76
-      // degenerate this leg's Greeks to a flat, misleading zero.
-      if (!(ivToUse > 0)) return acc
-      const g = black76(F, leg.strike, T, r, ivToUse, leg.type)
+      const g = computeLegGreeks(leg, F, T, r, lotSize, liveIV)
       return {
-        delta: acc.delta + s * g.delta,
-        gamma: acc.gamma + s * g.gamma,
-        theta: acc.theta + s * g.theta,
-        vega:  acc.vega  + s * g.vega,
+        delta: acc.delta + g.delta,
+        gamma: acc.gamma + g.gamma,
+        theta: acc.theta + g.theta,
+        vega:  acc.vega  + g.vega,
       }
     },
     { delta: 0, gamma: 0, theta: 0, vega: 0 },
