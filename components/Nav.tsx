@@ -17,7 +17,8 @@ const NAV_LINKS = [
   { href: '/news',           label: 'Feed'     },
   { href: '/calendar',       label: 'Calendar' },
   { href: '/learn',          label: 'Learn'    },
-  { href: '/pro',            label: 'Pro'   },
+  // No separate '/pro' nav-links entry — AuthNavChip's gold-pill CTA already
+  // links there and duplicated it (reported live on this PR's preview).
 ]
 
 export default function Nav() {
