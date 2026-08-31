@@ -286,6 +286,42 @@ jobs:
             echo "::error::Kite login not done today ($TODAY) — data/last-kite-auth.json shows lastAuth=${LAST_AUTH:-never}"
           fi
 
+      - name: Check Basis daily snapshot (9:45 AM IST run only)
+        id: basis_check
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping Basis snapshot check"
+            echo "basis_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # fetch-snapshot.mjs (which writes data/history/{date}.json, the
+          # source for the Basis Dashboard's 30-day chart) doesn't filter
+          # holidays itself — it still runs and writes a (likely
+          # stale-flagged) file. So unlike the other checks above, don't
+          # skip on a holiday here: a missing file is still worth knowing
+          # about, since the writing script doesn't skip either.
+          CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
+          for i in 1 2 3 4 5; do
+            DOW=$(date -d "$CHECK_DATE" +%u)
+            if [ "$DOW" -ge 6 ]; then
+              CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
+            else
+              break
+            fi
+          done
+          echo "Target date: $CHECK_DATE (last weekday)"
+
+          if [ -f "data/history/${CHECK_DATE}.json" ]; then
+            echo "basis_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Basis snapshot present for $CHECK_DATE"
+          else
+            echo "basis_ok=false" >> $GITHUB_OUTPUT
+            echo "basis_date=$CHECK_DATE" >> $GITHUB_OUTPUT
+            echo "::error::Basis snapshot missing for $CHECK_DATE — data/history/${CHECK_DATE}.json not found"
+          fi
+
       - name: Auto-recover — trigger generate-brief
         if: steps.brief_check.outputs.brief_ok == 'false'
         run: |
@@ -394,4 +430,22 @@ jobs:
             }"
           echo "Alert sent for missing OI-buildup snapshot"
           exit 1
+
+      - name: Alert — Basis snapshot missing
+        if: steps.basis_check.outputs.basis_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL="${{ steps.basis_check.outputs.basis_date }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Basis snapshot missing for ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The daily Basis snapshot (scripts/fetch-snapshot.mjs → data/history/${DATE_LABEL}.json) was not committed for <strong>${DATE_LABEL}</strong>.</p><p>Check the generate-brief / evening-close-brief / flash-brief / intelligence-engine / site-guardian workflow runs for that day — any of them can write this file, so check which one(s) failed.</p>\"
+            }"
+          echo "Alert sent for missing Basis snapshot"
           exit 1
