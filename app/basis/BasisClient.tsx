@@ -94,51 +94,35 @@ export default function BasisClient({ commodities, history, isPro }: Props) {
               </div>
             )}
 
-            {isPro && stats && chartData.filter(d => d.spread !== null).length > 1 ? (
-              <ResponsiveContainer width="100%" height={130}>
-                <AreaChart data={chartData} margin={{ top: 2, right: 4, bottom: 0, left: -16 }}>
-                  <defs>
-                    <linearGradient id={`grad-${c.id}`} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"   stopColor={color} stopOpacity={0.25} />
-                      <stop offset="95%"  stopColor={color} stopOpacity={0.02} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="date" tick={{ fontSize: 9 }} />
-                  <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
-                  <Tooltip formatter={(v) => [typeof v === 'number' ? `${v.toFixed(2)}%` : String(v)]} labelFormatter={d => `Date: ${d}`} />
-                  <ReferenceLine y={stats.mean}            stroke="#888" strokeDasharray="3 3" />
-                  <ReferenceLine y={stats.mean + stats.std}  stroke="#f97316" strokeDasharray="2 4" />
-                  <ReferenceLine y={stats.mean - stats.std}  stroke="#f97316" strokeDasharray="2 4" />
-                  <ReferenceLine y={stats.mean + 2*stats.std} stroke="#ef4444" strokeDasharray="2 4" />
-                  <ReferenceLine y={stats.mean - 2*stats.std} stroke="#ef4444" strokeDasharray="2 4" />
-                  <Area
-                    type="monotone"
-                    dataKey="spread"
-                    stroke={color}
-                    fill={`url(#grad-${c.id})`}
-                    strokeWidth={1.5}
-                    dot={false}
-                    connectNulls
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            ) : !isPro && stats ? (
+            {stats && chartData.filter(d => d.spread !== null).length > 1 ? (
               <ProBlurGate isPro={isPro} label="30-Day Spread Chart — ±1σ / ±2σ reference bands" timestamp="Live">
-                <svg width="100%" height="180" viewBox="0 0 400 180" style={{ display: 'block' }}>
-                  <defs>
-                    <linearGradient id="bbg" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={color} stopOpacity="0.3"/>
-                      <stop offset="100%" stopColor={color} stopOpacity="0.05"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="55" width="400" height="70" fill={color} fillOpacity="0.06"/>
-                  <rect x="0" y="70" width="400" height="40" fill={color} fillOpacity="0.1"/>
-                  <polyline
-                    points="0,100 40,95 80,88 120,105 160,78 200,82 240,92 280,75 320,88 360,80 400,85"
-                    fill="none" stroke={color} strokeWidth="2" opacity="0.85"
-                  />
-                  <line x1="0" y1="90" x2="400" y2="90" stroke="#d1d5db" strokeDasharray="4 3" strokeWidth="1"/>
-                </svg>
+                <ResponsiveContainer width="100%" height={130}>
+                  <AreaChart data={chartData} margin={{ top: 2, right: 4, bottom: 0, left: -16 }}>
+                    <defs>
+                      <linearGradient id={`grad-${c.id}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%"   stopColor={color} stopOpacity={0.25} />
+                        <stop offset="95%"  stopColor={color} stopOpacity={0.02} />
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="date" tick={{ fontSize: 9 }} />
+                    <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
+                    <Tooltip formatter={(v) => [typeof v === 'number' ? `${v.toFixed(2)}%` : String(v)]} labelFormatter={d => `Date: ${d}`} />
+                    <ReferenceLine y={stats.mean}            stroke="#888" strokeDasharray="3 3" />
+                    <ReferenceLine y={stats.mean + stats.std}  stroke="#f97316" strokeDasharray="2 4" />
+                    <ReferenceLine y={stats.mean - stats.std}  stroke="#f97316" strokeDasharray="2 4" />
+                    <ReferenceLine y={stats.mean + 2*stats.std} stroke="#ef4444" strokeDasharray="2 4" />
+                    <ReferenceLine y={stats.mean - 2*stats.std} stroke="#ef4444" strokeDasharray="2 4" />
+                    <Area
+                      type="monotone"
+                      dataKey="spread"
+                      stroke={color}
+                      fill={`url(#grad-${c.id})`}
+                      strokeWidth={1.5}
+                      dot={false}
+                      connectNulls
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </ProBlurGate>
             ) : null}
 

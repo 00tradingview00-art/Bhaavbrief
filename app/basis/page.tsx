@@ -31,6 +31,10 @@ export default async function BasisPage() {
   const { userId } = await auth()
   const isPro = await isProUser(userId)
   const history = getBasisHistory()
+  // Stats are labeled "30d avg"/"±1σ" in the UI — compute them over the same
+  // trailing 30-day window, not the full accumulated history (which keeps
+  // growing past 30 days and would silently drift the "30d" figure).
+  const last30 = history.slice(-30)
 
   const commodities = [
     {
@@ -38,21 +42,21 @@ export default async function BasisPage() {
       label: 'Gold',
       unit:  'INR/10g vs COMEX',
       key:   'goldSpreadPct' as const,
-      stats: calcStats(history, 'goldSpreadPct'),
+      stats: calcStats(last30, 'goldSpreadPct'),
     },
     {
       id:    'silver',
       label: 'Silver',
       unit:  'INR/kg vs COMEX',
       key:   'silverSpreadPct' as const,
-      stats: calcStats(history, 'silverSpreadPct'),
+      stats: calcStats(last30, 'silverSpreadPct'),
     },
     {
       id:    'crude',
       label: 'Crude Oil',
       unit:  'INR/bbl vs WTI',
       key:   'crudeSpreadPct' as const,
-      stats: calcStats(history, 'crudeSpreadPct'),
+      stats: calcStats(last30, 'crudeSpreadPct'),
     },
     // Copper deliberately excluded: lib/basis.ts's copperSpreadPct is a
     // permanent null stub (no COMEX HG price feed wired up yet) — shipping an
