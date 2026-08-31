@@ -18,7 +18,10 @@ export default async function AccountPage() {
   const pro = await isProUser(userId)
   const plan = pro ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null : null
   const expiresAt = pro ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null : null
-  const subId = pro ? (await redisCommand('GET', `sub:${userId}:razorpay_sub_id`)) as string | null : null
+  const subId = pro ? (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null : null
+  const provider = pro
+    ? ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
+    : null
 
   const expiryLabel = expiresAt
     ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -42,7 +45,9 @@ export default async function AccountPage() {
             <p style={{ color: 'var(--ink-2)' }}><strong>Renews:</strong> {expiryLabel}</p>
             {subId && (
               <p style={{ marginTop: '1rem', fontSize: '0.82rem', color: 'var(--ink-3)', borderTop: '1px solid var(--border)', paddingTop: '1rem' }}>
-                To cancel, contact support with subscription ID: <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>{subId}</span>
+                To cancel, contact support with subscription ID
+                {provider ? ` (${provider})` : ''}:{' '}
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>{subId}</span>
               </p>
             )}
           </>

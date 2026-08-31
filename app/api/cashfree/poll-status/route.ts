@@ -12,7 +12,6 @@ export async function GET(): Promise<NextResponse> {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  // Rate limit: max 30 polls per minute per user (prevent runaway poll loops)
   const rlKey = `rl:poll:${userId}`
   const count = Number(await redisCommand('INCR', rlKey))
   if (count === 1) await redisCommand('EXPIRE', rlKey, '60')

@@ -1,10 +1,11 @@
 // Subscription status for BhaavBrief Pro.
 //
 // Redis key schema (Upstash, via redisCommand):
-//   sub:{userId}:status       → "active" | "cancelled" | "expired"
-//   sub:{userId}:plan         → "daily" | "monthly" | "yearly"
-//   sub:{userId}:razorpay_sub_id
-//   sub:{userId}:expires_at   → ISO 8601 timestamp
+//   sub:{userId}:status          → "active" | "cancelled" | "expired"
+//   sub:{userId}:plan            → "daily" | "monthly" | "yearly"
+//   sub:{userId}:provider        → "cashfree"
+//   sub:{userId}:provider_sub_id → external subscription id
+//   sub:{userId}:expires_at      → ISO 8601 timestamp
 //
 // Clerk publicMetadata.isPro mirrors status for client-side use without Redis
 // (see scalability note in plan: options pages use ISR + client-side override).
@@ -26,20 +27,19 @@ export async function isProUser(userId: string | null): Promise<boolean> {
 
 export async function activateSubscription(
   userId: string,
-  razorpaySubId: string,
+  providerSubId: string,
   plan: Plan,
   expiresAt: Date,
 ): Promise<void> {
   const expiresISO = expiresAt.toISOString()
-  // Atomic multi-set for all subscription keys
   await redisCommand(
     'MSET',
     `sub:${userId}:status`, 'active',
     `sub:${userId}:plan`, plan,
-    `sub:${userId}:razorpay_sub_id`, razorpaySubId,
+    `sub:${userId}:provider`, 'cashfree',
+    `sub:${userId}:provider_sub_id`, providerSubId,
     `sub:${userId}:expires_at`, expiresISO,
   )
-  // Mirror in Clerk publicMetadata so client components can read isPro from JWT
   const clerk = await clerkClient()
   await clerk.users.updateUserMetadata(userId, {
     publicMetadata: { isPro: true, planExpires: expiresISO, plan },
