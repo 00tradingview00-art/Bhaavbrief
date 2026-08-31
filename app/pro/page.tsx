@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import ProCheckout from './ProCheckout'
+import ProPaidPoller from './ProPaidPoller'
 
 export const revalidate = 3600
 
@@ -68,7 +70,7 @@ const PRO_WORKFLOWS: {
 export default function ProPage() {
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+      <Script src="https://sdk.cashfree.com/js/v3/cashfree.js" strategy="lazyOnload" />
       <main style={{ maxWidth: 900, margin: '0 auto', padding: '3rem 1rem 5rem', fontFamily: 'var(--font-sans)' }}>
 
         {/* Hero */}
@@ -83,6 +85,10 @@ export default function ProPage() {
             No dedicated options-analytics platform exists for MCX commodities. BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
           </p>
         </div>
+
+        <Suspense fallback={null}>
+          <ProPaidPoller />
+        </Suspense>
 
         {/* Pricing cards */}
         <div className="pro-pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.85rem', marginBottom: '4rem' }}>
@@ -214,7 +220,20 @@ function PricingCard({
         {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
       </div>
       {note && <div style={{ fontSize: '0.7rem', color: 'var(--up)', marginBottom: '0.7rem', fontWeight: 500 }}>{note}</div>}
-      <ProCheckout plan={plan} cta={cta} />
+      <Suspense fallback={
+        <button
+          disabled
+          style={{
+            width: '100%', marginTop: '0.6rem', padding: '0.55rem',
+            background: '#6b7280', color: '#fff', border: 'none', borderRadius: 6,
+            fontSize: '0.8rem', fontWeight: 600,
+          }}
+        >
+          {cta}
+        </button>
+      }>
+        <ProCheckout plan={plan} cta={cta} />
+      </Suspense>
     </div>
   )
 }

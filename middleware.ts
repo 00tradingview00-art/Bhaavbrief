@@ -13,7 +13,8 @@ export default clerkMiddleware((auth, req) => {
 export const config = {
   matcher: [
     // Must cover /api/* too: several Pro API routes (options chain, aav-history,
-    // oi-history, strategy-margin, razorpay/checkout, razorpay/poll-status) call
+    // oi-history, strategy-margin, cashfree/checkout, cashfree/poll-status,
+    // razorpay/checkout, razorpay/poll-status) call
     // auth()/isProUser(), which throws "Clerk: auth() was called but Clerk can't
     // detect usage of clerkMiddleware()" if this middleware never ran on their
     // path — confirmed live in production (real 500s on every one of those
@@ -22,7 +23,8 @@ export const config = {
     // but went stale as those routes were added later and nobody widened the
     // matcher. clerkMiddleware() running on a route that never calls auth() or
     // auth.protect() (cron routes using CRON_SECRET, the Kite OAuth callback,
-    // /api/subscribe) is a harmless no-op pass-through — isProtectedPage above
+    // /api/subscribe, /api/cashfree/webhook) is a harmless no-op pass-through —
+    // isProtectedPage above
     // stays scoped to /account only, so nothing new gets blocked/redirected.
     '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|news-sitemap.xml|feed.xml|llms.txt|robots.txt).*)',
   ],

@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const expiresAt = sub?.current_end
         ? new Date(sub.current_end * 1000)
         : new Date(Date.now() + 31 * 24 * 3600 * 1000)
-      await activateSubscription(userId, sub?.id ?? '', plan, expiresAt)
+      await activateSubscription(userId, sub?.id ?? '', plan, expiresAt, 'razorpay')
       break
     }
     case 'subscription.charged': {

@@ -54,17 +54,25 @@ describe('isProUser', () => {
 })
 
 describe('activateSubscription', () => {
-  it('writes all keys via MSET', async () => {
+  it('writes all keys via MSET including provider', async () => {
     mockRedis.mockResolvedValueOnce('OK')
     const expiry = new Date('2027-01-01T00:00:00Z')
-    await activateSubscription('user1', 'sub_xyz', 'monthly', expiry)
+    await activateSubscription('user1', 'sub_xyz', 'monthly', expiry, 'cashfree')
     expect(mockRedis).toHaveBeenCalledWith(
       'MSET',
       'sub:user1:status', 'active',
       'sub:user1:plan', 'monthly',
-      'sub:user1:razorpay_sub_id', 'sub_xyz',
+      'sub:user1:provider', 'cashfree',
+      'sub:user1:provider_sub_id', 'sub_xyz',
       'sub:user1:expires_at', '2027-01-01T00:00:00.000Z',
     )
+  })
+
+  it('also writes legacy razorpay_sub_id when provider is razorpay', async () => {
+    mockRedis.mockResolvedValue('OK')
+    const expiry = new Date('2027-01-01T00:00:00Z')
+    await activateSubscription('user1', 'sub_rzp', 'monthly', expiry, 'razorpay')
+    expect(mockRedis).toHaveBeenCalledWith('SET', 'sub:user1:razorpay_sub_id', 'sub_rzp')
   })
 })
 
