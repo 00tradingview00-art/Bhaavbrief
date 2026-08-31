@@ -5,8 +5,8 @@ import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import Link from 'next/link'
-import ProBlurGate from '@/components/ProBlurGate'
 import VolatilityHub from './VolatilityHub'
+import IVRankHistoryChart from './IVRankHistoryChart'
 
 export const revalidate = 900
 
@@ -133,43 +133,13 @@ export default async function MCXIVRankPage() {
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>{chartTitle}</h2>
-        <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
-          <svg width="100%" height="170" viewBox="0 0 500 170" style={{ display: 'block' }}>
-            {Object.entries(MCX_INSTRUMENTS).map(([key, meta], row) => {
-              const series = ivRankSeries(ivRanks[key]?.history ?? [])
-              const rowTop = row * 32
-              if (series.length < 2) {
-                return (
-                  <text key={key} x="4" y={rowTop + 18} fontSize="10" fill="var(--ink-4)">
-                    {meta.label}: not enough history yet
-                  </text>
-                )
-              }
-              const barW  = Math.min(18, 480 / series.length - 2)
-              const gap   = 480 / series.length
-              return (
-                <g key={key}>
-                  <text x="0" y={rowTop + 8} fontSize="9" fill="var(--ink-3)">{meta.label}</text>
-                  {series.map((point, i) => {
-                    const h = 2 + (point.ivRank / 100) * 20
-                    return (
-                      <rect
-                        key={point.date}
-                        x={i * gap + 4}
-                        y={rowTop + 26 - h}
-                        width={Math.max(1.5, barW)}
-                        height={h}
-                        rx="1"
-                        fill="var(--gold)"
-                        opacity={0.4 + (i / series.length) * 0.5}
-                      />
-                    )
-                  })}
-                </g>
-              )
-            })}
-          </svg>
-        </ProBlurGate>
+        <IVRankHistoryChart
+          title={chartTitle}
+          isPro={isPro}
+          instruments={Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({
+            key, label: meta.label, series: ivRankSeries(ivRanks[key]?.history ?? []),
+          }))}
+        />
       </section>
 
       <section style={{ marginTop: '2rem' }}>
