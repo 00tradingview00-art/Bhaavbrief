@@ -102,6 +102,29 @@
     "priceAtPublish": 0
   },
   {
+    "type": "research",
+    "slug": "2026-08-28-jackson-hole-mcx-gold-options-positioning",
+    "href": "/research/2026-08-28-jackson-hole-mcx-gold-options-positioning",
+    "title": "Jackson Hole Left the Fed's Door Open — Here's the MCX Gold Options Trade",
+    "description": "Powell's Jackson Hole remarks kept a September cut alive without committing to it. What that ambiguity does to MCX Gold's options chain, and how to position around it.",
+    "excerpt": "WHAT HAPPENED Jerome Powell's Jackson Hole address avoided a pre-commitment on the September FOMC decision, repeating that policy is \"not on a preset course\" while acknowledging the labor market has \"",
+    "date": "2026-08-28",
+    "edition": "macro-research",
+    "tags": [
+      "Jackson Hole",
+      "Fed",
+      "MCX Gold",
+      "Options Positioning",
+      "IV"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "article",
     "slug": "2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
     "href": "/articles/2026-08-27-mcx-nat-gas-rallies-2-5-as-henry-hub-defies-summer-weakness",
