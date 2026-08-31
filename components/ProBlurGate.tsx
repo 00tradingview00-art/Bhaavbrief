@@ -1,6 +1,6 @@
 'use client'
-import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
+import { useIsPro } from '@/lib/useIsPro'
 
 interface Props {
   children: React.ReactNode
@@ -10,8 +10,8 @@ interface Props {
 }
 
 export default function ProBlurGate({ children, isPro: serverPro = false, label, timestamp }: Props) {
-  const { user } = useUser()
-  const isPro = serverPro || user?.publicMetadata?.isPro === true
+  const clientIsPro = useIsPro()
+  const isPro = serverPro || clientIsPro
   if (isPro) return <>{children}</>
 
   return (

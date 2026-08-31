@@ -6,7 +6,7 @@ import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
 import { useIVHistory } from '@/lib/useIVHistory'
-import { useUser } from '@clerk/nextjs'
+import { useIsPro } from '@/lib/useIsPro'
 import IVSkewChart from './IVSkewChart'
 import ProBlurGate from '@/components/ProBlurGate'
 
@@ -437,11 +437,12 @@ function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function OptionChain({ isPro: serverIsPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
-  // ISR-safe Pro check: server always passes isPro=false (preserves revalidate=60 cache).
-  // Client reads Clerk publicMetadata.isPro to unlock the chain for Pro subscribers
-  // without a Redis call or breaking ISR. See plan §S-02.
-  const { user } = useUser()
-  const isPro = serverIsPro || (user?.publicMetadata?.isPro === true)
+  // ISR-safe Pro check: server always passes isPro=false (preserves revalidate=60 cache
+  // for the free, now-unconditional chain data). useIsPro() gives the live Redis-backed
+  // truth client-side for the two remaining Pro-gated tabs (IV Skew, Volatility) — not
+  // Clerk's cached publicMetadata, which nothing force-refreshes after a purchase.
+  const clientIsPro = useIsPro()
+  const isPro = serverIsPro || clientIsPro
   const [instrument, setInstrument] = useState(initialData?.instrument ?? 'GOLD')
   const [expiry, setExpiry]         = useState<string|null>(null)
   const [data, setData]             = useState<OptionsData|null>(initialData)

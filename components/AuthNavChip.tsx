@@ -2,10 +2,11 @@
 
 import { useUser } from '@clerk/nextjs'
 import Button from '@/components/ui/Button'
+import { useIsPro } from '@/lib/useIsPro'
 
 export default function AuthNavChip() {
-  const { isSignedIn, user } = useUser()
-  const isPro = user?.publicMetadata?.isPro === true
+  const { isSignedIn } = useUser()
+  const isPro = useIsPro()
 
   if (isSignedIn && isPro) {
     return (

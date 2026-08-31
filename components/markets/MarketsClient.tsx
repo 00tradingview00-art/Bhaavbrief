@@ -388,7 +388,11 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
             View full chain →
           </Link>
         } />
-        <OptionChain isPro={true} preview />
+        {/* isPro=false here is correct, not a placeholder — OptionChain determines the
+            real value itself via its own live useIsPro() check client-side. Hardcoding
+            true here previously granted the Pro-only IV Skew/Volatility tabs to every
+            visitor regardless of actual entitlement. */}
+        <OptionChain isPro={false} preview />
       </div>
 
       {/* ── Subscribe CTA ── */}
