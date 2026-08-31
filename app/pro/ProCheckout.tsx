@@ -94,13 +94,13 @@ export default function ProCheckout({ plan, cta }: Props) {
       disabled={loading}
       style={{
         width: '100%',
-        marginTop: '1.25rem',
-        padding: '0.75rem',
+        marginTop: '0.6rem',
+        padding: '0.55rem',
         background: loading ? '#6b7280' : '#1a1a1a',
         color: '#fff',
         border: 'none',
         borderRadius: 6,
-        fontSize: '0.95rem',
+        fontSize: '0.8rem',
         fontWeight: 600,
         cursor: loading ? 'not-allowed' : 'pointer',
       }}

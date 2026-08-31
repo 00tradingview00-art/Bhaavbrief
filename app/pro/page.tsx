@@ -85,7 +85,7 @@ export default function ProPage() {
         </div>
 
         {/* Pricing cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+        <div className="pro-pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.85rem', marginBottom: '4rem' }}>
           <PricingCard
             plan="daily"
             label="Daily"
@@ -171,6 +171,9 @@ export default function ProPage() {
 
       <style>{`
         .pro-workflow-card:hover { border-color: var(--gold) !important; }
+        @media (max-width: 640px) {
+          .pro-pricing-grid { grid-template-columns: 1fr !important; }
+        }
       `}</style>
     </>
   )
@@ -190,27 +193,27 @@ function PricingCard({
   return (
     <div style={{
       border: highlight ? '2px solid var(--ink)' : '1px solid var(--border)',
-      borderRadius: 10,
-      padding: '1.75rem',
+      borderRadius: 8,
+      padding: '1.1rem',
       position: 'relative',
       background: highlight ? 'var(--surface-3)' : 'var(--surface)',
       fontFamily: 'var(--font-sans)',
     }}>
       {highlight && (
         <span style={{
-          position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)',
-          background: 'var(--ink)', color: '#fff', fontSize: '0.72rem', padding: '2px 12px', borderRadius: 20, fontWeight: 600, letterSpacing: '0.05em',
+          position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)',
+          background: 'var(--ink)', color: '#fff', fontSize: '0.62rem', padding: '2px 10px', borderRadius: 20, fontWeight: 600, letterSpacing: '0.05em',
         }}>
           Best value
         </span>
       )}
-      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ink-3)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+      <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--ink-3)', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
         {label}
       </div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
-        {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.2rem' }}>
+        {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
       </div>
-      {note && <div style={{ fontSize: '0.85rem', color: 'var(--up)', marginBottom: '1rem', fontWeight: 500 }}>{note}</div>}
+      {note && <div style={{ fontSize: '0.7rem', color: 'var(--up)', marginBottom: '0.7rem', fontWeight: 500 }}>{note}</div>}
       <ProCheckout plan={plan} cta={cta} />
     </div>
   )

@@ -16,7 +16,7 @@ const NAV_LINKS = [
   { href: '/news',           label: 'Feed'     },
   { href: '/calendar',       label: 'Calendar' },
   { href: '/learn',          label: 'Learn'    },
-  { href: '/pro',            label: '⭐ Pro'   },
+  { href: '/pro',            label: 'Pro'   },
 ]
 
 export default function Nav() {
