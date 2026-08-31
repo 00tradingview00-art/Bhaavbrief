@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { redisCommand } from '@/lib/redis'
-import { computeIVRegime, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
-import { MCX_INSTRUMENTS } from '@/lib/options'
+import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
+import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import Link from 'next/link'
 import ProBlurGate from '@/components/ProBlurGate'
 
@@ -17,6 +17,15 @@ export const metadata: Metadata = {
   ],
 }
 
+// Fetches a live ATM IV per instrument via the same liveAtmIV() helper
+// OptionChain.tsx uses, instead of reusing the last *stored daily snapshot*
+// as "current" — those two notions of "now" could diverge by hours,
+// producing a different IV Rank/percentile for the same instrument than the
+// Options page shows at the same moment (confirmed live: Gold read IV Rank
+// 60 here vs 28 on /options). Falls back to the last stored snapshot only if
+// the live chain fetch fails or has no LIVE-tier quote anywhere (e.g. a Kite
+// outage) — never regresses to "No history yet" over a live-fetch hiccup
+// when real historical data already exists.
 async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
   const result: Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }> = {}
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
@@ -29,8 +38,17 @@ async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; h
         if (!isNaN(iv)) entries.push({ date: raw[i], iv })
       }
       entries.sort((a, b) => a.date.localeCompare(b.date))
-      const currentIV = entries[entries.length - 1]?.iv ?? 0
-      const history   = entries.map(e => ({ date: e.date, iv: e.iv }))
+      const history = entries.map(e => ({ date: e.date, iv: e.iv }))
+
+      let currentIV = entries[entries.length - 1]?.iv ?? 0
+      try {
+        const chain = await getOptionsChain(instrument)
+        const live = liveAtmIV(chain.chain)
+        if (live.iv != null) currentIV = live.iv
+      } catch {
+        // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
+      }
+
       result[instrument] = { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }
     } catch {
       result[instrument] = { regime: null, history: [] }
@@ -61,13 +79,25 @@ function regimeColor(regime: string | undefined): string {
 export default async function MCXIVRankPage() {
   const ivRanks = await getIVRanks()
 
+  // The comparison window grows daily as the IV-snapshot cron accumulates
+  // history — state the real depth available today rather than a fixed
+  // "past year"/"90-Day" claim the data doesn't support yet (D-07: never
+  // overclaim). Uses the longest real per-instrument window currently
+  // available; each instrument's own card still shows its exact count.
+  const maxHistoryDays = Math.max(
+    0,
+    ...Object.values(ivRanks).map(r => (r.regime ? Number(r.regime.label.match(/past (\d+) days/)?.[1] ?? 0) : 0)),
+  )
+  const windowLabel = maxHistoryDays >= 365 ? 'the past year' : `the past ${maxHistoryDays} day${maxHistoryDays === 1 ? '' : 's'}`
+  const chartTitle = maxHistoryDays >= 90 ? '90-Day IV Rank History' : `${maxHistoryDays}-Day IV Rank History (growing daily)`
+
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Implied Volatility Rank
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        IV Rank 0–100: how current IV compares to the past year. &gt;70 = expensive options, &lt;30 = cheap options.
+        IV Rank 0–100: how current IV compares to {windowLabel}. &gt;70 = expensive options, &lt;30 = cheap options.
       </p>
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -95,7 +125,7 @@ export default async function MCXIVRankPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>{chartTitle}</h2>
         <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
           <svg width="100%" height="170" viewBox="0 0 500 170" style={{ display: 'block' }}>
             {Object.entries(MCX_INSTRUMENTS).map(([key, meta], row) => {

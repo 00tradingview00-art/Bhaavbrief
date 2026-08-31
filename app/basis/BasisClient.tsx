@@ -28,11 +28,16 @@ function spreadColor(latest: number | null, mean: number, std: number): string {
   return '#22c55e'
 }
 
+// Direction-aware: a deviation below the mean is "Compressed"/"Depressed",
+// not "Elevated" — that word means unusually high, and using it for a
+// negative deviation reads backwards to a trader (e.g. crude basis at -0.36%
+// against a +0.25% mean is unusually LOW, not "Elevated").
 function spreadLabel(latest: number | null, mean: number, std: number): string {
   if (latest === null) return 'No data'
-  const z = std > 0 ? Math.abs(latest - mean) / std : 0
-  if (z >= 2) return 'Extreme'
-  if (z >= 1) return 'Elevated'
+  const z = std > 0 ? (latest - mean) / std : 0
+  const az = Math.abs(z)
+  if (az >= 2) return z > 0 ? 'Extreme high' : 'Extreme low'
+  if (az >= 1) return z > 0 ? 'Elevated' : 'Compressed'
   return 'Normal'
 }
 

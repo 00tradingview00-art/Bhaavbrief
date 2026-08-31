@@ -42,12 +42,18 @@ export default function IVSkewChart({ chain, isPro }: Props) {
     )
   }
 
+  // Only LIVE-tier IVs go into the line — STALE means "no live two-sided
+  // quote, this print may not be a current tradeable price" (see D-06 in
+  // lib/options.ts), which is a reasonable caveat for a table cell with a
+  // "Stale" badge next to it but produces a misleading, jagged sawtooth in a
+  // continuous line chart where a viewer reads jumps as signal, not
+  // liquidity gaps. Real gaps are left as gaps, never interpolated.
   const data = chain
-    .filter(r => r.CE.tier !== 'JUNK' || r.PE.tier !== 'JUNK')
+    .filter(r => r.CE.tier === 'LIVE' || r.PE.tier === 'LIVE')
     .map(r => ({
       strike: r.strike,
-      ceIV:   (r.CE.tier !== 'JUNK' && r.CE.iv != null && r.CE.iv > 0) ? r.CE.iv : null,
-      peIV:   (r.PE.tier !== 'JUNK' && r.PE.iv != null && r.PE.iv > 0) ? r.PE.iv : null,
+      ceIV:   (r.CE.tier === 'LIVE' && r.CE.iv != null && r.CE.iv > 0) ? r.CE.iv : null,
+      peIV:   (r.PE.tier === 'LIVE' && r.PE.iv != null && r.PE.iv > 0) ? r.PE.iv : null,
       isATM:  r.isATM,
     }))
     .filter(r => r.ceIV != null || r.peIV != null)

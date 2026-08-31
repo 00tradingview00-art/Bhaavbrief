@@ -72,6 +72,18 @@ describe('computeIVRegime', () => {
     expect(result.label).toContain('Cheap')
     expect(result.label).toContain('0th percentile')
   })
+
+  test('label uses correct ordinal suffixes, not a hardcoded "th"', () => {
+    // 100-point history so percentile == count of values below currentIV
+    const history = makeHistory(Array.from({ length: 100 }, (_, i) => i + 1))
+    expect(computeIVRegime(history, 22).label).toContain('21st percentile')  // percentile 21
+    expect(computeIVRegime(history, 33).label).toContain('32nd percentile')  // percentile 32
+    expect(computeIVRegime(history, 4).label).toContain('3rd percentile')    // percentile 3
+    expect(computeIVRegime(history, 5).label).toContain('4th percentile')    // percentile 4
+    expect(computeIVRegime(history, 12).label).toContain('11th percentile')  // percentile 11 (exception)
+    expect(computeIVRegime(history, 13).label).toContain('12th percentile')  // percentile 12 (exception)
+    expect(computeIVRegime(history, 14).label).toContain('13th percentile')  // percentile 13 (exception)
+  })
 })
 
 describe('recommendStrategies', () => {

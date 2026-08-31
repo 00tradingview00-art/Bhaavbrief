@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
-import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
+import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
 import { useIVHistory } from '@/lib/useIVHistory'
 import { useUser } from '@clerk/nextjs'
 import IVSkewChart from './IVSkewChart'
@@ -230,37 +230,9 @@ function IVHistoryTooltip({ active, payload }: IVHistoryTooltipProps) {
 }
 
 function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: string }) {
-  // Today's live ATM IV — average of the ATM row's Call/Put IV from the current
-  // chain, LIVE-tier only. STALE-tier sides (illiquid, wide-spread, but not
-  // disqualified) still get a Black-76 IV computed from a stale/thin price and
-  // can be wildly wrong — averaging one in unfiltered dragged this number off
-  // by tens of points on a real ATM-strike case (2026-07-21, Silver: a clean
-  // 37% LIVE call averaged with a stale ~95% put read as "66% today").
-  //
-  // The ATM strike itself is sometimes the illiquid one (zero OI/volume, or a
-  // bad print that fails the no-arbitrage check) while strikes one or two away
-  // trade fine — that produced "no data" headlines even with a healthy chain
-  // (2026-08-18: Gold/Crude ATM strikes both non-LIVE while iVIX, which pools
-  // across many strikes, read normally). Walk outward from the ATM row and use
-  // the nearest strike that has a LIVE-tier side, never averaging non-LIVE data.
-  const atmIdx = chain.findIndex(r => r.isATM)
-  let liveIV: number | null = null
-  let liveIVAtStrike: number | null = null
-  if (atmIdx !== -1) {
-    const order = chain.map((_, i) => i).sort((a, b) => Math.abs(a - atmIdx) - Math.abs(b - atmIdx))
-    for (const idx of order) {
-      const row = chain[idx]
-      const ivs = [row.CE, row.PE]
-        .filter(side => side.tier === 'LIVE' && side.iv != null && side.iv > 0)
-        .map(side => side.iv as number)
-      if (ivs.length) {
-        liveIV = parseFloat((ivs.reduce((s, v) => s + v, 0) / ivs.length).toFixed(2))
-        liveIVAtStrike = row.strike
-        break
-      }
-    }
-  }
-  const liveIVIsExactATM = atmIdx !== -1 && liveIVAtStrike === chain[atmIdx].strike
+  // Today's live ATM IV — see liveAtmIV() in lib/ivAnalysis.ts for why this
+  // must be LIVE-tier only and walk outward from ATM, not a naive average.
+  const { iv: liveIV, atStrike: liveIVAtStrike, isExactATM: liveIVIsExactATM } = liveAtmIV(chain)
 
   const { history, loading: histLoading, error: histError } = useIVHistory(instrument)
   const ivRegime: IVRegime | null = liveIV != null && history.length > 0
