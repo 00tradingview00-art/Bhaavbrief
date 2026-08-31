@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-08-31-mcx-options-trading-beginners-guide",
+    "href": "/articles/2026-08-31-mcx-options-trading-beginners-guide",
+    "title": "MCX Options Trading for Beginners — A Step-by-Step India Guide",
+    "description": "Learn how to trade MCX options for beginners in India with this step-by-step guide covering mechanics, pricing, margin, and real market episodes.",
+    "excerpt": "Understanding how to trade MCX options for beginners in India starts with one core principle: an MCX option gives the holder the right — not the obligation — to buy or sell a commodity futures contrac",
+    "date": "2026-08-31",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-095",
     "href": "/briefs/edition-095",
