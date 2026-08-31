@@ -81,5 +81,4 @@ export const ROUTES = [
   '/privacy',
   '/sitemap.xml',
   '/terms',
-  '/track-record',
 ]

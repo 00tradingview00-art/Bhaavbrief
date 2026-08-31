@@ -142,7 +142,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <p style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 16 }}>
             © {new Date().getFullYear()} BhaavBrief ·{' '}
             <a href="/about" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>About</a>{' '}·{' '}
-            <a href="/track-record" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Track Record</a>{' '}·{' '}
             <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Privacy Policy</a>{' '}·{' '}
             <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Terms of Use</a>{' '}·{' '}
             <a href="https://instagram.com/bhaavbrief" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Instagram</a>{' '}·{' '}

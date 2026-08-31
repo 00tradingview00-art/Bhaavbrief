@@ -120,7 +120,7 @@ const SECTIONS = [
     title: '"Edge of the Day" and how it gets resolved',
     body: [
       'Some editions include an "Edge of the Day" — a specific, falsifiable price level to watch, stated as a level and a direction, never as a buy or sell instruction. The next trading day\'s brief checks that level against the actual close before writing anything new, and records the verdict — confirmed, rejected, or unresolved — permanently.',
-      'Nothing gets quietly removed from that record. The full history is public on the Track Record page, including the misses.',
+      'Nothing gets quietly removed from that record. The next morning\'s brief states the verdict plainly, including the misses.',
     ],
   },
 ]
@@ -172,9 +172,6 @@ export default function MethodologyPage() {
         ))}
 
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-          <a href="/track-record" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
-            See the full Track Record →
-          </a>
           <a href="/about" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             More about BhaavBrief →
           </a>
