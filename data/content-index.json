@@ -1,5 +1,27 @@
 [
   {
+    "type": "article",
+    "slug": "2026-08-31-mcx-crude-surges-2-99-to-8231-on-refinery-maintenance-fade",
+    "href": "/articles/2026-08-31-mcx-crude-surges-2-99-to-8231-on-refinery-maintenance-fade",
+    "title": "MCX Crude Surges 2.99% to ₹8231 on Refinery Maintenance Fade",
+    "description": "MCX Crude Oil +2.99% to ₹8231/bbl as Northern Hemisphere refinery turnarounds ease demand expectations. Gold, NatGas retreat.",
+    "excerpt": "WHAT HAPPENED MCX Crude Oil rallied +2.99% to ₹8,231/bbl this morning — the session's dominant mover — while gold and natural gas both retreated. The crude strength reflects a tactical reprieve from s",
+    "date": "2026-08-31T14:28:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX Nat Gas",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8231
+  },
+  {
     "type": "brief",
     "slug": "edition-096",
     "href": "/briefs/edition-096",

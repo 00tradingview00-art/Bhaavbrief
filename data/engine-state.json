@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 156450,
-    "silver": 236499,
-    "crude": 7992,
-    "copper": 1384,
-    "natgas": 276.4,
+    "gold": 154564,
+    "silver": 235800,
+    "crude": 8231,
+    "copper": 1388.3,
+    "natgas": 273.1,
     "usdinr": 95.39
   },
-  "lastChecked": "2026-08-28T16:47:27.805Z",
+  "lastChecked": "2026-08-31T08:58:57.305Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,10 +22,12 @@
     "mideast": "Asia's crude oil imports stay soft in August, challenging US Hormuz claims - Reu",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-08-27T14:20:23.540Z",
+  "articlesToday": [
+    "2026-08-31/2026-08-31-mcx-crude-surges-2-99-to-8231-on-refinery-maintenance-fade"
+  ],
+  "lastArticleAt": "2026-08-31T08:59:13.057Z",
   "lastCoveredAt": {
-    "crude": "2026-08-26T03:42:36.457Z",
+    "crude": "2026-08-31T08:59:13.057Z",
     "silver": "2026-07-28T05:36:23.461Z",
     "natgas": "2026-08-27T14:20:23.540Z"
   }
