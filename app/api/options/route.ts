@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { getOptionsChain, getCachedOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
+import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
+import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { isProUser } from '@/lib/subscription'
 
 export const runtime  = 'nodejs'
@@ -53,7 +54,17 @@ export async function GET(request: NextRequest) {
   const pro = await isProUser(userId)
 
   try {
-    let payload = await getOptionsChain(instrument, requestedExpiry) as OptionsPayload
+    const rawPayload = await getOptionsChain(instrument, requestedExpiry) as OptionsPayload
+
+    // Cache only the default (nearest-expiry) chain as the fallback — an
+    // explicit ?expiry= request is a less common case and not worth a cache
+    // key per expiry for what's meant to be a last-known-good safety net.
+    // Cache the full payload, before free-tier limiting is applied below.
+    if (requestedExpiry === null) {
+      void cacheOptionsChain(instrument, rawPayload)
+    }
+
+    let payload = rawPayload
     if (!pro) {
       payload = limitChainForFree(payload)
     }
