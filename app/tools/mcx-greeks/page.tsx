@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import ProBlurGate from '@/components/ProBlurGate'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
 
@@ -15,23 +14,22 @@ export const metadata: Metadata = {
   ],
 }
 
-async function getATMGreeks() {
-  const results: Record<string, {
-    strike: number
-    CE: { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }
-    PE: { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }
-  } | null> = {}
+type Side = { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }
+type StrikeRow = { strike: number; isATM?: boolean; CE: Side; PE: Side }
+
+async function getGreeksData() {
+  const results: Record<string, { atm: StrikeRow; otm: StrikeRow[] } | null> = {}
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
       const { chain } = await getOptionsChain(instrument)
-      const atm = chain.find(r => r.isATM)
+      const toSide = (s: { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }): Side => ({
+        delta: s.delta ?? null, gamma: s.gamma ?? null, theta: s.theta ?? null, vega: s.vega ?? null, iv: s.iv ?? null,
+      })
+      const rows: StrikeRow[] = chain.map(r => ({ strike: r.strike, isATM: r.isATM, CE: toSide(r.CE), PE: toSide(r.PE) }))
+      const atm = rows.find(r => r.isATM)
       if (!atm) { results[instrument] = null; continue }
-      results[instrument] = {
-        strike: atm.strike,
-        CE: { delta: atm.CE.delta ?? null, gamma: atm.CE.gamma ?? null, theta: atm.CE.theta ?? null, vega: atm.CE.vega ?? null, iv: atm.CE.iv ?? null },
-        PE: { delta: atm.PE.delta ?? null, gamma: atm.PE.gamma ?? null, theta: atm.PE.theta ?? null, vega: atm.PE.vega ?? null, iv: atm.PE.iv ?? null },
-      }
+      results[instrument] = { atm, otm: rows.filter(r => !r.isATM) }
     } catch {
       results[instrument] = null
     }
@@ -44,31 +42,33 @@ function fmt(v: number | null, decimals = 4): string {
 }
 
 export default async function MCXGreeksPage() {
-  const greeks = await getATMGreeks()
+  const greeks = await getGreeksData()
 
   return (
     <main style={{ maxWidth: 800, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
-        MCX Options Greeks (ATM)
+        MCX Options Greeks — Full Strike Depth
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        Black-76 model Greeks for the at-the-money strike. Refreshed every 60 seconds.
+        Black-76 model Delta, Gamma, Theta, and Vega for every strike, free. Refreshed every 60 seconds.
       </p>
 
-      <div style={{ display: 'grid', gap: '1rem' }}>
+      <div style={{ display: 'grid', gap: '1.5rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
           const data = greeks[key]
+          const rows = data ? [data.atm, ...data.otm].sort((a, b) => a.strike - b.strike) : []
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', background: 'var(--surface)' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.6rem' }}>
                 <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>{meta.label}</h2>
-                {data && <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>ATM Strike: {data.strike.toLocaleString()}</span>}
+                {data && <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>ATM Strike: {data.atm.strike.toLocaleString()}</span>}
               </div>
-              {data ? (
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+              {rows.length ? (
+                <div style={{ overflowX: 'auto', maxHeight: 320, overflowY: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                     <thead>
                       <tr style={{ color: 'var(--ink-3)' }}>
+                        <th style={{ textAlign: 'left', padding: '4px 8px' }}>Strike</th>
                         <th style={{ textAlign: 'left', padding: '4px 8px' }}>Side</th>
                         <th style={{ textAlign: 'right', padding: '4px 8px' }}>IV %</th>
                         <th style={{ textAlign: 'right', padding: '4px 8px' }}>Delta</th>
@@ -78,15 +78,23 @@ export default async function MCXGreeksPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {(['CE', 'PE'] as const).map(side => (
-                        <tr key={side} style={{ borderTop: '1px solid var(--border)' }}>
-                          <td style={{ padding: '4px 8px', fontWeight: 600, color: side === 'CE' ? 'var(--up)' : 'var(--gold-dark)' }}>{side}</td>
-                          <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(data[side].iv, 1)}</td>
-                          <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(data[side].delta)}</td>
-                          <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(data[side].gamma, 6)}</td>
-                          <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(data[side].theta, 2)}</td>
-                          <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(data[side].vega, 2)}</td>
-                        </tr>
+                      {rows.map(row => (
+                        (['CE', 'PE'] as const).map(side => (
+                          <tr key={`${row.strike}-${side}`} style={{
+                            borderTop: '1px solid var(--border)',
+                            background: row.isATM ? 'var(--gold-pale, #FFF6E0)' : 'transparent',
+                          }}>
+                            <td style={{ padding: '4px 8px', fontWeight: row.isATM ? 700 : 500, color: 'var(--ink)' }}>
+                              {side === 'CE' ? row.strike.toLocaleString() : ''}
+                            </td>
+                            <td style={{ padding: '4px 8px', fontWeight: 600, color: side === 'CE' ? 'var(--up)' : 'var(--gold-dark)' }}>{side}</td>
+                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].iv, 1)}</td>
+                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].delta)}</td>
+                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].gamma, 6)}</td>
+                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].theta, 2)}</td>
+                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].vega, 2)}</td>
+                          </tr>
+                        ))
                       ))}
                     </tbody>
                   </table>
@@ -99,38 +107,8 @@ export default async function MCXGreeksPage() {
         })}
       </div>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>Full Strike Greeks — OTM Depth</h2>
-        <ProBlurGate label="OTM strike Greeks — delta, gamma, theta, vega for all strikes" timestamp="Live">
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: '0.82rem' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid var(--border)', textAlign: 'right' }}>
-                  <th style={{ padding: '4px 8px', textAlign: 'left' }}>Strike</th>
-                  <th style={{ padding: '4px 8px' }}>Δ Delta</th>
-                  <th style={{ padding: '4px 8px' }}>Γ Gamma</th>
-                  <th style={{ padding: '4px 8px' }}>Θ Theta</th>
-                  <th style={{ padding: '4px 8px' }}>V Vega</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Array.from({ length: 6 }, (_, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '4px 8px', fontWeight: 600 }}>——</td>
-                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>0.{30 + i * 8}</td>
-                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>0.00{4 + i}</td>
-                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>-{12 + i * 3}</td>
-                    <td style={{ padding: '4px 8px', textAlign: 'right' }}>{80 + i * 15}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </ProBlurGate>
-      </section>
-
       <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
-        Full option chain with all strikes →{' '}
+        Full option chain with live prices and OI →{' '}
         <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options</Link>
         {' '}· Strategy builder →{' '}
         <Link href="/options/strategy" style={{ color: 'var(--gold)', fontWeight: 600 }}>Strategy Builder</Link>
