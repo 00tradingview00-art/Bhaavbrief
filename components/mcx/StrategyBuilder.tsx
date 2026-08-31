@@ -358,7 +358,7 @@ function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT
       background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
       padding: '6px 10px', borderRadius: 4, fontSize: 12, minWidth: 160,
     }}>
-      <div style={{ opacity: 0.7, marginBottom: 4 }}>
+      <div style={{ marginBottom: 4 }}>
         F = ₹{fmt(label)}
         {movePct !== null && (
           <span style={{ color: movePct >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
