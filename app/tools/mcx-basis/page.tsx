@@ -45,7 +45,7 @@ export default function MCXBasisPage() {
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{label}</div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>{unit}</div>
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 700, color }}>
                 {val !== null ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : '—'}
               </div>
             </div>

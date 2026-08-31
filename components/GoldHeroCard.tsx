@@ -57,13 +57,13 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 28, fontWeight: 700,
+              fontFamily: 'var(--font-sans)', fontSize: 28, fontWeight: 700,
               color: 'var(--ink)', lineHeight: 1, fontVariantNumeric: 'tabular-nums',
             }}>
               {fmtINR(gold.mcx)}
             </span>
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700,
+              fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 700,
               padding: '3px 8px', borderRadius: 5,
               background: up ? 'var(--up-bg)' : 'var(--down-bg)',
               color: up ? 'var(--up)' : 'var(--down)',
@@ -83,7 +83,7 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
                 COMEX Gold
               </div>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600,
+                fontFamily: 'var(--font-sans)', fontSize: 15, fontWeight: 600,
                 color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums',
               }}>
                 ${gold.comex.toFixed(2)}

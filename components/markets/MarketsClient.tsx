@@ -74,7 +74,7 @@ function RangeBar({ low, high, current, isUp }: { low: number; high: number; cur
           width: 9, height: 9, borderRadius: '50%', background: color, top: -3, border: '2px solid var(--surface)',
         }} />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 10, color: 'var(--ink-4)', fontFamily: 'var(--font-mono)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 10, color: 'var(--ink-4)', fontFamily: 'var(--font-sans)' }}>
         <span>L {fmtINR(low)}</span>
         <span>H {fmtINR(high)}</span>
       </div>
@@ -124,7 +124,7 @@ function PriceCard({
 
       {/* Price + sparkline */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
           {data.mcx > 0 ? cfg.fmtP(data.mcx) : '—'}
         </div>
         {closes && closes.length >= 2 && <Sparkline closes={closes} size="card" />}
@@ -150,7 +150,7 @@ function PriceCard({
             ].map(({ l, v }) => (
               <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
                 <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', letterSpacing: '0.3px', minWidth: 10 }}>{l}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>{cfg.fmtP(v)}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2)' }}>{cfg.fmtP(v)}</span>
               </div>
             ))}
           </div>
@@ -161,11 +161,11 @@ function PriceCard({
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginBottom: 8 }}>
             <div style={{ background: 'var(--surface-2)', borderRadius: 4, padding: '5px 8px' }}>
               <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Volume</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxVolume)}</div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxVolume)}</div>
             </div>
             <div style={{ background: 'var(--surface-2)', borderRadius: 4, padding: '5px 8px' }}>
               <div style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', marginBottom: 2 }}>Open Int.</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxOI)}</div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{fmtVol(data.mcxOI)}</div>
             </div>
           </div>
 
@@ -180,7 +180,7 @@ function PriceCard({
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {hasKite && data.mcxExpiry && (
             <span style={{
-              fontFamily: 'var(--font-mono)', fontSize: 10, padding: '2px 6px', borderRadius: 3,
+              fontFamily: 'var(--font-sans)', fontSize: 10, padding: '2px 6px', borderRadius: 3,
               background: 'var(--gold-pale)', color: 'var(--gold-dark)',
             }}>
               {daysToExpiry(data.mcxExpiry)} · {shortExpiry(data.mcxExpiry)}
@@ -287,7 +287,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
             <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
               <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px', minHeight: 80, cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 8, display: 'block' }}>{cfg.label}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-4)' }}>—</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 18, fontWeight: 600, color: 'var(--ink-4)' }}>—</span>
                 <span style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 4 }}>awaiting data</span>
               </div>
             </Link>
@@ -330,7 +330,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
                   </span>
                 )}
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
                 {ltp > 0 ? `₹${ltp.toLocaleString('en-IN', { minimumFractionDigits: cfg.decimals, maximumFractionDigits: cfg.decimals })}` : '—'}
               </div>
               {fx?.open && fx.open > 0 ? (
@@ -338,7 +338,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
                   {[{ l: 'O', v: fx.open }, { l: 'H', v: fx.high }, { l: 'L', v: fx.low }, { l: 'C', v: fx.prevClose }].map(({ l, v }) => (
                     <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
                       <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', minWidth: 10 }}>{l}</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>₹{v.toFixed(cfg.decimals)}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2)' }}>₹{v.toFixed(cfg.decimals)}</span>
                     </div>
                   ))}
                 </div>
@@ -367,7 +367,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
               <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Repo Rate</span>
             </div>
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
             5.25
           </div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
@@ -455,7 +455,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
                     </span>
                   )}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
                   {(price ?? 0) > 0 ? fmt(price ?? 0) : '—'}
                 </div>
                 <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>{unit}</div>

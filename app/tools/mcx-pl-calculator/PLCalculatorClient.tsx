@@ -40,7 +40,7 @@ export default function PLCalculatorClient() {
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '0.55rem 0.75rem', borderRadius: 6,
     border: '1px solid var(--border)', fontSize: '0.9rem', boxSizing: 'border-box',
-    fontFamily: 'var(--font-mono)', background: 'var(--surface)',
+    fontFamily: 'var(--font-sans)', background: 'var(--surface)',
     color: 'var(--ink)',
   }
   const labelStyle: React.CSSProperties = {
@@ -116,7 +116,7 @@ export default function PLCalculatorClient() {
           background: pnl >= 0 ? 'var(--up-bg)' : 'var(--down-bg)',
           border: `1px solid ${pnl >= 0 ? '#A7F3D0' : '#FECACA'}`,
         }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2.25rem', fontWeight: 700, color: pnl >= 0 ? 'var(--up)' : 'var(--down)' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: '2.25rem', fontWeight: 700, color: pnl >= 0 ? 'var(--up)' : 'var(--down)' }}>
             {pnl >= 0 ? '+' : ''}₹{Math.abs(pnl).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
           </div>
           <div style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: 5, fontFamily: 'var(--font-sans)' }}>

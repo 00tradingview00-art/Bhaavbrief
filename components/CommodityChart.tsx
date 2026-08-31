@@ -47,7 +47,7 @@ function CustomTooltip({ active, payload }: TooltipProps) {
     <div style={{
       background: '#18180F', border: '0.5px solid #3A3A2A',
       padding: '8px 12px', borderRadius: 4, fontSize: 11,
-      fontFamily: 'var(--font-mono)',
+      fontFamily: 'var(--font-sans)',
     }}>
       <div style={{ color: '#8A8A7A', marginBottom: 4, letterSpacing: '0.03em' }}>{fmtDateFull(d.date)}</div>
       <div style={{ color: '#FAFAF6', fontSize: 15, fontWeight: 500 }}>{fmtPrice(d.price)}</div>
@@ -119,11 +119,11 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
           </div>
           {!loading && !error && data.length > 0 && (
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 500, color: 'var(--ink)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 500, color: 'var(--ink)' }}>
                 {fmtPrice(last)}
               </span>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 500,
+                fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 500,
                 color: isUp ? '#1B7A4A' : '#B53A2A',
               }}>
                 {isUp ? '+' : ''}{changePct.toFixed(2)}%
@@ -220,7 +220,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         <div style={{
           padding: '8px 20px 12px',
           display: 'flex', justifyContent: 'space-between',
-          fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)',
+          fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)',
           borderTop: '0.5px solid var(--border)',
           letterSpacing: '0.03em',
         }}>

@@ -119,7 +119,7 @@ export default async function MCXIVRankPage() {
               </div>
               {regime ? (
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>IV Rank</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>Pctl: {regime.percentile.toFixed(0)} · {regime.label}</div>
                 </div>

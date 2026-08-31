@@ -77,12 +77,12 @@ export default async function MCXPCRPage() {
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 {row?.ivix !== null && row?.ivix !== undefined && (
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)' }}>{row.ivix.toFixed(1)}</div>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)' }}>{row.ivix.toFixed(1)}</div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--ink-3)' }}>iVIX</div>
                   </div>
                 )}
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 700, color }}>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.4rem', fontWeight: 700, color }}>
                     {row?.pcr !== null && row?.pcr !== undefined ? row.pcr.toFixed(2) : '—'}
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>{label}</div>

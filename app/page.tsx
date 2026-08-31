@@ -85,7 +85,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
               {item.label}
             </div>
             <div style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 17,
               fontWeight: 500,
               color: 'var(--ink)',
@@ -100,7 +100,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
               )}
             </div>
             <div style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 11,
               fontWeight: 500,
               color: up ? 'var(--up)' : 'var(--down)',
@@ -211,7 +211,7 @@ export default async function HomePage() {
             marginBottom: 18,
           }}>
             <span style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10, fontWeight: 500,
               letterSpacing: '0.12em', textTransform: 'uppercase',
               color: 'var(--gold)',
@@ -223,7 +223,7 @@ export default async function HomePage() {
               Edition #{String(latest.edition).padStart(3, '0')}
             </span>
             <span style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10, color: 'var(--ink-4)',
               letterSpacing: '0.04em',
             }}>
@@ -371,7 +371,7 @@ export default async function HomePage() {
               }}
             >
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)',
+                fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-4)',
                 flexShrink: 0, minWidth: 32,
               }}>
                 #{brief.edition}
@@ -475,11 +475,11 @@ export default async function HomePage() {
                   return (
                     <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
                         {price ? fmtINR(price) : '—'}
                         <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
                       </span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
                         {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
                       </span>
                     </div>
@@ -514,7 +514,7 @@ export default async function HomePage() {
                 <div style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500, marginBottom: 4 }}>
                   {nextEvent.name}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-3)' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-3)' }}>
                   {new Intl.DateTimeFormat('en-IN', {
                     timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short',
                     hour: 'numeric', minute: '2-digit', hour12: true,

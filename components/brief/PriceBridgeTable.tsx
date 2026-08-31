@@ -15,7 +15,7 @@ export default function PriceBridgeTable({ heading, rows }: { heading: string; r
         {heading}
       </h2>
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-sans)', fontSize: 13 }}>
           <thead>
             <tr style={{ borderBottom: '2px solid var(--border-2)' }}>
               {['Commodity', 'Global Price', 'FX Rate', 'MCX Price', ''].map(h => (
