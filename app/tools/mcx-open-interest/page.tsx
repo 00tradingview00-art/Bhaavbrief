@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
-import Link from 'next/link'
-import ProBlurGate from '@/components/ProBlurGate'
+import OIBuildupSection from './OIBuildupSection'
 
 export const revalidate = 60
 
@@ -42,7 +43,16 @@ async function getOIData() {
 }
 
 export default async function MCXOpenInterestPage() {
+  const { userId } = await auth()
+  const isPro = await isProUser(userId)
   const oi = await getOIData()
+  const buildupInstruments = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
+    const data = oi[key]
+    const strikes = data
+      ? Array.from(new Set([...data.topCE.map(r => r.strike), ...data.topPE.map(r => r.strike)])).sort((a, b) => a - b)
+      : []
+    return { key, label: meta.label, strikes }
+  })
 
   return (
     <main style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
@@ -87,33 +97,9 @@ export default async function MCXOpenInterestPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>OI Buildup History — 90 Days by Strike</h2>
-        <ProBlurGate label="OI buildup history — see how open interest has shifted across strikes over 90 days" timestamp="Updated today">
-          <svg width="100%" height="180" viewBox="0 0 500 180" style={{ display: 'block' }}>
-            <defs>
-              <linearGradient id="oigrad1" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--up)" stopOpacity="0.6"/>
-                <stop offset="100%" stopColor="var(--up)" stopOpacity="0.1"/>
-              </linearGradient>
-              <linearGradient id="oigrad2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--gold-dark)" stopOpacity="0.5"/>
-                <stop offset="100%" stopColor="var(--gold-dark)" stopOpacity="0.05"/>
-              </linearGradient>
-            </defs>
-            <polyline points="0,160 50,140 100,120 150,90 200,60 250,80 300,100 350,130 400,150 450,145 500,160"
-              fill="url(#oigrad1)" stroke="var(--up)" strokeWidth="2"/>
-            <polyline points="0,160 50,150 100,145 150,130 200,110 250,100 300,120 350,140 400,155 450,160 500,160"
-              fill="url(#oigrad2)" stroke="var(--gold-dark)" strokeWidth="2"/>
-            <text x="6" y="170" fontSize="9" fill="var(--up)">Call OI concentration</text>
-            <text x="130" y="170" fontSize="9" fill="var(--gold-dark)">Put OI concentration</text>
-          </svg>
-        </ProBlurGate>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>OI Buildup History — by Strike</h2>
+        <OIBuildupSection instruments={buildupInstruments} isPro={isPro} />
       </section>
-
-      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
-        90-day OI buildup history by strike →{' '}
-        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options (Pro)</Link>
-      </p>
     </main>
   )
 }
