@@ -1,22 +1,22 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-08-27T15:23:21.726Z",
-    "lastFlashPrice": 158480,
+    "lastFlashAt": "2026-08-31T11:01:19.343Z",
+    "lastFlashPrice": 155298,
     "lastRoundLevel": 160000,
     "recentFlashIds": [
+      "2026-08-31-16-31-mcx-gold-slides-0-63-on-rupee-strength",
       "2026-08-27-20-53-mcx-gold-slides-0-74-as-rupee-strengthens-sharply",
-      "2026-08-26-22-26-mcx-gold-slides-1-55-as-recovery-stalls",
-      "2026-08-25-10-20-mcx-gold-slides-0-35-as-rupee-steadies"
+      "2026-08-26-22-26-mcx-gold-slides-1-55-as-recovery-stalls"
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-08-21T04:50:23.058Z",
-    "lastFlashPrice": 245585,
+    "lastFlashAt": "2026-08-31T11:01:19.343Z",
+    "lastFlashPrice": 236150,
     "lastRoundLevel": 240000,
     "recentFlashIds": [
+      "2026-08-31-16-31-mcx-silver-retreats-on-profit-taking-after-rally",
       "2026-08-21-10-20-mcx-silver-extends-rally-on-broad-commodity-strength",
-      "2026-08-20-09-25-mcx-silver-extends-rally-1-50-on-broad-commodity-streng",
-      "2026-08-19-19-35-mcx-silver-rallies-1-26-on-risk-on-momentum"
+      "2026-08-20-09-25-mcx-silver-extends-rally-1-50-on-broad-commodity-streng"
     ]
   },
   "MCX_CRUDE": {
