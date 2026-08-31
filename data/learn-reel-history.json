@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "mcx-trading-hours",
+  "lastSlug": "what-is-comex",
   "log": [
+    {
+      "slug": "what-is-comex",
+      "date": "2026-08-31",
+      "file": "public/reels/news-20260831-what-is-comex.mp4",
+      "generated_at": "2026-08-31T19:56:43.529Z"
+    },
     {
       "slug": "mcx-trading-hours",
       "date": "2026-08-30",

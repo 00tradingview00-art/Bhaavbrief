@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260831-what-is-comex",
+    "topic": "What is COMEX?",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Before you trade MCX gold, know who really sets the price.",
+    "stat_line": "COMEX in New York. Your rupee follows.",
+    "payoff": "You're trading an echo of someone else's market, not the original.",
+    "beat1": "MCX gold isn't independent—it's a math equation tied to a New York exchange you can't access directly.",
+    "beat2": "COMEX, run by CME Group, sets the global reference price for gold, silver, copper, palladium globally.",
+    "beat3": "Indian traders can't trade COMEX directly, but the 7 PM–11:30 PM IST window is when most volume moves.",
+    "instagram_id": "17977696962086453",
+    "generated_at": "2026-08-31T19:56:43.299Z",
+    "edition": null,
+    "posted_at": "2026-08-31T19:57:32.078Z"
+  },
+  {
     "file": "brief-edition-096",
     "topic": "Oil Jumps $1.73 While Gold Freezes — The War Premium Is Splitting",
     "content_type": "macro_trend",
