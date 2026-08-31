@@ -1,6 +1,7 @@
 import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
+import { getAllResearch } from '@/lib/research'
 import SectionTabs from '@/components/SectionTabs'
 import { safeJsonLd } from '@/lib/seo'
 
@@ -55,13 +56,15 @@ export default async function NewsPage() {
   // notice.
   let flashItems: ReturnType<typeof getAllFlash>
   let articles: Awaited<ReturnType<typeof getAllArticles>>
+  let research: ReturnType<typeof getAllResearch>
   try {
-    ;[flashItems, articles] = await Promise.all([
+    ;[flashItems, articles, research] = await Promise.all([
       Promise.resolve(getAllFlash()),
       getAllArticles(),
+      Promise.resolve(getAllResearch()),
     ])
   } catch (e) {
-    console.error('[news/page] getAllFlash/getAllArticles threw during render — D-01 class failure:', e)
+    console.error('[news/page] getAllFlash/getAllArticles/getAllResearch threw during render — D-01 class failure:', e)
     throw e
   }
 
@@ -94,6 +97,19 @@ export default async function NewsPage() {
         pubDate:  a.date,
         href:     `/articles/${a.slug}`,
         itemType: (a.edition === 'hawk-scan' ? 'hawk-scan' : 'alert') as 'hawk-scan' | 'alert',
+      })),
+    ...research
+      .filter(r => r.published)
+      .map(r => ({
+        id:       r.slug,
+        title:    r.title,
+        summary:  r.description,
+        category: commodityCategory(r.commodity),
+        tagType:  commodityTagType(r.commodity),
+        pubDate:  r.date,
+        href:     `/research/${r.slug}`,
+        itemType: 'research' as const,
+        premium:  r.premium,
       })),
   ]
 

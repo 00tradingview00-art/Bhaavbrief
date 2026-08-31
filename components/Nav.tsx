@@ -8,13 +8,15 @@ import dynamic from 'next/dynamic'
 const SearchModal = dynamic(() => import('./SearchModal'), { ssr: false })
 
 const NAV_LINKS = [
-  { href: '/',               label: 'Home'    },
-  { href: '/briefs',         label: 'Briefs'  },
-  { href: '/markets',        label: 'Markets' },
-  { href: '/options',        label: 'Options' },
-  { href: '/news',           label: 'Feed'    },
+  { href: '/',               label: 'Home'     },
+  { href: '/briefs',         label: 'Briefs'   },
+  { href: '/markets',        label: 'Markets'  },
+  { href: '/options',        label: 'Options'  },
+  { href: '/tools',          label: 'Tools'    },
+  { href: '/news',           label: 'Feed'     },
   { href: '/calendar',       label: 'Calendar' },
-  { href: '/learn',          label: 'Learn'   },
+  { href: '/learn',          label: 'Learn'    },
+  { href: '/pro',            label: 'Pro'   },
 ]
 
 export default function Nav() {

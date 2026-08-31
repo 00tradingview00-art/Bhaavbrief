@@ -57,6 +57,11 @@ jobs:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
           KITE_API_SECRET:    ${{ secrets.KITE_API_SECRET }}
           KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
+          # Needed here (not just the "Alert on failure" step below) — the
+          # Pro Research queue processed inside this run sends its own alert
+          # for a gate-internal-error, not just on the whole workflow failing.
+          BREVO_API_KEY:      ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:       ${{ secrets.SENDER_EMAIL }}
         run: node scripts/intelligence-engine.js
 
       - name: Rebuild content search index
@@ -96,6 +101,13 @@ jobs:
           }
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ content/events/ data/content-index.json
+          # Pro Research: published/rejected articles from this run's queue
+          # processing, plus the queue file itself (processed:true markers) —
+          # without this, generated research would never actually get
+          # committed, same class of bug as content/events/ not being staged.
+          [ -d content/research ] && git add content/research/ || true
+          git add data/pending-research-events.json 2>/dev/null || true
+          git add data/gate-log.jsonl 2>/dev/null || true
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
           git add data/market-snapshot.json data/story-arcs.json data/site-stats.json data/market-structure.json 2>/dev/null || true
           [ -d data/history ] && git add data/history/ || true
@@ -107,9 +119,12 @@ jobs:
             exit 0
           fi
           HAS_ARTICLE=$(git diff --staged --name-only -- content/articles/ | grep -c '\.mdx$' || true)
+          HAS_RESEARCH=$(git diff --staged --name-only -- content/research/ | grep -c '\.mdx$' || true)
           if [ "$HAS_ARTICLE" -gt 0 ]; then
             TITLE=$(cat data/last-article-title.txt 2>/dev/null || echo "Market Update")
             git commit -m "⚡ Flash: ${TITLE}"
+          elif [ "$HAS_RESEARCH" -gt 0 ]; then
+            git commit -m "feat(research): auto-published $(date -u '+%H:%M UTC')"
           else
             git commit -m "chore: snapshot $(date -u '+%H:%M UTC')"
           fi

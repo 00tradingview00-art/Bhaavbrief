@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   title: "About — MCX Commodity Intelligence, Daily at 9:30 AM",
   description: "BhaavBrief publishes daily MCX commodity briefs at 9:30 AM — gold, silver, crude, copper, natgas — with global context, open interest, and what moves each price.",
   alternates: { canonical: 'https://bhaavbrief.in/about' },
+  keywords: [
+    'BhaavBrief MCX India',
+    'MCX analytics platform India',
+    'commodity intelligence India',
+    'AI MCX brief India',
+    'MCX daily market analysis India',
+    'MCX gold silver crude oil intelligence',
+    'commodity market brief India',
+  ],
   openGraph: {
     title: "About BhaavBrief — MCX Commodity Intelligence",
     description: 'Daily OHLC context, open interest, global benchmarks, flash intelligence and live geo risk — built for MCX traders, commodity businesses, and investors.',
@@ -30,7 +39,7 @@ const COMMODITIES = [
 
 
 const PRINCIPLES = [
-  { title: 'Open access', body: 'No subscription fee, no paywalled content. Commodity intelligence should be accessible to everyone who needs it — futures traders, portfolio investors, jewellers, fuel dealers, agri merchants. Not just institutional desks.' },
+  { title: 'Open access', body: 'Daily briefs, flash alerts, and live price data are free for everyone. Pro analytics — full option chains, Greeks, Strategy Builder, and institutional positioning — are available on a paid plan. Commodity intelligence should be accessible to everyone who needs it.' },
   { title: 'Data, not noise', body: 'Every edition leads with price levels, OHLC context, and open interest — the numbers that matter whether you are trading, hedging a business, or tracking an investment.' },
   { title: 'Plain language', body: 'We write for people who need to act on information, not economists. No jargon for its own sake. If a concept needs explaining, we explain it.' },
   { title: 'Transparent about limits', body: 'We are not SEBI registered. We do not give trading calls or buy/sell recommendations. We provide context; you make the decision.' },
@@ -93,7 +102,7 @@ export default async function AboutPage() {
             { value: '9:30 AM', label: 'Daily delivery IST' },
             { value: '5',       label: 'Commodities tracked' },
             { value: `${briefs.length}+`, label: 'Editions published' },
-            { value: 'Free',    label: 'No paywall, ever' },
+            { value: 'Free+Pro', label: 'Daily briefs free · Pro analytics' },
           ].map(s => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1.1rem 1.25rem' }}>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.65rem', fontWeight: 800, color: '#18180F', lineHeight: 1 }}>
@@ -316,7 +325,7 @@ export default async function AboutPage() {
               {[
                 { label: 'Delivery time',   value: '9:30 AM IST' },
                 { label: 'Frequency',        value: 'Every weekday' },
-                { label: 'Price',            value: 'No charge' },
+                { label: 'Price',            value: 'Free / ₹333 Pro' },
                 { label: 'Format',           value: 'Email + Web' },
                 { label: 'Flash updates',    value: 'During mkt hours' },
                 { label: 'Geo Risk refresh', value: 'Every 15 min' },

@@ -39,8 +39,9 @@ export interface NewsItem {
   pubDate:     string
   pubDateIST?: string
   href?:       string
-  itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan'
+  itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan' | 'research'
   coverImage?: string
+  premium?:    boolean
 }
 
 function relativeTime(iso: string): string {
@@ -100,7 +101,12 @@ function truncate(text: string, maxLen = 220): string {
   return text.slice(0, cut > 0 ? cut : maxLen) + '…'
 }
 
-function TypeBadge({ itemType }: { itemType?: NewsItem['itemType'] }) {
+function TypeBadge({ itemType, premium }: { itemType?: NewsItem['itemType']; premium?: boolean }) {
+  if (itemType === 'research') return (
+    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: 'var(--gold-pale)', color: 'var(--gold-dark)', border: '0.5px solid var(--gold)', fontWeight: 600 }}>
+      {premium ? '🔒 PRO RESEARCH' : 'RESEARCH'}
+    </span>
+  )
   if (itemType === 'hawk-scan') return (
     <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#FFF0E8', color: '#CC3300', border: '0.5px solid #CC3300', fontWeight: 600 }}>
       ⚡ HAWK-SCAN
@@ -323,7 +329,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 {/* Meta row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
                   <Tag type={item.tagType}>{item.category.charAt(0).toUpperCase() + item.category.slice(1)}</Tag>
-                  <TypeBadge itemType={item.itemType} />
+                  <TypeBadge itemType={item.itemType} premium={item.premium} />
                   <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
                   <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
                     {relativeTime(item.pubDate)}

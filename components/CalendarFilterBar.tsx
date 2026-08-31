@@ -138,6 +138,18 @@ function EventCard({
           ))}
         </div>
       )}
+
+      {event.research_href && (
+        <div style={{ marginTop: 6 }}>
+          <Link
+            href={event.research_href}
+            style={{ fontSize: 11, color: '#1a1a1a', fontWeight: 600, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+          >
+            <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: '#1a1a1a', color: '#fff', padding: '1px 5px', borderRadius: 99 }}>Pro</span>
+            Read our analysis →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

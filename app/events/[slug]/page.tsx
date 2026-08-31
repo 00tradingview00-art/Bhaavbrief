@@ -30,10 +30,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `https://bhaavbrief.in/events/${slug}`
   const ogParams = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
   const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
+  const commodityLabel = event.commodity !== 'macro' ? `MCX ${event.commodity} India` : 'MCX India'
   return {
     title:       event.title,
     description: event.description,
     alternates:  { canonical },
+    keywords: [
+      event.eventName,
+      `${event.eventName} MCX impact`,
+      `${event.eventName} India`,
+      commodityLabel,
+      `${event.commodity} market event India`,
+      'MCX commodity event result India',
+    ].filter(Boolean),
     openGraph: {
       title:         event.title,
       description:   event.description,

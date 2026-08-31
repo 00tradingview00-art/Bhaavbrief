@@ -27,6 +27,7 @@ export interface EventMapEntry {
   consensus_field:        null
   prior_field:            EventPriorField
   description_educational: string
+  research_href?:         string
 }
 
 // Maps event-map.json's affected_contracts keys to the URL slugs used by

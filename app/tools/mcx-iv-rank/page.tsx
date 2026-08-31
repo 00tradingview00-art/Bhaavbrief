@@ -1,0 +1,144 @@
+import type { Metadata } from 'next'
+import { redisCommand } from '@/lib/redis'
+import { computeIVRegime, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
+import { MCX_INSTRUMENTS } from '@/lib/options'
+import Link from 'next/link'
+import ProBlurGate from '@/components/ProBlurGate'
+
+export const revalidate = 900
+
+export const metadata: Metadata = {
+  title:       'MCX IV Rank — BhaavBrief',
+  description: 'Live MCX Implied Volatility Rank (IV Rank) and IV Percentile for Gold, Silver, Crude Oil, Natural Gas, and Copper. Know if MCX options are cheap or expensive today.',
+  keywords:    [
+    'MCX IV rank India', 'MCX implied volatility rank today', 'MCX gold IV rank',
+    'MCX crude oil IV percentile', 'is MCX options cheap or expensive India',
+    'MCX options IV rank analysis', 'MCX silver IV rank today',
+  ],
+}
+
+async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
+  const result: Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }> = {}
+  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
+    try {
+      const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+      if (!raw || raw.length < 4) { result[instrument] = { regime: null, history: [] }; continue }
+      const entries: { date: string; iv: number }[] = []
+      for (let i = 0; i < raw.length; i += 2) {
+        const iv = parseFloat(raw[i + 1])
+        if (!isNaN(iv)) entries.push({ date: raw[i], iv })
+      }
+      entries.sort((a, b) => a.date.localeCompare(b.date))
+      const currentIV = entries[entries.length - 1]?.iv ?? 0
+      const history   = entries.map(e => ({ date: e.date, iv: e.iv }))
+      result[instrument] = { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }
+    } catch {
+      result[instrument] = { regime: null, history: [] }
+    }
+  }
+  return result
+}
+
+// Rolling IV Rank per day — computeIVRegime(history, currentIV) already does
+// the min/max-rank math for "today vs all history"; walking it forward one
+// day at a time (using only the data available up to that day) turns that
+// single snapshot into the real 90-day series the chart below needs, instead
+// of the hardcoded Math.sin() placeholder this replaced.
+function ivRankSeries(history: IVHistoryPoint[]): { date: string; ivRank: number }[] {
+  return history.map((point, i) => ({
+    date:   point.date,
+    ivRank: computeIVRegime(history.slice(0, i + 1), point.iv).ivRank,
+  }))
+}
+
+function regimeColor(regime: string | undefined): string {
+  if (regime === 'HIGH')   return 'var(--down)'
+  if (regime === 'NORMAL') return 'var(--up)'
+  if (regime === 'LOW')    return 'var(--gold-dark)'
+  return 'var(--ink-3)'
+}
+
+export default async function MCXIVRankPage() {
+  const ivRanks = await getIVRanks()
+
+  return (
+    <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
+        MCX Implied Volatility Rank
+      </h1>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
+        IV Rank 0–100: how current IV compares to the past year. &gt;70 = expensive options, &lt;30 = cheap options.
+      </p>
+
+      <div style={{ display: 'grid', gap: '0.75rem' }}>
+        {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
+          const { regime } = ivRanks[key] ?? { regime: null, history: [] }
+          const color = regimeColor(regime?.regime)
+          return (
+            <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{meta.label}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{key}</div>
+              </div>
+              {regime ? (
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
+                  <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>IV Rank</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>Pctl: {regime.percentile.toFixed(0)} · {regime.label}</div>
+                </div>
+              ) : (
+                <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>No history yet</div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      <section style={{ marginTop: '2rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
+        <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
+          <svg width="100%" height="170" viewBox="0 0 500 170" style={{ display: 'block' }}>
+            {Object.entries(MCX_INSTRUMENTS).map(([key, meta], row) => {
+              const series = ivRankSeries(ivRanks[key]?.history ?? [])
+              const rowTop = row * 32
+              if (series.length < 2) {
+                return (
+                  <text key={key} x="4" y={rowTop + 18} fontSize="10" fill="var(--ink-4)">
+                    {meta.label}: not enough history yet
+                  </text>
+                )
+              }
+              const barW  = Math.min(18, 480 / series.length - 2)
+              const gap   = 480 / series.length
+              return (
+                <g key={key}>
+                  <text x="0" y={rowTop + 8} fontSize="9" fill="var(--ink-3)">{meta.label}</text>
+                  {series.map((point, i) => {
+                    const h = 2 + (point.ivRank / 100) * 20
+                    return (
+                      <rect
+                        key={point.date}
+                        x={i * gap + 4}
+                        y={rowTop + 26 - h}
+                        width={Math.max(1.5, barW)}
+                        height={h}
+                        rx="1"
+                        fill="var(--gold)"
+                        opacity={0.4 + (i / series.length) * 0.5}
+                      />
+                    )
+                  })}
+                </g>
+              )
+            })}
+          </svg>
+        </ProBlurGate>
+      </section>
+
+      <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
+        For full option chains, Greeks, and strategy builder →{' '}
+        <Link href="/options" style={{ color: 'var(--gold)', fontWeight: 600 }}>MCX Options</Link>
+      </p>
+    </main>
+  )
+}

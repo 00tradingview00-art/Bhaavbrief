@@ -6,6 +6,9 @@ import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
 import { useIVHistory } from '@/lib/useIVHistory'
+import { useUser } from '@clerk/nextjs'
+import IVSkewChart from './IVSkewChart'
+import ProBlurGate from '@/components/ProBlurGate'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -49,6 +52,7 @@ interface OptionsData {
   ivix: number|null; aav: AAVResult; volPremium: number|null
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
   riskFreeRate: number; riskFreeRateAsOf: string
+  stale?: boolean
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -460,7 +464,12 @@ function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
-export default function OptionChain({ isPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
+export default function OptionChain({ isPro: serverIsPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
+  // ISR-safe Pro check: server always passes isPro=false (preserves revalidate=60 cache).
+  // Client reads Clerk publicMetadata.isPro to unlock the chain for Pro subscribers
+  // without a Redis call or breaking ISR. See plan §S-02.
+  const { user } = useUser()
+  const isPro = serverIsPro || (user?.publicMetadata?.isPro === true)
   const [instrument, setInstrument] = useState(initialData?.instrument ?? 'GOLD')
   const [expiry, setExpiry]         = useState<string|null>(null)
   const [data, setData]             = useState<OptionsData|null>(initialData)
@@ -468,7 +477,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   const [error, setError]           = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
-  const [mapView, setMapView]       = useState<'oi'|'iv'|null>('oi')
+  const [mapView, setMapView]       = useState<'oi'|'iv'|'skew'|null>('oi')
   // D-06: strikes with zero liquidity / no-arbitrage violations are tiered
   // JUNK server-side (lib/options.ts) and hidden by default here — a row is
   // hidden only when BOTH sides are JUNK, so a genuinely liquid CE next to a
@@ -524,29 +533,47 @@ export default function OptionChain({ isPro, preview = false, initialData = null
   }, [data, page, preview])
 
   if (!isPro) {
+    // Build a preview of real chain rows (ATM ±4 strikes) from initialData.
+    // initialData is always available from ISR, so users see real prices blurred —
+    // not fake hardcoded numbers — which makes the tease much more compelling.
+    const previewChain = (() => {
+      const chain = initialData?.chain ?? []
+      const atmIdx = chain.findIndex(r => r.isATM)
+      const centre  = atmIdx >= 0 ? atmIdx : Math.floor(chain.length / 2)
+      const start   = Math.max(0, centre - 4)
+      return chain.slice(start, start + 9)
+    })()
     return (
-      <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: `1px solid ${C.bdr}` }}>
-        <div style={{ filter: 'blur(5px)', opacity: 0.4, pointerEvents: 'none', maxHeight: 180, overflow: 'hidden', background: C.surf, padding: 24 }}>
-          {[116500, 117000, 117500, 118000].map(s => (
-            <div key={s} style={{ display: 'flex', gap: 24, padding: '5px 0', borderBottom: `1px solid ${C.bdr}`, fontFamily: C.sans, fontSize: 12, ...numStyle }}>
-              <span style={{ color: C.dn, width: 60, textAlign: 'right' }}>28,000</span>
-              <span style={{ color: C.dn, width: 50, textAlign: 'right' }}>-500</span>
-              <span style={{ color: C.ink3, width: 40, textAlign: 'right' }}>24%</span>
-              <span style={{ color: C.ink, fontWeight: 700, width: 80, textAlign: 'center' }}>{s.toLocaleString('en-IN')}</span>
-              <span style={{ color: C.up, width: 60 }}>1,200</span>
-              <span style={{ color: C.up, width: 50 }}>+300</span>
-              <span style={{ color: C.ink3, width: 40 }}>22%</span>
+      <ProBlurGate label="Live MCX option chain — Greeks, iVIX, Max Pain, PCR">
+        <div style={{ fontFamily: C.sans, fontSize: 12, background: C.surf, padding: '8px 12px' }}>
+          <div style={{ display: 'flex', gap: 8, padding: '3px 0', fontWeight: 600, fontSize: 10, opacity: 0.5, borderBottom: `1px solid ${C.bdr}`, textTransform: 'uppercase' }}>
+            <span style={{ flex: 1, textAlign: 'right' }}>CE LTP</span>
+            <span style={{ width: 36, textAlign: 'right' }}>IV%</span>
+            <span style={{ width: 80, textAlign: 'center' }}>Strike</span>
+            <span style={{ width: 36 }}>IV%</span>
+            <span style={{ flex: 1 }}>PE LTP</span>
+          </div>
+          {(previewChain.length > 0 ? previewChain : [116500, 117000, 117500, 118000, 118500].map(s => ({ strike: s, isATM: false, CE: { ltp: 0, iv: null }, PE: { ltp: 0, iv: null } }))).map((row) => (
+            <div key={row.strike} style={{ display: 'flex', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.bdr}`, alignItems: 'center' }}>
+              <span style={{ flex: 1, textAlign: 'right', color: C.dn, ...numStyle }}>
+                {(row as ChainRow).CE?.ltp ? fmtINR((row as ChainRow).CE.ltp) : '—'}
+              </span>
+              <span style={{ width: 36, textAlign: 'right', color: C.ink3, fontSize: 10 }}>
+                {(row as ChainRow).CE?.iv != null ? `${((row as ChainRow).CE.iv! * 100).toFixed(0)}` : '—'}
+              </span>
+              <span style={{ width: 80, textAlign: 'center', fontWeight: (row as ChainRow).isATM ? 800 : 600, color: (row as ChainRow).isATM ? C.gold : C.ink, fontSize: (row as ChainRow).isATM ? 13 : 12 }}>
+                {row.strike.toLocaleString('en-IN')}
+              </span>
+              <span style={{ width: 36, color: C.ink3, fontSize: 10 }}>
+                {(row as ChainRow).PE?.iv != null ? `${((row as ChainRow).PE.iv! * 100).toFixed(0)}` : '—'}
+              </span>
+              <span style={{ flex: 1, color: C.up, ...numStyle }}>
+                {(row as ChainRow).PE?.ltp ? fmtINR((row as ChainRow).PE.ltp) : '—'}
+              </span>
             </div>
           ))}
         </div>
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.88)' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontFamily: C.sans, fontSize: 16, fontWeight: 600, color: C.ink, marginBottom: 6 }}>BhaavBrief Pro</div>
-            <div style={{ fontFamily: C.sans, fontSize: 13, color: C.ink3, marginBottom: 20 }}>Live MCX option chain — Greeks, iVIX, Max Pain, PCR</div>
-            <a href="/pro" style={{ display: 'inline-block', background: C.gold, color: '#fff', fontFamily: C.sans, fontWeight: 600, fontSize: 13, padding: '9px 22px', borderRadius: 5, textDecoration: 'none' }}>Upgrade to Pro →</a>
-          </div>
-        </div>
-      </div>
+      </ProBlurGate>
     )
   }
 
@@ -661,6 +688,21 @@ export default function OptionChain({ isPro, preview = false, initialData = null
           >
             Volatility
           </button>
+          {isPro && (
+            <button
+              onClick={() => setMapView(v => v === 'skew' ? null : 'skew')}
+              role="tab"
+              aria-selected={mapView === 'skew'}
+              style={{
+                padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
+                border: 'none',
+                background: mapView === 'skew' ? C.goldPl : 'transparent',
+                color: mapView === 'skew' ? C.gold : C.ink3,
+              }}
+            >
+              IV Skew
+            </button>
+          )}
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
@@ -705,8 +747,15 @@ export default function OptionChain({ isPro, preview = false, initialData = null
             info="iVIX minus AAV 20d. Positive means options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
             <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700 }}>Status</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: data.marketOpen ? C.up : C.ink4, ...numStyle }}>● {data.marketOpen ? 'Live' : 'Closed'}</span>
+            <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>
+              ● {data.stale ? 'Stale' : data.marketOpen ? 'Live' : 'Closed'}
+            </span>
           </div>
+        </div>
+      )}
+      {data?.stale && (
+        <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
+          ⚠ Showing the last known chain — live data is temporarily unavailable and this may be out of date.
         </div>
       )}
 
@@ -728,6 +777,7 @@ export default function OptionChain({ isPro, preview = false, initialData = null
       {/* ── OI concentration map / IV skew chart ── */}
       {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
       {data?.chain && mapView === 'iv' && <IVHistoryChart chain={mainPage} instrument={instrument} />}
+      {data?.chain && mapView === 'skew' && <IVSkewChart chain={data.chain} isPro={isPro} />}
 
       {/* ── ITM note ── */}
       {data?.chain && (

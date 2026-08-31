@@ -21,6 +21,7 @@
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { execFileSync } from 'node:child_process'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
@@ -52,6 +53,8 @@ const EVENTS_DIR       = path.join(ROOT, 'content/events')
 const EVENT_MAP_FILE   = path.join(ROOT, 'data/event-map.json')
 const TITLE_FILE      = path.join(ROOT, 'data/last-article-title.txt')
 const IMPACT_MAP_FILE = path.join(ROOT, 'data/impact-map.json')
+const RESEARCH_DIR           = path.join(ROOT, 'content/research')
+const PENDING_RESEARCH_FILE  = path.join(ROOT, 'data/pending-research-events.json')
 
 // ── Impact Map — persistent knowledge base ───────────────────────────────────
 let _impactMap = null
@@ -1355,6 +1358,111 @@ published: true
   console.log(`  Event result page published: content/events/${slug}.mdx`)
 }
 
+// ── 7b. Pro Research queue ──────────────────────────────────────────────────
+// scripts/monitor-macro-economy.js (flash-brief.yml, every 15 min) tags
+// detected headlines against event-map.json's manual-cadence events and
+// queues them in data/pending-research-events.json. This engine already
+// runs on the same cadence and already has the equivalent pattern for
+// EIA events above (publishEventResultPage) — processing the queue here
+// instead of a separate workflow avoids a second parallel cron for what's
+// fundamentally the same "detect → generate → publish" job shape.
+//
+// Zero human review by design (see the automation plan) — generate-research.mjs's
+// output only goes live if scripts/validate-research.mjs passes. That gate is
+// the only safety net, so a rejection here is routine and expected, not an
+// incident; only a gate-internal-error (exit 2 — the gate itself couldn't run)
+// is actually worth alerting a human about.
+
+function loadPendingResearch() {
+  try { return JSON.parse(fs.readFileSync(PENDING_RESEARCH_FILE, 'utf8')) } catch { return [] }
+}
+
+function savePendingResearch(entries) {
+  fs.writeFileSync(PENDING_RESEARCH_FILE, JSON.stringify(entries, null, 2) + '\n', 'utf8')
+}
+
+async function sendResearchAlert(subject, html) {
+  const { BREVO_API_KEY, SENDER_EMAIL } = process.env
+  if (!BREVO_API_KEY || !SENDER_EMAIL) { console.log('  [research] No email credentials — skipping alert'); return }
+  try {
+    const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method:  'POST',
+      headers: { 'api-key': BREVO_API_KEY, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        sender:      { name: 'BhaavBrief Research', email: SENDER_EMAIL },
+        to:          [{ email: '00tradingview00@gmail.com' }],
+        subject,
+        htmlContent: html,
+      }),
+    })
+    if (!res.ok) console.error('  [research] Alert email API error:', res.status)
+  } catch (e) {
+    console.error('  [research] Alert email failed:', e.message)
+  }
+}
+
+async function processResearchQueue() {
+  const pending = loadPendingResearch()
+  const unprocessed = pending.filter(p => !p.processed)
+  if (!unprocessed.length) return
+
+  for (const entry of unprocessed) {
+    console.log(`\n[research] Processing queued event: ${entry.event_id}`)
+    const isoDate   = new Date().toISOString().slice(0, 10)
+    const eventSlug = entry.event_id.replace(/_/g, '-')
+    const filepath  = path.join(RESEARCH_DIR, `${isoDate}-${eventSlug}.mdx`)
+
+    try {
+      execFileSync(
+        'node',
+        ['scripts/generate-research.mjs', '--event', entry.event_id, '--context', entry.context],
+        { cwd: ROOT, stdio: 'inherit' },
+      )
+    } catch (genErr) {
+      console.error(`  [research] Generation failed: ${genErr.message}`)
+      entry.processed = true
+      entry.published = false
+      entry.error = `generation failed: ${genErr.message}`
+      continue
+    }
+
+    if (!fs.existsSync(filepath)) {
+      // Most likely cause: a file for this event+date already existed
+      // (generate-research.mjs refuses to overwrite) — not an error worth
+      // alerting on, just nothing new to publish.
+      console.log(`  [research] No new file at expected path (already exists?) — skipping: ${filepath}`)
+      entry.processed = true
+      entry.published = false
+      entry.error = 'expected output file not found after generation'
+      continue
+    }
+
+    try {
+      execFileSync('node', ['scripts/validate-research.mjs', filepath], { cwd: ROOT, stdio: 'inherit' })
+      const raw = fs.readFileSync(filepath, 'utf8')
+      fs.writeFileSync(filepath, raw.replace(/^published:\s*false\s*$/m, 'published: true'), 'utf8')
+      console.log(`  [research] ✅ Published: ${filepath}`)
+      entry.processed = true
+      entry.published = true
+    } catch (gateErr) {
+      const exitCode = gateErr.status
+      console.error(`  [research] Gate rejected (exit ${exitCode}) — left unpublished: ${filepath}`)
+      entry.processed = true
+      entry.published = false
+      entry.gateExitCode = exitCode
+      if (exitCode === 2) {
+        await sendResearchAlert(
+          `⚠️ Pro Research validation gate failed to run — ${entry.event_id}`,
+          `<p>scripts/validate-research.mjs exited 2 (internal error, not a content rejection) for <strong>${entry.event_id}</strong>.</p>` +
+          `<p>This is the only safety net for auto-published research — it not running is worth checking. See the Intelligence Engine workflow logs for the actual error, and <code>${filepath}</code> (left as published: false).</p>`,
+        )
+      }
+    }
+  }
+
+  savePendingResearch(pending)
+}
+
 // ── 8. Throttle Check ─────────────────────────────────────────────────────────
 function canPublish(state) {
   const today = new Date().toISOString().split('T')[0]
@@ -1383,6 +1491,16 @@ function canPublish(state) {
 async function main() {
   const startTime = Date.now()
   console.log(`\nBhaavBrief Intelligence Engine — ${new Date().toISOString()}\n`)
+
+  // Runs before the holiday/pre-market sleep checks below — a macro event
+  // (FOMC, RBI MPC) can fire at any time and doesn't wait for MCX pre-market
+  // open, unlike the regular flash/hawk-scan article throttle this function
+  // otherwise gates on.
+  try {
+    await processResearchQueue()
+  } catch (e) {
+    console.error('[research] Queue processing failed:', e.message)
+  }
 
   const today = todayIST()
   if (isTradingHoliday(today)) {

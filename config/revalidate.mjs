@@ -24,7 +24,7 @@ export const REVALIDATE = {
   VERY_FAST: 30,    // markets dashboard
   NEAR_LIVE: 60,    // homepage, options page, news listing, about — ticker-adjacent pages
   FAST:      300,   // pages whose underlying data can change within the trading day
-  MEDIUM:    900,   // calendar — the ceiling for listing/dashboard-style live-data pages
+  MEDIUM:    900,   // calendar, research — the ceiling for listing/dashboard-style live-data pages
   HOURLY:    3600,  // individual briefs/arcs/articles/events detail pages — content-item
                      // pages are immutable once published (corrections are an explicit
                      // editorial event, not a staleness problem) and AI-thesis cache

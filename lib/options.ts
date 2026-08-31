@@ -20,7 +20,7 @@ function envNumber(name: string, fallback: number): number {
 // TODO: replace with a daily-fetched 91-day T-bill / MIBOR rate (D-11); this
 // constant is a dated, disclosed fallback in the meantime, not a silent one.
 const RISK_FREE_RATE = envNumber('OPTIONS_RISK_FREE_RATE', 0.065)
-const RISK_FREE_RATE_ASOF = process.env.OPTIONS_RISK_FREE_RATE_ASOF ?? '2026-07'
+const RISK_FREE_RATE_ASOF = process.env.OPTIONS_RISK_FREE_RATE_ASOF ?? '2026-08'
 
 // ── Quote quality tiering (D-06) ────────────────────────────────────────────
 // Verified live 2026-07-17 against the real GOLD chain: zero-OI/zero-volume
@@ -285,7 +285,7 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     ? parseFloat((ivix - aav['20d']).toFixed(2))
     : null
 
-  return {
+  const result = {
     instrument,
     meta:        MCX_INSTRUMENTS[instrument],
     expiry:      activeExpiry,
@@ -302,4 +302,6 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
     chain,
     lastUpdated: new Date().toISOString(),
   }
+
+  return result
 }

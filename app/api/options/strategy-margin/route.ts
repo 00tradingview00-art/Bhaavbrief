@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
 import { KiteClient, getFullMCXInstrumentsCached, type KiteBasketOrder } from '@/lib/kite'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 
@@ -22,6 +24,11 @@ function isLegInput(v: unknown): v is LegInput {
 }
 
 export async function POST(request: Request) {
+  const { userId } = await auth()
+  if (!await isProUser(userId)) {
+    return NextResponse.json({ error: 'Pro subscription required' }, { status: 403 })
+  }
+
   let body: { instrument?: string; expiry?: string; legs?: unknown }
   try {
     body = await request.json()

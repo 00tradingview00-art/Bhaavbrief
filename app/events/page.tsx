@@ -11,6 +11,15 @@ export const metadata: Metadata = {
   title:       'Event Results — MCX Economic Calendar Outcomes | BhaavBrief',
   description: 'A permanent archive of scheduled macro events — EIA inventories, FOMC, CPI — and exactly how MCX commodity prices reacted at time of print.',
   alternates:  { canonical: 'https://bhaavbrief.in/events' },
+  keywords: [
+    'MCX commodity events calendar India',
+    'FOMC EIA OPEC MCX schedule',
+    'MCX macro events India',
+    'commodity market events today India',
+    'EIA inventory MCX crude oil India',
+    'FOMC MCX gold impact India',
+    'RBI MPC commodity India',
+  ],
 }
 
 export default async function EventsIndexPage() {

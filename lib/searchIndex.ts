@@ -4,7 +4,7 @@ import matter from 'gray-matter'
 import { deriveCommodityLabelsFromTags } from './commodityTags'
 
 export interface ContentEntry {
-  type:        'brief' | 'article' | 'hawk-scan' | 'news' | 'commodity'
+  type:        'brief' | 'article' | 'hawk-scan' | 'news' | 'commodity' | 'research'
   slug:        string
   href:        string
   title:       string
@@ -16,6 +16,7 @@ export interface ContentEntry {
   commodities: string[]
   commodity:   string
   priceAtPublish?: number
+  premium?:    boolean
 }
 
 export interface ScoredEntry extends ContentEntry {
@@ -24,6 +25,7 @@ export interface ScoredEntry extends ContentEntry {
 
 const BRIEFS_DIR   = path.join(process.cwd(), 'content/briefs')
 const ARTICLES_DIR = path.join(process.cwd(), 'content/articles')
+const RESEARCH_DIR = path.join(process.cwd(), 'content/research')
 const NEWS_FILE    = path.join(process.cwd(), 'data/ai-news.json')
 
 // 60-second TTL cache — re-reads filesystem after each minute
@@ -108,6 +110,37 @@ function readArticles(): ContentEntry[] {
     .filter((e): e is ContentEntry => e !== null)
 }
 
+function makeResearchEntry(file: string): ContentEntry | null {
+  try {
+    const raw = fs.readFileSync(path.join(RESEARCH_DIR, file), 'utf8')
+    const { data, content } = matter(raw)
+    if (!data.title || data.published !== true) return null
+    const slug = file.replace(/\.(mdx|md)$/, '')
+    return {
+      type:        'research',
+      slug,
+      href:        `/research/${slug}`,
+      title:       String(data.title ?? ''),
+      description: String(data.description ?? ''),
+      excerpt:     extractExcerpt(content, 200),
+      date:        String(data.date ?? ''),
+      edition:     String(data.edition ?? 'macro-research'),
+      tags:        Array.isArray(data.tags) ? data.tags : (data.tags ? [String(data.tags)] : []),
+      commodity:   String(data.commodity ?? 'macro'),
+      commodities: Array.isArray(data.commodities) ? data.commodities : (data.commodities ? [String(data.commodities)] : []),
+      premium:     data.premium !== false,
+    }
+  } catch { return null }
+}
+
+function readResearch(): ContentEntry[] {
+  if (!fs.existsSync(RESEARCH_DIR)) return []
+  return fs.readdirSync(RESEARCH_DIR)
+    .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
+    .map(makeResearchEntry)
+    .filter((e): e is ContentEntry => e !== null)
+}
+
 function readNews(): ContentEntry[] {
   try {
     const items = JSON.parse(fs.readFileSync(NEWS_FILE, 'utf8')) as Array<{
@@ -171,10 +204,11 @@ export function loadIndex(): ContentEntry[] {
 
   const briefs      = readBriefs()
   const articles    = readArticles()
+  const research    = readResearch()
   const news        = readNews()
   const commodities = readCommodityPages()
 
-  _cache = [...briefs, ...articles, ...news, ...commodities]
+  _cache = [...briefs, ...articles, ...research, ...news, ...commodities]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   _cacheAt = now
   return _cache

@@ -183,6 +183,145 @@ jobs:
             echo "✓ ATM IV snapshot present for all instruments on $CHECK_DATE"
           fi
 
+      - name: Check OI-buildup snapshot (9:45 AM IST run only)
+        id: oi_check
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping OI snapshot check"
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
+          for i in 1 2 3 4 5; do
+            DOW=$(date -d "$CHECK_DATE" +%u)
+            IS_HOLIDAY=$(jq --arg d "$CHECK_DATE" \
+              '[.[] | select(.date == $d)] | length' \
+              data/market-holidays.json 2>/dev/null || echo "0")
+            IS_HOLIDAY="${IS_HOLIDAY:-0}"
+            if [ "$DOW" -ge 6 ] || [ "$IS_HOLIDAY" != "0" ]; then
+              CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
+            else
+              break
+            fi
+          done
+          echo "Target date: $CHECK_DATE (last trading day)"
+
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::warning::CRON_SECRET not set as a GitHub Actions secret — cannot check OI-snapshot (it's Pro-gated). Skipping to avoid false alarms."
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # ── Bootstrap guard ── same reasoning as the IV check above: if the
+          # cron has never run, every date will show missing — that's a setup
+          # gap, not a monitoring alert.
+          GOLD_RESP=$(curl -s --max-time 10 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "https://bhaavbrief.in/api/options/oi-history?instrument=GOLD&date=${CHECK_DATE}" || echo "")
+          GOLD_EXISTS=$(echo "$GOLD_RESP" | jq -r '.exists // empty' 2>/dev/null || echo "")
+          if [ -z "$GOLD_EXISTS" ]; then
+            echo "::warning::Could not reach oi-history (bad CRON_SECRET or route error) — skipping OI check."
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          MISSING=""
+          for INSTRUMENT in GOLD SILVER CRUDEOIL NATURALGAS COPPER; do
+            RESPONSE=$(curl -s --max-time 10 \
+              -H "Authorization: Bearer $CRON_SECRET" \
+              "https://bhaavbrief.in/api/options/oi-history?instrument=$INSTRUMENT&date=${CHECK_DATE}" || echo "")
+            EXISTS=$(echo "$RESPONSE" | jq -r '.exists // false' 2>/dev/null || echo "false")
+            if [ "$EXISTS" != "true" ]; then
+              MISSING="$MISSING $INSTRUMENT"
+              echo "  ✗ $INSTRUMENT — no OI snapshot for $CHECK_DATE"
+            else
+              echo "  ✓ $INSTRUMENT — OI snapshot present for $CHECK_DATE"
+            fi
+          done
+
+          if [ -n "$MISSING" ]; then
+            echo "oi_ok=false" >> $GITHUB_OUTPUT
+            echo "oi_missing=$MISSING" >> $GITHUB_OUTPUT
+            echo "oi_date=$CHECK_DATE" >> $GITHUB_OUTPUT
+            echo "::error::OI-buildup snapshot missing for $CHECK_DATE:$MISSING"
+          else
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ OI-buildup snapshot present for all instruments on $CHECK_DATE"
+          fi
+
+      - name: Check Kite daily login (9:45 AM IST run only)
+        id: kite_check
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping Kite login check"
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          TODAY=$(TZ=Asia/Kolkata date +%Y-%m-%d)
+
+          # MCX holiday guard — same source as the brief/engine checks above.
+          # No trading today means no one needs to have logged in.
+          IS_HOLIDAY=$(jq --arg d "$TODAY" \
+            '[.[] | select(.date == $d)] | length' \
+            data/market-holidays.json 2>/dev/null || echo "0")
+          IS_HOLIDAY="${IS_HOLIDAY:-0}"
+          if [ "$IS_HOLIDAY" != "0" ]; then
+            echo "MCX holiday today ($TODAY) — skipping Kite login check"
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          LAST_AUTH=$(jq -r '.lastAuth // ""' data/last-kite-auth.json 2>/dev/null || echo "")
+          if [ "$LAST_AUTH" = "$TODAY" ]; then
+            echo "kite_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Kite login done today ($TODAY)"
+          else
+            echo "kite_ok=false" >> $GITHUB_OUTPUT
+            echo "kite_last_auth=${LAST_AUTH:-never}" >> $GITHUB_OUTPUT
+            echo "::error::Kite login not done today ($TODAY) — data/last-kite-auth.json shows lastAuth=${LAST_AUTH:-never}"
+          fi
+
+      - name: Check Basis daily snapshot (9:45 AM IST run only)
+        id: basis_check
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping Basis snapshot check"
+            echo "basis_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # fetch-snapshot.mjs (which writes data/history/{date}.json, the
+          # source for the Basis Dashboard's 30-day chart) doesn't filter
+          # holidays itself — it still runs and writes a (likely
+          # stale-flagged) file. So unlike the other checks above, don't
+          # skip on a holiday here: a missing file is still worth knowing
+          # about, since the writing script doesn't skip either.
+          CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
+          for i in 1 2 3 4 5; do
+            DOW=$(date -d "$CHECK_DATE" +%u)
+            if [ "$DOW" -ge 6 ]; then
+              CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
+            else
+              break
+            fi
+          done
+          echo "Target date: $CHECK_DATE (last weekday)"
+
+          if [ -f "data/history/${CHECK_DATE}.json" ]; then
+            echo "basis_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ Basis snapshot present for $CHECK_DATE"
+          else
+            echo "basis_ok=false" >> $GITHUB_OUTPUT
+            echo "basis_date=$CHECK_DATE" >> $GITHUB_OUTPUT
+            echo "::error::Basis snapshot missing for $CHECK_DATE — data/history/${CHECK_DATE}.json not found"
+          fi
+
       - name: Auto-recover — trigger generate-brief
         if: steps.brief_check.outputs.brief_ok == 'false'
         run: |
@@ -232,6 +371,26 @@ jobs:
           echo "Alert sent for silent engine"
           exit 1
 
+      - name: Alert — Kite login not done today
+        if: steps.kite_check.outputs.kite_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
+          LAST_AUTH="${{ steps.kite_check.outputs.kite_last_auth }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Kite login not done today — ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The daily Kite Connect login has not been done today (<strong>${DATE_LABEL}</strong>) — data/last-kite-auth.json still shows lastAuth: <strong>${LAST_AUTH}</strong>.</p><p>Options Chain, Strategy Builder, and today's IV/OI snapshots will fail or serve stale data until this is done. Fix: run <code>node scripts/kite-morning-auth.js</code> and complete the login.</p>\"
+            }"
+          echo "Alert sent for missing Kite login"
+          exit 1
+
       - name: Alert — ATM IV snapshot missing
         if: steps.iv_check.outputs.iv_ok == 'false'
         env:
@@ -250,4 +409,43 @@ jobs:
               \"htmlContent\": \"<p>The daily ATM IV snapshot (Vercel Cron → /api/cron/iv-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>Likely a silent skip (no futures price / no ATM IV from Kite at 23:35 IST) or an unhandled error — check the Vercel dashboard function logs for this route, since nothing else surfaces its failures.</p>\"
             }"
           echo "Alert sent for missing ATM IV snapshot"
+          exit 1
+
+      - name: Alert — OI-buildup snapshot missing
+        if: steps.oi_check.outputs.oi_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL="${{ steps.oi_check.outputs.oi_date }}"
+          MISSING="${{ steps.oi_check.outputs.oi_missing }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ OI-buildup snapshot missing for ${DATE_LABEL} —${MISSING}\",
+              \"htmlContent\": \"<p>The daily OI-buildup snapshot (Vercel Cron → /api/cron/oi-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>This is a newer, less-hardened pipeline than the IV snapshot — check Vercel function logs for this route. Sold as 'OI Buildup 90-day' on the Pro page, so a gap here directly affects what paying customers see.</p>\"
+            }"
+          echo "Alert sent for missing OI-buildup snapshot"
+          exit 1
+
+      - name: Alert — Basis snapshot missing
+        if: steps.basis_check.outputs.basis_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL="${{ steps.basis_check.outputs.basis_date }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Basis snapshot missing for ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The daily Basis snapshot (scripts/fetch-snapshot.mjs → data/history/${DATE_LABEL}.json) was not committed for <strong>${DATE_LABEL}</strong>.</p><p>Check the generate-brief / evening-close-brief / flash-brief / intelligence-engine / site-guardian workflow runs for that day — any of them can write this file, so check which one(s) failed.</p>\"
+            }"
+          echo "Alert sent for missing Basis snapshot"
           exit 1

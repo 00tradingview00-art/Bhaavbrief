@@ -11,9 +11,10 @@ import { deriveCommodityLabelsFromTags } from './lib/commodity-tags.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
-const BRIEFS_DIR = path.join(ROOT, 'content/briefs')
+const BRIEFS_DIR   = path.join(ROOT, 'content/briefs')
 const ARTICLES_DIR = path.join(ROOT, 'content/articles')
-const OUTPUT     = path.join(ROOT, 'data/content-index.json')
+const RESEARCH_DIR = path.join(ROOT, 'content/research')
+const OUTPUT       = path.join(ROOT, 'data/content-index.json')
 
 function parseFrontmatter(raw) {
   const clean = raw.replace(/^```(?:mdx|md)?\n/, '').replace(/\n```\s*$/, '\n')
@@ -108,11 +109,40 @@ function indexArticles() {
     .filter(e => e.title)
 }
 
+function indexResearch() {
+  if (!fs.existsSync(RESEARCH_DIR)) return []
+  return fs.readdirSync(RESEARCH_DIR)
+    .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
+    .map(file => {
+      const raw = fs.readFileSync(path.join(RESEARCH_DIR, file), 'utf8')
+      const fm  = parseFrontmatter(raw)
+      if (fm.published !== 'true' && fm.published !== true) return null
+      const slug = file.replace(/\.(mdx|md)$/, '')
+      return {
+        type:        'research',
+        slug,
+        href:        `/research/${slug}`,
+        title:       fm.title        ?? '',
+        description: fm.description  ?? '',
+        excerpt:     extractExcerpt(raw).slice(0, 200),
+        date:        fm.date         ?? '',
+        edition:     fm.edition      ?? 'macro-research',
+        tags:        Array.isArray(fm.tags) ? fm.tags : (fm.tags ? [fm.tags] : []),
+        commodity:   fm.commodity    ?? 'macro',
+        commodities: Array.isArray(fm.commodities) ? fm.commodities : (fm.commodities ? [fm.commodities] : []),
+        premium:     fm.premium !== 'false' && fm.premium !== false,
+      }
+    })
+    .filter(Boolean)
+    .filter(e => e.title)
+}
+
 const briefs   = indexBriefs()
 const articles = indexArticles()
-const all      = [...briefs, ...articles]
+const research = indexResearch()
+const all      = [...briefs, ...articles, ...research]
   .sort((a, b) => b.date.localeCompare(a.date))
 
 fs.writeFileSync(OUTPUT, JSON.stringify(all, null, 2), 'utf8')
-console.log(`Content index built: ${briefs.length} briefs + ${articles.length} articles = ${all.length} total`)
+console.log(`Content index built: ${briefs.length} briefs + ${articles.length} articles + ${research.length} research = ${all.length} total`)
 console.log(`  → ${OUTPUT}`)
