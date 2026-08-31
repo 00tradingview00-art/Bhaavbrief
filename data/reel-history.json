@@ -1,5 +1,22 @@
 [
   {
+    "file": "brief-edition-096",
+    "topic": "Oil Jumps $1.73 While Gold Freezes — The War Premium Is Splitting",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Oil jumped ₹108 while gold stayed silent—here's the split",
+    "stat_line": "Same crisis. Two metals. Opposite moves.",
+    "payoff": "When crisis divides metals instead of uniting them, someone's reading the risk wrong.",
+    "beat1": "Crude climbed $1.73 overnight on Middle East supply fears—your fuel bill just got pressure before the next pump price reset.",
+    "beat2": "Gold froze at ₹1,56,281 despite geopolitical escalation—the safe-haven trade isn't working the way it historically should.",
+    "beat3": "Watch if gold breaks above ₹1,56,500 today. If it doesn't, the war premium has truly split.",
+    "instagram_id": "18131365399733063",
+    "generated_at": "2026-08-31T03:27:45.107Z",
+    "edition": 96,
+    "hi_path": "public/reels/brief-edition-096-hi.mp4",
+    "posted_at": "2026-08-31T03:29:06.073Z"
+  },
+  {
     "file": "news-20260830-mcx-trading-hours-in-india",
     "topic": "MCX Trading Hours in India",
     "content_type": "explainer",
@@ -29,7 +46,14 @@
     "instagram_id": "18208735297362235",
     "generated_at": "2026-08-29T17:39:39.427Z",
     "edition": null,
-    "posted_at": "2026-08-29T17:40:24.165Z"
+    "posted_at": "2026-08-29T17:40:24.165Z",
+    "insights": {
+      "views": 144,
+      "reach": 137,
+      "ig_reels_avg_watch_time": 1503,
+      "ig_reels_video_view_total_time": 207545,
+      "fetched_at": "2026-08-31T03:19:21.833Z"
+    }
   },
   {
     "file": "news-20260828-mcx-order-types-explained",
