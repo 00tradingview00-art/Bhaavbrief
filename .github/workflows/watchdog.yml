@@ -183,6 +183,76 @@ jobs:
             echo "✓ ATM IV snapshot present for all instruments on $CHECK_DATE"
           fi
 
+      - name: Check OI-buildup snapshot (9:45 AM IST run only)
+        id: oi_check
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
+            echo "Not the 9:45 AM run — skipping OI snapshot check"
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          CHECK_DATE=$(TZ=Asia/Kolkata date -d 'yesterday' +%Y-%m-%d)
+          for i in 1 2 3 4 5; do
+            DOW=$(date -d "$CHECK_DATE" +%u)
+            IS_HOLIDAY=$(jq --arg d "$CHECK_DATE" \
+              '[.[] | select(.date == $d)] | length' \
+              data/market-holidays.json 2>/dev/null || echo "0")
+            IS_HOLIDAY="${IS_HOLIDAY:-0}"
+            if [ "$DOW" -ge 6 ] || [ "$IS_HOLIDAY" != "0" ]; then
+              CHECK_DATE=$(date -d "$CHECK_DATE - 1 day" +%Y-%m-%d)
+            else
+              break
+            fi
+          done
+          echo "Target date: $CHECK_DATE (last trading day)"
+
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::warning::CRON_SECRET not set as a GitHub Actions secret — cannot check OI-snapshot (it's Pro-gated). Skipping to avoid false alarms."
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # ── Bootstrap guard ── same reasoning as the IV check above: if the
+          # cron has never run, every date will show missing — that's a setup
+          # gap, not a monitoring alert.
+          GOLD_RESP=$(curl -s --max-time 10 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "https://bhaavbrief.in/api/options/oi-history?instrument=GOLD&date=${CHECK_DATE}" || echo "")
+          GOLD_EXISTS=$(echo "$GOLD_RESP" | jq -r '.exists // empty' 2>/dev/null || echo "")
+          if [ -z "$GOLD_EXISTS" ]; then
+            echo "::warning::Could not reach oi-history (bad CRON_SECRET or route error) — skipping OI check."
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          MISSING=""
+          for INSTRUMENT in GOLD SILVER CRUDEOIL NATURALGAS COPPER; do
+            RESPONSE=$(curl -s --max-time 10 \
+              -H "Authorization: Bearer $CRON_SECRET" \
+              "https://bhaavbrief.in/api/options/oi-history?instrument=$INSTRUMENT&date=${CHECK_DATE}" || echo "")
+            EXISTS=$(echo "$RESPONSE" | jq -r '.exists // false' 2>/dev/null || echo "false")
+            if [ "$EXISTS" != "true" ]; then
+              MISSING="$MISSING $INSTRUMENT"
+              echo "  ✗ $INSTRUMENT — no OI snapshot for $CHECK_DATE"
+            else
+              echo "  ✓ $INSTRUMENT — OI snapshot present for $CHECK_DATE"
+            fi
+          done
+
+          if [ -n "$MISSING" ]; then
+            echo "oi_ok=false" >> $GITHUB_OUTPUT
+            echo "oi_missing=$MISSING" >> $GITHUB_OUTPUT
+            echo "oi_date=$CHECK_DATE" >> $GITHUB_OUTPUT
+            echo "::error::OI-buildup snapshot missing for $CHECK_DATE:$MISSING"
+          else
+            echo "oi_ok=true" >> $GITHUB_OUTPUT
+            echo "✓ OI-buildup snapshot present for all instruments on $CHECK_DATE"
+          fi
+
       - name: Check Kite daily login (9:45 AM IST run only)
         id: kite_check
         run: |
@@ -303,4 +373,25 @@ jobs:
               \"htmlContent\": \"<p>The daily ATM IV snapshot (Vercel Cron → /api/cron/iv-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>Likely a silent skip (no futures price / no ATM IV from Kite at 23:35 IST) or an unhandled error — check the Vercel dashboard function logs for this route, since nothing else surfaces its failures.</p>\"
             }"
           echo "Alert sent for missing ATM IV snapshot"
+          exit 1
+
+      - name: Alert — OI-buildup snapshot missing
+        if: steps.oi_check.outputs.oi_ok == 'false'
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          DATE_LABEL="${{ steps.oi_check.outputs.oi_date }}"
+          MISSING="${{ steps.oi_check.outputs.oi_missing }}"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ OI-buildup snapshot missing for ${DATE_LABEL} —${MISSING}\",
+              \"htmlContent\": \"<p>The daily OI-buildup snapshot (Vercel Cron → /api/cron/oi-snapshot) did not record for <strong>${DATE_LABEL}</strong> for:<strong>${MISSING}</strong></p><p>This is a newer, less-hardened pipeline than the IV snapshot — check Vercel function logs for this route. Sold as 'OI Buildup 90-day' on the Pro page, so a gap here directly affects what paying customers see.</p>\"
+            }"
+          echo "Alert sent for missing OI-buildup snapshot"
+          exit 1
           exit 1

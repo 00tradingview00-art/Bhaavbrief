@@ -8,20 +8,40 @@ export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 
 export async function GET(request: Request) {
-  const { userId } = await auth()
-  if (!await isProUser(userId)) {
-    return NextResponse.json({ error: 'Pro subscription required' }, { status: 403 })
+  // Monitoring bypass: the watchdog needs to read this route unauthenticated
+  // to verify the OI-snapshot cron is actually writing data — same
+  // CRON_SECRET already used to authenticate the crons themselves, checked
+  // before the Pro gate so it isn't subject to a real user session.
+  const isMonitoring = process.env.CRON_SECRET
+    && request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`
+
+  if (!isMonitoring) {
+    const { userId } = await auth()
+    if (!await isProUser(userId)) {
+      return NextResponse.json({ error: 'Pro subscription required' }, { status: 403 })
+    }
   }
 
   const { searchParams } = new URL(request.url)
   const instrument = searchParams.get('instrument')?.toUpperCase()
   const strikeParam = searchParams.get('strike')
+  const dateParam = searchParams.get('date')
 
   if (!instrument || !MCX_INSTRUMENTS[instrument]) {
     return NextResponse.json(
       { error: `Invalid instrument. Valid: ${Object.keys(MCX_INSTRUMENTS).join(', ')}` },
       { status: 400 },
     )
+  }
+
+  // Existence-check mode for monitoring: ?instrument=X&date=YYYY-MM-DD with no
+  // strike just confirms whether that day's snapshot was written at all —
+  // watchdog has no way to know "the" strike to check, and doesn't need one.
+  if (!strikeParam && dateParam) {
+    const raw = await redisCommand('get', `oi-snap:${instrument}:${dateParam}`).catch(() => null)
+    return NextResponse.json({ instrument, date: dateParam, exists: !!raw }, {
+      headers: { 'Cache-Control': 'no-store' },
+    })
   }
 
   const strike = strikeParam ? parseFloat(strikeParam) : null

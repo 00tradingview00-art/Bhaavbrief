@@ -38,7 +38,7 @@ export default function OIBuildupChart({ instrument, strike, isPro }: Props) {
   if (!isPro) {
     return (
       <div style={{ marginTop: '1rem' }}>
-        <ProBlurGate label="OI Buildup — Call vs Put open interest by strike (30-day)" timestamp="Live">
+        <ProBlurGate label="OI Buildup — Call vs Put open interest by strike (90-day)" timestamp="Live">
           <svg width="100%" height="180" viewBox="0 0 400 180" style={{ display: 'block' }}>
             {[60, 110, 160, 210, 260, 310].map((x, i) => (
               <g key={i}>
@@ -57,7 +57,7 @@ export default function OIBuildupChart({ instrument, strike, isPro }: Props) {
   if (error)   return <p style={{ fontSize: '0.8rem', color: '#ef4444' }}>{error}</p>
   if (data.length < 2) return <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>No OI history yet for this strike.</p>
 
-  const display = data.slice(-30).map(d => ({
+  const display = data.slice(-90).map(d => ({
     date:  d.date.slice(5),  // MM-DD
     ceOI:  d.ceOI,
     peOI:  d.peOI,
@@ -66,7 +66,7 @@ export default function OIBuildupChart({ instrument, strike, isPro }: Props) {
   return (
     <div style={{ marginTop: '1rem' }}>
       <h4 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', opacity: 0.75 }}>
-        OI Buildup — Strike {strike} (30-day)
+        OI Buildup — Strike {strike} ({display.length}-day)
       </h4>
       <ResponsiveContainer width="100%" height={180}>
         <BarChart data={display} margin={{ top: 4, right: 8, bottom: 0, left: -8 }}>

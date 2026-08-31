@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { redisCommand } from '@/lib/redis'
-import { computeIVRegime, type IVRegime } from '@/lib/ivAnalysis'
+import { computeIVRegime, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
 import ProBlurGate from '@/components/ProBlurGate'
@@ -17,12 +17,12 @@ export const metadata: Metadata = {
   ],
 }
 
-async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null }>> {
-  const result: Record<string, { regime: IVRegime | null }> = {}
+async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
+  const result: Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }> = {}
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
       const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
-      if (!raw || raw.length < 4) { result[instrument] = { regime: null }; continue }
+      if (!raw || raw.length < 4) { result[instrument] = { regime: null, history: [] }; continue }
       const entries: { date: string; iv: number }[] = []
       for (let i = 0; i < raw.length; i += 2) {
         const iv = parseFloat(raw[i + 1])
@@ -31,12 +31,24 @@ async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null }>
       entries.sort((a, b) => a.date.localeCompare(b.date))
       const currentIV = entries[entries.length - 1]?.iv ?? 0
       const history   = entries.map(e => ({ date: e.date, iv: e.iv }))
-      result[instrument] = { regime: computeIVRegime(history, currentIV) }
+      result[instrument] = { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }
     } catch {
-      result[instrument] = { regime: null }
+      result[instrument] = { regime: null, history: [] }
     }
   }
   return result
+}
+
+// Rolling IV Rank per day — computeIVRegime(history, currentIV) already does
+// the min/max-rank math for "today vs all history"; walking it forward one
+// day at a time (using only the data available up to that day) turns that
+// single snapshot into the real 90-day series the chart below needs, instead
+// of the hardcoded Math.sin() placeholder this replaced.
+function ivRankSeries(history: IVHistoryPoint[]): { date: string; ivRank: number }[] {
+  return history.map((point, i) => ({
+    date:   point.date,
+    ivRank: computeIVRegime(history.slice(0, i + 1), point.iv).ivRank,
+  }))
 }
 
 function regimeColor(regime: string | undefined): string {
@@ -60,7 +72,7 @@ export default async function MCXIVRankPage() {
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
-          const { regime } = ivRanks[key] ?? { regime: null }
+          const { regime } = ivRanks[key] ?? { regime: null, history: [] }
           const color = regimeColor(regime?.regime)
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
@@ -85,15 +97,40 @@ export default async function MCXIVRankPage() {
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>90-Day IV Rank History</h2>
         <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
-          <svg width="100%" height="160" viewBox="0 0 500 160" style={{ display: 'block' }}>
-            {Object.keys(MCX_INSTRUMENTS).map((_, row) => (
-              <g key={row}>
-                {Array.from({ length: 20 }, (__, i) => {
-                  const h = 10 + Math.abs(Math.sin((i + row * 3) * 0.8)) * 18
-                  return <rect key={i} x={i * 24 + 4} y={row * 28 + 28 - h} width={18} height={h} rx="2" fill="var(--gold)" opacity={0.35 + i * 0.02}/>
-                })}
-              </g>
-            ))}
+          <svg width="100%" height="170" viewBox="0 0 500 170" style={{ display: 'block' }}>
+            {Object.entries(MCX_INSTRUMENTS).map(([key, meta], row) => {
+              const series = ivRankSeries(ivRanks[key]?.history ?? [])
+              const rowTop = row * 32
+              if (series.length < 2) {
+                return (
+                  <text key={key} x="4" y={rowTop + 18} fontSize="10" fill="var(--ink-4)">
+                    {meta.label}: not enough history yet
+                  </text>
+                )
+              }
+              const barW  = Math.min(18, 480 / series.length - 2)
+              const gap   = 480 / series.length
+              return (
+                <g key={key}>
+                  <text x="0" y={rowTop + 8} fontSize="9" fill="var(--ink-3)">{meta.label}</text>
+                  {series.map((point, i) => {
+                    const h = 2 + (point.ivRank / 100) * 20
+                    return (
+                      <rect
+                        key={point.date}
+                        x={i * gap + 4}
+                        y={rowTop + 26 - h}
+                        width={Math.max(1.5, barW)}
+                        height={h}
+                        rx="1"
+                        fill="var(--gold)"
+                        opacity={0.4 + (i / series.length) * 0.5}
+                      />
+                    )
+                  })}
+                </g>
+              )
+            })}
           </svg>
         </ProBlurGate>
       </section>
