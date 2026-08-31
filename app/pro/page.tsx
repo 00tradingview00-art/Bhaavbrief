@@ -25,7 +25,7 @@ const FREE_FEATURES = [
   'Flash intelligence during market hours',
   'Live MCX prices (gold, silver, crude, copper, natgas)',
   'MCX event calendar (EIA, FOMC, RBI MPC, OPEC)',
-  'ATM option row and summary stats (PCR, Max Pain, IVIX)',
+  'Full MCX option chain — all strikes & expiries, Greeks, Max Pain, PCR, OI Map',
   'Educational library (lot sizes, margin, Greeks basics)',
 ]
 
@@ -36,15 +36,9 @@ const PRO_WORKFLOWS: {
   href: string
 }[] = [
   {
-    title: 'Options Chain Terminal',
-    description: 'Full strike ladder with live Greeks, IV quality tiers, Max Pain and PCR — what a market maker sees.',
-    chips: ['All strikes & expiries', 'Delta · Gamma · Theta · Vega', 'IV quality tiers'],
-    href: '/options',
-  },
-  {
     title: 'Volatility Analytics',
-    description: 'Know when to buy volatility and when to sell it. IV Rank, IV Percentile (90-day history), IV Skew chart, OI buildup.',
-    chips: ['IV Rank & Percentile', 'IV Skew CE vs PE', 'OI Buildup 90-day'],
+    description: 'Know when to buy volatility and when to sell it — the analytical layer on top of the free option chain. IV Rank, IV Percentile, IV Skew (CE vs PE), OI buildup by strike.',
+    chips: ['IV Rank & Percentile', 'IV Skew CE vs PE', 'OI Buildup'],
     href: '/tools/mcx-iv-rank',
   },
   {
