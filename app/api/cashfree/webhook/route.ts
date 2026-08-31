@@ -129,7 +129,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         if (existing === 'active') {
           await refreshSubscriptionExpiry(userId, capped)
         } else {
-          await activateSubscription(userId, providerSubId, plan, capped, 'cashfree')
+          await activateSubscription(userId, providerSubId, plan, capped)
         }
       } else if (DEACTIVATE_STATUSES.has(status)) {
         await deactivateSubscription(userId)
@@ -141,7 +141,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         expiryFromPlan(plan)
       const existing = await redisCommand('GET', `sub:${userId}:status`)
       if (existing !== 'active') {
-        await activateSubscription(userId, providerSubId, plan, expiresAt, 'cashfree')
+        await activateSubscription(userId, providerSubId, plan, expiresAt)
       } else {
         await refreshSubscriptionExpiry(userId, expiresAt)
       }

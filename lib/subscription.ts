@@ -3,9 +3,8 @@
 // Redis key schema (Upstash, via redisCommand):
 //   sub:{userId}:status          → "active" | "cancelled" | "expired"
 //   sub:{userId}:plan            → "daily" | "monthly" | "yearly"
-//   sub:{userId}:provider        → "cashfree" | "razorpay"
+//   sub:{userId}:provider        → "cashfree"
 //   sub:{userId}:provider_sub_id → external subscription id
-//   sub:{userId}:razorpay_sub_id → legacy (Razorpay-only; kept for old subs)
 //   sub:{userId}:expires_at      → ISO 8601 timestamp
 //
 // Clerk publicMetadata.isPro mirrors status for client-side use without Redis
@@ -16,7 +15,6 @@ import { clerkClient } from '@clerk/nextjs/server'
 
 export type Plan = 'daily' | 'monthly' | 'yearly'
 export type SubStatus = 'active' | 'cancelled' | 'expired'
-export type BillingProvider = 'cashfree' | 'razorpay'
 
 export async function isProUser(userId: string | null): Promise<boolean> {
   if (!userId) return false
@@ -32,21 +30,16 @@ export async function activateSubscription(
   providerSubId: string,
   plan: Plan,
   expiresAt: Date,
-  provider: BillingProvider = 'cashfree',
 ): Promise<void> {
   const expiresISO = expiresAt.toISOString()
   await redisCommand(
     'MSET',
     `sub:${userId}:status`, 'active',
     `sub:${userId}:plan`, plan,
-    `sub:${userId}:provider`, provider,
+    `sub:${userId}:provider`, 'cashfree',
     `sub:${userId}:provider_sub_id`, providerSubId,
     `sub:${userId}:expires_at`, expiresISO,
   )
-  // Preserve legacy key for Razorpay-era account pages / support lookups
-  if (provider === 'razorpay') {
-    await redisCommand('SET', `sub:${userId}:razorpay_sub_id`, providerSubId)
-  }
   const clerk = await clerkClient()
   await clerk.users.updateUserMetadata(userId, {
     publicMetadata: { isPro: true, planExpires: expiresISO, plan },

@@ -18,12 +18,7 @@ export default async function AccountPage() {
   const pro = await isProUser(userId)
   const plan = pro ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null : null
   const expiresAt = pro ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null : null
-  const subId = pro
-    ? (
-        (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null
-        ?? (await redisCommand('GET', `sub:${userId}:razorpay_sub_id`)) as string | null
-      )
-    : null
+  const subId = pro ? (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null : null
   const provider = pro
     ? ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
     : null
