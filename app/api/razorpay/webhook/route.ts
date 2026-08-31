@@ -43,6 +43,7 @@ function verifySignature(rawBody: Buffer, signature: string | null): boolean {
 
 function planFromId(planId: string | undefined): Plan {
   if (planId === process.env.RAZORPAY_PLAN_ID_YEARLY) return 'yearly'
+  if (planId === process.env.RAZORPAY_PLAN_ID_DAILY) return 'daily'
   return 'monthly'
 }
 

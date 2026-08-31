@@ -2,7 +2,7 @@
 //
 // Redis key schema (Upstash, via redisCommand):
 //   sub:{userId}:status       → "active" | "cancelled" | "expired"
-//   sub:{userId}:plan         → "monthly" | "yearly"
+//   sub:{userId}:plan         → "daily" | "monthly" | "yearly"
 //   sub:{userId}:razorpay_sub_id
 //   sub:{userId}:expires_at   → ISO 8601 timestamp
 //
@@ -12,7 +12,7 @@
 import { redisCommand } from './redis'
 import { clerkClient } from '@clerk/nextjs/server'
 
-export type Plan = 'monthly' | 'yearly'
+export type Plan = 'daily' | 'monthly' | 'yearly'
 export type SubStatus = 'active' | 'cancelled' | 'expired'
 
 export async function isProUser(userId: string | null): Promise<boolean> {

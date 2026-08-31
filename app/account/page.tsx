@@ -33,7 +33,11 @@ export default async function AccountPage() {
         {pro ? (
           <>
             <p style={{ color: 'var(--ink)', marginBottom: '0.5rem' }}>
-              <strong>Plan:</strong> BhaavBrief Pro — {plan === 'yearly' ? 'Annual (₹2,999/year)' : 'Monthly (₹333/month)'}
+              <strong>Plan:</strong> BhaavBrief Pro — {
+                plan === 'yearly' ? 'Annual (₹2,999/year)' :
+                plan === 'daily'  ? 'Daily (₹33/day)' :
+                'Monthly (₹333/month)'
+              }
             </p>
             <p style={{ color: 'var(--ink-2)' }}><strong>Renews:</strong> {expiryLabel}</p>
             {subId && (

@@ -11,7 +11,7 @@ declare global {
 }
 
 interface Props {
-  plan: 'monthly' | 'yearly'
+  plan: 'daily' | 'monthly' | 'yearly'
   cta: string
 }
 
@@ -43,7 +43,10 @@ export default function ProCheckout({ plan, cta }: Props) {
           key: keyId,
           subscription_id: subscriptionId,
           name: 'BhaavBrief',
-          description: plan === 'yearly' ? 'Pro Annual — ₹2,999/year' : 'Pro Monthly — ₹333/month',
+          description:
+            plan === 'yearly' ? 'Pro Annual — ₹2,999/year' :
+            plan === 'daily'  ? 'Pro Daily — ₹33/day' :
+            'Pro Monthly — ₹333/month',
           theme: { color: '#1a1a1a' },
           handler: () => resolve(),
           modal: { ondismiss: () => reject(new Error('dismissed')) },

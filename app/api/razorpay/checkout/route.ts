@@ -6,7 +6,7 @@ import { redisCommand } from '@/lib/redis'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-type Plan = 'monthly' | 'yearly'
+type Plan = 'daily' | 'monthly' | 'yearly'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const { userId } = await auth()
@@ -25,14 +25,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   let plan: Plan
   try {
     const body = await req.json()
-    plan = body.plan === 'yearly' ? 'yearly' : 'monthly'
+    plan = body.plan === 'yearly' ? 'yearly' : body.plan === 'daily' ? 'daily' : 'monthly'
   } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  const planId = plan === 'yearly'
-    ? process.env.RAZORPAY_PLAN_ID_YEARLY
-    : process.env.RAZORPAY_PLAN_ID_MONTHLY
+  const planId =
+    plan === 'yearly' ? process.env.RAZORPAY_PLAN_ID_YEARLY :
+    plan === 'daily'  ? process.env.RAZORPAY_PLAN_ID_DAILY :
+    process.env.RAZORPAY_PLAN_ID_MONTHLY
   if (!planId) {
     return NextResponse.json({ error: 'Plan not configured' }, { status: 500 })
   }
@@ -42,9 +43,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     key_secret: process.env.RAZORPAY_KEY_SECRET ?? '',
   })
 
+  // total_count is the number of billing cycles Razorpay will run before the
+  // subscription auto-ends — matched to roughly a 10-year horizon per plan
+  // (same reasoning as monthly's existing 120), not a real expectation anyone
+  // keeps a daily sub running that long uninterrupted.
+  const totalCount = plan === 'yearly' ? 12 : plan === 'daily' ? 3650 : 120
+
   const subscription = await razorpay.subscriptions.create({
     plan_id: planId,
-    total_count: plan === 'yearly' ? 12 : 120,
+    total_count: totalCount,
     notes: { clerk_user_id: userId, plan },
   })
 
