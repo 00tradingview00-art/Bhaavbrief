@@ -36,8 +36,8 @@ export default function ResearchIndexPage() {
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>{a.displayDate}</span>
                   {a.premium && (
-                    <span style={{ fontSize: '0.65rem', background: 'var(--gold-pale)', color: 'var(--gold-dark)', padding: '1px 7px', borderRadius: 20, fontWeight: 700 }}>
-                      PRO
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.08em', textTransform: 'uppercase', background: 'var(--gold-pale)', color: 'var(--gold-dark)', border: '0.5px solid var(--gold)', padding: '2px 8px', fontWeight: 600 }}>
+                      🔒 Pro
                     </span>
                   )}
                   {a.commodities.map(c => (
