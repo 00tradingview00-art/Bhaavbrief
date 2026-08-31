@@ -1,5 +1,5 @@
 {
-  "_note": "Scheduled recurring macro/data-release events mapped to MCX contracts. Complementary to impact-map.json (ad-hoc geopolitical narrative KB, loaded into brief-writing prompts) \u2014 this file is NOT fed into brief generation, it is a display-layer data source for /calendar, TapeMovers, and UpcomingEventsForCommodity only. consensus_field is reserved/unused on every entry \u2014 never scrape consensus estimates from third-party calendars (ToS risk, product decision). Rule-based weekly entries (cadence_type: 'rule_based') have next_release_utc kept current by scripts/refresh-event-calendar.mjs. Irregular-cadence entries (cadence_type: 'manual') have next_release_utc manually seeded and need periodic manual refresh against each source's official calendar \u2014 treat any date more than ~6 weeks stale as suspect. MCX expiry entries (cadence_type: 'mcx_expiry') derive from data/kite-instruments.json and go stale every contract rollover \u2014 refresh alongside that file.",
+  "_note": "Scheduled recurring macro/data-release events mapped to MCX contracts. Complementary to impact-map.json (ad-hoc geopolitical narrative KB, loaded into brief-writing prompts) — this file is NOT fed into brief generation, it is a display-layer data source for /calendar, TapeMovers, and UpcomingEventsForCommodity only. consensus_field is reserved/unused on every entry — never scrape consensus estimates from third-party calendars (ToS risk, product decision). Rule-based weekly entries (cadence_type: 'rule_based') have next_release_utc kept current by scripts/refresh-event-calendar.mjs. Irregular-cadence entries (cadence_type: 'manual') have next_release_utc manually seeded and need periodic manual refresh against each source's official calendar — treat any date more than ~6 weeks stale as suspect. MCX expiry entries (cadence_type: 'mcx_expiry') derive from data/kite-instruments.json and go stale every contract rollover — refresh alongside that file.",
   "events": [
     {
       "id": "eia_natural_gas_storage",
@@ -7,20 +7,20 @@
       "source_url": "https://ir.eia.gov/ngs/ngs.html",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-08-27T14:30:00.000Z",
+      "next_release_utc": "2026-09-03T14:30:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": 16,
+        "value": 15,
         "unit": "Bcf",
-        "as_of_period": "week ending 2026-08-14",
+        "as_of_period": "week ending 2026-08-21",
         "source": "eia_api",
-        "as_of": "2026-08-24"
+        "as_of": "2026-08-31"
       },
-      "description_educational": "Weekly change in US natural gas storage \u2014 the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR."
+      "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR."
     },
     {
       "id": "eia_petroleum_status_report",
@@ -28,20 +28,20 @@
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-08-26T14:30:00.000Z",
+      "next_release_utc": "2026-09-02T14:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": -0.9,
+        "value": -3.6,
         "unit": "million barrels",
-        "as_of_period": "week ending 2026-08-14",
+        "as_of_period": "week ending 2026-08-21",
         "source": "eia_api",
-        "as_of": "2026-08-24"
+        "as_of": "2026-08-31"
       },
-      "description_educational": "Weekly change in US commercial crude oil inventories \u2014 the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate."
+      "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate."
     },
     {
       "id": "api_crude_inventories",
@@ -49,7 +49,7 @@
       "source_url": "https://www.api.org/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-08-25T20:30:00.000Z",
+      "next_release_utc": "2026-09-01T20:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
@@ -62,7 +62,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "American Petroleum Institute's own weekly estimate of US crude stock changes, released the evening before the official EIA figure \u2014 often moves MCX Crude in the Wednesday-morning IST session ahead of the EIA number."
+      "description_educational": "American Petroleum Institute's own weekly estimate of US crude stock changes, released the evening before the official EIA figure — often moves MCX Crude in the Wednesday-morning IST session ahead of the EIA number."
     },
     {
       "id": "opec_plus_meeting",
@@ -83,7 +83,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "OPEC+ production-quota decisions directly set the supply backdrop for Brent/WTI, which MCX Crude tracks via USD/INR \u2014 historically the single largest scheduled (non-geopolitical-shock) driver of crude volatility."
+      "description_educational": "OPEC+ production-quota decisions directly set the supply backdrop for Brent/WTI, which MCX Crude tracks via USD/INR — historically the single largest scheduled (non-geopolitical-shock) driver of crude volatility."
     },
     {
       "id": "us_cpi",
@@ -106,7 +106,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "US inflation prints shape Fed rate-path expectations, which move real yields and the dollar \u2014 the two primary transmission channels into MCX Gold and Silver."
+      "description_educational": "US inflation prints shape Fed rate-path expectations, which move real yields and the dollar — the two primary transmission channels into MCX Gold and Silver."
     },
     {
       "id": "fomc_rate_decision",
@@ -130,7 +130,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "The Fed's rate decision and forward guidance move US real yields and the dollar \u2014 the dominant macro driver for MCX Gold and Silver, with secondary effects on Copper and Crude via broad risk appetite."
+      "description_educational": "The Fed's rate decision and forward guidance move US real yields and the dollar — the dominant macro driver for MCX Gold and Silver, with secondary effects on Copper and Crude via broad risk appetite."
     },
     {
       "id": "jackson_hole",
@@ -175,7 +175,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "The monthly US jobs report is a key Fed-policy input \u2014 a labor market that cools faster than expected raises rate-cut odds, typically supportive for gold via lower real yields."
+      "description_educational": "The monthly US jobs report is a key Fed-policy input — a labor market that cools faster than expected raises rate-cut odds, typically supportive for gold via lower real yields."
     },
     {
       "id": "china_nbs_pmi",
@@ -199,7 +199,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "China's official manufacturing PMI is a headline read on industrial demand \u2014 the single largest external demand signal for base metals (Copper, Aluminium, Zinc) given China's share of global consumption."
+      "description_educational": "China's official manufacturing PMI is a headline read on industrial demand — the single largest external demand signal for base metals (Copper, Aluminium, Zinc) given China's share of global consumption."
     },
     {
       "id": "china_caixin_pmi",
@@ -224,7 +224,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "Caixin's PMI skews toward smaller/export-facing manufacturers, complementing the official NBS PMI \u2014 divergence between the two is itself a watched signal for base-metals demand momentum."
+      "description_educational": "Caixin's PMI skews toward smaller/export-facing manufacturers, complementing the official NBS PMI — divergence between the two is itself a watched signal for base-metals demand momentum."
     },
     {
       "id": "usda_wasde",
@@ -270,7 +270,7 @@
       "source_url": "https://rigcount.bakerhughes.com/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-08-28T17:00:00.000Z",
+      "next_release_utc": "2026-09-04T17:00:00.000Z",
       "affected_contracts": [
         "crude",
         "natgas"
@@ -284,7 +284,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "A weekly proxy for future US drilling activity and supply growth \u2014 a slower-moving, lower-impact signal than inventory reports, but relevant context for medium-term crude/gas supply trajectory."
+      "description_educational": "A weekly proxy for future US drilling activity and supply growth — a slower-moving, lower-impact signal than inventory reports, but relevant context for medium-term crude/gas supply trajectory."
     },
     {
       "id": "noaa_weather_outlook",
@@ -305,7 +305,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "Heating/cooling degree-day forecasts drive near-term US natural gas demand expectations \u2014 during peak summer cooling or winter heating season, weather forecast shifts can rival storage-report volatility for Natural Gas."
+      "description_educational": "Heating/cooling degree-day forecasts drive near-term US natural gas demand expectations — during peak summer cooling or winter heating season, weather forecast shifts can rival storage-report volatility for Natural Gas."
     },
     {
       "id": "india_cpi",
@@ -326,7 +326,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "India's retail inflation print shapes RBI policy expectations and rupee sentiment \u2014 MCX Gold, quoted in INR, carries a currency-translation sensitivity to India-specific macro data on top of USD-gold moves."
+      "description_educational": "India's retail inflation print shapes RBI policy expectations and rupee sentiment — MCX Gold, quoted in INR, carries a currency-translation sensitivity to India-specific macro data on top of USD-gold moves."
     },
     {
       "id": "india_wpi",
@@ -370,7 +370,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "India's annual Union Budget (presented 1 February, 11:00 AM IST) is where the government sets customs duty on gold and silver imports \u2014 the single largest discrete lever on MCX Gold and Silver pricing outside of global COMEX moves; each 1 percentage-point duty change has historically shifted MCX gold by roughly \u20b91,000/10g overnight. Crude-linked windfall/export levies on fuel have also been announced at Budget in past years."
+      "description_educational": "India's annual Union Budget (presented 1 February, 11:00 AM IST) is where the government sets customs duty on gold and silver imports — the single largest discrete lever on MCX Gold and Silver pricing outside of global COMEX moves; each 1 percentage-point duty change has historically shifted MCX gold by roughly ₹1,000/10g overnight. Crude-linked windfall/export levies on fuel have also been announced at Budget in past years."
     },
     {
       "id": "rbi_mpc",
@@ -399,7 +399,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "RBI's repo-rate decision and INR-management stance directly move USD/INR \u2014 since every MCX contract is INR-denominated, a rupee move around an MPC decision shows up mechanically across all 9 commodities even without any change in the underlying USD/international price. High-priority for an India-focused platform: this is one of the few events that moves every MCX contract at once, not just one commodity's benchmark."
+      "description_educational": "RBI's repo-rate decision and INR-management stance directly move USD/INR — since every MCX contract is INR-denominated, a rupee move around an MPC decision shows up mechanically across all 9 commodities even without any change in the underlying USD/international price. High-priority for an India-focused platform: this is one of the few events that moves every MCX contract at once, not just one commodity's benchmark."
     },
     {
       "id": "cftc_cot_report",
@@ -407,7 +407,7 @@
       "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-08-28T19:30:00.000Z",
+      "next_release_utc": "2026-09-04T19:30:00.000Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -428,7 +428,7 @@
         "source": "manual",
         "as_of": "2026-07-09"
       },
-      "description_educational": "A weekly snapshot of futures positioning by trader category (commercial, managed money, etc.) on the international benchmark contracts \u2014 context on how crowded a positioning is, not a signal of future direction."
+      "description_educational": "A weekly snapshot of futures positioning by trader category (commercial, managed money, etc.) on the international benchmark contracts — context on how crowded a positioning is, not a signal of future direction."
     },
     {
       "id": "mcx_expiry_gold",
@@ -449,7 +449,7 @@
         "source": "kite_instruments",
         "as_of": "2026-07-09"
       },
-      "description_educational": "Last trading day for the current MCX Gold futures contract \u2014 open positions must be closed or rolled to the next contract before expiry; liquidity and spreads can widen in the final sessions."
+      "description_educational": "Last trading day for the current MCX Gold futures contract — open positions must be closed or rolled to the next contract before expiry; liquidity and spreads can widen in the final sessions."
     },
     {
       "id": "mcx_expiry_silver",
@@ -491,7 +491,7 @@
         "source": "kite_instruments",
         "as_of": "2026-07-09"
       },
-      "description_educational": "Last trading day for the current MCX Crude Oil futures contract \u2014 crude expires ahead of the physical delivery month and rolls monthly, more frequently than metals."
+      "description_educational": "Last trading day for the current MCX Crude Oil futures contract — crude expires ahead of the physical delivery month and rolls monthly, more frequently than metals."
     },
     {
       "id": "mcx_expiry_copper",
@@ -533,7 +533,7 @@
         "source": "kite_instruments",
         "as_of": "2026-07-09"
       },
-      "description_educational": "Last trading day for the current MCX Natural Gas futures contract \u2014 this contract rolls monthly, aligned closely with the Henry Hub futures calendar."
+      "description_educational": "Last trading day for the current MCX Natural Gas futures contract — this contract rolls monthly, aligned closely with the Henry Hub futures calendar."
     },
     {
       "id": "mcx_expiry_zinc",
