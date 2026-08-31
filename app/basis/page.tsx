@@ -54,13 +54,10 @@ export default async function BasisPage() {
       key:   'crudeSpreadPct' as const,
       stats: calcStats(history, 'crudeSpreadPct'),
     },
-    {
-      id:    'copper',
-      label: 'Copper',
-      unit:  'INR/kg vs COMEX HG (coming soon)',
-      key:   'copperSpreadPct' as const,
-      stats: null,
-    },
+    // Copper deliberately excluded: lib/basis.ts's copperSpreadPct is a
+    // permanent null stub (no COMEX HG price feed wired up yet) — shipping an
+    // empty "coming soon" tile inside a paid dashboard is worse than not
+    // listing it. Add back once lib/basis.ts computes it for real.
   ]
 
   return (
