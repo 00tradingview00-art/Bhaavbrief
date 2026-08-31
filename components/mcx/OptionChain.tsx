@@ -504,50 +504,10 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
     container.scrollTo({ top: offset, behavior: 'smooth' })
   }, [data, page, preview])
 
-  if (!isPro) {
-    // Build a preview of real chain rows (ATM ±4 strikes) from initialData.
-    // initialData is always available from ISR, so users see real prices blurred —
-    // not fake hardcoded numbers — which makes the tease much more compelling.
-    const previewChain = (() => {
-      const chain = initialData?.chain ?? []
-      const atmIdx = chain.findIndex(r => r.isATM)
-      const centre  = atmIdx >= 0 ? atmIdx : Math.floor(chain.length / 2)
-      const start   = Math.max(0, centre - 4)
-      return chain.slice(start, start + 9)
-    })()
-    return (
-      <ProBlurGate label="Live MCX option chain — Greeks, iVIX, Max Pain, PCR">
-        <div style={{ fontFamily: C.sans, fontSize: 12, background: C.surf, padding: '8px 12px' }}>
-          <div style={{ display: 'flex', gap: 8, padding: '3px 0', fontWeight: 600, fontSize: 10, opacity: 0.5, borderBottom: `1px solid ${C.bdr}`, textTransform: 'uppercase' }}>
-            <span style={{ flex: 1, textAlign: 'right' }}>CE LTP</span>
-            <span style={{ width: 36, textAlign: 'right' }}>IV%</span>
-            <span style={{ width: 80, textAlign: 'center' }}>Strike</span>
-            <span style={{ width: 36 }}>IV%</span>
-            <span style={{ flex: 1 }}>PE LTP</span>
-          </div>
-          {(previewChain.length > 0 ? previewChain : [116500, 117000, 117500, 118000, 118500].map(s => ({ strike: s, isATM: false, CE: { ltp: 0, iv: null }, PE: { ltp: 0, iv: null } }))).map((row) => (
-            <div key={row.strike} style={{ display: 'flex', gap: 8, padding: '4px 0', borderBottom: `1px solid ${C.bdr}`, alignItems: 'center' }}>
-              <span style={{ flex: 1, textAlign: 'right', color: C.dn, ...numStyle }}>
-                {(row as ChainRow).CE?.ltp ? fmtINR((row as ChainRow).CE.ltp) : '—'}
-              </span>
-              <span style={{ width: 36, textAlign: 'right', color: C.ink3, fontSize: 10 }}>
-                {(row as ChainRow).CE?.iv != null ? `${((row as ChainRow).CE.iv! * 100).toFixed(0)}` : '—'}
-              </span>
-              <span style={{ width: 80, textAlign: 'center', fontWeight: (row as ChainRow).isATM ? 800 : 600, color: (row as ChainRow).isATM ? C.gold : C.ink, fontSize: (row as ChainRow).isATM ? 13 : 12 }}>
-                {row.strike.toLocaleString('en-IN')}
-              </span>
-              <span style={{ width: 36, color: C.ink3, fontSize: 10 }}>
-                {(row as ChainRow).PE?.iv != null ? `${((row as ChainRow).PE.iv! * 100).toFixed(0)}` : '—'}
-              </span>
-              <span style={{ flex: 1, color: C.up, ...numStyle }}>
-                {(row as ChainRow).PE?.ltp ? fmtINR((row as ChainRow).PE.ltp) : '—'}
-              </span>
-            </div>
-          ))}
-        </div>
-      </ProBlurGate>
-    )
-  }
+  // Full chain — all strikes/expiries, Max Pain, PCR, iVIX, AAV, Greeks
+  // columns and the OI Map — is free for everyone. Only the IV Skew and
+  // Volatility (in-chain IV-history) tabs below stay Pro-gated, each with a
+  // real blurred preview rather than being hidden outright.
 
   // ── Pagination: ±10% of futures price ────────────────────────────────────
   const lo = data ? data.futurePrice * 0.90 : 0
@@ -658,23 +618,21 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
               color: mapView === 'iv' ? C.gold : C.ink3,
             }}
           >
-            Volatility
+            Volatility {!isPro && '🔒'}
           </button>
-          {isPro && (
-            <button
-              onClick={() => setMapView(v => v === 'skew' ? null : 'skew')}
-              role="tab"
-              aria-selected={mapView === 'skew'}
-              style={{
-                padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
-                border: 'none',
-                background: mapView === 'skew' ? C.goldPl : 'transparent',
-                color: mapView === 'skew' ? C.gold : C.ink3,
-              }}
-            >
-              IV Skew
-            </button>
-          )}
+          <button
+            onClick={() => setMapView(v => v === 'skew' ? null : 'skew')}
+            role="tab"
+            aria-selected={mapView === 'skew'}
+            style={{
+              padding: isMobile ? '14px 16px' : '5px 12px', fontSize: 12, cursor: 'pointer', fontFamily: C.sans,
+              border: 'none',
+              background: mapView === 'skew' ? C.goldPl : 'transparent',
+              color: mapView === 'skew' ? C.gold : C.ink3,
+            }}
+          >
+            IV Skew {!isPro && '🔒'}
+          </button>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
@@ -748,7 +706,17 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
 
       {/* ── OI concentration map / IV skew chart ── */}
       {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
-      {data?.chain && mapView === 'iv' && <IVHistoryChart chain={mainPage} instrument={instrument} />}
+      {data?.chain && mapView === 'iv' && (
+        isPro ? (
+          <IVHistoryChart chain={mainPage} instrument={instrument} />
+        ) : (
+          <div style={{ padding: '16px 14px', borderBottom: `1px solid ${C.bdr}` }}>
+            <ProBlurGate isPro={false} label="Volatility — today's ATM IV, regime and 10-day trend" timestamp="Live">
+              <IVHistoryChart chain={mainPage} instrument={instrument} />
+            </ProBlurGate>
+          </div>
+        )
+      )}
       {data?.chain && mapView === 'skew' && <IVSkewChart chain={data.chain} isPro={isPro} />}
 
       {/* ── ITM note ── */}
