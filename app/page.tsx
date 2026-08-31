@@ -3,6 +3,7 @@ import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import type { PriceData } from '@/lib/prices'
 import Tag from '@/components/Tag'
+import Card from '@/components/ui/Card'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import GoldHeroCard from '@/components/GoldHeroCard'
@@ -191,7 +192,8 @@ export default async function HomePage() {
           borderTop: '3px solid var(--gold)',
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          borderRadius: 4,
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: 'var(--shadow-sm)',
           padding: 'clamp(20px, 4vw, 32px) clamp(18px, 4vw, 36px)',
           marginBottom: 40,
           position: 'relative',
@@ -397,7 +399,8 @@ export default async function HomePage() {
                   background: 'var(--gold-pale)',
                   border: '1px solid rgba(181,134,42,0.35)',
                   borderLeft: '3px solid var(--gold)',
-                  borderRadius: '0 8px 8px 0',
+                  borderRadius: '0 var(--radius-md) var(--radius-md) 0',
+                  boxShadow: 'var(--shadow-xs)',
                   padding: '14px 16px',
                 }}>
                   <div style={{
@@ -446,14 +449,8 @@ export default async function HomePage() {
           })()}
 
           {/* Live markets CTA */}
-          <Link href="/markets" style={{ textDecoration: 'none', display: 'block' }}>
-            <div style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 4,
-              padding: '14px 16px',
-              marginBottom: 16,
-            }}>
+          <Link href="/markets" style={{ textDecoration: 'none', display: 'block', marginBottom: 16 }}>
+            <Card padding="sm" hoverLift>
               {/* Header row */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{
@@ -493,7 +490,7 @@ export default async function HomePage() {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
                 OHLC · Volume · Open Interest · 5 commodities
               </div>
-            </div>
+            </Card>
           </Link>
 
           {/* Next high-impact event teaser */}
@@ -503,7 +500,8 @@ export default async function HomePage() {
                 background: 'var(--gold-pale)',
                 border: '1px solid var(--border)',
                 borderLeft: '3px solid var(--gold)',
-                borderRadius: '0 4px 4px 0',
+                borderRadius: '0 var(--radius-md) var(--radius-md) 0',
+                boxShadow: 'var(--shadow-xs)',
                 padding: '14px 16px',
                 marginBottom: 16,
               }}>
@@ -527,16 +525,12 @@ export default async function HomePage() {
           )}
 
           {/* Stats strip */}
-          <div style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 4,
-            padding: '16px 20px',
-            marginBottom: 16,
+          <Card padding="sm" style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: 12,
             textAlign: 'center',
+            marginBottom: 16,
           }}>
             {[
               { val: '5 min', label: 'Daily read' },
@@ -558,7 +552,7 @@ export default async function HomePage() {
                 </div>
               </div>
             ))}
-          </div>
+          </Card>
 
           {/* Subscribe CTA block — the page's single "primary" (gold-button) ask.
               Was desktop-only on the theory that mobile already saw the quiet
@@ -572,7 +566,8 @@ export default async function HomePage() {
           <div id="subscribe" style={{
             background: '#0C0E00',
             border: '1px solid #252800',
-            borderRadius: 4,
+            borderRadius: 'var(--radius-lg)',
+            boxShadow: 'var(--shadow-md)',
             overflow: 'hidden',
             marginBottom: 16,
             padding: '20px 20px 18px',
@@ -594,12 +589,8 @@ export default async function HomePage() {
           </div>
 
           {/* About */}
-          <div id="about" style={{
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            borderRadius: 4,
-            padding: '16px 20px',
-          }}>
+          <div id="about">
+          <Card padding="sm">
             <p style={{
               fontFamily: 'var(--font-mono)',
               fontSize: 10, fontWeight: 500, letterSpacing: '0.1em',
@@ -611,6 +602,7 @@ export default async function HomePage() {
               Independent commodity intelligence for India&apos;s traders, investors, merchants and businesses.
               MCX energy, metals, and NCDEX agri — prices, context, and what moves them.
             </p>
+          </Card>
           </div>
         </div>
 

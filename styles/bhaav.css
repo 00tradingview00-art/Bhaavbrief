@@ -26,12 +26,55 @@
   --font-serif: var(--font-playfair), 'Georgia', serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
   --font-mono: var(--font-dm-mono), 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Spacing scale (4px base) — normalizes what was previously ad-hoc px/rem
+     values scattered per-component (padding strings like '16px 20px',
+     '0.9rem 1.1rem', '1.25rem 0' with no shared scale). */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Radius scale — consolidates 13 distinct ad-hoc borderRadius values found
+     in active use (2px, 3px, 4px, 5px, 6px, 8px, 9px, 10px, 12px, 20px, 99px...)
+     down to 4 named steps. */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Shadow/elevation scale — the codebase had only 5 one-off boxShadow values
+     total before this, no shared elevation system. Ink-tinted (not pure
+     black) to match the paper/ink editorial palette rather than a generic
+     cool-gray SaaS shadow. */
+  --shadow-xs: 0 1px 2px rgba(14, 13, 10, 0.04);
+  --shadow-sm: 0 1px 3px rgba(14, 13, 10, 0.06), 0 1px 2px rgba(14, 13, 10, 0.04);
+  --shadow-md: 0 4px 12px rgba(14, 13, 10, 0.08), 0 2px 4px rgba(14, 13, 10, 0.04);
+  --shadow-lg: 0 12px 32px rgba(14, 13, 10, 0.12), 0 4px 8px rgba(14, 13, 10, 0.04);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
 }
 
 /* ── Keyboard focus ───────────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
+}
+
+/* ── Card hover elevation (components/ui/Card.tsx) ───────────────────────── */
+.bb-card--hover-lift {
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+}
+.bb-card--hover-lift:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-2);
+  transform: translateY(-1px);
 }
 
 /* Tag colours */

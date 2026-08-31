@@ -4,7 +4,6 @@ import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import Link from 'next/link'
 import { ClerkProvider } from '@clerk/nextjs'
-import AuthNavChip from '@/components/AuthNavChip'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
@@ -127,10 +126,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>
-        {/* Auth nav chip — shown in top-right corner */}
-        <div style={{ position: 'fixed', top: 10, right: 16, zIndex: 100, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <AuthNavChip />
-        </div>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
         <Nav />
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
