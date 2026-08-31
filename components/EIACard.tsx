@@ -74,23 +74,23 @@ function BarChart({ history }: { history: EIAWeek[] }) {
 
       {/* X-axis labels — show first, middle, last */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 8, color: 'var(--ink-4)' }}>
           {fmtPeriod(weeks[0]?.period ?? '')}
         </span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 8, color: 'var(--ink-4)' }}>
           {fmtPeriod(weeks[Math.floor(weeks.length / 2)]?.period ?? '')}
         </span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink)', fontWeight: 600 }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 8, color: 'var(--ink)', fontWeight: 600 }}>
           Now
         </span>
       </div>
 
       {/* Range labels */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 8, color: 'var(--ink-4)' }}>
           Low {min.toFixed(0)}M
         </span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 8, color: 'var(--ink-4)' }}>
           High {max.toFixed(0)}M
         </span>
       </div>
@@ -196,7 +196,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
 
             {/* Change figure */}
             <div style={{
-              fontFamily:   'var(--font-mono)',
+              fontFamily:   'var(--font-sans)',
               fontSize:     22,
               fontWeight:   500,
               color:        'var(--ink)',
@@ -210,7 +210,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
             </div>
 
             {/* Total stocks */}
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', marginBottom: 2 }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', marginBottom: 2 }}>
               Total: {data.stocksM.toFixed(0)}M bbls
             </div>
 
@@ -235,10 +235,10 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
               justifyContent: 'space-between',
               alignItems:     'center',
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Week ending {new Date(data.period + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {timeAgo(data.updatedAt)}
               </span>
             </div>

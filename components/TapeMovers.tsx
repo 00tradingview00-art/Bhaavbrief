@@ -27,11 +27,11 @@ function TapeMoversRow({ event, commodityKey }: { event: EventMapEntry; commodit
           {COMMODITY_LABELS[commodityKey] ?? commodityKey}
         </div>
       </div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#48483A', whiteSpace: 'nowrap' }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#48483A', whiteSpace: 'nowrap' }}>
         {formatIST(event.next_release_utc)}
       </div>
       {stats && (
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', whiteSpace: 'nowrap' }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', whiteSpace: 'nowrap' }}>
           Avg move ±{stats.avgAbsMovePct.toFixed(1)}% (n={stats.sampleSize})
         </div>
       )}

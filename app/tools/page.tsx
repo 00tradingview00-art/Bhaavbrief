@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Card from '@/components/ui/Card'
 
 export const revalidate = 3600
 
@@ -15,7 +16,35 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/tools' },
 }
 
+const PRO_TOOLS = [
+  {
+    href: '/tools/mcx-iv-rank',
+    label: 'Volatility Analytics',
+    desc: 'IV Rank, IV Percentile, IV Skew (CE vs PE), and OI buildup by strike — the analytical layer on top of the free option chain.',
+  },
+  {
+    href: '/options/strategy',
+    label: 'Strategy Builder',
+    desc: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table.',
+  },
+  {
+    href: '/basis',
+    label: 'Basis Dashboard',
+    desc: 'Commodity arbitrage intelligence — MCX vs COMEX/WTI import-parity spread, 30-day chart with ±1σ / ±2σ reference bands.',
+  },
+  {
+    href: '/research',
+    label: 'Pro Research',
+    desc: 'Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications.',
+  },
+]
+
 const FREE_TOOLS = [
+  {
+    href: '/options',
+    label: 'Option Chain',
+    desc: 'Full MCX strike ladder — all strikes & expiries, live Greeks, Max Pain, PCR, and the OI Map. Free for everyone.',
+  },
   {
     href: '/tools/mcx-iv-rank',
     label: 'IV Rank & Percentile',
@@ -67,6 +96,28 @@ export default function ToolsPage() {
       <p style={{ fontSize: '0.88rem', color: 'var(--ink-3)', marginBottom: '2.5rem' }}>
         Professional-grade tools for MCX commodity options traders. Pro analytics unlock the full analytical depth.
       </p>
+
+      {/* Pro Tools */}
+      <section style={{ marginBottom: '2.5rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--gold-dark)', marginBottom: '1rem' }}>
+          Pro Tools
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.75rem' }}>
+          {PRO_TOOLS.map(t => (
+            <Link key={t.href} href={t.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+              <Card padding="sm" hoverLift>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--ink)' }}>{t.label}</span>
+                  <span style={{ fontSize: '0.65rem', background: 'var(--gold-pale)', color: 'var(--gold-dark)', padding: '1px 7px', borderRadius: 20, fontWeight: 700 }}>
+                    PRO
+                  </span>
+                </div>
+                <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.45 }}>{t.desc}</p>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* Pro banner */}
       <Link

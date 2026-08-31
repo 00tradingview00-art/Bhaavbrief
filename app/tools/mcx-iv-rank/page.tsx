@@ -5,8 +5,8 @@ import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import Link from 'next/link'
-import ProBlurGate from '@/components/ProBlurGate'
 import VolatilityHub from './VolatilityHub'
+import IVRankHistoryChart from './IVRankHistoryChart'
 
 export const revalidate = 900
 
@@ -30,34 +30,35 @@ export const metadata: Metadata = {
 // outage) — never regresses to "No history yet" over a live-fetch hiccup
 // when real historical data already exists.
 async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
-  const result: Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }> = {}
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
-      if (!raw || raw.length < 4) { result[instrument] = { regime: null, history: [] }; continue }
-      const entries: { date: string; iv: number }[] = []
-      for (let i = 0; i < raw.length; i += 2) {
-        const iv = parseFloat(raw[i + 1])
-        if (!isNaN(iv)) entries.push({ date: raw[i], iv })
-      }
-      entries.sort((a, b) => a.date.localeCompare(b.date))
-      const history = entries.map(e => ({ date: e.date, iv: e.iv }))
-
-      let currentIV = entries[entries.length - 1]?.iv ?? 0
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { regime: IVRegime | null; history: IVHistoryPoint[] }]> => {
       try {
-        const chain = await getOptionsChain(instrument)
-        const live = liveAtmIV(chain.chain)
-        if (live.iv != null) currentIV = live.iv
-      } catch {
-        // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
-      }
+        const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+        if (!raw || raw.length < 4) return [instrument, { regime: null, history: [] }]
+        const points: { date: string; iv: number }[] = []
+        for (let i = 0; i < raw.length; i += 2) {
+          const iv = parseFloat(raw[i + 1])
+          if (!isNaN(iv)) points.push({ date: raw[i], iv })
+        }
+        points.sort((a, b) => a.date.localeCompare(b.date))
+        const history = points.map(e => ({ date: e.date, iv: e.iv }))
 
-      result[instrument] = { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }
-    } catch {
-      result[instrument] = { regime: null, history: [] }
-    }
-  }
-  return result
+        let currentIV = points[points.length - 1]?.iv ?? 0
+        try {
+          const chain = await getOptionsChain(instrument)
+          const live = liveAtmIV(chain.chain)
+          if (live.iv != null) currentIV = live.iv
+        } catch {
+          // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
+        }
+
+        return [instrument, { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }]
+      } catch {
+        return [instrument, { regime: null, history: [] }]
+      }
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 // Rolling IV Rank per day — computeIVRegime(history, currentIV) already does
@@ -118,7 +119,7 @@ export default async function MCXIVRankPage() {
               </div>
               {regime ? (
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 700, color }}>{regime.ivRank.toFixed(0)}</div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>IV Rank</div>
                   <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>Pctl: {regime.percentile.toFixed(0)} · {regime.label}</div>
                 </div>
@@ -132,43 +133,13 @@ export default async function MCXIVRankPage() {
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>{chartTitle}</h2>
-        <ProBlurGate label="90-day IV rank trend — see how volatility has moved over time" timestamp="Updated today">
-          <svg width="100%" height="170" viewBox="0 0 500 170" style={{ display: 'block' }}>
-            {Object.entries(MCX_INSTRUMENTS).map(([key, meta], row) => {
-              const series = ivRankSeries(ivRanks[key]?.history ?? [])
-              const rowTop = row * 32
-              if (series.length < 2) {
-                return (
-                  <text key={key} x="4" y={rowTop + 18} fontSize="10" fill="var(--ink-4)">
-                    {meta.label}: not enough history yet
-                  </text>
-                )
-              }
-              const barW  = Math.min(18, 480 / series.length - 2)
-              const gap   = 480 / series.length
-              return (
-                <g key={key}>
-                  <text x="0" y={rowTop + 8} fontSize="9" fill="var(--ink-3)">{meta.label}</text>
-                  {series.map((point, i) => {
-                    const h = 2 + (point.ivRank / 100) * 20
-                    return (
-                      <rect
-                        key={point.date}
-                        x={i * gap + 4}
-                        y={rowTop + 26 - h}
-                        width={Math.max(1.5, barW)}
-                        height={h}
-                        rx="1"
-                        fill="var(--gold)"
-                        opacity={0.4 + (i / series.length) * 0.5}
-                      />
-                    )
-                  })}
-                </g>
-              )
-            })}
-          </svg>
-        </ProBlurGate>
+        <IVRankHistoryChart
+          title={chartTitle}
+          isPro={isPro}
+          instruments={Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({
+            key, label: meta.label, series: ivRankSeries(ivRanks[key]?.history ?? []),
+          }))}
+        />
       </section>
 
       <section style={{ marginTop: '2rem' }}>

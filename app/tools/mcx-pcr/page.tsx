@@ -18,20 +18,21 @@ export const metadata: Metadata = {
 }
 
 async function getPCRData() {
-  const results: Record<string, { pcr: number | null; ivix: number | null; futurePrice: number } | null> = {}
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const data = await getOptionsChain(instrument)
-      results[instrument] = {
-        pcr:         (data as { pcr?: number }).pcr ?? null,
-        ivix:        (data as { ivix?: number }).ivix ?? null,
-        futurePrice: data.futurePrice,
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { pcr: number | null; ivix: number | null; futurePrice: number } | null]> => {
+      try {
+        const data = await getOptionsChain(instrument)
+        return [instrument, {
+          pcr:         (data as { pcr?: number }).pcr ?? null,
+          ivix:        (data as { ivix?: number }).ivix ?? null,
+          futurePrice: data.futurePrice,
+        }]
+      } catch {
+        return [instrument, null]
       }
-    } catch {
-      results[instrument] = null
-    }
-  }
-  return results
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 function pcrSignal(pcr: number | null): { label: string; color: string } {
@@ -76,12 +77,12 @@ export default async function MCXPCRPage() {
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 {row?.ivix !== null && row?.ivix !== undefined && (
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)' }}>{row.ivix.toFixed(1)}</div>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--ink)' }}>{row.ivix.toFixed(1)}</div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--ink-3)' }}>iVIX</div>
                   </div>
                 )}
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 700, color }}>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.4rem', fontWeight: 700, color }}>
                     {row?.pcr !== null && row?.pcr !== undefined ? row.pcr.toFixed(2) : '—'}
                   </div>
                   <div style={{ fontSize: '0.72rem', fontWeight: 600, color }}>{label}</div>

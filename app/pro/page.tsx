@@ -57,7 +57,7 @@ const PRO_WORKFLOWS: {
     title: 'Pro Research',
     description: 'Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours.',
     chips: ['Macro event analysis', 'MCX implications', 'Published within hours'],
-    href: '/news',
+    href: '/research',
   },
 ]
 

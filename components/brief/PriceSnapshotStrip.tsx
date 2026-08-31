@@ -60,10 +60,10 @@ export default function PriceSnapshotStrip({ commodities, data }: { commodities:
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-4)' }}>
               {item.label}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 700, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
               {item.isUSD ? fmtRate(item.price) : fmtINR(item.price)}
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700, color: up ? 'var(--up)' : 'var(--down)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 700, color: up ? 'var(--up)' : 'var(--down)' }}>
               {up ? '+' : ''}{item.pct.toFixed(2)}%
             </span>
           </div>

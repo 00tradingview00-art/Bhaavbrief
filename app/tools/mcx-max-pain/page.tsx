@@ -62,7 +62,7 @@ export default async function MCXMaxPainPage() {
               </div>
               <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)' }}>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', fontWeight: 700, color: 'var(--ink)' }}>
                     {row?.maxPain !== null && row?.maxPain !== undefined
                       ? row.maxPain.toLocaleString()
                       : '—'}
@@ -71,7 +71,7 @@ export default async function MCXMaxPainPage() {
                 </div>
                 {row?.gap !== null && row?.gap !== undefined && (
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 700, color: gapColor }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 700, color: gapColor }}>
                       {row.gap > 0 ? '+' : ''}{row.gap}%
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--ink-3)' }}>Futures vs Max Pain</div>

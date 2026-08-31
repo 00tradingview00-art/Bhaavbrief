@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
@@ -162,7 +163,7 @@ export default async function NewsPage() {
           </span>
           <span
             title="When this page was last rendered — a stuck value here means the page stopped refreshing"
-            style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}
+            style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}
           >
             Rendered {generatedAtIST}
           </span>
@@ -190,6 +191,10 @@ export default async function NewsPage() {
         }}>
           What&apos;s moving MCX today — gold, crude, silver, copper. Updated every 15 minutes.
         </p>
+
+        <Link href="/research" style={{ display: 'inline-block', fontSize: 13, color: 'var(--gold-dark)', fontWeight: 600, textDecoration: 'none', marginTop: 12 }}>
+          Browse all Pro Research →
+        </Link>
       </div>
 
       <NewsFeed serverItems={serverItems} />
