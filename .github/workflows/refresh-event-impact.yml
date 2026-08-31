@@ -61,3 +61,48 @@ jobs:
         run: |
           echo "::warning::EIA_API_KEY appears invalid (fetch-eia-data.mjs failed) — event actuals not refreshed. Rotate the secret."
           exit 1
+
+      - name: Check manual-cadence event dates for staleness
+        id: staleness_check
+        run: |
+          # Unlike rule_based events (rolled forward automatically by
+          # refresh-event-calendar.mjs above), manual-cadence events'
+          # next_release_utc is hand-seeded and can silently drift — this is
+          # the trigger source for Pro Research auto-generation (see
+          # scripts/monitor-macro-economy.js), so a stale date here means a
+          # real FOMC/RBI-MPC/OPEC+ meeting could pass with nothing detecting
+          # it. Alert-only (not blocking) — 6 weeks matches the threshold
+          # event-map.json's own _note field already recommends.
+          STALE=$(node -e '
+            const fs = require("fs");
+            const data = JSON.parse(fs.readFileSync("data/event-map.json", "utf8"));
+            const sixWeeksAgo = Date.now() - 6 * 7 * 24 * 3600 * 1000;
+            const stale = data.events.filter(e =>
+              e.cadence_type === "manual" &&
+              e.impact_tier === "high" &&
+              new Date(e.next_release_utc).getTime() < sixWeeksAgo
+            );
+            console.log(stale.map(e => `${e.id} (next_release_utc: ${e.next_release_utc})`).join("|"));
+          ')
+          if [ -n "$STALE" ]; then
+            echo "stale_events=$STALE" >> $GITHUB_OUTPUT
+            echo "::warning::Stale manual-cadence event date(s): $STALE"
+          fi
+
+      - name: Alert — stale event date(s)
+        if: steps.staleness_check.outputs.stale_events != ''
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        run: |
+          STALE="${{ steps.staleness_check.outputs.stale_events }}"
+          ITEMS=$(echo "$STALE" | tr '|' '\n' | sed 's/^/<li>/;s/$/<\/li>/' | tr -d '\n')
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
+              \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
+              \"subject\": \"⚠️ Stale event date(s) in event-map.json\",
+              \"htmlContent\": \"<p>These manual-cadence, high-impact events have a next_release_utc more than 6 weeks in the past — nobody has updated them against the source calendar:</p><ul>${ITEMS}</ul><p>These dates drive Pro Research auto-generation (scripts/monitor-macro-economy.js) — a stale date means a real event could pass with nothing detecting it. Update data/event-map.json.</p>\"
+            }" || true

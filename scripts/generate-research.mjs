@@ -67,6 +67,22 @@ try {
 }
 
 // ---------------------------------------------------------------------------
+// Load claims ledger (D-07 discipline, same as the daily brief) — the model
+// may only cite a historical "X% historically" statistic if it's backed by
+// one of these. For FOMC/Jackson Hole/RBI-MPC-class events this list will
+// come back empty (buildClaimsLedger.mjs deliberately never computes those —
+// see its header comment) — that's correct, not a bug, and the prompt below
+// tells the model explicitly not to invent one when the list is empty.
+// scripts/validate-research.mjs enforces this after generation either way.
+let claims = []
+try {
+  const allClaims = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/claims.json'), 'utf8')).claims ?? []
+  claims = allClaims.filter(c => event.affected_contracts.some(commodity => c.claim_id.endsWith(`__${commodity}`)))
+} catch {
+  console.warn('Warning: could not load data/claims.json — no verified claims will be available')
+}
+
+// ---------------------------------------------------------------------------
 // Fetch options chain data for affected commodities
 // ---------------------------------------------------------------------------
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://bhaavbrief.in'
@@ -128,6 +144,12 @@ Educational context: ${event.description_educational}
 
 ## Live MCX Data (as of ${todayIST} IST)
 ${priceLines}
+
+## Verified historical statistics
+${claims.length > 0
+  ? claims.map(c => `- ${c.statement_template.replace(/\{(\w+)\}/g, (_, k) => c.values?.[k] ?? '?')}`).join('\n')
+  : '(none available for this event — do NOT state any specific historical average-move percentage or frequency claim for it; describe the event and its live implications without inventing a "historically moves X%" statistic)'}
+You may only cite a historical percentage-move or frequency statistic if it appears above, worded consistently with it. Never invent one.
 
 ## Your task
 Write a Pro Research article in MDX format with the following structure. Be specific — name actual price levels, strikes, IV readings. Avoid vague statements like "gold may move higher". Indian readers want: "MCX Gold front-month at ₹87,200 — max pain at ₹86,000, PCR 1.14 suggests put writers are absorbing downside."

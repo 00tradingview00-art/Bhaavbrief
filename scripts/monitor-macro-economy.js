@@ -103,6 +103,109 @@ function mapToCommodities(title) {
   return [...new Set(contracts)].join(', ') || 'MCX Gold, MCX Crude, MCX Copper'
 }
 
+// ── Pro Research event tagging ───────────────────────────────────────────────
+// Pro Research targets specific high-impact, "manual"-cadence events in
+// data/event-map.json (FOMC, Jackson Hole, RBI MPC, OPEC+, CPI, NFP, Union
+// Budget) — unlike EIA's rule_based events (already auto-detected elsewhere,
+// see intelligence-engine.js's publishEventResultPage), nothing tags a
+// detected headline to one of these ids today. This is that tagging step:
+// reuses the macro-item detection this monitor already does every 15 min
+// instead of a second, separate detection pass.
+const RESEARCH_EVENT_MAP_FILE = path.join(ROOT, 'data/event-map.json')
+const PENDING_RESEARCH_FILE   = path.join(ROOT, 'data/pending-research-events.json')
+const RESEARCH_REQUEUE_TTL    = 7 * 24 * 3600 * 1000 // don't re-queue the same event within 7 days
+
+// Only the high-impact, manual-cadence events worth a dedicated deep-dive —
+// medium/low-impact ones (China PMI, India CPI/WPI) are already reasonably
+// served by this monitor's own regular flash articles.
+// Order matters — checked top to bottom, first match wins. rbi_mpc and
+// india_union_budget must come before us_cpi: a headline like "RBI watches
+// India CPI ahead of MPC meeting" contains both "CPI" and "MPC", and should
+// tag as the RBI event, not US CPI.
+const EVENT_ID_SIGNALS = {
+  jackson_hole:        /jackson hole/i,
+  rbi_mpc:             /rbi.*(?:monetary policy|mpc|repo rate)|monetary policy committee/i,
+  india_union_budget:  /union budget/i,
+  fomc_rate_decision:  /\bfomc\b|federal reserve.*rate.(?:decision|cut|hike)|fed.*rate.(?:decision|cut|hike)|dot plot/i,
+  us_nonfarm_payrolls: /nonfarm payroll|non-farm payroll|\bnfp\b|jobs report|unemployment rate/i,
+  opec_plus_meeting:   /opec\+|opec plus|opec meeting|\bjmmc\b/i,
+  // Checked last, with an explicit exclusion below — a regex lookbehind here
+  // proved unreliable at correctly excluding "India CPI" mentions in testing.
+  us_cpi:              /\bcpi\b/i,
+}
+
+function matchEventMapId(title) {
+  for (const [id, re] of Object.entries(EVENT_ID_SIGNALS)) {
+    if (!re.test(title)) continue
+    // "India CPI" is a different (lower-impact, not research-targeted) event
+    // — if "india" appears anywhere in a CPI headline, don't tag it as US CPI.
+    if (id === 'us_cpi' && /india/i.test(title)) continue
+    return id
+  }
+  return null
+}
+
+function loadEventMap() {
+  try {
+    return JSON.parse(fs.readFileSync(RESEARCH_EVENT_MAP_FILE, 'utf8')).events ?? []
+  } catch { return [] }
+}
+
+function loadPendingResearch() {
+  try { return JSON.parse(fs.readFileSync(PENDING_RESEARCH_FILE, 'utf8')) } catch { return [] }
+}
+
+function savePendingResearch(entries) {
+  fs.writeFileSync(PENDING_RESEARCH_FILE, JSON.stringify(entries, null, 2) + '\n', 'utf8')
+}
+
+// Extract the "WHAT HAPPENED" paragraph from the flash breakdown already
+// generated for this item (if any) — reuses that Claude call's output as the
+// research --context instead of a second API call to summarize the same event.
+function extractWhatHappened(flashBody) {
+  const m = flashBody?.match(/\*\*WHAT HAPPENED\*\*\s*\n(.+?)(?:\n\n|\n\*\*)/s)
+  return m ? m[1].trim() : null
+}
+
+// Called once per detected macro item, after the flash breakdown (if any) has
+// been generated. Queues a pending research entry when the item matches a
+// high-impact manual-cadence event and hasn't been queued/processed recently
+// — actual generation happens in intelligence-engine.js, which already runs
+// every 15 min and already has the equivalent pattern for EIA events.
+function maybeQueueResearchEvent(item, flashBody) {
+  const eventId = matchEventMapId(item.title)
+  if (!eventId) return
+
+  const eventMap = loadEventMap()
+  const event = eventMap.find(e => e.id === eventId)
+  if (!event) return
+
+  // Date-proximity guard: only queue near the event's own scheduled window —
+  // an incidental "FOMC" mention weeks away from the actual meeting isn't
+  // the event firing, it's routine macro chatter referencing it.
+  const scheduled = new Date(event.next_release_utc).getTime()
+  if (!Number.isFinite(scheduled)) return
+  const proximityMs = Math.abs(Date.now() - scheduled)
+  if (proximityMs > 3 * 24 * 3600 * 1000) return
+
+  const pending = loadPendingResearch()
+  const recentDuplicate = pending.some(
+    p => p.event_id === eventId && Date.now() - new Date(p.queuedAt).getTime() < RESEARCH_REQUEUE_TTL
+  )
+  if (recentDuplicate) return
+
+  const context = extractWhatHappened(flashBody) ?? item.title
+  pending.push({
+    event_id:  eventId,
+    context,
+    queuedAt:  new Date().toISOString(),
+    sourceTitle: item.title,
+    processed: false,
+  })
+  savePendingResearch(pending)
+  console.log(`  📋 Queued Pro Research for event: ${eventId}`)
+}
+
 // ── Seen state ────────────────────────────────────────────────────────────────
 
 function loadSeen() {
@@ -289,17 +392,20 @@ async function main() {
   console.log(`Macro monitor: ${allItems.length} items fetched, ${newEvents.length} new events`)
 
   let published = 0
+  const flashGenerated = new Set()
   for (const event of newEvents.slice(0, 1)) {  // max 1 per run
     const contracts = mapToCommodities(event.title)
     console.log(`  → ${event.title.slice(0, 80)} [${contracts}]`)
     try {
       const result = await generateBreakdown(event, contracts)
+      flashGenerated.add(event.id)
       if (!result) continue
       const { title: aiTitle, body } = result
       if (/^SKIP\s*$/i.test(body.trim())) {
         console.log(`    Skipped (no direct MCX commodity angle): ${event.title.slice(0, 60)}`)
         continue
       }
+      maybeQueueResearchEvent(event, body)
       const coverImage = await fetchPexelsImage(aiTitle, 'macro')
       const fname = saveFlashArticle(event, aiTitle, body, coverImage)
       if (fname) {
@@ -309,6 +415,17 @@ async function main() {
     } catch (e) {
       console.warn(`    ⚠️  Failed: ${e.message}`)
     }
+  }
+
+  // Research-event tagging runs against every new event this run detected,
+  // not just the one flash-generated above (flash gen is capped at 1/run for
+  // cost reasons, but missing a real FOMC/RBI-MPC headline because a
+  // different story happened to be first in the queue would defeat the
+  // point) — falls back to the raw headline as context when no flash
+  // breakdown was generated for that particular item.
+  for (const event of newEvents) {
+    if (flashGenerated.has(event.id)) continue // already handled above, with real context
+    maybeQueueResearchEvent(event, null)
   }
 
   const now = new Date().toISOString()
