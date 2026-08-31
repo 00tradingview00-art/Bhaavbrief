@@ -1,4 +1,4 @@
-import { getAllResearch, getResearchBySlug } from '@/lib/research'
+import { getResearchBySlug } from '@/lib/research'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { MDXRemote } from 'next-mdx-remote/rsc'
@@ -8,16 +8,22 @@ import type { Metadata } from 'next'
 import { safeJsonLd } from '@/lib/seo'
 import ProBlurGate from '@/components/ProBlurGate'
 
-export const dynamicParams = true
-export const revalidate = 3600
+// Deliberately not ISR/SSG: this page's render branches structurally on
+// isProUser() (full article vs. teaser+blur). generateStaticParams would
+// pre-render at build time with no request context, so isPro would always
+// resolve false and a real Pro subscriber would never receive the full
+// <MDXRemote> content — only the teaser ever gets rendered into the HTML for
+// anyone to reveal client-side. Confirmed: adding force-dynamic alongside a
+// still-present generateStaticParams did NOT change the build's SSG output
+// for this route on Next 15.5.20 (verified via a clean `npm run build`), so
+// generateStaticParams is removed entirely rather than left in place.
+// force-dynamic re-runs the Pro check per request (same pattern already used
+// by app/options/strategy/page.tsx); anonymous/crawler requests still get the
+// teaser-only server render, unchanged.
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const articles = getAllResearch()
-  return articles.map(a => ({ slug: a.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

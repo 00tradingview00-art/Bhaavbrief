@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     const history = computeRollingAAV(closes, 20)
 
     return NextResponse.json({ instrument, history }, {
-      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=300' },
+      headers: { 'Cache-Control': 'private, no-store' },
     })
   } catch (e) {
     console.error('[aav-history] error:', (e as Error).message)

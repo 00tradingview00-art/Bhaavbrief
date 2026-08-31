@@ -70,7 +70,14 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(payload, {
-      headers: { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=10' },
+      headers: {
+        // Only the free/anonymous response is identical for every visitor and
+        // safe to share-cache at the edge. The Pro (full-chain) response must
+        // never be shared-cached — a cache hit skips this handler entirely,
+        // which would otherwise let a free user transiently receive full
+        // Greeks data (or a Pro user get the truncated free view) at this URL.
+        'Cache-Control': pro ? 'private, no-store' : 'public, s-maxage=30, stale-while-revalidate=10',
+      },
     })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
@@ -88,7 +95,7 @@ export async function GET(request: NextRequest) {
         }
         return NextResponse.json(payload, {
           headers: {
-            'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=10',
+            'Cache-Control': pro ? 'private, no-store' : 'public, s-maxage=30, stale-while-revalidate=10',
             'X-Chain-Source': 'stale-cache',
           },
         })
