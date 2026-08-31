@@ -18,20 +18,21 @@ export const metadata: Metadata = {
 }
 
 async function getPCRData() {
-  const results: Record<string, { pcr: number | null; ivix: number | null; futurePrice: number } | null> = {}
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const data = await getOptionsChain(instrument)
-      results[instrument] = {
-        pcr:         (data as { pcr?: number }).pcr ?? null,
-        ivix:        (data as { ivix?: number }).ivix ?? null,
-        futurePrice: data.futurePrice,
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { pcr: number | null; ivix: number | null; futurePrice: number } | null]> => {
+      try {
+        const data = await getOptionsChain(instrument)
+        return [instrument, {
+          pcr:         (data as { pcr?: number }).pcr ?? null,
+          ivix:        (data as { ivix?: number }).ivix ?? null,
+          futurePrice: data.futurePrice,
+        }]
+      } catch {
+        return [instrument, null]
       }
-    } catch {
-      results[instrument] = null
-    }
-  }
-  return results
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 function pcrSignal(pcr: number | null): { label: string; color: string } {

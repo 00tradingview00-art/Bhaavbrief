@@ -30,34 +30,35 @@ export const metadata: Metadata = {
 // outage) — never regresses to "No history yet" over a live-fetch hiccup
 // when real historical data already exists.
 async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
-  const result: Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }> = {}
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
-      if (!raw || raw.length < 4) { result[instrument] = { regime: null, history: [] }; continue }
-      const entries: { date: string; iv: number }[] = []
-      for (let i = 0; i < raw.length; i += 2) {
-        const iv = parseFloat(raw[i + 1])
-        if (!isNaN(iv)) entries.push({ date: raw[i], iv })
-      }
-      entries.sort((a, b) => a.date.localeCompare(b.date))
-      const history = entries.map(e => ({ date: e.date, iv: e.iv }))
-
-      let currentIV = entries[entries.length - 1]?.iv ?? 0
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { regime: IVRegime | null; history: IVHistoryPoint[] }]> => {
       try {
-        const chain = await getOptionsChain(instrument)
-        const live = liveAtmIV(chain.chain)
-        if (live.iv != null) currentIV = live.iv
-      } catch {
-        // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
-      }
+        const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+        if (!raw || raw.length < 4) return [instrument, { regime: null, history: [] }]
+        const points: { date: string; iv: number }[] = []
+        for (let i = 0; i < raw.length; i += 2) {
+          const iv = parseFloat(raw[i + 1])
+          if (!isNaN(iv)) points.push({ date: raw[i], iv })
+        }
+        points.sort((a, b) => a.date.localeCompare(b.date))
+        const history = points.map(e => ({ date: e.date, iv: e.iv }))
 
-      result[instrument] = { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }
-    } catch {
-      result[instrument] = { regime: null, history: [] }
-    }
-  }
-  return result
+        let currentIV = points[points.length - 1]?.iv ?? 0
+        try {
+          const chain = await getOptionsChain(instrument)
+          const live = liveAtmIV(chain.chain)
+          if (live.iv != null) currentIV = live.iv
+        } catch {
+          // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
+        }
+
+        return [instrument, { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }]
+      } catch {
+        return [instrument, { regime: null, history: [] }]
+      }
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 // Rolling IV Rank per day — computeIVRegime(history, currentIV) already does

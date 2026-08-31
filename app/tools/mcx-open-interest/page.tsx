@@ -17,29 +17,27 @@ export const metadata: Metadata = {
 }
 
 async function getOIData() {
-  const results: Record<string, {
-    futurePrice: number
-    topCE: { strike: number; oi: number }[]
-    topPE: { strike: number; oi: number }[]
-  } | null> = {}
+  type OIResult = { futurePrice: number; topCE: { strike: number; oi: number }[]; topPE: { strike: number; oi: number }[] } | null
 
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const { chain, futurePrice } = await getOptionsChain(instrument)
-      const topCE = [...chain]
-        .sort((a, b) => b.CE.oi - a.CE.oi)
-        .slice(0, 5)
-        .map(r => ({ strike: r.strike, oi: r.CE.oi }))
-      const topPE = [...chain]
-        .sort((a, b) => b.PE.oi - a.PE.oi)
-        .slice(0, 5)
-        .map(r => ({ strike: r.strike, oi: r.PE.oi }))
-      results[instrument] = { futurePrice, topCE, topPE }
-    } catch {
-      results[instrument] = null
-    }
-  }
-  return results
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, OIResult]> => {
+      try {
+        const { chain, futurePrice } = await getOptionsChain(instrument)
+        const topCE = [...chain]
+          .sort((a, b) => b.CE.oi - a.CE.oi)
+          .slice(0, 5)
+          .map(r => ({ strike: r.strike, oi: r.CE.oi }))
+        const topPE = [...chain]
+          .sort((a, b) => b.PE.oi - a.PE.oi)
+          .slice(0, 5)
+          .map(r => ({ strike: r.strike, oi: r.PE.oi }))
+        return [instrument, { futurePrice, topCE, topPE }]
+      } catch {
+        return [instrument, null]
+      }
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 export default async function MCXOpenInterestPage() {
