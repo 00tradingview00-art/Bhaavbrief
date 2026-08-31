@@ -3,8 +3,11 @@ import type { Metadata } from 'next'
 import OptionChain from '@/components/mcx/OptionChain'
 import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getOptionsChain } from '@/lib/options'
+import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { safeJsonLd } from '@/lib/seo'
 import { notFound } from 'next/navigation'
+
+type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
 // NEAR_LIVE tier (config/revalidate.mjs) — matches the bare /options page this
 // route splits out from; lib/options is a LIVE_DATA_IMPORT_MARKERS entry so
@@ -116,7 +119,13 @@ export default async function OptionsCommodityPage({ params }: Props) {
   const meta = COMMODITY_META[commodity]
   if (!instrument || !meta) notFound()
 
-  const initialData = await getOptionsChain(instrument).catch(() => null)
+  const initialData = await getOptionsChain(instrument).catch(async () => {
+    // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
+    // last-known-good chain so the free-tier blurred preview shows real (if stale)
+    // strikes instead of degrading to all-dash placeholder rows.
+    const cached = await getCachedOptionsChain(instrument)
+    return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
+  })
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
