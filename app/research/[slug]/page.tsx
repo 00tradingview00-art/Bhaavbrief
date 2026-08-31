@@ -57,21 +57,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function getTeaserWords(content: string, wordLimit = 300): string {
-  const plainish = content
-    .replace(/---[\s\S]*?---/g, '')
-    .replace(/#{1,6}\s+/g, '')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/`[^`]+`/g, '')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/^>\s+/gm, '')
-    .replace(/\n{2,}/g, '\n\n')
-    .trim()
-
-  const words = plainish.split(/\s+/)
-  if (words.length <= wordLimit) return plainish
-  return words.slice(0, wordLimit).join(' ') + '…'
+// Splits the raw MDX source into a free "teaser" and a Pro-only "rest" —
+// at block boundaries (blank lines), never mid-syntax — so both halves
+// stay valid MDX and render through the same <MDXRemote> pipeline as the
+// full Pro article (real headings, bold, italics), instead of the teaser
+// being flattened to plain text. Previously getTeaserWords() stripped all
+// markdown to a single <p> before the word-count cut, which is why the
+// free view looked structurally different from the Pro view of the same
+// article — same content, but one properly formatted and one not.
+function splitMDXTeaser(content: string, wordLimit = 300): { teaser: string; rest: string } {
+  const blocks = content.trim().split(/\n{2,}/)
+  let wordCount = 0
+  let cut = blocks.length
+  for (let i = 0; i < blocks.length; i++) {
+    wordCount += blocks[i].split(/\s+/).filter(Boolean).length
+    if (wordCount >= wordLimit) { cut = i + 1; break }
+  }
+  return {
+    teaser: blocks.slice(0, cut).join('\n\n'),
+    rest:   blocks.slice(cut).join('\n\n'),
+  }
 }
 
 export default async function ResearchSlugPage({ params }: Props) {
@@ -166,19 +171,29 @@ export default async function ResearchSlugPage({ params }: Props) {
             <MDXRemote source={content} />
           </div>
         ) : (
-          <>
-            {/* Teaser: always server-rendered so Google can index it */}
-            <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, marginBottom: '1.5rem' }}>
-              <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 300)}</p>
-            </div>
+          (() => {
+            const { teaser, rest } = splitMDXTeaser(content, 300)
+            return (
+              <>
+                {/* Teaser: real MDX, same rendering as the Pro article — just
+                    the first ~300 words — always server-rendered so Google
+                    can index it. */}
+                <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, marginBottom: '1.5rem' }}>
+                  <MDXRemote source={teaser} />
+                </div>
 
-            {/* Paywall gate — blurred article text preview */}
-            <ProBlurGate isPro={isPro} label="Full analysis — strategy, levels, options positioning">
-              <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, maxHeight: 200, overflow: 'hidden' }}>
-                <p style={{ whiteSpace: 'pre-wrap' }}>{getTeaserWords(content, 500).split(' ').slice(300).join(' ')}</p>
-              </div>
-            </ProBlurGate>
-          </>
+                {/* Paywall gate — the real remaining article, blurred, not a
+                    fake/flattened placeholder. */}
+                {rest.trim().length > 0 && (
+                  <ProBlurGate isPro={isPro} label="Full analysis — strategy, levels, options positioning">
+                    <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, maxHeight: 260, overflow: 'hidden' }}>
+                      <MDXRemote source={rest} />
+                    </div>
+                  </ProBlurGate>
+                )}
+              </>
+            )
+          })()
         )}
 
         {/* Footer */}
