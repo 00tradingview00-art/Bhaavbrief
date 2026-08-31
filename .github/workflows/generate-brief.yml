@@ -53,11 +53,31 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/fetch-reel-insights.mjs
 
+      # Self-healing: kite-morning-auth.yml normally rolls expired instrument
+      # contracts before this job runs, but GitHub's `schedule` trigger is
+      # best-effort and has been observed 40-50 min late on a typical day and
+      # 11-12 hours late twice in one week (2026-08-27, 2026-08-28) — which
+      # left this step racing ahead of an unrolled contract. Rather than
+      # trying to tune cron timing against an unreliable scheduler, retry
+      # once here by rolling instruments ourselves on a failure.
       - name: Fetch market snapshot
         env:
           KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: node scripts/fetch-snapshot.mjs
+        run: |
+          if ! node scripts/fetch-snapshot.mjs; then
+            echo "Snapshot fetch failed — rolling instrument tokens and retrying once..."
+            node scripts/discover-instruments.mjs
+            node scripts/fetch-contract-specs.js
+            git config user.name "BhaavBrief Bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/kite-instruments.json data/contract-specs.json
+            if ! git diff --staged --quiet; then
+              git commit -m "chore: update MCX instrument tokens and contract specs $(date +'%d %b %Y')"
+              git push origin main
+            fi
+            node scripts/fetch-snapshot.mjs
+          fi
 
       - name: Generate brief MDX
         id: generate

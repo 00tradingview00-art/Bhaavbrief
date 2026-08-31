@@ -5,7 +5,9 @@
  * immediately on signup by lib/brevo.ts's sendWelcomeEmail).
  *
  *   Day 2: "how to read the brief in 3 minutes"
- *   Day 5: "the track record" (links to /track-record and /methodology)
+ *   Day 5: "the track record" (links to /methodology — the /track-record
+ *          page itself was removed 2026-08-31, too small a sample to show
+ *          publicly; the underlying resolve mechanic is unchanged)
  *
  * Runs daily. For each contact in the list whose SIGNUP_DATE attribute
  * (set by lib/brevo.ts addSubscriber) is exactly 2 or 5 days ago and who
@@ -120,10 +122,10 @@ const EMAIL_2 = {
 }
 
 const EMAIL_3 = {
-  subject: "BhaavBrief's track record — every call, resolved",
+  subject: "Every Edge of the Day call, resolved — how it works",
   html: wrap('Every Edge of the Day call, resolved', `
     <p style="font-size:14px;line-height:1.75;color:#48483A">Most market commentary makes a call and moves on. We don't — every "Edge of the Day" is a specific, falsifiable level, and the next morning's brief resolves it against the real closing price before writing anything new. Misses stay on the record; nothing gets quietly deleted.</p>
-    <a href="https://bhaavbrief.in/track-record" style="display:inline-block;margin-top:8px;background:#18180F;color:#FAFAF6;font-family:monospace;font-size:11px;letter-spacing:0.05em;padding:11px 20px;text-decoration:none">See the full track record →</a>
+    <a href="https://bhaavbrief.in/methodology" style="display:inline-block;margin-top:8px;background:#18180F;color:#FAFAF6;font-family:monospace;font-size:11px;letter-spacing:0.05em;padding:11px 20px;text-decoration:none">Read how it works →</a>
   `),
 }
 

@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 /**
  * scripts/send-edge-scoreboard.mjs — FIX-12 (D-16) weekly "Edge Scoreboard"
- * email: retention + track-record marketing in one, per the master doc.
+ * email: retention via the resolved-call record, per the master doc.
  * Summarizes the last 7 days of data/edge-ledger.json resolutions.
+ * (No longer links to a /track-record page — that public page was removed
+ * 2026-08-31 for showing an unconvincing record on too small a sample; the
+ * underlying Edge-of-the-Day call-and-resolve mechanic itself is unchanged.)
  *
  * Mirrors scripts/send-newsletter.js's Brevo campaign pattern (idempotent
  * campaign-by-name lookup before create+send, same env vars) rather than
@@ -76,7 +79,6 @@ function buildHtml(entries, weekLabel) {
     </div>
   </div>
   <table style="width:100%;border-collapse:collapse">${rows || '<tr><td style="padding:12px 0;color:#8A8A7A;font-size:13px">No calls resolved this week.</td></tr>'}</table>
-  <a href="https://bhaavbrief.in/track-record" style="display:inline-block;margin-top:24px;background:#18180F;color:#FAFAF6;font-family:monospace;font-size:11px;letter-spacing:0.05em;padding:11px 20px;text-decoration:none">See the full track record →</a>
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
     © 2026 BhaavBrief · bhaavbrief.in<br>
     For educational and informational purposes only. Not registered with SEBI or any regulatory authority. Nothing here constitutes investment advice.<br>

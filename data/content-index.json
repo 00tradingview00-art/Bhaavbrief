@@ -1,6 +1,46 @@
 [
   {
     "type": "brief",
+    "slug": "edition-096",
+    "href": "/briefs/edition-096",
+    "title": "Oil Jumps $1.73 While Gold Freezes — The War Premium Is Splitting",
+    "description": "WTI surges on fresh Middle East tension while gold sits flat, exposing a fracture in the geopolitical premium trade.",
+    "excerpt": "MCX Gold ₹156281 | Crude ₹7984 | USDINR ₹95.61 Yesterday's Edge — Result: Edition #95 watched whether COMEX GOLD would close above 4,640. Rejected ✗, now at 4,474. | Commodity | Global Price | USD/INR",
+    "date": "2026-08-31T03:19:24.810Z",
+    "edition": "96",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "article",
+    "slug": "2026-08-31-mcx-options-trading-beginners-guide",
+    "href": "/articles/2026-08-31-mcx-options-trading-beginners-guide",
+    "title": "MCX Options Trading for Beginners — A Step-by-Step India Guide",
+    "description": "Learn how to trade MCX options for beginners in India with this step-by-step guide covering mechanics, pricing, margin, and real market episodes.",
+    "excerpt": "Understanding how to trade MCX options for beginners in India starts with one core principle: an MCX option gives the holder the right — not the obligation — to buy or sell a commodity futures contrac",
+    "date": "2026-08-31",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "brief",
     "slug": "edition-095",
     "href": "/briefs/edition-095",
     "title": "Gold Falls Into a War While Oil Climbs — Something Doesn't Add Up",

@@ -1,5 +1,84 @@
 [
   {
+    "file": "brief-edition-096",
+    "topic": "Oil Jumps $1.73 While Gold Freezes — The War Premium Is Splitting",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Oil jumped ₹108 while gold stayed silent—here's the split",
+    "stat_line": "Same crisis. Two metals. Opposite moves.",
+    "payoff": "When crisis divides metals instead of uniting them, someone's reading the risk wrong.",
+    "beat1": "Crude climbed $1.73 overnight on Middle East supply fears—your fuel bill just got pressure before the next pump price reset.",
+    "beat2": "Gold froze at ₹1,56,281 despite geopolitical escalation—the safe-haven trade isn't working the way it historically should.",
+    "beat3": "Watch if gold breaks above ₹1,56,500 today. If it doesn't, the war premium has truly split.",
+    "instagram_id": "18131365399733063",
+    "generated_at": "2026-08-31T03:27:45.107Z",
+    "edition": 96,
+    "hi_path": "public/reels/brief-edition-096-hi.mp4",
+    "posted_at": "2026-08-31T03:29:06.073Z"
+  },
+  {
+    "file": "news-20260830-mcx-trading-hours-in-india",
+    "topic": "MCX Trading Hours in India",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold trade just died in the quiet hours—here's when.",
+    "stat_line": "12:00 PM to 4:30 PM IST: the graveyard shift.",
+    "payoff": "Trading during dead hours isn't brave. It's expensive.",
+    "beat1": "Between lunch and US market open, volume collapses. Your ₹1,56,400 gold position moves on fumes—spreads widen, slippage hits hard.",
+    "beat2": "Europe's asleep, America hasn't woken. MCX sits alone with thin liquidity and zero external price discovery happening.",
+    "beat3": "Wait for 7:00 PM onwards when COMEX gold, silver, and crude fire up simultaneously. That's when real volume returns.",
+    "instagram_id": "17886896964455292",
+    "generated_at": "2026-08-30T18:02:11.867Z",
+    "edition": null,
+    "posted_at": "2026-08-30T18:02:46.903Z"
+  },
+  {
+    "file": "news-20260829-mcx-futures-rollover",
+    "topic": "MCX Futures Rollover",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your gold contract expires in 10 days. You haven't rolled it yet.",
+    "stat_line": "Roll 5–7 days before expiry or lose ₹1,56,400 to delivery.",
+    "payoff": "Smallest rollover costs ₹0. Biggest rollover cost is your entire account frozen.",
+    "beat1": "Rollover means selling your expiring contract and buying next month instantly—without ever touching physical gold or your full account balance.",
+    "beat2": "The gap between near-month and next-month price is your actual rollover cost—sometimes ₹500, sometimes ₹5,000 per lot depending on contango.",
+    "beat3": "For gold, roll by the 2nd–3rd of expiry month. Miss it, and you settle physical delivery—full KYC, full payment demanded.",
+    "instagram_id": "18208735297362235",
+    "generated_at": "2026-08-29T17:39:39.427Z",
+    "edition": null,
+    "posted_at": "2026-08-29T17:40:24.165Z",
+    "insights": {
+      "views": 144,
+      "reach": 137,
+      "ig_reels_avg_watch_time": 1503,
+      "ig_reels_video_view_total_time": 207545,
+      "fetched_at": "2026-08-31T03:19:21.833Z"
+    }
+  },
+  {
+    "file": "news-20260828-mcx-order-types-explained",
+    "topic": "MCX Order Types Explained",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your stop loss order just failed silently—here's why.",
+    "stat_line": "Four order types. One wrong choice costs real money.",
+    "payoff": "Fastest order type doesn't mean safest. It means it actually executes when you need it to.",
+    "beat1": "Most traders place stop losses wrong—on the buying side when they're already long, locking them into the trade instead of out of it.",
+    "beat2": "MCX's four order types—Market, Limit, SL, SL-M—each behave differently when price gaps against you or market closes early.",
+    "beat3": "SL-M (Stop Loss Market) only needs trigger price; fills instantly once hit. SL needs trigger AND limit price—may never fill if market gaps.",
+    "instagram_id": "18114460202053903",
+    "generated_at": "2026-08-28T23:33:20.262Z",
+    "edition": null,
+    "posted_at": "2026-08-28T23:34:01.290Z",
+    "insights": {
+      "views": 34,
+      "reach": 30,
+      "ig_reels_avg_watch_time": 2782,
+      "ig_reels_video_view_total_time": 86261,
+      "fetched_at": "2026-08-30T05:05:24.352Z"
+    }
+  },
+  {
     "file": "news-20260828-fed-chair-kevin-warsh-s-first-jackson-hole-s",
     "topic": "Fed Chair Kevin Warsh's first Jackson Hole speech",
     "content_type": "macro_trend",
@@ -13,7 +92,14 @@
     "instagram_id": "18130567192673126",
     "generated_at": "2026-08-28T15:05:58.089Z",
     "edition": null,
-    "posted_at": "2026-08-28T15:07:08.074Z"
+    "posted_at": "2026-08-28T15:07:08.074Z",
+    "insights": {
+      "views": 21,
+      "reach": 19,
+      "ig_reels_avg_watch_time": 6144,
+      "ig_reels_video_view_total_time": 122893,
+      "fetched_at": "2026-08-30T05:05:24.887Z"
+    }
   },
   {
     "file": "brief-edition-095",
@@ -29,7 +115,14 @@
     "instagram_id": "17929164495402252",
     "generated_at": "2026-08-28T03:43:17.427Z",
     "edition": 95,
-    "posted_at": "2026-08-28T03:44:00.562Z"
+    "posted_at": "2026-08-28T03:44:00.562Z",
+    "insights": {
+      "views": 32,
+      "reach": 29,
+      "ig_reels_avg_watch_time": 4662,
+      "ig_reels_video_view_total_time": 135223,
+      "fetched_at": "2026-08-29T06:32:03.956Z"
+    }
   },
   {
     "file": "news-20260827-mcx-margin-calculator",
@@ -45,7 +138,14 @@
     "instagram_id": "17900743179354058",
     "generated_at": "2026-08-27T23:43:53.079Z",
     "edition": null,
-    "posted_at": "2026-08-27T23:44:41.893Z"
+    "posted_at": "2026-08-27T23:44:41.893Z",
+    "insights": {
+      "views": 39,
+      "reach": 33,
+      "ig_reels_avg_watch_time": 1866,
+      "ig_reels_video_view_total_time": 65312,
+      "fetched_at": "2026-08-29T06:32:04.531Z"
+    }
   },
   {
     "file": "news-20260826-mcx-margin-calculation",

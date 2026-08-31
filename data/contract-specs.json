@@ -37,8 +37,8 @@
   },
   "copper": {
     "name": "COPPER",
-    "tradingsymbol": "COPPER26AUGFUT",
-    "expiry": "2026-08-31",
+    "tradingsymbol": "COPPER26SEPFUT",
+    "expiry": "2026-09-30",
     "contractSize": 2500,
     "contractSizeStr": "2.5 MT (2500 kg)",
     "priceQuote": "per kg",

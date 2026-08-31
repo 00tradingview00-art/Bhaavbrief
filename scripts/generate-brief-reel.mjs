@@ -299,7 +299,11 @@ async function generateVoiceover(script, outputPath) {
 // ── Hindi reel variant ────────────────────────────────────────────────────────
 async function generateHindiVariant(copy, padded, filePrefix, musicPath, framesDir, dur) {
   const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-  const hindiVoiceId = process.env.ELEVENLABS_HINDI_VOICE_ID ?? 'XB0fDUnXU5powFXDhCwa'
+  // Sarah — soft, mature, reassuring female voice (same as the English reel);
+  // eleven_multilingual_v2 carries her timbre into Hindi. || (not ??) so an
+  // empty ELEVENLABS_HINDI_VOICE_ID secret (GitHub Actions injects unset
+  // secrets as "", not undefined) still falls back to this default.
+  const hindiVoiceId = process.env.ELEVENLABS_HINDI_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
 
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
   console.log('  🇮🇳  Generating Hindi variant...')
