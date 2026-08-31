@@ -99,6 +99,7 @@ export default function ProPage() {
             label="Monthly"
             price="₹333"
             sub="/month"
+            note="Save ₹657 — ₹11/day"
             cta="Start Monthly"
           />
           <PricingCard
@@ -206,8 +207,8 @@ function PricingCard({
       <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--ink-3)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
         {label}
       </div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
-        {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '1rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
+        {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
       </div>
       {note && <div style={{ fontSize: '0.85rem', color: 'var(--up)', marginBottom: '1rem', fontWeight: 500 }}>{note}</div>}
       <ProCheckout plan={plan} cta={cta} />
