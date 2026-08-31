@@ -6,7 +6,7 @@ import {
   AreaChart, Area,
 } from 'recharts'
 import {
-  computePayoff, computeNetGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
+  computePayoff, computeNetGreeks, computeLegGreeks, computeBreakevens, computeMaxProfitLoss, computeNetCost,
   computeExpectedMoveCone, computeProbOfProfit,
   type Leg, type SavedStrategy, type PayoffPoint, type Action,
 } from '@/lib/strategy'
@@ -1251,11 +1251,19 @@ export default function StrategyBuilder({
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Entry</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>IV%</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Qty</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Delta</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Gamma</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Theta</th>
+                    <th style={{ padding: '5px 8px', textAlign: 'right' }}>Vega</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {legs.map((leg, i) => (
+                  {legs.map((leg, i) => {
+                    const legGreeks = futurePrice > 0 && T > 0
+                      ? computeLegGreeks(leg, futurePrice, T, r, lotSize, currentIV)
+                      : null
+                    return (
                     <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
                       <td style={{ padding: '5px 8px' }}>
                         <button onClick={() => toggleAction(i)}
@@ -1311,6 +1319,18 @@ export default function StrategyBuilder({
                           onChange={e => updateQty(i, parseInt(e.target.value) || 1)}
                           style={{ width: 48, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.delta, 2) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.gamma, 4) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.theta, 2) : '—'}
+                      </td>
+                      <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
+                        {legGreeks ? fmtGreek(legGreeks.vega, 2) : '—'}
+                      </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <button onClick={() => removeLeg(i)}
                           style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-2, #3A3830)', fontSize: 16 }}>
@@ -1318,7 +1338,8 @@ export default function StrategyBuilder({
                         </button>
                       </td>
                     </tr>
-                  ))}
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
