@@ -1,5 +1,29 @@
 [
   {
+    "type": "research",
+    "slug": "2026-09-01-gold-silver-basis-divergence",
+    "href": "/research/2026-09-01-gold-silver-basis-divergence",
+    "title": "Gold's MCX Premium Is Steady, Silver's Just Compressed 4 Points — What That Split Means",
+    "description": "MCX Gold's import-parity premium has held near 12.7% for 30 days while Silver's collapsed from 17.6% to 13.9% in the same window. A real divergence in the two metals' COMEX relationship, with live options positioning notes.",
+    "excerpt": "MCX Gold's import-parity premium over COMEX — the \"basis,\" computed from live MCX price vs. COMEX spot converted through USD/INR — has held remarkably steady at a 12.72% average over the past 30 real ",
+    "date": "2026-09-01",
+    "edition": "macro-research",
+    "tags": [
+      "gold",
+      "silver",
+      "basis",
+      "comex",
+      "rupee",
+      "macro-event"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "article",
     "slug": "2026-08-31-mcx-crude-surges-2-99-to-8231-on-refinery-maintenance-fade",
     "href": "/articles/2026-08-31-mcx-crude-surges-2-99-to-8231-on-refinery-maintenance-fade",
@@ -60,6 +84,30 @@
       "options"
     ],
     "priceAtPublish": 0
+  },
+  {
+    "type": "research",
+    "slug": "2026-08-31-jackson-hole",
+    "href": "/research/2026-08-31-jackson-hole",
+    "title": "Jackson Hole Symposium — MCX Commodity Implications",
+    "description": "MCX-specific analysis of the Jackson Hole Symposium: implications for gold, silver, crude with live options chain data and actionable strategy notes.",
+    "excerpt": "The Fed chair delivered the annual policy address at the Jackson Hole Symposium on 28 August 2026. Three sessions later, as of the 31 August evening IST session, MCX Gold futures are at ₹1,54,456 with",
+    "date": "2026-08-31",
+    "edition": "macro-research",
+    "tags": [
+      "jackson-hole",
+      "gold",
+      "silver",
+      "crude",
+      "macro-event"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver",
+      "crude"
+    ],
+    "premium": true
   },
   {
     "type": "brief",
