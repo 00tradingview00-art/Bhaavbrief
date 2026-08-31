@@ -134,13 +134,20 @@ export async function createCashfreeSubscription(
   return json as CashfreeSubscriptionResponse
 }
 
-/** Verify Cashfree subscription webhook: HMAC-SHA256(timestamp + rawBody) → Base64 */
+/**
+ * Verify Cashfree subscription webhook: HMAC-SHA256(timestamp + rawBody) → Base64.
+ * Cashfree has no separate webhook secret — the dashboard's webhook setup is just a
+ * URL field. Signing uses the same Client Secret issued for API auth (confirmed
+ * against Cashfree's own docs, whose signature-verification code example names the
+ * HMAC key "<client-secret>"), so this reads CASHFREE_CLIENT_SECRET, not a
+ * CASHFREE_WEBHOOK_SECRET that doesn't exist.
+ */
 export function verifyCashfreeWebhookSignature(
   rawBody: Buffer,
   signature: string | null,
   timestamp: string | null,
 ): boolean {
-  const secret = process.env.CASHFREE_WEBHOOK_SECRET
+  const secret = process.env.CASHFREE_CLIENT_SECRET
   if (!secret || !signature || !timestamp) return false
   const expected = createHmac('sha256', secret)
     .update(timestamp + rawBody.toString('utf8'))

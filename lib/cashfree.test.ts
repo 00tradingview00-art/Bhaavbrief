@@ -36,7 +36,7 @@ describe('planAmountInr', () => {
 describe('verifyCashfreeWebhookSignature', () => {
   const prev = { ...process.env }
   beforeEach(() => {
-    process.env.CASHFREE_WEBHOOK_SECRET = 'test_secret'
+    process.env.CASHFREE_CLIENT_SECRET = 'test_secret'
   })
   afterEach(() => {
     process.env = { ...prev }
