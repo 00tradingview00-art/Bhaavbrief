@@ -81,7 +81,7 @@ function EventCard({
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
         <Pill tone={tierTone} size="xs">{event.impact_tier}</Pill>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
           {formatIST(event.next_release_utc)}
         </span>
       </div>
@@ -95,7 +95,7 @@ function EventCard({
       </p>
 
       {prior && (
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)', marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2)', marginBottom: 8 }}>
           {prior}
         </div>
       )}
@@ -105,11 +105,11 @@ function EventCard({
           background: 'var(--surface-2)', borderLeft: '2px solid var(--border)',
           padding: '8px 10px', marginBottom: 8, borderRadius: '0 4px 4px 0',
         }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 9, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
             Historical reaction
           </div>
           {impactLines.map((line, i) => (
-            <div key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: 10.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>
+            <div key={i} style={{ fontFamily: 'var(--font-sans)', fontSize: 10.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>
               {line}
             </div>
           ))}
