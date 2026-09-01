@@ -119,7 +119,7 @@ export default function Page() {
   const goldStdMarginHi  = Math.round(goldStdCV * 0.085 / 1000) * 1000
 
   const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
-  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
+  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-sans)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const greenText: React.CSSProperties = { color: '#1A7A1A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
@@ -134,7 +134,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -145,7 +145,7 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           MCX Gold vs Gold ETF India 2026: Which Is Better For You?
         </h1>
-        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
+        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
           MCX Gold at <strong style={{ color: '#18180F' }}>₹{fmt(p.gold)}/10g</strong> · {p.snapshotDate} · Covers Budget 2024 LTCG change
         </p>
 
@@ -194,9 +194,9 @@ export default function Page() {
 
         {/* Live capital comparison */}
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Capital required — live numbers at ₹{fmt(p.gold)}/10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Capital required — live numbers at ₹{fmt(p.gold)}/10g</div>
           <div style={{ overflowX: 'auto' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2.2, color: '#18180F', minWidth: 300 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2.2, color: '#18180F', minWidth: 300 }}>
             MCX Gold Standard (1 kg):<br />
             {'  '}Contract value: {fmtValue(goldStdCV)}<br />
             {'  '}Margin needed:  ₹{fmt(goldStdMarginLo)} – ₹{fmt(goldStdMarginHi)}<br />
@@ -244,7 +244,7 @@ export default function Page() {
           </table>
         </div>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Budget 2024 Gold ETF change — what changed</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Budget 2024 Gold ETF change — what changed</div>
           <p style={{ margin: '0 0 10px', fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             <strong>Before Budget 2024 (pre July 2024):</strong> Gold ETF had a 3-year LTCG holding period at 20% with indexation benefit.<br /><br />
             <strong>After Budget 2024 (from July 23, 2024):</strong> Gold ETF now qualifies for LTCG at <strong>12.5% after just 12 months</strong> — no indexation. The shorter holding period and lower rate make Gold ETF significantly more tax-efficient for medium-term investors.
@@ -399,7 +399,7 @@ export default function Page() {
 
         {/* Cross-links */}
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
-          <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
+          <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>← Learn hub</Link>
             <Link href="/learn/mcx-gold-contracts" style={{ fontSize: 15, color: '#18180F', textDecoration: 'none', border: '0.5px solid #DDDDD0', padding: '8px 14px' }}>MCX Gold contracts →</Link>
@@ -413,7 +413,7 @@ export default function Page() {
           <SubscribeForm location="learn_gold-etf-vs-mcx-gold" />
         </div>
 
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Last updated {p.snapshotDate}
         </p>
       </div>

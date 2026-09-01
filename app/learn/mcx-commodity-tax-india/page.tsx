@@ -134,7 +134,7 @@ export default function Page() {
   const traderTax30    = Math.round(traderTaxable * 0.30)
 
   const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
-  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
+  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-sans)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
   const infoBox: React.CSSProperties = { background: '#F8F7F2', borderLeft: '3px solid #C8720A', padding: '16px 20px', marginBottom: 24, borderRadius: '0 4px 4px 0' }
@@ -149,7 +149,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -160,7 +160,7 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           MCX Commodity Trading Tax in India 2026: Complete Guide
         </h1>
-        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
+        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
           Covers ITR-3 filing · CTT deduction · Turnover calculation · Audit threshold · Loss carry forward
         </p>
 
@@ -192,7 +192,7 @@ export default function Page() {
                   <td style={cell}>{rate}</td>
                   <td style={{ ...cell, fontSize: 12, color: '#8A8A7A' }}>{offset}</td>
                   <td style={cell}>{cf}</td>
-                  <td style={{ ...cell, fontFamily: 'var(--font-mono)', fontSize: 12 }}>{itr}</td>
+                  <td style={{ ...cell, fontFamily: 'var(--font-sans)', fontSize: 12 }}>{itr}</td>
                 </tr>
               ))}
             </tbody>
@@ -208,7 +208,7 @@ export default function Page() {
           Section 43(5) of the Income Tax Act governs the classification of trading activity. MCX commodity futures are explicitly carved out as <strong>non-speculative transactions</strong> — which means they are treated as business income, not capital gains and not speculative income.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Why &quot;non-speculative&quot; matters</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Why &quot;non-speculative&quot; matters</div>
           <p style={{ margin: '0 0 10px', fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             The non-speculative classification is more favourable than speculative (which would limit loss offsets to speculative income only for 4 years). Non-speculative business losses can be set off against any other non-speculative business income in the current year, and carried forward for 8 years.
           </p>
@@ -242,7 +242,7 @@ export default function Page() {
                 ['Tax Audit Report (3CA/3CB + 3CD)', 'Required if audit triggered — filed by CA', 'All trading and bank records'],
               ].map(([sched, what, docs], i) => (
                 <tr key={i}>
-                  <td style={{ ...cell, fontFamily: 'var(--font-mono)', fontSize: 12, color: '#C8720A' }}>{sched}</td>
+                  <td style={{ ...cell, fontFamily: 'var(--font-sans)', fontSize: 12, color: '#C8720A' }}>{sched}</td>
                   <td style={{ ...cell, fontSize: 13 }}>{what}</td>
                   <td style={{ ...cell, fontSize: 12, color: '#8A8A7A' }}>{docs}</td>
                 </tr>
@@ -251,7 +251,7 @@ export default function Page() {
           </table>
         </div>
         <div style={warnBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#E05C00', marginBottom: 8 }}>Deadline — do not miss</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#E05C00', marginBottom: 8 }}>Deadline — do not miss</div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             <strong>31 July</strong> — ITR-3 due date for traders not requiring a tax audit.<br />
             <strong>31 October</strong> — Extended due date for traders requiring a tax audit (audit report must be filed by 30 September).<br /><br />
@@ -264,7 +264,7 @@ export default function Page() {
         <p style={prose}>
           Turnover for MCX trading — as per ICAI guidance — is the <strong>absolute sum of all profits and all losses</strong> across every trade during the financial year. It is not gross receipts (sell value), and it is not net profit.
         </p>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2, color: '#18180F' }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', marginBottom: 24, fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2, color: '#18180F' }}>
           Trade 1: +₹45,000 profit<br />
           Trade 2: −₹28,000 loss<br />
           Trade 3: +₹12,000 profit<br />
@@ -308,7 +308,7 @@ export default function Page() {
           The 6% rule catches many traders off guard. If your turnover is ₹50 lakh and you declare a net profit of ₹2 lakh (4% of turnover), a tax audit is required even though your turnover is modest. The 6% presumptive profit threshold was originally designed for businesses, and its application to commodity traders is a common source of unexpected audit obligations.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Practical implication</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Practical implication</div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             If you have a loss year, file ITR-3 with the loss declared <em>and</em> arrange a tax audit. The cost of a CA for an audit (typically ₹5,000–₹20,000 for small traders) is worth it to preserve the 8-year loss carry forward — which can offset future profitable years&apos; income.
           </p>
@@ -408,7 +408,7 @@ export default function Page() {
           CTT at current prices: Gold ₹{fmt(p.gold)}/10g · Crude ₹{fmt(p.crude)}/bbl as of {p.snapshotDate}. CTT is only on sell trades, not buys — one round trip = one CTT payment.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>CTT deductibility — how to claim it</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>CTT deductibility — how to claim it</div>
           <p style={{ margin: '0 0 10px', fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             CTT is deductible as a business expense under Section 36(1)(xv) of the Income Tax Act — just like STT is deductible for equity traders. Your broker&apos;s annual contract note summary or P&L statement shows total CTT paid for the year.
           </p>
@@ -441,7 +441,7 @@ export default function Page() {
               ].map(([charge, rate, on, ded], i) => (
                 <tr key={i}>
                   <td style={cell}><strong>{charge}</strong></td>
-                  <td style={{ ...cell, fontFamily: 'var(--font-mono)', fontSize: 12 }}>{rate}</td>
+                  <td style={{ ...cell, fontFamily: 'var(--font-sans)', fontSize: 12 }}>{rate}</td>
                   <td style={{ ...cell, fontSize: 12, color: '#8A8A7A' }}>{on}</td>
                   <td style={{ ...cell, color: ded.startsWith('Yes') ? '#1A7A1A' : '#8A8A7A', fontWeight: ded.startsWith('Yes') ? 500 : 400 }}>{ded}</td>
                 </tr>
@@ -509,7 +509,7 @@ export default function Page() {
               ].map(([inst, due, pct, interest], i) => (
                 <tr key={i}>
                   <td style={cell}>{inst}</td>
-                  <td style={{ ...cell, fontFamily: 'var(--font-mono)', fontSize: 12 }}>{due}</td>
+                  <td style={{ ...cell, fontFamily: 'var(--font-sans)', fontSize: 12 }}>{due}</td>
                   <td style={{ ...cell, ...accent }}>{pct}</td>
                   <td style={{ ...cell, fontSize: 12, color: '#8A8A7A' }}>{interest}</td>
                 </tr>
@@ -518,7 +518,7 @@ export default function Page() {
           </table>
         </div>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Commodity trading advance tax challenge</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Commodity trading advance tax challenge</div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             Commodity trading income is inherently lumpy and unpredictable. A trader who earns ₹10 lakh in Q1 but breaks even for the rest of the year may have over-paid advance tax. You can revise your advance tax estimate each quarter — pay what you realistically expect to owe, not a fixed proportion of early profits. Any excess advance tax is refunded (with interest at 6% p.a. under Section 244A).
           </p>
@@ -530,7 +530,7 @@ export default function Page() {
           Here is a complete tax calculation for a typical retail MCX trader in FY 2025-26.
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '20px 24px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2.1, color: '#18180F', minWidth: 360 }}>
+        <div style={{ background: '#F3F2EC', padding: '20px 24px', fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2.1, color: '#18180F', minWidth: 360 }}>
           <div style={{ marginBottom: 12, fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600 }}>Trader profile: Salaried (₹18L/year) + MCX trading on the side</div>
           <strong>Gross trading profits (all winning trades):</strong>  ₹{fmt(traderProfits)}<br />
           <strong>Gross trading losses (all losing trades):</strong>    ₹{fmt(traderLosses)}<br />
@@ -602,7 +602,7 @@ export default function Page() {
 
         {/* Cross-links */}
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
-          <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
+          <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
@@ -629,7 +629,7 @@ export default function Page() {
           <SubscribeForm location="learn_mcx-commodity-tax-india" />
         </div>
 
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Last updated {p.snapshotDate}
         </p>
       </div>

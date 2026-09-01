@@ -139,7 +139,7 @@ export default function Page() {
   const tickValuePetal  = 0.1
 
   const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
-  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
+  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-sans)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
   const infoBox: React.CSSProperties = { background: '#F8F7F2', borderLeft: '3px solid #C8720A', padding: '16px 20px', marginBottom: 24, borderRadius: '0 4px 4px 0' }
@@ -153,7 +153,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -164,7 +164,7 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           MCX Gold Contracts 2026: Standard, Mini, Guinea &amp; Petal Guide
         </h1>
-        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
+        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
           MCX Gold at <strong style={{ color: '#18180F' }}>₹{fmt(p.gold)}/10g</strong> · {p.snapshotDate} · Updated on every deploy
         </p>
 
@@ -225,7 +225,7 @@ export default function Page() {
 
         {/* Live callout */}
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Live — MCX Gold at ₹{fmt(p.gold)}/10g as of {p.snapshotDate}</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Live — MCX Gold at ₹{fmt(p.gold)}/10g as of {p.snapshotDate}</div>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li>Gold Standard (1 kg) = <strong>{fmtValue(goldStd)}</strong> contract value · margin ≈ {marginRange(goldStd)}</li>
             <li>Gold Mini (100g) = <strong>{fmtValue(goldMini)}</strong> contract value · margin ≈ {marginRange(goldMini)}</li>
@@ -240,7 +240,7 @@ export default function Page() {
           The Gold Standard is MCX&apos;s flagship contract and the benchmark for Indian gold price discovery. At ₹{fmt(p.gold)}/10g, one lot controls <strong>{fmtValue(goldStd)}</strong> of gold — equivalent to 1 kilogram of physical 995-purity gold. It accounts for the bulk of MCX gold&apos;s open interest and volume, driven by large traders, proprietary desks, and institutions.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Standard — key numbers at ₹{fmt(p.gold)}/10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Standard — key numbers at ₹{fmt(p.gold)}/10g</div>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li><strong>Contract value:</strong> {fmtValue(goldStd)}</li>
             <li><strong>Total margin:</strong> {marginRange(goldStd)}</li>
@@ -259,7 +259,7 @@ export default function Page() {
           Gold Mini is the most actively traded MCX gold contract by number of retail participants. Its 100-gram lot size means a contract value of <strong>{fmtValue(goldMini)}</strong> at current prices — one-tenth of the Standard, with proportionally lower margin and P&amp;L per move.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Mini — key numbers at ₹{fmt(p.gold)}/10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Mini — key numbers at ₹{fmt(p.gold)}/10g</div>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li><strong>Contract value:</strong> {fmtValue(goldMini)}</li>
             <li><strong>Total margin:</strong> {marginRange(goldMini)}</li>
@@ -273,7 +273,7 @@ export default function Page() {
           Gold Mini and Gold Standard expire on the same date and track prices in lockstep. The only meaningful difference is size. A trader with ₹5 lakh in their commodity account can comfortably trade 3–4 Gold Mini lots while maintaining a 30% margin buffer — versus being limited to less than 1 Standard lot.
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2, color: '#18180F', minWidth: 300 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2, color: '#18180F', minWidth: 300 }}>
           Example: Buy 1 Gold Mini at ₹{fmt(p.gold)}/10g<br />
           Contract value = ₹{fmt(p.gold)} × 10 = <strong>{fmtValue(goldMini)}</strong><br />
           Margin (at ~7%) = <strong>₹{fmt(Math.round(goldMini * 0.07))}</strong><br />
@@ -289,7 +289,7 @@ export default function Page() {
           Gold Guinea is an 8-gram contract — a nod to the traditional gold coin denomination. At current prices, one lot controls <strong>{fmtValue(goldGuinea)}</strong> of gold and requires only approximately {marginRange(goldGuinea)} in total margin. It is primarily used by small jewellers hedging specific customer orders rather than by active traders.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Guinea — key numbers at ₹{fmt(p.gold)}/10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Guinea — key numbers at ₹{fmt(p.gold)}/10g</div>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li><strong>Lot size:</strong> 8 grams (quoted in ₹ per 8g, not per 10g)</li>
             <li><strong>Contract value:</strong> {fmtValue(goldGuinea)}</li>
@@ -308,7 +308,7 @@ export default function Page() {
           Gold Petal is MCX&apos;s micro contract — a single gram of gold. At ₹{fmt(p.gold)}/10g, the Petal&apos;s contract value is <strong>{fmtValue(goldPetal)}</strong> and margin is approximately {marginRange(goldPetal)}. Its P&amp;L is ₹{tickValuePetal} per tick — meaning even a ₹1,000/10g gold move earns or loses only ₹{fmt(tickValuePetal * 1000)}.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Petal — use cases</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Gold Petal — use cases</div>
           <p style={{ margin: '0 0 8px', fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             <strong>Jeweller micro-hedging:</strong> A jeweller with a 10g customer order can sell 10 Petal lots to hedge the exact quantity — without tying up capital in a full Mini lot (100g).
           </p>
@@ -339,7 +339,7 @@ export default function Page() {
                 <tr key={i}>
                   <td style={cell}><strong>{contract}</strong></td>
                   <td style={cell}>{rule}</td>
-                  <td style={{ ...cell, fontFamily: 'var(--font-mono)', fontSize: 12 }}>{example}</td>
+                  <td style={{ ...cell, fontFamily: 'var(--font-sans)', fontSize: 12 }}>{example}</td>
                   <td style={{ ...cell, fontSize: 12, color: '#8A8A7A' }}>{happens}</td>
                 </tr>
               ))}
@@ -384,7 +384,7 @@ export default function Page() {
           Physical delivery is available on all four gold contracts but is compulsory only if you hold an open position at expiry without squaring off. Here&apos;s how it works:
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Delivery process</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Delivery process</div>
           <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li><strong>Intention to deliver:</strong> Both buyer and seller must file delivery intentions with MCX via their broker 2–3 days before expiry.</li>
             <li><strong>Delivery unit:</strong> 995 purity LBMA-approved gold bars in standard vault locations (Ahmedabad, Mumbai, Delhi).</li>
@@ -414,7 +414,7 @@ export default function Page() {
 
         {/* Cross-links */}
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
-          <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
+          <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
@@ -435,10 +435,10 @@ export default function Page() {
           <SubscribeForm location="learn_mcx-gold-contracts" />
         </div>
 
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Data auto-updated with every site deploy from live MCX feed · Last updated {p.snapshotDate}
         </p>
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', lineHeight: 1.6 }}>
           Prices are indicative. Verify live margins on your broker&apos;s SPAN calculator before trading. Trading commodity futures involves significant risk of loss.
         </p>
       </div>

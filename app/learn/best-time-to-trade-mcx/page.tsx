@@ -87,7 +87,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -125,21 +125,21 @@ export default function Page() {
             <tbody>
               <tr>
                 <td style={td}><strong>Morning</strong></td>
-                <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13 }}>9:00 AM – 1:30 PM</td>
+                <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13 }}>9:00 AM – 1:30 PM</td>
                 <td style={td}>Low–Medium</td>
                 <td style={td}>London open (1:30 PM), Asian carry-over</td>
                 <td style={td}>Beginners, range trading, low-risk exposure</td>
               </tr>
               <tr style={{ background: '#FAFAF7' }}>
                 <td style={td}><strong>Afternoon</strong></td>
-                <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13 }}>1:30 PM – 6:30 PM</td>
+                <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13 }}>1:30 PM – 6:30 PM</td>
                 <td style={td}>Medium</td>
                 <td style={td}>London session, LME metals close (3:15 PM), base metal settlements</td>
                 <td style={td}>Copper, Zinc, Aluminium, Lead trades</td>
               </tr>
               <tr>
                 <td style={td}><strong>Evening (Power Session)</strong></td>
-                <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13 }}>6:30 PM – 11:30 PM</td>
+                <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13 }}>6:30 PM – 11:30 PM</td>
                 <td style={td}><strong>High</strong></td>
                 <td style={td}>COMEX/NYMEX open, US data, Fed commentary</td>
                 <td style={td}>Gold, Silver, Crude — maximum liquidity and movement</td>
@@ -204,7 +204,7 @@ export default function Page() {
               ].map((r, i) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? 'white' : '#FAFAF7' }}>
                   <td style={{ ...td, fontWeight: 500 }}>{r.day}</td>
-                  <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13, color: '#C8720A' }}>{r.time}</td>
+                  <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13, color: '#C8720A' }}>{r.time}</td>
                   <td style={td}>{r.event}</td>
                   <td style={{ ...td, color: '#48483A' }}>{r.impact}</td>
                 </tr>
