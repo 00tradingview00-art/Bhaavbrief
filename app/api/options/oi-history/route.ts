@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import { MCX_INSTRUMENTS } from '@/lib/options'
+import { getOIHistory } from '@/lib/oiHistory'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -49,27 +50,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Collect oi-snap:{instrument}:{date} keys — scan the last 90 days
-    const history: { date: string; ceOI: number; peOI: number }[] = []
-    const today = new Date()
-
-    for (let i = 0; i < 90; i++) {
-      const d = new Date(today)
-      d.setDate(d.getDate() - i)
-      const dateStr = d.toISOString().slice(0, 10)
-      const key = `oi-snap:${instrument}:${dateStr}`
-      const raw = await redisCommand('get', key) as string | null
-      if (!raw) continue
-      try {
-        const { chain } = JSON.parse(raw) as { expiry: string; chain: { strike: number; ceOI: number; peOI: number }[] }
-        const row = chain.find(r => r.strike === strike)
-        if (row) history.push({ date: dateStr, ceOI: row.ceOI, peOI: row.peOI })
-      } catch {
-        // skip malformed entries
-      }
-    }
-
-    history.sort((a, b) => a.date.localeCompare(b.date))
+    const history = await getOIHistory(instrument, strike)
 
     // Non-Pro requests get a real (not fabricated) but short preview — the
     // last 5 days only — so the free-tier teaser is honest data, not a fake

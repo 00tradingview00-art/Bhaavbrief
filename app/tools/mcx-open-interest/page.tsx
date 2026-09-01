@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
+import { getOIHistory } from '@/lib/oiHistory'
 import OIBuildupSection from './OIBuildupSection'
 
 export const revalidate = 60
@@ -52,6 +53,18 @@ export default async function MCXOpenInterestPage() {
     return { key, label: meta.label, strikes }
   })
 
+  // Server-seed OIBuildupSection's default (instrument, strike) selection —
+  // same pair it would otherwise only resolve after a client-side fetch —
+  // so the OI Buildup chart is present in the initial HTML.
+  const defaultBuildup = buildupInstruments.find(i => i.strikes.length > 0)
+  const defaultStrike  = defaultBuildup?.strikes[0] ?? null
+  const initialOIHistory = defaultBuildup && defaultStrike != null
+    ? await getOIHistory(defaultBuildup.key, defaultStrike).catch(() => [])
+    : undefined
+  const initialOIData = initialOIHistory
+    ? { instrument: defaultBuildup!.key, strike: defaultStrike!, history: isPro ? initialOIHistory : initialOIHistory.slice(-5), preview: !isPro }
+    : undefined
+
   return (
     <main style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
@@ -96,7 +109,7 @@ export default async function MCXOpenInterestPage() {
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>OI Buildup History — by Strike</h2>
-        <OIBuildupSection instruments={buildupInstruments} isPro={isPro} />
+        <OIBuildupSection instruments={buildupInstruments} isPro={isPro} initialOIData={initialOIData} />
       </section>
     </main>
   )

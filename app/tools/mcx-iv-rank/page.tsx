@@ -4,6 +4,8 @@ import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
+import { getCachedOptionsChain } from '@/lib/optionsChainCache'
+import { getOIHistory } from '@/lib/oiHistory'
 import Link from 'next/link'
 import VolatilityHub from './VolatilityHub'
 import IVRankHistoryChart from './IVRankHistoryChart'
@@ -80,11 +82,46 @@ function regimeColor(regime: string | undefined): string {
   return 'var(--ink-3)'
 }
 
+interface VolatilityChainRow {
+  strike: number
+  isATM?: boolean
+  CE: { iv: number | null; tier: string }
+  PE: { iv: number | null; tier: string }
+}
+
+// Server-seeds VolatilityHub's default-instrument view (IV Skew chart + OI
+// Buildup chart) so it's present in the initial HTML instead of appearing
+// only after a client-side fetch — mirrors app/options/page.tsx's
+// getOptionsChain()/getCachedOptionsChain() → initialData prop pattern.
+async function getDefaultVolatilityData(instrument: string, isPro: boolean) {
+  const chainResult = await getOptionsChain(instrument).catch(async () => {
+    const cached = await getCachedOptionsChain(instrument)
+    return cached as { chain: VolatilityChainRow[] } | null
+  })
+  const chain = (chainResult?.chain ?? null) as VolatilityChainRow[] | null
+  const atmStrike = chain?.find(r => r.isATM)?.strike ?? null
+
+  if (!chain || atmStrike == null) {
+    return { initialChain: chain, initialOIHistory: undefined, initialPreview: undefined }
+  }
+
+  const history = await getOIHistory(instrument, atmStrike).catch(() => [])
+  return {
+    initialChain: chain,
+    initialOIHistory: isPro ? history : history.slice(-5),
+    initialPreview: !isPro,
+  }
+}
+
 export default async function MCXIVRankPage() {
   const { userId } = await auth()
   const isPro = await isProUser(userId)
   const ivRanks = await getIVRanks()
   const instrumentList = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({ key, label: meta.label }))
+  const defaultInstrument = instrumentList[0]?.key ?? ''
+  const { initialChain, initialOIHistory, initialPreview } = defaultInstrument
+    ? await getDefaultVolatilityData(defaultInstrument, isPro)
+    : { initialChain: null, initialOIHistory: undefined, initialPreview: undefined }
 
   // The comparison window grows daily as the IV-snapshot cron accumulates
   // history — state the real depth available today rather than a fixed
@@ -146,7 +183,14 @@ export default async function MCXIVRankPage() {
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>
           IV Skew &amp; OI Buildup
         </h2>
-        <VolatilityHub instruments={instrumentList} isPro={isPro} />
+        <VolatilityHub
+          instruments={instrumentList}
+          isPro={isPro}
+          initialInstrument={defaultInstrument}
+          initialChain={initialChain ?? undefined}
+          initialOIHistory={initialOIHistory}
+          initialPreview={initialPreview}
+        />
       </section>
 
       <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>
