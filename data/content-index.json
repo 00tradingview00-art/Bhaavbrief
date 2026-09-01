@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-01-cot-report-mcx-commodity-trading",
+    "href": "/articles/2026-09-01-cot-report-mcx-commodity-trading",
+    "title": "How to Read the CFTC COT Report for MCX Commodity Trading in India",
+    "description": "Learn how to read COT report for MCX commodity trading India — decode CFTC positioning data and trace its step-by-step impact on Indian prices.",
+    "excerpt": "Understanding how to read the COT report for MCX commodity trading in India gives traders a structured window into global speculative positioning before price moves propagate to domestic markets. The ",
+    "date": "2026-09-01",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "positioning"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-09-01-gold-silver-basis-divergence",
     "href": "/research/2026-09-01-gold-silver-basis-divergence",
