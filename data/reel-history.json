@@ -47,7 +47,14 @@
     "generated_at": "2026-08-31T03:27:45.107Z",
     "edition": 96,
     "hi_path": "public/reels/brief-edition-096-hi.mp4",
-    "posted_at": "2026-08-31T03:29:06.073Z"
+    "posted_at": "2026-08-31T03:29:06.073Z",
+    "insights": {
+      "views": 19,
+      "reach": 16,
+      "ig_reels_avg_watch_time": 4008,
+      "ig_reels_video_view_total_time": 72161,
+      "fetched_at": "2026-09-01T04:14:52.172Z"
+    }
   },
   {
     "file": "news-20260830-mcx-trading-hours-in-india",
