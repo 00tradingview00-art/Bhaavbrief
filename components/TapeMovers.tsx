@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getEventsForCommodity, COMMODITY_LABELS, type EventMapEntry } from '@/lib/eventMap'
 import { getImpactStats } from '@/lib/eventImpactStats'
 import { deriveCommodityKeysFromTags, type CommodityKey } from '@/lib/commodityTags'
@@ -83,8 +82,6 @@ export default function TapeMovers({ tags }: { tags: string[] }) {
       {rows.map(({ event, commodityKey }) => (
         <TapeMoversRow key={`${event.id}-${commodityKey}`} event={event} commodityKey={commodityKey} />
       ))}
-
-      <StatisticalDisclaimer style={{ marginTop: 8 }} />
     </div>
   )
 }
