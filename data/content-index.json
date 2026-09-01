@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-097",
+    "href": "/briefs/edition-097",
+    "title": "Gold at $4,492 Refuses to Retreat — Even as Oil Surges",
+    "description": "WTI climbs to $86.72 while gold holds firm, signalling the safe-haven bid is quietly decoupling from the war-premium narrative.",
+    "excerpt": "MCX Gold ₹154460 | Crude ₹8149 | USDINR ₹95.24 Yesterday's Edge — Result: Edition #96 watched whether WTI would close above 85.13. Confirmed ✓, now at 86.72. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-09-01T03:11:58.391Z",
+    "edition": "97",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "research",
     "slug": "2026-09-01-gold-silver-basis-divergence",
     "href": "/research/2026-09-01-gold-silver-basis-divergence",
