@@ -90,7 +90,7 @@ export default async function BriefsPage() {
             All Briefs
           </h1>
           <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
-            {briefs.length} editions published · Every weekday at 9:30 AM IST
+            {briefs.length} briefs in the archive · Published every weekday at 9:30 AM IST
           </p>
           {delayed && (
             <p style={{
