@@ -1,6 +1,7 @@
 import { getAllBriefs }   from '@/lib/briefs'
 import { getAllArcs }     from '@/lib/arcs'
 import { getAllEvents }   from '@/lib/events'
+import { getAllResearch } from '@/lib/research'
 
 export const revalidate = 3600 // rebuild sitemap cache every hour
 
@@ -53,6 +54,18 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/events`,                  priority: '0.6', changefreq: 'daily'  },
   { url: `${BASE}/options/strategy`,        priority: '0.7', changefreq: 'monthly'},
+  { url: `${BASE}/pro`,                     priority: '0.8', changefreq: 'daily'  },
+  { url: `${BASE}/research`,                priority: '0.8', changefreq: 'daily'  },
+  { url: `${BASE}/basis`,                   priority: '0.7', changefreq: 'hourly' },
+  { url: `${BASE}/tools`,                   priority: '0.6', changefreq: 'weekly' },
+  { url: `${BASE}/tools/mcx-basis`,         priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-bhavcopy`,      priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-greeks`,        priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-iv-rank`,       priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-max-pain`,      priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-open-interest`, priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-pcr`,           priority: '0.6', changefreq: 'daily'  },
+  { url: `${BASE}/tools/mcx-pl-calculator`, priority: '0.6', changefreq: 'daily'  },
 ]
 
 function entry(url: string, lastmod: string, changefreq: string, priority: string): string {
@@ -76,6 +89,12 @@ export async function GET() {
       entry(`${BASE}/briefs/${b.urlSlug}`, b.date ? new Date(b.date).toISOString() : now, 'never', '0.8')
     )
 
+    const researchEntries = getAllResearch()
+      .filter(r => r.published)
+      .map(r =>
+        entry(`${BASE}/research/${r.slug}`, r.date ? new Date(r.date).toISOString() : now, 'never', '0.7')
+      )
+
     // /flash and /articles are deliberately excluded from sitemap.xml —
     // high volume (~350+ URLs) and covered separately by news-sitemap.xml
     // for Google News/Discover discovery (48h window). Keeping them out of
@@ -91,7 +110,7 @@ export async function GET() {
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticEntries, ...briefEntries, ...arcEntries, ...eventEntries].join('\n')}
+${[...staticEntries, ...briefEntries, ...researchEntries, ...arcEntries, ...eventEntries].join('\n')}
 </urlset>`
 
     return new Response(xml, {

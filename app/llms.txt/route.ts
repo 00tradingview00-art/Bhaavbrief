@@ -1,5 +1,6 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { getAllArticles } from '@/lib/articles'
+import { getAllResearch } from '@/lib/research'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,7 @@ export async function GET() {
 
   const recentBriefs  = briefs.slice(0, 10)
   const recentArticles = articles.slice(0, 10)
+  const recentResearch = getAllResearch().filter(r => r.published).slice(0, 10)
 
   const body = `# BhaavBrief
 
@@ -69,10 +71,33 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 - [MCX Margin Calculation Explained](${BASE}/learn/mcx-margin-calculation): SPAN vs exposure margin, worked examples for Gold Mini, Crude Mini, Silver and Copper, how margin calls work
 - [MCX Gold vs Gold ETF](${BASE}/learn/gold-etf-vs-mcx-gold): Tax treatment, capital, leverage, liquidity, SIP options, LTCG rules — futures vs ETF comparison
 
+## Pro Analytics Tools
+
+BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the full option chain (all strikes/expiries, Greeks, Max Pain, PCR, OI Map).
+
+- [BhaavBrief Pro](${BASE}/pro): Pricing and full feature breakdown for the MCX options analytics subscription
+- [Pro Research](${BASE}/research): Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours
+- [Basis Dashboard](${BASE}/basis): Live import-parity spread for MCX Gold, Silver, and Crude Oil vs COMEX/WTI benchmarks
+- [Strategy Builder](${BASE}/options/strategy): 12 pre-built multi-leg options strategy templates with payoff charts and per-leg Greeks
+- [IV Rank & Skew](${BASE}/tools/mcx-iv-rank): Implied volatility rank/percentile and CE vs PE skew by strike
+- [Open Interest Buildup](${BASE}/tools/mcx-open-interest): OI buildup history by strike
+- [PCR Trend](${BASE}/tools/mcx-pcr): Put-Call Ratio trend over time
+- [Max Pain Calculator](${BASE}/tools/mcx-max-pain): Options Max Pain by expiry
+- [MCX Greeks](${BASE}/tools/mcx-greeks): Black-76 Greeks calculator
+- [MCX Bhavcopy](${BASE}/tools/mcx-bhavcopy): Daily settlement data lookup (OHLC, volume, OI)
+- [MCX P&L Calculator](${BASE}/tools/mcx-pl-calculator): Profit/loss calculator by contract and lot size
+- [MCX Basis](${BASE}/tools/mcx-basis): Basis (futures vs spot) calculator
+
+${recentResearch.length > 0 ? `## Recent Pro Research
+
+${recentResearch.map(r =>
+  `- [${r.title}](${BASE}/research/${r.slug}): ${r.displayDate}${r.description ? ' — ' + r.description.slice(0, 120) : ''}`
+).join('\n')}
+` : ''}
 ## Recent Daily Briefs
 
 ${recentBriefs.map(b =>
-  `- [${b.title}](${BASE}/briefs/${b.slug}): ${b.displayDate ?? b.date}${b.summary ? ' — ' + b.summary.slice(0, 120) : ''}`
+  `- [${b.title}](${BASE}/briefs/${b.urlSlug}): ${b.displayDate ?? b.date}${b.summary ? ' — ' + b.summary.slice(0, 120) : ''}`
 ).join('\n')}
 
 ## Recent Flash Intelligence
