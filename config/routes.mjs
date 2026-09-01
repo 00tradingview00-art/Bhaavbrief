@@ -36,6 +36,7 @@ export const ROUTES = [
   '/api/options/oi-history',
   '/api/options/strategy-margin',
   '/api/prices',
+  '/api/cashfree/cancel',
   '/api/cashfree/checkout',
   '/api/cashfree/poll-status',
   '/api/cashfree/webhook',

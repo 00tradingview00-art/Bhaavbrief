@@ -4,7 +4,11 @@
 //   sub:{userId}:status          → "active" | "cancelled" | "expired"
 //   sub:{userId}:plan            → "daily" | "monthly" | "yearly"
 //   sub:{userId}:provider        → "cashfree"
-//   sub:{userId}:provider_sub_id → external subscription id
+//   sub:{userId}:provider_sub_id → Cashfree's cf_subscription_id (display/support use)
+//   sub:{userId}:merchant_sub_id → our own merchant-supplied subscription_id — this,
+//                                   not provider_sub_id, is what Cashfree's Manage
+//                                   Subscription API (POST /subscriptions/{id}/manage)
+//                                   expects in its path, per their docs
 //   sub:{userId}:expires_at      → ISO 8601 timestamp
 //
 // Clerk publicMetadata.isPro mirrors status for client-side use without Redis
@@ -30,16 +34,18 @@ export async function activateSubscription(
   providerSubId: string,
   plan: Plan,
   expiresAt: Date,
+  merchantSubId?: string,
 ): Promise<void> {
   const expiresISO = expiresAt.toISOString()
-  await redisCommand(
-    'MSET',
+  const kv = [
     `sub:${userId}:status`, 'active',
     `sub:${userId}:plan`, plan,
     `sub:${userId}:provider`, 'cashfree',
     `sub:${userId}:provider_sub_id`, providerSubId,
     `sub:${userId}:expires_at`, expiresISO,
-  )
+  ]
+  if (merchantSubId) kv.push(`sub:${userId}:merchant_sub_id`, merchantSubId)
+  await redisCommand('MSET', ...kv)
   const clerk = await clerkClient()
   await clerk.users.updateUserMetadata(userId, {
     publicMetadata: { isPro: true, planExpires: expiresISO, plan },
