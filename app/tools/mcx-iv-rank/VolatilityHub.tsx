@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import IVSkewChart from '@/components/mcx/IVSkewChart'
 import OIBuildupChart from '@/components/mcx/OIBuildupChart'
 
@@ -11,18 +11,36 @@ interface ChainRow {
   PE: { iv: number | null; tier: string }
 }
 
+interface OIPoint {
+  date: string
+  ceOI: number
+  peOI: number
+}
+
 interface Props {
   instruments: { key: string; label: string }[]
   isPro: boolean
+  initialInstrument?: string
+  initialChain?: ChainRow[]
+  initialOIHistory?: OIPoint[]
+  initialPreview?: boolean
 }
 
-export default function VolatilityHub({ instruments, isPro }: Props) {
-  const [instrument, setInstrument] = useState(instruments[0]?.key ?? '')
-  const [chain, setChain]     = useState<ChainRow[] | null>(null)
+export default function VolatilityHub({ instruments, isPro, initialInstrument, initialChain, initialOIHistory, initialPreview }: Props) {
+  const [instrument, setInstrument] = useState(initialInstrument ?? instruments[0]?.key ?? '')
+  const [chain, setChain]     = useState<ChainRow[] | null>(initialChain ?? null)
   const [loading, setLoading] = useState(false)
+
+  // Skip the client fetch only for the exact instrument the server already
+  // seeded — switching to a different instrument still fetches client-side.
+  const seededInstrument = useRef(initialChain ? initialInstrument : null)
 
   useEffect(() => {
     if (!instrument) return
+    if (seededInstrument.current === instrument) {
+      seededInstrument.current = null
+      return
+    }
     setLoading(true)
     fetch(`/api/options?instrument=${instrument}`)
       .then(r => r.json())
@@ -61,7 +79,13 @@ export default function VolatilityHub({ instruments, isPro }: Props) {
           <IVSkewChart chain={chain} isPro={isPro} />
           {atmStrike != null && (
             <div style={{ marginTop: '1.5rem' }}>
-              <OIBuildupChart instrument={instrument} strike={atmStrike} isPro={isPro} />
+              <OIBuildupChart
+                instrument={instrument}
+                strike={atmStrike}
+                isPro={isPro}
+                initialData={initialOIHistory}
+                initialPreview={initialPreview}
+              />
             </div>
           )}
         </>

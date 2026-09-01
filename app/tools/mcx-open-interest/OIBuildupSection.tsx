@@ -9,12 +9,20 @@ interface InstrumentOI {
   strikes: number[]
 }
 
+interface InitialOIData {
+  instrument: string
+  strike: number
+  history: { date: string; ceOI: number; peOI: number }[]
+  preview: boolean
+}
+
 interface Props {
   instruments: InstrumentOI[]
   isPro: boolean
+  initialOIData?: InitialOIData
 }
 
-export default function OIBuildupSection({ instruments, isPro }: Props) {
+export default function OIBuildupSection({ instruments, isPro, initialOIData }: Props) {
   const withData = instruments.filter(i => i.strikes.length > 0)
   const [instrument, setInstrument] = useState(withData[0]?.key ?? '')
   const active = withData.find(i => i.key === instrument) ?? withData[0]
@@ -62,7 +70,13 @@ export default function OIBuildupSection({ instruments, isPro }: Props) {
       </div>
 
       {active && strike != null && (
-        <OIBuildupChart instrument={active.key} strike={strike} isPro={isPro} />
+        <OIBuildupChart
+          instrument={active.key}
+          strike={strike}
+          isPro={isPro}
+          initialData={initialOIData?.instrument === active.key && initialOIData.strike === strike ? initialOIData.history : undefined}
+          initialPreview={initialOIData?.instrument === active.key && initialOIData.strike === strike ? initialOIData.preview : undefined}
+        />
       )}
     </div>
   )

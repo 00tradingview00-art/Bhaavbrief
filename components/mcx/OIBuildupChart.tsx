@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import ProBlurGate from '@/components/ProBlurGate'
 
@@ -14,16 +14,27 @@ interface Props {
   instrument: string
   strike: number
   isPro: boolean
+  initialData?: OIPoint[]
+  initialPreview?: boolean
 }
 
-export default function OIBuildupChart({ instrument, strike, isPro }: Props) {
-  const [data, setData]       = useState<OIPoint[]>([])
-  const [preview, setPreview] = useState(!isPro)
+export default function OIBuildupChart({ instrument, strike, isPro, initialData, initialPreview }: Props) {
+  const [data, setData]       = useState<OIPoint[]>(initialData ?? [])
+  const [preview, setPreview] = useState(initialPreview ?? !isPro)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState<string | null>(null)
 
+  // Skip the client fetch only for the exact (instrument, strike) pair the
+  // server already seeded — any later change (user picks a different
+  // strike/instrument) falls through to the normal client fetch below.
+  const seededKey = useRef(initialData ? `${instrument}:${strike}` : null)
+
   useEffect(() => {
     if (!instrument || !strike) return
+    if (seededKey.current === `${instrument}:${strike}`) {
+      seededKey.current = null
+      return
+    }
     setLoading(true)
     setError(null)
     fetch(`/api/options/oi-history?instrument=${instrument}&strike=${strike}`)
