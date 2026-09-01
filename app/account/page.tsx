@@ -93,7 +93,7 @@ export default async function AccountPage() {
               }}>
                 To cancel, contact support with subscription ID
                 {provider ? ` (${provider})` : ''}:{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
               </div>
             )}
           </>

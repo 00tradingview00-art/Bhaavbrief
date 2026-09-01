@@ -1122,10 +1122,10 @@ export default function StrategyBuilder({
           {briefEdge && (
             <div style={{ margin: '0 0 14px', padding: '10px 14px', background: '#FFFBF0', border: '0.5px solid rgba(181,134,42,0.3)', borderRadius: 6 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', fontWeight: 700 }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', fontWeight: 700 }}>
                   Today&apos;s Edge
                 </span>
-                <a href={`/briefs/${briefEdge.urlSlug}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2, #3A3830)', textDecoration: 'none', letterSpacing: '0.04em' }}>
+                <a href={`/briefs/${briefEdge.urlSlug}`} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2, #3A3830)', textDecoration: 'none', letterSpacing: '0.04em' }}>
                   {briefEdge.date} →
                 </a>
               </div>

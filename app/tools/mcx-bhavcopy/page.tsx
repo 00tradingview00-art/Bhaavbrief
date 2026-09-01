@@ -65,7 +65,7 @@ export default function MCXBhavCopyPage() {
                 ['HIGH / LOW', 'Intraday price range'],
               ].map(([col, desc]) => (
                 <tr key={col} style={{ borderBottom: '1px solid var(--border)' }}>
-                  <td style={{ padding: '5px 10px', fontWeight: 600, fontFamily: 'var(--font-mono)', color: 'var(--ink)' }}>{col}</td>
+                  <td style={{ padding: '5px 10px', fontWeight: 600, fontFamily: 'var(--font-sans)', color: 'var(--ink)' }}>{col}</td>
                   <td style={{ padding: '5px 10px', color: 'var(--ink-3)' }}>{desc}</td>
                 </tr>
               ))}
