@@ -198,6 +198,49 @@ export function verifyCashfreeWebhookSignature(
   }
 }
 
+export interface CashfreeSubscriptionPayment {
+  cf_payment_id?: number
+  payment_amount?: number
+  payment_status?: string
+  payment_type?: string
+  payment_initiated_date?: string
+}
+
+/**
+ * Fetch a subscription's payment/transaction history via Cashfree's Fetch Payments API.
+ * Docs: https://www.cashfree.com/docs/api-reference/payments/latest/subscription/payment/fetch-payments-for-mandate
+ * GET /subscriptions/{subscription_id}/payments — same merchant-supplied subscription_id
+ * as cancelCashfreeSubscription, not cf_subscription_id.
+ */
+export async function getCashfreeSubscriptionPayments(
+  merchantSubscriptionId: string,
+): Promise<CashfreeSubscriptionPayment[]> {
+  const clientId = process.env.CASHFREE_CLIENT_ID
+  const clientSecret = process.env.CASHFREE_CLIENT_SECRET
+  if (!clientId || !clientSecret) {
+    throw new Error('Cashfree credentials not configured')
+  }
+
+  const res = await fetch(`${cashfreeBaseUrl()}/subscriptions/${encodeURIComponent(merchantSubscriptionId)}/payments`, {
+    headers: {
+      'x-api-version': CASHFREE_API_VERSION,
+      'x-client-id': clientId,
+      'x-client-secret': clientSecret,
+    },
+  })
+
+  const json = await res.json().catch(() => ({}))
+  if (!res.ok) {
+    const msg =
+      (json as { message?: string }).message ??
+      (json as { error?: string }).error ??
+      `Cashfree fetch payments failed (${res.status})`
+    throw new Error(msg)
+  }
+
+  return Array.isArray(json) ? (json as CashfreeSubscriptionPayment[]) : []
+}
+
 export function expiryFromPlan(plan: Plan, from = new Date()): Date {
   return new Date(from.getTime() + planPeriodMs(plan))
 }
