@@ -99,7 +99,9 @@ function PriceCard({
   return (
     <div style={{
       background: flashing ? (isUp ? '#f0fdf4' : '#fff1f0') : 'var(--surface)',
-      border: `1px solid ${flashing ? color : 'var(--border)'}`,
+      borderTop: `1px solid ${flashing ? color : 'var(--border)'}`,
+      borderRight: `1px solid ${flashing ? color : 'var(--border)'}`,
+      borderBottom: `1px solid ${flashing ? color : 'var(--border)'}`,
       borderLeft: `3px solid ${data.mcx > 0 ? color : 'var(--border)'}`,
       borderRadius: 4,
       padding: '14px 16px',

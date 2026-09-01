@@ -22,7 +22,9 @@ export default function BriefGate() {
   return (
     <div id="brief-gate" style={{
       margin: '1.5rem 0 2rem',
-      border: '1px solid rgba(181,134,42,0.35)',
+      borderTop: '1px solid rgba(181,134,42,0.35)',
+      borderRight: '1px solid rgba(181,134,42,0.35)',
+      borderBottom: '1px solid rgba(181,134,42,0.35)',
       borderLeft: '3px solid var(--gold)',
       background: 'var(--gold-pale)',
       borderRadius: '0 4px 4px 0',

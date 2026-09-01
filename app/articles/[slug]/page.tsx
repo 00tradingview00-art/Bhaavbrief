@@ -135,7 +135,9 @@ export default async function ArticlePage({ params }: Props) {
         {meta.edition === 'hawk-scan' ? (
           <div style={{
             background: '#0E0806',
-            border: '1px solid rgba(255,68,68,0.3)',
+            borderTop: '1px solid rgba(255,68,68,0.3)',
+            borderRight: '1px solid rgba(255,68,68,0.3)',
+            borderBottom: '1px solid rgba(255,68,68,0.3)',
             borderLeft: '4px solid #FF4444',
             borderRadius: 4,
             padding: '20px 24px',

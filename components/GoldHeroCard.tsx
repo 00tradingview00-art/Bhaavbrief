@@ -19,7 +19,10 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
   if (!gold || !gold.mcx) {
     return (
       <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border)',
+        background: 'var(--surface)',
+        borderTop: '1px solid var(--border)',
+        borderRight: '1px solid var(--border)',
+        borderBottom: '1px solid var(--border)',
         borderLeft: '3px solid var(--border-2)', borderRadius: 4,
         padding: '18px 22px', marginBottom: 32, textAlign: 'center',
       }}>
@@ -38,7 +41,9 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
     <Link href="/commodities/gold" style={{ textDecoration: 'none', display: 'block', marginBottom: 32 }}>
       <div style={{
         background: 'var(--surface)',
-        border: '1px solid var(--border)',
+        borderTop: '1px solid var(--border)',
+        borderRight: '1px solid var(--border)',
+        borderBottom: '1px solid var(--border)',
         borderLeft: '3px solid var(--gold)',
         borderRadius: 4,
         padding: '18px 22px',
