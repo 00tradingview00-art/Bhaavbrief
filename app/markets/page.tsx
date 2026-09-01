@@ -3,6 +3,7 @@ import SectionTabs from '@/components/SectionTabs'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { loadEIA } from '@/lib/eia'
 import { getSparklineCloses } from '@/lib/history'
+import { safeJsonLd } from '@/lib/seo'
 
 const SPARKLINE_COMMODITIES = ['gold', 'silver', 'crude', 'copper', 'natgas']
 
@@ -37,6 +38,28 @@ export const metadata = {
 
 export const revalidate = 30
 
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Dataset',
+      '@id': 'https://bhaavbrief.in/markets',
+      name: 'MCX Live Prices',
+      description: 'Live MCX commodity futures prices — Gold, Silver, Crude Oil, Copper, Natural Gas, Zinc, Lead, Aluminium, Nickel — with OHLC, Volume, and Open Interest, updated every 30 seconds during market hours.',
+      url: 'https://bhaavbrief.in/markets',
+      creator: { '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' },
+      variableMeasured: ['Open', 'High', 'Low', 'Close', '% Change', 'Volume', 'Open Interest'],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'MCX Live Prices' },
+      ],
+    },
+  ],
+}
+
 export default async function MarketsPage() {
   const snap = loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
@@ -46,6 +69,7 @@ export default async function MarketsPage() {
   )
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <SectionTabs
         active="/markets"
         tabs={[

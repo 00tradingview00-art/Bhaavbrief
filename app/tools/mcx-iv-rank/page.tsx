@@ -9,6 +9,34 @@ import { getOIHistory } from '@/lib/oiHistory'
 import Link from 'next/link'
 import VolatilityHub from './VolatilityHub'
 import IVRankHistoryChart from './IVRankHistoryChart'
+import { safeJsonLd } from '@/lib/seo'
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'MCX IV Rank',
+      url: 'https://bhaavbrief.in/tools/mcx-iv-rank',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Any (web browser)',
+      description: 'Live MCX Implied Volatility Rank (IV Rank) and IV Percentile for Gold, Silver, Crude Oil, Natural Gas, and Copper.',
+      offers: [
+        { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'INR', description: 'Current IV Rank per instrument' },
+        { '@type': 'Offer', name: 'Pro', price: '333', priceCurrency: 'INR', description: 'IV Rank history, IV Skew, and OI Buildup' },
+      ],
+      provider: { '@id': 'https://bhaavbrief.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://bhaavbrief.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'MCX IV Rank' },
+      ],
+    },
+  ],
+}
 
 export const revalidate = 900
 
@@ -137,6 +165,7 @@ export default async function MCXIVRankPage() {
 
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Implied Volatility Rank
       </h1>

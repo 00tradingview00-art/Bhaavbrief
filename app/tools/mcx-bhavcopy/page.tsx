@@ -1,5 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/seo'
+
+const BREADCRUMB_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://bhaavbrief.in/tools' },
+    { '@type': 'ListItem', position: 3, name: 'MCX Bhavcopy' },
+  ],
+}
 
 export const revalidate = 3600
 
@@ -16,6 +27,7 @@ export const metadata: Metadata = {
 export default function MCXBhavCopyPage() {
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)', lineHeight: 1.7 }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Bhavcopy — Daily Settlement Data
       </h1>

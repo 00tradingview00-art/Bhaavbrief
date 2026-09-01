@@ -1,6 +1,31 @@
 import type { Metadata } from 'next'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/seo'
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'MCX Max Pain',
+      url: 'https://bhaavbrief.in/tools/mcx-max-pain',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Any (web browser)',
+      description: 'Live MCX Max Pain strike price for Gold, Silver, Crude Oil, Natural Gas, and Copper.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      provider: { '@id': 'https://bhaavbrief.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://bhaavbrief.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'MCX Max Pain Today' },
+      ],
+    },
+  ],
+}
 
 export const revalidate = 60
 
@@ -36,6 +61,7 @@ export default async function MCXMaxPainPage() {
 
   return (
     <main style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Max Pain Today
       </h1>

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Card from '@/components/ui/Card'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -87,9 +88,39 @@ const FREE_TOOLS = [
   },
 ]
 
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type':     'CollectionPage',
+      '@id':       'https://bhaavbrief.in/tools',
+      name:        'MCX Analytics Tools',
+      description: 'Free and Pro MCX analytics tools: IV Rank, Put-Call Ratio, Open Interest, Greeks, Max Pain, P&L Calculator, Bhavcopy, and Commodity Basis.',
+      url:         'https://bhaavbrief.in/tools',
+    },
+    {
+      '@type': 'ItemList',
+      itemListElement: FREE_TOOLS.map((t, i) => ({
+        '@type':  'ListItem',
+        position: i + 1,
+        url:      `https://bhaavbrief.in${t.href}`,
+        name:     t.label,
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools' },
+      ],
+    },
+  ],
+}
+
 export default function ToolsPage() {
   return (
     <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Analytics Tools
       </h1>

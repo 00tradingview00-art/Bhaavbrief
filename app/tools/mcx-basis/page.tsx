@@ -1,6 +1,30 @@
 import type { Metadata } from 'next'
 import { getBasisHistory } from '@/lib/basis'
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/seo'
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Dataset',
+      '@id': 'https://bhaavbrief.in/tools/mcx-basis',
+      name: 'MCX Basis Today',
+      description: 'Current MCX Gold, Silver, and Crude Oil basis vs COMEX/WTI import parity.',
+      url: 'https://bhaavbrief.in/tools/mcx-basis',
+      creator: { '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' },
+      variableMeasured: ['Gold basis %', 'Silver basis %', 'Crude Oil basis %'],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://bhaavbrief.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'MCX Basis Today' },
+      ],
+    },
+  ],
+}
 
 export const revalidate = 900
 
@@ -27,6 +51,7 @@ export default function MCXBasisPage() {
 
   return (
     <main style={{ maxWidth: 640, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Commodity Basis
       </h1>

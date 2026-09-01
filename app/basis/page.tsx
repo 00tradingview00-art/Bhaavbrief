@@ -5,6 +5,7 @@ import { isProUser } from '@/lib/subscription'
 import { getBasisHistory, type BasisPoint } from '@/lib/basis'
 import SectionTabs from '@/components/SectionTabs'
 import BasisClient from './BasisClient'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 900
 
@@ -15,6 +16,28 @@ export const metadata: Metadata = {
     'MCX gold basis today India', 'MCX silver basis India', 'MCX crude oil basis today',
     'MCX COMEX gold premium India', 'MCX import parity gold silver crude',
     'MCX basis explained', 'commodity basis India',
+  ],
+}
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Dataset',
+      '@id': 'https://bhaavbrief.in/basis',
+      name: 'MCX Commodity Basis',
+      description: '% premium/discount of MCX Gold, Silver, and Crude Oil price vs import parity (COMEX/WTI × USDINR conversion), 30-day trailing mean and standard deviation.',
+      url: 'https://bhaavbrief.in/basis',
+      creator: { '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' },
+      variableMeasured: ['Gold basis %', 'Silver basis %', 'Crude Oil basis %'],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'MCX Commodity Basis' },
+      ],
+    },
   ],
 }
 
@@ -66,6 +89,7 @@ export default async function BasisPage() {
 
   return (
     <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <SectionTabs
         active="/basis"
         tabs={[
