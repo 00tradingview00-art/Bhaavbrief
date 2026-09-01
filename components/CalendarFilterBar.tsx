@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Pill, { type PillTone } from '@/components/ui/Pill'
 import {
   type EventMapEntry,
   COMMODITY_URL_SLUGS,
@@ -14,12 +15,12 @@ type EventImpactEntry = {
   sampleSize:    number
 }
 
-const TIER_STYLES: Record<string, { background: string; color: string }> = {
-  high:       { background: '#FDF0F0', color: '#991818' },
-  medium:     { background: '#FFF7E0', color: '#996600' },
-  low:        { background: '#F3F2EC', color: '#48483A' },
-  context:    { background: '#EAF5EE', color: '#1E6630' },
-  structural: { background: '#F3F2EC', color: '#8A8A7A' },
+const TIER_TONE: Record<string, PillTone> = {
+  high:       'down',
+  medium:     'energy',
+  low:        'neutral',
+  context:    'up',
+  structural: 'neutral',
 }
 
 function formatIST(iso: string): string {
@@ -51,7 +52,7 @@ function EventCard({
   eventImpact: Record<string, EventImpactEntry>
   tickValues: Record<string, number>
 }) {
-  const tierStyle = TIER_STYLES[event.impact_tier] ?? TIER_STYLES.low
+  const tierTone = TIER_TONE[event.impact_tier] ?? 'neutral'
   const prior = formatPrior(event)
 
   // Build per-commodity historical reaction summary
@@ -79,13 +80,7 @@ function EventCard({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-        <span style={{
-          fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.08em',
-          textTransform: 'uppercase', padding: '2px 7px',
-          background: tierStyle.background, color: tierStyle.color,
-        }}>
-          {event.impact_tier}
-        </span>
+        <Pill tone={tierTone} size="xs">{event.impact_tier}</Pill>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
           {formatIST(event.next_release_utc)}
         </span>
@@ -124,17 +119,9 @@ function EventCard({
       {event.affected_contracts.length > 0 && (
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
           {event.affected_contracts.map(c => (
-            <Link
-              key={c}
-              href={`/commodities/${COMMODITY_URL_SLUGS[c] ?? c}`}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10,
-                color: '#C8720A', textDecoration: 'none',
-                background: '#F3F2EC', padding: '2px 8px',
-              }}
-            >
+            <Pill key={c} tone="neutral" size="xs" href={`/commodities/${COMMODITY_URL_SLUGS[c] ?? c}`} style={{ color: '#C8720A' }}>
               {COMMODITY_LABELS[c] ?? c}
-            </Link>
+            </Pill>
           ))}
         </div>
       )}
@@ -178,34 +165,13 @@ export default function CalendarFilterBar({
   return (
     <div>
       <div className="calendar-filter-bar" style={{ marginBottom: 16 }}>
-        <button
-          onClick={() => setActive('all')}
-          style={{
-            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em',
-            padding: '10px 16px', minHeight: 44, display: 'inline-flex', alignItems: 'center',
-            border: '1px solid var(--border)', whiteSpace: 'nowrap',
-            background: active === 'all' ? 'var(--gold)' : 'var(--surface-1)',
-            color: active === 'all' ? '#FAFAF6' : 'var(--ink-2)',
-            cursor: 'pointer',
-          }}
-        >
+        <Pill size="md" tone="neutral" active={active === 'all'} onClick={() => setActive('all')}>
           All
-        </button>
+        </Pill>
         {commodities.map(c => (
-          <button
-            key={c}
-            onClick={() => setActive(c)}
-            style={{
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em',
-              padding: '10px 16px', minHeight: 44, display: 'inline-flex', alignItems: 'center',
-              border: '1px solid var(--border)', whiteSpace: 'nowrap',
-              background: active === c ? 'var(--gold)' : 'var(--surface-1)',
-              color: active === c ? '#FAFAF6' : 'var(--ink-2)',
-              cursor: 'pointer',
-            }}
-          >
+          <Pill key={c} size="md" tone="neutral" active={active === c} onClick={() => setActive(c)}>
             {COMMODITY_LABELS[c] ?? c}
-          </button>
+          </Pill>
         ))}
       </div>
 

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import fs from 'fs'
 import path from 'path'
-import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import CountdownTimer from '@/components/CountdownTimer'
 import CalendarFilterBar from '@/components/CalendarFilterBar'
 import { getUpcomingEvents, getNextHighImpactEvent } from '@/lib/eventMap'
@@ -130,7 +129,6 @@ export default function CalendarPage() {
           <p style={{ fontSize: '1rem', color: '#48483A', lineHeight: 1.6, fontWeight: 300, maxWidth: 640 }}>
             Scheduled macro and data-release events mapped to the MCX contracts they typically move — with prior actuals and historical context where available.
           </p>
-          <StatisticalDisclaimer />
         </header>
 
         {nextHighImpact && (

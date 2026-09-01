@@ -4,6 +4,7 @@ import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 import { getAllResearch } from '@/lib/research'
 import SectionTabs from '@/components/SectionTabs'
+import Pill from '@/components/ui/Pill'
 import { safeJsonLd } from '@/lib/seo'
 
 export const metadata = {
@@ -149,18 +150,7 @@ export default async function NewsPage() {
       {/* Page header */}
       <div style={{ marginBottom: 28, paddingBottom: 24, borderBottom: '0.5px solid #DDDDD0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-          <span style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 10,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: '#C8720A',
-            background: '#FFF7E0',
-            border: '0.5px solid #D4A830',
-            padding: '3px 9px',
-          }}>
-            Live · Updated every 15 min
-          </span>
+          <Pill tone="live" size="sm">Live · Updated every 15 min</Pill>
           <span
             title="When this page was last rendered — a stuck value here means the page stopped refreshing"
             style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}

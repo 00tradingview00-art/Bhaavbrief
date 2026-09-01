@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Pill from '@/components/ui/Pill'
 
 interface Tab {
   label: string
@@ -12,27 +12,11 @@ interface Tab {
 export default function SectionTabs({ tabs, active }: { tabs: Tab[]; active: string }) {
   return (
     <div style={{ display: 'flex', gap: 6, marginBottom: 20, flexWrap: 'wrap' }}>
-      {tabs.map(tab => {
-        const isActive = tab.href === active
-        return (
-          <Link
-            key={tab.href}
-            href={tab.href}
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 11,
-              letterSpacing: '0.04em',
-              padding: '6px 14px',
-              border: '1px solid var(--border)',
-              textDecoration: 'none',
-              background: isActive ? 'var(--gold)' : 'var(--surface)',
-              color: isActive ? '#FAFAF6' : 'var(--ink-2)',
-            }}
-          >
-            {tab.label}
-          </Link>
-        )
-      })}
+      {tabs.map(tab => (
+        <Pill key={tab.href} href={tab.href} size="md" tone="neutral" active={tab.href === active}>
+          {tab.label}
+        </Pill>
+      ))}
     </div>
   )
 }

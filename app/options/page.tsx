@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import OptionChain from '@/components/mcx/OptionChain'
-import StatisticalDisclaimer from '@/components/StatisticalDisclaimer'
 import { getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { safeJsonLd } from '@/lib/seo'
@@ -135,8 +134,6 @@ export default async function OptionsPage({
           {initialData.ivix != null ? ` and implied volatility (iVIX) of ${initialData.ivix.toFixed(1)}%` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: 'var(--gold)' }}>rollover mechanics</Link> for the underlying futures contract.
         </p>
       )}
-
-      <StatisticalDisclaimer />
 
       <div style={{ marginBottom: 20 }}>
         <Link href={`/options/strategy?instrument=${instrument}`} style={{

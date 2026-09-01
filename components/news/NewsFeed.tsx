@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import Tag from '@/components/Tag'
+import Pill, { type PillTone } from '@/components/ui/Pill'
 
 const FILTERS = ['All', 'Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
 
@@ -103,20 +103,14 @@ function truncate(text: string, maxLen = 220): string {
 
 function TypeBadge({ itemType, premium }: { itemType?: NewsItem['itemType']; premium?: boolean }) {
   if (itemType === 'research') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: 'var(--gold-pale)', color: 'var(--gold-dark)', border: '0.5px solid var(--gold)', fontWeight: 600 }}>
-      {premium ? '🔒 PRO RESEARCH' : 'RESEARCH'}
-    </span>
+    <Pill tone="gold" size="sm">{premium ? '🔒 Pro Research' : 'Research'}</Pill>
   )
   if (itemType === 'hawk-scan') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', padding: '2px 8px', background: '#FFF0E8', color: '#CC3300', border: '0.5px solid #CC3300', fontWeight: 600 }}>
-      ⚡ HAWK-SCAN
-    </span>
+    <Pill tone="down" size="sm">⚡ Hawk-Scan</Pill>
   )
   if (itemType === 'flash') return null
   if (itemType === 'alert') return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 6px', background: '#EAF5EE', color: '#1E6630', border: '0.5px solid #5AAA70' }}>
-      Analysis
-    </span>
+    <Pill tone="up" size="sm">Analysis</Pill>
   )
   return null
 }
@@ -209,7 +203,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       {/* Last updated indicator */}
       {!loading && lastFetched && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
             ● updated {relativeTime(lastFetched.toISOString())}
           </span>
         </div>
@@ -221,40 +215,25 @@ export default function NewsFeed({ serverItems = [] }: Props) {
           const count = f === 'All' ? allItems.length : allItems.filter(item => matchesFilter(item, f)).length
           const active = activeFilter === f
           return (
-            <button
+            <Pill
               key={f}
+              size="md"
+              tone="neutral"
+              active={active}
               onClick={() => { setActiveFilter(f); setPage(1) }}
-              style={{
-                padding: '5px 14px',
-                borderRadius: 2,
-                fontSize: 11,
-                fontWeight: 500,
-                fontFamily: 'var(--font-mono)',
-                letterSpacing: '0.04em',
-                border: active ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
-                background: active ? '#18180F' : '#FAFAF6',
-                color: active ? '#FAFAF6' : count > 0 ? '#48483A' : '#C8C8B8',
-                cursor: 'pointer',
-                transition: 'all .12s',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 5,
-              }}
+              style={{ opacity: !active && count === 0 ? 0.5 : 1 }}
             >
-              {f.toUpperCase()}
+              {f}
               {count > 0 && (
-                <span style={{
-                  fontSize: 10,
-                  background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8',
-                  color: active ? '#FAFAF6' : '#8A8A7A',
-                  padding: '1px 5px',
-                  borderRadius: 4,
-                  lineHeight: 1.4,
-                }}>
+                <Pill
+                  size="xs"
+                  tone="neutral"
+                  style={{ background: active ? 'rgba(255,255,255,0.2)' : '#E8E4D8', color: active ? '#FAFAF6' : '#8A8A7A', border: 'none' }}
+                >
                   {count}
-                </span>
+                </Pill>
               )}
-            </button>
+            </Pill>
           )
         })}
       </div>
@@ -264,7 +243,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
       {/* Error state */}
       {!loading && error && allItems.length === 0 && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
           Intelligence feed offline — retrying in 5 min
         </p>
       )}
@@ -272,13 +251,13 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       {/* Empty state */}
       {!loading && !error && filtered.length === 0 && (
         <div style={{ padding: '32px 0', borderTop: '0.5px solid #DDDDD0' }}>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
             No {activeFilter === 'All' ? '' : activeFilter.toLowerCase() + ' '}intelligence right now.
           </p>
           {activeFilter !== 'All' && allItems.length > 0 && (
             <button
               onClick={() => { setActiveFilter('All'); setPage(1) }}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+              style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
             >
               Show all {allItems.length} items →
             </button>
@@ -328,7 +307,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
                 {/* Meta row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-                  <Tag type={item.tagType}>{item.category.charAt(0).toUpperCase() + item.category.slice(1)}</Tag>
+                  <Pill tone={item.tagType as PillTone} size="sm">{item.category.charAt(0).toUpperCase() + item.category.slice(1)}</Pill>
                   <TypeBadge itemType={item.itemType} premium={item.premium} />
                   <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
                   <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
@@ -396,23 +375,10 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
                     {crossAssets.map(a => {
                       const detector = ASSET_DETECTORS.find(d => d.label === a)
-                      const tagStyle = {
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 10,
-                        letterSpacing: '0.06em',
-                        padding: '2px 7px',
-                        background: '#F3F2EC',
-                        color: '#48483A',
-                        border: '0.5px solid #DDDDD0',
-                        textDecoration: 'none',
-                        display: 'inline-block',
-                      }
                       return detector?.href ? (
-                        <Link key={a} href={detector.href} style={{ ...tagStyle, color: '#48483A' }}>
-                          {a.toUpperCase()}
-                        </Link>
+                        <Pill key={a} tone="neutral" size="xs" href={detector.href}>{a.toUpperCase()}</Pill>
                       ) : (
-                        <span key={a} style={tagStyle}>{a.toUpperCase()}</span>
+                        <Pill key={a} tone="neutral" size="xs">{a.toUpperCase()}</Pill>
                       )
                     })}
                   </div>

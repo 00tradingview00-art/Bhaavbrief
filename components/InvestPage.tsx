@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Pill, { type PillTone } from '@/components/ui/Pill'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -119,10 +120,10 @@ const TABS: { id: TabId; label: string; count: number }[] = [
   { id: 'global-stocks', label: 'Global Stocks',  count: INSTRUMENTS['global-stocks'].length },
 ]
 
-const TYPE_COLORS: Record<string, { bg: string; color: string }> = {
-  ETF:   { bg: '#FFF3E0', color: '#B45309' },
-  MF:    { bg: '#F0F4FF', color: '#2B4FC7' },
-  Stock: { bg: '#F3F0FF', color: '#6B21A8' },
+const TYPE_TONE: Record<string, PillTone> = {
+  ETF:   'energy',
+  MF:    'metals',
+  Stock: 'macro',
 }
 
 // ── Price helpers ─────────────────────────────────────────────────────────────
@@ -139,7 +140,7 @@ function formatPrice(instrument: Instrument, prices: { nse: Record<string, Price
 
 function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹' | '$' }) {
   if (!data) return (
-    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8C8B8' }}>—</span>
+    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8C8B8' }}>—</span>
   )
   const chg    = data.changePct ?? 0
   const isUp   = chg >= 0
@@ -147,10 +148,10 @@ function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹
   const prefix = chg === 0 ? '' : isUp ? '+' : ''
   return (
     <div style={{ textAlign: 'right' }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: '#18180F' }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 15, fontWeight: 600, color: '#18180F' }}>
         {currency}{data.price.toLocaleString('en-IN', { maximumFractionDigits: currency === '$' ? 2 : 0 })}
       </div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color, marginTop: 1 }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color, marginTop: 1 }}>
         {prefix}{chg.toFixed(2)}%
       </div>
     </div>
@@ -160,7 +161,7 @@ function PriceBadge({ data, currency }: { data: PriceData | null; currency: '₹
 // ── Card ──────────────────────────────────────────────────────────────────────
 
 function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Record<string, PriceData>; global: Record<string, PriceData> } }) {
-  const typeColor = TYPE_COLORS[item.type] ?? TYPE_COLORS.Stock
+  const typeTone  = TYPE_TONE[item.type] ?? 'macro'
   const priceData = formatPrice(item, prices)
   const currency  = item.isGlobal ? '$' : '₹'
 
@@ -175,15 +176,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
     }}>
       {/* Top row: type badge + price */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-        <span style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 10, letterSpacing: '0.08em',
-          padding: '2px 7px',
-          background: typeColor.bg, color: typeColor.color,
-          border: `0.5px solid ${typeColor.color}22`,
-        }}>
-          {item.type}
-        </span>
+        <Pill tone={typeTone} size="xs">{item.type}</Pill>
         <PriceBadge data={priceData} currency={currency} />
       </div>
 
@@ -193,7 +186,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       </div>
 
       {/* Ticker + exchange */}
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginBottom: 10 }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', marginBottom: 10 }}>
         {item.ticker} · {item.exchange}
       </div>
 
@@ -204,7 +197,7 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
 
       {/* Note if any */}
       {item.note && (
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', marginBottom: 10, letterSpacing: '0.04em' }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', marginBottom: 10, letterSpacing: '0.04em' }}>
           ✦ {item.note}
         </div>
       )}
@@ -213,12 +206,12 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
       <div style={{ borderTop: '0.5px solid #DDDDD0', paddingTop: 10, marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 6 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {item.expenseRatio && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A' }}>
               TER {item.expenseRatio}
             </span>
           )}
           {item.aum && (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A' }}>
               AUM {item.aum}
             </span>
           )}
@@ -227,16 +220,10 @@ function InstrumentCard({ item, prices }: { item: Instrument; prices: { nse: Rec
           {/* Commodity tags */}
           <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {item.commodity.slice(0, 3).map(c => (
-              <span key={c} style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10,
-                padding: '2px 6px', background: '#F3F2EC', color: '#48483A',
-                border: '0.5px solid #DDDDD0',
-              }}>
-                {c.toUpperCase()}
-              </span>
+              <Pill key={c} tone="neutral" size="xs">{c.toUpperCase()}</Pill>
             ))}
           </div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginTop: 4 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', marginTop: 4 }}>
             {item.platform}
           </div>
         </div>
@@ -294,17 +281,17 @@ export default function InvestPage() {
         {/* Price status */}
         <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           {loadingPrices ? (
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>Loading prices...</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A' }}>Loading prices...</span>
           ) : (
             <>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', color: nseCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {nseCount > 0 ? `● NSE live (${nseCount})` : '○ NSE offline'}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', color: globalCount > 0 ? '#1E6630' : '#8A8A7A' }}>
                 {globalCount > 0 ? `● Global live (${globalCount})` : '○ Global offline'}
               </span>
               {priceTime && (
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8C8B8' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8C8B8' }}>
                   as of {priceTime}
                 </span>
               )}
@@ -316,7 +303,7 @@ export default function InvestPage() {
       {/* RBI LRS note for global */}
       {(activeTab === 'global-etf' || activeTab === 'global-stocks') && (
         <div style={{ background: '#F3F2EC', border: '0.5px solid #DDDDD0', padding: '10px 14px', marginBottom: 20, fontSize: 12, color: '#48483A', lineHeight: 1.6 }}>
-          <strong style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.06em' }}>RBI LRS:</strong> Global instruments accessible via Vested Finance or INDmoney under the Liberalised Remittance Scheme (USD 250,000/year limit). Subject to TCS on remittance above ₹7L/year.
+          <strong style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.06em' }}>RBI LRS:</strong> Global instruments accessible via Vested Finance or INDmoney under the Liberalised Remittance Scheme (USD 250,000/year limit). Subject to TCS on remittance above ₹7L/year.
         </div>
       )}
 
@@ -326,21 +313,9 @@ export default function InvestPage() {
           const count = c === 'All' ? items.length : INSTRUMENTS[activeTab].filter(i => i.commodity.includes(c)).length
           if (count === 0 && c !== 'All') return null
           return (
-            <button
-              key={c}
-              onClick={() => setCommodityFilter(c)}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10,
-                letterSpacing: '0.06em', textTransform: 'uppercase',
-                padding: '4px 10px',
-                border: commodityFilter === c ? '0.5px solid #18180F' : '0.5px solid #DDDDD0',
-                background: commodityFilter === c ? '#18180F' : '#FAFAF6',
-                color: commodityFilter === c ? '#FAFAF6' : '#8A8A7A',
-                cursor: 'pointer',
-              }}
-            >
+            <Pill key={c} size="md" tone="neutral" active={commodityFilter === c} onClick={() => setCommodityFilter(c)}>
               {c}
-            </button>
+            </Pill>
           )
         })}
       </div>
@@ -352,8 +327,8 @@ export default function InvestPage() {
             key={id}
             onClick={() => { setActiveTab(id); setCommodityFilter('All') }}
             style={{
-              fontFamily: 'var(--font-mono)', fontSize: 10,
-              letterSpacing: '0.06em', textTransform: 'uppercase',
+              fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+              letterSpacing: '0.02em', textTransform: 'uppercase',
               padding: '10px 16px', whiteSpace: 'nowrap',
               border: 'none', background: 'none',
               borderBottom: activeTab === id ? '2px solid #18180F' : '2px solid transparent',
@@ -374,7 +349,7 @@ export default function InvestPage() {
       </div>
 
       {items.length === 0 && (
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#8A8A7A', padding: '32px 0' }}>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', padding: '32px 0' }}>
           No instruments in this category with the selected filter.
         </p>
       )}

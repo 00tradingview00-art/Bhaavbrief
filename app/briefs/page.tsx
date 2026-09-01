@@ -1,6 +1,7 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
-import Tag from '@/components/Tag'
+import Pill from '@/components/ui/Pill'
+import { tagTone } from '@/lib/tagType'
 import Link from 'next/link'
 import SectionTabs from '@/components/SectionTabs'
 import { safeJsonLd } from '@/lib/seo'
@@ -34,16 +35,6 @@ export const metadata = {
     locale: 'en_IN',
   },
   twitter: { card: 'summary' as const, title: 'MCX Daily Briefs | BhaavBrief', description: 'What moved MCX gold, crude oil and silver — and why. Daily commodity intelligence for Indian traders.', site: '@bhaavbrief' },
-}
-
-function getTagType(tag?: string): string {
-  if (!tag) return 'default'
-  const t = tag.toLowerCase()
-  if (t.includes('crude') || t.includes('energy') || t.includes('gas')) return 'energy'
-  if (t.includes('gold') || t.includes('silver') || t.includes('copper') || t.includes('metal') || t.includes('zinc')) return 'metals'
-  if (t.includes('macro') || t.includes('rbi') || t.includes('sebi') || t.includes('fed') || t.includes('dollar')) return 'macro'
-  if (t.includes('agri') || t.includes('ncdex')) return 'agri'
-  return 'default'
 }
 
 export default async function BriefsPage() {
@@ -90,7 +81,7 @@ export default async function BriefsPage() {
             All Briefs
           </h1>
           <p style={{ fontSize: 15, color: 'var(--ink-3)', margin: 0 }}>
-            {briefs.length} editions published · Every weekday at 9:30 AM IST
+            {briefs.length} briefs in the archive · Published every weekday at 9:30 AM IST
           </p>
           {delayed && (
             <p style={{
@@ -114,7 +105,7 @@ export default async function BriefsPage() {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                 {brief.tags?.slice(0, 1).map((tag: string) => (
-                  <Tag key={tag} type={getTagType(tag)}>{tag}</Tag>
+                  <Pill key={tag} tone={tagTone(tag)} size="sm">{tag}</Pill>
                 ))}
                 <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{brief.displayDate}</span>
                 {brief.edition > 0 && (

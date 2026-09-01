@@ -77,12 +77,6 @@
   transform: translateY(-1px);
 }
 
-/* Tag colours */
-.tag-energy  { background: #FFF3E0; color: #B45309; }
-.tag-metals  { background: #F0F4FF; color: #2B4FC7; }
-.tag-macro   { background: #F3F0FF; color: #6B21A8; }
-.tag-agri    { background: #EFFAF4; color: #166534; }
-
 /* Live dot animation */
 @keyframes livePulse {
   0%, 100% { opacity: 1; }
@@ -258,8 +252,7 @@
     min-height: 44px;
   }
   /* But not inline/chip buttons — those are fine smaller */
-  button[style*="padding: 2px"], button[style*="padding:2px"],
-  .tag-chip { min-height: unset; }
+  button[style*="padding: 2px"], button[style*="padding:2px"] { min-height: unset; }
 }
 
 /* ── Prevent horizontal overflow ─────────────────────────────────────────── */

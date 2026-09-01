@@ -1,5 +1,6 @@
 import type { MarketIsSayingRow } from '@/lib/parseBriefSections'
 import renderInlineBold from './renderInlineBold'
+import Pill from '@/components/ui/Pill'
 
 // Part 12 §12.4.5 "The Market Is Saying" module — chip rows, source order
 // preserved (no fabricated significance ranking; the content pipeline's own
@@ -10,7 +11,7 @@ export default function MarketIsSayingModule({ heading, rows }: { heading: strin
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       <h2 style={{
-        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600,
+        fontFamily: 'var(--font-sans)', fontSize: 9, fontWeight: 600,
         letterSpacing: '0.12em', textTransform: 'uppercase',
         color: 'var(--gold)', margin: '1.5rem 0 0.5rem',
       }}>
@@ -22,15 +23,13 @@ export default function MarketIsSayingModule({ heading, rows }: { heading: strin
             display: 'flex', alignItems: 'flex-start', gap: 10,
             padding: '9px 12px', borderBottom: i < rows.length - 1 ? '1px solid var(--border)' : 'none',
           }}>
-            <span style={{
-              flexShrink: 0, marginTop: 2,
-              fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
-              padding: '2px 6px', borderRadius: 4, minWidth: 52, textAlign: 'center',
-              background: row.pct === null ? 'var(--surface-3)' : row.pct >= 0 ? 'var(--up-bg)' : 'var(--down-bg)',
-              color: row.pct === null ? 'var(--ink-4)' : row.pct >= 0 ? 'var(--up)' : 'var(--down)',
-            }}>
+            <Pill
+              tone={row.pct === null ? 'neutral' : row.pct >= 0 ? 'up' : 'down'}
+              size="xs"
+              style={{ flexShrink: 0, marginTop: 2, fontWeight: 700, minWidth: 52, justifyContent: 'center' }}
+            >
               {row.pct === null ? (row.commodity ?? '—') : `${row.pct >= 0 ? '+' : ''}${row.pct.toFixed(2)}%`}
-            </span>
+            </Pill>
             <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--ink-2)', fontWeight: 300 }}>
               {renderInlineBold(row.text)}
             </p>

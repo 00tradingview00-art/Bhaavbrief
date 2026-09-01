@@ -9,7 +9,7 @@ export default function WhatKillsItBlock({ heading, body }: { heading: string; b
       background: 'var(--down-bg)', border: '1px solid rgba(181,58,42,0.2)', borderRadius: 8,
     }}>
       <h2 style={{
-        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700,
+        fontFamily: 'var(--font-sans)', fontSize: 9, fontWeight: 700,
         letterSpacing: '0.12em', textTransform: 'uppercase',
         color: 'var(--down)', margin: '0 0 8px',
       }}>
