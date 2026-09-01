@@ -36,7 +36,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <div style={{ textAlign: 'center', padding: '80px 24px', maxWidth: 480, margin: '0 auto' }}>
           <div style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-sans)',
             fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--gold)', marginBottom: 16,
           }}>
