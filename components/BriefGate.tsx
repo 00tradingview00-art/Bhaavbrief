@@ -29,7 +29,7 @@ export default function BriefGate() {
       padding: '1.5rem 1.75rem',
     }}>
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: 10,
+        fontFamily: 'var(--font-sans)', fontSize: 10,
         letterSpacing: '0.1em', textTransform: 'uppercase',
         color: 'var(--gold)', fontWeight: 700, marginBottom: 10,
       }}>

@@ -76,7 +76,7 @@ export default function SubscribeForm({ compact = false, primary = false, locati
       }
     : {
         display: 'block', width: '100%', background: status === 'loading' ? '#8A8A7A' : '#18180F',
-        color: '#FAFAF6', fontFamily: 'var(--font-mono)',
+        color: '#FAFAF6', fontFamily: 'var(--font-sans)',
         fontSize: 11, letterSpacing: '0.05em', padding: 11,
         border: 'none', cursor: status === 'loading' ? 'not-allowed' : 'pointer',
         transition: 'background 0.15s',
@@ -85,7 +85,7 @@ export default function SubscribeForm({ compact = false, primary = false, locati
   if (status === 'success') {
     return (
       <div style={{ background: '#EAF5EE', border: '0.5px solid #5AAA70', padding: '1rem', textAlign: 'center' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1E6630', marginBottom: 4 }}>✓ Subscribed</div>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#1E6630', marginBottom: 4 }}>✓ Subscribed</div>
         <p style={{ fontSize: 15, color: '#1E6630', margin: 0 }}>{message}</p>
       </div>
     )
@@ -95,7 +95,7 @@ export default function SubscribeForm({ compact = false, primary = false, locati
     <form onSubmit={handleSubmit}>
       {!compact && (
         <>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.75rem' }}>
             Daily brief
           </div>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.3, marginBottom: '0.5rem' }}>
@@ -118,9 +118,9 @@ export default function SubscribeForm({ compact = false, primary = false, locati
         {status === 'loading' ? 'Subscribing...' : 'Subscribe →'}
       </button>
       {status === 'error' && (
-        <p style={{ fontSize: 11, color: '#991818', marginTop: 6, fontFamily: 'var(--font-mono)' }}>{message}</p>
+        <p style={{ fontSize: 11, color: '#991818', marginTop: 6, fontFamily: 'var(--font-sans)' }}>{message}</p>
       )}
-      <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#8A8A7A', textAlign: 'center', marginTop: 8 }}>
+      <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#8A8A7A', textAlign: 'center', marginTop: 8 }}>
         No spam · Unsubscribe anytime
       </p>
     </form>

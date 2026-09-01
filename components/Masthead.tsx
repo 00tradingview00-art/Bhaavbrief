@@ -20,13 +20,13 @@ export default function Masthead() {
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.025em', color: '#18180F', lineHeight: 1 }}>
               BhaavBrief
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8720A', marginTop: 4 }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#C8720A', marginTop: 4 }}>
               India&apos;s First Commodity Intelligence · Est. 2026
             </div>
           </Link>
           <div style={{ textAlign: 'right' }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em', lineHeight: 1.7 }}>{today}</p>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', lineHeight: 1.7 }}>bhaavbrief.in</p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em', lineHeight: 1.7 }}>{today}</p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', lineHeight: 1.7 }}>bhaavbrief.in</p>
           </div>
         </div>
 
@@ -45,7 +45,7 @@ export default function Masthead() {
             ))}
           </div>
           <Link href="#subscribe" style={{
-            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em',
+            fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.04em',
             background: '#18180F', color: '#FAFAF6', padding: '7px 18px',
             textDecoration: 'none', whiteSpace: 'nowrap',
           }}>

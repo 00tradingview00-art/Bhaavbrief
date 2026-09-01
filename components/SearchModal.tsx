@@ -35,7 +35,7 @@ function TypePill({ type }: { type: ScoredEntry['type'] }) {
   const st = s[type] ?? s.article
   return (
     <span style={{
-      fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.1em',
+      fontFamily: 'var(--font-sans)', fontSize: 8, letterSpacing: '0.1em',
       textTransform: 'uppercase', padding: '2px 6px',
       background: st.bg, color: st.color,
       border: `0.5px solid ${st.border ?? 'transparent'}`,
@@ -158,12 +158,12 @@ export default function SearchModal({ open, onClose }: Props) {
           />
           {loading && (
             // Part 12 §12.9: no infinite spinning loaders — static text instead.
-            <span style={{ fontSize: 11, color: 'var(--ink-4)', flexShrink: 0, fontFamily: 'var(--font-mono)' }}>
+            <span style={{ fontSize: 11, color: 'var(--ink-4)', flexShrink: 0, fontFamily: 'var(--font-sans)' }}>
               Searching…
             </span>
           )}
           <kbd onClick={onClose} style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10,
+            fontFamily: 'var(--font-sans)', fontSize: 10,
             color: 'var(--ink-4)', background: 'var(--surface-3)',
             border: '1px solid var(--border)', borderRadius: 4,
             padding: '2px 6px', cursor: 'pointer', flexShrink: 0,
@@ -179,7 +179,7 @@ export default function SearchModal({ open, onClose }: Props) {
           {!query && !result && (
             <div style={{ padding: '16px 20px' }}>
               <p style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 12,
               }}>
                 Try asking
@@ -212,7 +212,7 @@ export default function SearchModal({ open, onClose }: Props) {
           {/* Error */}
           {error && (
             <div style={{ padding: '24px 20px', textAlign: 'center' }}>
-              <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)' }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-4)' }}>
                 Search offline — try again in a moment
               </p>
             </div>
@@ -232,7 +232,7 @@ export default function SearchModal({ open, onClose }: Props) {
                     display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10,
                   }}>
                     <span style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em',
+                      fontFamily: 'var(--font-sans)', fontSize: 8, letterSpacing: '0.12em',
                       textTransform: 'uppercase', color: 'var(--gold)',
                       background: 'var(--gold-pale)', padding: '2px 7px',
                       border: '0.5px solid rgba(181,134,42,0.25)',
@@ -253,7 +253,7 @@ export default function SearchModal({ open, onClose }: Props) {
               {result.contentMatches.length > 0 && (
                 <div>
                   <p style={{
-                    fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                    fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                     textTransform: 'uppercase', color: 'var(--ink-4)',
                     padding: '14px 20px 8px', margin: 0,
                   }}>
@@ -278,14 +278,14 @@ export default function SearchModal({ open, onClose }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
                           <TypePill type={item.type} />
                           <span style={{
-                            fontFamily: 'var(--font-mono)', fontSize: 10,
+                            fontFamily: 'var(--font-sans)', fontSize: 10,
                             color: 'var(--ink-4)', letterSpacing: '0.03em',
                           }}>
                             {relDate(item.date)}
                           </span>
                           {item.commodity && (
                             <span style={{
-                              fontFamily: 'var(--font-mono)', fontSize: 10,
+                              fontFamily: 'var(--font-sans)', fontSize: 10,
                               color: 'var(--ink-4)', letterSpacing: '0.03em',
                             }}>
                               · {item.commodity}
@@ -319,7 +319,7 @@ export default function SearchModal({ open, onClose }: Props) {
                   borderTop: '1px solid var(--border)',
                 }}>
                   <p style={{
-                    fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                    fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                     textTransform: 'uppercase', color: 'var(--ink-4)',
                     margin: '0 0 8px',
                   }}>
@@ -350,7 +350,7 @@ export default function SearchModal({ open, onClose }: Props) {
               {/* No results */}
               {!result.answer && result.contentMatches.length === 0 && (
                 <div style={{ padding: '32px 20px', textAlign: 'center' }}>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)' }}>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-4)' }}>
                     No results — try a different search term
                   </p>
                 </div>
@@ -366,7 +366,7 @@ export default function SearchModal({ open, onClose }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
           flexWrap: 'wrap', gap: '4px 12px',
         }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
             BhaavBrief Intelligence
           </span>
         </div>

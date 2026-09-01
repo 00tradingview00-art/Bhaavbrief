@@ -92,7 +92,7 @@ export default function EmailCaptureModal({ location = 'brief_page_modal' }: { l
             ×
           </button>
         </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 6 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 6 }}>
           Before you go
         </div>
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', fontWeight: 700, marginBottom: 6, color: 'var(--ink)' }}>

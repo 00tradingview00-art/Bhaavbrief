@@ -131,12 +131,12 @@ export default function Nav() {
               <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/>
               <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em', color: 'var(--ink-3)', fontWeight: 700 }}
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.04em', color: 'var(--ink-3)', fontWeight: 700 }}
               className="nav-search-label">
               Search
             </span>
             <kbd style={{
-              fontFamily: 'var(--font-mono)', fontSize: 10,
+              fontFamily: 'var(--font-sans)', fontSize: 10,
               color: 'var(--ink-4)',
               background: '#fff',
               border: '1px solid var(--border)',
