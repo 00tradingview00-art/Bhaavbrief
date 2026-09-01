@@ -57,7 +57,10 @@ interface TagPillProps extends BaseProps {
 // that was gold in some places and dark-ink in others before this.
 export default function Pill(props: LinkPillProps | ClickPillProps | TagPillProps) {
   const { children, tone = 'neutral', size = 'sm', active = false, style } = props
-  const toneStyle = TONE_STYLE[tone]
+  // Several call sites cast a raw, dynamically-sourced string (e.g. an
+  // item's tagType) to PillTone — the cast can't guarantee the value is
+  // actually a known tone, so fall back rather than crash on lookup.
+  const toneStyle = TONE_STYLE[tone] ?? TONE_STYLE.neutral
   const sizeStyle = SIZE_STYLE[size]
 
   const sharedStyle: CSSProperties = {
