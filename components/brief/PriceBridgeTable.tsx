@@ -8,7 +8,7 @@ export default function PriceBridgeTable({ heading, rows }: { heading: string; r
   return (
     <div style={{ marginBottom: '1.5rem' }}>
       <h2 style={{
-        fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
+        fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 600,
         letterSpacing: '0.12em', textTransform: 'uppercase',
         color: 'var(--ink-4)', margin: '1.5rem 0 0.75rem',
       }}>
@@ -47,7 +47,7 @@ export default function PriceBridgeTable({ heading, rows }: { heading: string; r
         </table>
       </div>
       <p style={{
-        fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)',
+        fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)',
         margin: '0.5rem 0 0',
       }}>
         Full settlement data (OHLC, volume, OI) →{' '}

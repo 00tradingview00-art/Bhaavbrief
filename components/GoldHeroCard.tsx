@@ -3,6 +3,7 @@ import type { PriceData } from '@/lib/prices'
 import { getSparklineCloses } from '@/lib/history'
 import { fmtINR } from '@/lib/format'
 import Sparkline from '@/components/ui/Sparkline'
+import Pill from '@/components/ui/Pill'
 
 // Prominent flagship-commodity price card (Part 12 §12.5 "Gold Hero Card").
 export default function GoldHeroCard({ data }: { data: PriceData | null }) {
@@ -22,7 +23,7 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
         borderLeft: '3px solid var(--border-2)', borderRadius: 4,
         padding: '18px 22px', marginBottom: 32, textAlign: 'center',
       }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-4)' }}>
           MCX Gold price unavailable — refreshing shortly
         </span>
       </div>
@@ -49,7 +50,7 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
       }}>
         <div>
           <div style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600,
+            fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 600,
             letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--ink-4)', marginBottom: 8,
           }}>
@@ -62,14 +63,9 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
             }}>
               {fmtINR(gold.mcx)}
             </span>
-            <span style={{
-              fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 700,
-              padding: '3px 8px', borderRadius: 5,
-              background: up ? 'var(--up-bg)' : 'var(--down-bg)',
-              color: up ? 'var(--up)' : 'var(--down)',
-            }}>
+            <Pill tone={up ? 'up' : 'down'} size="sm" style={{ fontWeight: 700 }}>
               {up ? '+' : ''}{(gold.mcxChangePct ?? 0).toFixed(2)}%
-            </span>
+            </Pill>
           </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -77,7 +73,7 @@ export default function GoldHeroCard({ data }: { data: PriceData | null }) {
           {gold.comex > 0 && (
             <div style={{ textAlign: 'right' }}>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em',
                 textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 4,
               }}>
                 COMEX Gold

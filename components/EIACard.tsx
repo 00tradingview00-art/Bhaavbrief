@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import type { EIAResponse, EIAWeek } from '@/lib/eia'
 import { isEIAData } from '@/lib/eia'
+import Pill from '@/components/ui/Pill'
 
 function timeAgo(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime()
@@ -34,7 +35,7 @@ function BarChart({ history }: { history: EIAWeek[] }) {
   return (
     <div style={{ marginTop: 14 }}>
       <div style={{
-        fontFamily: 'var(--font-mono)',
+        fontFamily: 'var(--font-sans)',
         fontSize: 10,
         color: 'var(--ink-4)',
         letterSpacing: '0.08em',
@@ -134,7 +135,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
         justifyContent: 'space-between',
       }}>
         <span style={{
-          fontFamily:    'var(--font-mono)',
+          fontFamily:    'var(--font-sans)',
           fontSize:      9,
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
@@ -144,7 +145,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
           EIA Crude Stocks
         </span>
         <span style={{
-          fontFamily: 'var(--font-mono)',
+          fontFamily: 'var(--font-sans)',
           fontSize:   9,
           color:      'var(--ink-4)',
         }}>
@@ -159,13 +160,13 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
       }}>
 
         {loading && (
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--ink-4)' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--ink-4)' }}>
             Fetching…
           </div>
         )}
 
         {!loading && data && !isEIAData(data) && (
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6 }}>
             Data unavailable
             <div style={{ fontSize: 10, marginTop: 4 }}>EIA publishes Wednesdays ~8:30 PM IST</div>
           </div>
@@ -175,21 +176,10 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
           <div>
             {/* Direction badge */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-              <span style={{
-                fontFamily:    'var(--font-mono)',
-                fontSize:      9,
-                fontWeight:    500,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color:         accentColor,
-                background:    draw ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)',
-                padding:       '2px 7px',
-                border:        `1px solid ${accentColor}`,
-                borderRadius:  3,
-              }}>
+              <Pill tone={draw ? 'up' : 'down'} size="xs">
                 {draw ? 'Draw' : 'Build'}{data.isSignificant ? ' ★' : ''}
-              </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+              </Pill>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {draw ? 'Inventories fell' : 'Inventories rose'}
               </span>
             </div>
@@ -215,7 +205,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
             </div>
 
             {/* Plain-language context */}
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.5, marginBottom: 4 }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.5, marginBottom: 4 }}>
               {draw
                 ? 'Less oil in storage → supply tighter → supports crude prices'
                 : 'More oil in storage → supply building → weighs on crude prices'}
