@@ -6,6 +6,7 @@ import type { EIAResponse } from '@/lib/eia'
 import OptionChain from '@/components/mcx/OptionChain'
 import EIACard from '@/components/EIACard'
 import Sparkline from '@/components/ui/Sparkline'
+import Pill from '@/components/ui/Pill'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -94,7 +95,6 @@ function PriceCard({
   const hasKite    = data.mcxHigh > 0
   const hasChangePct = data.mcxPrevClose > 0
   const color      = isUp ? 'var(--up)' : 'var(--down)'
-  const bg         = isUp ? 'var(--up-bg)' : 'var(--down-bg)'
 
   return (
     <div style={{
@@ -112,13 +112,13 @@ function PriceCard({
           {cfg.label}
         </span>
         {hasChangePct ? (
-          <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: bg, color }}>
+          <Pill tone={isUp ? 'up' : 'down'} size="xs" style={{ fontWeight: 600 }}>
             {isUp ? '▲' : '▼'} {fmtPct(data.mcxChangePct)}
-          </span>
+          </Pill>
         ) : data.mcx > 0 ? (
-          <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: 'var(--surface-2)', color: 'var(--ink-4)', letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+          <Pill tone="neutral" size="xs" style={{ fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase' }}>
             Prev close
-          </span>
+          </Pill>
         ) : null}
       </div>
 
@@ -174,17 +174,14 @@ function PriceCard({
 
       {/* Footer — always visible */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 8, borderTop: '1px solid var(--border)', marginTop: hasKite ? 0 : 10 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', letterSpacing: '0.3px' }}>
           {hasKite && data.mcxSymbol ? data.mcxSymbol : ''}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {hasKite && data.mcxExpiry && (
-            <span style={{
-              fontFamily: 'var(--font-sans)', fontSize: 10, padding: '2px 6px', borderRadius: 3,
-              background: 'var(--gold-pale)', color: 'var(--gold-dark)',
-            }}>
+            <Pill tone="gold" size="xs">
               {daysToExpiry(data.mcxExpiry)} · {shortExpiry(data.mcxExpiry)}
-            </span>
+            </Pill>
           )}
           <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>Chart & analysis →</span>
         </div>
@@ -201,7 +198,7 @@ function SectionHeader({ label, right }: { label: string; right?: React.ReactNod
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       borderBottom: '1px solid var(--border)', paddingBottom: 8, marginBottom: 14,
     }}>
-      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
         {label}
       </span>
       {right}
@@ -255,14 +252,9 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <span style={{
-            fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 3,
-            background: marketOpen ? 'var(--up-bg)' : 'var(--surface-3)',
-            color: marketOpen ? 'var(--up)' : 'var(--ink-3)',
-            border: `1px solid ${marketOpen ? 'var(--up)' : 'var(--border)'}`,
-          }}>
+          <Pill tone={marketOpen ? 'up' : 'neutral'} size="sm" style={{ fontWeight: 600 }}>
             {marketOpen ? '● MCX Open' : '○ MCX Closed'}
-          </span>
+          </Pill>
           <span style={{ fontSize: 11, color: prices?.snapshotStale ? '#C87000' : 'var(--ink-4)' }}>
             {prices?.generatedAtIST
               ? `as of ${prices.generatedAtIST}`
@@ -276,7 +268,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
 
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
           {marketOpen ? 'Live · refreshed every 30s' : 'Market closed'}
         </span>
       } />
@@ -325,9 +317,9 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
                   {cfg.label}
                 </span>
                 {ltp > 0 && (
-                  <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: isUp ? 'var(--up-bg)' : 'var(--down-bg)', color: isUp ? 'var(--up)' : 'var(--down)' }}>
+                  <Pill tone={isUp ? 'up' : 'down'} size="xs" style={{ fontWeight: 600 }}>
                     {isUp ? '▲' : '▼'} {fmtPct(pct)}
-                  </span>
+                  </Pill>
                 )}
               </div>
               <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
@@ -346,7 +338,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
                 <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>{cfg.unit}</div>
               )}
               {fx?.symbol && (
-                <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
+                <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', color: 'var(--ink-4)', marginTop: 8 }}>{fx.symbol}</div>
               )}
               {cfg.key === 'usdinr' && ltp > 0 && (
                 <div style={{ fontSize: 11, color: 'var(--ink-3)', marginTop: 8, lineHeight: 1.4, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
@@ -363,7 +355,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 5px', borderRadius: 2, background: '#FFF3E0', color: '#B45309', letterSpacing: '0.05em' }}>RBI</span>
+              <Pill tone="energy" size="xs" style={{ fontWeight: 700 }}>RBI</Pill>
               <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>Repo Rate</span>
             </div>
           </div>
@@ -384,7 +376,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
       {/* ── MCX Option Chain ── */}
       <div style={{ marginBottom: 32 }}>
         <SectionHeader label="MCX Option Chain" right={
-          <Link href="/options" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
+          <Link href="/options" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
             View full chain →
           </Link>
         } />
@@ -426,7 +418,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
       {/* ── Global Reference ── */}
       <div style={{ marginBottom: 4 }}>
         <SectionHeader label="Global Reference" right={
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>15-min delayed</span>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>15-min delayed</span>
         } />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
           {p && ([
@@ -446,13 +438,13 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
               <div key={label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 4, padding: '14px 16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 5px', borderRadius: 3, background: exStyle.bg, color: exStyle.color }}>{exch}</span>
+                    <Pill tone="neutral" size="xs" style={{ background: exStyle.bg, color: exStyle.color, border: 'none', fontWeight: 700 }}>{exch}</Pill>
                     <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.3px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>{label}</span>
                   </div>
                   {pct !== undefined && (
-                    <span style={{ fontSize: 11, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: isUp ? 'var(--up-bg)' : 'var(--down-bg)', color: isUp ? 'var(--up)' : 'var(--down)' }}>
+                    <Pill tone={isUp ? 'up' : 'down'} size="xs" style={{ fontWeight: 600 }}>
                       {isUp ? '▲' : '▼'} {fmtPct(pct)}
-                    </span>
+                    </Pill>
                   )}
                 </div>
                 <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
