@@ -77,7 +77,7 @@ export default function SentimentPanel() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--ink)' }}>{name}</span>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10,
+                fontFamily: 'var(--font-sans)', fontSize: 10,
                 color: 'var(--ink-4)', letterSpacing: '0.04em',
               }}>
                 {count} article{count !== 1 ? 's' : ''}
