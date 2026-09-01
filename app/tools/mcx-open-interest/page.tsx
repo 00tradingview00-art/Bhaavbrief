@@ -2,9 +2,12 @@ import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
+import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
 import OIBuildupSection from './OIBuildupSection'
 import { safeJsonLd } from '@/lib/seo'
+
+type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -46,12 +49,20 @@ export const metadata: Metadata = {
 }
 
 async function getOIData() {
-  type OIResult = { futurePrice: number; topCE: { strike: number; oi: number }[]; topPE: { strike: number; oi: number }[] } | null
+  type OIResult = { futurePrice: number; topCE: { strike: number; oi: number }[]; topPE: { strike: number; oi: number }[]; stale?: boolean } | null
 
   const entries = await Promise.all(
     Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, OIResult]> => {
       try {
-        const { chain, futurePrice } = await getOptionsChain(instrument)
+        // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to
+        // the last-known-good chain, same pattern app/options/page.tsx already
+        // uses, so this page shows real (if stale) OI data instead of going blank.
+        const result = await getOptionsChain(instrument).catch(async () => {
+          const cached = await getCachedOptionsChain(instrument)
+          return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult & { stale: true }) : null
+        })
+        if (!result) return [instrument, null]
+        const { chain, futurePrice } = result
         const topCE = [...chain]
           .sort((a, b) => b.CE.oi - a.CE.oi)
           .slice(0, 5)
@@ -60,7 +71,7 @@ async function getOIData() {
           .sort((a, b) => b.PE.oi - a.PE.oi)
           .slice(0, 5)
           .map(r => ({ strike: r.strike, oi: r.PE.oi }))
-        return [instrument, { futurePrice, topCE, topPE }]
+        return [instrument, { futurePrice, topCE, topPE, stale: 'stale' in result ? result.stale : false }]
       } catch {
         return [instrument, null]
       }
@@ -73,6 +84,7 @@ export default async function MCXOpenInterestPage() {
   const { userId } = await auth()
   const isPro = await isProUser(userId)
   const oi = await getOIData()
+  const anyStale = Object.values(oi).some(d => d?.stale)
   const buildupInstruments = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
     const data = oi[key]
     const strikes = data
@@ -99,9 +111,14 @@ export default async function MCXOpenInterestPage() {
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Open Interest Analysis
       </h1>
-      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
+      <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: anyStale ? '0.5rem' : '1.5rem' }}>
         Top-5 OI strikes by Call and Put for each instrument. High OI = strong support/resistance.
       </p>
+      {anyStale && (
+        <p style={{ fontSize: '0.78rem', color: 'var(--gold-dark)', marginBottom: '1.5rem' }}>
+          Showing the last known data for one or more instruments — live feed temporarily unavailable.
+        </p>
+      )}
 
       <div style={{ display: 'grid', gap: '1.25rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
