@@ -92,7 +92,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -138,9 +138,9 @@ export default function Page() {
               ].map((r, i) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? 'white' : '#FAFAF7' }}>
                   <td style={{ ...td, fontWeight: 500 }}>{r.commodity}</td>
-                  <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13, color: '#C8720A' }}>{r.expiry}</td>
+                  <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13, color: '#C8720A' }}>{r.expiry}</td>
                   <td style={td}>{r.settlement}</td>
-                  <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13 }}>{r.lot}</td>
+                  <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13 }}>{r.lot}</td>
                   <td style={{ ...td, color: '#E05C00' }}>{r.roll}</td>
                 </tr>
               ))}

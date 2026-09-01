@@ -133,7 +133,7 @@ export default async function EventResultPage({ params }: Props) {
             </span>
             <span style={{
               fontSize: 11, color: 'var(--ink-4)', padding: '2px 7px', borderRadius: 4,
-              background: 'var(--surface-3)', fontFamily: 'var(--font-mono)',
+              background: 'var(--surface-3)', fontFamily: 'var(--font-sans)',
             }}>
               {event.eventName}
             </span>
@@ -170,11 +170,11 @@ export default async function EventResultPage({ params }: Props) {
               MCX {commodityLabel} at print
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>
                 ₹{event.mcxPrice.toLocaleString('en-IN')}
               </span>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600,
+                fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 14, fontWeight: 600,
                 color: up ? '#16A34A' : '#DC2626',
               }}>
                 {up ? '▲' : '▼'} {Math.abs(event.mcxChangePct).toFixed(2)}%
@@ -206,7 +206,7 @@ export default async function EventResultPage({ params }: Props) {
                 border: '1px solid var(--border)', borderLeft: '3px solid var(--gold)',
                 borderRadius: '0 4px 4px 0', padding: '12px 16px',
               }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                   Full coverage →
                 </span>
               </div>
@@ -228,7 +228,7 @@ export default async function EventResultPage({ params }: Props) {
           border: '0.5px solid var(--border)', display: 'flex', alignItems: 'center',
           justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
         }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
             Found this useful? Share with your trading circle.
           </span>
           <CopyLinkButton url={eventUrl} title={event.title} location="event_page" />
@@ -247,7 +247,7 @@ export default async function EventResultPage({ params }: Props) {
               {recentBriefs.map(b => (
                 <Link key={b.urlSlug} href={`/briefs/${b.urlSlug}`} style={{ textDecoration: 'none' }}>
                   <div style={{ borderLeft: '3px solid var(--gold)', paddingLeft: 14, paddingTop: 8, paddingBottom: 8 }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
                       {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)', lineHeight: 1.4 }}>

@@ -91,8 +91,8 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
         ].map((c, i, arr) => (
           <span key={c.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {c.href
-              ? <a href={c.href} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none' }}>{c.label}</a>
-              : <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>{c.label}</span>
+              ? <a href={c.href} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none' }}>{c.label}</a>
+              : <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>{c.label}</span>
             }
             {i < arr.length - 1 && <span style={{ color: 'var(--border-2)', fontSize: 10 }}>›</span>}
           </span>
@@ -107,7 +107,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, flexWrap: 'wrap' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)',
+            fontFamily: 'var(--font-sans)',
             fontSize: 10,
             fontWeight: 700,
             letterSpacing: '0.1em',
@@ -121,7 +121,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
           </span>
           {arc.primaryCommodity && (
             <span style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10,
               color: 'white',
               background: 'var(--ink-3)',
@@ -133,7 +133,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
           )}
           {arc.keyLevel && (
             <span style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10,
               color: 'var(--gold)',
               background: 'var(--gold-pale)',
@@ -172,7 +172,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
 
         <div style={{
           display: 'flex', gap: 16, marginTop: 12, flexWrap: 'wrap',
-          fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)',
+          fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)',
         }}>
           <span>Started {new Date(arc.startDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}</span>
           {arc.endDate && <span>Resolved {new Date(arc.endDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}</span>}
@@ -212,7 +212,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10,
                   fontWeight: 700,
                   color: idx === 0 ? '#fff' : 'var(--ink-3)',
@@ -233,7 +233,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
                 transition: 'border-color 0.15s',
               }}>
                 <div style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10,
                   color: 'var(--ink-4)',
                   letterSpacing: '0.06em',
@@ -269,14 +269,14 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
                 border: '2px dashed var(--border-2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>…</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>…</span>
               </div>
             </div>
             <div style={{
               flex: 1, border: '1px dashed var(--border)',
               borderRadius: 4, padding: '14px 16px',
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 Story continues · Next edition tomorrow
               </span>
             </div>
@@ -291,12 +291,12 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
         if (!page) return null
         return (
           <div style={{ marginTop: 32, border: '0.5px solid var(--border)', borderRadius: 4, padding: '1.25rem' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
               Related
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <Link href={`/commodities/${page.slug}`} style={{
-                fontFamily: 'var(--font-mono)', fontSize: 11,
+                fontFamily: 'var(--font-sans)', fontSize: 11,
                 color: 'var(--gold)', textDecoration: 'none',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '6px 0', borderBottom: '0.5px solid var(--border)',
@@ -305,7 +305,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
                 <span style={{ fontSize: 10, color: 'var(--ink-4)' }}>→</span>
               </Link>
               <Link href={`/options/${page.slug}`} style={{
-                fontFamily: 'var(--font-mono)', fontSize: 11,
+                fontFamily: 'var(--font-sans)', fontSize: 11,
                 color: 'var(--gold)', textDecoration: 'none',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '6px 0',
@@ -321,7 +321,7 @@ export default async function ArcPage({ params }: { params: Promise<{ id: string
       {/* Back */}
       <div style={{ marginTop: 40 }}>
         <Link href="/briefs" style={{
-          fontFamily: 'var(--font-mono)', fontSize: 11,
+          fontFamily: 'var(--font-sans)', fontSize: 11,
           color: 'var(--gold)', textDecoration: 'none',
         }}>
           ← All editions

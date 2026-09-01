@@ -143,7 +143,7 @@ export default async function ArticlePage({ params }: Props) {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
               <span style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.12em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.12em',
                 textTransform: 'uppercase', padding: '3px 10px', fontWeight: 700,
                 background: '#1A0A0A', color: '#FF4444', border: '0.5px solid #FF4444',
               }}>
@@ -152,11 +152,11 @@ export default async function ArticlePage({ params }: Props) {
               <span style={{
                 fontSize: 10, fontWeight: 600, letterSpacing: '0.4px', textTransform: 'uppercase',
                 padding: '3px 8px', background: `${color}20`, color,
-                fontFamily: 'var(--font-mono)',
+                fontFamily: 'var(--font-sans)',
               }}>
                 {meta.commodity.toUpperCase()}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
                 {meta.date && new Date(meta.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}
                 {meta.time && ` · ${meta.time} IST`}
               </span>
@@ -219,7 +219,7 @@ export default async function ArticlePage({ params }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexWrap: 'wrap', gap: 12,
         }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: 'var(--ink-3)' }}>
             Found this useful? Share with your trading circle.
           </span>
           <CopyLinkButton url={`https://bhaavbrief.in/articles/${slug}`} title={meta.title} location="article_page" />
@@ -243,7 +243,7 @@ export default async function ArticlePage({ params }: Props) {
                     paddingLeft: 14, paddingTop: 8, paddingBottom: 8,
                     transition: 'border-color 0.15s',
                   }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
                       {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' })}
                     </div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)', lineHeight: 1.4 }}>
@@ -282,7 +282,7 @@ export default async function ArticlePage({ params }: Props) {
         /* Section label: paragraph whose only content is a bold element (e.g. **WHAT HAPPENED**) */
         .article-body p > strong:only-child {
           display: block;
-          font-family: var(--font-mono);
+          font-family: var(--font-sans);
           font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.12em;
@@ -318,7 +318,7 @@ export default async function ArticlePage({ params }: Props) {
         .hawk-scan-body strong {
           color: var(--ink);
           font-weight: 700;
-          font-family: var(--font-mono);
+          font-family: var(--font-sans);
           font-size: 11px;
           letter-spacing: 0.08em;
           text-transform: uppercase;

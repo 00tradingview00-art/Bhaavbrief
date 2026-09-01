@@ -60,12 +60,12 @@ export default function UpcomingEventsForCommodity({ commodityKey, name }: { com
               >
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
                   <span style={{ fontSize: 14, color: 'var(--ink-2)', fontWeight: 500 }}>{event.name}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)', whiteSpace: 'nowrap' }}>
                     {formatIST(event.next_release_utc)}
                   </span>
                 </div>
                 {(prior || stats) && (
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', marginTop: 2 }}>
+                  <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', marginTop: 2 }}>
                     {[prior, stats ? `Avg move ±${stats.avgAbsMovePct.toFixed(1)}% (n=${stats.sampleSize})` : null]
                       .filter(Boolean).join(' · ')}
                   </div>

@@ -37,11 +37,11 @@ export default function CountdownTimer({ targetIso, label }: { targetIso: string
       flexWrap: 'wrap',
       marginBottom: 16,
     }}>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-2)' }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2)' }}>
         {label}
       </div>
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 700,
+        fontFamily: 'var(--font-sans)', fontSize: 14, fontWeight: 700,
         color: 'var(--gold)', letterSpacing: '0.02em',
       }}>
         {formatRemaining(remaining)}

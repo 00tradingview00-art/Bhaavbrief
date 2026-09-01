@@ -82,7 +82,7 @@ export default async function AboutPage() {
 
         {/* Header */}
         <div style={{ marginBottom: '2.25rem' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A' }}>
             About
           </span>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', margin: '0.4rem 0 1.25rem', maxWidth: 780 }}>
@@ -108,7 +108,7 @@ export default async function AboutPage() {
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.65rem', fontWeight: 800, color: '#18180F', lineHeight: 1 }}>
                 {s.value}
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', marginTop: 6 }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', marginTop: 6 }}>
                 {s.label}
               </div>
             </div>
@@ -151,7 +151,7 @@ export default async function AboutPage() {
                 ].map(p => (
                   <div key={p.badge} style={{ background: '#F3F2EC', border: '0.5px solid #DDDDD0', padding: '1rem 1.1rem' }}>
                     <span style={{
-                      display: 'inline-block', fontFamily: 'var(--font-mono)', fontSize: 10,
+                      display: 'inline-block', fontFamily: 'var(--font-sans)', fontSize: 10,
                       letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px',
                       border: `0.5px solid ${p.badgeBorder}`, background: p.badgeBg, color: p.badgeColor,
                       marginBottom: '0.75rem',
@@ -164,7 +164,7 @@ export default async function AboutPage() {
                     <p style={{ fontSize: 12, color: '#48483A', lineHeight: 1.75, fontWeight: 300, margin: '0 0 0.85rem' }}>
                       {p.desc}
                     </p>
-                    <a href={p.link} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1, letterSpacing: '0.03em' }}>
+                    <a href={p.link} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1, letterSpacing: '0.03em' }}>
                       {p.linkText} →
                     </a>
                   </div>
@@ -180,11 +180,11 @@ export default async function AboutPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {COMMODITIES.map(c => (
                   <div key={c.name} style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '0.9rem 1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', background: '#FFF7E0', border: '0.5px solid #D4A830', padding: '3px 8px', flexShrink: 0, marginTop: 2 }}>
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', background: '#FFF7E0', border: '0.5px solid #D4A830', padding: '3px 8px', flexShrink: 0, marginTop: 2 }}>
                       {c.symbol}
                     </span>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 2 }}>{c.name}</div>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 2 }}>{c.name}</div>
                       <div style={{ fontSize: 12, color: '#8A8A7A', lineHeight: 1.5 }}>{c.desc}</div>
                     </div>
                   </div>
@@ -201,7 +201,7 @@ export default async function AboutPage() {
                 {AUDIENCES.map(a => (
                   <div key={a.label} style={{ padding: '1rem 1.1rem', border: '0.5px solid #DDDDD0', background: '#FAFAF6' }}>
                     <div style={{ fontSize: 20, marginBottom: '0.5rem', color: '#C8720A', lineHeight: 1 }}>{a.icon}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, color: '#18180F', marginBottom: '0.4rem' }}>{a.label}</div>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600, color: '#18180F', marginBottom: '0.4rem' }}>{a.label}</div>
                     <div style={{ fontSize: 12, color: '#48483A', lineHeight: 1.65, fontWeight: 300 }}>{a.desc}</div>
                   </div>
                 ))}
@@ -267,7 +267,7 @@ export default async function AboutPage() {
                   },
                 ].map(item => (
                   <div key={item.label} style={{ paddingLeft: '1rem', borderLeft: '2px solid #C8720A' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{item.label}</div>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{item.label}</div>
                     <div style={{ fontSize: 14, color: '#48483A', lineHeight: 1.75, fontWeight: 300 }}>{item.body}</div>
                   </div>
                 ))}
@@ -288,7 +288,7 @@ export default async function AboutPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {PRINCIPLES.map(p => (
                   <div key={p.title} style={{ paddingLeft: '1rem', borderLeft: '2px solid #C8720A' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{p.title}</div>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 500, color: '#18180F', marginBottom: 4 }}>{p.title}</div>
                     <div style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300 }}>{p.body}</div>
                   </div>
                 ))}
@@ -297,7 +297,7 @@ export default async function AboutPage() {
 
             {/* Disclaimer */}
             <div style={{ background: '#18180F', padding: '1.25rem 1.5rem', color: '#FAFAF6' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
                 Important — Not SEBI registered
               </div>
               <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
@@ -331,15 +331,15 @@ export default async function AboutPage() {
                 { label: 'Geo Risk refresh', value: 'Every 15 min' },
               ].map((s, i, arr) => (
                 <div key={s.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: i < arr.length - 1 ? '0.5px solid #DDDDD0' : 'none' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{s.label}</span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#18180F', fontWeight: 500 }}>{s.value}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{s.label}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#18180F', fontWeight: 500 }}>{s.value}</span>
                 </div>
               ))}
             </div>
 
             {/* Explore links */}
             <div style={{ border: '0.5px solid #DDDDD0', padding: '1rem 1.1rem', marginBottom: '1.5rem' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                 Explore
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -350,7 +350,7 @@ export default async function AboutPage() {
                   { href: '/learn',   label: 'Learn MCX Trading' },
                   { href: '/invest',  label: 'How to Invest' },
                 ].map(l => (
-                  <a key={l.href} href={l.href} style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.03em' }}>
+                  <a key={l.href} href={l.href} style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.03em' }}>
                     {l.label} →
                   </a>
                 ))}
@@ -359,13 +359,13 @@ export default async function AboutPage() {
 
             {/* Contact */}
             <div style={{ padding: '1.25rem', border: '0.5px solid #DDDDD0' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                 Get in touch
               </div>
               <p style={{ fontSize: 15, color: '#48483A', lineHeight: 1.7, fontWeight: 300, marginBottom: '0.75rem' }}>
                 Questions, feedback, or a story tip? We read every submission.
               </p>
-              <a href="/feedback" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+              <a href="/feedback" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
                 Share feedback →
               </a>
             </div>

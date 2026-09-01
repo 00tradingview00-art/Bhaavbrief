@@ -112,9 +112,9 @@ export default function CalendarPage() {
         ].map((crumb, i, arr) => (
           <span key={crumb.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {crumb.href ? (
-              <a href={crumb.href} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
+              <a href={crumb.href} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
             ) : (
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
             )}
             {i < arr.length - 1 && <span style={{ color: '#C8C8B8', fontSize: 10 }}>›</span>}
           </span>

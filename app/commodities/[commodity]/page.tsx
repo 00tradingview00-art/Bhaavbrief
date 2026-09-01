@@ -537,7 +537,7 @@ export default async function CommodityPage({ params }: Props) {
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 36, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-1px' }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 36, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-1px' }}>
               {ltp > 0 ? `₹${fmt(ltp)}` : '—'}
             </div>
             <div style={{ marginTop: 6 }}>
@@ -563,7 +563,7 @@ export default async function CommodityPage({ params }: Props) {
                 <div style={{ fontSize: 11, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4 }}>
                   {label}
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: 'var(--ink-2)', fontWeight: 500 }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 16, color: 'var(--ink-2)', fontWeight: 500 }}>
                   ₹{value}
                 </div>
               </div>
@@ -583,7 +583,7 @@ export default async function CommodityPage({ params }: Props) {
             <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
               Duty-inclusive import parity
             </div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
               ₹{fmt(liveParity.dutyInclusivePrice)}
               <span style={{ fontSize: 12, color: 'var(--ink-4)', marginLeft: 6 }}>{info.unit}</span>
             </div>
@@ -593,7 +593,7 @@ export default async function CommodityPage({ params }: Props) {
               MCX vs parity
             </div>
             <div style={{
-              fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600,
+              fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 18, fontWeight: 600,
               color: liveParity.premiumPct > 0 ? '#D97706' : '#2B7A0B',
             }}>
               {liveParity.premiumPct > 0 ? '+' : ''}{liveParity.premiumPct.toFixed(1)}%
@@ -625,7 +625,7 @@ export default async function CommodityPage({ params }: Props) {
                 padding: '14px 16px',
               }}>
                 <div style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
@@ -658,7 +658,7 @@ export default async function CommodityPage({ params }: Props) {
                   {leadArc.summary}
                 </p>
                 <span style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10,
                   color: 'var(--gold)',
                 }}>

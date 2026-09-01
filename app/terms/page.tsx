@@ -34,7 +34,7 @@ export default function TermsPage() {
 
         <div style={{ marginBottom: '2.5rem' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+            fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
             textTransform: 'uppercase', color: '#C8720A',
           }}>
             Legal
@@ -45,7 +45,7 @@ export default function TermsPage() {
           }}>
             Terms of Use
           </h1>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
             Last updated: {LAST_UPDATED}
           </p>
         </div>
@@ -152,10 +152,10 @@ export default function TermsPage() {
           border: '0.5px solid #DDDDD0',
           display: 'flex', gap: 24, flexWrap: 'wrap',
         }}>
-          <Link href="/privacy" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+          <Link href="/privacy" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             Privacy Policy →
           </Link>
-          <Link href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#8A8A7A', textDecoration: 'none' }}>
+          <Link href="/" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#8A8A7A', textDecoration: 'none' }}>
             ← Back to home
           </Link>
         </div>

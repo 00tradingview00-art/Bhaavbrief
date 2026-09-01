@@ -114,7 +114,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         flexWrap: 'wrap', gap: 10,
       }}>
         <div>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 6 }}>
             MCX Historical · {unit}
           </div>
           {!loading && !error && data.length > 0 && (
@@ -128,7 +128,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
               }}>
                 {isUp ? '+' : ''}{changePct.toFixed(2)}%
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {PERIODS.find(p => p.value === period)?.label}
               </span>
             </div>
@@ -142,7 +142,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
               key={p.value}
               onClick={() => setPeriod(p.value)}
               style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.06em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.06em',
                 padding: '4px 10px', border: 'none', borderRadius: 4, cursor: 'pointer',
                 background: period === p.value ? color : 'var(--surface-3)',
                 color:      period === p.value ? '#fff' : 'var(--ink-4)',
@@ -161,7 +161,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         {loading && (
           <div style={{
             height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)',
+            fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)',
           }}>
             Loading…
           </div>
@@ -170,7 +170,7 @@ export default function CommodityChart({ commodity, color, unit }: Props) {
         {error && (
           <div style={{
             height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--ink-4)',
+            fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)',
           }}>
             Chart data unavailable
           </div>

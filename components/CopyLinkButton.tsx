@@ -28,7 +28,7 @@ function LinkIcon() {
 
 const BTN: React.CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
-  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em',
+  fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em',
   padding: '6px 12px', border: 'none', cursor: 'pointer',
   transition: 'opacity .15s', whiteSpace: 'nowrap' as const,
 }

@@ -319,7 +319,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             <EmailCaptureModal location="brief_page_modal" />
 
             <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
               <CopyLinkButton url={url} title={brief.title} location="brief_page" />
             </div>
 
@@ -332,10 +332,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               <div>
                 {prev && (
                   <Link href={`/briefs/${prev.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
                       ← Previous edition
                     </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
                       #{String(prev.edition).padStart(3,'0')} · {prev.displayDate.split(',')[0]}
                     </div>
                     <div style={{ fontSize: 12, color: '#48483A', lineHeight: 1.4, marginTop: 2, fontWeight: 500 }}>
@@ -347,7 +347,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
               {/* All editions */}
               <div style={{ textAlign: 'center' }}>
-                <Link href="/briefs" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '0.5px solid #C8C8B8', paddingBottom: 1 }}>
+                <Link href="/briefs" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderBottom: '0.5px solid #C8C8B8', paddingBottom: 1 }}>
                   All editions
                 </Link>
               </div>
@@ -356,10 +356,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
               <div style={{ textAlign: 'right' }}>
                 {next && (
                   <Link href={`/briefs/${next.urlSlug}`} style={{ textDecoration: 'none', display: 'block' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
                       Next edition →
                     </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', lineHeight: 1.4 }}>
                       #{String(next.edition).padStart(3,'0')} · {next.displayDate.split(',')[0]}
                     </div>
                     <div style={{ fontSize: 12, color: '#48483A', lineHeight: 1.4, marginTop: 2, fontWeight: 500 }}>
@@ -385,13 +385,13 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             if (pages.length === 0) return null
             return (
               <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                   Commodity Pages
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {pages.map(p => (
                     <Link key={p.slug} href={`/commodities/${p.slug}`} style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 11,
+                      fontFamily: 'var(--font-sans)', fontSize: 11,
                       color: '#C8720A', textDecoration: 'none',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
@@ -414,13 +414,13 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
             if (optPages.length === 0) return null
             return (
               <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
                   Options Chain
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {optPages.map(p => (
                     <Link key={p.slug} href={`/options/${p.slug}`} style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 11,
+                      fontFamily: 'var(--font-sans)', fontSize: 11,
                       color: '#C8720A', textDecoration: 'none',
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',
@@ -436,7 +436,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
           {/* Learn section internal links */}
           <div style={{ border: '0.5px solid #DDDDD0', padding: '1.25rem', marginBottom: '1.5rem' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: '0.75rem' }}>
               Learn
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -453,7 +453,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 { label: 'How to hedge price risk',   href: '/options' },
               ].map(l => (
                 <Link key={l.label} href={l.href} style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 11,
+                  fontFamily: 'var(--font-sans)', fontSize: 11,
                   color: '#48483A', textDecoration: 'none',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   padding: '6px 0', borderBottom: '0.5px solid #DDDDD0',

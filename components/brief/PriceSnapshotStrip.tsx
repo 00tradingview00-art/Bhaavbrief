@@ -57,7 +57,7 @@ export default function PriceSnapshotStrip({ commodities, data }: { commodities:
             flexShrink: 0, background: 'var(--surface-2, #FAFAF7)', borderRadius: 8,
             padding: '6px 10px', display: 'flex', alignItems: 'baseline', gap: 6,
           }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-4)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--ink-4)' }}>
               {item.label}
             </span>
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 700, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>

@@ -91,7 +91,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -107,7 +107,7 @@ export default function Page() {
         </p>
 
         <div style={keyBox}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#C8720A', marginBottom: 12, fontWeight: 600 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#C8720A', marginBottom: 12, fontWeight: 600 }}>
             One-Line Answer
           </div>
           <p style={{ fontSize: 16, color: '#18180F', lineHeight: 1.7, margin: 0 }}>
@@ -176,7 +176,7 @@ export default function Page() {
                 position: 'absolute', left: -12, top: 0,
                 width: 24, height: 24, borderRadius: '50%',
                 background: '#C8720A', color: 'white',
-                fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 700,
+                fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 700,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 flexShrink: 0,
               }}>
@@ -213,7 +213,7 @@ export default function Page() {
               ].map((r, i) => (
                 <tr key={i} style={{ background: i === 2 ? '#FFFBF5' : i % 2 === 0 ? 'white' : '#FAFAF7' }}>
                   <td style={{ ...td, fontWeight: i === 2 ? 600 : 400 }}>{r.session}</td>
-                  <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: 13, color: '#C8720A' }}>{r.time}</td>
+                  <td style={{ ...td, fontFamily: 'var(--font-sans)', fontSize: 13, color: '#C8720A' }}>{r.time}</td>
                   <td style={td}>{r.what}</td>
                   <td style={{ ...td, color: '#48483A', fontWeight: i === 2 ? 500 : 400 }}>{r.impact}</td>
                 </tr>
@@ -239,7 +239,7 @@ export default function Page() {
           ].map((r) => (
             <div key={r.rank} style={{ display: 'flex', gap: 16, padding: '14px 16px', background: '#FAFAF7', borderRadius: 4, border: '1px solid #E5E5DC' }}>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700,
+                fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 700,
                 color: '#C8720A', flexShrink: 0, width: 20, paddingTop: 2,
               }}>
                 {r.rank}

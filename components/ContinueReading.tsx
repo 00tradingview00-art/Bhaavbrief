@@ -26,7 +26,7 @@ export default function ContinueReading() {
       marginBottom: 24, paddingBottom: 20, borderBottom: '1px solid var(--border)',
     }}>
       <span style={{
-        fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em',
+        fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em',
         textTransform: 'uppercase', color: 'var(--ink-4)', flexShrink: 0,
       }}>
         Continue reading

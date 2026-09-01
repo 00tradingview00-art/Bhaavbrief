@@ -283,7 +283,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   borderBottom: '0.5px solid #DDDDD0',
                 }}>
                   <span style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                     fontSize: 10,
                     fontWeight: 600,
                     letterSpacing: '0.08em',
@@ -292,7 +292,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   }}>
                     {dateDividerLabel(dateKey)}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                     {dateKey}
                   </span>
                 </div>
@@ -310,7 +310,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                   <Pill tone={item.tagType as PillTone} size="sm">{item.category.charAt(0).toUpperCase() + item.category.slice(1)}</Pill>
                   <TypeBadge itemType={item.itemType} premium={item.premium} />
                   <span style={{ width: 1, height: 12, background: '#DDDDD0', display: 'inline-block' }} />
-                  <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)' }}>
                     {relativeTime(item.pubDate)}
                   </span>
                 </div>
@@ -358,7 +358,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                     )}
                     {item.href && (
                       <Link href={item.href} style={{
-                        fontFamily: 'var(--font-mono)',
+                        fontFamily: 'var(--font-sans)',
                         fontSize: 11,
                         color: item.itemType === 'hawk-scan' ? '#CC3300' : '#C8720A',
                         textDecoration: 'none',
@@ -396,7 +396,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
             onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             disabled={page === 1}
             style={{
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
+              fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
               padding: '8px 16px', border: '0.5px solid #DDDDD0',
               background: page === 1 ? 'transparent' : '#18180F',
               color: page === 1 ? '#C8C8B8' : '#FAFAF6',
@@ -412,7 +412,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
                 key={p}
                 onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                 style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 11,
+                  fontFamily: 'var(--font-sans)', fontSize: 11,
                   width: 30, height: 30, border: '0.5px solid #DDDDD0',
                   background: page === p ? '#18180F' : 'transparent',
                   color: page === p ? '#FAFAF6' : '#8A8A7A',
@@ -428,7 +428,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
             onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             disabled={page === totalPages}
             style={{
-              fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
+              fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
               padding: '8px 16px', border: '0.5px solid #DDDDD0',
               background: page === totalPages ? 'transparent' : '#18180F',
               color: page === totalPages ? '#C8C8B8' : '#FAFAF6',
@@ -442,7 +442,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
       {/* Item count */}
       {!loading && !error && filtered.length > 0 && (
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
           {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} intelligence items`}
         </div>
       )}

@@ -109,7 +109,7 @@ export default async function BriefsPage() {
                 ))}
                 <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>{brief.displayDate}</span>
                 {brief.edition > 0 && (
-                  <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-sans)' }}>
                     · #{brief.edition}
                   </span>
                 )}
@@ -133,7 +133,7 @@ export default async function BriefsPage() {
           display: 'block', border: '0.5px solid var(--gold)', background: 'var(--gold-pale)',
           padding: '1rem 1.25rem', marginBottom: '1.5rem', textDecoration: 'none',
         }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold-dark)', marginBottom: '0.4rem', fontWeight: 700 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold-dark)', marginBottom: '0.4rem', fontWeight: 700 }}>
             Pro Research
           </div>
           <p style={{ fontSize: 13, color: 'var(--ink-2)', margin: 0, lineHeight: 1.5 }}>
@@ -141,7 +141,7 @@ export default async function BriefsPage() {
           </p>
         </Link>
         <div style={{ border: '0.5px solid var(--border)', padding: '1.25rem' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: '0.75rem' }}>
             Learn
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -153,7 +153,7 @@ export default async function BriefsPage() {
               'How to hedge price risk',
             ].map(label => (
               <Link key={label} href="/learn" style={{
-                fontFamily: 'var(--font-mono)', fontSize: 11,
+                fontFamily: 'var(--font-sans)', fontSize: 11,
                 color: 'var(--ink-3)', textDecoration: 'none',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 padding: '8px 0', borderBottom: '0.5px solid var(--border)',
@@ -163,7 +163,7 @@ export default async function BriefsPage() {
               </Link>
             ))}
           </div>
-          <Link href="/learn" style={{ display: 'block', marginTop: '0.75rem', fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.04em' }}>
+          <Link href="/learn" style={{ display: 'block', marginTop: '0.75rem', fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.04em' }}>
             All topics →
           </Link>
         </div>

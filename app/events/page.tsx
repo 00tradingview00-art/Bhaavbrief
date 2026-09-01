@@ -94,11 +94,11 @@ export default async function EventsIndexPage() {
                     </div>
                   </div>
                   <div style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
                       ₹{e.mcxPrice.toLocaleString('en-IN')}
                     </div>
                     <div style={{
-                      fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600,
+                      fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 600,
                       color: up ? '#16A34A' : '#DC2626',
                     }}>
                       {up ? '▲' : '▼'} {Math.abs(e.mcxChangePct).toFixed(2)}%

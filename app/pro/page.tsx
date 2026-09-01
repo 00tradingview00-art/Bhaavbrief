@@ -210,7 +210,7 @@ function PricingCard({
       <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--ink-3)', marginBottom: '0.35rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
         {label}
       </div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.2rem' }}>
+      <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.2rem' }}>
         {price}<span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.7rem', fontWeight: 400, color: 'var(--ink-3)' }}>{sub}</span>
       </div>
       {note && <div style={{ fontSize: '0.7rem', color: 'var(--up)', marginBottom: '0.7rem', fontWeight: 500 }}>{note}</div>}

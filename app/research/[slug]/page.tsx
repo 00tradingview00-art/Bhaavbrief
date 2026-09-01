@@ -147,7 +147,7 @@ export default async function ResearchSlugPage({ params }: Props) {
         {/* Header */}
         <header style={{ marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem', flexWrap: 'wrap' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--ink)', color: '#fff', padding: '2px 7px', borderRadius: 99 }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: 'var(--ink)', color: '#fff', padding: '2px 7px', borderRadius: 99 }}>
               Pro Research
             </span>
             <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{meta.displayDate}</span>

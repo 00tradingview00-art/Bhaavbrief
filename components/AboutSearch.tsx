@@ -32,7 +32,7 @@ function TypePill({ type }: { type: ScoredEntry['type'] }) {
   const s = styles[type] ?? styles.article
   return (
     <span style={{
-      fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.1em',
+      fontFamily: 'var(--font-sans)', fontSize: 8, letterSpacing: '0.1em',
       textTransform: 'uppercase', padding: '2px 6px',
       background: s.bg, color: s.color,
       border: `0.5px solid ${s.border ?? 'transparent'}`,
@@ -117,7 +117,7 @@ export default function AboutSearch() {
         />
         {loading && (
           // Part 12 §12.9: no infinite spinning loaders — static text instead.
-          <span style={{ fontSize: 11, color: '#8A8A7A', flexShrink: 0, fontFamily: 'var(--font-mono)' }}>
+          <span style={{ fontSize: 11, color: '#8A8A7A', flexShrink: 0, fontFamily: 'var(--font-sans)' }}>
             Searching…
           </span>
         )}
@@ -131,7 +131,7 @@ export default function AboutSearch() {
               key={q}
               onClick={() => handleStarter(q)}
               style={{
-                fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.02em',
+                fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.02em',
                 color: '#48483A', background: '#F3F2EC',
                 border: '0.5px solid #DDDDD0', padding: '5px 10px',
                 cursor: 'pointer', lineHeight: 1.4, textAlign: 'left',
@@ -160,13 +160,13 @@ export default function AboutSearch() {
               borderBottom: '0.5px solid #DDDDD0',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
             }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
                 &quot;{asked}&quot;
               </span>
               <button
                 onClick={() => { setResult(null); setQuery(''); setAsked('') }}
                 style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A',
+                  fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A',
                   background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: '0.06em',
                 }}
               >
@@ -180,14 +180,14 @@ export default function AboutSearch() {
             <div style={{ padding: '16px', borderBottom: '0.5px solid #DDDDD0', background: '#FAFAF6' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em',
+                  fontFamily: 'var(--font-sans)', fontSize: 8, letterSpacing: '0.12em',
                   textTransform: 'uppercase', color: '#C8720A',
                   background: '#FFF7E0', padding: '2px 7px',
                   border: '0.5px solid #D4A830',
                 }}>
                   Intelligence
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A' }}>
                   Educational · Not investment advice
                 </span>
               </div>
@@ -201,7 +201,7 @@ export default function AboutSearch() {
           {result.contentMatches.length > 0 && (
             <div>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: '#8A8A7A',
                 padding: '10px 16px 6px',
               }}>
@@ -224,13 +224,13 @@ export default function AboutSearch() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                       <TypePill type={item.type} />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A' }}>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A' }}>
                         {relDate(item.date)}
                       </span>
                     </div>
                     <p style={{ fontSize: 15, fontWeight: 500, color: '#18180F', margin: '0 0 2px', lineHeight: 1.3 }}>
                       {item.title}
-                      <span style={{ fontSize: 11, color: '#C8720A', marginLeft: 5, fontFamily: 'var(--font-mono)' }}>→</span>
+                      <span style={{ fontSize: 11, color: '#C8720A', marginLeft: 5, fontFamily: 'var(--font-sans)' }}>→</span>
                     </p>
                     {item.description && (
                       <p style={{ fontSize: 11, color: '#8A8A7A', margin: 0, lineHeight: 1.5 }}>
@@ -247,7 +247,7 @@ export default function AboutSearch() {
           {result.relatedQuestions.length > 0 && (
             <div style={{ padding: '10px 16px', borderTop: '0.5px solid #DDDDD0', background: '#FAFAF6' }}>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                 textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 8,
               }}>
                 Related
@@ -258,7 +258,7 @@ export default function AboutSearch() {
                     key={q}
                     onClick={() => handleStarter(q)}
                     style={{
-                      fontSize: 11, fontFamily: 'var(--font-mono)',
+                      fontSize: 11, fontFamily: 'var(--font-sans)',
                       color: '#C8720A', background: 'none',
                       border: '0.5px solid #D4A830', padding: '4px 9px',
                       cursor: 'pointer', letterSpacing: '0.02em',

@@ -165,7 +165,7 @@ export default function Page() {
   const warnBox: React.CSSProperties = { background: '#FFF8F0', borderLeft: '3px solid #E05C00', padding: '16px 20px', marginBottom: 24, borderRadius: '0 4px 4px 0' }
   const th: React.CSSProperties = { padding: '9px 12px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', whiteSpace: 'nowrap' }
   const td: React.CSSProperties = { padding: '10px 12px', borderTop: '1px solid #E5E5DC', fontSize: 14, color: '#18180F', verticalAlign: 'top' }
-  const mono: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: 14 }
+  const mono: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: 14, fontVariantNumeric: 'tabular-nums' }
 
   return (
     <>
@@ -175,7 +175,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>

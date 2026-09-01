@@ -140,7 +140,7 @@ export default function MethodologyPage() {
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(METHODOLOGY_SCHEMA) }} />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '3rem 1.25rem 5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>
           Methodology
         </div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: 800, lineHeight: 1.15, margin: '0 0 1rem' }}>
@@ -160,7 +160,7 @@ export default function MethodologyPage() {
           ].map((s) => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1rem' }}>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 800, color: '#18180F' }}>{s.value}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -179,13 +179,13 @@ export default function MethodologyPage() {
         ))}
 
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: '2.5rem' }}>
-          <a href="/about" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+          <a href="/about" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             More about BhaavBrief →
           </a>
         </div>
 
         <div style={{ background: '#18180F', padding: '1.25rem 1.5rem', color: '#FAFAF6' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
             Important — Not SEBI registered
           </div>
           <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>

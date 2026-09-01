@@ -76,7 +76,7 @@ function MarketSnapshot({ data }: { data: PriceData | null }) {
             padding: '14px 16px',
           }}>
             <div style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10,
               letterSpacing: '0.09em',
               textTransform: 'uppercase',
@@ -135,7 +135,7 @@ export default async function HomePage() {
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
       <div style={{ marginBottom: 16 }}>
         <div style={{
-          fontFamily: 'var(--font-mono)', fontSize: 10,
+          fontFamily: 'var(--font-sans)', fontSize: 10,
           letterSpacing: '0.14em', textTransform: 'uppercase',
           color: 'var(--gold)',
         }}>
@@ -290,7 +290,7 @@ export default async function HomePage() {
 
               {/* Subscribe — after value proof, not before */}
               <div style={{ maxWidth: 400, borderTop: '1px solid var(--border)', paddingTop: 20 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10 }}>
                   Get it in your inbox · Every weekday at 9:30 AM
                 </div>
                 <SubscribeForm compact location="hero" />
@@ -334,14 +334,14 @@ export default async function HomePage() {
             paddingTop: 16, paddingBottom: 8, borderTop: '2px solid var(--ink)',
           }}>
             <span style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10, fontWeight: 500, letterSpacing: '0.1em',
               textTransform: 'uppercase', color: 'var(--ink)',
             }}>
               Previous Editions
             </span>
             <Link href="/briefs" style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10, color: 'var(--gold)',
               letterSpacing: '0.04em', textDecoration: 'none',
             }}>
@@ -393,7 +393,7 @@ export default async function HomePage() {
                   padding: '14px 16px',
                 }}>
                   <div style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                     fontSize: 10,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
@@ -426,7 +426,7 @@ export default async function HomePage() {
                     {arc.summary}
                   </p>
                   <span style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-sans)',
                     fontSize: 10,
                     color: 'var(--gold)',
                   }}>
@@ -443,7 +443,7 @@ export default async function HomePage() {
               {/* Header row */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                 <div style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10, letterSpacing: '0.1em',
                   textTransform: 'uppercase', color: 'var(--up)',
                   display: 'flex', alignItems: 'center', gap: 5,
@@ -463,7 +463,7 @@ export default async function HomePage() {
                   const up = (pct ?? 0) >= 0
                   return (
                     <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
                       <span style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
                         {price ? fmtINR(price) : '—'}
                         <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
@@ -476,7 +476,7 @@ export default async function HomePage() {
                 })}
               </div>
               {/* Footer hint */}
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
                 OHLC · Volume · Open Interest · 5 commodities
               </div>
             </Card>
@@ -495,7 +495,7 @@ export default async function HomePage() {
                 marginBottom: 16,
               }}>
                 <div style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+                  fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
                   textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 6,
                 }}>
                   Next High-Impact Event
@@ -533,7 +533,7 @@ export default async function HomePage() {
                   {val}
                 </div>
                 <div style={{
-                  fontFamily: 'var(--font-mono)',
+                  fontFamily: 'var(--font-sans)',
                   fontSize: 10, color: 'var(--ink-4)',
                   letterSpacing: '0.07em', textTransform: 'uppercase', marginTop: 5,
                 }}>
@@ -569,7 +569,7 @@ export default async function HomePage() {
               Get it before market opens.
             </p>
             <p style={{
-              fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em',
+              fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em',
               color: 'rgba(255,255,255,0.5)', margin: '0 0 16px',
             }}>
               Every weekday · 9:30 AM IST · Free · {briefs.length} editions
@@ -581,7 +581,7 @@ export default async function HomePage() {
           <div id="about">
           <Card padding="sm">
             <p style={{
-              fontFamily: 'var(--font-mono)',
+              fontFamily: 'var(--font-sans)',
               fontSize: 10, fontWeight: 500, letterSpacing: '0.1em',
               textTransform: 'uppercase', color: 'var(--ink-4)', marginBottom: 10,
             }}>

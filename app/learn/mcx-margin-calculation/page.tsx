@@ -172,7 +172,7 @@ export default function Page() {
   const goldCallLoss   = goldTotal - goldMaint
 
   const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
-  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-mono)' }
+  const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-sans)' }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
   const infoBox: React.CSSProperties = { background: '#F8F7F2', borderLeft: '3px solid #C8720A', padding: '16px 20px', marginBottom: 24, borderRadius: '0 4px 4px 0' }
@@ -187,7 +187,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -198,7 +198,7 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           MCX Margin Calculation 2026: SPAN, Exposure &amp; Total Margin Explained
         </h1>
-        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
+        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
           Live prices as of {p.snapshotDate} · Updated on every deploy
         </p>
 
@@ -217,7 +217,7 @@ export default function Page() {
               </tr>
             </thead>
             <tbody>
-              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Precious Metals</td></tr>
+              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Precious Metals</td></tr>
               <tr>
                 <td style={cell}><strong>Gold</strong></td>
                 <td style={cell}>1 kg</td>
@@ -267,7 +267,7 @@ export default function Page() {
                 <td style={cell}>{spanRange(silverMicro)}</td>
                 <td style={cell}>{totalRange(silverMicro)}</td>
               </tr>
-              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Energy</td></tr>
+              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Energy</td></tr>
               <tr>
                 <td style={cell}><strong>Crude Oil</strong></td>
                 <td style={cell}>100 bbl</td>
@@ -296,7 +296,7 @@ export default function Page() {
                 <td style={cell}>{spanRange(natgasMini)}</td>
                 <td style={cell}>{totalRange(natgasMini)}</td>
               </tr>
-              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Base Metals</td></tr>
+              <tr><td colSpan={5} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Base Metals</td></tr>
               <tr>
                 <td style={cell}><strong>Copper</strong></td>
                 <td style={cell}>2,500 kg</td>
@@ -324,7 +324,7 @@ export default function Page() {
           SPAN (Standard Portfolio Analysis of Risk) is the risk model MCX uses to set minimum margin requirements. It simulates 16 extreme price-and-volatility scenarios and requires enough margin to cover the worst case over a single trading day. MCX recalculates SPAN twice daily — once at market open and once intraday — so your required margin can change while you hold a position.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Key property of SPAN</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Key property of SPAN</div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
             SPAN is portfolio-aware. If you hold both a long Gold position and a short Gold Mini, SPAN recognises the hedge and may reduce your total margin. This is why traders holding offsetting positions often see lower-than-expected margin requirements on their statements.
           </p>
@@ -369,7 +369,7 @@ export default function Page() {
           MCX Crude Mini (10 barrels) is the most accessible entry point for energy traders. Here is the full margin calculation at today&apos;s price of <strong>₹{fmt(p.crude)}/bbl</strong>.
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>MCX Crude Mini · 1 lot = 10 barrels</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>MCX Crude Mini · 1 lot = 10 barrels</div>
           <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2.1, color: '#18180F' }}>
             <li><strong>Current price:</strong> ₹{fmt(p.crude)}/barrel</li>
             <li><strong>Contract value:</strong> ₹{fmt(p.crude)} × 10 = <strong>₹{fmt(crudeWorkedCV)}</strong></li>
@@ -389,7 +389,7 @@ export default function Page() {
           MCX Gold Mini (100 grams) at today&apos;s price of <strong>₹{fmt(p.gold)}/10g</strong>:
         </p>
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>MCX Gold Mini · 1 lot = 100g = 10 units of 10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>MCX Gold Mini · 1 lot = 100g = 10 units of 10g</div>
           <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2.1, color: '#18180F' }}>
             <li><strong>Current price:</strong> ₹{fmt(p.gold)}/10g</li>
             <li><strong>Contract value:</strong> ₹{fmt(p.gold)} × 10 = <strong>₹{fmt(goldWorkedCV)}</strong></li>
@@ -409,7 +409,7 @@ export default function Page() {
           MTM is the daily profit/loss settlement that happens every evening after MCX closes. It is the mechanism that makes your margin requirement dynamic rather than fixed.
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 2, color: '#18180F', minWidth: 320 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2, color: '#18180F', minWidth: 320 }}>
           Day 1: You buy 1 MCX Gold Mini at ₹{fmt(p.gold)}/10g.<br />
           Day 1 closing price: ₹{fmt(p.gold + 800)}/10g.<br />
           MTM profit: ₹800 × 10 units = <strong>+₹8,000</strong> credited to account.<br />
@@ -428,7 +428,7 @@ export default function Page() {
         {/* Margin call box */}
         <h2 style={h2}>What triggers an MCX margin call?</h2>
         <div style={warnBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Margin call sequence</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Margin call sequence</div>
           <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, lineHeight: 2, color: '#18180F' }}>
             <li>Your account balance drops below <strong>maintenance margin</strong> (typically 75% of initial margin) due to MTM losses.</li>
             <li>Broker sends a margin call notice — usually via SMS and email — before market open the next morning.</li>
@@ -483,7 +483,7 @@ export default function Page() {
 
         {/* Cross-links */}
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
-          <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
+          <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
@@ -504,10 +504,10 @@ export default function Page() {
           <SubscribeForm location="learn_mcx-margin-calculation" />
         </div>
 
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Data auto-updated with every site deploy from live MCX feed · Last updated {p.snapshotDate}
         </p>
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', lineHeight: 1.6 }}>
           Margin figures are indicative. Actual SPAN and exposure margin set daily by MCX and your broker. Verify on your broker&apos;s SPAN calculator before trading. Commodity futures trading involves significant risk of loss.
         </p>
       </div>

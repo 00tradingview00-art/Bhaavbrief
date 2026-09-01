@@ -185,7 +185,7 @@ export default function Page() {
     fontWeight: 600,
     color: '#8A8A7A',
     background: '#F3F2EC',
-    fontFamily: 'var(--font-mono)',
+    fontFamily: 'var(--font-sans)',
   }
   const accent: React.CSSProperties = { color: '#C8720A', fontWeight: 500 }
   const sub: React.CSSProperties = { fontSize: 11, color: '#8A8A7A' }
@@ -219,7 +219,7 @@ export default function Page() {
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
         {/* Breadcrumb */}
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -231,7 +231,7 @@ export default function Page() {
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, lineHeight: 1.25, color: '#18180F', marginBottom: 8 }}>
           MCX Lot Sizes 2026: Every Contract, Margin &amp; Contract Value
         </h1>
-        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginBottom: 24 }}>
+        <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
           Live prices as of {p.snapshotDate} · Updated on every deploy
         </p>
 
@@ -256,7 +256,7 @@ export default function Page() {
             </thead>
             <tbody>
               {/* ── Precious Metals ── */}
-              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Precious Metals</td></tr>
+              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Precious Metals</td></tr>
               <tr>
                 <td style={cell}><strong>Gold</strong></td>
                 <td style={cell}>1 kg</td>
@@ -314,7 +314,7 @@ export default function Page() {
                 <td style={cell}>{marginRange(silverMicro)}</td>
               </tr>
               {/* ── Energy ── */}
-              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Energy</td></tr>
+              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Energy</td></tr>
               <tr>
                 <td style={cell}><strong>Crude Oil</strong></td>
                 <td style={cell}>100 bbl</td>
@@ -348,7 +348,7 @@ export default function Page() {
                 <td style={cell}>{marginRange(natgasMini)}</td>
               </tr>
               {/* ── Base Metals ── */}
-              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-mono)', padding: '6px 14px' }}>Base Metals</td></tr>
+              <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Base Metals</td></tr>
               <tr>
                 <td style={cell}><strong>Copper</strong></td>
                 <td style={cell}>2,500 kg</td>
@@ -374,7 +374,7 @@ export default function Page() {
 
         {/* ── Live-data edge callout ── */}
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Live data — as of {p.snapshotDate}</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Live data — as of {p.snapshotDate}</div>
           <p style={{ margin: '0 0 10px', fontSize: 14, lineHeight: 1.7, color: '#18180F' }}>
             At today&apos;s MCX Gold price of <strong>₹{fmt(p.gold)}/10g</strong>:
           </p>
@@ -420,7 +420,7 @@ export default function Page() {
           = 100 units of 10g. So:
         </p>
         <div style={{ overflowX: 'auto', marginBottom: 24 }}>
-        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-mono)', fontSize: 15, lineHeight: 1.9, color: '#18180F', minWidth: 280 }}>
+        <div style={{ background: '#F3F2EC', padding: '16px 20px', fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 1.9, color: '#18180F', minWidth: 280 }}>
           Contract value = price per 10g × lot size in 10g units<br />
           = ₹{fmt(p.gold)} × 100 = <strong>{fmtValue(goldStd)}</strong><br />
           <br />
@@ -446,7 +446,7 @@ export default function Page() {
 
         {/* ── Cross-links ── */}
         <div style={{ borderTop: '0.5px solid #DDDDD0', marginTop: 40, paddingTop: 28 }}>
-          <div style={{ fontSize: 10, fontFamily: 'var(--font-mono)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
+          <div style={{ fontSize: 10, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8A7A', marginBottom: 16 }}>Continue reading</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <Link href="/learn" style={{ fontSize: 15, color: '#C8720A', textDecoration: 'none', border: '0.5px solid #C8720A', padding: '8px 14px' }}>
               ← Learn hub
@@ -478,10 +478,10 @@ export default function Page() {
         </div>
 
         {/* ── Author / update stamp ── */}
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', marginTop: 24, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
           BhaavBrief · MCX commodity intelligence · Data auto-updated with every site deploy from live MCX feed · Last updated {p.snapshotDate}
         </p>
-        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-mono)', lineHeight: 1.6 }}>
+        <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', lineHeight: 1.6 }}>
           Prices are indicative. Verify live margins on your broker&apos;s SPAN calculator. Trading commodity futures involves significant risk of loss.
         </p>
       </div>

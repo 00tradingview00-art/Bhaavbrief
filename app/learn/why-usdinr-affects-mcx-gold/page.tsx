@@ -111,7 +111,7 @@ export default function Page() {
   const td: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #E5E5DC', fontSize: 14, color: '#18180F', verticalAlign: 'top', lineHeight: 1.6 }
   const up: React.CSSProperties = { color: '#16A34A', fontWeight: 600 }
   const down: React.CSSProperties = { color: '#DC2626', fontWeight: 600 }
-  const mono: React.CSSProperties = { fontFamily: 'var(--font-mono)' }
+  const mono: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums' }
 
   return (
     <>
@@ -120,7 +120,7 @@ export default function Page() {
 
       <div style={{ maxWidth: 820, margin: '0 auto', padding: '0 16px 64px' }}>
 
-        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-mono)' }}>
+        <nav style={{ fontSize: 12, color: '#8A8A7A', marginBottom: 20, fontFamily: 'var(--font-sans)' }}>
           <Link href="/" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Home</Link>
           {' / '}
           <Link href="/learn" style={{ color: '#8A8A7A', textDecoration: 'none' }}>Learn</Link>
@@ -148,7 +148,7 @@ export default function Page() {
           <li><strong>USD/INR exchange rate</strong> (how many rupees per dollar)</li>
           <li><strong>Indian import duty + GST</strong> (currently 6% BCD + 3% AIDC + 3% GST, effective ~12%, post-July 2024 budget)</li>
         </ol>
-        <div style={{ background: '#18180F', color: '#F0EFE6', padding: '20px 24px', borderRadius: 6, marginBottom: 24, fontFamily: 'var(--font-mono)', fontSize: 14, lineHeight: 2 }}>
+        <div style={{ background: '#18180F', color: '#F0EFE6', padding: '20px 24px', borderRadius: 6, marginBottom: 24, fontFamily: 'var(--font-sans)', fontSize: 14, lineHeight: 2 }}>
           <div style={{ color: '#C8720A', fontWeight: 700, marginBottom: 8, fontSize: 12, letterSpacing: 1 }}>FORMULA</div>
           <div>MCX Gold (₹/10g) =</div>
           <div style={{ marginLeft: 24 }}>(COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + duty factor)</div>

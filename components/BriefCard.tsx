@@ -19,7 +19,7 @@ export default function BriefCard({ brief, featured = false }: { brief: BriefMet
           alignItems: 'center',
           gap: 10,
           marginBottom: '0.55rem',
-          fontFamily: 'var(--font-mono)',
+          fontFamily: 'var(--font-sans)',
           fontSize: 11,
           letterSpacing: '0.06em',
           textTransform: 'uppercase',
