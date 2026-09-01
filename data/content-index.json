@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-01-mcx-nat-gas-drops-2-4-as-henry-hub-weakens-on-summer-glut",
+    "href": "/articles/2026-09-01-mcx-nat-gas-drops-2-4-as-henry-hub-weakens-on-summer-glut",
+    "title": "MCX Nat Gas Drops 2.4% as Henry Hub Weakens on Summer Glut",
+    "description": "MCX Natural Gas ₹272/mmBtu, down 2.37% in evening session. Henry Hub at $2.85 signals seasonal oversupply; injection season storage builds pressuring prices.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas is the session's weakest performer, shedding 2.37% to ₹272.30/mmBtu as Henry Hub, the global benchmark, sits at $2.85/mmBtu—a level that suppresses US LNG export economic",
+    "date": "2026-09-01T18:58:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "Natural Gas Futures"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 272
+  },
+  {
     "type": "brief",
     "slug": "edition-097",
     "href": "/briefs/edition-097",
