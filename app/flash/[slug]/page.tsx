@@ -122,7 +122,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
 
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <nav style={{ marginBottom: '1.5rem' }}>
-          <Link href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
+          <Link href="/" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             ← Home
           </Link>
         </nav>
@@ -130,13 +130,13 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
         <article>
           <header style={{ paddingBottom: '1.25rem', marginBottom: '1.25rem', borderBottom: '0.5px solid #DDDDD0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', border: `0.5px solid ${catStyle.borderColor as string}`, background: catStyle.background as string, color: catStyle.color as string }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', border: `0.5px solid ${catStyle.borderColor as string}`, background: catStyle.background as string, color: catStyle.color as string }}>
                 {flash.category}
               </span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', background: '#F3F2EC', color: '#8A8A7A', border: '0.5px solid #C8C8B8' }}>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '2px 8px', background: '#F3F2EC', color: '#8A8A7A', border: '0.5px solid #C8C8B8' }}>
                 Flash
               </span>
-              <time dateTime={flash.date} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
+              <time dateTime={flash.date} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
                 {formatFlashDate(flash.date)}
               </time>
             </div>
@@ -145,7 +145,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
               {flash.title}
             </h1>
 
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
               Source: {flash.source}
             </div>
           </header>
@@ -170,7 +170,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
         </article>
 
         <div style={{ marginTop: '2rem', padding: '1rem', background: '#F3F2EC', border: '0.5px solid #DDDDD0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A' }}>Found this useful? Share it with your trading circle.</span>
           <CopyLinkButton url={url} title={flash.title} location="flash_page" />
         </div>
 
@@ -178,7 +178,7 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           <div style={{ marginTop: '0.75rem', textAlign: 'right' }}>
             <Link
               href={`/options/${CATEGORY_TO_INSTRUMENT[flash.category]!.slug}`}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}
+              style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}
             >
               Analyze {CATEGORY_TO_INSTRUMENT[flash.category]!.label} Options →
             </Link>
@@ -189,20 +189,20 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
           {(prev || next) && (
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1.5rem', marginBottom: '1.25rem' }}>
               {next ? (
-                <Link href={`/flash/${next.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4 }}>
+                <Link href={`/flash/${next.slug}`} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4 }}>
                   <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>← Older</span>
                   {next.title.length > 72 ? next.title.slice(0, 72) + '…' : next.title}
                 </Link>
               ) : <span />}
               {prev ? (
-                <Link href={`/flash/${prev.slug}`} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4, textAlign: 'right' }}>
+                <Link href={`/flash/${prev.slug}`} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#48483A', textDecoration: 'none', maxWidth: '45%', lineHeight: 1.4, textAlign: 'right' }}>
                   <span style={{ display: 'block', color: '#8A8A7A', marginBottom: 3 }}>Newer →</span>
                   {prev.title.length > 72 ? prev.title.slice(0, 72) + '…' : prev.title}
                 </Link>
               ) : <span />}
             </div>
           )}
-          <Link href="/news" style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← Intelligence Feed</Link>
+          <Link href="/news" style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>← Intelligence Feed</Link>
         </nav>
       </div>
     </div>
