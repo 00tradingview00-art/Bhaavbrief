@@ -4,6 +4,7 @@ import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
+import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -47,6 +48,7 @@ export default async function AccountPage() {
   const plan = pro ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null : null
   const expiresAt = pro ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null : null
   const subId = pro ? (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null : null
+  const merchantSubId = pro ? (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null : null
   const provider = pro
     ? ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
     : null
@@ -86,16 +88,19 @@ export default async function AccountPage() {
               <StatTile label="Plan" value={`BhaavBrief Pro — ${PLAN_LABEL[planKey]}`} sub={PLAN_PRICE[planKey]} />
               <StatTile label="Renews" value={expiryLabel ?? '—'} />
             </div>
-            {subId && (
-              <div style={{
-                fontSize: '0.8rem', color: 'var(--ink-3)',
-                borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
-              }}>
-                To cancel, contact support with subscription ID
-                {provider ? ` (${provider})` : ''}:{' '}
-                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
-              </div>
-            )}
+            <div style={{
+              borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
+            }}>
+              {merchantSubId ? (
+                <CancelSubscriptionButton />
+              ) : subId ? (
+                <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>
+                  To cancel, contact support with subscription ID
+                  {provider ? ` (${provider})` : ''}:{' '}
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
+                </div>
+              ) : null}
+            </div>
           </>
         ) : (
           <>

@@ -135,6 +135,42 @@ export async function createCashfreeSubscription(
 }
 
 /**
+ * Cancel a subscription via Cashfree's Manage Subscription API.
+ * Docs: https://www.cashfree.com/docs/api-reference/payments/latest/subscription/mandate/manage
+ * POST /subscriptions/{subscription_id}/manage — the path/body subscription_id is our
+ * own merchant-supplied id (the "bb_..." string from checkout), NOT Cashfree's
+ * cf_subscription_id — confirmed against Cashfree's docs, since the two look similar
+ * enough to mix up and using the wrong one would 404 rather than cancel anything.
+ */
+export async function cancelCashfreeSubscription(merchantSubscriptionId: string): Promise<void> {
+  const clientId = process.env.CASHFREE_CLIENT_ID
+  const clientSecret = process.env.CASHFREE_CLIENT_SECRET
+  if (!clientId || !clientSecret) {
+    throw new Error('Cashfree credentials not configured')
+  }
+
+  const res = await fetch(`${cashfreeBaseUrl()}/subscriptions/${encodeURIComponent(merchantSubscriptionId)}/manage`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-version': CASHFREE_API_VERSION,
+      'x-client-id': clientId,
+      'x-client-secret': clientSecret,
+    },
+    body: JSON.stringify({ subscription_id: merchantSubscriptionId, action: 'CANCEL' }),
+  })
+
+  const json = await res.json().catch(() => ({}))
+  if (!res.ok) {
+    const msg =
+      (json as { message?: string }).message ??
+      (json as { error?: string }).error ??
+      `Cashfree cancel subscription failed (${res.status})`
+    throw new Error(msg)
+  }
+}
+
+/**
  * Verify Cashfree subscription webhook: HMAC-SHA256(timestamp + rawBody) → Base64.
  * Cashfree has no separate webhook secret — the dashboard's webhook setup is just a
  * URL field. Signing uses the same Client Secret issued for API auth (confirmed
