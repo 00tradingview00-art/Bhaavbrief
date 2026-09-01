@@ -16,7 +16,7 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
       background: 'var(--gold-pale)', border: '1px solid rgba(181,134,42,0.3)', borderRadius: 8,
     }}>
       <h2 style={{
-        fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700,
+        fontFamily: 'var(--font-sans)', fontSize: 9, fontWeight: 700,
         letterSpacing: '0.12em', textTransform: 'uppercase',
         color: 'var(--gold)', margin: '0 0 8px',
       }}>
@@ -27,7 +27,7 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
       </p>
       {tomorrow && (
         <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(181,134,42,0.2)' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold-dark)', marginBottom: 6 }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--gold-dark)', marginBottom: 6 }}>
             Tomorrow
           </div>
           <p style={{ fontSize: 13, color: 'var(--ink-2)', lineHeight: 1.6, margin: 0 }}>
@@ -36,7 +36,7 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
         </div>
       )}
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(181,134,42,0.15)', textAlign: 'right' }}>
-        <Link href="/track-record" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--gold)', textDecoration: 'none' }}>
+        <Link href="/track-record" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--gold)', textDecoration: 'none' }}>
           See past edges →
         </Link>
       </div>
