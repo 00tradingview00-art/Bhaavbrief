@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-01T18:41:45.096Z",
-  "generatedAtIST": "2026-09-02 00:11 IST",
+  "generatedAt": "2026-09-01T18:47:37.936Z",
+  "generatedAtIST": "2026-09-02 00:17 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4382,
+      "price": 4379.4,
       "prevClose": 4431.1,
-      "changePct": -1.1081,
+      "changePct": -1.1668,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 64.97,
+      "price": 64.89,
       "prevClose": 66.22,
-      "changePct": -1.8967,
+      "changePct": -2.0175,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 90.42,
+      "price": 90.45,
       "prevClose": 85.76,
-      "changePct": 5.4338,
+      "changePct": 5.4687,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 94.89,
+      "price": 94.93,
       "prevClose": 90.49,
-      "changePct": 4.8624,
+      "changePct": 4.9066,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.91,
       "prevClose": 2.94,
-      "changePct": -0.7496,
+      "changePct": -0.7836,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -113,19 +113,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 133939,
-    "mcxComexGoldSpreadPct": 13.26,
-    "importParitySilverINR": 198585,
-    "mcxComexSilverSpreadPct": 15.31,
-    "goldSilverRatio": 67.4
+    "importParityGoldINR": 133859,
+    "mcxComexGoldSpreadPct": 13.33,
+    "importParitySilverINR": 198341,
+    "mcxComexSilverSpreadPct": 15.45,
+    "goldSilverRatio": 67.5
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.26% vs silver 15.31% — 2.05pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.26,
-      "silverSpreadPct": 15.31,
-      "deltaPts": 2.05
+      "detail": "Gold import-parity spread 13.33% vs silver 15.45% — 2.12pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.33,
+      "silverSpreadPct": 15.45,
+      "deltaPts": 2.12
     }
   ]
 }
