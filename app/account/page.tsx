@@ -5,6 +5,7 @@ import { redisCommand } from '@/lib/redis'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
+import ChangePlanButton from '@/components/ChangePlanButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -100,7 +101,10 @@ export default async function AccountPage() {
               borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
             }}>
               {merchantSubId ? (
-                <CancelSubscriptionButton />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', alignItems: 'flex-start' }}>
+                  <ChangePlanButton currentPlan={planKey as 'daily' | 'monthly' | 'yearly'} />
+                  <CancelSubscriptionButton />
+                </div>
               ) : subId ? (
                 <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>
                   To cancel, contact support with subscription ID
