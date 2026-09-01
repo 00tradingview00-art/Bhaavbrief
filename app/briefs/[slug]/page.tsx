@@ -18,6 +18,8 @@ import MarketIsSayingModule from '@/components/brief/MarketIsSayingModule'
 import WhatKillsItBlock from '@/components/brief/WhatKillsItBlock'
 import EdgeOfDayCallout from '@/components/brief/EdgeOfDayCallout'
 import { safeJsonLd, buildBriefTitle } from '@/lib/seo'
+import Pill from '@/components/ui/Pill'
+import { tagTone } from '@/lib/tagType'
 import { COMMODITY_PAGE_MAP, SLUG_TO_INSTRUMENT } from '@/lib/commodityPages'
 
 export const revalidate = 3600
@@ -85,14 +87,6 @@ export async function generateStaticParams() {
 }
 
 
-const TAG_STYLES: Record<string, React.CSSProperties> = {
-  energy:  { background: '#FFF7E0', color: '#996600', borderColor: '#D4A830' },
-  metals:  { background: '#EAF5EE', color: '#1E6630', borderColor: '#5AAA70' },
-  agri:    { background: '#FDF0F0', color: '#991818', borderColor: '#D07070' },
-  macro:   { background: '#F3F2EC', color: '#48483A', borderColor: '#C8C8B8' },
-  default: { background: '#F3F2EC', color: '#48483A', borderColor: '#C8C8B8' },
-}
-
 export default async function BriefPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const brief = getBrief(slug)
@@ -104,8 +98,6 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   const { prev, next } = await getPrevNextBriefs(brief.urlSlug)
 
 
-  const tag      = brief.tags?.[0]?.toLowerCase() ?? 'default'
-  const tagStyle = TAG_STYLES[tag] ?? TAG_STYLES.default
   const url      = `${BASE_URL}/briefs/${brief.urlSlug}`
   const arcs     = getBriefArcs(brief.edition)
 
@@ -174,9 +166,9 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
         ].map((crumb, i, arr) => (
           <span key={crumb.label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             {crumb.href ? (
-              <a href={crumb.href} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
+              <a href={crumb.href} style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#C8720A', textDecoration: 'none', letterSpacing: '0.04em' }}>{crumb.label}</a>
             ) : (
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{crumb.label}</span>
             )}
             {i < arr.length - 1 && <span style={{ color: '#C8C8B8', fontSize: 10 }}>›</span>}
           </span>
@@ -188,10 +180,8 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
           <article itemScope itemType="https://schema.org/NewsArticle">
             <header style={{ paddingBottom: '1.5rem', marginBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '3px 8px', border: `0.5px solid ${tagStyle.borderColor}`, background: tagStyle.background as string, color: tagStyle.color as string }}>
-                  {brief.tags?.[0] ?? 'Brief'}
-                </span>
-                <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
+                <Pill tone={tagTone(brief.tags?.[0])} size="sm">{brief.tags?.[0] ?? 'Brief'}</Pill>
+                <time dateTime={brief.date} itemProp="datePublished" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.05em' }}>
                   {formatDate(brief.date)}
                 </time>
               </div>
@@ -207,11 +197,10 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: '0.75rem' }}>
                   {brief.commodities.map(c => {
                     const page = COMMODITY_PAGE_MAP[c]
-                    const style: React.CSSProperties = { fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', background: '#F3F2EC', padding: '2px 8px' }
                     return page ? (
-                      <Link key={c} href={`/commodities/${page.slug}`} itemProp="keywords" style={{ ...style, color: '#C8720A', textDecoration: 'none' }}>{c}</Link>
+                      <Pill key={c} tone="neutral" size="xs" href={`/commodities/${page.slug}`}><span itemProp="keywords">{c}</span></Pill>
                     ) : (
-                      <span key={c} itemProp="keywords" style={style}>{c}</span>
+                      <Pill key={c} tone="neutral" size="xs"><span itemProp="keywords">{c}</span></Pill>
                     )
                   })}
                 </div>
@@ -252,7 +241,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                     }}>
                       <div>
                         <span style={{
-                          fontFamily: 'var(--font-mono)',
+                          fontFamily: 'var(--font-sans)',
                           fontSize: 10,
                           letterSpacing: '0.1em',
                           textTransform: 'uppercase',
@@ -263,7 +252,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                           {arc.status === 'active' ? `DAY ${arc.latestDay} OF` : 'STORY ARC'}
                         </span>
                         <span style={{
-                          fontFamily: 'var(--font-mono)',
+                          fontFamily: 'var(--font-sans)',
                           fontSize: 11,
                           color: 'var(--ink-2)',
                           fontWeight: 500,
@@ -271,7 +260,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                           {arc.title}
                         </span>
                       </div>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--gold)', flexShrink: 0 }}>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', flexShrink: 0 }}>
                         Full story →
                       </span>
                     </div>
