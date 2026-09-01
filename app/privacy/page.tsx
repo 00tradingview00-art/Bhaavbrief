@@ -34,7 +34,7 @@ export default function PrivacyPage() {
 
         <div style={{ marginBottom: '2.5rem' }}>
           <span style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em',
+            fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em',
             textTransform: 'uppercase', color: '#C8720A',
           }}>
             Legal
@@ -45,7 +45,7 @@ export default function PrivacyPage() {
           }}>
             Privacy Policy
           </h1>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
             Last updated: {LAST_UPDATED}
           </p>
         </div>
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
 
         <div style={{
           marginTop: '3rem', padding: '1rem 1.25rem', background: '#F3F2EC',
-          border: '0.5px solid #DDDDD0', fontFamily: 'var(--font-mono)',
+          border: '0.5px solid #DDDDD0', fontFamily: 'var(--font-sans)',
           fontSize: 10, color: '#8A8A7A', lineHeight: 1.7,
         }}>
           BhaavBrief is for educational and informational purposes only. We are not registered with SEBI or any other regulatory authority. Nothing on this platform constitutes investment advice, a recommendation, or a solicitation to buy or sell any security or commodity. All data and analysis is sourced from publicly available information. Past patterns are not indicative of future results. Commodity and equity trading involves substantial risk of loss. Please consult a SEBI-registered investment advisor or research analyst before making any financial decisions.
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
 
         <div style={{ marginTop: '2rem' }}>
           <Link href="/" style={{
-            fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.05em',
+            fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
             color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1,
           }}>
             ← Back to home

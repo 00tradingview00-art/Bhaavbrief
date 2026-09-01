@@ -118,7 +118,7 @@ export default function EventImpactDataPage() {
     <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(datasetSchema) }} />
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '3rem 1.25rem 5rem' }}>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>
+        <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>
           Data
         </div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', fontWeight: 800, lineHeight: 1.15, margin: '0 0 1rem' }}>
@@ -141,7 +141,7 @@ export default function EventImpactDataPage() {
           ].map((s) => (
             <div key={s.label} style={{ background: '#F3F2EC', padding: '1rem' }}>
               <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 800, color: '#18180F' }}>{s.value}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: '#8A8A7A', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -166,9 +166,9 @@ export default function EventImpactDataPage() {
                   <tr key={c.claim_id} style={{ borderBottom: '0.5px solid #E8E8DE' }}>
                     <td style={{ padding: '8px 10px', color: '#18180F' }}>{c.event}</td>
                     <td style={{ padding: '8px 10px', color: '#48483A' }}>{c.commodity}</td>
-                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-mono)', color: '#18180F', fontWeight: 600 }}>{c.values.avgAbsMovePct}%</td>
-                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-mono)', color: '#8A8A7A' }}>{c.values.maxAbsMovePct}%</td>
-                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-mono)', color: '#8A8A7A' }}>{c.values.n}</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', color: '#18180F', fontWeight: 600 }}>{c.values.avgAbsMovePct}%</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', color: '#8A8A7A' }}>{c.values.maxAbsMovePct}%</td>
+                    <td style={{ padding: '8px 10px', textAlign: 'right', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', color: '#8A8A7A' }}>{c.values.n}</td>
                   </tr>
                 ))}
               </tbody>
@@ -203,7 +203,7 @@ export default function EventImpactDataPage() {
         </section>
 
         <div style={{ background: '#18180F', padding: '1.25rem 1.5rem', color: '#FAFAF6' }}>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
+          <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#C8720A', marginBottom: '0.6rem' }}>
             Important — Not SEBI registered
           </div>
           <p style={{ fontSize: 12, color: 'rgba(250,250,246,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
