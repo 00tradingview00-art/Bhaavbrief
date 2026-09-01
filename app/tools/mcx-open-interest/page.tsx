@@ -3,6 +3,34 @@ import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import OIBuildupSection from './OIBuildupSection'
+import { safeJsonLd } from '@/lib/seo'
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'MCX Open Interest Analysis',
+      url: 'https://bhaavbrief.in/tools/mcx-open-interest',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Any (web browser)',
+      description: 'Top-5 OI strikes by Call and Put open interest for MCX Gold, Silver, Crude Oil, Natural Gas, and Copper, with OI buildup history by strike.',
+      offers: [
+        { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'INR', description: 'Top-5 OI strikes per instrument' },
+        { '@type': 'Offer', name: 'Pro', price: '333', priceCurrency: 'INR', description: 'Full 90-day OI buildup history by strike' },
+      ],
+      provider: { '@id': 'https://bhaavbrief.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://bhaavbrief.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'MCX Open Interest Analysis' },
+      ],
+    },
+  ],
+}
 
 export const revalidate = 60
 
@@ -54,6 +82,7 @@ export default async function MCXOpenInterestPage() {
 
   return (
     <main style={{ maxWidth: 900, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Open Interest Analysis
       </h1>

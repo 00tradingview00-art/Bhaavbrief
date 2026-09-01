@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import ProCheckout from './ProCheckout'
 import ProPaidPoller from './ProPaidPoller'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 3600
 
@@ -18,6 +19,30 @@ export const metadata: Metadata = {
     'MCX options strategy builder India',
   ],
   alternates: { canonical: 'https://bhaavbrief.in/pro' },
+}
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Product',
+      name: 'BhaavBrief Pro',
+      description: 'Unlock the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data.',
+      brand: { '@id': 'https://bhaavbrief.in/#organization' },
+      offers: [
+        { '@type': 'Offer', name: 'Daily', price: '33', priceCurrency: 'INR', description: 'No commitment — cancel anytime' },
+        { '@type': 'Offer', name: 'Monthly', price: '333', priceCurrency: 'INR', description: 'Save ₹657 — ₹11/day' },
+        { '@type': 'Offer', name: 'Annual', price: '2999', priceCurrency: 'INR', description: 'Save ₹997 — ₹250/month' },
+      ],
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'BhaavBrief Pro' },
+      ],
+    },
+  ],
 }
 
 const FREE_FEATURES = [
@@ -65,6 +90,7 @@ export default function ProPage() {
   return (
     <>
       <Script src="https://sdk.cashfree.com/js/v3/cashfree.js" strategy="lazyOnload" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <main style={{ maxWidth: 900, margin: '0 auto', padding: '3rem 1rem 5rem', fontFamily: 'var(--font-sans)' }}>
 
         {/* Hero */}

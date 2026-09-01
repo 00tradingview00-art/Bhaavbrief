@@ -1,5 +1,15 @@
 import InvestPage from '@/components/InvestPage'
 import SectionTabs from '@/components/SectionTabs'
+import { safeJsonLd } from '@/lib/seo'
+
+const BREADCRUMB_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+    { '@type': 'ListItem', position: 2, name: 'Invest in Commodities' },
+  ],
+}
 
 export const metadata = {
   title: 'Invest in Commodities from India — Gold ETF, Silver ETF, Commodity MFs 2026',
@@ -33,6 +43,7 @@ export const metadata = {
 export default function Page() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
       <div style={{ maxWidth: 860, margin: '0 auto', padding: '24px 16px 0' }}>
         <SectionTabs
           active="/invest"

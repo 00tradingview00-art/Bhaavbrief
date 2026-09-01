@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllResearch } from '@/lib/research'
 import Card from '@/components/ui/Card'
+import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 900
 
@@ -14,8 +15,34 @@ export const metadata: Metadata = {
 export default function ResearchIndexPage() {
   const articles = getAllResearch()
 
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type':     'CollectionPage',
+        '@id':       'https://bhaavbrief.in/research',
+        name:        'Pro Research',
+        description: 'Macro event analysis for MCX traders — FOMC, Jackson Hole, EIA, RBI MPC — with commodity-specific implications and options positioning notes.',
+        url:         'https://bhaavbrief.in/research',
+      },
+      {
+        '@type': 'ItemList',
+        // Only published articles — an unpublished slug 404s (see
+        // app/research/[slug]/page.tsx), and structured data pointing at a
+        // dead link is a real Search Console flag, not just a style nit.
+        itemListElement: articles.filter(a => a.published).slice(0, 20).map((a, i) => ({
+          '@type':  'ListItem',
+          position: i + 1,
+          url:      `https://bhaavbrief.in/research/${a.slug}`,
+          name:     a.title,
+        })),
+      },
+    ],
+  }
+
   return (
     <main style={{ maxWidth: 860, margin: '0 auto', padding: '1.5rem 1rem 4rem', fontFamily: 'var(--font-sans)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         Pro Research
       </h1>
