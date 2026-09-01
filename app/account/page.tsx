@@ -1,10 +1,12 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { isProUser } from '@/lib/subscription'
+import { getCashfreeSubscriptionPayments, type CashfreeSubscriptionPayment } from '@/lib/cashfree'
 import { redisCommand } from '@/lib/redis'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
+import ChangePlanButton from '@/components/ChangePlanButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -44,6 +46,9 @@ export default async function AccountPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
+  const user = await currentUser()
+  const email = user?.primaryEmailAddress?.emailAddress ?? user?.emailAddresses?.[0]?.emailAddress ?? null
+
   const pro = await isProUser(userId)
   const plan = pro ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null : null
   const expiresAt = pro ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null : null
@@ -59,11 +64,25 @@ export default async function AccountPage() {
 
   const planKey = plan && PLAN_LABEL[plan] ? plan : 'monthly'
 
+  let payments: CashfreeSubscriptionPayment[] = []
+  if (merchantSubId) {
+    try {
+      payments = await getCashfreeSubscriptionPayments(merchantSubId)
+    } catch (err) {
+      console.error('[account] fetch payment history failed', err)
+    }
+  }
+
   return (
     <main style={{ maxWidth: 640, margin: '3rem auto', padding: '0 1rem', fontFamily: 'var(--font-sans)' }}>
-      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.7rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 'var(--space-8)' }}>
+      <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.7rem', fontWeight: 700, color: 'var(--ink)', marginBottom: email ? 'var(--space-2)' : 'var(--space-8)' }}>
         My Account
       </h1>
+      {email && (
+        <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: 'var(--space-8)' }}>
+          {email}
+        </p>
+      )}
 
       <Card padding="lg">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-5)' }}>
@@ -92,7 +111,10 @@ export default async function AccountPage() {
               borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
             }}>
               {merchantSubId ? (
-                <CancelSubscriptionButton />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', alignItems: 'flex-start' }}>
+                  <ChangePlanButton currentPlan={planKey as 'daily' | 'monthly' | 'yearly'} />
+                  <CancelSubscriptionButton />
+                </div>
               ) : subId ? (
                 <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>
                   To cancel, contact support with subscription ID
@@ -111,6 +133,40 @@ export default async function AccountPage() {
           </>
         )}
       </Card>
+
+      {payments.length > 0 && (
+        <div style={{ marginTop: 'var(--space-8)' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)', marginBottom: 'var(--space-4)' }}>
+            Payment History
+          </div>
+          <Card padding="lg">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              {payments.map((p, i) => (
+                <div
+                  key={p.cf_payment_id ?? i}
+                  style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+                    fontSize: '0.85rem', paddingBottom: 'var(--space-3)',
+                    borderBottom: i < payments.length - 1 ? '1px solid var(--border)' : 'none',
+                  }}
+                >
+                  <span style={{ color: 'var(--ink-2)' }}>
+                    {p.payment_initiated_date
+                      ? new Date(p.payment_initiated_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                      : '—'}
+                  </span>
+                  <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--ink)', fontWeight: 600 }}>
+                    {typeof p.payment_amount === 'number' ? `₹${p.payment_amount.toLocaleString('en-IN')}` : '—'}
+                  </span>
+                  <span style={{ color: p.payment_status === 'SUCCESS' ? 'var(--up)' : 'var(--ink-3)', fontWeight: 500 }}>
+                    {p.payment_status ?? '—'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
     </main>
   )
 }
