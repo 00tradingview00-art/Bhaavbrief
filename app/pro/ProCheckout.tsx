@@ -3,6 +3,8 @@
 import { useUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import Link from 'next/link'
+import { useIsPro } from '@/lib/useIsPro'
 
 declare global {
   interface Window {
@@ -24,6 +26,7 @@ export default function ProCheckout({ plan, cta }: Props) {
   const { isSignedIn } = useUser()
   const { openSignIn } = useClerk()
   const router = useRouter()
+  const isPro = useIsPro()
   const [loading, setLoading] = useState(false)
   const [phone, setPhone] = useState('')
   const [needPhone, setNeedPhone] = useState(false)
@@ -32,6 +35,14 @@ export default function ProCheckout({ plan, cta }: Props) {
   async function handleClick() {
     if (!isSignedIn) {
       openSignIn({ fallbackRedirectUrl: '/pro' })
+      return
+    }
+    // Belt-and-suspenders: the button below already swaps to a "Manage
+    // subscription" link when isPro, but guard the handler itself too so a
+    // stale isPro read (e.g. hook hasn't resolved yet) can never start a
+    // second, duplicate paid subscription for someone already on Pro.
+    if (isPro) {
+      router.push('/account')
       return
     }
 
@@ -108,6 +119,22 @@ export default function ProCheckout({ plan, cta }: Props) {
     cta
 
   const disabled = loading || status === 'delayed' || status === 'done'
+
+  if (isPro) {
+    return (
+      <Link
+        href="/account"
+        style={{
+          display: 'block', width: '100%', marginTop: '0.6rem', padding: '0.55rem',
+          background: 'var(--surface-3)', color: 'var(--ink-2)', border: '1px solid var(--border)',
+          borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, textAlign: 'center',
+          textDecoration: 'none', boxSizing: 'border-box',
+        }}
+      >
+        You&apos;re already subscribed — Manage →
+      </Link>
+    )
+  }
 
   return (
     <div>

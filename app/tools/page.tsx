@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Card from '@/components/ui/Card'
 import { safeJsonLd } from '@/lib/seo'
+import ProToolsBanner from './ProToolsBanner'
 
 export const revalidate = 3600
 
@@ -150,29 +151,8 @@ export default function ToolsPage() {
         </div>
       </section>
 
-      {/* Pro banner */}
-      <Link
-        href="/pro"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-          border: '1px solid var(--border-2)',
-          borderRadius: 8,
-          padding: '1rem 1.25rem',
-          marginBottom: '2.5rem',
-          textDecoration: 'none',
-          background: 'var(--surface-3)',
-        }}
-      >
-        <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>
-          Want the full analytics suite? See everything BhaavBrief Pro unlocks
-        </span>
-        <span style={{ fontSize: '0.75rem', background: 'var(--ink)', color: '#fff', padding: '4px 12px', borderRadius: 20, fontWeight: 600, whiteSpace: 'nowrap' }}>
-          Unlock — ₹33/day →
-        </span>
-      </Link>
+      {/* Pro banner — hidden for already-subscribed Pro users */}
+      <ProToolsBanner />
 
       {/* Free Tools */}
       <section>
