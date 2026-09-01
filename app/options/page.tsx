@@ -86,7 +86,7 @@ const WEBAPP_SCHEMA = {
   description: 'Live MCX option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio for Gold, Silver, Crude Oil, Natural Gas and Copper.',
   offers: [
     { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'INR', description: 'ATM row and summary statistics' },
-    { '@type': 'Offer', name: 'Pro', price: '999', priceCurrency: 'INR', description: 'Full option chain, Greeks, Strategy Builder, IV analytics' },
+    { '@type': 'Offer', name: 'Pro', price: '333', priceCurrency: 'INR', description: 'Full option chain, Greeks, Strategy Builder, IV analytics — ₹333/month, also available at ₹33/day or ₹2,999/year' },
   ],
   provider: { '@id': 'https://bhaavbrief.in/#organization' },
 }

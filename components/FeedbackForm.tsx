@@ -171,7 +171,9 @@ export default function FeedbackForm() {
           {showQuote && (
             <div style={{
               padding: '16px 20px', background: C.accentFaint,
-              border: `1px solid ${C.border}`,
+              borderTop: `1px solid ${C.border}`,
+              borderRight: `1px solid ${C.border}`,
+              borderBottom: `1px solid ${C.border}`,
               borderLeft: `3px solid ${C.accent}`,
               borderRadius: '8px', borderTopLeftRadius: 0, borderBottomLeftRadius: 0,
               textAlign: 'left',

@@ -26,7 +26,9 @@ export default function CountdownTimer({ targetIso, label }: { targetIso: string
 
   return (
     <div style={{
-      border: '1px solid var(--border)',
+      borderTop: '1px solid var(--border)',
+      borderRight: '1px solid var(--border)',
+      borderBottom: '1px solid var(--border)',
       borderLeft: '3px solid var(--gold)',
       background: 'var(--gold-pale)',
       padding: '12px 16px',

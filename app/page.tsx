@@ -386,7 +386,9 @@ export default async function HomePage() {
               <Link href={`/arcs/${arc.id}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 16 }}>
                 <div style={{
                   background: 'var(--gold-pale)',
-                  border: '1px solid rgba(181,134,42,0.35)',
+                  borderTop: '1px solid rgba(181,134,42,0.35)',
+                  borderRight: '1px solid rgba(181,134,42,0.35)',
+                  borderBottom: '1px solid rgba(181,134,42,0.35)',
                   borderLeft: '3px solid var(--gold)',
                   borderRadius: '0 var(--radius-md) var(--radius-md) 0',
                   boxShadow: 'var(--shadow-xs)',
@@ -487,7 +489,9 @@ export default async function HomePage() {
             <Link href={`/calendar#${nextEvent.id}`} style={{ textDecoration: 'none', display: 'block' }}>
               <div style={{
                 background: 'var(--gold-pale)',
-                border: '1px solid var(--border)',
+                borderTop: '1px solid var(--border)',
+                borderRight: '1px solid var(--border)',
+                borderBottom: '1px solid var(--border)',
                 borderLeft: '3px solid var(--gold)',
                 borderRadius: '0 var(--radius-md) var(--radius-md) 0',
                 boxShadow: 'var(--shadow-xs)',

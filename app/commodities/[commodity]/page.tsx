@@ -619,7 +619,9 @@ export default async function CommodityPage({ params }: Props) {
             <Link href={`/arcs/${leadArc.id}`} style={{ textDecoration: 'none', display: 'block', marginBottom: 24 }}>
               <div style={{
                 background: 'var(--gold-pale)',
-                border: '1px solid rgba(181,134,42,0.35)',
+                borderTop: '1px solid rgba(181,134,42,0.35)',
+                borderRight: '1px solid rgba(181,134,42,0.35)',
+                borderBottom: '1px solid rgba(181,134,42,0.35)',
                 borderLeft: '3px solid var(--gold)',
                 borderRadius: '0 8px 8px 0',
                 padding: '14px 16px',

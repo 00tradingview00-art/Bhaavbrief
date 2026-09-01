@@ -229,7 +229,9 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
                 {arcs.map(arc => (
                   <Link key={arc.id} href={`/arcs/${arc.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                     <div style={{
-                      border: '1px solid rgba(181,134,42,0.4)',
+                      borderTop: '1px solid rgba(181,134,42,0.4)',
+                      borderRight: '1px solid rgba(181,134,42,0.4)',
+                      borderBottom: '1px solid rgba(181,134,42,0.4)',
                       borderLeft: '3px solid var(--gold)',
                       background: 'var(--gold-pale)',
                       padding: '10px 14px',
