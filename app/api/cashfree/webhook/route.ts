@@ -103,7 +103,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   )
 
   if (!resolved) {
-    // Not a BhaavBrief checkout (or mapping expired) — ack and ignore
+    // Not a BhaavBrief checkout (or mapping expired) — ack and ignore, but
+    // log it: a real subscription hitting this path would otherwise fail to
+    // activate with zero signal anywhere that it happened.
+    console.error('[cashfree/webhook] unresolved', { type, merchantSubId, providerSubId })
     return NextResponse.json({ ok: true })
   }
 

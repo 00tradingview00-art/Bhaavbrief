@@ -50,13 +50,13 @@ export default async function AccountPage() {
   const email = user?.primaryEmailAddress?.emailAddress ?? user?.emailAddresses?.[0]?.emailAddress ?? null
 
   const pro = await isProUser(userId)
-  const plan = pro ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null : null
-  const expiresAt = pro ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null : null
-  const subId = pro ? (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null : null
-  const merchantSubId = pro ? (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null : null
-  const provider = pro
-    ? ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
-    : null
+  // Fetched unconditionally, not just when pro — an expired plan still has
+  // Redis/Cashfree history worth showing (payment history, last-plan note).
+  const plan = (await redisCommand('GET', `sub:${userId}:plan`)) as string | null
+  const expiresAt = (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null
+  const subId = (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null
+  const merchantSubId = (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
+  const provider = ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
 
   const expiryLabel = expiresAt
     ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -127,7 +127,9 @@ export default async function AccountPage() {
         ) : (
           <>
             <p style={{ color: 'var(--ink-3)', marginBottom: 'var(--space-5)', fontSize: '0.92rem' }}>
-              You are on the free plan.
+              {merchantSubId && expiryLabel
+                ? `Your ${PLAN_LABEL[planKey]} pass (${PLAN_PRICE[planKey]}) expired on ${expiryLabel}.`
+                : 'You are on the free plan.'}
             </p>
             <Button href="/pro" variant="primary">Upgrade to Pro →</Button>
           </>
