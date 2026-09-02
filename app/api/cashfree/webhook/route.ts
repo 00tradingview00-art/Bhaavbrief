@@ -45,6 +45,22 @@ const DEACTIVATE_STATUSES = new Set([
   'CARD_EXPIRED',
 ])
 
+// Durable trail of every webhook outcome for a subscription — not just
+// unresolved-user misses. console.error alone isn't enough to debug this:
+// Vercel's function-log retention for this project turned out to hold only
+// a couple of minutes of history, nowhere near enough to see what happened
+// hours (or days) after the fact. Founder-only diagnostic, queryable via
+// direct Redis LRANGE — never exposed through any API response.
+async function logWebhookEvent(
+  merchantSubId: string | undefined,
+  entry: { type: string; status?: string; action: string },
+): Promise<void> {
+  const key = `cf-webhook-log:${merchantSubId || 'unknown'}`
+  const value = JSON.stringify({ ts: new Date().toISOString(), ...entry })
+  await redisCommand('lpush', key, value).catch(() => {})
+  await redisCommand('ltrim', key, '0', '19').catch(() => {})
+}
+
 async function resolveUserAndPlan(
   merchantSubId: string | undefined,
   tags: Record<string, string> | null | undefined,
@@ -107,6 +123,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // log it: a real subscription hitting this path would otherwise fail to
     // activate with zero signal anywhere that it happened.
     console.error('[cashfree/webhook] unresolved', { type, merchantSubId, providerSubId })
+    await logWebhookEvent(merchantSubId, { type, action: 'unresolved' })
     return NextResponse.json({ ok: true })
   }
 
@@ -131,11 +148,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
         if (existing === 'active') {
           await refreshSubscriptionExpiry(userId, capped)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'refreshed' })
         } else {
           await activateSubscription(userId, providerSubId, plan, capped, merchantSubId)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'activated' })
         }
       } else if (DEACTIVATE_STATUSES.has(status)) {
         await deactivateSubscription(userId)
+        await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
+      } else {
+        // A recognized user/subscription, but a status this route has no
+        // branch for — e.g. an intermediate "still processing" state on a
+        // recurring auto-debit (INITIALIZED, ON_HOLD, PENDING, ...). Not
+        // acted on (correctly — nothing confirmed yet), but previously not
+        // even logged, which is exactly what made an in-flight charge
+        // impossible to debug.
+        await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: unhandled status' })
       }
     } else if (type === 'SUBSCRIPTION_PAYMENT_SUCCESS') {
       const expiresAt =
@@ -145,12 +173,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       const existing = await redisCommand('GET', `sub:${userId}:status`)
       if (existing !== 'active') {
         await activateSubscription(userId, providerSubId, plan, expiresAt, merchantSubId)
+        await logWebhookEvent(merchantSubId, { type, action: 'activated' })
       } else {
         await refreshSubscriptionExpiry(userId, expiresAt)
+        await logWebhookEvent(merchantSubId, { type, action: 'refreshed' })
       }
+    } else {
+      // e.g. SUBSCRIPTION_PAYMENT_FAILED, SUBSCRIPTION_AUTH_STATUS — event
+      // types this route has never handled. Same "correctly inert but
+      // previously invisible" gap as above, one level up (unhandled type
+      // rather than unhandled status).
+      await logWebhookEvent(merchantSubId, {
+        type,
+        status: details?.subscription_status ?? body.data?.payment_status ?? undefined,
+        action: 'ignored: unhandled type',
+      })
     }
   } catch (err) {
     console.error('[cashfree/webhook]', err)
+    await logWebhookEvent(merchantSubId, { type, action: `error: ${(err as Error).message}` })
     return NextResponse.json({ error: 'Processing failed' }, { status: 500 })
   }
 
