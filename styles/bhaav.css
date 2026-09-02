@@ -132,8 +132,22 @@
   animation: priceFlash 600ms ease-out;
 }
 
+/* Route-level loading spinner (components/ui/LoadingSpinner.tsx) and the
+   skeleton-bar shimmer reused by OptionChain's initial-load state — shares
+   livePulse's opacity-pulse timing rather than inventing a second motion
+   language for "loading" vs. "live." */
+@keyframes bb-spin {
+  to { transform: rotate(360deg); }
+}
+.bb-spinner {
+  animation: bb-spin 700ms linear infinite;
+}
+.bb-skeleton-bar {
+  animation: livePulse 1.4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .live-dot::before, .live-dot-ring::after, .price-flash {
+  .live-dot::before, .live-dot-ring::after, .price-flash, .bb-spinner, .bb-skeleton-bar {
     animation: none;
   }
 }
@@ -150,6 +164,15 @@
   white-space: nowrap;
 }
 .ticker-track:hover { animation-play-state: paused; }
+
+/* Mobile ticker: plain swipeable row (no auto-scroll animation), 5 MCX
+   commodities only — see components/TickerStrip.tsx. Desktop keeps the
+   existing animated marquee with the full 8-item set. */
+.ticker-mobile-wrap { display: none; }
+@media (max-width: 767px) {
+  .ticker-desktop-wrap { display: none; }
+  .ticker-mobile-wrap  { display: flex; }
+}
 
 .geo-ticker-track {
   display: flex;
@@ -204,6 +227,18 @@
 }
 @media (min-width: 768px) {
   .market-snap { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* /markets stat-card grids (MCX Futures, Currencies & Rates, Global
+   Reference): 2 columns on mobile — same pattern as .market-snap above —
+   instead of the auto-fill/minmax collapsing to a single column, which on a
+   real phone meant scrolling past ~18 full-width cards before reaching the
+   options chain below. */
+.markets-card-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 768px) {
+  .markets-card-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 }
 
 /* Sidebar: show below content on mobile, sticky on desktop */

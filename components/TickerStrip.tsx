@@ -89,30 +89,39 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
   if (items.length === 0) return null
 
   const doubled = [...items, ...items]
+  // Mobile: the 5 MCX commodities only (drop USD/INR, COMEX Gold, WTI Crude —
+  // desktop-only extras), no auto-scroll — a continuously moving strip you
+  // can't read or tap is worse UX on a phone than a plain swipeable row.
+  const mobileItems = items.slice(0, 5)
+
+  const renderItem = (item: Item, i: number) => (
+    <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12, flex: '0 0 auto' }}>
+      <span style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '0.3px' }}>
+        {item.label}
+      </span>
+      <span style={{ fontFamily: 'var(--font-sans)', color: '#fff', fontWeight: 500 }}>
+        {item.price}
+      </span>
+      <span style={{
+        fontFamily: 'var(--font-sans)', fontWeight: 500,
+        color: item.pct > 0  ? '#4ADE80'
+             : item.pct < 0  ? '#F87171'
+             : 'rgba(255,255,255,0.35)',
+      }}>
+        {fmtPct(item.pct)}
+      </span>
+    </span>
+  )
 
   return (
     <div style={{ background: 'var(--ink)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-      <div style={{ overflow: 'hidden', padding: '7px 0' }}>
+      <div className="ticker-desktop-wrap" style={{ overflow: 'hidden', padding: '7px 0' }}>
         <div className="ticker-track" style={{ display: 'flex', gap: 36, whiteSpace: 'nowrap' }}>
-          {doubled.map((item, i) => (
-            <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
-              <span style={{ color: 'rgba(255,255,255,0.42)', fontWeight: 400, letterSpacing: '0.3px' }}>
-                {item.label}
-              </span>
-              <span style={{ fontFamily: 'var(--font-sans)', color: '#fff', fontWeight: 500 }}>
-                {item.price}
-              </span>
-              <span style={{
-                fontFamily: 'var(--font-sans)', fontWeight: 500,
-                color: item.pct > 0  ? '#4ADE80'
-                     : item.pct < 0  ? '#F87171'
-                     : 'rgba(255,255,255,0.35)',
-              }}>
-                {fmtPct(item.pct)}
-              </span>
-            </span>
-          ))}
+          {doubled.map(renderItem)}
         </div>
+      </div>
+      <div className="ticker-mobile-wrap" style={{ display: 'flex', gap: 20, whiteSpace: 'nowrap', overflowX: 'auto', padding: '7px 12px', WebkitOverflowScrolling: 'touch' }}>
+        {mobileItems.map(renderItem)}
       </div>
       {generatedAtIST && (
         <div style={{

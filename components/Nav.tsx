@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import AuthNavChip from './AuthNavChip'
+import MobileMenu from './MobileMenu'
 
 const SearchModal = dynamic(() => import('./SearchModal'), { ssr: false })
 
@@ -24,6 +25,11 @@ const NAV_LINKS = [
 export default function Nav() {
   const pathname = usePathname()
   const [searchOpen, setSearchOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Close the drawer on route change (e.g. tapping a bottom-nav tab while
+  // the drawer happens to be open from a previous page).
+  useEffect(() => { setMenuOpen(false) }, [pathname])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -105,82 +111,108 @@ export default function Nav() {
             })}
           </div>
 
-          {/* Search */}
+          {/* Search + Subscribe + Auth — hidden below 768px in favor of the
+              hamburger drawer (MobileMenu), which holds the same actions
+              plus the footer-tier links. Was previously all crammed into
+              this same 52px row on mobile alongside the logo. */}
+          <div className="nav-actions-desktop" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'stretch' }}>
+            <button
+              onClick={() => setSearchOpen(true)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 7,
+                background: 'var(--surface-2, #F3F2EC)',
+                border: '1px solid var(--border)',
+                borderRadius: 6,
+                padding: '5px 12px',
+                cursor: 'pointer',
+                flexShrink: 0,
+                color: 'var(--ink-3)',
+                transition: 'border-color 0.15s, background 0.15s',
+                marginRight: 12,
+                alignSelf: 'center',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--ink-3)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)' }}
+              aria-label="Search"
+            >
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.5 }}>
+                <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.04em', color: 'var(--ink-3)', fontWeight: 700 }}
+                className="nav-search-label">
+                Search
+              </span>
+              <kbd style={{
+                fontFamily: 'var(--font-sans)', fontSize: 10,
+                color: 'var(--ink-4)',
+                background: '#fff',
+                border: '1px solid var(--border)',
+                borderRadius: 4,
+                padding: '1px 5px',
+                lineHeight: 1.5,
+                boxShadow: '0 1px 0 var(--border)',
+              }}
+                className="nav-search-kbd">
+                ⌘K
+              </kbd>
+            </button>
+
+            <Link
+              href="/#subscribe"
+              className="nav-subscribe"
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                borderLeft: '1px solid var(--border)',
+                padding: '0 20px',
+                fontSize: 13,
+                fontWeight: 500,
+                color: 'var(--ink)',
+                textDecoration: 'none',
+                flexShrink: 0,
+                whiteSpace: 'nowrap',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              Subscribe →
+            </Link>
+
+            {/* Auth/Pro chip — was a detached position:fixed overlay in
+                app/layout.tsx; folded into the nav's own flex row so it
+                inherits real sticky positioning instead of floating separately. */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 12, flexShrink: 0 }}>
+              <AuthNavChip />
+            </div>
+          </div>
+
+          {/* Hamburger — mobile only, opens MobileMenu */}
           <button
-            onClick={() => setSearchOpen(true)}
+            onClick={() => setMenuOpen(true)}
+            className="nav-hamburger"
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
             style={{
               marginLeft: 'auto',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 7,
-              background: 'var(--surface-2, #F3F2EC)',
-              border: '1px solid var(--border)',
-              borderRadius: 6,
-              padding: '5px 12px',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
-              flexShrink: 0,
-              color: 'var(--ink-3)',
-              transition: 'border-color 0.15s, background 0.15s',
-              marginRight: 12,
-            }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--ink-3)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)' }}
-            aria-label="Search"
-          >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.5 }}>
-              <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.04em', color: 'var(--ink-3)', fontWeight: 700 }}
-              className="nav-search-label">
-              Search
-            </span>
-            <kbd style={{
-              fontFamily: 'var(--font-sans)', fontSize: 10,
-              color: 'var(--ink-4)',
-              background: '#fff',
-              border: '1px solid var(--border)',
-              borderRadius: 4,
-              padding: '1px 5px',
-              lineHeight: 1.5,
-              boxShadow: '0 1px 0 var(--border)',
-            }}
-              className="nav-search-kbd">
-              ⌘K
-            </kbd>
-          </button>
-
-          {/* Subscribe */}
-          <Link
-            href="/#subscribe"
-            className="nav-subscribe"
-            style={{
-              display: 'none',
-              alignItems: 'center',
-              borderLeft: '1px solid var(--border)',
-              padding: '0 20px',
-              fontSize: 13,
-              fontWeight: 500,
               color: 'var(--ink)',
-              textDecoration: 'none',
-              flexShrink: 0,
-              whiteSpace: 'nowrap',
-              letterSpacing: '-0.01em',
+              padding: 8,
+              alignSelf: 'center',
             }}
           >
-            Subscribe →
-          </Link>
-
-          {/* Auth/Pro chip — was a detached position:fixed overlay in
-              app/layout.tsx; folded into the nav's own flex row so it
-              inherits real sticky positioning instead of floating separately. */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: 12, flexShrink: 0 }}>
-            <AuthNavChip />
-          </div>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M3 5.5H17M3 10H17M3 14.5H17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
       </nav>
 
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} onOpenSearch={() => setSearchOpen(true)} />
 
       <style>{`
         @media (min-width: 640px) {
@@ -200,8 +232,11 @@ export default function Nav() {
         @media (max-width: 480px) {
           .nav-links a { padding: 0 8px !important; font-size: 13px !important; }
         }
+        .nav-hamburger { display: none; }
         @media (max-width: 767px) {
           .nav-links { display: none !important; }
+          .nav-actions-desktop { display: none !important; }
+          .nav-hamburger { display: flex !important; }
         }
       `}</style>
     </>

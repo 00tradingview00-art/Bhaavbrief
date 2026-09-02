@@ -213,10 +213,12 @@ function SectionHeader({ label, right }: { label: string; right?: React.ReactNod
 export default function MarketsClient({ initialPrices, eiaData, sparklines }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]> }) {
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
+  const [loading, setLoading]       = useState(false)
   const [marketOpen, setMarketOpen] = useState(isMCXOpen())
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const refresh = useCallback(async () => {
+    setLoading(true)
     try {
       const res = await fetch('/api/prices', { cache: 'no-store' })
       if (!res.ok) return
@@ -226,6 +228,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
       setFlashing(true)
       setTimeout(() => setFlashing(false), 600)
     } catch { /* keep stale data */ }
+    finally { setLoading(false) }
   }, [])
 
   useEffect(() => {
@@ -270,11 +273,19 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
 
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={
-        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
+        <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          {loading && (
+            <span
+              role="status"
+              aria-label="Refreshing"
+              className="bb-spinner"
+              style={{ width: 9, height: 9, borderRadius: '50%', border: '2px solid var(--border)', borderTopColor: 'var(--gold)', display: 'inline-block' }}
+            />
+          )}
           {marketOpen ? 'Live · refreshed every 30s' : 'Market closed'}
         </span>
       } />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12, marginBottom: 32 }}>
+      <div className="markets-card-grid" style={{ display: 'grid', gap: 12, marginBottom: 32 }}>
         {CARDS.map(cfg => {
           const data = p?.[cfg.key as keyof PriceData] as MCXData | undefined
           if (!data) return (
@@ -296,7 +307,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
 
       {/* ── Currencies & Rates ── */}
       <SectionHeader label="Currencies & Rates" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12, marginBottom: 32 }}>
+      <div className="markets-card-grid" style={{ display: 'grid', gap: 12, marginBottom: 32 }}>
         {([
           { key: 'usdinr', label: 'USD / INR', decimals: 4, unit: 'per USD'     },
           { key: 'eurinr', label: 'EUR / INR', decimals: 4, unit: 'per EUR'     },
@@ -422,7 +433,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
         <SectionHeader label="Global Reference" right={
           <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>15-min delayed</span>
         } />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
+        <div className="markets-card-grid" style={{ display: 'grid', gap: 12 }}>
           {p && ([
             { label: 'COMEX Gold',   exch: 'COMEX', price: p.comexGold,   pct: p.goldComexPct,   unit: '/oz',    fmt: (v: number) => fmtUSD(v, 0) },
             { label: 'COMEX Silver', exch: 'COMEX', price: p.comexSilver, pct: p.silverComexPct, unit: '/oz',    fmt: (v: number) => fmtUSD(v, 3) },

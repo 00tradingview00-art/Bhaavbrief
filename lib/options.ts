@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
@@ -109,7 +110,14 @@ export function isMCXMarketOpen(): boolean {
   return mins >= 9 * 60 && mins < 23 * 60 + 30
 }
 
-export async function getOptionsChain(instrument: string, requestedExpiry: string | null = null) {
+// Deduped per-request via React's cache() — a single page render can call
+// this more than once for the same instrument (e.g. app/tools/mcx-iv-rank
+// fetches the same instrument's chain twice, once for its IV Rank listing
+// and again to seed the default volatility view), and each call is a real
+// Kite round-trip plus a full Black-76 solve across the strike chain, not a
+// cheap read. cache() only dedupes within one server render — it never
+// serves stale data across separate requests.
+async function getOptionsChainUncached(instrument: string, requestedExpiry: string | null = null) {
   if (!MCX_INSTRUMENTS[instrument]) {
     throw new Error(`Invalid instrument. Valid: ${Object.keys(MCX_INSTRUMENTS).join(', ')}`)
   }
@@ -305,3 +313,5 @@ export async function getOptionsChain(instrument: string, requestedExpiry: strin
 
   return result
 }
+
+export const getOptionsChain = cache(getOptionsChainUncached)

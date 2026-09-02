@@ -636,6 +636,14 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
           </button>
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 10 }}>
+          {loading && data && (
+            <span
+              role="status"
+              aria-label="Refreshing"
+              className="bb-spinner"
+              style={{ width: 10, height: 10, borderRadius: '50%', border: `2px solid ${C.bdr}`, borderTopColor: C.gold, display: 'inline-block' }}
+            />
+          )}
           {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
             {loading ? 'Loading…' : '↻ Refresh'}
@@ -731,11 +739,15 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
       {/* ── Table ── */}
       {/* Loading skeleton */}
       {loading && !data && (
-        <div style={{ padding: '32px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div role="status" aria-label="Loading option chain" style={{ padding: '32px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               {Array.from({ length: 13 }).map((_, j) => (
-                <div key={j} style={{ flex: j === 6 ? '0 0 90px' : 1, height: 20, background: C.surf3, borderRadius: 3, opacity: 1 - i * 0.08 }} />
+                <div
+                  key={j}
+                  className="bb-skeleton-bar"
+                  style={{ flex: j === 6 ? '0 0 90px' : 1, height: 20, background: C.surf3, borderRadius: 3, animationDelay: `${i * 80}ms` }}
+                />
               ))}
             </div>
           ))}
