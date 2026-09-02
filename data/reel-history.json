@@ -47,7 +47,14 @@
     "generated_at": "2026-09-01T03:18:55.157Z",
     "edition": 97,
     "hi_path": "public/reels/brief-edition-097-hi.mp4",
-    "posted_at": "2026-09-01T03:20:05.341Z"
+    "posted_at": "2026-09-01T03:20:05.341Z",
+    "insights": {
+      "views": 6,
+      "reach": 5,
+      "ig_reels_avg_watch_time": 8648,
+      "ig_reels_video_view_total_time": 60542,
+      "fetched_at": "2026-09-02T04:14:57.728Z"
+    }
   },
   {
     "file": "news-20260831-what-is-comex",
