@@ -3,7 +3,6 @@ import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import Link from 'next/link'
-import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 import '../styles/bhaav.css'
 import Nav from '@/components/Nav'
@@ -116,24 +115,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <ClerkProvider
-      appearance={{
-        // Match the site's own design tokens (styles/bhaav.css) instead of
-        // Clerk's stock look — was rendering as a visually unrelated product
-        // bolted onto the site (plain sans-serif, generic dark button).
-        variables: {
-          colorPrimary:         'var(--gold)',
-          colorBackground:      'var(--surface)',
-          colorForeground:      'var(--ink)',
-          colorMutedForeground: 'var(--ink-3)',
-          colorBorder:          'var(--border)',
-          colorDanger:          'var(--down)',
-          colorSuccess:         'var(--up)',
-          borderRadius:         'var(--radius-md)',
-          fontFamily:           'var(--font-sans)',
-        },
-      }}
-    >
     <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Rendered directly here (not via the Metadata API's `other` field) so it
@@ -204,6 +185,5 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </PostHogProvider>
       </body>
     </html>
-    </ClerkProvider>
   )
 }

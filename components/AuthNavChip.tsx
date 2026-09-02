@@ -4,6 +4,10 @@ import { useUser } from '@clerk/nextjs'
 import Button from '@/components/ui/Button'
 import { useIsPro } from '@/lib/useIsPro'
 
+// Only ever rendered inside DeferredAuthChip.tsx's own ClerkProvider —
+// never mounted directly (see Nav.tsx/MobileMenu.tsx for why: this chunk is
+// code-split and client-only, so pages with no other Clerk usage don't pay
+// for Clerk's JS as part of their initial render).
 export default function AuthNavChip() {
   const { isSignedIn } = useUser()
   const isPro = useIsPro()

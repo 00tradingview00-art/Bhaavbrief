@@ -1,7 +1,16 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
-import AuthNavChip from './AuthNavChip'
+import dynamic from 'next/dynamic'
+import AuthChipFallback from './AuthChipFallback'
+
+// Same deferred, self-contained chip as Nav.tsx — see that file's comment.
+// The drawer only mounts once opened anyway, but this keeps a single
+// consistent way to render the auth chip across both call sites.
+const AuthNavChip = dynamic(() => import('./DeferredAuthChip'), {
+  ssr: false,
+  loading: AuthChipFallback,
+})
 
 interface MobileMenuProps {
   open: boolean
