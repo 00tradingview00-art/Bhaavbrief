@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 152100,
-    "silver": 230139,
-    "crude": 8578,
-    "copper": 1369.4,
-    "natgas": 281.8,
+    "gold": 152510,
+    "silver": 230083,
+    "crude": 8580,
+    "copper": 1371,
+    "natgas": 279,
     "usdinr": 94.97
   },
-  "lastChecked": "2026-09-02T16:31:25.145Z",
+  "lastChecked": "2026-09-02T17:58:26.721Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-08-21",
-    "value": "395"
+    "period": "2026-08-28",
+    "value": "223"
   },
   "lastGeoNews": {
     "mideast": "Oil up about 2% as renewed US-Iran strikes stoke supply fears - reuters.com",
