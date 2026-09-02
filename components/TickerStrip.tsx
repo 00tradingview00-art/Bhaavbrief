@@ -120,7 +120,7 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
           {doubled.map(renderItem)}
         </div>
       </div>
-      <div className="ticker-mobile-wrap" style={{ display: 'flex', gap: 20, whiteSpace: 'nowrap', overflowX: 'auto', padding: '7px 12px', WebkitOverflowScrolling: 'touch' }}>
+      <div className="ticker-mobile-wrap" style={{ gap: 20, whiteSpace: 'nowrap', overflowX: 'auto', padding: '7px 12px', WebkitOverflowScrolling: 'touch' }}>
         {mobileItems.map(renderItem)}
       </div>
       {generatedAtIST && (
