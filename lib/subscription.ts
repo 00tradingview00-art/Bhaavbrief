@@ -16,8 +16,9 @@
 
 import { redisCommand } from './redis'
 import { clerkClient } from '@clerk/nextjs/server'
+import type { Plan } from './proPlans'
 
-export type Plan = 'daily' | 'monthly' | 'yearly'
+export type { Plan } from './proPlans'
 export type SubStatus = 'active' | 'cancelled' | 'expired'
 
 export async function isProUser(userId: string | null): Promise<boolean> {

@@ -2,6 +2,8 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { trackProPurchase } from '@/lib/analytics'
+import { PLAN_PRICES, type Plan } from '@/lib/proPlans'
 
 /** After Cashfree return_url → /pro?paid=1, poll until webhook sets isPro. */
 export default function ProPaidPoller() {
@@ -20,8 +22,11 @@ export default function ProPaidPoller() {
         if (cancelled) return
         const res = await fetch('/api/cashfree/poll-status')
         if (res.ok) {
-          const { isPro } = await res.json()
+          const { isPro, plan, merchantSubId } = await res.json()
           if (isPro) {
+            if (merchantSubId && plan in PLAN_PRICES) {
+              trackProPurchase(plan, PLAN_PRICES[plan as Plan], merchantSubId)
+            }
             router.replace('/options')
             return
           }

@@ -95,7 +95,7 @@ function mdxToHtml(content, title, edition, date) {
   <div>
     <p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 12px">${body}</p>
   </div>
-  <a href="https://bhaavbrief.in/briefs/${slug}" style="display:block;background:#C8720A;color:#FAFAF6;text-decoration:none;padding:12px 24px;text-align:center;font-family:monospace;font-size:12px;letter-spacing:0.04em;margin:24px 0">
+  <a href="https://bhaavbrief.in/briefs/${slug}?utm_source=newsletter&utm_medium=email&utm_campaign=daily_brief" style="display:block;background:#C8720A;color:#FAFAF6;text-decoration:none;padding:12px 24px;text-align:center;font-family:monospace;font-size:12px;letter-spacing:0.04em;margin:24px 0">
     Read full edition on BhaavBrief →
   </a>
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">

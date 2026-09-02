@@ -66,6 +66,21 @@ export function trackSectionSeen(edition: string, section: string) {
   trackEvent("brief_section_seen", { edition, section });
 }
 
+/** Fire ONLY once /api/cashfree/poll-status first reports isPro:true for a
+ *  merchantSubId — that's the client's proof the Cashfree webhook already
+ *  activated the subscription server-side. Never fire on the /pro?paid=1
+ *  redirect alone; that fires even on abandoned/failed checkouts.
+ *  merchantSubId doubles as the sessionStorage guard key and the GA4
+ *  transaction_id, so a reload of the success page (or the checkout page's
+ *  own fallback poll also detecting activation) can't double-count. */
+export function trackProPurchase(plan: string, value: number, merchantSubId: string) {
+  if (typeof window === "undefined") return;
+  const guardKey = `ga_purchase_fired:${merchantSubId}`;
+  if (sessionStorage.getItem(guardKey)) return;
+  sessionStorage.setItem(guardKey, "1");
+  trackEvent("purchase", { currency: "INR", value, transaction_id: merchantSubId, plan });
+}
+
 // ---------------------------------------------------------------------------
 // Wiring into the subscribe form handler:
 // ---------------------------------------------------------------------------

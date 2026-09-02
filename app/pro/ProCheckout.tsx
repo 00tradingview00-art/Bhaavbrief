@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useIsPro } from '@/lib/useIsPro'
+import { trackProPurchase } from '@/lib/analytics'
+import { PLAN_PRICES } from '@/lib/proPlans'
 
 declare global {
   interface Window {
@@ -83,8 +85,11 @@ export default function ProCheckout({ plan, cta }: Props) {
       }
       // redirectTarget _self normally navigates away; if not, poll here
       setStatus('activating')
-      const activated = await pollUntilPro()
-      if (activated) {
+      const activation = await pollUntilPro()
+      if (activation) {
+        if (activation.merchantSubId) {
+          trackProPurchase(activation.plan ?? plan, PLAN_PRICES[plan], activation.merchantSubId)
+        }
         setStatus('done')
         router.push('/options')
       } else {
@@ -98,16 +103,16 @@ export default function ProCheckout({ plan, cta }: Props) {
     }
   }
 
-  async function pollUntilPro(maxAttempts = 15): Promise<boolean> {
+  async function pollUntilPro(maxAttempts = 15): Promise<{ plan: string | null; merchantSubId: string | null } | null> {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(r => setTimeout(r, 2000))
       const res = await fetch('/api/cashfree/poll-status')
       if (res.ok) {
-        const { isPro } = await res.json()
-        if (isPro) return true
+        const { isPro, plan: activatedPlan, merchantSubId } = await res.json()
+        if (isPro) return { plan: activatedPlan ?? null, merchantSubId: merchantSubId ?? null }
       }
     }
-    return false
+    return null
   }
 
   const label =

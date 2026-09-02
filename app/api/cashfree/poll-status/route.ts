@@ -23,6 +23,12 @@ export async function GET(): Promise<NextResponse> {
   const expiresAt = pro
     ? (await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null
     : null
+  const plan = pro
+    ? (await redisCommand('GET', `sub:${userId}:plan`)) as string | null
+    : null
+  const merchantSubId = pro
+    ? (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
+    : null
 
-  return NextResponse.json({ isPro: pro, planExpires: expiresAt })
+  return NextResponse.json({ isPro: pro, planExpires: expiresAt, plan, merchantSubId })
 }
