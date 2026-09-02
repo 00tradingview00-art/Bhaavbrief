@@ -4,21 +4,10 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import AuthChipFallback from './AuthChipFallback'
+import AuthNavChip from './AuthNavChip'
 import MobileMenu from './MobileMenu'
 
 const SearchModal = dynamic(() => import('./SearchModal'), { ssr: false })
-
-// Deferred + client-only: this chunk carries its own ClerkProvider (see
-// DeferredAuthChip.tsx) and is code-split away from the main bundle, so
-// pages that don't otherwise touch Clerk (home, briefs, news, ...) don't
-// pay for Clerk's JS as part of their initial render — it loads in just
-// after hydration instead. AuthChipFallback (plain, hook-free) covers the
-// brief gap so there's no layout shift while it loads.
-const AuthNavChip = dynamic(() => import('./DeferredAuthChip'), {
-  ssr: false,
-  loading: AuthChipFallback,
-})
 
 const NAV_LINKS = [
   { href: '/',               label: 'Home'     },

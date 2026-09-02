@@ -10,7 +10,11 @@ import type { ReactNode } from 'react'
 // sign-in, sign-up) mount this via their own layout.tsx — everything else
 // (home, briefs, news, calendar, learn, about, etc.) now ships zero Clerk JS.
 // The global nav's auth chip (components/AuthNavChip.tsx) no longer needs
-// Clerk client-side at all — it's server-prop-driven from app/layout.tsx.
+// Clerk client-side at all — it derives signed-in/Pro state from a plain
+// fetch to /api/cashfree/poll-status instead (see that file's own comment;
+// an earlier version routed this through a second, independent
+// ClerkProvider instance here, which turned out to cost enough main-thread
+// JS work on every page to cause a real PageSpeed regression on its own).
 export default function AppClerkProvider({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider
