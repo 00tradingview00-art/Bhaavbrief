@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useUser } from '@clerk/nextjs'
 
 // Single source of truth for client-side Pro checks. Reuses the existing
 // /api/cashfree/poll-status endpoint (already does auth() -> isProUser() ->
@@ -13,6 +12,20 @@ import { useUser } from '@clerk/nextjs'
 // Multiple components mounting on the same page (nav chip, chain, IV Skew,
 // etc.) share one in-flight fetch + a short-lived cache so they don't each
 // hit the endpoint independently.
+//
+// No Clerk import here, deliberately — mirrors components/AuthNavChip.tsx's
+// fix. This hook's only Clerk client usage was useUser(), used solely to
+// seed an initial value and gate the fetch behind isSignedIn — both already
+// covered by fetchIsPro()'s own 200(+isPro)/401 response. But because this
+// hook is pulled into OptionChain/IVSkewChart/OIBuildupChart/StrategyBuilder/
+// MarketsClient/BasisClient/ProBlurGate/ProToolsBanner, that one useUser()
+// call forced app/options, app/tools, app/markets, app/basis and
+// app/research's layouts to each mount a full ClerkProvider — the identical
+// class of PageSpeed regression (Desktop 99->84, Total Blocking Time 340ms)
+// AuthNavChip.tsx's fix eliminated for the nav chip, just with a much wider
+// blast radius. Trade-off: a returning Pro user now sees the locked state
+// for one fetch round-trip instead of an instant unlock — the same
+// trade-off AuthNavChip.tsx already made.
 
 let cached: { isPro: boolean; expiresAt: number } | null = null
 let inFlight: Promise<boolean> | null = null
@@ -37,18 +50,13 @@ function fetchIsPro(): Promise<boolean> {
 }
 
 export function useIsPro(): boolean {
-  const { isSignedIn, user } = useUser()
-  // Start from Clerk's cached metadata so there's no flash of "locked" for a
-  // returning Pro user while the live check is in flight — but the live
-  // fetch below always wins once it resolves.
-  const [isPro, setIsPro] = useState(user?.publicMetadata?.isPro === true)
+  const [isPro, setIsPro] = useState(false)
 
   useEffect(() => {
-    if (!isSignedIn) { setIsPro(false); return }
     let cancelled = false
     fetchIsPro().then(v => { if (!cancelled) setIsPro(v) })
     return () => { cancelled = true }
-  }, [isSignedIn])
+  }, [])
 
   return isPro
 }
