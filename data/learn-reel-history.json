@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "which-mcx-commodity-to-trade",
+  "lastSlug": "why-usdinr-affects-mcx-gold",
   "log": [
+    {
+      "slug": "why-usdinr-affects-mcx-gold",
+      "date": "2026-09-02",
+      "file": "public/reels/news-20260902-why-usd-inr-affects-mcx-gold-price.mp4",
+      "generated_at": "2026-09-02T17:50:48.571Z"
+    },
     {
       "slug": "which-mcx-commodity-to-trade",
       "date": "2026-09-01",
