@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
+    "href": "/articles/2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
+    "title": "MCX Nat Gas Falls 2.83% as Henry Hub Storage Builds",
+    "description": "MCX Nat Gas ₹275/mmBtu down 2.83% as US storage injection season accelerates. Silver rallies 1.02% on dollar weakness.",
+    "excerpt": "WHAT HAPPENED MCX Nat Gas fell 2.83% to ₹275/mmBtu — the sharpest decline in three sessions — while Henry Hub stayed flat at $2.89/mmBtu, indicating the rupee weakness alone cannot explain the move. T",
+    "date": "2026-09-03T21:52:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver",
+      "Henry Hub",
+      "US Storage"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 275
+  },
+  {
     "type": "brief",
     "slug": "edition-099",
     "href": "/briefs/edition-099",
