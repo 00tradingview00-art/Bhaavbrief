@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { redisCommand, todayIST } from '@/lib/redis'
+import { buildOiSnapshotRows } from '@/lib/oiHistory'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -44,12 +45,9 @@ export async function GET(req: Request) {
     try {
       const { chain, expiry, pcr } = await getOptionsChain(instrument)
 
-      // Top-10 OI strikes by combined CE+PE OI
-      const top = chain
-        .map(r => ({ strike: r.strike, ceOI: r.CE.oi, peOI: r.PE.oi, total: r.CE.oi + r.PE.oi }))
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 10)
-        .map(({ strike, ceOI, peOI }) => ({ strike, ceOI, peOI }))
+      // Top-10 OI strikes by combined CE+PE OI, plus today's ATM strike if
+      // it isn't already one of them — see buildOiSnapshotRows() for why.
+      const top = buildOiSnapshotRows(chain)
 
       // pcr is the same full-chain total-PE-OI/total-CE-OI figure getOptionsChain()
       // already exposes live (lib/options.ts) — persisted here so /tools/mcx-pcr's
