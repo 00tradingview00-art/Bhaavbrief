@@ -7,6 +7,7 @@ import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
 import Link from 'next/link'
+import Card from '@/components/ui/Card'
 import VolatilityHub from './VolatilityHub'
 import IVRankHistoryChart from './IVRankHistoryChart'
 import { safeJsonLd } from '@/lib/seo'
@@ -196,17 +197,19 @@ export default async function MCXIVRankPage() {
       </section>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>
-          IV Skew &amp; OI Buildup
-        </h2>
-        <VolatilityHub
-          instruments={instrumentList}
-          isPro={isPro}
-          initialInstrument={defaultInstrument}
-          initialChain={initialChain ?? undefined}
-          initialOIHistory={initialOIHistory}
-          initialPreview={initialPreview}
-        />
+        <Card padding="md">
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>
+            IV Skew &amp; OI Buildup
+          </h2>
+          <VolatilityHub
+            instruments={instrumentList}
+            isPro={isPro}
+            initialInstrument={defaultInstrument}
+            initialChain={initialChain ?? undefined}
+            initialOIHistory={initialOIHistory}
+            initialPreview={initialPreview}
+          />
+        </Card>
       </section>
 
       <p style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: '1.5rem' }}>

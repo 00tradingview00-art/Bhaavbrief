@@ -49,7 +49,7 @@ export default function IVSkewChart({ chain, isPro }: Props) {
             <XAxis
               dataKey="strike"
               tick={{ fontSize: 10 }}
-              tickFormatter={v => String(v)}
+              tickFormatter={v => Number(v).toLocaleString('en-IN')}
             />
             <YAxis
               tick={{ fontSize: 10 }}
@@ -58,17 +58,17 @@ export default function IVSkewChart({ chain, isPro }: Props) {
             />
             <Tooltip
               formatter={(v) => [typeof v === 'number' ? `${v.toFixed(1)}%` : String(v)]}
-              labelFormatter={v => `Strike ${v}`}
+              labelFormatter={v => `Strike ${Number(v).toLocaleString('en-IN')}`}
             />
             <Legend wrapperStyle={{ fontSize: 11 }} />
             {atmStrike != null && (
-              <ReferenceLine x={atmStrike} stroke="#888" strokeDasharray="3 3" label={{ value: 'ATM', fontSize: 9 }} />
+              <ReferenceLine x={atmStrike} stroke="var(--ink-4)" strokeDasharray="3 3" label={{ value: 'ATM', fontSize: 9 }} />
             )}
             <Line
               type="monotone"
               dataKey="ceIV"
               name="Call IV"
-              stroke="#22c55e"
+              stroke="var(--up)"
               dot={false}
               strokeWidth={1.5}
               connectNulls
@@ -77,7 +77,7 @@ export default function IVSkewChart({ chain, isPro }: Props) {
               type="monotone"
               dataKey="peIV"
               name="Put IV"
-              stroke="#f97316"
+              stroke="var(--down)"
               dot={false}
               strokeWidth={1.5}
               connectNulls
