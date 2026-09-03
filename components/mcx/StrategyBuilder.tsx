@@ -993,8 +993,11 @@ export default function StrategyBuilder({
             style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
               cursor: 'pointer', fontSize: 15, fontWeight: instrument === inst.key ? 700 : 400,
-              borderColor: instrument === inst.key ? 'var(--gold, #B5862A)' : '#d1d5db',
-              background: instrument === inst.key ? 'var(--gold, #B5862A)' : 'transparent',
+              // White text on var(--gold) fails WCAG AA (measured 3.28:1) —
+              // gold-dark passes (5.28:1), same fix already shipped for the
+              // regime pill elsewhere in this file.
+              borderColor: instrument === inst.key ? 'var(--gold-dark, #8B6520)' : 'var(--border-2, #D4CFC0)',
+              background: instrument === inst.key ? 'var(--gold-dark, #8B6520)' : 'transparent',
               color: instrument === inst.key ? '#fff' : 'inherit',
             }}>
             {inst.label}
@@ -1008,8 +1011,10 @@ export default function StrategyBuilder({
         </div>
       )}
 
+      {/* var(--gold) text on this pale background measured 3.02:1 (fails
+          WCAG AA) — gold-dark passes (4.86:1). */}
       {chainData?.stale && (
-        <div style={{ background: 'rgba(181, 134, 42, 0.08)', border: '1px solid var(--gold, #B5862A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--gold, #B5862A)', fontSize: 14 }}>
+        <div style={{ background: 'rgba(181, 134, 42, 0.08)', border: '1px solid var(--gold, #B5862A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--gold-dark, #8B6520)', fontSize: 14 }}>
           ⚠ Showing the last known chain — live data is temporarily unavailable and this may be out of date.
         </div>
       )}
@@ -1068,8 +1073,8 @@ export default function StrategyBuilder({
             ] as { id: TemplateId; name: string; desc: string }[]).map(t => (
               <button key={t.id} onClick={() => loadTemplate(t.id)}
                 style={{
-                  padding: '6px 10px', borderRadius: 6, border: '1px solid #d1d5db',
-                  background: '#fff', cursor: 'pointer', textAlign: 'left',
+                  padding: '6px 10px', borderRadius: 6, border: '1px solid var(--border-2, #D4CFC0)',
+                  background: 'var(--surface)', cursor: 'pointer', textAlign: 'left',
                 }}>
                 <div style={{ fontSize: 14, fontWeight: 600 }}>{t.name}</div>
                 <div style={{ fontSize: 12, color: 'var(--ink-2, #3A3830)', marginTop: 2, lineHeight: 1.3 }}>{t.desc}</div>
@@ -1105,7 +1110,7 @@ export default function StrategyBuilder({
             <span style={{ fontSize: 15, color: 'var(--ink-2, #3A3830)' }}>Expiry:</span>
             <select value={expiry}
               onChange={e => { fetchData(instrument, e.target.value); setLegs([]) }}
-              style={{ padding: '4px 8px', borderRadius: 5, border: '1px solid #d1d5db', fontSize: 15 }}>
+              style={{ padding: '4px 8px', borderRadius: 5, border: '1px solid var(--border-2, #D4CFC0)', fontSize: 15 }}>
               {expiries.map(ex => <option key={ex} value={ex}>{ex}</option>)}
             </select>
             <span style={{ fontSize: 15, color: 'var(--ink-2, #3A3830)', marginLeft: 4 }}>
@@ -1118,7 +1123,7 @@ export default function StrategyBuilder({
               onClick={() => fetchData(instrument, expiry, true)}
               style={{
                 marginLeft: 'auto', fontSize: 13, padding: '3px 10px', borderRadius: 5,
-                border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer', color: 'var(--ink-2, #3A3830)',
+                border: '1px solid var(--border-2, #D4CFC0)', background: 'var(--surface)', cursor: 'pointer', color: 'var(--ink-2, #3A3830)',
               }}>
               ↺ Refresh
             </button>
@@ -1161,7 +1166,8 @@ export default function StrategyBuilder({
                   marginTop: 8, display: 'inline-flex', alignItems: 'center', gap: 6,
                   fontSize: 12, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
                   color: '#fff',
-                  background: { confirmed: 'var(--up, #1B7A4A)', rejected: 'var(--down, #B53A2A)', unresolved: 'var(--gold, #B5862A)' }[briefEdge.resolution.verdict],
+                  // White text on var(--gold) fails WCAG AA (3.28:1) — gold-dark passes (5.28:1).
+                  background: { confirmed: 'var(--up, #1B7A4A)', rejected: 'var(--down, #B53A2A)', unresolved: 'var(--gold-dark, #8B6520)' }[briefEdge.resolution.verdict],
                 }}>
                   {briefEdge.edgeMetric.replace(/_/g, ' ')} {briefEdge.edgeCondition} {briefEdge.edgeLevel != null ? fmt(briefEdge.edgeLevel) : ''}
                   {' — '}
@@ -1314,7 +1320,7 @@ export default function StrategyBuilder({
                               <button onClick={() => stepStrike(i, -1)} disabled={!canDown}
                                 style={{
                                   fontSize: 12, width: 16, height: 16, lineHeight: 1, padding: 0,
-                                  borderRadius: 3, border: '1px solid #d1d5db', background: '#fff',
+                                  borderRadius: 3, border: '1px solid var(--border-2, #D4CFC0)', background: 'var(--surface)',
                                   color: 'var(--ink-2, #3A3830)', cursor: canDown ? 'pointer' : 'not-allowed',
                                   opacity: canDown ? 1 : 0.3,
                                 }}>−</button>
@@ -1322,7 +1328,7 @@ export default function StrategyBuilder({
                               <button onClick={() => stepStrike(i, 1)} disabled={!canUp}
                                 style={{
                                   fontSize: 12, width: 16, height: 16, lineHeight: 1, padding: 0,
-                                  borderRadius: 3, border: '1px solid #d1d5db', background: '#fff',
+                                  borderRadius: 3, border: '1px solid var(--border-2, #D4CFC0)', background: 'var(--surface)',
                                   color: 'var(--ink-2, #3A3830)', cursor: canUp ? 'pointer' : 'not-allowed',
                                   opacity: canUp ? 1 : 0.3,
                                 }}>+</button>
@@ -1335,7 +1341,7 @@ export default function StrategyBuilder({
                           onChange={e => updatePremium(i, parseFloat(e.target.value) || 0)}
                           title="Edit to model a position entered at a different price than today's live quote"
                           className="no-spinner"
-                          style={{ width: 88, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
+                          style={{ width: 88, padding: '2px 4px', border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
                         {leg.type === 'FUT' ? '—' : (leg.iv * 100).toFixed(1)}
@@ -1343,7 +1349,7 @@ export default function StrategyBuilder({
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <input type="number" min={1} max={100} value={leg.qty}
                           onChange={e => updateQty(i, parseInt(e.target.value) || 1)}
-                          style={{ width: 48, padding: '2px 4px', border: '1px solid #d1d5db', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
+                          style={{ width: 48, padding: '2px 4px', border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 4, fontSize: 14, textAlign: 'right' }} />
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right', color: 'var(--ink-2, #3A3830)' }}>
                         {legGreeks ? fmtGreek(legGreeks.delta, 2) : '—'}
@@ -1592,15 +1598,16 @@ export default function StrategyBuilder({
                 type="number" min={0} placeholder="e.g. 50000"
                 value={riskBudget}
                 onChange={e => setRiskBudget(e.target.value)}
-                style={{ width: 110, padding: '4px 8px', border: '1px solid #d1d5db', borderRadius: 5, fontSize: 14 }}
+                style={{ width: 110, padding: '4px 8px', border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 5, fontSize: 14 }}
               />
               {suggestedLots !== null && (
                 <>
                   <span style={{ fontSize: 14, color: 'var(--ink-2, #3A3830)' }}>→ <strong>{suggestedLots} lot{suggestedLots !== 1 ? 's' : ''}</strong></span>
                   <button
                     onClick={() => riskScaleFactor !== null && applyRiskScale(riskScaleFactor)}
-                    style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid var(--gold, #B5862A)',
-                      background: 'var(--gold, #B5862A)', color: '#fff', cursor: 'pointer' }}>
+                    // White text on var(--gold) fails WCAG AA (3.28:1) — gold-dark passes (5.28:1).
+                    style={{ fontSize: 14, padding: '4px 10px', borderRadius: 5, border: '1px solid var(--gold-dark, #8B6520)',
+                      background: 'var(--gold-dark, #8B6520)', color: '#fff', cursor: 'pointer' }}>
                     Apply
                   </button>
                 </>
@@ -1616,11 +1623,12 @@ export default function StrategyBuilder({
                 placeholder={`Label (e.g. "${autoLabel(legs, instrument)}")`}
                 value={saveLabel}
                 onChange={e => setSaveLabel(e.target.value)}
-                style={{ padding: '7px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 14, minWidth: 200 }}
+                style={{ padding: '7px 10px', border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 6, fontSize: 14, minWidth: 200 }}
               />
               <button onClick={saveStrategy}
+                // White text on var(--gold) fails WCAG AA (3.28:1) — gold-dark passes (5.28:1).
                 style={{
-                  padding: '8px 20px', background: 'var(--gold, #B5862A)', color: '#fff',
+                  padding: '8px 20px', background: 'var(--gold-dark, #8B6520)', color: '#fff',
                   border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 15, fontWeight: 600,
                 }}>
                 Save →
@@ -1628,7 +1636,7 @@ export default function StrategyBuilder({
               <button onClick={() => setLegs([])}
                 style={{
                   padding: '8px 16px', background: 'none', color: 'var(--ink-2, #3A3830)',
-                  border: '1px solid #d1d5db', borderRadius: 6, cursor: 'pointer', fontSize: 15,
+                  border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 6, cursor: 'pointer', fontSize: 15,
                 }}>
                 Clear
               </button>
@@ -1636,7 +1644,7 @@ export default function StrategyBuilder({
                 style={{
                   padding: '8px 16px', background: 'none',
                   color: copied ? 'var(--up, #1B7A4A)' : 'var(--ink-2, #3A3830)',
-                  border: `1px solid ${copied ? 'var(--up, #1B7A4A)' : '#d1d5db'}`,
+                  border: `1px solid ${copied ? 'var(--up, #1B7A4A)' : 'var(--border-2, #D4CFC0)'}`,
                   borderRadius: 6, cursor: 'pointer', fontSize: 15,
                 }}>
                 {copied ? 'Link copied' : 'Share link'}
