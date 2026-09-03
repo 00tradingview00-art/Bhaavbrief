@@ -10,6 +10,7 @@ export async function redisCommand(cmd: string, ...args: string[]): Promise<unkn
   const res = await fetch(`${REDIS_URL}/${[cmd, ...args].map(encodeURIComponent).join('/')}`, {
     headers: { Authorization: `Bearer ${REDIS_TOKEN}` },
     cache: 'no-store',
+    signal: AbortSignal.timeout(8000),
   })
   if (!res.ok) throw new Error(`Redis ${cmd} failed: ${res.status} ${await res.text()}`)
   const json = await res.json() as { result?: unknown }

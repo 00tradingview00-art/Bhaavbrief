@@ -30,6 +30,7 @@ export default function VolatilityHub({ instruments, isPro, initialInstrument, i
   const [instrument, setInstrument] = useState(initialInstrument ?? instruments[0]?.key ?? '')
   const [chain, setChain]     = useState<ChainRow[] | null>(initialChain ?? null)
   const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState<string | null>(null)
 
   // Skip the client fetch only for the exact instrument the server already
   // seeded — switching to a different instrument still fetches client-side.
@@ -42,10 +43,11 @@ export default function VolatilityHub({ instruments, isPro, initialInstrument, i
       return
     }
     setLoading(true)
-    fetch(`/api/options?instrument=${instrument}`)
+    setError(null)
+    fetch(`/api/options?instrument=${instrument}`, { signal: AbortSignal.timeout(10000) })
       .then(r => r.json())
       .then(d => setChain(d.chain ?? null))
-      .catch(() => setChain(null))
+      .catch(() => { setChain(null); setError('Failed to load options chain') })
       .finally(() => setLoading(false))
   }, [instrument])
 
@@ -73,8 +75,9 @@ export default function VolatilityHub({ instruments, isPro, initialInstrument, i
       </div>
 
       {loading && <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>Loading…</p>}
+      {!loading && error && <p style={{ fontSize: '0.8rem', color: '#ef4444' }}>{error}</p>}
 
-      {!loading && chain && (
+      {!loading && !error && chain && (
         <>
           <IVSkewChart chain={chain} isPro={isPro} />
           {atmStrike != null && (

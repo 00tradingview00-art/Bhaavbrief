@@ -37,7 +37,7 @@ export default function OIBuildupChart({ instrument, strike, isPro, initialData,
     }
     setLoading(true)
     setError(null)
-    fetch(`/api/options/oi-history?instrument=${instrument}&strike=${strike}`)
+    fetch(`/api/options/oi-history?instrument=${instrument}&strike=${strike}`, { signal: AbortSignal.timeout(10000) })
       .then(r => r.json())
       .then(d => {
         if (d.error) { setError(d.error); return }

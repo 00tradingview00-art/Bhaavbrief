@@ -13,16 +13,24 @@ export interface OIHistoryPoint {
 // untruncated history; free/Pro slicing is a presentation concern the caller
 // decides, not this function's job.
 export async function getOIHistory(instrument: string, strike: number): Promise<OIHistoryPoint[]> {
-  const history: OIHistoryPoint[] = []
   const today = new Date()
-
-  for (let i = 0; i < 90; i++) {
+  const dates = Array.from({ length: 90 }, (_, i) => {
     const d = new Date(today)
     d.setDate(d.getDate() - i)
-    const dateStr = d.toISOString().slice(0, 10)
-    const key = `oi-snap:${instrument}:${dateStr}`
-    const raw = await redisCommand('get', key) as string | null
-    if (!raw) continue
+    return d.toISOString().slice(0, 10)
+  })
+
+  // Fired concurrently, not sequentially — each redisCommand() call is
+  // individually timed out (lib/redis.ts), so one slow/stuck day can no
+  // longer stall the other 89 behind it.
+  const raws = await Promise.all(
+    dates.map(dateStr => redisCommand('get', `oi-snap:${instrument}:${dateStr}`).catch(() => null) as Promise<string | null>),
+  )
+
+  const history: OIHistoryPoint[] = []
+  dates.forEach((dateStr, i) => {
+    const raw = raws[i]
+    if (!raw) return
     try {
       const { chain } = JSON.parse(raw) as { expiry: string; chain: { strike: number; ceOI: number; peOI: number }[] }
       const row = chain.find(r => r.strike === strike)
@@ -30,7 +38,7 @@ export async function getOIHistory(instrument: string, strike: number): Promise<
     } catch {
       // skip malformed entries
     }
-  }
+  })
 
   history.sort((a, b) => a.date.localeCompare(b.date))
   return history
