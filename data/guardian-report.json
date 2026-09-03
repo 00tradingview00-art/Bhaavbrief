@@ -1,12 +1,25 @@
 {
-  "generatedAt": "2026-09-02T02:54:29.405Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-09-03T02:58:07.284Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [],
+    "learnIssues": [
+      {
+        "field": "MCX Gold lot size description",
+        "currentValue": "Gold Mini contract with a 100g lot size",
+        "correctValue": "Gold Mini contract lot size is not specified in ground truth data; only standard 1kg contract is confirmed",
+        "location": "FAQ_SCHEMA - 'What is the MCX Gold lot size in 2026?' answer"
+      },
+      {
+        "field": "Gold Mini margin estimate",
+        "currentValue": "approximately ₹55,000–₹75,000",
+        "correctValue": "Cannot verify from ground truth; margin estimates are not provided in contract-specs.json",
+        "location": "FAQ_SCHEMA - 'What is the MCX Gold lot size in 2026?' answer"
+      }
+    ],
     "investIssues": [],
     "circularImpact": []
   }
