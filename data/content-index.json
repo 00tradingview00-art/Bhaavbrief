@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-099",
+    "href": "/briefs/edition-099",
+    "title": "Gold Reclaims $4,472 While Crude Holds — The War Trade Is Reuniting",
+    "description": "COMEX Gold surged $106 overnight as the rupee softened, reversing three sessions of divergence between gold and crude.",
+    "excerpt": "MCX Gold ₹153940 | Crude ₹8572 | USDINR ₹94.51 — Gold +1.01% | Crude -0.34% | Silver +1.23% Yesterday's Edge — Result: Edition #98 watched whether WTI would close above 90.83. Confirmed ✓, now at 90.9",
+    "date": "2026-09-03T04:15:00.824Z",
+    "edition": "99",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-098",
     "href": "/briefs/edition-098",
     "title": "Oil at $90 While Gold Drops $76 — The War Trade Is Splitting",
