@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { computeIVRegime, recommendStrategies } from './ivAnalysis'
+import { computeIVRegime, recommendStrategies, ivRankSeries } from './ivAnalysis'
 
 const makeHistory = (ivs: number[]) =>
   ivs.map((iv, i) => ({ date: `2026-0${Math.floor(i / 28) + 1}-${String((i % 28) + 1).padStart(2, '0')}`, iv }))
@@ -83,6 +83,40 @@ describe('computeIVRegime', () => {
     expect(computeIVRegime(history, 12).label).toContain('11th percentile')  // percentile 11 (exception)
     expect(computeIVRegime(history, 13).label).toContain('12th percentile')  // percentile 12 (exception)
     expect(computeIVRegime(history, 14).label).toContain('13th percentile')  // percentile 13 (exception)
+  })
+})
+
+describe('ivRankSeries', () => {
+  test('day 0 (no prior history) falls back to the neutral 50, not a forced pin', () => {
+    const history = makeHistory([20, 30, 25])
+    const series = ivRankSeries(history)
+    expect(series[0].ivRank).toBe(50)
+  })
+
+  test('day 1 (exactly one prior day) also falls back to 50 — regression test: a single prior', () => {
+    // A single prior point can't establish a range, so day 1 shouldn't be
+    // rankable at all. The old `history.slice(0, i + 1)` window included day
+    // 1's own value alongside that one prior point, so day 1 was *always*
+    // either the min or the max of that 2-element set — forcing ivRank to 0
+    // or 100 regardless of the actual value. This fails against that old
+    // logic (which would return 100 here, since 30 > 20) and passes against
+    // the fixed `history.slice(0, i)` window (1 prior point → max === min →
+    // fallback 50).
+    const history = makeHistory([20, 30])
+    const series = ivRankSeries(history)
+    expect(series[1].ivRank).toBe(50)
+  })
+
+  test('a value that genuinely extends the prior range still reads as a real extreme', () => {
+    const history = makeHistory([20, 25, 30, 22, 35])
+    const series = ivRankSeries(history)
+    expect(series[4].ivRank).toBe(100) // 35 is a real new high vs. days 0–3
+  })
+
+  test('a value within the already-established prior range ranks proportionally, unaffected by the fix', () => {
+    const history = makeHistory([20, 30, 25])
+    const series = ivRankSeries(history)
+    expect(series[2].ivRank).toBe(50) // 25 is exactly midway between the prior 20–30 range
   })
 })
 

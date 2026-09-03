@@ -106,6 +106,21 @@ export function computeIVRegime(history: IVHistoryPoint[], currentIV: number): I
   return { currentIV, percentile, ivRank, regime, label: labels[regime] }
 }
 
+// Rolling IV Rank per day, for the history chart. Ranks day i against days
+// *before* i only (history.slice(0, i), never including day i's own value) —
+// the same "current vs. prior history" shape computeIVRegime is normally
+// called with live. An earlier version passed history.slice(0, i + 1), which
+// put day i's value inside its own min/max window and made ivRank == 0 or 100
+// a mathematical certainty for small windows (guaranteed, not a real
+// volatility signal) rather than a real "today is a genuine new extreme"
+// read. Fixed 2026-09-03.
+export function ivRankSeries(history: IVHistoryPoint[]): { date: string; ivRank: number }[] {
+  return history.map((point, i) => ({
+    date:   point.date,
+    ivRank: computeIVRegime(history.slice(0, i), point.iv).ivRank,
+  }))
+}
+
 export type MarketView = 'BULLISH' | 'NEUTRAL' | 'BEARISH'
 
 export type TemplateId =

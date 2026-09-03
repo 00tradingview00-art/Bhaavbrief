@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
-import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
+import { computeIVRegime, liveAtmIV, ivRankSeries, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
@@ -89,18 +89,6 @@ async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; h
     }),
   )
   return Object.fromEntries(entries)
-}
-
-// Rolling IV Rank per day — computeIVRegime(history, currentIV) already does
-// the min/max-rank math for "today vs all history"; walking it forward one
-// day at a time (using only the data available up to that day) turns that
-// single snapshot into the real 90-day series the chart below needs, instead
-// of the hardcoded Math.sin() placeholder this replaced.
-function ivRankSeries(history: IVHistoryPoint[]): { date: string; ivRank: number }[] {
-  return history.map((point, i) => ({
-    date:   point.date,
-    ivRank: computeIVRegime(history.slice(0, i + 1), point.iv).ivRank,
-  }))
 }
 
 function regimeColor(regime: string | undefined): string {
