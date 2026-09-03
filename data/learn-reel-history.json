@@ -1,7 +1,13 @@
 {
   "_note": "Rotation state for the daily /learn reel (scripts/generate-learn-reel.mjs). lastSlug plus the alphabetical key order of data/learn-topics.json fully determines the next pick — self-heals when topics are added or removed.",
-  "lastSlug": "why-usdinr-affects-mcx-gold",
+  "lastSlug": "best-time-to-trade-mcx",
   "log": [
+    {
+      "slug": "best-time-to-trade-mcx",
+      "date": "2026-09-03",
+      "file": "public/reels/news-20260903-best-time-to-trade-mcx-in-india.mp4",
+      "generated_at": "2026-09-03T17:48:00.146Z"
+    },
     {
       "slug": "why-usdinr-affects-mcx-gold",
       "date": "2026-09-02",
