@@ -40,9 +40,12 @@ export default function IVSkewChart({ chain, isPro }: Props) {
 
   return (
     <div style={{ marginTop: '1.5rem' }}>
-      <h4 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.5rem', opacity: 0.75 }}>
+      <h4 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.25rem', opacity: 0.75 }}>
         IV Skew
       </h4>
+      <p style={{ fontSize: '0.72rem', color: 'var(--ink-3)', marginBottom: '0.5rem' }}>
+        Gaps = no live two-sided quote for that strike today, not missing data.
+      </p>
       <ProBlurGate isPro={isPro} label="IV Skew — Call vs Put implied volatility by strike" timestamp="Live">
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: -8 }}>
