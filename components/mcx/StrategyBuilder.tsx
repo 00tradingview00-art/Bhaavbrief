@@ -164,7 +164,12 @@ function buildFRange(futurePrice: number, payoffWidth: number, legs: Leg[]): num
 function greekColor(label: string, raw: number): string {
   if (label.includes('Theta')) return raw < 0 ? 'var(--down, #B53A2A)' : 'var(--up, #1B7A4A)'
   if (label.includes('Vega'))  return raw < 0 ? 'var(--down, #B53A2A)' : 'var(--up, #1B7A4A)'
-  if (label.includes('Delta')) return raw > 0.001 ? '#2563eb' : raw < -0.001 ? '#7c3aed' : 'inherit'
+  // Delta's sign is directional exposure, not P&L — deliberately not
+  // var(--up)/var(--down) (reserved for Theta/Vega above) so a positive
+  // delta doesn't visually read as "good." gold-dark/ink-2 are the only
+  // other warm-palette tokens available, both verified >4.5:1 on this card's
+  // var(--surface-2) background.
+  if (label.includes('Delta')) return raw > 0.001 ? 'var(--gold-dark, #8B6520)' : raw < -0.001 ? 'var(--ink-2, #3A3830)' : 'inherit'
   return 'inherit'
 }
 
@@ -321,16 +326,29 @@ interface IVHistoryTooltipProps {
   color: string
 }
 
+// regimeColors (--up/--gold/--down) are tuned for contrast on a white chart
+// background — fine for the sparkline's own fill/stroke, but --up and --down
+// both fail WCAG AA as text on this tooltip's dark background (measured
+// 3.64:1 / 3.33:1, need 4.5:1). Remap to the same on-dark green/red
+// TickerStrip.tsx already uses on this exact var(--ink) background
+// (measured 11.15:1 / 7.03:1) — --gold passes as-is (5.93:1).
+const DARK_SAFE_REGIME_COLOR: Record<string, string> = {
+  'var(--up, #1B7A4A)':   '#4ADE80',
+  'var(--down, #B53A2A)': '#F87171',
+}
+
 function IVHistoryTooltip({ active, payload, color }: IVHistoryTooltipProps) {
   if (!active || !payload?.length) return null
   const d = payload[0].payload
+  const valueColor = DARK_SAFE_REGIME_COLOR[color] ?? color
   return (
     <div style={{
       background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
-      padding: '6px 10px', borderRadius: 4, fontSize: 12,
+      padding: '8px 10px', borderRadius: 'var(--radius-sm)', boxShadow: 'var(--shadow-md)',
+      fontSize: 12, fontFamily: 'var(--font-sans)',
     }}>
-      <div style={{ opacity: 0.7, marginBottom: 2 }}>{fmtIVDate(d.date)}</div>
-      <div style={{ fontWeight: 700, color }}>{d.iv}%</div>
+      <div style={{ color: 'var(--ink-4, #B8B4A8)', marginBottom: 2 }}>{fmtIVDate(d.date)}</div>
+      <div style={{ fontWeight: 700, color: valueColor }}>{d.iv}%</div>
     </div>
   )
 }
@@ -356,17 +374,21 @@ function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT
   return (
     <div style={{
       background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
-      padding: '6px 10px', borderRadius: 4, fontSize: 12, minWidth: 160,
+      padding: '8px 10px', borderRadius: 'var(--radius-sm)', boxShadow: 'var(--shadow-md)',
+      fontSize: 12, fontFamily: 'var(--font-sans)', minWidth: 160,
     }}>
       <div style={{ marginBottom: 4 }}>
         F = ₹{fmt(label)}
         {movePct !== null && (
-          <span style={{ color: movePct >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>
+          // var(--up)/var(--down) fail WCAG AA as text on this dark background
+          // (measured 3.64:1 / 3.33:1) — same on-dark green/red TickerStrip.tsx
+          // already uses on this exact var(--ink) background (11.15:1 / 7.03:1).
+          <span style={{ color: movePct >= 0 ? '#4ADE80' : '#F87171' }}>
             {' '}({movePct >= 0 ? '+' : ''}{movePct.toFixed(1)}%)
           </span>
         )}
         {sigmasAway !== null && (
-          <span style={{ opacity: 0.6 }}> · {Math.abs(sigmasAway).toFixed(1)}σ {sigmasAway >= 0 ? 'above' : 'below'}</span>
+          <span style={{ color: 'var(--ink-4, #B8B4A8)' }}> · {Math.abs(sigmasAway).toFixed(1)}σ {sigmasAway >= 0 ? 'above' : 'below'}</span>
         )}
       </div>
       {payload.map(p => {
@@ -410,7 +432,7 @@ function EventTimeline({
         <span>Today</span>
         <span>Expiry {new Date(expiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
       </div>
-      <div style={{ position: 'relative', height: 20, background: '#f3f4f6', borderRadius: 3 }}>
+      <div style={{ position: 'relative', height: 20, background: 'var(--surface-3)', borderRadius: 3 }}>
         {events.map(e => {
           const pct = Math.min(100, Math.max(0, ((new Date(e.next_release_utc).getTime() - now) / span) * 100))
           const selected = targetDate === e.next_release_utc
@@ -463,7 +485,7 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
   const maxIV = Math.max(...ivValues)
 
   return (
-    <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '10px 14px', marginBottom: 16 }}>
+    <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 16 }}>
       <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2, #3A3830)', marginBottom: 6 }}>
         ATM IV — 10-Day
       </div>
@@ -485,7 +507,7 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
               cursor={{ stroke: color, strokeWidth: 1, strokeDasharray: '3 3' }}
             />
 
-            <ReferenceLine y={recent[0].iv} stroke="#d1d5db" strokeDasharray="2 4" strokeWidth={0.8} />
+            <ReferenceLine y={recent[0].iv} stroke="var(--border-2, #D4CFC0)" strokeDasharray="2 4" strokeWidth={0.8} />
 
             <Area
               type="monotone"
@@ -493,7 +515,7 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
               stroke={color}
               strokeWidth={1.5}
               fill={`url(#${gradId})`}
-              dot={{ r: 2.5, fill: color, stroke: '#f9fafb', strokeWidth: 1 }}
+              dot={{ r: 2.5, fill: color, stroke: 'var(--surface-2, #FAFAF7)', strokeWidth: 1 }}
               activeDot={{ r: 3.5, fill: color, stroke: '#fff', strokeWidth: 1.5 }}
             />
           </AreaChart>
@@ -997,12 +1019,16 @@ export default function StrategyBuilder({
       {/* IV Regime Banner */}
       {ivRegime && (
         <div style={{
-          background: '#f9fafb', border: `1px solid ${regimeColors[ivRegime.regime]}`,
+          background: 'var(--surface-2)', border: `1px solid ${regimeColors[ivRegime.regime]}`,
           borderRadius: 8, padding: '12px 16px', marginBottom: 16,
           display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
         }}>
           <div style={{
-            background: regimeColors[ivRegime.regime], color: '#fff',
+            // White text on var(--gold) fails WCAG AA (measured 3.28:1) for the
+            // NORMAL regime specifically — gold-dark passes (5.28:1); CHEAP/RICH
+            // (--up/--down) already pass as pill backgrounds, left untouched.
+            background: ivRegime.regime === 'NORMAL' ? 'var(--gold-dark, #8B6520)' : regimeColors[ivRegime.regime],
+            color: '#fff',
             borderRadius: 4, padding: '2px 8px', fontWeight: 700, fontSize: 14,
           }}>
             {ivRegime.regime}
@@ -1057,7 +1083,7 @@ export default function StrategyBuilder({
       )}
 
       {/* Tabs */}
-      <div style={{ display: 'flex', borderBottom: '1px solid #e5e7eb', marginBottom: 16 }}>
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
         {([['build', 'Strategy Builder'], ['saved', `My Strategies (${saved.length})`]] as const).map(([t, label]) => (
           <button key={t} onClick={() => setTab(t)}
             style={{
@@ -1163,7 +1189,7 @@ export default function StrategyBuilder({
               <div style={{ overflowX: 'auto', marginBottom: 16 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid #e5e7eb', color: 'var(--ink-2, #3A3830)' }}>
+                    <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--ink-2, #3A3830)' }}>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE OI</th>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE IV%</th>
                       <th style={{ padding: '6px 6px', textAlign: 'right' }}>CE Δ</th>
@@ -1180,7 +1206,7 @@ export default function StrategyBuilder({
                       <tr key={row.strike}
                         style={{
                           background: row.isATM ? 'var(--gold-pale, #F9F4EC)' : 'transparent',
-                          borderBottom: '1px solid #f3f4f6',
+                          borderBottom: '1px solid var(--border)',
                         }}>
                         {/* CE OI */}
                         <td style={{ padding: '5px 6px', textAlign: 'right', color: 'var(--ink-2, #3A3830)', fontSize: 13 }}>
@@ -1244,7 +1270,7 @@ export default function StrategyBuilder({
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Selected Legs</div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #e5e7eb', color: 'var(--ink-2, #3A3830)' }}>
+                  <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--ink-2, #3A3830)' }}>
                     <th style={{ padding: '5px 8px', textAlign: 'left' }}>Action</th>
                     <th style={{ padding: '5px 8px', textAlign: 'left' }}>Type</th>
                     <th style={{ padding: '5px 8px', textAlign: 'right' }}>Strike</th>
@@ -1264,7 +1290,7 @@ export default function StrategyBuilder({
                       ? computeLegGreeks(leg, futurePrice, T, r, lotSize, currentIV)
                       : null
                     return (
-                    <tr key={i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={{ padding: '5px 8px' }}>
                         <button onClick={() => toggleAction(i)}
                           style={{
@@ -1347,7 +1373,7 @@ export default function StrategyBuilder({
 
           {/* Net Greeks — color-coded by sign */}
           {netGreeks && legs.length > 0 && (
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16, fontSize: 14 }}>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
               {[
                 { label: 'Net Delta',    raw: netGreeks.delta,                       display: fmtGreek(netGreeks.delta, 2) },
                 { label: 'Delta ₹ Exp', raw: netGreeks.delta * futurePrice,         display: fmtPnlAxis(Math.round(netGreeks.delta * futurePrice)) },
@@ -1356,9 +1382,9 @@ export default function StrategyBuilder({
                 { label: 'Net Vega/1%', raw: netGreeks.vega,                        display: fmtPnlAxis(Math.round(netGreeks.vega)) },
               ].map(g => (
                 <div key={g.label}
-                  style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '6px 12px' }}>
-                  <div style={{ color: 'var(--ink-2, #3A3830)', marginBottom: 2 }}>{g.label}</div>
-                  <div style={{ fontWeight: 700, color: greekColor(g.label, g.raw) }}>{g.display}</div>
+                  style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 6, padding: '6px 12px' }}>
+                  <div style={{ fontSize: 12, color: 'var(--ink-2, #3A3830)', marginBottom: 2 }}>{g.label}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: greekColor(g.label, g.raw) }}>{g.display}</div>
                 </div>
               ))}
             </div>
@@ -1437,7 +1463,7 @@ export default function StrategyBuilder({
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>P&amp;L Scenarios at Expiry</div>
               <table style={{ borderCollapse: 'collapse', fontSize: 14, minWidth: 340 }}>
                 <thead>
-                  <tr style={{ borderBottom: '1px solid #e5e7eb', color: 'var(--ink-2, #3A3830)' }}>
+                  <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--ink-2, #3A3830)' }}>
                     <th style={{ padding: '5px 12px', textAlign: 'left' }}>Move</th>
                     <th style={{ padding: '5px 12px', textAlign: 'right' }}>Price</th>
                     <th style={{ padding: '5px 12px', textAlign: 'right' }}>P&amp;L</th>
@@ -1448,8 +1474,8 @@ export default function StrategyBuilder({
                   {scenarios.map(s => (
                     <tr key={s.label}
                       style={{
-                        background: s.isATM ? '#f9fafb' : 'transparent',
-                        borderBottom: '1px solid #f3f4f6',
+                        background: s.isATM ? 'var(--surface-2)' : 'transparent',
+                        borderBottom: '1px solid var(--border)',
                         fontWeight: s.isATM ? 600 : 400,
                       }}>
                       <td style={{ padding: '5px 12px', color: 'var(--ink-2, #3A3830)' }}>{s.label}</td>
@@ -1545,7 +1571,7 @@ export default function StrategyBuilder({
                 }] : []),
               ].map(s => (
                 <div key={s.label}
-                  style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
+                  style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 6, padding: '8px 14px', minWidth: 120 }}>
                   <div style={{ color: 'var(--ink-2, #3A3830)', fontSize: 13, marginBottom: 2 }}>
                     {s.label === 'Approx Margin' || s.label === 'Margin Needed'
                       ? <Link href="/learn/mcx-margin-calculation" style={{ color: 'inherit', textDecoration: 'underline dotted' }}>{s.label}</Link>
@@ -1636,8 +1662,8 @@ export default function StrategyBuilder({
             return (
               <div key={s.id}
                 style={{
-                  border: '1px solid #e5e7eb', borderRadius: 8, padding: '12px 16px',
-                  marginBottom: 12, background: expired ? '#f9fafb' : '#fff',
+                  border: '1px solid var(--border)', borderRadius: 8, padding: '12px 16px',
+                  marginBottom: 12, background: expired ? 'var(--surface-2)' : 'var(--surface)',
                 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
