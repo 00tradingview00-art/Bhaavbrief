@@ -186,7 +186,6 @@ export default async function MCXIVRankPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>{chartTitle}</h2>
         <IVRankHistoryChart
           title={chartTitle}
           isPro={isPro}
