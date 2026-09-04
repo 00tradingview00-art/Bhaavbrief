@@ -47,7 +47,14 @@
     "generated_at": "2026-09-03T04:22:19.265Z",
     "edition": 99,
     "hi_path": "public/reels/brief-edition-099-hi.mp4",
-    "posted_at": "2026-09-03T04:23:25.735Z"
+    "posted_at": "2026-09-03T04:23:25.735Z",
+    "insights": {
+      "views": 7,
+      "reach": 6,
+      "ig_reels_avg_watch_time": 14406,
+      "ig_reels_video_view_total_time": 72030,
+      "fetched_at": "2026-09-04T08:04:20.061Z"
+    }
   },
   {
     "file": "news-20260902-why-usd-inr-affects-mcx-gold-price",
