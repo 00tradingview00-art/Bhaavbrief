@@ -1,0 +1,5 @@
+{
+  "_note": "Rotation state for the 30-day reel campaign (scripts/generate-campaign-reel.mjs, plan in data/reel-campaign-queue.json). nextDay advances by 1 after each successful generation, self-healing (a missed run just runs that day late rather than skipping it) — same convention as data/learn-reel-history.json's lastSlug pointer. Once nextDay exceeds the queue length the dispatcher logs completion and exits without generating.",
+  "nextDay": 1,
+  "log": []
+}

@@ -1,0 +1,103 @@
+name: Generate 30-Day Campaign Reel
+
+on:
+  schedule:
+    - cron: '30 10 * * *'  # 4:00 PM IST daily — distinct slot from the 9 AM brief reel and 7:30 PM learn reel
+  workflow_dispatch:
+
+# One campaign reel per run — queue rather than cancel if a run is somehow still going
+concurrency:
+  group: generate-campaign-reel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Generate campaign reel
+        id: reel
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: node scripts/generate-campaign-reel.mjs
+
+      - name: Post reel to Instagram
+        if: steps.reel.outcome == 'success' && steps.reel.outputs.reel_file != ''
+        continue-on-error: true
+        env:
+          REEL_FILE:              ${{ steps.reel.outputs.reel_file }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: node scripts/post-reel-instagram.mjs
+
+      # data/reel-history.json (written by generate-brief-reel.mjs + post-reel-instagram.mjs)
+      # and data/reel-campaign-state.json (the day-N rotation pointer, written by
+      # generate-campaign-reel.mjs) both live only on this runner until committed
+      # back — same save/rebase/restore-via-/tmp pattern as generate-learn-reel.yml's
+      # "Persist reel state" step.
+      - name: Persist reel state
+        continue-on-error: true
+        run: |
+          [ -f data/reel-history.json ] && cp data/reel-history.json /tmp/bb-reel-history.json || true
+          [ -f data/reel-campaign-state.json ] && cp data/reel-campaign-state.json /tmp/bb-campaign-state.json || true
+          git checkout -- . 2>/dev/null || true
+          git pull --rebase origin main
+          [ -f /tmp/bb-reel-history.json ] && cp /tmp/bb-reel-history.json data/reel-history.json || true
+          [ -f /tmp/bb-campaign-state.json ] && cp /tmp/bb-campaign-state.json data/reel-campaign-state.json || true
+          git add data/reel-history.json data/reel-campaign-state.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Reel state unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Campaign reel — $(date +'%d %b %Y')"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Campaign reel pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Generate 30-Day Campaign Reel</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/generate-campaign-reel.yml\">Re-run workflow →</a></p>"
+            }'
