@@ -1,5 +1,28 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-100",
+    "href": "/briefs/edition-100",
+    "title": "Gold Surges $159 as the War Trade Reunites at Full Force",
+    "description": "COMEX gold jumped to $4,526 overnight while WTI crossed $91 — the war trade is no longer splitting, it is accelerating.",
+    "excerpt": "MCX Gold ₹155775 | Crude ₹8643 | USDINR ₹94.62 Yesterday's Edge — Result: Edition #99 watched whether COMEX GOLD would close above 4,472.5. Confirmed ✓, now at 4,525.7. | Commodity | Global Price | US",
+    "date": "2026-09-04T02:17:11.276Z",
+    "edition": "100",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
     "href": "/articles/2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
