@@ -1,11 +1,11 @@
 {
-  "rotationIndex": 5,
+  "rotationIndex": 10,
   "lastClaimIds": [
-    "eia_petroleum_status_report__crude",
-    "api_crude_inventories__crude",
-    "baker_hughes_rig_count__crude",
-    "baker_hughes_rig_count__natgas",
-    "cftc_cot_report__gold"
+    "cftc_cot_report__silver",
+    "cftc_cot_report__crude",
+    "cftc_cot_report__copper",
+    "cftc_cot_report__natgas",
+    "cftc_cot_report__zinc"
   ],
-  "lastDate": "2026-08-28"
+  "lastDate": "2026-09-04"
 }
