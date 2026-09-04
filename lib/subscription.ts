@@ -13,6 +13,13 @@
 //
 // Clerk publicMetadata.isPro mirrors status for client-side use without Redis
 // (see scalability note in plan: options pages use ISR + client-side override).
+//
+// Internal access — for backend scripts (e.g. the reel campaign pipeline)
+// that need real Pro-tier data with no Clerk session at all, see
+// hasInternalAccess() below. Browser-based Pro verification (does the real
+// UI/UX work) goes through the dev.bhaavbrief.in staging domain instead —
+// Cashfree sandbox mode (lib/cashfree.ts) already runs the real subscribe
+// flow there with test cards, so no auth-bypass code is needed for that.
 
 import { redisCommand } from './redis'
 import { clerkClient } from '@clerk/nextjs/server'
@@ -28,6 +35,18 @@ export async function isProUser(userId: string | null): Promise<boolean> {
   const expiresAt = await redisCommand('GET', `sub:${userId}:expires_at`)
   if (!expiresAt) return false
   return new Date(expiresAt as string) > new Date()
+}
+
+// Bearer-secret check for server-to-server internal access (backend scripts
+// hitting Pro-gated API routes with no Clerk session at all). A real
+// customer's browser never sends this header — there is no UI, cookie, or
+// normal request path that would ever attach it. Deliberately a separate
+// secret from CRON_SECRET: that one scopes to the app's own cron/ops infra,
+// this one grants Pro-data access — a different privilege, kept on a
+// different secret so a leak of one doesn't grant the other.
+export function hasInternalAccess(headers: Headers): boolean {
+  const auth = headers.get('authorization')
+  return !!process.env.INTERNAL_ACCESS_SECRET && auth === `Bearer ${process.env.INTERNAL_ACCESS_SECRET}`
 }
 
 export async function activateSubscription(

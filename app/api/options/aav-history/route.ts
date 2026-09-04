@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { isProUser } from '@/lib/subscription'
+import { isProUser, hasInternalAccess } from '@/lib/subscription'
 import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { computeRollingAAV } from '@/lib/vix'
 import { MCX_INSTRUMENTS } from '@/lib/options'
@@ -17,7 +17,7 @@ export const dynamic  = 'force-dynamic'
  */
 export async function GET(request: Request) {
   const { userId } = await auth()
-  if (!await isProUser(userId)) {
+  if (!hasInternalAccess(request.headers) && !await isProUser(userId)) {
     return NextResponse.json({ error: 'Pro subscription required' }, { status: 403 })
   }
 

@@ -25,6 +25,7 @@ import { fileURLToPath } from 'url'
 import { execFileSync } from 'child_process'
 import {
   fetchOptionsSnapshot, fetchIvPercentile, fetchNextEvent, getBasisSnapshot, topOiStrikes,
+  atmGreeksFacts,
 } from './lib/reelCampaignData.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -87,6 +88,13 @@ async function resolveLiveContext(entry) {
           `Market convention: a PCR above 1.2 is read as a contrarian bullish signal in options positioning; below 0.7 is read as contrarian bearish. This is a positioning statistic, not a standalone trade signal.`,
         ],
       }
+    }
+    case 'greeks': {
+      const snap = await fetchOptionsSnapshot(SITE, instrument)
+      if (!snap || !snap.chain.length) return null
+      const facts = atmGreeksFacts(snap.chain, INSTRUMENT_LABEL[instrument])
+      if (!facts) return null
+      return { tags, facts }
     }
     case 'maxpain': {
       const snap = await fetchOptionsSnapshot(SITE, instrument)

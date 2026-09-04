@@ -22,6 +22,17 @@ const nextConfig = {
           { key: 'Strict-Transport-Security',  value: 'max-age=63072000; includeSubDomains; preload' },
         ],
       },
+      // dev.bhaavbrief.in is the staging domain (real Cashfree sandbox testing,
+      // see IS_STAGING in .env.example) — never indexable. app/robots.ts also
+      // returns a blanket disallow there; this is the belt-and-suspenders header
+      // in case anything crawls a page directly without checking robots.txt first.
+      {
+        source: '/(.*)',
+        has: [{ type: 'host', value: 'dev.bhaavbrief.in' }],
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+        ],
+      },
     ]
   },
   async redirects() {
