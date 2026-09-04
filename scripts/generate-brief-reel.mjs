@@ -24,10 +24,13 @@ import { getCloses }                          from './lib/historyReader.mjs'
 import { validateChart }                      from './lib/chartValidation.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { buildHashtags }                      from './lib/reelHashtags.mjs'
+import { computeReelTiming }                  from './lib/reelTiming.mjs'
+import { parseHindiCopyResponse }             from './lib/reelHindiCopy.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
 const PROMPT_VERSION = 'reel_v1'
+const HINDI_PROMPT_VERSION = 'reel_hindi_v1'
 
 // ── Env ───────────────────────────────────────────────────────────────────────
 const envFile = join(ROOT, '.env.local')
@@ -191,10 +194,12 @@ async function ensureMusic(mood) {
 }
 
 // ── ElevenLabs voiceover ──────────────────────────────────────────────────────
-async function generateVoiceover(script, outputPath) {
-  const apiKey  = process.env.ELEVENLABS_API_KEY
-  // Sarah — mature, reassuring, confident female voice
-  const voiceId = process.env.ELEVENLABS_VOICE_ID ?? 'EXAVITQu4vr4xnSDxMaL'
+// Sarah — mature, reassuring, confident female voice; the default for both
+// English and Hindi (eleven_multilingual_v2 carries her timbre into Hindi).
+const DEFAULT_VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'
+
+async function generateVoiceover(script, outputPath, voiceId = process.env.ELEVENLABS_VOICE_ID ?? DEFAULT_VOICE_ID) {
+  const apiKey = process.env.ELEVENLABS_API_KEY
 
   if (!apiKey) { console.warn('  ⚠️  ELEVENLABS_API_KEY not set — skipping voiceover'); return null }
 
@@ -219,132 +224,93 @@ async function generateVoiceover(script, outputPath) {
   return outputPath
 }
 
-// ── Hindi reel variant ────────────────────────────────────────────────────────
-async function generateHindiVariant(copy, padded, filePrefix, musicPath, framesDir, dur) {
-  const client      = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-  // Sarah — soft, mature, reassuring female voice (same as the English reel);
-  // eleven_multilingual_v2 carries her timbre into Hindi. || (not ??) so an
-  // empty ELEVENLABS_HINDI_VOICE_ID secret (GitHub Actions injects unset
-  // secrets as "", not undefined) still falls back to this default.
-  const hindiVoiceId = process.env.ELEVENLABS_HINDI_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL'
+// ── Hindi copy translation — one call for all 7 on-screen/spoken fields, so
+// spoken and written Hindi agree in wording (previously two independent
+// ad-hoc translation calls could drift from each other). ─────────────────────
+const hindiPromptTemplate = loadPromptTemplate(join(ROOT, 'prompts'), HINDI_PROMPT_VERSION)
 
+async function translateCopyToHindi(copy) {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const prompt = renderPromptTemplate(hindiPromptTemplate, {
+    HOOK_CAPTION: copy.hook_caption ?? '',
+    STAT_LINE:    copy.stat_line ?? '',
+    BEAT1:        copy.beat1 ?? '',
+    BEAT2:        copy.beat2 ?? '',
+    BEAT3:        copy.beat3 ?? '',
+    PAYOFF:       copy.payoff ?? '',
+    VOICEOVER:    copy.voiceover ?? '',
+  })
+
+  try {
+    const msg = await client.messages.create({
+      model:      'claude-haiku-4-5-20251001',
+      max_tokens: 1200,
+      messages:   [{ role: 'user', content: prompt }],
+    })
+    return parseHindiCopyResponse(msg.content[0].text.trim(), copy)
+  } catch (e) {
+    console.warn(`  ⚠️  Hindi translation failed (${e.message}) — falling back to English copy on-screen`)
+    return parseHindiCopyResponse('', copy)
+  }
+}
+
+// ── Hindi reel variant — a genuine second render pass (own translated
+// on-screen text, own independently-measured voiceover timing), not a dub
+// over the English frames. ────────────────────────────────────────────────
+async function generateHindiVariant({ copy, data, snapshot, mood, hookCloses, padded, filePrefix, musicPath }) {
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
   console.log('  🇮🇳  Generating Hindi variant...')
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
 
-  // 1. Translate voiceover to Hindi
-  console.log('🔤  Translating voiceover to Hindi...')
-  let hindiVoiceover = copy.voiceover
-  try {
-    const transRes = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      messages: [{
-        role: 'user',
-        content: `Translate this English voiceover to Hindi (Devanagari script).\nKeep all numbers, commodity names (MCX Gold, MCX Silver, MCX Crude, COMEX, OPEC, WTI, Federal Reserve, RBI, USDINR) in English — only translate the connecting narrative.\nOutput ONLY the Hindi voiceover text, nothing else.\n\nEnglish: ${copy.voiceover}`,
-      }],
-    })
-    hindiVoiceover = transRes.content[0].text.trim()
-    console.log(`  ✅  Translated (${hindiVoiceover.length} chars)`)
-  } catch (e) {
-    console.warn(`  ⚠️  Translation failed (${e.message}) — using English voiceover`)
-  }
+  console.log('🔤  Translating copy to Hindi...')
+  const hindiFields = await translateCopyToHindi(copy)
+  const hindiCopy   = { ...copy, ...hindiFields }
+  console.log(`  ✅  Translated`)
 
-  // 2. Generate Hindi TTS
-  const HI_VO_FILE  = join(ROOT, `.reel-vo-${padded}-hi.mp3`)
-  const apiKey      = process.env.ELEVENLABS_API_KEY
-  let hindiVoicePath = null
-  if (apiKey) {
-    console.log('🎙️   Generating Hindi voiceover...')
-    try {
-      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${hindiVoiceId}`, {
-        method: 'POST',
-        headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: hindiVoiceover,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: { stability: 0.22, similarity_boost: 0.72, style: 0.28, use_speaker_boost: true },
-        }),
-        signal: AbortSignal.timeout(30000),
-      })
-      if (res.ok) {
-        const buf = Buffer.from(await res.arrayBuffer())
-        writeFileSync(HI_VO_FILE, buf)
-        console.log(`  ✅  Hindi voiceover (${(buf.length / 1024).toFixed(0)} KB)`)
-        hindiVoicePath = HI_VO_FILE
-      } else {
-        console.warn(`  ⚠️  ElevenLabs Hindi TTS failed (${res.status}) — encoding without voiceover`)
-      }
-    } catch (e) {
-      console.warn(`  ⚠️  ElevenLabs Hindi TTS error (${e.message}) — encoding without voiceover`)
+  // || (not ??) so an empty ELEVENLABS_HINDI_VOICE_ID secret (GitHub Actions
+  // injects unset secrets as "", not undefined) still falls back to the default.
+  const hindiVoiceId = process.env.ELEVENLABS_HINDI_VOICE_ID || DEFAULT_VOICE_ID
+  const HI_VO_FILE   = join(ROOT, `.reel-vo-${padded}-hi.mp3`)
+  console.log('🎙️   Generating Hindi voiceover...')
+  const hindiVoicePath = await generateVoiceover(hindiCopy.voiceover, HI_VO_FILE, hindiVoiceId)
+
+  // Independently timed from the English pass — this is what actually fixes
+  // the truncation/dead-air bug: Hindi gets its own measured voiceover
+  // duration rescaling its own scene timing, instead of borrowing English's.
+  const measuredHindiDur = hindiVoicePath && existsSync(hindiVoicePath) ? probeDuration(hindiVoicePath) : null
+  const hindiTiming = computeReelTiming(REEL_TIMING_BASELINE, measuredHindiDur, FPS)
+  if (measuredHindiDur != null) {
+    if (hindiTiming.clamped) {
+      console.warn(`  ⚠️  Hindi voiceover implies a ${hindiTiming.rawScale.toFixed(2)}x scale — clamped to ${hindiTiming.scale.toFixed(2)}x (measured ${measuredHindiDur.toFixed(1)}s)`)
     }
-  } else {
-    console.warn('  ⚠️  ELEVENLABS_API_KEY not set — encoding Hindi without voiceover')
+    console.log(`  🎯  Hindi voiceover measured ${measuredHindiDur.toFixed(1)}s — video rescaled to ${(hindiTiming.TOTAL_FRAMES / FPS).toFixed(1)}s total`)
   }
 
-  // 3. Measure Hindi audio duration (for trim bound)
-  let hindiVoiceTrim = dur
-  if (hindiVoicePath && existsSync(hindiVoicePath)) {
-    try {
-      const probeOut = execFileSync(
-        'ffprobe',
-        ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', hindiVoicePath],
-        { encoding: 'utf8' }
-      ).trim()
-      const probed = parseFloat(probeOut)
-      if (Number.isFinite(probed) && probed > 0) hindiVoiceTrim = Math.min(probed + 0.1, dur)
-    } catch {}
-  }
+  const HI_FRAMES_DIR = join(ROOT, '.reel-frames-tmp-hi')
+  if (existsSync(HI_FRAMES_DIR)) rmSync(HI_FRAMES_DIR, { recursive: true })
+  renderReelFrames({ copy: hindiCopy, data, snapshot, mood, hookCloses, timing: hindiTiming, lang: 'hi', framesDir: HI_FRAMES_DIR })
 
-  // 4. Encode Hindi MP4 (reuses same frames)
   const HI_OUT_FILE = join(ROOT, 'public/reels', `${filePrefix}-${padded}-hi.mp4`)
   const HI_CAP_FILE = join(ROOT, 'public/reels', `${filePrefix}-${padded}-hi.txt`)
+  const hindiDur    = hindiTiming.TOTAL_FRAMES / FPS
   console.log('⚙️   Encoding Hindi reel...')
-  const hiArgs = ['-y', '-framerate', '30', '-i', join(framesDir, 'f%04d.png')]
-  if (hindiVoicePath) {
-    hiArgs.push('-i', musicPath, '-i', hindiVoicePath,
-      '-filter_complex',
-      `[1:a]atrim=0:${dur},afade=t=out:st=${dur - 2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
-      `[2:a]atrim=0:${hindiVoiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
-      `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
-      '-map', '0:v', '-map', '[aout]'
-    )
-  } else {
-    hiArgs.push('-i', musicPath,
-      '-af', `atrim=0:${dur},afade=t=out:st=${dur - 2.0}:d=2.0,asetpts=PTS-STARTPTS`
-    )
-  }
-  hiArgs.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p',
-    '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', HI_OUT_FILE)
-  execFileSync('ffmpeg', hiArgs, { stdio: 'pipe' })
+  encodeReel({ framesDir: HI_FRAMES_DIR, musicPath, voiceoverPath: hindiVoicePath, measuredVoiceDur: measuredHindiDur, dur: hindiDur, outFile: HI_OUT_FILE })
   console.log(`  ✅  ${HI_OUT_FILE}`)
+
+  if (!process.env.KEEP_FRAMES) rmSync(HI_FRAMES_DIR, { recursive: true })
   if (hindiVoicePath && existsSync(hindiVoicePath)) rmSync(hindiVoicePath)
 
-  // 5. Hindi caption — translate hook + beats, keep link/hashtags
-  console.log('📝  Translating caption...')
-  let hiHook  = copy.hook_caption ?? copy.stat_line ?? ''
-  let hiBeat1 = copy.beat1 ?? ''
-  let hiBeat2 = copy.beat2 ?? ''
-  try {
-    const capRes = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
-      messages: [{
-        role: 'user',
-        content: `Translate these lines to Hindi (Devanagari script). Keep numbers and English terms (MCX, RBI, USDINR, COMEX, etc.) in English. Output ONLY the translations, one per line, in the same order.\n\nLine 1: ${hiHook}\nLine 2: ${hiBeat1}\nLine 3: ${hiBeat2}`,
-      }],
-    })
-    const lines = capRes.content[0].text.trim().split('\n')
-      .map(l => l.replace(/^Line \d+:\s*/i, '').trim()).filter(Boolean)
-    if (lines[0]) hiHook  = lines[0]
-    if (lines[1]) hiBeat1 = lines[1]
-    if (lines[2]) hiBeat2 = lines[2]
-  } catch {}
-
-  const hiHashtags = '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #हिंदी #कमोडिटीमार्केट'
+  // Caption — reuses the same translated fields the on-screen text used
+  // (previously a separate, independent translation call that could disagree
+  // in wording with the voiceover/on-screen text).
+  const S = STRINGS.hi
+  const hiHashtags = buildHashtags(
+    ['#हिंदी', '#कमोडिटीमार्केट'],
+    ['#BhaavBrief', '#MCX', '#CommodityMarkets', '#IndianMarkets', '#MCXTrading'],
+  ).join(' ')
   const hiCaption = [
-    hiHook, '', hiBeat1, hiBeat2, '',
-    `Watch: ${copy.beat3 ?? ''}`,
+    hindiFields.hook_caption, '', hindiFields.beat1, hindiFields.beat2, '',
+    `${S.watchPrefix} ${hindiFields.beat3}`,
     '\nbhaavbrief.in 👇\n',
     'Follow @bhaavbrief for daily MCX updates. 🔔',
     hiHashtags,
@@ -352,10 +318,8 @@ async function generateHindiVariant(copy, padded, filePrefix, musicPath, framesD
   writeFileSync(HI_CAP_FILE, hiCaption, 'utf8')
   console.log(`  ✅  ${HI_CAP_FILE}`)
 
-  // 6. Write Hindi output path file
   writeFileSync(join(ROOT, '.reel-hi-output-path.txt'), relative(ROOT, HI_OUT_FILE), 'utf8')
 
-  // 7. Tag existing history entry with hi_path
   try {
     const history = readHistory()
     const entry   = history.find(h => h.file === `${filePrefix}-${padded}`)
@@ -390,28 +354,24 @@ const W = 1080, H = 1920, FPS = 30
 // scripts/generate-learn-reel.mjs render through).
 const COVER_DUR  = 0     // cover removed — hook renders from frame 0 (first-frame value rule);
                          // drawCover() kept below but never dispatched while this is 0
-let   HOOK_DUR   = 3.0
-let   BEAT1_DUR  = 8.0
-let   BEAT2_DUR  = 8.0
-let   BEAT3_DUR  = 7.0
-let   PAYOFF_DUR = 5.0
+const HOOK_DUR   = 3.0
+const BEAT1_DUR  = 8.0
+const BEAT2_DUR  = 8.0
+const BEAT3_DUR  = 7.0
+const PAYOFF_DUR = 5.0
 const CTA_DUR    = 4.0   // silent/music-only outro tail — not part of the spoken script, stays fixed
 const TOTAL_DUR  = COVER_DUR + HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
 // The portion of the video the voiceover actually speaks over (everything
 // except the silent CTA outro) — rescaling target for the real audio length.
 const SPEECH_DUR_BASELINE = HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR
-
-// Frame boundaries — recomputed after the rescale below; declared here as
-// the planned baseline so renderFrame()'s dispatch logic has valid values
-// even when there's no voiceover (silent fallback keeps the old fixed pacing).
-let COVER_END  = Math.round(COVER_DUR  * FPS)
-let HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
-let BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
-let BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
-let BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
-let PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
-let CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
-let TOTAL_FRAMES = CTA_END
+// Baseline timing object passed to computeReelTiming() — the planned/unscaled
+// per-phase durations before a real measured voiceover rescales them. Kept as
+// one object so English and Hindi can each call computeReelTiming() with
+// their own measured voiceover duration against the same starting plan.
+const REEL_TIMING_BASELINE = { COVER_DUR, HOOK_DUR, BEAT1_DUR, BEAT2_DUR, BEAT3_DUR, PAYOFF_DUR, CTA_DUR }
+// Used only for the early "planned" log line printed before the voiceover
+// exists (see below) — the real per-run timing comes from computeReelTiming().
+const PLANNED_TOTAL_FRAMES = Math.round(TOTAL_DUR * FPS)
 
 // Palette
 const CREAM  = '#FAFAF6'
@@ -484,8 +444,40 @@ function dominantMover(snapshot, preferLabel) {
 const TOP_SAFE = 168
 const BOT_SAFE = H - 268
 
+// ── On-screen chrome strings — not sourced from the Haiku-generated `copy`
+// object, so the Hindi pass needs its own lookup for these literals. The
+// brand wordmark ("BHAAVBRIEF") and commodity/ticker names are deliberately
+// NOT here — those stay in English in both languages, a normal brand
+// convention, not an oversight. "MCX 101" is likewise kept identical in both
+// — it's a named content-series label, not a phrase that translates cleanly.
+const STRINGS = {
+  en: {
+    dailyIntel:   'Daily MCX Intelligence',
+    marketUpdate: 'Market Update',
+    editionLabel: 'Edition #',
+    breaking:     'BREAKING',
+    mcx101:       'MCX 101',
+    sevenDayTrend:'7-DAY TREND',
+    followEdge:   'Follow for your daily edge',
+    watchPrefix:  'Watch:',
+  },
+  hi: {
+    dailyIntel:   'रोज़ाना MCX जानकारी',
+    marketUpdate: 'मार्केट अपडेट',
+    editionLabel: 'संस्करण #',
+    breaking:     'ब्रेकिंग',
+    mcx101:       'MCX 101',
+    sevenDayTrend:'7-दिन का रुझान',
+    followEdge:   'रोज़ अपनी बढ़त के लिए फॉलो करें',
+    watchPrefix:  'देखें:',
+  },
+}
+
 // ── Shared header (wordmark + price strip) ────────────────────────────────────
-function drawHeader(ctx, snapshot) {
+function drawHeader(ctx, snapshot, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
   const PAD = 60
 
   // Gold top bar
@@ -494,7 +486,7 @@ function drawHeader(ctx, snapshot) {
 
   // Wordmark — inside safe zone
   ctx.fillStyle     = GOLD
-  ctx.font          = 'bold 22px "NotoSans", "Inter", sans-serif'
+  ctx.font          = `bold 22px ${FONT_FAMILY}`
   ctx.textAlign     = 'left'
   ctx.letterSpacing = '5px'
   ctx.fillText('BHAAVBRIEF', PAD, TOP_SAFE + 28)
@@ -519,18 +511,18 @@ function drawHeader(ctx, snapshot) {
     const px    = PAD + i * stripW
 
     ctx.fillStyle     = INK_4
-    ctx.font          = 'bold 14px "NotoSans", "Inter", sans-serif'
+    ctx.font          = `bold 14px ${FONT_FAMILY}`
     ctx.textAlign     = 'left'
     ctx.letterSpacing = '1px'
     ctx.fillText(inst.label, px, TOP_SAFE + 74)
     ctx.letterSpacing = '0px'
 
     ctx.fillStyle = INK
-    ctx.font      = 'bold 20px "NotoSans", "Inter", sans-serif'
+    ctx.font      = `bold 20px ${FONT_FAMILY}`
     ctx.fillText(instr ? inst.fmt(instr.price) : '—', px, TOP_SAFE + 100)
 
     ctx.fillStyle = isUp ? GREEN : RED
-    ctx.font      = '16px "NotoSans", "Inter", sans-serif'
+    ctx.font      = `16px ${FONT_FAMILY}`
     ctx.fillText(`${isUp ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%`, px, TOP_SAFE + 122)
   })
 
@@ -540,7 +532,11 @@ function drawHeader(ctx, snapshot) {
 const HEADER_BOTTOM = TOP_SAFE + 148
 
 // ── Phase 0: COVER — static title card, always fully rendered ────────────────
-function drawCover(ctx, copy, mood, edition) {
+function drawCover(ctx, copy, mood, edition, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
+  const S = STRINGS[lang]
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
@@ -554,7 +550,7 @@ function drawCover(ctx, copy, mood, edition) {
 
   // Large wordmark
   ctx.fillStyle     = GOLD
-  ctx.font          = 'bold 76px "NotoSans", "Inter", sans-serif'
+  ctx.font          = `bold 76px ${FONT_FAMILY}`
   ctx.textAlign     = 'center'
   ctx.letterSpacing = '14px'
   ctx.fillText('BHAAVBRIEF', W / 2, midY - 60)
@@ -566,17 +562,21 @@ function drawCover(ctx, copy, mood, edition) {
 
   // Tagline
   ctx.fillStyle = INK_6
-  ctx.font      = '32px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('Daily MCX Intelligence', W / 2, midY + 36)
+  ctx.font      = `32px ${FONT_FAMILY}`
+  ctx.fillText(S.dailyIntel, W / 2, midY + 36)
 
   // Edition or mode label
   ctx.fillStyle = INK_4
-  ctx.font      = '22px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W / 2, midY + 86)
+  ctx.font      = `22px ${FONT_FAMILY}`
+  ctx.fillText(edition != null ? `${S.editionLabel}${edition}` : S.marketUpdate, W / 2, midY + 86)
 }
 
 // ── Phase 1a: HOOK — concept / explainer / trend / breaking ──────────────────
-function drawHookConcept(ctx, t, copy, mood, edition) {
+function drawHookConcept(ctx, t, copy, mood, edition, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
+  const S = STRINGS[lang]
   const isBreaking = copy.content_type === 'breaking'
   const isLearn101 = process.env.REEL_SERIES === 'learn101'
   const accentColor = isBreaking ? '#E74C3C' : (isLearn101 ? '#2E86AB' : GOLD)
@@ -590,7 +590,7 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
   // Wordmark
   ctx.globalAlpha = easeOut(t * 10)
   ctx.fillStyle   = accentColor
-  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 24px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
   ctx.fillText('BHAAVBRIEF', W / 2, TOP_SAFE + 24)
@@ -603,9 +603,9 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
     ctx.fillStyle = '#E74C3C'
     roundRect(ctx, bx, by, bw, bh, 6); ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.font = 'bold 19px "NotoSans", "Inter", sans-serif'
+    ctx.font = `bold 19px ${FONT_FAMILY}`
     ctx.letterSpacing = '4px'
-    ctx.fillText('BREAKING', W / 2, by + 28)
+    ctx.fillText(S.breaking, W / 2, by + 28)
     ctx.letterSpacing = '0px'
   } else if (isLearn101) {
     ctx.globalAlpha = easeOut(Math.min(1, t * 12))
@@ -613,9 +613,9 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
     ctx.fillStyle = '#2E86AB'
     roundRect(ctx, bx, by, bw, bh, 6); ctx.fill()
     ctx.fillStyle = '#FFFFFF'
-    ctx.font = 'bold 19px "NotoSans", "Inter", sans-serif'
+    ctx.font = `bold 19px ${FONT_FAMILY}`
     ctx.letterSpacing = '3px'
-    ctx.fillText('MCX 101', W / 2, by + 28)
+    ctx.fillText(S.mcx101, W / 2, by + 28)
     ctx.letterSpacing = '0px'
   } else {
     ctx.globalAlpha = easeOut(Math.max(0, t * 8 - 0.3))
@@ -625,7 +625,7 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
 
   // Main concept text — large, centered in safe zone
   const midY = TOP_SAFE + (BOT_SAFE - TOP_SAFE) / 2
-  ctx.font = 'bold 62px "NotoSans", "Inter", sans-serif'
+  ctx.font = `bold 62px ${FONT_FAMILY}`
   ctx.textAlign = 'center'
   const conceptLines = wrapText(ctx, copy.stat_line ?? '', W - 160)
   const lineH = 84
@@ -644,7 +644,7 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
   // Hook sub-line below — legible by ≈1s of video, same rationale as drawHook
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.6))
   ctx.fillStyle   = INK_6
-  ctx.font        = '34px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `34px ${FONT_FAMILY}`
   const subLines = wrapText(ctx, copy.hook_caption ?? '', W - 200)
   const subStartY = midY + blockH / 2 + 60
   subLines.slice(0, 2).forEach((line, i) => {
@@ -656,14 +656,18 @@ function drawHookConcept(ctx, t, copy, mood, edition) {
   ctx.fillStyle   = '#FFFFFF0C'
   roundRect(ctx, W / 2 - 90, BOT_SAFE - 56, 180, 42, 21); ctx.fill()
   ctx.fillStyle   = INK_6
-  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W / 2, BOT_SAFE - 26)
+  ctx.font        = `18px ${FONT_FAMILY}`
+  ctx.fillText(edition != null ? `${S.editionLabel}${edition}` : S.marketUpdate, W / 2, BOT_SAFE - 26)
 
   ctx.globalAlpha = 1
 }
 
 // ── Phase 1b: HOOK — price move (animated delta count-up) ────────────────────
-function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
+function drawHook(ctx, t, copy, snapshot, mood, edition, closes, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
+  const S = STRINGS[lang]
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
@@ -675,7 +679,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   // Wordmark — inside safe zone
   ctx.globalAlpha = easeOut(t * 10)
   ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 24px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
   ctx.fillText('BHAAVBRIEF', W/2, TOP_SAFE + 24)
@@ -688,7 +692,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   // Instrument label
   ctx.globalAlpha = easeOut(t * 7)
   ctx.fillStyle   = INK_6
-  ctx.font        = 'bold 28px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 28px ${FONT_FAMILY}`
   ctx.letterSpacing = '3px'
   ctx.fillText(mover.label, W/2, 500)
   ctx.letterSpacing = '0px'
@@ -704,7 +708,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   ctx.scale(numScale, numScale)
   ctx.globalAlpha = easeOut(Math.min(1, t * 5))
   ctx.fillStyle   = moveColor
-  ctx.font        = 'bold 108px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 108px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.fillText(`${isUp ? '▲' : '▼'} ${mover.fmtDelta(animDelta)}`, 0, 0)
   ctx.restore()
@@ -712,7 +716,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   // % change
   ctx.globalAlpha = easeOut(Math.max(0, t * 6 - 0.5))
   ctx.fillStyle   = moveColor
-  ctx.font        = '40px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `40px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.fillText(`${isUp ? '+' : ''}${animPct.toFixed(2)}% today`, W/2, 752)
 
@@ -726,7 +730,7 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   // 1-1.5s, so the payoff can't wait for t=0.5 like it used to.
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.7))
   ctx.fillStyle   = CREAM
-  ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 52px ${FONT_FAMILY}`
   const hookLines = wrapText(ctx, copy?.stat_line ?? '', W - 160)
   let hy = 890
   for (const l of hookLines.slice(0, 2)) { ctx.fillText(l, W/2, hy); hy += 70 }
@@ -741,10 +745,10 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   const sparkY = 1080
   ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.0))
   ctx.fillStyle   = INK_6
-  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `18px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '2px'
-  ctx.fillText('7-DAY TREND', W / 2, sparkY - 20)
+  ctx.fillText(S.sevenDayTrend, W / 2, sparkY - 20)
   ctx.letterSpacing = '0px'
   drawSparkline(ctx, {
     x: sparkX, y: sparkY, w: sparkW, h: sparkH,
@@ -756,25 +760,29 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes) {
   ctx.fillStyle   = '#FFFFFF0C'
   roundRect(ctx, W/2 - 80, BOT_SAFE - 56, 160, 42, 21); ctx.fill()
   ctx.fillStyle   = INK_6
-  ctx.font        = '18px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W/2, BOT_SAFE - 26)
+  ctx.font        = `18px ${FONT_FAMILY}`
+  ctx.fillText(edition != null ? `${S.editionLabel}${edition}` : S.marketUpdate, W/2, BOT_SAFE - 26)
 
   ctx.globalAlpha = 1
 }
 
 // ── Phase 2-4: BEAT screens — one idea per screen, lines animate in ───────────
-function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null) {
+function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
+  const S = STRINGS[lang]
   const PAD = 68
 
   ctx.fillStyle = CREAM
   ctx.fillRect(0, 0, W, H)
 
   // Shared header (renders within safe zone)
-  drawHeader(ctx, snapshot)
+  drawHeader(ctx, snapshot, lang)
 
   // Beat index label — inside top safe zone
   ctx.fillStyle     = INK_4
-  ctx.font          = 'bold 16px "NotoSans", "Inter", sans-serif'
+  ctx.font          = `bold 16px ${FONT_FAMILY}`
   ctx.textAlign     = 'right'
   ctx.letterSpacing = '1px'
   ctx.fillText(`0${beatIndex} / 03`, W - PAD, TOP_SAFE + 28)
@@ -783,10 +791,10 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null) {
   // Footer — inside bottom safe zone
   ctx.strokeStyle = BORDER; ctx.lineWidth = 1
   ctx.beginPath(); ctx.moveTo(PAD, BOT_SAFE - 58); ctx.lineTo(W - PAD, BOT_SAFE - 58); ctx.stroke()
-  ctx.fillStyle = INK_4; ctx.font = '18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'left'
+  ctx.fillStyle = INK_4; ctx.font = `18px ${FONT_FAMILY}`; ctx.textAlign = 'left'
   ctx.fillText('bhaavbrief.in', PAD, BOT_SAFE - 38)
-  ctx.fillStyle = GOLD; ctx.font = 'bold 18px "NotoSans", "Inter", sans-serif'; ctx.textAlign = 'right'
-  ctx.fillText('Daily MCX Intelligence', W - PAD, BOT_SAFE - 38)
+  ctx.fillStyle = GOLD; ctx.font = `bold 18px ${FONT_FAMILY}`; ctx.textAlign = 'right'
+  ctx.fillText(S.dailyIntel, W - PAD, BOT_SAFE - 38)
 
   // Progress bar — moved below the footer text (previously sat at
   // BOT_SAFE-36, only 6px from the footer text's baseline at BOT_SAFE-30,
@@ -812,7 +820,7 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null) {
   const textBot     = hasChart ? contentTop + fullH * 0.45 : contentBot
   const chartTop    = hasChart ? textBot + 60 : null
 
-  ctx.font = 'bold 56px "NotoSans", "Inter", sans-serif'
+  ctx.font = `bold 56px ${FONT_FAMILY}`
   ctx.textAlign = 'left'
   const lines = wrapText(ctx, text, W - PAD * 2)
   const lineHeight = 76
@@ -865,7 +873,10 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null) {
 }
 
 // ── Phase 5: PAYOFF ───────────────────────────────────────────────────────────
-function drawPayoff(ctx, t, copy, mood) {
+function drawPayoff(ctx, t, copy, mood, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
@@ -875,7 +886,7 @@ function drawPayoff(ctx, t, copy, mood) {
   // Wordmark — inside safe zone
   ctx.globalAlpha = easeOut(t * 8)
   ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 24px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 24px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '7px'
   ctx.fillText('BHAAVBRIEF', W/2, TOP_SAFE + 24)
@@ -892,7 +903,7 @@ function drawPayoff(ctx, t, copy, mood) {
   // wrapped as if they'd render at 24px, then were actually drawn at 68px:
   // massive horizontal overflow off both edges of the canvas. Confirmed via
   // a real rendered frame (2026-07-31) before this fix.
-  ctx.font = 'bold 68px "NotoSans", "Inter", sans-serif'
+  ctx.font = `bold 68px ${FONT_FAMILY}`
   const payLines = wrapText(ctx, copy.payoff ?? '', W - 140)
   const lineH    = 90
   const safeH    = BOT_SAFE - TOP_SAFE
@@ -904,7 +915,7 @@ function drawPayoff(ctx, t, copy, mood) {
     const yShift = (1 - spring(Math.min(1, lineT))) * 32
     ctx.globalAlpha = alpha
     ctx.fillStyle   = CREAM
-    ctx.font        = `${i === 0 ? 'bold ' : ''}68px "NotoSans", "Inter", sans-serif`
+    ctx.font        = `${i === 0 ? 'bold ' : ''}68px ${FONT_FAMILY}`
     ctx.textAlign   = 'center'
     ctx.fillText(line, W/2, startY + i * lineH - yShift)
   })
@@ -913,7 +924,11 @@ function drawPayoff(ctx, t, copy, mood) {
 }
 
 // ── Phase 6: CTA ──────────────────────────────────────────────────────────────
-function drawCTA(ctx, t, mood, edition) {
+function drawCTA(ctx, t, mood, edition, lang = 'en') {
+  const FONT_FAMILY = lang === 'hi'
+    ? '"NotoSansDevanagari", "NotoSans", "Inter", sans-serif'
+    : '"NotoSans", "Inter", sans-serif'
+  const S = STRINGS[lang]
   const bg = MOOD_BG[mood] ?? '#18180F'
   ctx.fillStyle = bg
   ctx.fillRect(0, 0, W, H)
@@ -928,7 +943,7 @@ function drawCTA(ctx, t, mood, edition) {
   // Large BHAAVBRIEF wordmark
   ctx.globalAlpha = easeOut(t * 6)
   ctx.fillStyle   = GOLD
-  ctx.font        = 'bold 52px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `bold 52px ${FONT_FAMILY}`
   ctx.textAlign   = 'center'
   ctx.letterSpacing = '10px'
   ctx.fillText('BHAAVBRIEF', W/2, midY - 110)
@@ -937,8 +952,8 @@ function drawCTA(ctx, t, mood, edition) {
   // Tagline
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.4))
   ctx.fillStyle   = INK_6
-  ctx.font        = '32px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('Daily MCX Intelligence', W/2, midY - 50)
+  ctx.font        = `32px ${FONT_FAMILY}`
+  ctx.fillText(S.dailyIntel, W/2, midY - 50)
 
   // Rule
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.6))
@@ -948,25 +963,25 @@ function drawCTA(ctx, t, mood, edition) {
   // Follow CTA
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 0.8))
   ctx.fillStyle   = CREAM
-  ctx.font        = 'bold 34px "NotoSans", "Inter", sans-serif'
-  ctx.fillText('Follow for your daily edge', W/2, midY + 50)
+  ctx.font        = `bold 34px ${FONT_FAMILY}`
+  ctx.fillText(S.followEdge, W/2, midY + 50)
 
   ctx.globalAlpha = easeOut(Math.max(0, t * 5 - 1.0))
   ctx.fillStyle   = GOLD
-  ctx.font        = '28px "NotoSans", "Inter", sans-serif'
+  ctx.font        = `28px ${FONT_FAMILY}`
   ctx.fillText('@bhaavbrief  ·  bhaavbrief.in', W/2, midY + 100)
 
   // Edition
   ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.2))
   ctx.fillStyle   = INK_4
-  ctx.font        = '20px "NotoSans", "Inter", sans-serif'
-  ctx.fillText(edition != null ? `Edition #${edition}` : 'Market Update', W/2, midY + 156)
+  ctx.font        = `20px ${FONT_FAMILY}`
+  ctx.fillText(edition != null ? `${S.editionLabel}${edition}` : S.marketUpdate, W/2, midY + 156)
 
   ctx.globalAlpha = 1
 }
 
 // ── Frame dispatcher ──────────────────────────────────────────────────────────
-function renderFrame(frame, copy, data, snapshot, mood, hookCloses) {
+function renderFrame(frame, copy, data, snapshot, mood, hookCloses, timing, lang = 'en') {
   const canvas = createCanvas(W, H)
   const ctx    = canvas.getContext('2d')
   // Deliberately NOT coalesced to a placeholder like '?' — null means "no
@@ -976,29 +991,94 @@ function renderFrame(frame, copy, data, snapshot, mood, hookCloses) {
   // "Edition #?" on screen for every non-brief reel — confirmed via a real
   // rendered frame, 2026-07-31.
   const edition = data.edition ?? null
+  const { COVER_END, HOOK_END, BEAT1_END, BEAT2_END, BEAT3_END, PAYOFF_END, CTA_END } = timing
 
   if (frame < COVER_END) {
-    drawCover(ctx, copy, mood, edition)
+    drawCover(ctx, copy, mood, edition, lang)
   } else if (frame < HOOK_END) {
     const t = (frame - COVER_END) / (HOOK_END - COVER_END)
     if (copy.content_type === 'price_move') {
-      drawHook(ctx, t, copy, snapshot, mood, edition, hookCloses)
+      drawHook(ctx, t, copy, snapshot, mood, edition, hookCloses, lang)
     } else {
-      drawHookConcept(ctx, t, copy, mood, edition)
+      drawHookConcept(ctx, t, copy, mood, edition, lang)
     }
   } else if (frame < BEAT1_END) {
-    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood, copy.chart)
+    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood, copy.chart, lang)
   } else if (frame < BEAT2_END) {
-    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood, copy.chart)
+    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood, copy.chart, lang)
   } else if (frame < BEAT3_END) {
-    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood, copy.chart)
+    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood, copy.chart, lang)
   } else if (frame < PAYOFF_END) {
-    drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood)
+    drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood, lang)
   } else {
-    drawCTA(ctx, (frame - PAYOFF_END) / (CTA_END - PAYOFF_END), mood, edition)
+    drawCTA(ctx, (frame - PAYOFF_END) / (CTA_END - PAYOFF_END), mood, edition, lang)
   }
 
   return canvas.toBuffer('image/png')
+}
+
+// ── Frame-directory render pass — shared by English and (via generateHindiVariant)
+// the Hindi second pass; each gets its own timing/lang/framesDir. ────────────────
+function renderReelFrames({ copy, data, snapshot, mood, hookCloses, timing, lang = 'en', framesDir }) {
+  mkdirSync(framesDir, { recursive: true })
+  console.log(`🎬  Rendering ${timing.TOTAL_FRAMES} frames${lang === 'hi' ? ' (Hindi)' : ''}...`)
+  const t0 = Date.now()
+  for (let f = 0; f < timing.TOTAL_FRAMES; f++) {
+    writeFileSync(
+      join(framesDir, `f${String(f).padStart(4,'0')}.png`),
+      renderFrame(f, copy, data, snapshot, mood, hookCloses, timing, lang)
+    )
+    if (f % 100 === 0) process.stdout.write(`  ${f}/${timing.TOTAL_FRAMES}\n`)
+  }
+  console.log(`  ${timing.TOTAL_FRAMES}/${timing.TOTAL_FRAMES} — ${((Date.now()-t0)/1000).toFixed(1)}s\n`)
+}
+
+// ── ffmpeg encode — mux rendered frames + music (+ optional voiceover) into
+// the final MP4. Shared by the English encode and generateHindiVariant's Hindi
+// encode (previously a near-duplicate inline block). ─────────────────────────
+function encodeReel({ framesDir, musicPath, voiceoverPath, measuredVoiceDur, dur, outFile }) {
+  const args = ['-y', '-framerate', String(FPS), '-i', join(framesDir, 'f%04d.png')]
+
+  if (voiceoverPath) {
+    // Trim the voice track to its own real measured length (not a guessed
+    // dur-1.5) — dur was itself derived from this same measurement, so this
+    // no longer cuts off speech; it's just a safety bound against the odd
+    // extra frame ffmpeg's own decode might disagree with ffprobe on. Falls
+    // back to the old dur-1.5 heuristic only if measurement failed.
+    const voiceTrim = measuredVoiceDur != null ? Math.min(measuredVoiceDur + 0.1, dur) : dur - 1.5
+    args.push('-i', musicPath, '-i', voiceoverPath,
+      '-filter_complex',
+      `[1:a]atrim=0:${dur},afade=t=out:st=${dur-2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
+      `[2:a]atrim=0:${voiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
+      `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
+      '-map', '0:v', '-map', '[aout]'
+    )
+  } else {
+    args.push('-i', musicPath,
+      '-af', `atrim=0:${dur},afade=t=out:st=${dur-2.0}:d=2.0,asetpts=PTS-STARTPTS`
+    )
+  }
+
+  args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p',
+    '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', outFile)
+
+  execFileSync('ffmpeg', args, { stdio: 'pipe' })
+}
+
+// ── ffprobe duration — shared by the English and Hindi voiceover measurement
+// (previously two copies of the same execFileSync/parseFloat pattern). ───────
+function probeDuration(path) {
+  try {
+    const probeOut = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', path],
+      { encoding: 'utf8' }
+    ).trim()
+    const probed = parseFloat(probeOut)
+    return Number.isFinite(probed) && probed > 0 ? probed : null
+  } catch {
+    return null
+  }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -1016,6 +1096,15 @@ if (existsSync(notoB)) GlobalFonts.registerFromPath(notoB, 'NotoSans')
 if (existsSync(notoR)) GlobalFonts.registerFromPath(notoR, 'NotoSans')
 if (existsSync(interV)) GlobalFonts.registerFromPath(interV, 'Inter')
 if (existsSync(interB)) GlobalFonts.registerFromPath(interB, 'Inter')
+// Devanagari — required for the Hindi reel pass to render real glyphs instead
+// of tofu/missing-glyph boxes; NotoSans above is Latin-only. This is Google's
+// variable-font build (weight axis 100-900) — confirmed via a real rendered
+// frame that @napi-rs/canvas resolves `ctx.font = 'bold ...'` to the heavier
+// weight from a single registered file, so no separate static Bold file is
+// needed. Registration is a no-op (Hindi FONT_FAMILY falls back to NotoSans/
+// Inter) if this file isn't present.
+const devanagari = join(ROOT, 'public/fonts/NotoSansDevanagari-Regular.ttf')
+if (existsSync(devanagari)) GlobalFonts.registerFromPath(devanagari, 'NotoSansDevanagari')
 
 // ── Mode detection ────────────────────────────────────────────────────────────
 const TOPIC   = process.env.TOPIC?.trim() || null
@@ -1054,8 +1143,8 @@ if (isNewsMode) {
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
 console.log(`  BhaavBrief — Reel Generator`)
 console.log(isNewsMode
-  ? `  NEWS MODE  (${TOTAL_DUR.toFixed(1)}s / ${TOTAL_FRAMES} frames)`
-  : `  Edition #${edition}  (${TOTAL_DUR.toFixed(1)}s / ${TOTAL_FRAMES} frames)`)
+  ? `  NEWS MODE  (${TOTAL_DUR.toFixed(1)}s / ${PLANNED_TOTAL_FRAMES} frames)`
+  : `  Edition #${edition}  (${TOTAL_DUR.toFixed(1)}s / ${PLANNED_TOTAL_FRAMES} frames)`)
 console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`)
 
 if (isNewsMode) {
@@ -1124,46 +1213,20 @@ console.log()
 // match — this is what actually prevents the video cutting the voiceover
 // off, rather than hoping the guess was close enough. CTA_DUR is excluded
 // on purpose: it's a silent/music-only outro, not part of the spoken script.
-let measuredVoiceDur = null
-if (voiceoverPath && existsSync(voiceoverPath)) {
-  try {
-    const probeOut = execFileSync(
-      'ffprobe',
-      ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', voiceoverPath],
-      { encoding: 'utf8' }
-    ).trim()
-    const probed = parseFloat(probeOut)
-    if (Number.isFinite(probed) && probed > 0) {
-      measuredVoiceDur = probed
-      // Clamp the rescale factor — a wildly small/large factor almost
-      // certainly means something else went wrong (empty/garbled audio),
-      // not a legitimately fast/slow read of this particular script.
-      const rawScale = probed / SPEECH_DUR_BASELINE
-      const scale    = clamp(rawScale, 0.7, 1.8)
-      if (Math.abs(rawScale - scale) > 0.01) {
-        console.warn(`  ⚠️  Voiceover implies a ${rawScale.toFixed(2)}x scale — clamped to ${scale.toFixed(2)}x (measured ${probed.toFixed(1)}s)`)
-      }
-      HOOK_DUR   *= scale
-      BEAT1_DUR  *= scale
-      BEAT2_DUR  *= scale
-      BEAT3_DUR  *= scale
-      PAYOFF_DUR *= scale
-      COVER_END  = Math.round(COVER_DUR  * FPS)
-      HOOK_END   = COVER_END  + Math.round(HOOK_DUR   * FPS)
-      BEAT1_END  = HOOK_END   + Math.round(BEAT1_DUR  * FPS)
-      BEAT2_END  = BEAT1_END  + Math.round(BEAT2_DUR  * FPS)
-      BEAT3_END  = BEAT2_END  + Math.round(BEAT3_DUR  * FPS)
-      PAYOFF_END = BEAT3_END  + Math.round(PAYOFF_DUR * FPS)
-      CTA_END    = PAYOFF_END + Math.round(CTA_DUR    * FPS)
-      TOTAL_FRAMES = CTA_END
-      console.log(`  🎯  Voiceover measured ${probed.toFixed(1)}s (planned ${SPEECH_DUR_BASELINE.toFixed(1)}s) — video rescaled to ${(TOTAL_FRAMES / FPS).toFixed(1)}s total`)
-    } else {
-      console.warn(`  ⚠️  ffprobe returned an unusable duration ("${probeOut}") — keeping planned ${TOTAL_DUR.toFixed(1)}s timing`)
-    }
-  } catch (e) {
-    console.warn(`  ⚠️  ffprobe failed on the voiceover file (${e.message}) — keeping planned ${TOTAL_DUR.toFixed(1)}s timing`)
-  }
+const measuredVoiceDur = voiceoverPath && existsSync(voiceoverPath) ? probeDuration(voiceoverPath) : null
+if (voiceoverPath && existsSync(voiceoverPath) && measuredVoiceDur == null) {
+  console.warn(`  ⚠️  ffprobe failed on the voiceover file — keeping planned ${TOTAL_DUR.toFixed(1)}s timing`)
 }
+
+const timing = computeReelTiming(REEL_TIMING_BASELINE, measuredVoiceDur, FPS)
+if (measuredVoiceDur != null) {
+  if (timing.clamped) {
+    console.warn(`  ⚠️  Voiceover implies a ${timing.rawScale.toFixed(2)}x scale — clamped to ${timing.scale.toFixed(2)}x (measured ${measuredVoiceDur.toFixed(1)}s)`)
+  }
+  console.log(`  🎯  Voiceover measured ${measuredVoiceDur.toFixed(1)}s (planned ${SPEECH_DUR_BASELINE.toFixed(1)}s) — video rescaled to ${(timing.TOTAL_FRAMES / FPS).toFixed(1)}s total`)
+}
+
+const GENERATE_HINDI = process.env.GENERATE_HINDI_REEL === 'true'
 
 const FRAMES_DIR = join(ROOT, '.reel-frames-tmp')
 const OUT_DIR    = join(ROOT, 'public/reels')
@@ -1171,56 +1234,21 @@ const OUT_FILE   = join(OUT_DIR, `${filePrefix}-${padded}.mp4`)
 const CAP_FILE   = join(OUT_DIR, `${filePrefix}-${padded}.txt`)
 
 if (existsSync(FRAMES_DIR)) rmSync(FRAMES_DIR, { recursive: true })
-mkdirSync(FRAMES_DIR, { recursive: true })
 if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
 
-console.log(`🎬  Rendering ${TOTAL_FRAMES} frames...`)
-const t0 = Date.now()
-for (let f = 0; f < TOTAL_FRAMES; f++) {
-  writeFileSync(
-    join(FRAMES_DIR, `f${String(f).padStart(4,'0')}.png`),
-    renderFrame(f, copy, data, snapshot, mood, hookCloses)
-  )
-  if (f % 100 === 0) process.stdout.write(`  ${f}/${TOTAL_FRAMES}\n`)
-}
-console.log(`  ${TOTAL_FRAMES}/${TOTAL_FRAMES} — ${((Date.now()-t0)/1000).toFixed(1)}s\n`)
+renderReelFrames({ copy, data, snapshot, mood, hookCloses, timing, lang: 'en', framesDir: FRAMES_DIR })
 
 console.log(`⚙️   Encoding (${mood}${voiceoverPath ? ' + voice' : ''})...`)
-const DUR  = TOTAL_FRAMES / FPS
-const args = ['-y', '-framerate', String(FPS), '-i', join(FRAMES_DIR, 'f%04d.png')]
+const DUR = timing.TOTAL_FRAMES / FPS
+encodeReel({ framesDir: FRAMES_DIR, musicPath, voiceoverPath, measuredVoiceDur, dur: DUR, outFile: OUT_FILE })
 
-if (voiceoverPath) {
-  // Trim the voice track to its own real measured length (not a guessed
-  // DUR-1.5) — DUR was itself derived from this same measurement above, so
-  // this no longer cuts off speech; it's just a safety bound against the
-  // odd extra frame ffmpeg's own decode might disagree with ffprobe on.
-  // Falls back to the old DUR-1.5 heuristic only if measurement failed.
-  const voiceTrim = measuredVoiceDur != null ? Math.min(measuredVoiceDur + 0.1, DUR) : DUR - 1.5
-  args.push('-i', musicPath, '-i', voiceoverPath,
-    '-filter_complex',
-    `[1:a]atrim=0:${DUR},afade=t=out:st=${DUR-2.5}:d=2.5,asetpts=PTS-STARTPTS,volume=0.16[music];` +
-    `[2:a]atrim=0:${voiceTrim},asetpts=PTS-STARTPTS,volume=1.0[voice];` +
-    `[music][voice]amix=inputs=2:duration=first:normalize=0[aout]`,
-    '-map', '0:v', '-map', '[aout]'
-  )
-} else {
-  args.push('-i', musicPath,
-    '-af', `atrim=0:${DUR},afade=t=out:st=${DUR-2.0}:d=2.0,asetpts=PTS-STARTPTS`
-  )
-}
-
-args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p',
-  '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', OUT_FILE)
-
-execFileSync('ffmpeg', args, { stdio: 'pipe' })
 // KEEP_FRAMES=1 leaves the rendered PNGs behind for visual inspection (e.g.
 // via the Read tool on specific f%04d.png files) after a real end-to-end
 // run — the standalone scripts/dev-preview-chart.mjs harness is faster for
 // iterating on a single chart, but a real run is still what confirms actual
 // Haiku-emitted chart data renders correctly in situ.
-const keepForHindi = process.env.GENERATE_HINDI_REEL === 'true'
-if (!process.env.KEEP_FRAMES && !keepForHindi) rmSync(FRAMES_DIR, { recursive: true })
-else if (process.env.KEEP_FRAMES) console.log(`  🗂️   KEEP_FRAMES set — frames left in ${FRAMES_DIR}`)
+if (!process.env.KEEP_FRAMES) rmSync(FRAMES_DIR, { recursive: true })
+else console.log(`  🗂️   KEEP_FRAMES set — frames left in ${FRAMES_DIR}`)
 if (voiceoverPath && existsSync(voiceoverPath)) rmSync(voiceoverPath)
 
 // Caption
@@ -1285,9 +1313,8 @@ appendHistory({
 // — an absolute path there would double up into a broken, nonexistent path).
 writeFileSync(join(ROOT, '.reel-output-path.txt'), relative(ROOT, OUT_FILE), 'utf8')
 
-if (keepForHindi) {
-  await generateHindiVariant(copy, padded, filePrefix, musicPath, FRAMES_DIR, DUR)
-  if (!process.env.KEEP_FRAMES && existsSync(FRAMES_DIR)) rmSync(FRAMES_DIR, { recursive: true })
+if (GENERATE_HINDI) {
+  await generateHindiVariant({ copy, data, snapshot, mood, hookCloses, padded, filePrefix, musicPath })
 }
 
 console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`)
