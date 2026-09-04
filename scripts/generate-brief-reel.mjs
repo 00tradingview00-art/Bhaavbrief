@@ -22,9 +22,12 @@ import matter                                 from 'gray-matter'
 import { drawSparkline, drawIconArray, drawComparisonBars } from './lib/charts.mjs'
 import { getCloses }                          from './lib/historyReader.mjs'
 import { validateChart }                      from './lib/chartValidation.mjs'
+import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
+import { buildHashtags }                      from './lib/reelHashtags.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
+const PROMPT_VERSION = 'reel_v1'
 
 // ── Env ───────────────────────────────────────────────────────────────────────
 const envFile = join(ROOT, '.env.local')
@@ -74,79 +77,19 @@ function historyContext(history) {
   }\n`
 }
 
-// ── Copy extraction — brief mode ──────────────────────────────────────────────
-async function extractReelCopy(brief, snapshot, history = []) {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
-  const prices = snapshot ? [
+// ── Shared price formatting (was duplicated identically in both copy-extraction
+// modes below) ──────────────────────────────────────────────────────────────
+function formatPricesBlock(snapshot) {
+  if (!snapshot) return ''
+  return [
     `MCX Gold  ₹${Math.round(snapshot.instruments.MCX_GOLD?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_GOLD?.changePct?.toFixed(2) ?? '?'}%)`,
     `MCX Crude ₹${Math.round(snapshot.instruments.MCX_CRUDE?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_CRUDE?.changePct?.toFixed(2) ?? '?'}%)`,
     `MCX Silver ₹${Math.round(snapshot.instruments.MCX_SILVER?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_SILVER?.changePct?.toFixed(2) ?? '?'}%)`,
     `USD/INR ₹${snapshot.instruments.USDINR?.price ?? '?'}  (${snapshot.instruments.USDINR?.changePct?.toFixed(2) ?? '?'}%)`,
-  ].join('\n') : ''
+  ].join('\n')
+}
 
-  const excerpt = brief.content
-    .replace(/^---[\s\S]*?---/, '')
-    .replace(/## Price Bridge[\s\S]*?##/, '##')
-    .replace(/\*BhaavBrief is not.*$/s, '')
-    .trim().slice(0, 1000)
-
-  const msg = await client.messages.create({
-    model:      'claude-haiku-4-5-20251001',
-    max_tokens: 800,
-    messages: [{
-      role:    'user',
-      content: `You are the head of content for BhaavBrief — India's daily MCX commodity intelligence brand. You write Instagram Reels that retail investors, importers, business owners, and curious Indians share — not just professional traders.
-
-This is a 35-second Instagram Reel. Frame every insight in terms everyday people can feel — jewellery buyers, importers, business owners, anyone watching their rupee. Lead with the human impact, then explain the structural reason.
-
-Brief: "${brief.data.title}"
-Market data:
-${prices}
-
-Excerpt:
-${excerpt}
-${historyContext(history)}
-Rules:
-- NEVER start with a question
-- Frame the move in rupees people feel: "Your gold costs ₹2,200 more per 10g today" beats "Gold up 1.5%"
-- Numbers make it real — use them
-- Tone: sharp, direct, like a smart friend who tracks markets for a living
-- Each beat is ONE complete thought — no "and also"
-- Vary your hook structure from past reels
-- The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
-- If today's move is small or flat, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
-- If one beat states two directly comparable numbers already present in the market data or excerpt above (a ratio, margin, or "X vs Y" comparison), fill in the chart field naming that beat and the two numbers. Never invent a number or ratio that isn't already stated above. Use "icon_array" only when both numbers are whole numbers ≤20 (e.g. pick one concrete value like 17 from a stated range like "14-20x"). Use "two_bar" for any other comparable pair (rupee amounts, percentages, larger counts). If no beat has a genuinely comparable pair, set chart.type to "none" — do not force a chart onto content that isn't shaped like one.
-
-Return ONLY this JSON:
-{
-  "content_type": "price_move (specific price change with rupee delta to show) | explainer (how/why education, no single delta) | macro_trend (broader force or trend) | breaking (urgent, fast-moving news)",
-
-  "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
-
-  "hook_caption": "First line of Instagram caption. Relatable to anyone, not just traders. Under 12 words. Frame in rupee impact or everyday terms. No jargon. This is what makes someone stop scrolling.",
-
-  "stat_line": "The single most striking number or concept — written as a visual headline. Max 7 words.",
-
-  "beat1": "What happened in everyday terms. ONE sentence. Specific rupee amount or %. Under 18 words.",
-  "beat2": "The structural reason behind this move. ONE sentence. Under 18 words. Name the force.",
-  "beat3": "The price level or event to watch, and what it means. Under 16 words. Specific number.",
-
-  "payoff": "The most surprising or counter-intuitive fact. Under 12 words. Makes people think.",
-
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural rhythm. Contractions only. Sentences 1-2: everyday impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause.",
-
-  "chart": {
-    "type": "icon_array | two_bar | none",
-    "beat": 1 or 2 or 3,
-    "icon_array": { "filled": integer, "total": integer, "unit_label": "short label, e.g. 'x leverage'" } or null,
-    "two_bar": { "labelA": string, "valueA": number, "labelB": string, "valueB": number, "unit": "e.g. '₹' or 'x'" } or null
-  }
-}`,
-    }],
-  })
-
-  const raw = msg.content[0].text.trim()
+function parseReelCopyResponse(raw) {
   try { return JSON.parse(raw) }
   catch {
     const m = raw.match(/\{[\s\S]*\}/)
@@ -155,76 +98,56 @@ Return ONLY this JSON:
   }
 }
 
-// ── Copy extraction — news / trend mode ──────────────────────────────────────
-async function extractNewsReelCopy(topic, context, snapshot, history = []) {
+const reelPromptTemplate = loadPromptTemplate(join(ROOT, 'prompts'), PROMPT_VERSION)
+
+// ── Copy extraction — brief mode ──────────────────────────────────────────────
+async function extractReelCopy(brief, snapshot, history = []) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-  const prices = snapshot ? [
-    `MCX Gold  ₹${Math.round(snapshot.instruments.MCX_GOLD?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_GOLD?.changePct?.toFixed(2) ?? '?'}%)`,
-    `MCX Crude ₹${Math.round(snapshot.instruments.MCX_CRUDE?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_CRUDE?.changePct?.toFixed(2) ?? '?'}%)`,
-    `MCX Silver ₹${Math.round(snapshot.instruments.MCX_SILVER?.price ?? 0).toLocaleString('en-IN')}  (${snapshot.instruments.MCX_SILVER?.changePct?.toFixed(2) ?? '?'}%)`,
-    `USD/INR ₹${snapshot.instruments.USDINR?.price ?? '?'}  (${snapshot.instruments.USDINR?.changePct?.toFixed(2) ?? '?'}%)`,
-  ].join('\n') : ''
+  const excerpt = brief.content
+    .replace(/^---[\s\S]*?---/, '')
+    .replace(/## Price Bridge[\s\S]*?##/, '##')
+    .replace(/\*BhaavBrief is not.*$/s, '')
+    .trim().slice(0, 1000)
+
+  const prompt = renderPromptTemplate(reelPromptTemplate, {
+    SOURCE_LABEL:          'Brief',
+    SOURCE_TITLE:          brief.data.title,
+    CONTEXT_LINE:          '',
+    PRICES_BLOCK:          formatPricesBlock(snapshot),
+    SOURCE_BODY_BLOCK:     `Excerpt:\n${excerpt}\n`,
+    HISTORY_CONTEXT_BLOCK: historyContext(history),
+  })
 
   const msg = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
     max_tokens: 800,
-    messages: [{
-      role:    'user',
-      content: `You are BhaavBrief's head of content — India's MCX commodity intelligence brand. You write Instagram Reels that jewellery buyers, importers, business owners, and everyday Indians stop to watch.
-
-Topic: "${topic}"${context ? `\nContext: ${context}` : ''}
-
-Live market data:
-${prices}
-${historyContext(history)}
-This is a 35-second reel. Make it feel urgent and relevant to anyone watching their rupee — not just traders.
-
-Rules:
-- NEVER start with a question
-- Frame in rupees or everyday human terms — not % jargon
-- Tone: sharp, direct, like a smart friend who tracks markets for a living
-- Each beat is ONE complete thought
-- Vary your hook and payoff angle from past reels listed above
-- The hook_caption and stat_line must each contain a rupee number OR name who it hits ("jewellery buyers", "importers", "your wedding budget") — never an abstract market statement
-- If the topic has no sharp move, use a consequence/curiosity hook instead of a flat statement — e.g. "Before you buy gold this week, know this" beats "Gold barely moved today"
-- If one beat states two directly comparable numbers already present in the facts/context above (a ratio, margin, or "X vs Y" comparison — this is common in Learn-topic facts, e.g. leverage ratios and margin requirements), fill in the chart field naming that beat and the two numbers. Never invent a number or ratio that isn't already stated above. Use "icon_array" only when both numbers are whole numbers ≤20 (e.g. pick one concrete value like 17 from a stated range like "14-20x"). Use "two_bar" for any other comparable pair (rupee amounts, percentages, larger counts). If no beat has a genuinely comparable pair, set chart.type to "none" — do not force a chart onto content that isn't shaped like one.
-
-Return ONLY this JSON:
-{
-  "content_type": "price_move (specific price change with a clear rupee delta) | explainer (education — how or why something works) | macro_trend (broader structural force or trend) | breaking (urgent fast-moving news)",
-
-  "dominant_instrument": "MCX GOLD or MCX CRUDE or MCX SILVER or MCX COPPER or USD/INR",
-
-  "hook_caption": "First line of Instagram caption. Relatable to anyone. Under 12 words. Frame in rupee impact or everyday terms. Stops the scroll.",
-
-  "stat_line": "The single most striking number or concept. Max 7 words. Punchy visual headline.",
-
-  "beat1": "What this means in everyday terms. ONE sentence. Human impact first. Under 18 words.",
-  "beat2": "The structural reason or force driving this. ONE sentence. Name it specifically. Under 18 words.",
-  "beat3": "The level or event to watch next, and what it means. Under 16 words. Specific number.",
-
-  "payoff": "The most counter-intuitive or surprising angle. Under 12 words. Makes people think.",
-
-  "voiceover": "Spoken word for 35 seconds. 7 short sentences, each under 10 words. Natural, conversational rhythm. Contractions only. Sentences 1-2: everyday human impact. Sentences 3-4: structural cause. Sentence 5: non-obvious truth. Sentence 6: what to watch. End with 'BhaavBrief.' as a signature pause.",
-
-  "chart": {
-    "type": "icon_array | two_bar | none",
-    "beat": 1 or 2 or 3,
-    "icon_array": { "filled": integer, "total": integer, "unit_label": "short label, e.g. 'x leverage'" } or null,
-    "two_bar": { "labelA": string, "valueA": number, "labelB": string, "valueB": number, "unit": "e.g. '₹' or 'x'" } or null
-  }
-}`,
-    }],
+    messages:   [{ role: 'user', content: prompt }],
   })
 
-  const raw = msg.content[0].text.trim()
-  try { return JSON.parse(raw) }
-  catch {
-    const m = raw.match(/\{[\s\S]*\}/)
-    if (m) return JSON.parse(m[0])
-    throw new Error(`Haiku JSON parse failed: ${raw.slice(0, 200)}`)
-  }
+  return parseReelCopyResponse(msg.content[0].text.trim())
+}
+
+// ── Copy extraction — news / trend mode ──────────────────────────────────────
+async function extractNewsReelCopy(topic, context, snapshot, history = []) {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+  const prompt = renderPromptTemplate(reelPromptTemplate, {
+    SOURCE_LABEL:          'Topic',
+    SOURCE_TITLE:          topic,
+    CONTEXT_LINE:          context ? `\nContext: ${context}` : '',
+    PRICES_BLOCK:          formatPricesBlock(snapshot),
+    SOURCE_BODY_BLOCK:     '',
+    HISTORY_CONTEXT_BLOCK: historyContext(history),
+  })
+
+  const msg = await client.messages.create({
+    model:      'claude-haiku-4-5-20251001',
+    max_tokens: 800,
+    messages:   [{ role: 'user', content: prompt }],
+  })
+
+  return parseReelCopyResponse(msg.content[0].text.trim())
 }
 
 // ── Dynamic music ─────────────────────────────────────────────────────────────
@@ -1307,10 +1230,10 @@ const TAG_MAP = {
   'Geopolitics':'#Geopolitics','OPEC':'#OPEC','RBI':'#RBI',
   'Fed':'#FederalReserve','USD/INR':'#USDINR','Inflation':'#Inflation',
 }
-const hashtags = [
-  ...(data.tags??[]).map(t => TAG_MAP[t]).filter(Boolean),
-  '#BhaavBrief','#MCX','#CommodityMarkets','#IndianMarkets','#MCXTrading',
-].join(' ')
+const hashtags = buildHashtags(
+  (data.tags??[]).map(t => TAG_MAP[t]).filter(Boolean),
+  ['#BhaavBrief','#MCX','#CommodityMarkets','#IndianMarkets','#MCXTrading'],
+).join(' ')
 
 const briefLink = !isNewsMode
   ? `\nFull brief → bhaavbrief.in/briefs/${data.urlSlug ?? `edition-${padded}`} 👇\n`

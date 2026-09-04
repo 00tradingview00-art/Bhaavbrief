@@ -20,9 +20,12 @@ import { join, dirname, basename }            from 'path'
 import { fileURLToPath }                      from 'url'
 import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
+import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
+import { buildHashtags }                      from './lib/reelHashtags.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
+const PROMPT_VERSION = 'flash_reel_v1'
 
 // ── Env ───────────────────────────────────────────────────────────────────────
 const envFile = join(ROOT, '.env.local')
@@ -85,56 +88,25 @@ function readSnapshot() {
 }
 
 // ── Copy extraction ───────────────────────────────────────────────────────────
+const flashReelPromptTemplate = loadPromptTemplate(join(ROOT, 'prompts'), PROMPT_VERSION)
+
 async function extractReelCopy(flash) {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+  const prompt = renderPromptTemplate(flashReelPromptTemplate, {
+    FLASH_TITLE:    flash.title,
+    CATEGORY:       flash.category,
+    IMPACT:         flash.impact,
+    WHAT_HAPPENED:  flash.whatHappened,
+    WHAT_IT_MEANS:  flash.whatItMeans,
+    BOTTOM_LINE:    flash.bottomLine,
+    WHAT_TO_WATCH:  flash.whatToWatch,
+  })
 
   const msg = await client.messages.create({
     model:      'claude-haiku-4-5-20251001',
     max_tokens: 600,
-    messages: [{
-      role:    'user',
-      content: `You are the head of content for BhaavBrief — India's only daily MCX commodity intelligence brand. You have 6 years building finance reels that actual traders, importers and manufacturers watch.
-
-This is a 20-second Instagram Flash Reel. The audience already knows what MCX is. They need the signal, not the background.
-
-Flash article: "${flash.title}"
-Category: ${flash.category} | Impact: ${flash.impact}
-
-WHAT HAPPENED:
-${flash.whatHappened}
-
-WHAT IT MEANS:
-${flash.whatItMeans}
-
-BOTTOM LINE:
-${flash.bottomLine}
-
-WHAT TO WATCH:
-${flash.whatToWatch}
-
-Rules:
-- NEVER start with a question
-- Numbers are your anchor — every beat must contain one
-- Tone: sharp colleague tap on the shoulder, not a news anchor
-- No passive voice, no "it was noted that"
-
-Return ONLY this JSON:
-{
-  "dominant_instrument": "The single MCX instrument this flash is about — full name e.g. 'MCX CRUDE' or 'MCX COPPER'",
-
-  "hook_number": "The single most striking number — format exactly as it should appear visually. Example: '₹6,621' or '-1.59%' or '+1.16%'",
-  "hook_label": "What that number is. Max 5 words. Example: 'MCX Crude today' or 'Silver move, session'",
-
-  "beat1": "WHAT HAPPENED compressed to ONE punchy sentence. Lead with the number. Under 22 words. No passive voice.",
-  "beat2": "The non-obvious structural context behind this move — what it reveals about the market. ONE sentence. Under 22 words. No directional instruction.",
-
-  "watch_level": "The observable price level or data event the market is focused on and what it represents. Under 20 words. Must include a number.",
-
-  "payoff": "One sentence capturing the most unusual or non-obvious thing about today's data. Under 12 words. An observation — not a directional instruction.",
-
-  "voiceover": "Spoken word, not a script. 5 sentences, each under 9 words. Contractions only. First sentence = the number and what moved. Second = what caused it. Third = the non-obvious impact. Fourth = the specific watch level. Fifth = 'BhaavBrief.' — pause before it, said like a signature. No filler, no hedge words."
-}`,
-    }],
+    messages:   [{ role: 'user', content: prompt }],
   })
 
   const raw = msg.content[0].text.trim()
@@ -626,8 +598,11 @@ const INSTRUMENT_HASHTAGS = {
   'MCX NATGAS': '#MCXNatGas #NaturalGasIndia #NatGasFutures #EnergyMarkets',
 }
 const instrKey    = (copy.dominant_instrument ?? '').toUpperCase()
-const instrTags   = INSTRUMENT_HASHTAGS[instrKey] ?? ''
-const hashtagLine = [instrTags, '#BhaavBrief #MCX #CommodityMarkets #IndianMarkets #MCXTrading #MCXIntelligence'].filter(Boolean).join(' ')
+const instrTags   = (INSTRUMENT_HASHTAGS[instrKey] ?? '').split(' ').filter(Boolean)
+const hashtagLine = buildHashtags(
+  instrTags,
+  ['#BhaavBrief', '#MCX', '#CommodityMarkets', '#IndianMarkets', '#MCXTrading', '#MCXIntelligence'],
+).join(' ')
 
 const caption = [
   copy.payoff ?? flash.title, '',
