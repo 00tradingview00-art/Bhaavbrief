@@ -1,0 +1,40 @@
+name: Sync staging branch
+
+# Keeps the `staging` branch (dev.bhaavbrief.in) fast-forwarded to whatever
+# just landed on `main`, so the staging domain never drifts far behind
+# without anyone having to remember to merge it by hand. staging only ever
+# differs from main in its Vercel-side environment variables (CASHFREE_ENV,
+# CASHFREE_CLIENT_ID/SECRET, IS_STAGING) — never in committed code — so a
+# plain fast-forward is always expected to succeed. If it doesn't (staging
+# has diverged somehow), this job fails loudly rather than force-pushing.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fast-forward staging to main
+        run: |
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin staging
+          git checkout -B staging origin/staging
+          if git merge --ff-only origin/main; then
+            git push origin staging
+          else
+            echo "::error::staging has diverged from main (not a fast-forward) — needs a manual merge, not auto-synced"
+            exit 1
+          fi
