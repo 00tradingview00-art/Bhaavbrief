@@ -2,7 +2,7 @@ import { describe, test, expect, beforeAll, afterAll } from "vitest";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { computeIvRank, pickLeadEvent, topOiStrikes, getBasisSnapshot } from "./reelCampaignData.mjs";
+import { computeIvRank, pickLeadEvent, topOiStrikes, getBasisSnapshot, atmGreeksFacts } from "./reelCampaignData.mjs";
 
 describe("computeIvRank", () => {
   const history = Array.from({ length: 20 }, (_, i) => ({ date: `2026-08-${i + 1}`, iv: i + 1 })); // 1..20
@@ -45,6 +45,34 @@ describe("pickLeadEvent", () => {
   test("falls back to the soonest event overall when nothing is high-impact", () => {
     const lowOnly = { name: "D", next_release_utc: "2026-09-06T00:00:00Z", impact_tier: "low" };
     expect(pickLeadEvent([lowOnly, soon])).toEqual(soon);
+  });
+});
+
+describe("atmGreeksFacts", () => {
+  test("returns facts when the ATM row has real (non-null) Greeks", () => {
+    const chain = [
+      { strike: 100, isATM: false, CE: { delta: null, gamma: null, theta: null, vega: null } },
+      { strike: 105, isATM: true, CE: { delta: 0.51, gamma: 0.002, theta: -12.3, vega: 8.1 } },
+    ];
+    const facts = atmGreeksFacts(chain, "MCX Gold");
+    expect(facts).not.toBeNull();
+    expect(facts[0]).toContain("₹105");
+    expect(facts[0]).toContain("delta 0.51");
+  });
+
+  test("returns null when Greeks are stripped (free-tier / no internal access)", () => {
+    const chain = [{ strike: 105, isATM: true, CE: { delta: null, gamma: null, theta: null, vega: null } }];
+    expect(atmGreeksFacts(chain, "MCX Gold")).toBeNull();
+  });
+
+  test("returns null when no row is marked ATM", () => {
+    const chain = [{ strike: 105, isATM: false, CE: { delta: 0.5, gamma: 0.01, theta: -1, vega: 2 } }];
+    expect(atmGreeksFacts(chain, "MCX Gold")).toBeNull();
+  });
+
+  test("returns null when the ATM row has no CE object at all", () => {
+    const chain = [{ strike: 105, isATM: true }];
+    expect(atmGreeksFacts(chain, "MCX Gold")).toBeNull();
   });
 });
 

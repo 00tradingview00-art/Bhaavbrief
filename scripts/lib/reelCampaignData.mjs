@@ -44,8 +44,16 @@ export function pickLeadEvent(events) {
 }
 
 async function fetchJson(url) {
+  // Sends INTERNAL_ACCESS_SECRET when configured, so Pro-gated fields (full
+  // chain Greeks, full OI history, etc. — see lib/subscription.ts's
+  // hasInternalAccess()) come back unstripped for this trusted backend
+  // script. Falls back to today's anonymous/free-tier response if the env
+  // var isn't set, so nothing breaks for a local run without it configured.
+  const headers = process.env.INTERNAL_ACCESS_SECRET
+    ? { authorization: `Bearer ${process.env.INTERNAL_ACCESS_SECRET}` }
+    : {}
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
+    const res = await fetch(url, { headers, signal: AbortSignal.timeout(10000) })
     if (!res.ok) return null
     return await res.json()
   } catch {
@@ -73,6 +81,25 @@ export function topOiStrikes(chain, n = 5) {
     .map(row => ({ strike: row.strike, oi: (row.CE?.oi ?? 0) + (row.PE?.oi ?? 0) }))
     .sort((a, b) => b.oi - a.oi)
     .slice(0, n)
+}
+
+/**
+ * Real ATM delta/gamma/theta/vega from an already-fetched chain's ATM row —
+ * only meaningful once fetchJson() is sending INTERNAL_ACCESS_SECRET (see
+ * above), since anonymous/free-tier responses have these nulled. Returns
+ * null if the row isn't found or the Greeks weren't actually present
+ * (e.g. internal access isn't configured), so the dispatcher falls back to
+ * the no-invented-number path rather than reporting a fabricated Greek.
+ */
+export function atmGreeksFacts(chain, instrumentLabel) {
+  const atm = chain.find(row => row.isATM)
+  if (!atm) return null
+  const { delta, gamma, theta, vega } = atm.CE ?? {}
+  if ([delta, gamma, theta, vega].some(v => v == null)) return null
+  return [
+    `${instrumentLabel}'s ATM (strike ₹${atm.strike}) call option Greeks right now: delta ${delta}, gamma ${gamma}, theta ${theta}, vega ${vega}.`,
+    `Delta measures price sensitivity to the underlying, gamma how fast delta itself changes, theta the daily time-decay, vega the sensitivity to a 1-point change in implied volatility — mechanics only, not a trade recommendation.`,
+  ]
 }
 
 /** IV Rank/Percentile for one instrument — current IVIX ranked against its own history. */

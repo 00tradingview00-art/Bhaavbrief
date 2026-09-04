@@ -42,8 +42,9 @@ jobs:
       - name: Generate campaign reel
         id: reel
         env:
-          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
-          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY:     ${{ secrets.ELEVENLABS_API_KEY }}
+          INTERNAL_ACCESS_SECRET: ${{ secrets.INTERNAL_ACCESS_SECRET }}
         run: node scripts/generate-campaign-reel.mjs
 
       - name: Post reel to Instagram
