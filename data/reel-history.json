@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260904-comex-vs-mcx-gold-price",
+    "topic": "COMEX vs MCX Gold Price",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your jeweller quotes ₹2,000 higher than MCX gold.",
+    "stat_line": "That gap isn't greed—it's maths.",
+    "payoff": "MCX and your jeweller's quote speak different languages—both are right.",
+    "beat1": "MCX gold contract reflects COMEX price converted to rupees, then duties and margins pile on top.",
+    "beat2": "Import duties alone add 12–13%: customs, AIDC, GST stacked before any shop margin exists.",
+    "beat3": "Physical market premium of ₹200–600 per 10g sits on top—jewellers aren't making it up, they're pricing reality.",
+    "instagram_id": "17982221943057969",
+    "generated_at": "2026-09-04T17:56:24.186Z",
+    "edition": null,
+    "posted_at": "2026-09-04T17:57:11.115Z"
+  },
+  {
     "file": "brief-edition-100",
     "topic": "Gold Surges $159 as the War Trade Reunites at Full Force",
     "content_type": "macro_trend",
