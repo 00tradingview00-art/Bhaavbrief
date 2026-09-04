@@ -1,5 +1,13 @@
 {
-  "_note": "Rotation state for the 30-day reel campaign (scripts/generate-campaign-reel.mjs, plan in data/reel-campaign-queue.json). nextDay advances by 1 after each successful generation, self-healing (a missed run just runs that day late rather than skipping it) — same convention as data/learn-reel-history.json's lastSlug pointer. Once nextDay exceeds the queue length the dispatcher logs completion and exits without generating.",
-  "nextDay": 1,
-  "log": []
+  "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
+  "nextDay": 2,
+  "log": [
+    {
+      "day": 1,
+      "pillar": "TRUST",
+      "feature": "Fast montage: Brief→Options→Tools→Feed→Calendar→Learn",
+      "file": "public/reels/news-20260904-fast-montage-brief-options-tools-feed-calend.mp4",
+      "generated_at": "2026-09-04T17:57:23.706Z"
+    }
+  ]
 }
