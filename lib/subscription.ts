@@ -14,23 +14,12 @@
 // Clerk publicMetadata.isPro mirrors status for client-side use without Redis
 // (see scalability note in plan: options pages use ISR + client-side override).
 //
-// Internal access — two separate, additive mechanisms, neither of which
-// loosens or replaces the Redis check above for a real customer:
-//   ADMIN_USER_IDS       → a hand-maintained allowlist of Clerk userIds (the
-//                           founder's own account) that always reads as Pro,
-//                           so real Pro UI/UX can be verified in the browser
-//                           without an actual Cashfree subscription. Checked
-//                           first in isProUser() so every existing call site
-//                           (server components AND /api/cashfree/poll-status,
-//                           which useIsPro() polls client-side) picks it up
-//                           automatically — no other file needs to change.
-//   INTERNAL_ACCESS_SECRET → a bearer-token secret for server-to-server
-//                           access (backend scripts, e.g. the reel campaign
-//                           pipeline) — see hasInternalAccess() below.
-// Deliberately a separate secret from CRON_SECRET: that one scopes to the
-// app's own cron/ops infra, this one grants Pro-data access — a different
-// privilege, kept on a different secret so a leak of one doesn't grant the
-// other.
+// Internal access — for backend scripts (e.g. the reel campaign pipeline)
+// that need real Pro-tier data with no Clerk session at all, see
+// hasInternalAccess() below. Browser-based Pro verification (does the real
+// UI/UX work) goes through the dev.bhaavbrief.in staging domain instead —
+// Cashfree sandbox mode (lib/cashfree.ts) already runs the real subscribe
+// flow there with test cards, so no auth-bypass code is needed for that.
 
 import { redisCommand } from './redis'
 import { clerkClient } from '@clerk/nextjs/server'
@@ -39,13 +28,7 @@ import type { Plan } from './proPlans'
 export type { Plan } from './proPlans'
 export type SubStatus = 'active' | 'cancelled' | 'expired'
 
-const ADMIN_USER_IDS = (process.env.ADMIN_USER_IDS ?? '')
-  .split(',')
-  .map(id => id.trim())
-  .filter(Boolean)
-
 export async function isProUser(userId: string | null): Promise<boolean> {
-  if (userId && ADMIN_USER_IDS.includes(userId)) return true
   if (!userId) return false
   const status = await redisCommand('GET', `sub:${userId}:status`)
   if (status !== 'active') return false
@@ -57,7 +40,10 @@ export async function isProUser(userId: string | null): Promise<boolean> {
 // Bearer-secret check for server-to-server internal access (backend scripts
 // hitting Pro-gated API routes with no Clerk session at all). A real
 // customer's browser never sends this header — there is no UI, cookie, or
-// normal request path that would ever attach it.
+// normal request path that would ever attach it. Deliberately a separate
+// secret from CRON_SECRET: that one scopes to the app's own cron/ops infra,
+// this one grants Pro-data access — a different privilege, kept on a
+// different secret so a leak of one doesn't grant the other.
 export function hasInternalAccess(headers: Headers): boolean {
   const auth = headers.get('authorization')
   return !!process.env.INTERNAL_ACCESS_SECRET && auth === `Bearer ${process.env.INTERNAL_ACCESS_SECRET}`
