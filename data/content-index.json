@@ -24,6 +24,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-04-gold-vs-nifty-correlation-crash-india",
+    "href": "/articles/2026-09-04-gold-vs-nifty-correlation-crash-india",
+    "title": "Gold vs Nifty — How MCX Gold Behaves During Indian Equity Market Crashes",
+    "description": "Understand gold vs nifty correlation during market crash india and how MCX gold prices move when Indian equity markets collapse.",
+    "excerpt": "The gold vs nifty correlation during market crash india is a well-documented inverse relationship — when Nifty 50 falls sharply, MCX Gold historically rises as institutional and retail capital rotates",
+    "date": "2026-09-04",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
     "href": "/articles/2026-09-03-mcx-nat-gas-falls-2-83-as-henry-hub-storage-builds",
     "title": "MCX Nat Gas Falls 2.83% as Henry Hub Storage Builds",
