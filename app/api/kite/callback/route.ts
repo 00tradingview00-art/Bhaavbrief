@@ -211,6 +211,7 @@ function html(title: string, body: string) {
   return new Response(`<!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>${title} — BhaavBrief</title>
   <style>
     body { font-family: system-ui; max-width: 580px; margin: 60px auto; padding: 0 20px; line-height: 1.7; color: #1a1a1a }
@@ -224,5 +225,5 @@ function html(title: string, body: string) {
   <h2>${title}</h2>
   ${body}
 </body>
-</html>`, { headers: { 'Content-Type': 'text/html' } })
+</html>`, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })
 }
