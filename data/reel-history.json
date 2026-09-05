@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260905-mcx-gold-vs-gold-etf",
+    "topic": "MCX Gold vs Gold ETF",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "MCX gold vs Gold ETF—which costs more to own?",
+    "stat_line": "₹50 entry. 14–20x leverage. Monthly expiry.",
+    "payoff": "Same gold. Different tax bills. Different risk clock.",
+    "beat1": "Gold ETFs let you start with ₹50–100 per unit or ₹500/month via SIP. MCX Mini contracts need real margin capital upfront.",
+    "beat2": "MCX leverage (14–20x) means tiny moves swing your account hard. ETFs move 1:1 with gold price—no amplification, no margin call.",
+    "beat3": "MCX gold expires monthly; you roll or exit. ETFs never expire. But MCX profits hit your tax slab; ETF gains get 12.5% LTCG after 12 months.",
+    "instagram_id": "17874632673632324",
+    "generated_at": "2026-09-05T16:44:52.264Z",
+    "edition": null,
+    "posted_at": "2026-09-05T16:45:36.953Z"
+  },
+  {
     "file": "news-20260905-pcr-tool",
     "topic": "PCR tool",
     "content_type": "explainer",
