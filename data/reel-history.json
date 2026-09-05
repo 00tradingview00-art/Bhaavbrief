@@ -29,7 +29,14 @@
     "generated_at": "2026-09-04T02:24:11.580Z",
     "edition": 100,
     "hi_path": "public/reels/brief-edition-100-hi.mp4",
-    "posted_at": "2026-09-04T02:25:12.046Z"
+    "posted_at": "2026-09-04T02:25:12.046Z",
+    "insights": {
+      "views": 10,
+      "reach": 10,
+      "ig_reels_avg_watch_time": 2441,
+      "ig_reels_video_view_total_time": 24419,
+      "fetched_at": "2026-09-05T06:03:58.620Z"
+    }
   },
   {
     "file": "news-20260903-best-time-to-trade-mcx-in-india",
@@ -45,7 +52,14 @@
     "instagram_id": "18092372048380991",
     "generated_at": "2026-09-03T17:47:59.922Z",
     "edition": null,
-    "posted_at": "2026-09-03T17:48:45.638Z"
+    "posted_at": "2026-09-03T17:48:45.638Z",
+    "insights": {
+      "views": 71,
+      "reach": 65,
+      "ig_reels_avg_watch_time": 2425,
+      "ig_reels_video_view_total_time": 164932,
+      "fetched_at": "2026-09-05T06:03:59.442Z"
+    }
   },
   {
     "file": "brief-edition-099",
