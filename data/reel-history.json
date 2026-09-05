@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260905-pcr-tool",
+    "topic": "PCR tool",
+    "content_type": "explainer",
+    "mood": "DOWNBEAT",
+    "hook_caption": "Gold traders split into two camps today.",
+    "stat_line": "PCR at 0.994—here's what that means.",
+    "payoff": "Options positioning tells you what big money actually fears—not just where price went.",
+    "beat1": "Gold's down ₹2,900 per 10g this week. But options traders are betting differently than spot buyers.",
+    "beat2": "PCR measures puts versus calls—fear versus greed. At 0.994, neither side is panicking yet.",
+    "beat3": "Watch 1.2 or 0.7. Above 1.2 means contrarian bullish; below 0.7 means contrarian bearish positioning.",
+    "instagram_id": "18391396057162489",
+    "generated_at": "2026-09-05T13:31:44.940Z",
+    "edition": null,
+    "posted_at": "2026-09-05T13:32:30.653Z"
+  },
+  {
     "file": "news-20260904-fast-montage-brief-options-tools-feed-calend",
     "topic": "Fast montage: Brief→Options→Tools→Feed→Calendar→Learn",
     "content_type": "price_move",

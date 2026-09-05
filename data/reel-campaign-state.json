@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 2,
+  "nextDay": 3,
   "log": [
+    {
+      "day": 2,
+      "pillar": "OPT",
+      "feature": "PCR tool",
+      "file": "public/reels/news-20260905-pcr-tool.mp4",
+      "generated_at": "2026-09-05T13:31:45.288Z"
+    },
     {
       "day": 1,
       "pillar": "TRUST",
