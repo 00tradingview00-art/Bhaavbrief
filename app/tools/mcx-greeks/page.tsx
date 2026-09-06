@@ -43,23 +43,23 @@ type Side = { delta: number | null; gamma: number | null; theta: number | null; 
 type StrikeRow = { strike: number; isATM?: boolean; CE: Side; PE: Side }
 
 async function getGreeksData() {
-  const results: Record<string, { atm: StrikeRow; otm: StrikeRow[] } | null> = {}
-
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const { chain } = await getOptionsChain(instrument)
-      const toSide = (s: { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }): Side => ({
-        delta: s.delta ?? null, gamma: s.gamma ?? null, theta: s.theta ?? null, vega: s.vega ?? null, iv: s.iv ?? null,
-      })
-      const rows: StrikeRow[] = chain.map(r => ({ strike: r.strike, isATM: r.isATM, CE: toSide(r.CE), PE: toSide(r.PE) }))
-      const atm = rows.find(r => r.isATM)
-      if (!atm) { results[instrument] = null; continue }
-      results[instrument] = { atm, otm: rows.filter(r => !r.isATM) }
-    } catch {
-      results[instrument] = null
-    }
-  }
-  return results
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { atm: StrikeRow; otm: StrikeRow[] } | null]> => {
+      try {
+        const { chain } = await getOptionsChain(instrument)
+        const toSide = (s: { delta: number | null; gamma: number | null; theta: number | null; vega: number | null; iv: number | null }): Side => ({
+          delta: s.delta ?? null, gamma: s.gamma ?? null, theta: s.theta ?? null, vega: s.vega ?? null, iv: s.iv ?? null,
+        })
+        const rows: StrikeRow[] = chain.map(r => ({ strike: r.strike, isATM: r.isATM, CE: toSide(r.CE), PE: toSide(r.PE) }))
+        const atm = rows.find(r => r.isATM)
+        if (!atm) return [instrument, null]
+        return [instrument, { atm, otm: rows.filter(r => !r.isATM) }]
+      } catch {
+        return [instrument, null]
+      }
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 function fmt(v: number | null, decimals = 4): string {

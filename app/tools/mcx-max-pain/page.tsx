@@ -40,20 +40,21 @@ export const metadata: Metadata = {
 }
 
 async function getMaxPainData() {
-  const results: Record<string, { maxPain: number | null; futurePrice: number; gap: number | null } | null> = {}
-  for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
-    try {
-      const data = await getOptionsChain(instrument)
-      const maxPain = (data as { maxPain?: number }).maxPain ?? null
-      const gap     = (maxPain !== null && data.futurePrice > 0)
-        ? parseFloat((((data.futurePrice - maxPain) / maxPain) * 100).toFixed(2))
-        : null
-      results[instrument] = { maxPain, futurePrice: data.futurePrice, gap }
-    } catch {
-      results[instrument] = null
-    }
-  }
-  return results
+  const entries = await Promise.all(
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { maxPain: number | null; futurePrice: number; gap: number | null } | null]> => {
+      try {
+        const data = await getOptionsChain(instrument)
+        const maxPain = (data as { maxPain?: number }).maxPain ?? null
+        const gap     = (maxPain !== null && data.futurePrice > 0)
+          ? parseFloat((((data.futurePrice - maxPain) / maxPain) * 100).toFixed(2))
+          : null
+        return [instrument, { maxPain, futurePrice: data.futurePrice, gap }]
+      } catch {
+        return [instrument, null]
+      }
+    }),
+  )
+  return Object.fromEntries(entries)
 }
 
 export default async function MCXMaxPainPage() {
