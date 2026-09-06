@@ -25,7 +25,12 @@ export interface BasisPoint {
 // MCX COMEX copper (COMEX HG=F) is not in the history feed.
 // When a COMEX_COPPER field is added to history files, add computeImportParityCopperINR here.
 
-export function getBasisHistory(): BasisPoint[] {
+// `limit`, when passed, reads only the most recent `limit` files instead of
+// every file in data/history/ — the directory grows by one file per trading
+// day forever, and one caller (app/tools/mcx-basis) only ever displays the
+// single most recent entry. app/basis/page.tsx needs a broader window (and
+// a full-history chart), so it calls this with no argument, unchanged.
+export function getBasisHistory(limit?: number): BasisPoint[] {
   const historyDir = path.join(process.cwd(), 'data', 'history')
   let files: string[]
   try {
@@ -33,6 +38,7 @@ export function getBasisHistory(): BasisPoint[] {
   } catch {
     return []
   }
+  if (limit != null) files = files.slice(-limit)
 
   const points: BasisPoint[] = []
 

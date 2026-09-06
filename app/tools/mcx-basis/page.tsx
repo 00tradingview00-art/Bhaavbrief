@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function MCXBasisPage() {
-  const history = getBasisHistory()
+  const history = getBasisHistory(1) // only the most recent entry is ever displayed below
   const latest  = history[history.length - 1]
 
   const items = [
