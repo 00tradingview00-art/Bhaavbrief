@@ -126,26 +126,47 @@ export interface ChainRowForMaxPain {
 
 /**
  * Max Pain — strike at which option writers lose the least.
+ *
+ * totalLoss(S) = Σ(S−Kᵢ)·CEoi(Kᵢ) over Kᵢ<S, plus Σ(Kᵢ−S)·PEoi(Kᵢ) over
+ * Kᵢ>S. Expanding: totalLoss(S) = S·ΣCEoi_below − ΣK·CEoi_below +
+ * ΣK·PEoi_above − S·ΣPEoi_above — every term is a prefix/suffix sum over
+ * strikes sorted ascending, so one forward + one backward pass computes
+ * every strike's loss in O(1), O(n) total instead of the O(n²) pairwise
+ * comparison this replaced. Sorts defensively rather than trusting the
+ * caller: the maths only holds over ascending strikes, and this is an
+ * exported, reusable function, not just an inline step of getOptionsChain.
  */
 export function calculateMaxPain(chain: ChainRowForMaxPain[]): number {
+  const sorted = [...chain].sort((a, b) => a.strike - b.strike)
+  const n = sorted.length
+  if (n === 0) return 0
+
+  const ceOiBelow  = new Array<number>(n).fill(0) // Σ CE oi at strikes strictly below index i
+  const ceWtBelow  = new Array<number>(n).fill(0) // Σ K·CE oi at strikes strictly below index i
+  for (let i = 1; i < n; i++) {
+    const prevOi = sorted[i - 1].CE?.oi || 0
+    ceOiBelow[i] = ceOiBelow[i - 1] + prevOi
+    ceWtBelow[i] = ceWtBelow[i - 1] + sorted[i - 1].strike * prevOi
+  }
+
+  const peOiAbove  = new Array<number>(n).fill(0) // Σ PE oi at strikes strictly above index i
+  const peWtAbove  = new Array<number>(n).fill(0) // Σ K·PE oi at strikes strictly above index i
+  for (let i = n - 2; i >= 0; i--) {
+    const nextOi = sorted[i + 1].PE?.oi || 0
+    peOiAbove[i] = peOiAbove[i + 1] + nextOi
+    peWtAbove[i] = peWtAbove[i + 1] + sorted[i + 1].strike * nextOi
+  }
+
   let minLoss = Infinity
   let maxPainStrike = 0
-
-  chain.forEach(row => {
-    let totalLoss = 0
-    chain.forEach(inner => {
-      if (inner.strike < row.strike) {
-        totalLoss += (row.strike - inner.strike) * (inner.CE?.oi || 0)
-      }
-      if (inner.strike > row.strike) {
-        totalLoss += (inner.strike - row.strike) * (inner.PE?.oi || 0)
-      }
-    })
+  for (let i = 0; i < n; i++) {
+    const S = sorted[i].strike
+    const totalLoss = (S * ceOiBelow[i] - ceWtBelow[i]) + (peWtAbove[i] - S * peOiAbove[i])
     if (totalLoss < minLoss) {
       minLoss = totalLoss
-      maxPainStrike = row.strike
+      maxPainStrike = S
     }
-  })
+  }
 
   return maxPainStrike
 }

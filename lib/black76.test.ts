@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { black76, calculateIV } from './black76'
+import { black76, calculateIV, calculateMaxPain } from './black76'
 
 describe('calculateIV', () => {
   it('recovers the seed IV used to generate a price (round-trip)', () => {
@@ -82,5 +82,38 @@ describe('black76', () => {
     const { theta: thetaCE } = black76(88000, 88000, 30 / 365, 0.065, 0.25, 'CE')
     const { theta: thetaPE } = black76(88000, 88000, 30 / 365, 0.065, 0.25, 'PE')
     expect(thetaCE).toBeCloseTo(thetaPE, 1)
+  })
+})
+
+describe('calculateMaxPain', () => {
+  // Hand-computed: totalLoss(100) = (110-100)*20 + (120-100)*10 = 400
+  //                totalLoss(110) = (110-100)*10 + (120-110)*10 = 200  <- min
+  //                totalLoss(120) = (120-100)*10 + (120-110)*20 = 400
+  const row = (strike: number, ceOi: number, peOi: number) => ({ strike, CE: { oi: ceOi }, PE: { oi: peOi } })
+
+  it('finds the strike where total writer loss is minimized', () => {
+    const chain = [row(100, 10, 50), row(110, 20, 20), row(120, 50, 10)]
+    expect(calculateMaxPain(chain)).toBe(110)
+  })
+
+  it('is order-independent — same result regardless of input strike order', () => {
+    // calculateMaxPain must not assume its input is pre-sorted by strike:
+    // the one production call site (lib/options.ts) happens to always sort
+    // first, but this is an exported, reusable function whose contract
+    // shouldn't silently depend on that.
+    const shuffled = [row(120, 50, 10), row(100, 10, 50), row(110, 20, 20)]
+    expect(calculateMaxPain(shuffled)).toBe(110)
+  })
+
+  it('returns 0 for an empty chain', () => {
+    expect(calculateMaxPain([])).toBe(0)
+  })
+
+  it('treats a missing CE/PE oi as zero rather than throwing', () => {
+    const chain = [
+      { strike: 100, CE: { oi: 0 }, PE: { oi: 0 } },
+      { strike: 110, CE: { oi: 5 }, PE: { oi: 5 } },
+    ]
+    expect(() => calculateMaxPain(chain)).not.toThrow()
   })
 })
