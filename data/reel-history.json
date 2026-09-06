@@ -1,5 +1,21 @@
 [
   {
+    "file": "news-20260906-news-feed-s-why-it-moved-framing",
+    "topic": "News Feed's \"why it moved\" framing",
+    "content_type": "price_move",
+    "mood": "DOWNBEAT",
+    "hook_caption": "Gold fell ₹2,900—but you didn't see why",
+    "stat_line": "90% saw the number, not the story",
+    "payoff": "The move happened elsewhere. You're seeing the echo.",
+    "beat1": "Your 10-gram gold bar costs ₹2,900 less today. Silver dropped ₹4,750 per kg. Crude fell too.",
+    "beat2": "Global gold fell overnight—COMEX prices dropped before MCX opened. Your news feed just showed you the result.",
+    "beat3": "When multiple metals drop together, watch currency moves next. Rupee weakness usually props up MCX prices.",
+    "instagram_id": "18112253570282363",
+    "generated_at": "2026-09-06T13:45:46.926Z",
+    "edition": null,
+    "posted_at": "2026-09-06T13:46:30.130Z"
+  },
+  {
     "file": "news-20260905-mcx-gold-vs-gold-etf",
     "topic": "MCX Gold vs Gold ETF",
     "content_type": "explainer",

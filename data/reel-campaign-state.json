@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 3,
+  "nextDay": 4,
   "log": [
+    {
+      "day": 3,
+      "pillar": "LIVE",
+      "feature": "News Feed's \"why it moved\" framing",
+      "file": "public/reels/news-20260906-news-feed-s-why-it-moved-framing.mp4",
+      "generated_at": "2026-09-06T13:45:47.190Z"
+    },
     {
       "day": 2,
       "pillar": "OPT",
