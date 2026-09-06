@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
@@ -436,6 +437,27 @@ function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 
+// The server always seeds Gold (app/options/page.tsx no longer reads
+// searchParams — that's a dynamic API and would force the page off ISR). A
+// `?commodity=` deep link (nothing internal links to one; only possible via a
+// direct/bookmarked URL) is instead honored here, client-side — reading it in
+// a client component doesn't affect server caching the way reading it
+// server-side would. Split into its own component (rather than calling
+// useSearchParams() directly in OptionChain) because useSearchParams()
+// requires a <Suspense> boundary to avoid opting the whole page out of static
+// generation — this keeps that requirement local to the one thing that needs
+// it, instead of forcing every page that renders OptionChain to add one.
+function CommodityFromQuery({ instrument, onCommodity }: { instrument: string; onCommodity: (key: string) => void }) {
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const requested = searchParams.get('commodity')?.toUpperCase()
+    if (requested && requested !== instrument && INSTRUMENTS.some(i => i.key === requested)) {
+      onCommodity(requested)
+    }
+  }, [searchParams, instrument, onCommodity])
+  return null
+}
+
 export default function OptionChain({ isPro: serverIsPro, preview = false, initialData = null }: { isPro: boolean; preview?: boolean; initialData?: OptionsData | null }) {
   // ISR-safe Pro check: server always passes isPro=false (preserves revalidate=60 cache
   // for the free, now-unconditional chain data). useIsPro() gives the live Redis-backed
@@ -461,6 +483,14 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
   const tableBodyRef  = useRef<HTMLDivElement>(null)
   const atmRowRef     = useRef<HTMLTableRowElement>(null)
   const isMobile      = useIsMobile()
+  // The server already ran the full chain computation once for `initialData`
+  // (live Kite quotes + historical fetch + per-strike IV solve + max pain) —
+  // skip re-fetching it a second time immediately on mount. Tracked by ref
+  // (not state) so it applies to exactly the one poll-effect run that still
+  // matches what was seeded; any later run (instrument/expiry changed, or
+  // there was no initialData to begin with) fetches immediately as before.
+  const seededInstrumentRef = useRef(initialData?.instrument ?? null)
+  const seededDataRef       = useRef(initialData)
 
   const fetchData = useCallback(async (): Promise<OptionsData|null> => {
     setLoading(true); setError(null)
@@ -484,7 +514,13 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
     let timer: ReturnType<typeof setTimeout> | undefined
 
     async function scheduleNext() {
-      const result = await fetchData()
+      let result: OptionsData | null
+      if (seededInstrumentRef.current === instrument && expiry === null) {
+        seededInstrumentRef.current = null // one-shot: only the still-fresh seeded run skips
+        result = seededDataRef.current
+      } else {
+        result = await fetchData()
+      }
       if (cancelled) return
       const delay = result?.marketOpen === false ? 20 * 60 * 1000 : 3 * 60 * 1000
       timer = setTimeout(scheduleNext, delay)
@@ -492,7 +528,10 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
 
     scheduleNext()
     return () => { cancelled = true; if (timer) clearTimeout(timer) }
-  }, [fetchData])
+    // fetchData already changes whenever instrument/expiry do (its own deps) —
+    // listed explicitly too since scheduleNext reads them directly for the
+    // seeded-run check above.
+  }, [fetchData, instrument, expiry])
   useEffect(() => { setExpiry(null); setPage('main') }, [instrument])
   useEffect(() => { setPage('main') }, [expiry])
 
@@ -543,6 +582,9 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
 
   return (
     <div style={{ background: C.surf, borderRadius: 8, border: `1px solid ${C.bdr}`, overflow: 'hidden', fontFamily: C.sans, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+      <Suspense fallback={null}>
+        <CommodityFromQuery instrument={instrument} onCommodity={setInstrument} />
+      </Suspense>
 
       {/* ── Controls ── */}
       <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: C.surf2 }}>

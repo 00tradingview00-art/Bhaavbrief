@@ -91,20 +91,18 @@ const WEBAPP_SCHEMA = {
   provider: { '@id': 'https://bhaavbrief.in/#organization' },
 }
 
-const VALID_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']
 const INSTRUMENT_LABELS: Record<string, string> = {
   GOLD: 'Gold', SILVER: 'Silver', CRUDEOIL: 'Crude Oil', NATURALGAS: 'Natural Gas', COPPER: 'Copper',
 }
 
-export default async function OptionsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ commodity?: string }>
-}) {
-  const { commodity } = await searchParams
-  const instrument = VALID_INSTRUMENTS.includes(commodity?.toUpperCase() ?? '')
-    ? commodity!.toUpperCase()
-    : 'GOLD'
+// Deliberately not reading `searchParams` here: it's a Next.js dynamic API and
+// using it would force this whole route to render on every request, defeating
+// `revalidate = 60` above. The legacy `?commodity=` deep link (nothing internal
+// links to it — the hub links to the bare path) is instead handled client-side
+// by OptionChain itself via useSearchParams(), which doesn't affect server
+// caching. This page always seeds the same default (Gold) chain for everyone.
+export default async function OptionsPage() {
+  const instrument = 'GOLD'
   const initialData = await getOptionsChain(instrument).catch(async () => {
     // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
     // last-known-good chain so the free-tier blurred preview shows real (if stale)
