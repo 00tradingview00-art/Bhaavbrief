@@ -23,19 +23,35 @@ export const metadata: Metadata = {
   ],
 }
 
-const VALID_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']
+const VALID_INSTRUMENTS = ['GOLD', 'GOLDM', 'SILVER', 'SILVERM', 'CRUDEOIL', 'CRUDEOILM', 'NATURALGAS', 'COPPER']
 
 // StrategyBuilder's instrument codes → data/market-structure.json's key scheme
 const MARGIN_KEY_MAP: Record<string, string> = {
   GOLD: 'gold', SILVER: 'silver', CRUDEOIL: 'crude', NATURALGAS: 'natgas', COPPER: 'copper',
 }
 
+// Mini contracts deliberately aren't added to data/market-structure.json —
+// that file is a much larger shared content resource (commodities SEO pages,
+// keyword-article generation, site-guardian) with a rich per-commodity schema;
+// adding sparse mini-only entries there risks half-populated data reaching
+// those other consumers. These figures are sourced from this site's own
+// /learn/mcx-margin-calculator page (same real SPAN margin ranges shown
+// there), kept local to where they're actually used.
+const MINI_MARGIN_FALLBACK: Record<string, string> = {
+  GOLDM:     '₹55,000–75,000',
+  SILVERM:   '₹25,000–40,000',
+  CRUDEOILM: '₹3,000–5,000',
+}
+
 function loadMarginByInstrument(): Record<string, string | null> {
   const file = path.join(process.cwd(), 'data/market-structure.json')
   const marketStructure = JSON.parse(fs.readFileSync(file, 'utf8'))
-  return Object.fromEntries(
-    Object.entries(MARGIN_KEY_MAP).map(([code, key]) => [code, marketStructure[key]?.typicalMargin ?? null]),
-  )
+  return {
+    ...Object.fromEntries(
+      Object.entries(MARGIN_KEY_MAP).map(([code, key]) => [code, marketStructure[key]?.typicalMargin ?? null]),
+    ),
+    ...MINI_MARGIN_FALLBACK,
+  }
 }
 
 export default async function StrategyPage({

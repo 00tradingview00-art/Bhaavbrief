@@ -18,11 +18,14 @@ const BASE = 'https://bhaavbrief.in'
 // Slugs match the /commodities/[commodity] convention used site-wide.
 // Values are the instrument keys lib/options.ts's getOptionsChain() expects.
 const SLUG_MAP: Record<string, string> = {
-  'gold':         'GOLD',
-  'silver':       'SILVER',
-  'crude-oil':    'CRUDEOIL',
-  'natural-gas':  'NATURALGAS',
-  'copper':       'COPPER',
+  'gold':           'GOLD',
+  'gold-mini':      'GOLDM',
+  'silver':         'SILVER',
+  'silver-mini':    'SILVERM',
+  'crude-oil':      'CRUDEOIL',
+  'crude-oil-mini': 'CRUDEOILM',
+  'natural-gas':    'NATURALGAS',
+  'copper':         'COPPER',
 }
 
 const COMMODITY_META: Record<string, { label: string; title: string; description: string; keywords: string[] }> = {
@@ -32,17 +35,35 @@ const COMMODITY_META: Record<string, { label: string; title: string; description
     description: 'Live MCX Gold option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
     keywords: ['MCX gold option chain', 'MCX gold options India', 'MCX gold max pain today', 'MCX gold put call ratio', 'MCX gold implied volatility'],
   },
+  'gold-mini': {
+    label: 'Gold Mini',
+    title: 'MCX Gold Mini Option Chain — Live Greeks, IV & Max Pain',
+    description: 'Live MCX Gold Mini (GOLDM) option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
+    keywords: ['MCX gold mini option chain', 'MCX GOLDM options India', 'MCX gold mini max pain today', 'MCX gold mini put call ratio', 'MCX gold mini implied volatility'],
+  },
   silver: {
     label: 'Silver',
     title: 'MCX Silver Option Chain — Live Greeks, IV & Max Pain',
     description: 'Live MCX Silver option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
     keywords: ['MCX silver option chain', 'MCX silver options India', 'MCX silver max pain today', 'MCX silver put call ratio'],
   },
+  'silver-mini': {
+    label: 'Silver Mini',
+    title: 'MCX Silver Mini Option Chain — Live Greeks, IV & Max Pain',
+    description: 'Live MCX Silver Mini (SILVERM) option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
+    keywords: ['MCX silver mini option chain', 'MCX SILVERM options India', 'MCX silver mini max pain today', 'MCX silver mini put call ratio'],
+  },
   'crude-oil': {
     label: 'Crude Oil',
     title: 'MCX Crude Oil Option Chain — Live Greeks, IV & Max Pain',
     description: 'Live MCX Crude Oil option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
     keywords: ['MCX crude oil option chain', 'MCX crude oil options', 'crude oil option chain', 'MCX crude oil max pain today'],
+  },
+  'crude-oil-mini': {
+    label: 'Crude Oil Mini',
+    title: 'MCX Crude Oil Mini Option Chain — Live Greeks, IV & Max Pain',
+    description: 'Live MCX Crude Oil Mini (CRUDEOILM) option chain with Black-76 Greeks, implied volatility (iVIX), Max Pain and Put-Call Ratio. Real-time option data for Indian traders.',
+    keywords: ['MCX crude oil mini option chain', 'MCX CRUDEOILM options', 'crude oil mini option chain', 'MCX crude oil mini max pain today'],
   },
   'natural-gas': {
     label: 'Natural Gas',

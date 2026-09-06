@@ -94,12 +94,22 @@ export function classifyQuote(
   return { tier: 'STALE', validForSolve: true }
 }
 
+// Mini contracts (GOLDM/SILVERM/CRUDEOILM) share their parent's quoting unit —
+// same underlying commodity, smaller lot — confirmed against MCX's live
+// instrument master (real listed CE/PE chains, not futures-only) and this
+// site's own published lot sizes (/learn/mcx-lot-sizes, /learn/mcx-margin-calculator):
+// Gold Mini 100g (10 x 10g), Silver Mini 5kg, Crude Oil Mini 10 barrels.
+// Silver Micro (SILVERMIC) was checked too and excluded — futures only, MCX
+// lists no options on it.
 export const MCX_INSTRUMENTS: Record<string, { label: string; unit: string; lotSize: number }> = {
-  GOLD:        { label: 'Gold',         unit: '10g',     lotSize: 100  },
-  SILVER:      { label: 'Silver',       unit: '1kg',     lotSize: 30   },
-  CRUDEOIL:    { label: 'Crude Oil',    unit: 'bbl',     lotSize: 100  },
-  NATURALGAS:  { label: 'Natural Gas',  unit: 'mmBtu',   lotSize: 1250 },
-  COPPER:      { label: 'Copper',       unit: 'kg',      lotSize: 2500 },
+  GOLD:        { label: 'Gold',           unit: '10g',   lotSize: 100  },
+  GOLDM:       { label: 'Gold Mini',      unit: '10g',   lotSize: 10   },
+  SILVER:      { label: 'Silver',         unit: '1kg',   lotSize: 30   },
+  SILVERM:     { label: 'Silver Mini',    unit: '1kg',   lotSize: 5    },
+  CRUDEOIL:    { label: 'Crude Oil',      unit: 'bbl',   lotSize: 100  },
+  CRUDEOILM:   { label: 'Crude Oil Mini', unit: 'bbl',   lotSize: 10   },
+  NATURALGAS:  { label: 'Natural Gas',    unit: 'mmBtu', lotSize: 1250 },
+  COPPER:      { label: 'Copper',         unit: 'kg',    lotSize: 2500 },
 }
 
 export function isMCXMarketOpen(): boolean {

@@ -15,8 +15,11 @@ interface Props {
 
 const COLORS: Record<string, string> = {
   GOLD:        'var(--gold-dark, #8A5A00)',
+  GOLDM:       '#C9A227',
   SILVER:      '#6B7280',
+  SILVERM:     '#9CA3AF',
   CRUDEOIL:    '#1B7A4A',
+  CRUDEOILM:   '#4CAF7D',
   NATURALGAS:  '#2563EB',
   COPPER:      '#B53A2A',
 }

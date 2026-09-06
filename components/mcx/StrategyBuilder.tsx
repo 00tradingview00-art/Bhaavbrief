@@ -70,34 +70,47 @@ interface BriefEdge {
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const INSTRUMENTS = [
-  { key: 'GOLD',       label: 'Gold'      },
-  { key: 'SILVER',     label: 'Silver'    },
-  { key: 'CRUDEOIL',   label: 'Crude Oil' },
-  { key: 'NATURALGAS', label: 'Nat Gas'   },
-  { key: 'COPPER',     label: 'Copper'    },
+  { key: 'GOLD',       label: 'Gold'           },
+  { key: 'GOLDM',      label: 'Gold Mini'      },
+  { key: 'SILVER',     label: 'Silver'         },
+  { key: 'SILVERM',    label: 'Silver Mini'    },
+  { key: 'CRUDEOIL',   label: 'Crude Oil'      },
+  { key: 'CRUDEOILM',  label: 'Crude Oil Mini' },
+  { key: 'NATURALGAS', label: 'Nat Gas'        },
+  { key: 'COPPER',     label: 'Copper'         },
 ]
 
 // Only these editions' structured Edge-of-Day metrics have a real underlying
 // market for the currently-supported instruments — COPPER/NATURALGAS
 // deliberately have no entry here (fail open, never fabricate a mapping).
+// GOLDM/SILVERM/CRUDEOILM follow the same rule for this one narrow
+// "resolution note" feature (the main Edge panel itself still shows for them —
+// see app/api/brief-edge/route.ts's INSTRUMENT_TO_COMMODITIES).
 const EDGE_METRIC_TO_INSTRUMENT: Record<string, string> = {
   COMEX_GOLD:   'GOLD',
   COMEX_SILVER: 'SILVER',
   WTI:          'CRUDEOIL',
 }
 
-// Instrument-appropriate chart ranges — wider for high-vol commodities
+// Instrument-appropriate chart ranges — wider for high-vol commodities.
+// Mini contracts mirror their parent's value: same underlying price series,
+// so the same volatility profile applies.
 const PAYOFF_WIDTH_BY_INST: Record<string, number> = {
   NATURALGAS: 0.30,
   SILVER:     0.25,
+  SILVERM:    0.25,
   CRUDEOIL:   0.20,
+  CRUDEOILM:  0.20,
   COPPER:     0.20,
   GOLD:       0.15,
+  GOLDM:      0.15,
 }
 
-// MCX daily circuit limits
+// MCX daily circuit limits — set per commodity, not per contract-size variant,
+// so mini contracts mirror their parent's limit.
 const CIRCUIT_LIMITS: Record<string, number> = {
-  GOLD: 0.06, SILVER: 0.06, CRUDEOIL: 0.04, NATURALGAS: 0.10, COPPER: 0.06,
+  GOLD: 0.06, GOLDM: 0.06, SILVER: 0.06, SILVERM: 0.06,
+  CRUDEOIL: 0.04, CRUDEOILM: 0.04, NATURALGAS: 0.10, COPPER: 0.06,
 }
 
 const PAYOFF_POINTS = 101

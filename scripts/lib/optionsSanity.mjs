@@ -10,7 +10,7 @@
  * served data, consistent with Part 4's "checks what a user sees" approach.
  */
 
-export const MCX_SANITY_INSTRUMENTS = ['GOLD', 'SILVER', 'CRUDEOIL', 'NATURALGAS', 'COPPER']
+export const MCX_SANITY_INSTRUMENTS = ['GOLD', 'GOLDM', 'SILVER', 'SILVERM', 'CRUDEOIL', 'CRUDEOILM', 'NATURALGAS', 'COPPER']
 
 /** @param {{CE: {tier: string, iv: number|null}, PE: {tier: string, iv: number|null}}[]} chain */
 export function computeTierDistribution(chain) {

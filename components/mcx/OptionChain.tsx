@@ -24,11 +24,14 @@ function useIsMobile(breakpoint = 640) {
 }
 
 const INSTRUMENTS = [
-  { key: 'GOLD',       label: 'Gold'      },
-  { key: 'SILVER',     label: 'Silver'    },
-  { key: 'CRUDEOIL',   label: 'Crude Oil' },
-  { key: 'NATURALGAS', label: 'Nat Gas'   },
-  { key: 'COPPER',     label: 'Copper'    },
+  { key: 'GOLD',       label: 'Gold'           },
+  { key: 'GOLDM',      label: 'Gold Mini'      },
+  { key: 'SILVER',     label: 'Silver'         },
+  { key: 'SILVERM',    label: 'Silver Mini'    },
+  { key: 'CRUDEOIL',   label: 'Crude Oil'      },
+  { key: 'CRUDEOILM',  label: 'Crude Oil Mini' },
+  { key: 'NATURALGAS', label: 'Nat Gas'        },
+  { key: 'COPPER',     label: 'Copper'         },
 ]
 
 // ── Types ─────────────────────────────────────────────────────────────────────

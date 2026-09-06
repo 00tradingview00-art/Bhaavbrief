@@ -13,8 +13,13 @@ export const revalidate = 0
 
 const INSTRUMENT_TO_COMMODITIES: Record<string, string[]> = {
   GOLD:       ['MCX Gold'],
+  // Mini contracts are the same underlying commodity as their parent, just a
+  // smaller lot — today's Gold brief commentary applies equally to Gold Mini.
+  GOLDM:      ['MCX Gold'],
   SILVER:     ['MCX Silver'],
+  SILVERM:    ['MCX Silver'],
   CRUDEOIL:   ['MCX Crude'],
+  CRUDEOILM:  ['MCX Crude'],
   COPPER:     ['MCX Copper'],
   NATURALGAS: ['MCX Natural Gas', 'MCX NatGas'],
 }
