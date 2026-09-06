@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef, useId } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, useId } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceArea, Legend,
   AreaChart, Area,
@@ -571,7 +571,15 @@ export default function StrategyBuilder({
   const chain       = chainData?.chain ?? []
   const futurePrice = chainData?.futurePrice ?? 0
   const r           = chainData?.riskFreeRate ?? 0.065
-  const T           = expiry ? daysToExpiry(expiry) / 365 : 0
+  // Rounded to the minute, not raw Date.now() — T feeds the useMemo deps
+  // below for the payoff/Greeks pricing sweep, and the 1s "seconds ago"
+  // ticker re-renders this component every second regardless. A T that
+  // drifts by a fraction of a millisecond-scale amount every render would
+  // fail the memo's equality check every single tick, silently defeating
+  // the memoization. Sub-minute precision on years-to-expiry is imperceptible
+  // in the Black-76 output anyway.
+  const nowMs       = Math.floor(Date.now() / 60_000) * 60_000
+  const T           = expiry ? Math.max(0, (new Date(expiry).getTime() - nowMs) / (1000 * 60 * 60 * 24 * 365)) : 0
 
   // IV regime from history + current chain — only LIVE-tier sides, matching IVHistoryChart.
   // Falls back from the ATM strike's own quote to the whole chain's average when the ATM
@@ -771,32 +779,49 @@ export default function StrategyBuilder({
     setSavedPnls(pnls)
   }, [saved, chainVersion])
 
-  // Payoff chart data — "today" line uses current live IV
-  const fRange      = futurePrice > 0 ? buildFRange(futurePrice, payoffWidth, legs) : []
-  const payoff: PayoffPoint[] = legs.length > 0 && futurePrice > 0
-    ? computePayoff(legs, fRange, lotSize, T, r, currentIV > 0 ? currentIV : undefined)
-    : []
+  // Payoff chart data — "today" line uses current live IV. Memoized: this
+  // block runs several hundred black76() evaluations (up to 185 price points
+  // × legs), and without memoization it re-ran on every render — including
+  // every 1s tick of the "seconds ago" ticker below and every keystroke into
+  // the unrelated Risk Budget / Save Label text fields further down.
+  const fRange = useMemo(
+    () => (futurePrice > 0 ? buildFRange(futurePrice, payoffWidth, legs) : []),
+    [futurePrice, payoffWidth, legs],
+  )
+  const payoff: PayoffPoint[] = useMemo(
+    () => (legs.length > 0 && futurePrice > 0
+      ? computePayoff(legs, fRange, lotSize, T, r, currentIV > 0 ? currentIV : undefined)
+      : []),
+    [legs, fRange, lotSize, T, r, currentIV, futurePrice],
+  )
 
   // ±1σ/±2σ expected-move cone from the site's own tracked IV — clamped to
   // the chart's visible price domain so it never overflows the axis. Also
   // supplies sigmaT for the lognormal-weighted Prob. of Profit below.
-  const rawCone = computeExpectedMoveCone(futurePrice, currentIV, T)
-  const cone = rawCone && fRange.length > 0
-    ? {
-        sigmaT:   rawCone.sigmaT,
-        oneSigma: [Math.max(fRange[0], rawCone.oneSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.oneSigma[1])] as [number, number],
-        twoSigma: [Math.max(fRange[0], rawCone.twoSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.twoSigma[1])] as [number, number],
-      }
-    : null
+  const cone = useMemo(() => {
+    const rawCone = computeExpectedMoveCone(futurePrice, currentIV, T)
+    if (!rawCone || fRange.length === 0) return null
+    return {
+      sigmaT:   rawCone.sigmaT,
+      oneSigma: [Math.max(fRange[0], rawCone.oneSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.oneSigma[1])] as [number, number],
+      twoSigma: [Math.max(fRange[0], rawCone.twoSigma[0]), Math.min(fRange[fRange.length - 1], rawCone.twoSigma[1])] as [number, number],
+    }
+  }, [futurePrice, currentIV, T, fRange])
 
-  const breakevens    = computeBreakevens(payoff)
-  const maxProfitLoss = computeMaxProfitLoss(payoff)
-  const pop = (payoff.length > 0 && cone)
-    ? Math.round(computeProbOfProfit(payoff, breakevens, futurePrice, cone.sigmaT) * 100)
-    : null
-  const netGreeks     = legs.length > 0 && futurePrice > 0 && T > 0
-    ? computeNetGreeks(legs, futurePrice, T, r, lotSize, currentIV)
-    : null
+  const breakevens    = useMemo(() => computeBreakevens(payoff), [payoff])
+  const maxProfitLoss = useMemo(() => computeMaxProfitLoss(payoff), [payoff])
+  const pop = useMemo(
+    () => (payoff.length > 0 && cone
+      ? Math.round(computeProbOfProfit(payoff, breakevens, futurePrice, cone.sigmaT) * 100)
+      : null),
+    [payoff, breakevens, futurePrice, cone],
+  )
+  const netGreeks = useMemo(
+    () => (legs.length > 0 && futurePrice > 0 && T > 0
+      ? computeNetGreeks(legs, futurePrice, T, r, lotSize, currentIV)
+      : null),
+    [legs, futurePrice, T, r, lotSize, currentIV],
+  )
   const netCost    = computeNetCost(legs)
   const netCostINR = netCost * lotSize
 
@@ -804,19 +829,21 @@ export default function StrategyBuilder({
   // sorted ascending by F but NOT uniformly spaced (buildFRange injects extra
   // points near strikes), so find the nearest real point rather than assuming
   // a uniform-index formula — that used to silently read the wrong price.
-  const scenarios = (payoff.length > 0 && futurePrice > 0)
-    ? [-0.10, -0.05, 0, 0.05, 0.10].map(pct => {
-        const F  = futurePrice * (1 + pct)
-        const pt = payoff.reduce((best, p) => Math.abs(p.F - F) < Math.abs(best.F - F) ? p : best, payoff[0])
-        const pnlVal = pt.pnlExpiry
-        // Guard against a near-zero (not just exact-zero) net cost producing
-        // an arithmetically "correct" but meaningless percentage like +40000%.
-        const pnlPct = Math.abs(netCostINR) > futurePrice * lotSize * 0.001
-          ? (pnlVal / Math.abs(netCostINR) * 100)
-          : null
-        return { label: `${pct >= 0 ? '+' : ''}${(pct * 100).toFixed(0)}%`, F, pnl: pnlVal, pnlPct, isATM: pct === 0 }
-      })
-    : []
+  const scenarios = useMemo(() => (
+    payoff.length > 0 && futurePrice > 0
+      ? [-0.10, -0.05, 0, 0.05, 0.10].map(pct => {
+          const F  = futurePrice * (1 + pct)
+          const pt = payoff.reduce((best, p) => Math.abs(p.F - F) < Math.abs(best.F - F) ? p : best, payoff[0])
+          const pnlVal = pt.pnlExpiry
+          // Guard against a near-zero (not just exact-zero) net cost producing
+          // an arithmetically "correct" but meaningless percentage like +40000%.
+          const pnlPct = Math.abs(netCostINR) > futurePrice * lotSize * 0.001
+            ? (pnlVal / Math.abs(netCostINR) * 100)
+            : null
+          return { label: `${pct >= 0 ? '+' : ''}${(pct * 100).toFixed(0)}%`, F, pnl: pnlVal, pnlPct, isATM: pct === 0 }
+        })
+      : []
+  ), [payoff, futurePrice, netCostINR, lotSize])
 
   // Risk budget sizing — scale the CURRENT leg structure (preserving any ratio
   // between legs, e.g. a 1x2 backspread) so its max loss matches the stated
@@ -830,20 +857,23 @@ export default function StrategyBuilder({
 
   // Target-date second line — defaults to "now" (T years out); clicking an
   // event marker on the timeline below re-anchors it to that event's date.
-  const targetDaysOut = targetDate ? Math.max(0, (new Date(targetDate).getTime() - Date.now()) / 86400000) : 0
+  const targetDaysOut = targetDate ? Math.max(0, (new Date(targetDate).getTime() - nowMs) / 86400000) : 0
   const targetT        = targetDate ? Math.max(0, T - targetDaysOut / 365) : T
-  const secondaryPayoff: PayoffPoint[] = targetDate && legs.length > 0 && futurePrice > 0
-    ? computePayoff(legs, fRange, lotSize, targetT, r, currentIV > 0 ? currentIV : undefined)
-    : payoff
+  const secondaryPayoff: PayoffPoint[] = useMemo(
+    () => (targetDate && legs.length > 0 && futurePrice > 0
+      ? computePayoff(legs, fRange, lotSize, targetT, r, currentIV > 0 ? currentIV : undefined)
+      : payoff),
+    [targetDate, legs, fRange, lotSize, targetT, r, currentIV, payoff, futurePrice],
+  )
   const secondaryLabel = targetDate
     ? `As of ${new Date(targetDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
     : `Today (${Math.round(dte)}d left)`
 
-  const chartData = payoff.map((p, i) => ({
+  const chartData = useMemo(() => payoff.map((p, i) => ({
     F:      Math.round(p.F),
     Expiry: Math.round(p.pnlExpiry),
     AsOf:   targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
-  }))
+  })), [payoff, secondaryPayoff, targetT])
 
 
   // Events between today and expiry, for the target-date timeline
