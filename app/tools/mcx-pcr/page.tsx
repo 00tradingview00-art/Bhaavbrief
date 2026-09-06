@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { auth } from '@clerk/nextjs/server'
-import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { getPCRHistory } from '@/lib/pcrAnalysis'
 import PCRTrendChart from './PCRTrendChart'
@@ -68,8 +66,6 @@ function pcrSignal(pcr: number | null): { label: string; color: string } {
 }
 
 export default async function MCXPCRPage() {
-  const { userId } = await auth()
-  const isPro = await isProUser(userId)
   const data = await getPCRData()
   const trends = await Promise.all(
     Object.entries(MCX_INSTRUMENTS).map(async ([key, meta]) => ({
@@ -122,7 +118,7 @@ export default async function MCXPCRPage() {
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>PCR Trend</h2>
         {trends.map(t => (
-          <PCRTrendChart key={t.key} label={t.label} history={t.history} isPro={isPro} />
+          <PCRTrendChart key={t.key} label={t.label} history={t.history} isPro={false} />
         ))}
       </section>
     </main>
