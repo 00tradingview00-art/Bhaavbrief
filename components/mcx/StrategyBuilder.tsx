@@ -610,7 +610,11 @@ export default function StrategyBuilder({
     if (!encoded) return
     try {
       const decoded: Leg[] = JSON.parse(decodeURIComponent(escape(atob(encoded))))
-      if (Array.isArray(decoded) && decoded.length > 0) setLegs(decoded)
+      if (Array.isArray(decoded) && decoded.length > 0) {
+        // Fresh ids regardless of what's in the URL — only need to be unique
+        // within this session's React tree, not stable across shares.
+        setLegs(decoded.map(leg => ({ ...leg, id: crypto.randomUUID() })))
+      }
     } catch {/* invalid URL param — ignore */}
   }, [])
 
@@ -855,7 +859,7 @@ export default function StrategyBuilder({
     if (side.ltp <= 0) return
     setLegs(prev => [
       ...prev,
-      { strike: row.strike, type, action, qty: 1, premium: side.ltp, iv: (side.iv ?? currentIV) / 100 },
+      { id: crypto.randomUUID(), strike: row.strike, type, action, qty: 1, premium: side.ltp, iv: (side.iv ?? currentIV) / 100 },
     ])
   }
 
@@ -863,7 +867,7 @@ export default function StrategyBuilder({
     if (futurePrice <= 0) return
     setLegs(prev => [
       ...prev,
-      { strike: futurePrice, type: 'FUT', action, qty: 1, premium: futurePrice, iv: 0 },
+      { id: crypto.randomUUID(), strike: futurePrice, type: 'FUT', action, qty: 1, premium: futurePrice, iv: 0 },
     ])
   }
 
@@ -922,7 +926,7 @@ export default function StrategyBuilder({
 
   function loadTemplate(templateId: TemplateId) {
     const newLegs = buildTemplateLegs(templateId, chain, futurePrice, currentIV || 0)
-    if (newLegs.length > 0) setLegs(newLegs)
+    if (newLegs.length > 0) setLegs(newLegs.map(leg => ({ ...leg, id: crypto.randomUUID() })))
   }
 
   function copyShareUrl() {
@@ -1296,7 +1300,7 @@ export default function StrategyBuilder({
                       ? computeLegGreeks(leg, futurePrice, T, r, lotSize, currentIV)
                       : null
                     return (
-                    <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <tr key={leg.id ?? i} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={{ padding: '5px 8px' }}>
                         <button onClick={() => toggleAction(i)}
                           style={{

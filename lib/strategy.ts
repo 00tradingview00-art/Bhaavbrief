@@ -4,6 +4,7 @@ export type Action     = 'BUY' | 'SELL'
 export type OptionType = 'CE' | 'PE'
 
 export interface Leg {
+  id?:     string    // stable per-leg identity for React list keys — pricing functions ignore it
   strike:  number
   type:    OptionType | 'FUT'
   action:  Action
