@@ -1,4 +1,5 @@
 import { redisCommand } from './redis'
+import { istDateWindow } from './oiHistory'
 
 export interface PCRPoint {
   date: string
@@ -14,22 +15,26 @@ const LOOKBACK_DAYS = 90
 // shown elsewhere on the same page. Snapshots taken before that field
 // existed are skipped (real gap, never backfilled/estimated).
 export async function getPCRHistory(instrument: string): Promise<PCRPoint[]> {
-  const history: PCRPoint[] = []
-  const today = new Date()
+  const dates = istDateWindow(LOOKBACK_DAYS)
 
-  for (let i = 0; i < LOOKBACK_DAYS; i++) {
-    const d = new Date(today)
-    d.setDate(d.getDate() - i)
-    const dateStr = d.toISOString().slice(0, 10)
-    const raw = await redisCommand('get', `oi-snap:${instrument}:${dateStr}`) as string | null
-    if (!raw) continue
+  // Fired concurrently, not sequentially — mirrors lib/oiHistory.ts's
+  // getOIHistory() (same key namespace), so one slow/stuck day can't stall
+  // the other 89 behind it.
+  const raws = await Promise.all(
+    dates.map(dateStr => redisCommand('get', `oi-snap:${instrument}:${dateStr}`).catch(() => null) as Promise<string | null>),
+  )
+
+  const history: PCRPoint[] = []
+  dates.forEach((dateStr, i) => {
+    const raw = raws[i]
+    if (!raw) return
     try {
       const parsed = JSON.parse(raw) as { pcr?: number }
       if (typeof parsed.pcr === 'number') history.push({ date: dateStr, pcr: parsed.pcr })
     } catch {
       // skip malformed entries
     }
-  }
+  })
 
   history.sort((a, b) => a.date.localeCompare(b.date))
   return history

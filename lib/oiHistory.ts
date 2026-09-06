@@ -46,7 +46,7 @@ export function buildOiSnapshotRows(chain: ChainRowForSnapshot[]): OISnapshotRow
 // window can't silently drift out of sync with the IST calendar dates the
 // cron writes under if its schedule ever moves closer to the UTC/IST
 // boundary (currently 18:10 UTC / 23:40 IST, comfortably clear of it).
-function istDateWindow(days: number): string[] {
+export function istDateWindow(days: number): string[] {
   const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000
   const nowIST = Date.now() + IST_OFFSET_MS
   return Array.from({ length: days }, (_, i) => new Date(nowIST - i * 86400000).toISOString().slice(0, 10))
