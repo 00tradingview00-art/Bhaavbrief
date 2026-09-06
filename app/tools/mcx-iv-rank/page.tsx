@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { auth } from '@clerk/nextjs/server'
-import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, ivRankSeries, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
@@ -110,7 +108,12 @@ interface VolatilityChainRow {
 // Buildup chart) so it's present in the initial HTML instead of appearing
 // only after a client-side fetch — mirrors app/options/page.tsx's
 // getOptionsChain()/getCachedOptionsChain() → initialData prop pattern.
-async function getDefaultVolatilityData(instrument: string, isPro: boolean) {
+// Server always seeds the free-tier (5-day) preview, regardless of the
+// visitor's real Pro status — reading that status here would require auth(),
+// a dynamic API that forces this whole route off ISR. A real Pro visitor gets
+// upgraded to full history client-side by OIBuildupChart's own useIsPro()
+// check instead (components/mcx/OIBuildupChart.tsx).
+async function getDefaultVolatilityData(instrument: string) {
   const chainResult = await getOptionsChain(instrument).catch(async () => {
     const cached = await getCachedOptionsChain(instrument)
     return cached as { chain: VolatilityChainRow[] } | null
@@ -125,19 +128,17 @@ async function getDefaultVolatilityData(instrument: string, isPro: boolean) {
   const history = await getOIHistory(instrument, atmStrike).catch(() => [])
   return {
     initialChain: chain,
-    initialOIHistory: isPro ? history : history.slice(-5),
-    initialPreview: !isPro,
+    initialOIHistory: history.slice(-5),
+    initialPreview: true,
   }
 }
 
 export default async function MCXIVRankPage() {
-  const { userId } = await auth()
-  const isPro = await isProUser(userId)
   const ivRanks = await getIVRanks()
   const instrumentList = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({ key, label: meta.label }))
   const defaultInstrument = instrumentList[0]?.key ?? ''
   const { initialChain, initialOIHistory, initialPreview } = defaultInstrument
-    ? await getDefaultVolatilityData(defaultInstrument, isPro)
+    ? await getDefaultVolatilityData(defaultInstrument)
     : { initialChain: null, initialOIHistory: undefined, initialPreview: undefined }
 
   // The comparison window grows daily as the IV-snapshot cron accumulates
@@ -189,7 +190,7 @@ export default async function MCXIVRankPage() {
       <section style={{ marginTop: '2rem' }}>
         <IVRankHistoryChart
           title={chartTitle}
-          isPro={isPro}
+          isPro={false}
           instruments={Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({
             key, label: meta.label, series: ivRankSeries(ivRanks[key]?.history ?? []),
           }))}
@@ -203,7 +204,7 @@ export default async function MCXIVRankPage() {
           </h2>
           <VolatilityHub
             instruments={instrumentList}
-            isPro={isPro}
+            isPro={false}
             initialInstrument={defaultInstrument}
             initialChain={initialChain ?? undefined}
             initialOIHistory={initialOIHistory}

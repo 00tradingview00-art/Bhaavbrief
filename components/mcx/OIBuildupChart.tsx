@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import ProBlurGate from '@/components/ProBlurGate'
+import { useIsPro } from '@/lib/useIsPro'
 
 interface OIPoint {
   date: string
@@ -23,18 +24,24 @@ export default function OIBuildupChart({ instrument, strike, isPro, initialData,
   const [preview, setPreview] = useState(initialPreview ?? !isPro)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState<string | null>(null)
+  // The server pages now always seed the free-tier preview regardless of the
+  // real visitor (calling auth() there would force those pages off ISR) — so
+  // a genuinely Pro visitor needs a client-side nudge to upgrade past it.
+  const clientIsPro = useIsPro()
 
   // Skip the client fetch only for the exact (instrument, strike) pair the
   // server already seeded — any later change (user picks a different
   // strike/instrument) falls through to the normal client fetch below.
   const seededKey = useRef(initialData ? `${instrument}:${strike}` : null)
+  // True only while still showing the server-seeded data with no real fetch
+  // having happened yet — cleared the moment fetchHistory actually runs, for
+  // any reason. Distinct from seededKey (which only guards the one skip) so
+  // the Pro-upgrade effect below knows whether an upgrade fetch is still owed.
+  const neverFetchedRef = useRef(!!initialData)
 
-  useEffect(() => {
+  const fetchHistory = useCallback(() => {
     if (!instrument || !strike) return
-    if (seededKey.current === `${instrument}:${strike}`) {
-      seededKey.current = null
-      return
-    }
+    neverFetchedRef.current = false
     setLoading(true)
     setError(null)
     fetch(`/api/options/oi-history?instrument=${instrument}&strike=${strike}`, { signal: AbortSignal.timeout(10000) })
@@ -47,6 +54,23 @@ export default function OIBuildupChart({ instrument, strike, isPro, initialData,
       .catch(() => setError('Failed to load OI history'))
       .finally(() => setLoading(false))
   }, [instrument, strike])
+
+  useEffect(() => {
+    if (!instrument || !strike) return
+    if (seededKey.current === `${instrument}:${strike}`) {
+      seededKey.current = null
+      return
+    }
+    fetchHistory()
+  }, [instrument, strike, fetchHistory])
+
+  // Real Pro status resolves asynchronously (useIsPro's own fetch) — once it
+  // comes back true while we're still sitting on the never-fetched seeded
+  // preview, upgrade to full history via the same (already Pro-aware)
+  // endpoint the instrument/strike-change path above uses.
+  useEffect(() => {
+    if (clientIsPro && neverFetchedRef.current) fetchHistory()
+  }, [clientIsPro, fetchHistory])
 
   if (loading) return <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>Loading OI history…</p>
   if (error)   return <p style={{ fontSize: '0.8rem', color: '#ef4444' }}>{error}</p>

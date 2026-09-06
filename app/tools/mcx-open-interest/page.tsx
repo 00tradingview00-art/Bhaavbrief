@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { auth } from '@clerk/nextjs/server'
-import { isProUser } from '@/lib/subscription'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
@@ -81,8 +79,6 @@ async function getOIData() {
 }
 
 export default async function MCXOpenInterestPage() {
-  const { userId } = await auth()
-  const isPro = await isProUser(userId)
   const oi = await getOIData()
   const anyStale = Object.values(oi).some(d => d?.stale)
   const buildupInstruments = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
@@ -101,8 +97,13 @@ export default async function MCXOpenInterestPage() {
   const initialOIHistory = defaultBuildup && defaultStrike != null
     ? await getOIHistory(defaultBuildup.key, defaultStrike).catch(() => [])
     : undefined
+  // Server always seeds the free-tier (5-day) preview, regardless of the
+  // visitor's real Pro status — reading that status here would require
+  // auth(), a dynamic API that forces this whole route off ISR. A real Pro
+  // visitor gets upgraded to full history client-side by OIBuildupChart's
+  // own useIsPro() check instead (components/mcx/OIBuildupChart.tsx).
   const initialOIData = initialOIHistory
-    ? { instrument: defaultBuildup!.key, strike: defaultStrike!, history: isPro ? initialOIHistory : initialOIHistory.slice(-5), preview: !isPro }
+    ? { instrument: defaultBuildup!.key, strike: defaultStrike!, history: initialOIHistory.slice(-5), preview: true }
     : undefined
 
   return (
@@ -155,7 +156,7 @@ export default async function MCXOpenInterestPage() {
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>OI Buildup History — by Strike</h2>
-        <OIBuildupSection instruments={buildupInstruments} isPro={isPro} initialOIData={initialOIData} />
+        <OIBuildupSection instruments={buildupInstruments} isPro={false} initialOIData={initialOIData} />
       </section>
     </main>
   )
