@@ -148,10 +148,22 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
     .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
     .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())[0]
 
-  // Fetch quotes (future + active-expiry options, up to 500)
+  // Fetch quotes (future + active-expiry options, up to 500). The AAV
+  // historical-candles fetch below only depends on `nearFut` (already
+  // resolved above), not on `quotes` — kick it off in parallel instead of
+  // waiting for the quotes round-trip to finish first.
   const optionTokens = activeOptions.map(i => i.instrument_token)
   const allTokens    = nearFut ? [nearFut.instrument_token, ...optionTokens] : optionTokens
-  const quotes       = await kc.getQuotes(allTokens.slice(0, 500))
+  const toDate       = new Date(); toDate.setDate(toDate.getDate() - 1)
+  const fromDate     = new Date(); fromDate.setDate(fromDate.getDate() - 75)
+  const fmtDate      = (d: Date) => d.toISOString().slice(0, 10)
+  const historicalPromise = nearFut
+    ? kc.getHistorical(nearFut.instrument_token, 'day', fmtDate(fromDate), fmtDate(toDate)).catch(() => null)
+    : Promise.resolve(null)
+  const [quotes, historical] = await Promise.all([
+    kc.getQuotes(allTokens.slice(0, 500)),
+    historicalPromise,
+  ])
 
   const futurePrice = nearFut ? (quotes[String(nearFut.instrument_token)]?.last_price ?? 0) : 0
 
@@ -277,17 +289,9 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
   const pcr       = totalCEOI > 0 ? parseFloat((totalPEOI / totalCEOI).toFixed(3)) : 0
   const ivix      = computeIVIX(chain, futurePrice, T, RISK_FREE_RATE)
 
-  // AAV — fetch 75 calendar days of daily closes
+  // AAV — 75 calendar days of daily closes, fetched in parallel with quotes above
   let aav: ReturnType<typeof computeAAV> = { '5d': null, '10d': null, '20d': null, '40d': null, '60d': null }
-  if (nearFut) {
-    try {
-      const toDate   = new Date(); toDate.setDate(toDate.getDate() - 1)
-      const fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 75)
-      const fmt = (d: Date) => d.toISOString().slice(0, 10)
-      const hist = await kc.getHistorical(nearFut.instrument_token, 'day', fmt(fromDate), fmt(toDate))
-      if (hist.length >= 6) aav = computeAAV(hist.map(h => h.price))
-    } catch { /* non-fatal */ }
-  }
+  if (historical && historical.length >= 6) aav = computeAAV(historical.map(h => h.price))
 
   const volPremium = ivix != null && aav['20d'] != null
     ? parseFloat((ivix - aav['20d']).toFixed(2))
