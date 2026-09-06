@@ -50,5 +50,11 @@ export default async function StrategyPage({
   const marginByInstrument = loadMarginByInstrument()
   const { userId } = await auth()
   const isPro = await isProUser(userId ?? null)
-  return <StrategyBuilder defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
+  // Keyed on defaultInstrument: StrategyBuilder seeds its `instrument` state
+  // from this prop once (useState's initial-value pattern) and never re-syncs
+  // it — a key forces a full remount (fully resetting internal state) if this
+  // page's instance is ever reused across a ?instrument= change without a
+  // remount happening on its own, rather than silently keeping stale legs/
+  // chain data for the instrument the page loaded with.
+  return <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
 }
