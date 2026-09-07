@@ -19,9 +19,10 @@ import { join, dirname, relative }            from 'path'
 import { fileURLToPath }                      from 'url'
 import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
-import { drawSparkline, drawIconArray, drawComparisonBars } from './lib/charts.mjs'
+import { drawSparkline, drawIconArray, drawComparisonBars, drawCaptionOverlay } from './lib/charts.mjs'
 import { getCloses }                          from './lib/historyReader.mjs'
 import { validateBeatCharts, deriveSnapshotChart } from './lib/chartValidation.mjs'
+import { charAlignmentToWords, chunkWords, activeChunkForFrame } from './lib/reelCaptions.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { buildHashtags }                      from './lib/reelHashtags.mjs'
 import { computeReelTiming }                  from './lib/reelTiming.mjs'
@@ -222,6 +223,59 @@ async function generateVoiceover(script, outputPath, voiceId = process.env.ELEVE
   writeFileSync(outputPath, buf)
   console.log(`  ✅  Voiceover (${(buf.length/1024).toFixed(0)} KB)`)
   return outputPath
+}
+
+/**
+ * Same voiceover as generateVoiceover(), but via the /with-timestamps
+ * endpoint, which returns character-level alignment alongside the audio —
+ * the real-second timing that drives drawCaptionOverlay's word-synced
+ * captions (scripts/lib/reelCaptions.mjs). Gated behind SYNCED_CAPTIONS so
+ * it can ship to one reel type at a time and be disabled instantly.
+ *
+ * On ANY failure (bad status, malformed/missing alignment) returns
+ * { path: null, alignment: null } and the caller falls back to plain
+ * generateVoiceover() — never breaks the pipeline over a caption feature.
+ * Response shape (audio_base64 + alignment.{characters,
+ * character_start_times_seconds, character_end_times_seconds}) is
+ * ElevenLabs' documented with-timestamps contract; still worth a real
+ * smoke-test call whenever this is touched, since this codebase has
+ * already seen Meta/ElevenLabs rename fields across API versions before.
+ */
+async function generateVoiceoverWithTimestamps(script, outputPath, voiceId = process.env.ELEVENLABS_VOICE_ID ?? DEFAULT_VOICE_ID) {
+  const apiKey = process.env.ELEVENLABS_API_KEY
+  if (!apiKey) return { path: null, alignment: null }
+
+  let body
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/with-timestamps`, {
+      method:  'POST',
+      headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text:      script,
+        model_id:  'eleven_multilingual_v2',
+        voice_settings: { stability: 0.22, similarity_boost: 0.72, style: 0.28, use_speaker_boost: true },
+      }),
+      signal: AbortSignal.timeout(30000),
+    })
+    if (!res.ok) {
+      console.warn(`  ⚠️  ElevenLabs with-timestamps failed (${res.status}) — falling back to plain voiceover`)
+      return { path: null, alignment: null }
+    }
+    body = await res.json()
+  } catch (e) {
+    console.warn(`  ⚠️  ElevenLabs with-timestamps request failed (${e.message}) — falling back to plain voiceover`)
+    return { path: null, alignment: null }
+  }
+
+  const alignment = body?.alignment
+  if (!body?.audio_base64 || !Array.isArray(alignment?.characters) || !Array.isArray(alignment?.character_start_times_seconds)) {
+    console.warn('  ⚠️  ElevenLabs with-timestamps returned an unexpected shape — falling back to plain voiceover')
+    return { path: null, alignment: null }
+  }
+
+  writeFileSync(outputPath, Buffer.from(body.audio_base64, 'base64'))
+  console.log(`  ✅  Voiceover with timestamps (${alignment.characters.length} chars aligned)`)
+  return { path: outputPath, alignment }
 }
 
 // ── Hindi copy translation — one call for all 7 on-screen/spoken fields, so
@@ -1000,6 +1054,16 @@ function drawCTA(ctx, t, mood, edition, lang = 'en') {
 }
 
 // ── Frame dispatcher ──────────────────────────────────────────────────────────
+// Word-synced caption chunks (see scripts/lib/reelCaptions.mjs) for the
+// English pass — assigned once real voiceover alignment is available
+// (main(), below), read here by frame number. Real per-second timestamps
+// from ElevenLabs, not tied to computeReelTiming()'s scaled phase
+// boundaries at all — see drawCaptionOverlay's own comment for why. English
+// only for now: Hindi/Devanagari word-boundary behavior on the alignment
+// API hasn't been verified yet, so the Hindi render pass never populates
+// this and renderFrame skips the overlay whenever lang !== 'en'.
+let captionChunks = []
+
 function renderFrame(frame, copy, data, snapshot, mood, hookCloses, timing, lang = 'en') {
   const canvas = createCanvas(W, H)
   const ctx    = canvas.getContext('2d')
@@ -1031,6 +1095,19 @@ function renderFrame(frame, copy, data, snapshot, mood, hookCloses, timing, lang
     drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood, lang)
   } else {
     drawCTA(ctx, (frame - PAYOFF_END) / (CTA_END - PAYOFF_END), mood, edition, lang)
+  }
+
+  if (lang === 'en' && captionChunks.length) {
+    // Sits just above the shared footer/edition-chip zone every phase
+    // already reserves near BOT_SAFE; on a beat with a chart this does
+    // cover the bottom sliver of it — a normal trade-off of a burned-in
+    // caption overlaying video content rather than reserving empty space
+    // for it everywhere.
+    const PAD = 68
+    drawCaptionOverlay(ctx, {
+      x: PAD, y: BOT_SAFE - 150, w: W - PAD * 2,
+      chunk: activeChunkForFrame(captionChunks, frame, FPS),
+    })
   }
 
   return canvas.toBuffer('image/png')
@@ -1235,7 +1312,24 @@ console.log(`  voice:        "${copy.voiceover}"\n`)
 
 const VO_FILE = join(ROOT, `.reel-vo-${padded}.mp3`)
 console.log('🎙️   Generating voiceover...')
-const voiceoverPath = copy.voiceover ? await generateVoiceover(copy.voiceover, VO_FILE) : null
+const SYNCED_CAPTIONS = process.env.SYNCED_CAPTIONS === 'true'
+let voiceoverPath = null
+let voiceAlignment = null
+if (copy.voiceover) {
+  if (SYNCED_CAPTIONS) {
+    const withTimestamps = await generateVoiceoverWithTimestamps(copy.voiceover, VO_FILE)
+    voiceoverPath = withTimestamps.path
+    voiceAlignment = withTimestamps.alignment
+  }
+  // Falls back to the plain endpoint both when SYNCED_CAPTIONS is off and
+  // when the timestamps call above failed for any reason — captions are a
+  // presentation extra, never a reason a reel goes out with no voice at all.
+  if (!voiceoverPath) voiceoverPath = await generateVoiceover(copy.voiceover, VO_FILE)
+}
+if (voiceAlignment) {
+  captionChunks = chunkWords(charAlignmentToWords(voiceAlignment))
+  console.log(`  💬  Synced captions: ${captionChunks.length} chunk(s)`)
+}
 console.log()
 
 // ── Voiceover-driven timing rescale ────────────────────────────────────────

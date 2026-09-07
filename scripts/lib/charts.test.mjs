@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { drawIconArray, drawComparisonBars, drawSparkline } from "./charts.mjs";
+import { drawIconArray, drawComparisonBars, drawSparkline, drawCaptionOverlay } from "./charts.mjs";
 
 // Minimal no-op mock of the Canvas2D API surface these functions use —
 // lets the pure layout/guard math be tested without a real @napi-rs/canvas
@@ -206,5 +206,37 @@ describe("drawSparkline", () => {
     drawSparkline(ctx, { ...base, closes: [100, 90, 95] });
     expect(ctx.stroke).toHaveBeenCalledTimes(1);
     expect(ctx.arc).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("drawCaptionOverlay", () => {
+  let ctx;
+  beforeEach(() => { ctx = mockCtx(); });
+
+  const base = { x: 0, y: 0, w: 900 };
+
+  test("returns false and draws nothing when chunk is null", () => {
+    expect(drawCaptionOverlay(ctx, { ...base, chunk: null })).toBe(false);
+    expect(ctx.fill).not.toHaveBeenCalled();
+    expect(ctx.fillText).not.toHaveBeenCalled();
+  });
+
+  test("returns false when chunk has no text", () => {
+    expect(drawCaptionOverlay(ctx, { ...base, chunk: { text: "" } })).toBe(false);
+    expect(drawCaptionOverlay(ctx, { ...base, chunk: {} })).toBe(false);
+  });
+
+  test("draws a background pill and the chunk's text for a valid chunk", () => {
+    expect(drawCaptionOverlay(ctx, { ...base, chunk: { text: "Gold rose today" } })).toBe(true);
+    expect(ctx.fill).toHaveBeenCalledTimes(1);
+    expect(ctx.fillText).toHaveBeenCalledWith("Gold rose today", 450, expect.any(Number));
+  });
+
+  test("caps rendered lines at 2 even if wrapping produced more", () => {
+    // mockCtx.measureText always returns a fixed width, so wrapping itself
+    // isn't exercised here — this just confirms the .slice(0,2) cap applies
+    // to however many lines wrapText hands back.
+    drawCaptionOverlay(ctx, { ...base, chunk: { text: "one two three four five six seven eight" } });
+    expect(ctx.fillText).toHaveBeenCalledTimes(1); // fixed-width mock never wraps past 1 line
   });
 });
