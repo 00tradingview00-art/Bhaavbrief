@@ -2,7 +2,7 @@
 /**
  * scripts/generate-brief-reel.mjs
  *
- * BhaavBrief — 35-second 1080×1920 Reel generator.
+ * BhaavBrief — ~20-second 1080×1920 Reel generator.
  * Broader framing, genuine motion, one idea per screen.
  *
  * Usage:
@@ -29,7 +29,7 @@ import { parseHindiCopyResponse }             from './lib/reelHindiCopy.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
-const PROMPT_VERSION = 'reel_v2'
+const PROMPT_VERSION = 'reel_v3'
 const HINDI_PROMPT_VERSION = 'reel_hindi_v1'
 
 // ── Env ───────────────────────────────────────────────────────────────────────
@@ -352,14 +352,20 @@ const W = 1080, H = 1920, FPS = 30
 // generate-ivix-reel.mjs's history, now fixed at the source (this file is
 // the shared engine both scripts/generate-brief-reel.mjs's own callers and
 // scripts/generate-learn-reel.mjs render through).
+// Shortened from a 35s baseline (HOOK 3 / BEAT 8-8-7 / PAYOFF 5 / CTA 4) on
+// 2026-09-08 — real posted reels average only 2-3s of watch time regardless
+// of total length, so a shorter reel turns that same watch time into a much
+// higher completion %, which is the signal the platform actually rewards.
+// Relative phase weighting is kept the same, just scaled down; see
+// prompts/reel_v3.md's changelog for the matching voiceover-length cut.
 const COVER_DUR  = 0     // cover removed — hook renders from frame 0 (first-frame value rule);
                          // drawCover() kept below but never dispatched while this is 0
-const HOOK_DUR   = 3.0
-const BEAT1_DUR  = 8.0
-const BEAT2_DUR  = 8.0
-const BEAT3_DUR  = 7.0
-const PAYOFF_DUR = 5.0
-const CTA_DUR    = 4.0   // silent/music-only outro tail — not part of the spoken script, stays fixed
+const HOOK_DUR   = 2.0
+const BEAT1_DUR  = 4.5
+const BEAT2_DUR  = 4.5
+const BEAT3_DUR  = 4.0
+const PAYOFF_DUR = 3.0
+const CTA_DUR    = 2.0   // silent/music-only outro tail — not part of the spoken script, stays fixed
 const TOTAL_DUR  = COVER_DUR + HOOK_DUR + BEAT1_DUR + BEAT2_DUR + BEAT3_DUR + PAYOFF_DUR + CTA_DUR
 // The portion of the video the voiceover actually speaks over (everything
 // except the silent CTA outro) — rescaling target for the real audio length.
