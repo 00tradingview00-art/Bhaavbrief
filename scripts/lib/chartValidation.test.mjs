@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { validateChart } from "./chartValidation.mjs";
+import { validateChart, validateBeatCharts, deriveSnapshotChart } from "./chartValidation.mjs";
 
 const FACTS = [
   "MCX gold offers roughly 14–20x leverage; Gold ETFs offer none — 1x price exposure only",
@@ -22,9 +22,9 @@ describe("validateChart — pass-through cases", () => {
     expect(validateChart({ type: "pie_chart", beat: 1 }, { facts: FACTS })).toEqual({ type: "none" });
   });
 
-  test("missing/invalid beat demotes to none", () => {
+  test("a `beat` field, if present, is ignored — the schema is now one chart per beat, positional", () => {
     const chart = { type: "icon_array", beat: 4, icon_array: { filled: 17, total: 20 } };
-    expect(validateChart(chart, { facts: FACTS })).toEqual({ type: "none" });
+    expect(validateChart(chart, { facts: FACTS })).toEqual(chart);
   });
 });
 
@@ -118,5 +118,56 @@ describe("validateChart — two_bar", () => {
       two_bar: { labelA: "Today", valueA: 999999, labelB: "Yesterday", valueB: 141781, unit: "₹" },
     };
     expect(validateChart(chart, { snapshot })).toEqual({ type: "none" });
+  });
+});
+
+describe("validateBeatCharts", () => {
+  test("validates each beat independently — one bad beat doesn't demote the others", () => {
+    const good = { type: "icon_array", icon_array: { filled: 17, total: 20 } };
+    const bad  = { type: "icon_array", icon_array: { filled: 999, total: 20 } }; // fabricated
+    const result = validateBeatCharts(
+      { beat1_chart: good, beat2_chart: bad, beat3_chart: { type: "none" } },
+      { facts: FACTS }
+    );
+    expect(result.beat1_chart).toEqual(good);
+    expect(result.beat2_chart).toEqual({ type: "none" });
+    expect(result.beat3_chart).toEqual({ type: "none" });
+  });
+
+  test("missing input defaults every beat to none", () => {
+    expect(validateBeatCharts(undefined, { facts: FACTS })).toEqual({
+      beat1_chart: { type: "none" }, beat2_chart: { type: "none" }, beat3_chart: { type: "none" },
+    });
+  });
+});
+
+describe("deriveSnapshotChart", () => {
+  test("builds a Today vs Yesterday two_bar chart from a real snapshot", () => {
+    const snapshot = { instruments: { MCX_GOLD: { price: 141809, prevClose: 141781 } } };
+    expect(deriveSnapshotChart(snapshot, "MCX_GOLD")).toEqual({
+      type: "two_bar",
+      two_bar: { labelA: "Today", valueA: 141809, labelB: "Yesterday", valueB: 141781, unit: "₹" },
+    });
+  });
+
+  test("returns none when price and prevClose are identical (nothing to compare)", () => {
+    const snapshot = { instruments: { MCX_GOLD: { price: 141809, prevClose: 141809 } } };
+    expect(deriveSnapshotChart(snapshot, "MCX_GOLD")).toEqual({ type: "none" });
+  });
+
+  test("returns none when the instrument or snapshot is missing", () => {
+    expect(deriveSnapshotChart(null, "MCX_GOLD")).toEqual({ type: "none" });
+    expect(deriveSnapshotChart({ instruments: {} }, "MCX_GOLD")).toEqual({ type: "none" });
+  });
+
+  test("returns none when prevClose is non-finite", () => {
+    const snapshot = { instruments: { MCX_GOLD: { price: 141809, prevClose: null } } };
+    expect(deriveSnapshotChart(snapshot, "MCX_GOLD")).toEqual({ type: "none" });
+  });
+
+  test("the derived chart itself passes validateChart against the same snapshot", () => {
+    const snapshot = { instruments: { MCX_GOLD: { price: 141809, prevClose: 141781 } } };
+    const derived = deriveSnapshotChart(snapshot, "MCX_GOLD");
+    expect(validateChart(derived, { snapshot })).toEqual(derived);
   });
 });

@@ -1,8 +1,12 @@
 /**
- * scripts/lib/chartValidation.mjs — deterministic guard on the `chart`
- * field Haiku emits alongside reel copy (scripts/generate-brief-reel.mjs's
- * extractReelCopy/extractNewsReelCopy), before that data is trusted to
- * render via scripts/lib/charts.mjs.
+ * scripts/lib/chartValidation.mjs — deterministic guard on the
+ * `beat1_chart`/`beat2_chart`/`beat3_chart` fields Haiku emits alongside
+ * reel copy (scripts/generate-brief-reel.mjs's extractReelCopy/
+ * extractNewsReelCopy), before that data is trusted to render via
+ * scripts/lib/charts.mjs. One chart per beat, each validated independently —
+ * earlier versions of this schema had a single `chart: {type, beat}` field
+ * covering the whole reel, so at most one of the three beats ever got a
+ * chart at all.
  *
  * This codebase has already learned, repeatedly (scripts/lib/claimsCheck.mjs,
  * scripts/lib/staleInstrumentCheck.mjs, scripts/lib/semanticDemote.mjs, the
@@ -21,6 +25,10 @@
  * range-derived pick. A value is accepted if it falls inside any numeric
  * range mentioned in the source text, or within a small tolerance of any
  * single number mentioned in the source text or the day's snapshot.
+ *
+ * deriveSnapshotChart() is the non-LLM safety net: a plain "Today vs
+ * Yesterday" comparison built straight from the snapshot, for beats where
+ * Haiku genuinely found no comparable pair worth charting.
  */
 
 const NUMBER_RE = /([\d,]+(?:\.\d+)?)/g
@@ -113,7 +121,6 @@ export function validateChart(chart, { facts = [], snapshot = null } = {}) {
   if (!chart || typeof chart !== 'object') return { type: 'none' }
   if (chart.type === 'none') return { type: 'none' }
   if (chart.type !== 'icon_array' && chart.type !== 'two_bar') return { type: 'none' }
-  if (![1, 2, 3].includes(chart.beat)) return { type: 'none' }
 
   const pool = extractNumbersAndRanges(Array.isArray(facts) ? facts.join(' \n ') : '')
   if (snapshot) pool.singles.push(...flattenNumbers(snapshot))
@@ -130,4 +137,42 @@ export function validateChart(chart, { facts = [], snapshot = null } = {}) {
   const { valueA, valueB } = chart.two_bar
   if (!isPlausible(valueA, pool) || !isPlausible(valueB, pool)) return { type: 'none' }
   return chart
+}
+
+/**
+ * Validates one chart per beat (each independently — a beat's chart is only
+ * ever demoted to `{type:'none'}` on its own merits, never because a
+ * sibling beat's chart failed). Replaces the old single-chart-per-reel
+ * `chart: {type, beat}` schema, where only one of the three beats could
+ * ever carry a chart.
+ * @param {{beat1_chart?: object, beat2_chart?: object, beat3_chart?: object}} charts
+ * @param {{ facts?: string[], snapshot?: object }} source
+ */
+export function validateBeatCharts({ beat1_chart, beat2_chart, beat3_chart } = {}, source) {
+  return {
+    beat1_chart: validateChart(beat1_chart, source),
+    beat2_chart: validateChart(beat2_chart, source),
+    beat3_chart: validateChart(beat3_chart, source),
+  }
+}
+
+/**
+ * Builds a "Today vs Yesterday" two_bar chart directly from the day's
+ * already-fetched price snapshot — no LLM involved, so it carries zero
+ * hallucination risk. Used as a safety net when Haiku legitimately found no
+ * comparable pair for a beat (validateChart demoted it to `{type:'none'}`),
+ * so a reel is never left with every beat showing plain text.
+ * @returns {object} a two_bar chart, or {type:'none'} if the snapshot lacks
+ *   a finite price/prevClose pair for this instrument, or they're equal
+ *   (nothing to compare).
+ */
+export function deriveSnapshotChart(snapshot, instrumentKey, unit = '₹') {
+  const instr = snapshot?.instruments?.[instrumentKey]
+  const price = instr?.price
+  const prevClose = instr?.prevClose
+  if (!Number.isFinite(price) || !Number.isFinite(prevClose) || price === prevClose) return { type: 'none' }
+  return {
+    type: 'two_bar',
+    two_bar: { labelA: 'Today', valueA: price, labelB: 'Yesterday', valueB: prevClose, unit },
+  }
 }

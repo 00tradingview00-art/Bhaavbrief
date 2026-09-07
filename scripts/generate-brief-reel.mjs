@@ -21,7 +21,7 @@ import { execFileSync }                       from 'child_process'
 import matter                                 from 'gray-matter'
 import { drawSparkline, drawIconArray, drawComparisonBars } from './lib/charts.mjs'
 import { getCloses }                          from './lib/historyReader.mjs'
-import { validateChart }                      from './lib/chartValidation.mjs'
+import { validateBeatCharts, deriveSnapshotChart } from './lib/chartValidation.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { buildHashtags }                      from './lib/reelHashtags.mjs'
 import { computeReelTiming }                  from './lib/reelTiming.mjs'
@@ -29,7 +29,7 @@ import { parseHindiCopyResponse }             from './lib/reelHindiCopy.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT      = join(__dirname, '..')
-const PROMPT_VERSION = 'reel_v1'
+const PROMPT_VERSION = 'reel_v2'
 const HINDI_PROMPT_VERSION = 'reel_hindi_v1'
 
 // ── Env ───────────────────────────────────────────────────────────────────────
@@ -819,8 +819,10 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null, lang = 
   // vertically centered within the TOP ~45% of the content region instead
   // of the whole thing, leaving the bottom for the chart — a layout change
   // inside drawBeat rather than a new phase, so beat pacing/animation stays
-  // unified with the no-chart case.
-  const hasChart   = !!chart && chart.beat === beatIndex && chart.type !== 'none'
+  // unified with the no-chart case. `chart` is already this specific beat's
+  // own validated chart (see beatCharts in main()) — no beat-index matching
+  // needed here anymore.
+  const hasChart   = !!chart && chart.type !== 'none'
   const contentTop = HEADER_BOTTOM + 20
   const contentBot = BOT_SAFE - 80
   const fullH       = contentBot - contentTop
@@ -1014,11 +1016,11 @@ function renderFrame(frame, copy, data, snapshot, mood, hookCloses, timing, lang
       drawHookConcept(ctx, t, copy, mood, edition, lang)
     }
   } else if (frame < BEAT1_END) {
-    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood, copy.chart, lang)
+    drawBeat(ctx, (frame - HOOK_END) / (BEAT1_END - HOOK_END), copy.beat1, 1, snapshot, mood, beatCharts.beat1_chart, lang)
   } else if (frame < BEAT2_END) {
-    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood, copy.chart, lang)
+    drawBeat(ctx, (frame - BEAT1_END) / (BEAT2_END - BEAT1_END), copy.beat2, 2, snapshot, mood, beatCharts.beat2_chart, lang)
   } else if (frame < BEAT3_END) {
-    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood, copy.chart, lang)
+    drawBeat(ctx, (frame - BEAT2_END) / (BEAT3_END - BEAT2_END), copy.beat3, 3, snapshot, mood, beatCharts.beat3_chart, lang)
   } else if (frame < PAYOFF_END) {
     drawPayoff(ctx, (frame - BEAT3_END) / (PAYOFF_END - BEAT3_END), copy, mood, lang)
   } else {
@@ -1180,19 +1182,32 @@ const copy = isNewsMode
   ? await extractNewsReelCopy(TOPIC, CONTEXT, snapshot, history)
   : await extractReelCopy({ data, content }, snapshot, history)
 
-// Deterministic guard on the chart Haiku just emitted — see
+// Deterministic guard on the charts Haiku just emitted — see
 // scripts/lib/chartValidation.mjs's header for why a prompt instruction
-// alone isn't trusted to keep a number from being fabricated. Demotes to
-// type:'none' (drawBeat falls back to its existing plain-text rendering)
-// if the structure is invalid or the numbers don't trace back to the
-// source material. Uses the full brief content (not the 1000-char excerpt
-// actually sent to Haiku) / full CONTEXT text as the source-of-truth pool —
-// a superset of what the prompt saw, so this can only be more permissive
-// toward genuine numbers, never reject something Haiku legitimately saw.
-copy.chart = validateChart(copy.chart, {
-  facts: [isNewsMode ? (CONTEXT ?? '') : content],
-  snapshot,
-})
+// alone isn't trusted to keep a number from being fabricated. Each beat's
+// chart is validated independently; a beat that fails (or that Haiku
+// legitimately found no comparable pair for) demotes to type:'none' —
+// drawBeat falls back to its existing plain-text rendering for that beat
+// specifically, not the whole reel. Uses the full brief content (not the
+// 1000-char excerpt actually sent to Haiku) / full CONTEXT text as the
+// source-of-truth pool — a superset of what the prompt saw, so this can
+// only be more permissive toward genuine numbers, never reject something
+// Haiku legitimately saw.
+const beatCharts = validateBeatCharts(
+  { beat1_chart: copy.beat1_chart, beat2_chart: copy.beat2_chart, beat3_chart: copy.beat3_chart },
+  { facts: [isNewsMode ? (CONTEXT ?? '') : content], snapshot }
+)
+
+// Safety net: if beat1 still has no chart (no clean LLM-found comparison
+// today), fall back to a plain "Today vs Yesterday" chart built straight
+// from the snapshot — zero hallucination risk since no LLM is involved —
+// so a reel is never left with every beat as plain text.
+if (beatCharts.beat1_chart.type === 'none') {
+  const dominantKey = dominantMover(snapshot, copy?.dominant_instrument).key
+  const derived = deriveSnapshotChart(snapshot, dominantKey)
+  if (derived.type !== 'none') beatCharts.beat1_chart = derived
+}
+
 console.log(`  type:         "${copy.content_type}"`)
 console.log(`  hook_caption: "${copy.hook_caption}"`)
 console.log(`  stat:         "${copy.stat_line}"`)
@@ -1200,7 +1215,7 @@ console.log(`  beat1:        "${copy.beat1}"`)
 console.log(`  beat2:        "${copy.beat2}"`)
 console.log(`  beat3:        "${copy.beat3}"`)
 console.log(`  payoff:       "${copy.payoff}"`)
-console.log(`  chart:        ${copy.chart?.type ?? 'none'}${copy.chart?.type !== 'none' ? ` (beat ${copy.chart.beat})` : ''}`)
+console.log(`  charts:       beat1=${beatCharts.beat1_chart.type}, beat2=${beatCharts.beat2_chart.type}, beat3=${beatCharts.beat3_chart.type}`)
 
 // Computed once (not per-frame — the hook phase alone is ~90 frames) for
 // drawHook's 7-day trend sparkline. Only meaningful for price_move reels;
