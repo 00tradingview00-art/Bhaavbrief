@@ -1,5 +1,6 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { getAllArticles } from '@/lib/articles'
+import { getAllFlash } from '@/lib/flash'
 import { getAllResearch } from '@/lib/research'
 
 export const dynamic = 'force-dynamic'
@@ -14,6 +15,7 @@ export async function GET() {
 
   const recentBriefs  = briefs.slice(0, 10)
   const recentArticles = articles.slice(0, 10)
+  const recentFlash = getAllFlash().slice(0, 10)
   const recentResearch = getAllResearch().filter(r => r.published).slice(0, 10)
 
   const body = `# BhaavBrief
@@ -100,10 +102,16 @@ ${recentBriefs.map(b =>
   `- [${b.title}](${BASE}/briefs/${b.urlSlug}): ${b.displayDate ?? b.date}${b.summary ? ' — ' + b.summary.slice(0, 120) : ''}`
 ).join('\n')}
 
-## Recent Flash Intelligence
+## Recent Articles
 
 ${recentArticles.map(a =>
   `- [${a.title}](${BASE}/articles/${a.slug}): ${a.displayDate}${a.description ? ' — ' + a.description.slice(0, 120) : ''}`
+).join('\n')}
+
+## Recent Flash Intelligence
+
+${recentFlash.map(f =>
+  `- [${f.title}](${BASE}/flash/${f.slug}): ${f.date.slice(0, 10)}${f.excerpt ? ' — ' + f.excerpt.slice(0, 120) : ''}`
 ).join('\n')}
 
 ## Data Coverage

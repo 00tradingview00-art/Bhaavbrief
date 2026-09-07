@@ -4,8 +4,33 @@ import path from 'path'
 import StrategyBuilder from '@/components/mcx/StrategyBuilder'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
+import { safeJsonLd } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
+
+const SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebApplication',
+      name: 'MCX Options Strategy Builder',
+      url: 'https://bhaavbrief.in/options/strategy',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Any (web browser)',
+      description: 'Build and analyse multi-leg MCX commodity options strategies with live payoff diagrams and IV regime signals.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      provider: { '@id': 'https://bhaavbrief.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bhaavbrief.in' },
+        { '@type': 'ListItem', position: 2, name: 'Options', item: 'https://bhaavbrief.in/options' },
+        { '@type': 'ListItem', position: 3, name: 'Strategy Builder' },
+      ],
+    },
+  ],
+}
 
 export const metadata: Metadata = {
   title: 'MCX Options Strategy Builder — BhaavBrief',
@@ -72,5 +97,10 @@ export default async function StrategyPage({
   // page's instance is ever reused across a ?instrument= change without a
   // remount happening on its own, rather than silently keeping stale legs/
   // chain data for the instrument the page loaded with.
-  return <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
+      <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
+    </>
+  )
 }

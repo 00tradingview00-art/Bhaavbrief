@@ -50,7 +50,11 @@ export async function generateMetadata(
   return {
     title,
     description,
-    robots: { index: false, follow: false },
+    // Indexable — do NOT reintroduce noindex here. It was added 2026-07-21 for
+    // crawl-budget reasons, reverted 2026-07-27, then mistakenly re-added
+    // 2026-08-11 while fixing an unrelated GSC issue, causing a real round of
+    // pages to drop out of Google's index. See app/sitemap.xml/route.ts for
+    // why these pages are still deliberately left out of sitemap.xml.
     alternates: { canonical: url },
     openGraph: {
       type: 'article', url, title, description,
