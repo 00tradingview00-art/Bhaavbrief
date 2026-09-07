@@ -16,6 +16,7 @@ import {
 } from '@/lib/ivAnalysis'
 import Link from 'next/link'
 import { MCX_INSTRUMENTS } from '@/lib/options'
+import { formatRemaining, formatIST } from '@/lib/formatTime'
 import type { EventMapEntry } from '@/lib/eventMapTypes'
 import ProBlurGate from '@/components/ProBlurGate'
 
@@ -48,6 +49,8 @@ interface ChainData {
   riskFreeRate: number
   chain:        ChainRow[]
   stale?:       boolean
+  lastUpdated:  string
+  nextOpenAt?:  string | null
 }
 
 interface EdgeResolution {
@@ -558,6 +561,7 @@ export default function StrategyBuilder({
   const [savedPnls,     setSavedPnls]     = useState<Record<string, number | null>>({})
   const [loading,       setLoading]       = useState(false)
   const [error,         setError]         = useState<string | null>(null)
+  const [errorNextOpenAt, setErrorNextOpenAt] = useState<string | null>(null)
   const [lastFetchedAt, setLastFetchedAt] = useState<Date | null>(null)
   const [secondsAgo,    setSecondsAgo]    = useState(0)
   const [saveLabel,     setSaveLabel]     = useState('')
@@ -643,6 +647,7 @@ export default function StrategyBuilder({
   const fetchData = useCallback(async (inst: string, exp?: string, preserveLegs = false) => {
     setLoading(true)
     setError(null)
+    setErrorNextOpenAt(null)
     try {
       const chainUrl = `/api/options?instrument=${inst}${exp ? `&expiry=${exp}` : ''}`
       const ivUrl    = `/api/options/iv-history?instrument=${inst}`
@@ -656,7 +661,11 @@ export default function StrategyBuilder({
         setIvHistory(ivJson.history ?? [])
       }
 
-      if (!chainRes.ok) throw new Error('Failed to load options chain')
+      if (!chainRes.ok) {
+        const body = await chainRes.json().catch(() => null) as { nextOpenAt?: string | null } | null
+        setErrorNextOpenAt(body?.nextOpenAt ?? null)
+        throw new Error('Failed to load options chain')
+      }
       const chainJson = await chainRes.json()
       setChainData(chainJson)
       allChainDataRef.current[`${inst}:${chainJson.expiry}`] = chainJson
@@ -1055,6 +1064,7 @@ export default function StrategyBuilder({
       {error && (
         <div style={{ background: 'var(--down-bg, #FAF0EE)', border: '1px solid var(--down, #B53A2A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--down, #B53A2A)', fontSize: 15 }}>
           {error} — please try again in a moment.
+          {errorNextOpenAt && ` Market reopens in ${formatRemaining(new Date(errorNextOpenAt).getTime() - Date.now())}.`}
         </div>
       )}
 
@@ -1062,7 +1072,8 @@ export default function StrategyBuilder({
           WCAG AA) — gold-dark passes (4.86:1). */}
       {chainData?.stale && (
         <div style={{ background: 'rgba(181, 134, 42, 0.08)', border: '1px solid var(--gold, #B5862A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--gold-dark, #8B6520)', fontSize: 14 }}>
-          ⚠ Showing the last known chain — live data is temporarily unavailable and this may be out of date.
+          ⚠ Showing the last known chain, as of {formatIST(chainData.lastUpdated)}.
+          {chainData.nextOpenAt && ` Market reopens in ${formatRemaining(new Date(chainData.nextOpenAt).getTime() - Date.now())}.`}
         </div>
       )}
 

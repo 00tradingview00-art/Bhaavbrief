@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
+import { formatRemaining, formatIST } from '@/lib/formatTime'
 import { useIVHistory } from '@/lib/useIVHistory'
 import { useIsPro } from '@/lib/useIsPro'
 import IVSkewChart from './IVSkewChart'
@@ -56,7 +57,7 @@ interface OptionsData {
   ivix: number|null; aav: AAVResult; volPremium: number|null
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
   riskFreeRate: number; riskFreeRateAsOf: string
-  stale?: boolean
+  stale?: boolean; nextOpenAt?: string | null
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -473,6 +474,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
   const [data, setData]             = useState<OptionsData|null>(initialData)
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string|null>(null)
+  const [errorNextOpenAt, setErrorNextOpenAt] = useState<string|null>(null)
   const [showGreeks, setShowGreeks] = useState(false)
   const [showAAV, setShowAAV]       = useState(false)
   const [mapView, setMapView]       = useState<'oi'|'iv'|'skew'|null>('oi')
@@ -496,12 +498,16 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
   const seededDataRef       = useRef(initialData)
 
   const fetchData = useCallback(async (): Promise<OptionsData|null> => {
-    setLoading(true); setError(null)
+    setLoading(true); setError(null); setErrorNextOpenAt(null)
     try {
       const params = new URLSearchParams({ instrument })
       if (expiry) params.set('expiry', expiry)
       const res = await fetch(`/api/options?${params}`)
-      if (!res.ok) throw new Error(((await res.json()) as { error: string }).error)
+      if (!res.ok) {
+        const body = await res.json() as { error: string; nextOpenAt?: string | null }
+        setErrorNextOpenAt(body.nextOpenAt ?? null)
+        throw new Error(body.error)
+      }
       const json: OptionsData = await res.json()
       setData(json)
       setLastRefresh(new Date())
@@ -739,7 +745,8 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
       )}
       {data?.stale && (
         <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
-          ⚠ Showing the last known chain — live data is temporarily unavailable and this may be out of date.
+          ⚠ Showing the last known chain, as of {formatIST(data.lastUpdated)}.
+          {data.nextOpenAt && ` Market reopens in ${formatRemaining(new Date(data.nextOpenAt).getTime() - Date.now())}.`}
         </div>
       )}
 
@@ -756,7 +763,12 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         </div>
       )}
 
-      {error && <div style={{ padding: '10px 14px', color: C.dn, fontSize: 12, fontFamily: C.sans }}>{error}</div>}
+      {error && (
+        <div style={{ padding: '10px 14px', color: C.dn, fontSize: 12, fontFamily: C.sans }}>
+          {error}
+          {errorNextOpenAt && ` Market reopens in ${formatRemaining(new Date(errorNextOpenAt).getTime() - Date.now())}.`}
+        </div>
+      )}
 
       {/* ── OI concentration map / IV skew chart ── */}
       {data?.chain && mapView === 'oi' && <OIConcentrationChart chain={mainPage} />}
