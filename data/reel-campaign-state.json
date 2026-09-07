@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 4,
+  "nextDay": 5,
   "log": [
+    {
+      "day": 4,
+      "pillar": "OPT",
+      "feature": "Full free option chain, all 5 commodities",
+      "file": "public/reels/news-20260907-full-free-option-chain-all-5-commodities.mp4",
+      "generated_at": "2026-09-07T15:59:27.463Z"
+    },
     {
       "day": 3,
       "pillar": "LIVE",
