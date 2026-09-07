@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-101",
+    "href": "/briefs/edition-101",
+    "title": "War Trade Cracks: Gold Falls ₹2,960 While COMEX Holds",
+    "description": "MCX gold drops sharply even as COMEX rises, exposing a rupee-driven divergence as the war trade narrative shows its first fracture.",
+    "excerpt": "MCX Gold ₹152815 | Crude ₹8571 | USDINR ₹94.53 — Gold -1.90% | Crude -0.83% | Silver -2.00% Yesterday's Edge — Result: Edition #100 watched whether COMEX GOLD would close above 4,525.7. Rejected ✗, no",
+    "date": "2026-09-07T00:40:55.736Z",
+    "edition": "101",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-100",
     "href": "/briefs/edition-100",
     "title": "Gold Surges $159 as the War Trade Reunites at Full Force",
