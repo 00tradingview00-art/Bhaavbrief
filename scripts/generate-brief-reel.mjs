@@ -1327,6 +1327,10 @@ appendHistory({
   beat1:         copy.beat1 ?? '',
   beat2:         copy.beat2 ?? '',
   beat3:         copy.beat3 ?? '',
+  // Which beats actually got a chart (post-validation/safety-net) — recorded
+  // so the weekly reel report (scripts/generate-reel-report.mjs) can track
+  // chart-coverage trend over time, not just infer it from a single run's logs.
+  charts:        { beat1: beatCharts.beat1_chart.type, beat2: beatCharts.beat2_chart.type, beat3: beatCharts.beat3_chart.type },
   instagram_id:  null,   // filled in by post-reel-instagram.mjs after publishing
   generated_at:  new Date().toISOString(),
   edition:       edition ?? null,
