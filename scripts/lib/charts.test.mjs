@@ -10,12 +10,13 @@ function mockCtx() {
     beginPath: vi.fn(), closePath: vi.fn(),
     moveTo: vi.fn(), lineTo: vi.fn(), quadraticCurveTo: vi.fn(),
     arc: vi.fn(), fill: vi.fn(), stroke: vi.fn(),
-    fillText: vi.fn(),
+    fillText: vi.fn(), save: vi.fn(), restore: vi.fn(),
     measureText: vi.fn(() => ({ width: 40 })),
     createLinearGradient: vi.fn(() => ({ addColorStop: vi.fn() })),
     set fillStyle(v) {}, get fillStyle() { return this._fs; },
     set strokeStyle(v) {}, get strokeStyle() { return this._ss; },
     font: "", textAlign: "left", lineWidth: 1, lineJoin: "miter", lineCap: "butt",
+    globalAlpha: 1,
   };
 }
 
@@ -61,6 +62,22 @@ describe("drawIconArray", () => {
   test("filled=0 (valid, just an empty pictograph) still draws and returns true", () => {
     expect(drawIconArray(ctx, { ...base, filled: 0, total: 8 })).toBe(true);
     expect(ctx.arc).toHaveBeenCalledTimes(8);
+  });
+
+  test("reveal=0 — still returns true (valid chart) but draws nothing yet", () => {
+    expect(drawIconArray(ctx, { ...base, filled: 7, total: 10, reveal: 0 })).toBe(true);
+    expect(ctx.arc).not.toHaveBeenCalled();
+    expect(ctx.fillText).not.toHaveBeenCalled();
+  });
+
+  test("reveal=0.5 with 10 icons — only the first 5 have popped in", () => {
+    expect(drawIconArray(ctx, { ...base, filled: 7, total: 10, reveal: 0.5 })).toBe(true);
+    expect(ctx.arc).toHaveBeenCalledTimes(5);
+  });
+
+  test("reveal=1 (default) — same call count as before this change", () => {
+    expect(drawIconArray(ctx, { ...base, filled: 7, total: 10 })).toBe(true);
+    expect(ctx.arc).toHaveBeenCalledTimes(10);
   });
 });
 
@@ -112,6 +129,24 @@ describe("drawComparisonBars", () => {
     ];
     expect(drawComparisonBars(ctx, { ...base, bars })).toBe(true);
   });
+
+  test("reveal=0 — valid chart, but no bar has grown yet", () => {
+    const bars = [
+      { label: "A", value: 10, color: "#f00" },
+      { label: "B", value: 20, color: "#0f0" },
+    ];
+    expect(drawComparisonBars(ctx, { ...base, bars, reveal: 0 })).toBe(true);
+    expect(ctx.fill).not.toHaveBeenCalled();
+  });
+
+  test("reveal=1 (default) — every bar still gets a fill, same as before this change", () => {
+    const bars = [
+      { label: "A", value: 10, color: "#f00" },
+      { label: "B", value: 20, color: "#0f0" },
+    ];
+    expect(drawComparisonBars(ctx, { ...base, bars })).toBe(true);
+    expect(ctx.fill).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("drawSparkline", () => {
@@ -153,5 +188,23 @@ describe("drawSparkline", () => {
     drawSparkline(ctx, { ...base, closes: [100, 90, 95], showArea: false, showDot: false });
     expect(ctx.createLinearGradient).not.toHaveBeenCalled();
     expect(ctx.arc).not.toHaveBeenCalled();
+  });
+
+  test("reveal=0 — valid data, but the line hasn't started tracing yet", () => {
+    expect(drawSparkline(ctx, { ...base, closes: [100, 105, 110], reveal: 0 })).toBe(true);
+    expect(ctx.stroke).not.toHaveBeenCalled();
+    expect(ctx.arc).not.toHaveBeenCalled();
+  });
+
+  test("reveal=0.5 — line and leading dot are drawn partway through", () => {
+    expect(drawSparkline(ctx, { ...base, closes: [100, 105, 110, 108, 115], reveal: 0.5 })).toBe(true);
+    expect(ctx.stroke).toHaveBeenCalledTimes(1);
+    expect(ctx.arc).toHaveBeenCalledTimes(1);
+  });
+
+  test("reveal=1 (default) — same call pattern as before this change", () => {
+    drawSparkline(ctx, { ...base, closes: [100, 90, 95] });
+    expect(ctx.stroke).toHaveBeenCalledTimes(1);
+    expect(ctx.arc).toHaveBeenCalledTimes(1);
   });
 });
