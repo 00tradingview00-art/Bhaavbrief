@@ -1,0 +1,51 @@
+---
+title: "MCX Options Greeks Explained — Delta, Gamma, Theta and Vega for Beginners"
+description: "Master MCX options greeks delta gamma theta vega explained simply — how each greek shifts your commodity option's price as gold, silver, and crude move."
+date: "2026-09-07"
+commodity: options
+tags: ["options", "mcx", "india"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["mcx options greeks delta gamma theta vega explained"]
+---
+
+## Introduction
+
+Understanding MCX options greeks — delta, gamma, theta, and vega explained together — gives commodity traders a precise language for measuring how option premiums respond to market changes. These four sensitivity measures apply directly to MCX Gold, Silver, Crude Oil, and Natural Gas contracts, where price swings can be sharp and leverage effects are amplified by rupee volatility.
+
+## The Mechanism
+
+Each greek quantifies a distinct dimension of option premium behaviour:
+
+**Delta** measures how much an option's premium changes for every ₹1 move in the underlying MCX futures price. A delta of 0.6 on an MCX Gold call means the premium rises approximately ₹0.60 for each ₹1 rise in the Gold futures price. Delta ranges from 0 to 1 for calls, 0 to -1 for puts.
+
+**Gamma** measures the rate of change of delta itself. High gamma — typically seen in near-expiry, at-the-money options — means delta shifts rapidly with small underlying moves. A gamma of 0.05 means delta changes by 0.05 for every ₹1 move in futures.
+
+**Theta** represents time decay — the daily erosion of premium as expiry approaches. An MCX Crude Oil option with theta of -₹12 loses approximately ₹12 in premium value each calendar day, assuming other factors remain constant.
+
+**Vega** measures premium sensitivity to implied volatility. A vega of ₹25 means the option premium rises or falls ₹25 for every 1-percentage-point change in implied volatility. During geopolitical events or budget announcements, vega becomes the dominant greek driving MCX option premiums.
+
+The interaction is dynamic: as delta approaches 1 (deep in-the-money), gamma shrinks; as expiry nears, theta accelerates while vega shrinks.
+
+## India-Specific Context
+
+MCX options are settled against MCX futures prices, not directly against COMEX or LME spot — this creates a layer of domestic basis risk that global greek calculations do not capture. The rupee-dollar exchange rate embeds itself into every MCX commodity price, meaning implied volatility on MCX Gold options can spike even when COMEX Gold is stable, purely because USD/INR volatility has risen. Import duties on gold (currently 15% with AIDC) and GST widen the gap between international and domestic price levels, affecting where strikes cluster around at-the-money. MCX contract lot sizes — 1 kg for Gold Mini, 100 barrels for Crude — determine the absolute rupee value of each greek, making position sizing calculations differ substantially from NYMEX or LME equivalents.
+
+## Historical Episodes
+
+In 2020, when crude oil futures briefly turned negative on NYMEX, MCX Crude options experienced extreme vega expansion — implied volatility on near-month contracts surged above 200%, causing option premiums to balloon several hundred percent within days before the MCX circuit mechanism triggered trading halts.
+
+In 2022, following the Russia-Ukraine conflict escalation, MCX Gold options saw delta compression at upper strikes as spot Gold futures rose approximately 8-10% within weeks — gamma effects caused at-the-money options to reprice sharply as delta moved from 0.5 toward 0.75 within the same session.
+
+In 2023, during the Union Budget announcement of revised gold import duty structures, MCX Silver options exhibited vega spikes of roughly 15-20 percentage points in implied volatility within a single session.
+
+## What to Watch
+
+Monitor these specific triggers for greek-level shifts on MCX:
+
+- **MCX expiry calendar**: Theta accelerates sharply in the final 5 trading days
+- **RBI MPC meeting dates**: Rupee volatility spikes lift vega on all MCX metal options
+- **FOMC statements**: USD index moves directly transmit into MCX implied volatility
+- **EIA Weekly Petroleum report (every Wednesday, 8:30 PM IST)**: Drives gamma risk on Crude options
+- **Union Budget date**: Duty change speculation raises vega weeks in advance
+- **MCX circuit limits**: 4% or 6% daily limits can freeze delta-hedging activity

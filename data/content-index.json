@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-07-mcx-options-greeks-delta-gamma-theta-vega",
+    "href": "/articles/2026-09-07-mcx-options-greeks-delta-gamma-theta-vega",
+    "title": "MCX Options Greeks Explained — Delta, Gamma, Theta and Vega for Beginners",
+    "description": "Master MCX options greeks delta gamma theta vega explained simply — how each greek shifts your commodity option's price as gold, silver, and crude move.",
+    "excerpt": "Understanding MCX options greeks — delta, gamma, theta, and vega explained together — gives commodity traders a precise language for measuring how option premiums respond to market changes. These four",
+    "date": "2026-09-07",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-100",
     "href": "/briefs/edition-100",
