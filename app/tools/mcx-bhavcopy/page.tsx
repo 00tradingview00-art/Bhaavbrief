@@ -15,8 +15,8 @@ const BREADCRUMB_SCHEMA = {
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title:       'MCX Bhavcopy — BhaavBrief',
-  description: 'Everything you need to know about MCX bhavcopy: what it is, how to download the daily settlement file from MCX India, and how traders use it for EOD analysis.',
+  title:       'MCX Bhavcopy Today — Download & Understand the Settlement File',
+  description: "Today's MCX bhavcopy explained: what each column means (SYMBOL, EXPIRY, STRIKE, CLOSE, OI), how traders use it for OI buildup, IV Rank and rollover tracking, plus the direct download link.",
   keywords:    [
     'MCX bhavcopy download today India', 'MCX bhavcopy PDF India',
     'what is MCX bhavcopy', 'MCX daily bhavcopy data',

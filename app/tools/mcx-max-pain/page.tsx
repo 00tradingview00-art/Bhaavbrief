@@ -30,7 +30,7 @@ const SCHEMA = {
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title:       'MCX Max Pain Today — BhaavBrief',
+  title:       'MCX Max Pain Today — Crude Oil, Natural Gas, Gold, Silver',
   description: 'Live MCX Max Pain strike price for Gold, Silver, Crude Oil, Natural Gas, and Copper. The max pain strike is where aggregate option-holder losses are maximized at expiry.',
   keywords:    [
     'MCX max pain today India', 'MCX gold max pain strike',

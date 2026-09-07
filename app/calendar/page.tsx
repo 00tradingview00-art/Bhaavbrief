@@ -11,8 +11,8 @@ export const revalidate = 900
 
 const BASE_URL = 'https://bhaavbrief.in'
 
-const TITLE = 'MCX Event Calendar — Trader Intelligence | BhaavBrief'
-const DESCRIPTION = 'Scheduled macro and data-release events mapped to MCX contracts — EIA storage, FOMC, CPI, RBI MPC, Union Budget, China PMI and more, with historical context. Educational, not advice.'
+const TITLE = 'MCX Events Today — Live Economic Calendar | BhaavBrief'
+const DESCRIPTION = "Today's and upcoming macro events that move MCX contracts — EIA storage, FOMC, CPI, RBI MPC, Union Budget, China PMI — with historical price impact. Educational, not advice."
 
 export const metadata: Metadata = {
   title: TITLE,
