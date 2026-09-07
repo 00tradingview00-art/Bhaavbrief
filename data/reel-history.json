@@ -1,5 +1,22 @@
 [
   {
+    "file": "brief-edition-101",
+    "topic": "War Trade Cracks: Gold Falls ₹2,960 While COMEX Holds",
+    "content_type": "macro_trend",
+    "mood": "DOWNBEAT",
+    "hook_caption": "Gold rose globally. Your jewellery got cheaper instead.",
+    "stat_line": "COMEX up. MCX down ₹2,960.",
+    "payoff": "When rupee moves, global gold price becomes noise. Currency is the real trade.",
+    "beat1": "MCX gold fell ₹2,960 to ₹152,815/10g while global COMEX gold gained $46.8. Rupee strength compressed every dollar import's INR value.",
+    "beat2": "USD/INR weakened to ₹94.53. Stronger rupee drowns out the global safe-haven bid that usually lifts gold prices here.",
+    "beat3": "Watch if USD/INR holds above ₹94.50 today. Break below it, and MCX-COMEX gap widens even if war trade stays hot.",
+    "instagram_id": "17872535058651288",
+    "generated_at": "2026-09-07T00:48:09.315Z",
+    "edition": 101,
+    "hi_path": "public/reels/brief-edition-101-hi.mp4",
+    "posted_at": "2026-09-07T00:50:29.925Z"
+  },
+  {
     "file": "news-20260906-how-much-money-to-start-mcx-trading",
     "topic": "How Much Money to Start MCX Trading",
     "content_type": "explainer",
@@ -44,7 +61,14 @@
     "instagram_id": "17874632673632324",
     "generated_at": "2026-09-05T16:44:52.264Z",
     "edition": null,
-    "posted_at": "2026-09-05T16:45:36.953Z"
+    "posted_at": "2026-09-05T16:45:36.953Z",
+    "insights": {
+      "views": 89,
+      "reach": 85,
+      "ig_reels_avg_watch_time": 3420,
+      "ig_reels_video_view_total_time": 290718,
+      "fetched_at": "2026-09-07T00:40:52.641Z"
+    }
   },
   {
     "file": "news-20260905-pcr-tool",
@@ -60,7 +84,14 @@
     "instagram_id": "18391396057162489",
     "generated_at": "2026-09-05T13:31:44.940Z",
     "edition": null,
-    "posted_at": "2026-09-05T13:32:30.653Z"
+    "posted_at": "2026-09-05T13:32:30.653Z",
+    "insights": {
+      "views": 25,
+      "reach": 23,
+      "ig_reels_avg_watch_time": 3753,
+      "ig_reels_video_view_total_time": 93829,
+      "fetched_at": "2026-09-07T00:40:53.065Z"
+    }
   },
   {
     "file": "news-20260904-fast-montage-brief-options-tools-feed-calend",
