@@ -285,6 +285,11 @@ jobs:
           echo "padded=$PADDED" >> $GITHUB_OUTPUT
 
       - name: Post reel to Instagram
+        # steps.reel.outcome stays 'success' even on a low-impact day that
+        # the script intentionally skipped (exit 0, no file written — see
+        # scripts/lib/reelImpact.mjs) — so the thing that actually gates
+        # posting here is the file-existence check below, not this outcome
+        # check alone. Same pattern the adjacent Hindi step already uses.
         if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true' && steps.reel.outcome == 'success'
         continue-on-error: true
         env:
@@ -292,7 +297,12 @@ jobs:
           REEL_FILE:              public/reels/brief-edition-${{ steps.reel.outputs.padded }}.mp4
           INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
           INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: node scripts/post-reel-instagram.mjs
+        run: |
+          if [ -f "$REEL_FILE" ]; then
+            node scripts/post-reel-instagram.mjs
+          else
+            echo "Reel not found at $REEL_FILE (brief was not high-impact today) — skipping"
+          fi
 
       - name: Post Hindi reel to Instagram
         if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true' && steps.reel.outcome == 'success' && env.GENERATE_HINDI_REEL == 'true'
