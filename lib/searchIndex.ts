@@ -179,6 +179,7 @@ const COMMODITY_PAGES: Array<{ slug: string; name: string; description: string }
   { slug: 'aluminium',  name: 'Aluminium',  description: 'MCX aluminium price live today — why aluminium is up or down: China smelter output, LME stocks, EU energy costs and rupee impact. OHLC and daily intelligence for Indian traders.' },
   { slug: 'lead',       name: 'Lead',       description: 'MCX lead price live today — why lead is up or down: battery demand, inverter cycle, Hindustan Zinc output and rupee impact. OHLC and daily intelligence for Indian traders.' },
   { slug: 'nickel',     name: 'Nickel',     description: 'MCX nickel price live today — why nickel is up or down: Indonesia export ban, LME stocks, EV battery demand and rupee impact. OHLC and daily intelligence for Indian traders.' },
+  { slug: 'electricity', name: 'Electricity', description: 'MCX electricity futures price live today — why it is up or down: IEX Day-Ahead Market price, power demand, coal and hydro supply, and renewable output. Contract specs and daily intelligence for Indian traders.' },
 ]
 
 function readCommodityPages(): ContentEntry[] {

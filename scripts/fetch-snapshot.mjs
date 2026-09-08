@@ -68,7 +68,7 @@ async function fetchKiteMCX() {
   const instruments = loadJSON(INSTRUMENTS_FILE)
   if (!apiKey || !accessToken || !instruments) return null
 
-  const keys = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
+  const keys = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel', 'electricity']
   const qs = keys
     .filter(k => instruments[k]?.symbol)
     .map(k => `i=MCX:${instruments[k].symbol}`)
@@ -305,6 +305,7 @@ async function main() {
     gold: 'INR/10g', silver: 'INR/kg', crude: 'INR/bbl',
     copper: 'INR/kg', natgas: 'INR/mmBtu',
     zinc: 'INR/kg', lead: 'INR/kg', aluminium: 'INR/kg', nickel: 'INR/kg',
+    electricity: 'INR/MWh',
   }
 
   // Optional minor metals — prefer live Kite data, fall back to last snapshot, never block pipeline
@@ -345,10 +346,12 @@ async function main() {
   const leadInst      = optionalMCX('lead',      'MCX_LEAD',      MCX_UNITS.lead)
   const aluminiumInst = optionalMCX('aluminium', 'MCX_ALUMINIUM', MCX_UNITS.aluminium)
   const nickelInst    = optionalMCX('nickel',    'MCX_NICKEL',    MCX_UNITS.nickel)
+  const electricityInst = optionalMCX('electricity', 'MCX_ELECTRICITY', MCX_UNITS.electricity)
   if (zincInst)      instruments.MCX_ZINC      = zincInst
   if (leadInst)      instruments.MCX_LEAD      = leadInst
   if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst
   if (nickelInst)    instruments.MCX_NICKEL    = nickelInst
+  if (electricityInst) instruments.MCX_ELECTRICITY = electricityInst
 
   // Optional CDS currency pairs — carry forward last good value when NSE is closed
   for (const key of ['eurinr', 'gbpinr', 'jpyinr']) {

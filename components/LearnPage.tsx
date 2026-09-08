@@ -565,7 +565,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     id: 15,
     section: 'Contracts',
     title: 'Gold contracts — Standard, Mini, Guinea, Petal',
-    label: 'Contracts · Article 1 of 4',
+    label: 'Contracts · Article 1 of 5',
     href: '/learn/mcx-gold-contracts',
     content: (
       <>
@@ -610,7 +610,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     id: 16,
     section: 'Contracts',
     title: 'Silver contracts — Standard, Mini, Micro',
-    label: 'Contracts · Article 2 of 4',
+    label: 'Contracts · Article 2 of 5',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -653,7 +653,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     id: 17,
     section: 'Contracts',
     title: 'Energy contracts — Crude Oil & Natural Gas',
-    label: 'Contracts · Article 3 of 4',
+    label: 'Contracts · Article 3 of 5',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -704,7 +704,7 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
     id: 18,
     section: 'Contracts',
     title: 'Base metals — Copper, Aluminium, Zinc, Lead, Nickel',
-    label: 'Contracts · Article 4 of 4',
+    label: 'Contracts · Article 4 of 5',
     content: (
       <>
         <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
@@ -744,6 +744,47 @@ function buildArticles(specs: ContractSpecs | null): Article[] {
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <Link href="/commodities/copper" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
             MCX Copper live price & analysis →
+          </Link>
+          <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
+          <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>
+            All live prices
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  {
+    id: 19,
+    section: 'Contracts',
+    title: 'Electricity contract — MCX\'s newest derivative',
+    label: 'Contracts · Article 5 of 5',
+    href: '/learn/mcx-electricity-contract',
+    content: (
+      <>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          Electricity is MCX&apos;s newest and structurally most different contract — launched in 2026, it is cash-settled only (electricity can&apos;t be stored or delivered) and references a real-time domestic spot price instead of a global benchmark or import-parity formula.
+        </p>
+        <ArticleTable
+          headers={['Contract', 'Lot Size', 'Quoted', 'Tick Size', 'P&L per tick', 'Approx margin*', 'Settlement']}
+          rows={[
+            ['Electricity', '50 MWh', '₹/MWh', '₹1', '₹50/lot', '10% of contract value, or SPAN', 'Cash only'],
+          ]}
+        />
+        <p style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 6, lineHeight: 1.6 }}>
+          * Margin per MCX&apos;s published rule (10% of contract value, or SPAN, whichever is higher). Verify live margins on your broker&apos;s SPAN calculator before trading.
+        </p>
+        <InfoBox title="No options yet">
+          Unlike gold, silver, crude oil, natural gas, and copper, MCX Electricity has <strong>no options chain</strong> as of this writing — futures only. This site&apos;s Strategy Builder reflects that: Electricity appears there as a futures-only instrument, without the strike-chain or options-strategy templates.
+        </InfoBox>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8, marginBottom: 20 }}>
+          <strong>Settlement reference</strong>: the contract cash-settles against the Volume Weighted Average of the Unconstrained Market Clearing Price (UMCP) on the Indian Energy Exchange&apos;s (IEX) Day-Ahead Market — the price at which India&apos;s spot power market clears a day ahead of delivery. This is also why it has a genuinely unusual dual-regulator structure: SEBI regulates the MCX futures contract, while CERC regulates the underlying IEX spot market.
+        </p>
+        <p style={{ fontSize: 15, color: 'var(--ink-2)', lineHeight: 1.8 }}>
+          Prices move with power demand and supply — summer heatwaves and winter cold snaps push demand up, while strong hydro or renewable generation pushes prices down. Contracts are listed near, next, and far month, with trading active across four expiry months at once as of late 2026.
+        </p>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Link href="/commodities/electricity" style={{ fontSize: 15, color: 'var(--gold)', fontWeight: 500, textDecoration: 'none' }}>
+            MCX Electricity live price & analysis →
           </Link>
           <span style={{ color: 'var(--border)', fontSize: 13 }}>|</span>
           <Link href="/markets" style={{ fontSize: 15, color: 'var(--ink-3)', textDecoration: 'none' }}>

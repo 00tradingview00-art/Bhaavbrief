@@ -81,7 +81,23 @@ const INSTRUMENTS = [
   { key: 'CRUDEOILM',  label: 'Crude Oil Mini' },
   { key: 'NATURALGAS', label: 'Nat Gas'        },
   { key: 'COPPER',     label: 'Copper'         },
+  { key: 'ELECTRICITY', label: 'Electricity'   },
 ]
+
+// Electricity has no options chain (MCX lists futures only) — this is the
+// only instrument in this list that isn't in lib/options.ts's
+// MCX_INSTRUMENTS, so it can't be gated/priced from there. See
+// FUTURES_ONLY_INSTRUMENTS in lib/options.ts for why it's kept separate.
+const FUTURES_ONLY_LOT_SIZE: Record<string, number> = {
+  ELECTRICITY: 50,
+}
+
+// Where to send a user when live futures data isn't available for a
+// futures-only instrument — points at this site's own contract-specs
+// writeup rather than leaving them with a bare error.
+const FUTURES_ONLY_LEARN_LINK: Record<string, string> = {
+  ELECTRICITY: '/learn/mcx-electricity-contract',
+}
 
 // Only these editions' structured Edge-of-Day metrics have a real underlying
 // market for the currently-supported instruments — COPPER/NATURALGAS
@@ -107,6 +123,7 @@ const PAYOFF_WIDTH_BY_INST: Record<string, number> = {
   COPPER:     0.20,
   GOLD:       0.15,
   GOLDM:      0.15,
+  ELECTRICITY: 0.30,
 }
 
 // MCX daily circuit limits — set per commodity, not per contract-size variant,
@@ -114,6 +131,7 @@ const PAYOFF_WIDTH_BY_INST: Record<string, number> = {
 const CIRCUIT_LIMITS: Record<string, number> = {
   GOLD: 0.06, GOLDM: 0.06, SILVER: 0.06, SILVERM: 0.06,
   CRUDEOIL: 0.04, CRUDEOILM: 0.04, NATURALGAS: 0.10, COPPER: 0.06,
+  ELECTRICITY: 0.10,
 }
 
 const PAYOFF_POINTS = 101
@@ -582,7 +600,11 @@ export default function StrategyBuilder({
   const [chainVersion, setChainVersion] = useState(0)
 
   const payoffWidth = PAYOFF_WIDTH_BY_INST[instrument] ?? 0.15
-  const lotSize     = MCX_INSTRUMENTS[instrument]?.lotSize ?? 1
+  const lotSize     = MCX_INSTRUMENTS[instrument]?.lotSize ?? FUTURES_ONLY_LOT_SIZE[instrument] ?? 1
+  // No options chain exists for this instrument (Electricity today) — hide
+  // the CE/PE strike table and option-based Quick Setup templates, leaving
+  // only the Futures Position panel available.
+  const isFuturesOnly = !MCX_INSTRUMENTS[instrument]
   const expiry      = chainData?.expiry ?? ''
   const expiries    = chainData?.expiries ?? []
   const chain       = chainData?.chain ?? []
@@ -649,22 +671,34 @@ export default function StrategyBuilder({
     setError(null)
     setErrorNextOpenAt(null)
     try {
-      const chainUrl = `/api/options?instrument=${inst}${exp ? `&expiry=${exp}` : ''}`
-      const ivUrl    = `/api/options/iv-history?instrument=${inst}`
-      const [chainRes, ivRes] = await Promise.all([fetch(chainUrl), fetch(ivUrl)])
+      const futuresOnly = !MCX_INSTRUMENTS[inst]
+      const chainUrl = futuresOnly
+        ? `/api/options/futures-only?instrument=${inst}${exp ? `&expiry=${exp}` : ''}`
+        : `/api/options?instrument=${inst}${exp ? `&expiry=${exp}` : ''}`
 
-      // Set independently of the chain outcome below — these come from two
-      // unrelated sources (Redis vs Kite), and a chain failure shouldn't
-      // erase IV history that was fetched successfully in parallel.
-      if (ivRes.ok) {
-        const ivJson = await ivRes.json()
-        setIvHistory(ivJson.history ?? [])
+      // No options chain (and so no IV) exists for a futures-only instrument —
+      // skip the IV-history fetch entirely rather than let it 400 harmlessly.
+      if (futuresOnly) {
+        setIvHistory([])
+      } else {
+        const ivUrl = `/api/options/iv-history?instrument=${inst}`
+        fetch(ivUrl).then(async ivRes => {
+          // Set independently of the chain outcome below — these come from two
+          // unrelated sources (Redis vs Kite), and a chain failure shouldn't
+          // erase IV history that was fetched successfully in parallel.
+          if (ivRes.ok) {
+            const ivJson = await ivRes.json()
+            setIvHistory(ivJson.history ?? [])
+          }
+        }).catch(() => {/* independent of chain fetch — ignore */})
       }
 
+      const chainRes = await fetch(chainUrl)
+
       if (!chainRes.ok) {
-        const body = await chainRes.json().catch(() => null) as { nextOpenAt?: string | null } | null
+        const body = await chainRes.json().catch(() => null) as { error?: string; nextOpenAt?: string | null } | null
         setErrorNextOpenAt(body?.nextOpenAt ?? null)
-        throw new Error('Failed to load options chain')
+        throw new Error(body?.error ?? 'Failed to load options chain')
       }
       const chainJson = await chainRes.json()
       setChainData(chainJson)
@@ -765,7 +799,10 @@ export default function StrategyBuilder({
       .filter(key => !allChainDataRef.current[key])
     needed.forEach(key => {
       const [inst, exp] = key.split(':')
-      fetch(`/api/options?instrument=${inst}&expiry=${exp}`)
+      const url = MCX_INSTRUMENTS[inst]
+        ? `/api/options?instrument=${inst}&expiry=${exp}`
+        : `/api/options/futures-only?instrument=${inst}&expiry=${exp}`
+      fetch(url)
         .then(r => r.ok ? r.json() : null)
         .then(data => {
           if (data) {
@@ -1045,7 +1082,16 @@ export default function StrategyBuilder({
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
         {INSTRUMENTS.map(inst => (
           <button key={inst.key}
-            onClick={() => { setInstrument(inst.key); setLegs([]) }}
+            onClick={() => {
+              setInstrument(inst.key)
+              setLegs([])
+              // Clear the previous instrument's chain/error so its leftover
+              // "stale chain" banner and futures price never bleed into the
+              // newly-selected instrument's view while the new fetch is in flight.
+              setChainData(null)
+              setError(null)
+              setErrorNextOpenAt(null)
+            }}
             style={{
               padding: '6px 14px', borderRadius: 6, border: '1px solid',
               cursor: 'pointer', fontSize: 15, fontWeight: instrument === inst.key ? 700 : 400,
@@ -1060,6 +1106,22 @@ export default function StrategyBuilder({
           </button>
         ))}
       </div>
+
+      {/* Structural fact about this instrument, not a data-availability
+          concern — a live futures price is available for Electricity the
+          same as every other instrument; it's specifically the options
+          chain that doesn't exist. Shown regardless of load/error state so
+          it explains why Quick Setup and the strike chain are absent below,
+          rather than only appearing when a fetch happens to fail. */}
+      {isFuturesOnly && (
+        <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border-2, #D4CFC0)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--ink-2, #3A3830)', fontSize: 15 }}>
+          {INSTRUMENTS.find(i => i.key === instrument)?.label ?? instrument} has no options chain on MCX yet — futures only. A live futures price is available, same as every other instrument; only a plain long/short futures position is available below.
+          {' '}
+          <Link href={FUTURES_ONLY_LEARN_LINK[instrument] ?? '/learn'} style={{ color: 'var(--gold-dark, #8B6520)', fontWeight: 600, textDecoration: 'none' }}>
+            See contract specs →
+          </Link>
+        </div>
+      )}
 
       {error && (
         <div style={{ background: 'var(--down-bg, #FAF0EE)', border: '1px solid var(--down, #B53A2A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--down, #B53A2A)', fontSize: 15 }}>
@@ -1110,8 +1172,10 @@ export default function StrategyBuilder({
         <IVHistorySparkline history={ivHistory} color={regimeColors[ivRegime.regime]} />
       )}
 
-      {/* Quick Setup — all templates, no IV-based filtering */}
-      {chainData && (
+      {/* Quick Setup — all templates, no IV-based filtering. Hidden for
+          futures-only instruments (Electricity) — every template needs at
+          least one CE/PE leg, which no chain exists to build here. */}
+      {chainData && !isFuturesOnly && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 6 }}>
@@ -1236,8 +1300,9 @@ export default function StrategyBuilder({
             </div>
           )}
 
-          {/* Mini chain — ±5 strikes around ATM */}
-          {(() => {
+          {/* Mini chain — ±5 strikes around ATM. Hidden for futures-only
+              instruments (Electricity) — there are no strikes to show. */}
+          {!isFuturesOnly && (() => {
             let atmIdx = chain.findIndex(r => r.isATM)
             if (atmIdx === -1 && futurePrice > 0 && chain.length > 0) {
               atmIdx = chain.reduce(

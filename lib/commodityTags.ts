@@ -10,7 +10,7 @@
  */
 
 export const CANONICAL_COMMODITY_KEYS = [
-  'gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'aluminium', 'lead', 'nickel',
+  'gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'aluminium', 'lead', 'nickel', 'electricity',
 ] as const
 
 export type CommodityKey = typeof CANONICAL_COMMODITY_KEYS[number]
@@ -25,6 +25,7 @@ const ALIASES: Record<string, CommodityKey> = {
   'aluminium': 'aluminium', 'aluminum': 'aluminium',
   'lead': 'lead',
   'nickel': 'nickel',
+  'electricity': 'electricity',
 }
 
 // Matches the literal strings generate-brief.js's LLM prompt and
@@ -41,6 +42,7 @@ export const KEY_TO_MCX_LABEL: Record<CommodityKey, string> = {
   aluminium: 'MCX Aluminium',
   lead: 'MCX Lead',
   nickel: 'MCX Nickel',
+  electricity: 'MCX Electricity',
 }
 
 // Single source of truth for commodity accent colors — was previously
@@ -58,6 +60,7 @@ export const COMMODITY_ACCENT_COLORS: Record<CommodityKey | 'macro', string> = {
   aluminium: '#6366F1',
   lead: '#64748B',
   nickel: '#0F766E',
+  electricity: '#CA8A04',
   macro: '#6B21A8',
 }
 
