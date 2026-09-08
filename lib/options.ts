@@ -342,6 +342,16 @@ export const FUTURES_ONLY_INSTRUMENTS: Record<string, { label: string; unit: str
   ELECTRICITY: { label: 'Electricity', unit: 'MWh', lotSize: 50 },
 }
 
+// Kite's own `name` field can differ from MCX's public product name and our
+// registry key above — verified against a live instruments/MCX dump on
+// 2026-09-08: Electricity's Kite `name` is "ELECDMBL" (tradingsymbol e.g.
+// ELECDMBL26SEPFUT), not "ELECTRICITY". Falls back to the registry key
+// itself for any future futures-only instrument whose Kite name happens to
+// match it directly.
+const KITE_NAME_OVERRIDE: Record<string, string> = {
+  ELECTRICITY: 'ELECDMBL',
+}
+
 async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: string | null = null) {
   if (!FUTURES_ONLY_INSTRUMENTS[instrument]) {
     throw new Error(`Invalid instrument. Valid: ${Object.keys(FUTURES_ONLY_INSTRUMENTS).join(', ')}`)
@@ -353,9 +363,10 @@ async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: 
   const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
   const allInstruments = await getFullMCXInstrumentsCached()
 
+  const kiteName = KITE_NAME_OVERRIDE[instrument] ?? instrument
   const today = new Date(); today.setHours(0, 0, 0, 0)
   const futures = allInstruments
-    .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+    .filter(i => i.name.toUpperCase() === kiteName && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
     .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())
 
   if (!futures.length) {

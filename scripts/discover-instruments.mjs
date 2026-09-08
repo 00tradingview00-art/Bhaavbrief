@@ -76,7 +76,13 @@ const zinc      = frontMonth(instruments, 'ZINC')
 const lead      = frontMonth(instruments, 'LEAD')
 const aluminium = frontMonth(instruments, 'ALUMINIUM')
 const nickel    = frontMonth(instruments, 'NICKEL')
-const electricity = frontMonth(instruments, 'ELECTRICITY')
+// Kite's own `name` field for this instrument is "ELECDMBL" (Electricity
+// Delivery Monthly Base Load, presumably) — not "ELECTRICITY" — confirmed
+// against a live instruments/MCX dump on 2026-09-08 (tradingsymbol e.g.
+// ELECDMBL26SEPFUT). MCX's own public product name is still "Electricity",
+// which is what every other part of this codebase calls it — this is
+// purely the Kite-side lookup key.
+const electricity = frontMonth(instruments, 'ELECDMBL')
 
 if (!gold || !silver || !crude || !copper || !natgas) {
   console.error('Could not find all core front-month contracts')
