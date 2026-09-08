@@ -1,8 +1,10 @@
 name: Generate Daily Learn Reel
 
 on:
-  schedule:
-    - cron: '0 14 * * *'  # 7:30 PM IST daily — evergreen content, not tied to trading days
+  # Daily schedule retired 2026-09-08 — learn now shares one alternating
+  # slot with the campaign reel via .github/workflows/generate-evergreen-reel.yml
+  # (scripts/lib/evergreenRotation.mjs). Kept as workflow_dispatch-only for
+  # manual runs/backfill; this script itself is unchanged.
   workflow_dispatch:
 
 # One learn reel per run — queue rather than cancel if a run is somehow still going

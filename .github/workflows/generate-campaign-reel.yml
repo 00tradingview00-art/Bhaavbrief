@@ -1,8 +1,10 @@
 name: Generate 30-Day Campaign Reel
 
 on:
-  schedule:
-    - cron: '30 10 * * *'  # 4:00 PM IST daily — distinct slot from the 9 AM brief reel and 7:30 PM learn reel
+  # Daily schedule retired 2026-09-08 — campaign now shares one alternating
+  # slot with the learn reel via .github/workflows/generate-evergreen-reel.yml
+  # (scripts/lib/evergreenRotation.mjs). Kept as workflow_dispatch-only for
+  # manual runs/backfill; this script itself is unchanged.
   workflow_dispatch:
 
 # One campaign reel per run — queue rather than cancel if a run is somehow still going
