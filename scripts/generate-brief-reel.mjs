@@ -740,7 +740,11 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes, lang = 'en') {
   // hallucination risk, pure data) — drawSparkline itself no-ops (returns
   // false) when fewer than 2 real closes exist, e.g. right after an
   // instrument-token rollover, so this is always safe to call unconditionally.
-  const sparkW = 700, sparkH = 160
+  // Bigger and more prominent than before — this is the one real data visual
+  // shown inside the highest-drop-off window of the video, so it earns more
+  // screen space. It also traces itself in (see sparkReveal below) rather
+  // than fading in fully-formed.
+  const sparkW = 820, sparkH = 200
   const sparkX = (W - sparkW) / 2
   const sparkY = 1080
   ctx.globalAlpha = easeOut(Math.max(0, t * 4 - 1.0))
@@ -750,9 +754,12 @@ function drawHook(ctx, t, copy, snapshot, mood, edition, closes, lang = 'en') {
   ctx.letterSpacing = '2px'
   ctx.fillText(S.sevenDayTrend, W / 2, sparkY - 20)
   ctx.letterSpacing = '0px'
+  ctx.globalAlpha = 1
+  const sparkReveal = clamp((t - 0.25) / 0.5, 0, 1)
   drawSparkline(ctx, {
     x: sparkX, y: sparkY, w: sparkW, h: sparkH,
-    closes, upColor: '#2ECC71', downColor: '#E74C3C', lineWidth: 3,
+    closes, upColor: '#2ECC71', downColor: '#E74C3C', lineWidth: 4,
+    reveal: sparkReveal,
   })
 
   // Edition chip — inside bottom safe zone
@@ -841,11 +848,14 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null, lang = 
 
   ctx.globalAlpha = 1
 
-  // Chart — fades in after the text lines have mostly settled (t≈0.7 per
-  // the comment above), not simultaneously with them.
+  // Chart — starts drawing itself in (trace/grow, not a plain fade) after
+  // the text lines have mostly settled (t≈0.6 per the comment above), not
+  // simultaneously with them. `chartReveal` maps that same window to 0-1;
+  // drawIconArray/drawComparisonBars each animate their own elements in
+  // against it rather than the whole chart just fading in as one block.
   if (hasChart) {
     const chartX = PAD, chartW = W - PAD * 2, chartH = contentBot - chartTop
-    ctx.globalAlpha = easeOut(Math.max(0, t * 2.5 - 0.6))
+    const chartReveal = clamp(t * 2.5 - 0.6, 0, 1)
     ctx.textAlign = 'center'
 
     if (chart.type === 'icon_array') {
@@ -854,6 +864,7 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null, lang = 
         filled: chart.icon_array.filled, total: chart.icon_array.total,
         unitLabel: chart.icon_array.unit_label ?? '',
         filledColor: GOLD, emptyColor: BORDER, textColor: INK,
+        reveal: chartReveal,
       })
     } else if (chart.type === 'two_bar') {
       const tb = chart.two_bar
@@ -866,9 +877,9 @@ function drawBeat(ctx, t, text, beatIndex, snapshot, mood, chart = null, lang = 
           { label: tb.labelB, value: tb.valueB, fmt, color: INK_4 },
         ],
         mutedColor: INK_4, textColor: INK,
+        reveal: chartReveal,
       })
     }
-    ctx.globalAlpha = 1
   }
 }
 

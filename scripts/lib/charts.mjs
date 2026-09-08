@@ -21,7 +21,18 @@
  * upstream scripts/lib/chartValidation.mjs gate, because these functions
  * are also called directly from a standalone preview harness with
  * hand-written fixtures that never go through that gate.
+ *
+ * `reveal` (0-1, default 1): every function accepts this to draw a
+ * progressive "coming into being" animation — a sparkline traces itself in,
+ * bars grow from zero, icons fill in one at a time — instead of appearing
+ * fully-formed under a plain alpha fade (the caller still controls the
+ * fade/alpha separately). Callers pass an eased value derived from their own
+ * per-frame `t`; reveal=1 reproduces the old fully-drawn behavior exactly,
+ * so existing call sites keep working unchanged until they opt in.
  */
+
+const clamp01  = v => Math.max(0, Math.min(1, v))
+const easeOut  = t => 1 - Math.pow(1 - clamp01(t), 3)
 
 function roundRect(ctx, x, y, w, h, r) {
   const rr = Math.max(0, Math.min(r, w / 2, h / 2))
@@ -45,7 +56,7 @@ function roundRect(ctx, x, y, w, h, r) {
 export function drawIconArray(ctx, {
   x, y, w, filled, total, unitLabel = '', label = '',
   filledColor, emptyColor, textColor,
-  iconSize = 36, maxIcons = 20, gap = 12,
+  iconSize = 36, maxIcons = 20, gap = 12, reveal = 1,
 }) {
   if (!(total > 0) || !Number.isFinite(filled) || filled < 0 || filled > total) return false
   const count = Math.min(total, maxIcons)
@@ -60,14 +71,23 @@ export function drawIconArray(ctx, {
   const gridH            = rows * diameter + (rows - 1) * (gap * 0.6)
   const startX             = x + (w - gridW) / 2
 
+  // Icons pop in left-to-right, one at a time, instead of all appearing at
+  // once — `visible` is a fractional position along that sequence, so the
+  // icon currently "in progress" gets a partial scale/alpha for a soft pop.
+  const visible = clamp01(reveal) * count
   for (let i = 0; i < count; i++) {
+    const iconT = clamp01(visible - i)
+    if (iconT <= 0) continue
     const col = i % cols
     const row = Math.floor(i / cols)
     const cx  = startX + col * (diameter + gap) + diameter / 2
     const cy  = y + row * (diameter + gap * 0.6) + diameter / 2
     const isFilled = i < filled
+    const scale = 0.5 + 0.5 * easeOut(iconT)
+    ctx.save()
+    ctx.globalAlpha = easeOut(iconT)
     ctx.beginPath()
-    ctx.arc(cx, cy, diameter / 2, 0, Math.PI * 2)
+    ctx.arc(cx, cy, (diameter / 2) * scale, 0, Math.PI * 2)
     if (isFilled) {
       ctx.fillStyle = filledColor
       ctx.fill()
@@ -76,8 +96,14 @@ export function drawIconArray(ctx, {
       ctx.lineWidth   = Math.max(1.5, diameter * 0.08)
       ctx.stroke()
     }
+    ctx.restore()
   }
 
+  // Caption fades in once the icon sequence has mostly finished popping in.
+  const captionAlpha = easeOut((reveal - 0.7) / 0.3)
+  if (captionAlpha <= 0) return true
+  ctx.save()
+  ctx.globalAlpha = captionAlpha
   const captionY = y + gridH + 40
   if (label) {
     ctx.fillStyle = textColor
@@ -89,6 +115,7 @@ export function drawIconArray(ctx, {
   ctx.font      = 'bold 40px "NotoSans", "Inter", sans-serif'
   ctx.textAlign = 'center'
   ctx.fillText(`${filled}${unitLabel ? ' ' + unitLabel : ''}`, x + w / 2, captionY + (label ? 46 : 0))
+  ctx.restore()
 
   return true
 }
@@ -103,7 +130,7 @@ export function drawIconArray(ctx, {
  */
 export function drawComparisonBars(ctx, {
   x, y, w, h, bars, baseline = 0,
-  mutedColor, textColor, barHeight = 72, labelGap = 14,
+  mutedColor, textColor, barHeight = 72, labelGap = 14, reveal = 1,
 }) {
   if (!Array.isArray(bars) || bars.length < 2 || bars.length > 4) return false
   const magnitudes = bars.map(b => Number.isFinite(b?.value) ? Math.abs(b.value - baseline) : 0)
@@ -113,24 +140,39 @@ export function drawComparisonBars(ctx, {
   const rowGap = Math.max(20, (h - bars.length * barHeight) / Math.max(1, bars.length - 1))
   const maxBarW = w * 0.92
 
+  // Bars grow in one at a time (staggered start per row) rather than
+  // appearing at full width immediately.
+  const stagger = 0.15
+  const perBarWindow = 1 - stagger * (bars.length - 1)
+
   bars.forEach((bar, i) => {
     const rowY = y + i * (barHeight + rowGap)
     const mag  = magnitudes[i]
-    const barW = Math.max(mag > 0 ? 8 : 0, (mag / maxMag) * maxBarW)
+    const fullBarW = Math.max(mag > 0 ? 8 : 0, (mag / maxMag) * maxBarW)
+    const growT = easeOut(clamp01((reveal - i * stagger) / perBarWindow))
+    const barW = fullBarW * growT
     const color = bar.emphasis ? bar.color : (mutedColor ?? bar.color)
 
     // Label above the bar
+    ctx.save()
+    ctx.globalAlpha = growT > 0 ? Math.max(growT, 0.001) : 0
     ctx.fillStyle = textColor
     ctx.font      = '20px "NotoSans", "Inter", sans-serif'
     ctx.textAlign = 'left'
     ctx.fillText(bar.label ?? '', x, rowY - labelGap)
+    ctx.restore()
+
+    if (barW <= 0) return
 
     // Bar itself
     roundRect(ctx, x, rowY, Math.max(2, barW), barHeight, 8)
     ctx.fillStyle = color
     ctx.fill()
 
-    // Value at the bar's tip — inside if there's room, else just outside
+    // Value at the bar's tip — inside if there's room, else just outside.
+    // Only shown once the bar has grown close to its final width, so the
+    // number doesn't race ahead of (or lag behind) the bar it labels.
+    if (growT < 0.85) return
     const valueText = typeof bar.fmt === 'function' ? bar.fmt(bar.value) : String(bar.value)
     ctx.font = 'bold 28px "NotoSans", "Inter", sans-serif'
     const textW = ctx.measureText(valueText).width
@@ -147,6 +189,16 @@ export function drawComparisonBars(ctx, {
   return true
 }
 
+/** Interpolated point at a fractional index along `points` (e.g. 2.4 -> 40% of the way from points[2] to points[3]). */
+function pointAtFraction(points, idx) {
+  const lo = Math.floor(idx), hi = Math.min(lo + 1, points.length - 1)
+  const t  = idx - lo
+  return {
+    px: points[lo].px + (points[hi].px - points[lo].px) * t,
+    py: points[lo].py + (points[hi].py - points[lo].py) * t,
+  }
+}
+
 /**
  * Line + area-wash sparkline from a plain closes[] array (oldest -> newest),
  * direction-colored (up/down by first vs last close) — same visual
@@ -157,7 +209,7 @@ export function drawComparisonBars(ctx, {
  */
 export function drawSparkline(ctx, {
   x, y, w, h, closes,
-  upColor, downColor, lineWidth = 3, showArea = true, showDot = true,
+  upColor, downColor, lineWidth = 3, showArea = true, showDot = true, reveal = 1,
 }) {
   if (!Array.isArray(closes) || closes.length < 2) return false
   const finite = closes.filter(v => Number.isFinite(v))
@@ -175,11 +227,19 @@ export function drawSparkline(ctx, {
     py: y + h - ((v - min) / range) * h,
   }))
 
+  // The line traces itself in left-to-right instead of appearing all at
+  // once — `headIdx` is the fractional point index the visible line
+  // currently ends at.
+  const headIdx = clamp01(reveal) * (points.length - 1)
+  if (headIdx <= 0) return true
+  const head = pointAtFraction(points, headIdx)
+  const visiblePoints = [...points.slice(0, Math.floor(headIdx) + 1), head]
+
   if (showArea) {
     ctx.beginPath()
-    ctx.moveTo(points[0].px, y + h)
-    for (const p of points) ctx.lineTo(p.px, p.py)
-    ctx.lineTo(points[points.length - 1].px, y + h)
+    ctx.moveTo(visiblePoints[0].px, y + h)
+    for (const p of visiblePoints) ctx.lineTo(p.px, p.py)
+    ctx.lineTo(visiblePoints[visiblePoints.length - 1].px, y + h)
     ctx.closePath()
     const gradient = ctx.createLinearGradient(0, y, 0, y + h)
     gradient.addColorStop(0, `${color}33`) // ~20% alpha wash at top
@@ -189,7 +249,7 @@ export function drawSparkline(ctx, {
   }
 
   ctx.beginPath()
-  points.forEach((p, i) => (i === 0 ? ctx.moveTo(p.px, p.py) : ctx.lineTo(p.px, p.py)))
+  visiblePoints.forEach((p, i) => (i === 0 ? ctx.moveTo(p.px, p.py) : ctx.lineTo(p.px, p.py)))
   ctx.strokeStyle = color
   ctx.lineWidth   = lineWidth
   ctx.lineJoin    = 'round'
@@ -197,9 +257,8 @@ export function drawSparkline(ctx, {
   ctx.stroke()
 
   if (showDot) {
-    const last = points[points.length - 1]
     ctx.beginPath()
-    ctx.arc(last.px, last.py, lineWidth * 1.8, 0, Math.PI * 2)
+    ctx.arc(head.px, head.py, lineWidth * 1.8, 0, Math.PI * 2)
     ctx.fillStyle = color
     ctx.fill()
   }
