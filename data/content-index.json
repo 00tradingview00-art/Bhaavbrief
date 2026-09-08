@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-102",
+    "href": "/briefs/edition-102",
+    "title": "Silver Breaks Out While Gold Holds Still — The Industrial Bid Returns",
+    "description": "COMEX Silver surges over 2% overnight as crude oil rebounds, splitting precious metals into two different stories.",
+    "excerpt": "MCX Gold ₹152818 | Crude ₹8760 | USDINR ₹94.57 Yesterday's Edge — Result: Edition #101 watched whether COMEX GOLD would close above 4,476.6. Rejected ✗, now at 4,471.9. | Commodity | Global Price | US",
+    "date": "2026-09-08T02:54:52.535Z",
+    "edition": "102",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-101",
     "href": "/briefs/edition-101",
     "title": "War Trade Cracks: Gold Falls ₹2,960 While COMEX Holds",
