@@ -15,6 +15,7 @@
 import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { isPriceMoveHighImpact, isGeoPolicyHighImpact } from './lib/reelImpact.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
@@ -859,7 +860,7 @@ async function main() {
         console.log(`  Skipped (duplicate theme in this run): ${title.slice(0, 60)}`)
         continue
       }
-      const reelWorthy = Math.abs(signal.pct) >= 1.5
+      const reelWorthy = isPriceMoveHighImpact(signal.pct)
       const flashSlug  = saveFlashMdx({ title, body, category: signal.category, date: new Date(), reelWorthy })
       const href       = flashSlug ? `/flash/${flashSlug}` : undefined
       const coverImage = CATEGORY_IMAGES[signal.category]
@@ -896,7 +897,7 @@ async function main() {
         continue
       }
       const { category, tagType } = detectCategory(`${signal.title} ${signal.desc}`)
-      const reelWorthy = impact !== 'neutral' && ['Geopolitics', 'Policy'].includes(category)
+      const reelWorthy = isGeoPolicyHighImpact(impact, category)
       const flashSlug  = saveFlashMdx({ title, body, category, date: new Date(), reelWorthy })
       const href       = flashSlug ? `/flash/${flashSlug}` : undefined
       const coverImage = CATEGORY_IMAGES[category]
