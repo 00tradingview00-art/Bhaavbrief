@@ -23,6 +23,7 @@ import { drawSparkline, drawIconArray, drawComparisonBars, drawCaptionOverlay } 
 import { getCloses }                          from './lib/historyReader.mjs'
 import { validateBeatCharts, deriveSnapshotChart } from './lib/chartValidation.mjs'
 import { charAlignmentToWords, chunkWords, activeChunkForFrame } from './lib/reelCaptions.mjs'
+import { isBriefHighImpact } from './lib/reelImpact.mjs'
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { buildHashtags }                      from './lib/reelHashtags.mjs'
 import { computeReelTiming }                  from './lib/reelTiming.mjs'
@@ -1253,6 +1254,20 @@ if (isNewsMode) {
 
 const snapshot = readSnapshot()
 const history  = readHistory()
+
+// ── Impact gate (brief mode only) ────────────────────────────────────────
+// News mode (flash/campaign/learn handoff) is never gated here — each of
+// those callers already decided a reel was warranted before invoking this
+// script. Runs before any Haiku/ElevenLabs call so a skip costs zero API
+// spend, not just zero render time. See scripts/lib/reelImpact.mjs.
+if (!isNewsMode) {
+  const { highImpact, reason } = isBriefHighImpact(data.tags, snapshot?.instruments)
+  if (!highImpact) {
+    console.log(`⏭️   Brief #${edition} is not high-impact — skipping reel (no API calls made).`)
+    process.exit(0)
+  }
+  console.log(`🎬  High-impact brief (${reason}) — generating reel.`)
+}
 
 const mood = classifyMood(data, snapshot)
 console.log(`🎵  Mood: ${mood}`)
