@@ -20,6 +20,28 @@
     "priceAtPublish": 278
   },
   {
+    "type": "article",
+    "slug": "2026-09-08-mcx-close-09sep2026-copper-china-demand",
+    "href": "/articles/2026-09-08-mcx-close-09sep2026-copper-china-demand",
+    "title": "MCX Close 9 Sep: Copper Surges on China Optimism",
+    "description": "9 Sep 2026 — MCX Copper +1.92% leads as China demand signals offset COMEX fade. Gold, crude flat. NatGas -2.42%.",
+    "excerpt": "Copper dominated MCX today, closing ₹1413.3/kg, +1.92%, on persistent China demand optimism offsetting global supply concerns. NatGas retreated sharply to ₹274.4/mmBtu, -2.42%, pressured by US invento",
+    "date": "2026-09-08T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Copper",
+      "NatGas",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-102",
     "href": "/briefs/edition-102",
