@@ -58,6 +58,7 @@ const CARDS = [
   { key: 'lead',      label: 'MCX Lead',      unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/lead'        },
   { key: 'aluminium', label: 'MCX Aluminium', unit: '/kg',    fmtP: (v: number) => fmtINR(v, 2),  href: '/commodities/aluminium'   },
   { key: 'nickel',    label: 'MCX Nickel',    unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/nickel'      },
+  { key: 'electricity', label: 'MCX Electricity', unit: '/MWh', fmtP: (v: number) => fmtINR(v),   href: '/commodities/electricity' },
 ]
 
 // ── Sub-components ────────────────────────────────────────────────────────────

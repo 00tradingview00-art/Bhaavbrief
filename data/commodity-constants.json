@@ -79,5 +79,15 @@
   "nickel": {
     "mcxSymbol": "NICKEL",
     "taxTreatment": "Non-speculative business income (CTT 0.01% on sell side). STCG does not apply to MCX commodity futures."
+  },
+
+  "electricity": {
+    "mcxSymbol": "ELECTRICITY",
+    "quotedUnit": "₹/MWh",
+    "mcxLotSizeMWh": 50,
+    "tickSize": 1,
+    "tickValuePerLotINR": 50,
+    "cashSettledOnly": true,
+    "taxTreatment": "Expected non-speculative business income (CTT 0.01% on sell side), consistent with other MCX commodity futures. STCG does not apply to MCX commodity futures. This is a newly launched (2026) cash-settled-only contract type; treatment had not been separately confirmed as of this writing — confirm with a tax advisor before relying on this for filing."
   }
 }

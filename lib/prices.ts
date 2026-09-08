@@ -17,7 +17,7 @@ import path from 'path'
 
 // ── Instrument token management ───────────────────────────────────────────────
 
-type MetalKey = 'gold' | 'goldMini' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'lead' | 'aluminium' | 'nickel'
+type MetalKey = 'gold' | 'goldMini' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'lead' | 'aluminium' | 'nickel' | 'electricity'
 
 interface InstrumentTokens {
   gold:      InstrumentInfo
@@ -30,6 +30,7 @@ interface InstrumentTokens {
   lead?:      InstrumentInfo
   aluminium?: InstrumentInfo
   nickel?:    InstrumentInfo
+  electricity?: InstrumentInfo
   currencies?: {
     usdinr: InstrumentInfo
     eurinr: InstrumentInfo
@@ -348,7 +349,7 @@ async function fetchKiteQuotes(): Promise<Record<string, KiteQuote> | null> {
   const instruments = loadInstrumentTokens()
   try {
     const client = new KiteClient(apiKey, accessToken)
-    const coreKeys: MetalKey[] = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel']
+    const coreKeys: MetalKey[] = ['gold', 'silver', 'crude', 'copper', 'natgas', 'zinc', 'lead', 'aluminium', 'nickel', 'electricity']
     const mcxTokens  = coreKeys
       .map(k => instruments[k])
       .filter((info): info is InstrumentInfo => !!info?.token)
@@ -424,6 +425,7 @@ export interface PriceData {
   lead?:     MCXData
   aluminium?: MCXData
   nickel?:   MCXData
+  electricity?: MCXData
   currencies?: {
     usdinr: ForexData
     eurinr: ForexData
@@ -497,6 +499,7 @@ export async function getPrices(): Promise<PriceData | null> {
     const leadQ      = instruments.lead      ? kiteByToken(instruments.lead.token)      : null
     const aluminiumQ = instruments.aluminium ? kiteByToken(instruments.aluminium.token) : null
     const nickelQ    = instruments.nickel    ? kiteByToken(instruments.nickel.token)    : null
+    const electricityQ = instruments.electricity ? kiteByToken(instruments.electricity.token) : null
 
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
@@ -550,6 +553,7 @@ export async function getPrices(): Promise<PriceData | null> {
       ...(leadQ      ? { lead:      buildMCXData(leadQ,      0, 0, instruments.lead!)      } : {}),
       ...(aluminiumQ ? { aluminium: buildMCXData(aluminiumQ, 0, 0, instruments.aluminium!) } : {}),
       ...(nickelQ    ? { nickel:    buildMCXData(nickelQ,    0, 0, instruments.nickel!)    } : {}),
+      ...(electricityQ ? { electricity: buildMCXData(electricityQ, 0, 0, instruments.electricity!) } : {}),
       ...(instruments.currencies ? {
         currencies: {
           usdinr: buildForexData(kiteByToken(instruments.currencies.usdinr.token), instruments.currencies.usdinr),
@@ -643,6 +647,7 @@ function loadFromSnapshot(): PriceData | null {
       ...(inst.MCX_LEAD      ? { lead:      mcxData('lead',      'MCX_LEAD')      } : {}),
       ...(inst.MCX_ALUMINIUM ? { aluminium: mcxData('aluminium', 'MCX_ALUMINIUM') } : {}),
       ...(inst.MCX_NICKEL    ? { nickel:    mcxData('nickel',    'MCX_NICKEL')    } : {}),
+      ...(inst.MCX_ELECTRICITY ? { electricity: mcxData('electricity', 'MCX_ELECTRICITY') } : {}),
     }
   } catch { return null }
 }

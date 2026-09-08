@@ -34,7 +34,7 @@ function check(condition, msg) {
 
 // ── Commodity-level required fields ─────────────────────────────────────────
 
-const REQUIRED_TAX = ['crude', 'gold', 'silver', 'copper', 'natgas', 'zinc', 'aluminium', 'lead', 'nickel']
+const REQUIRED_TAX = ['crude', 'gold', 'silver', 'copper', 'natgas', 'zinc', 'aluminium', 'lead', 'nickel', 'electricity']
 for (const key of REQUIRED_TAX) {
   check(constants[key], `Missing commodity entry: ${key}`)
   if (constants[key]) {

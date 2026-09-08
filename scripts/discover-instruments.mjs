@@ -76,6 +76,7 @@ const zinc      = frontMonth(instruments, 'ZINC')
 const lead      = frontMonth(instruments, 'LEAD')
 const aluminium = frontMonth(instruments, 'ALUMINIUM')
 const nickel    = frontMonth(instruments, 'NICKEL')
+const electricity = frontMonth(instruments, 'ELECTRICITY')
 
 if (!gold || !silver || !crude || !copper || !natgas) {
   console.error('Could not find all core front-month contracts')
@@ -91,6 +92,7 @@ if (zinc)      console.log(`Zinc:      ${zinc.symbol} (${zinc.token}) expiry ${z
 if (lead)      console.log(`Lead:      ${lead.symbol} (${lead.token}) expiry ${lead.expiry}`)
 if (aluminium) console.log(`Aluminium: ${aluminium.symbol} (${aluminium.token}) expiry ${aluminium.expiry}`)
 if (nickel)    console.log(`Nickel:    ${nickel.symbol} (${nickel.token}) expiry ${nickel.expiry}`)
+if (electricity) console.log(`Electricity: ${electricity.symbol} (${electricity.token}) expiry ${electricity.expiry}`)
 
 const tokenMap = {
   _note: 'Auto-updated by morning auth. Do not edit manually.',
@@ -104,6 +106,7 @@ const tokenMap = {
   ...(lead      ? { lead:      { token: lead.token,      symbol: lead.symbol,      expiry: lead.expiry      } } : {}),
   ...(aluminium ? { aluminium: { token: aluminium.token, symbol: aluminium.symbol, expiry: aluminium.expiry } } : {}),
   ...(nickel    ? { nickel:    { token: nickel.token,    symbol: nickel.symbol,    expiry: nickel.expiry    } } : {}),
+  ...(electricity ? { electricity: { token: electricity.token, symbol: electricity.symbol, expiry: electricity.expiry } } : {}),
   updatedAt: new Date().toISOString(),
 }
 

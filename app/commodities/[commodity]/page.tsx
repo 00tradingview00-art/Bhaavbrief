@@ -3,7 +3,7 @@ import Link                 from 'next/link'
 import type { Metadata }    from 'next'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 
-type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel'
+type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel' | 'electricity'
 import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
 import { getActiveArcs }    from '@/lib/arcs'
@@ -58,6 +58,7 @@ const SLUG_MAP: Record<string, { key: string; priceKey: string; color: string }>
   'aluminium':   { key: 'aluminium', priceKey: 'aluminium', color: '#6366F1' },
   'lead':        { key: 'lead',      priceKey: 'lead',      color: '#64748B' },
   'nickel':      { key: 'nickel',    priceKey: 'nickel',    color: '#0F766E' },
+  'electricity': { key: 'electricity', priceKey: 'electricity', color: '#CA8A04' },
 }
 
 const BASE = 'https://bhaavbrief.in'
@@ -248,6 +249,24 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
       { q: 'Why is MCX natural gas price up or down today?', a: 'MCX Natural Gas tracks US Henry Hub prices (converted to rupees). It rises when: US natural gas storage draws are larger than expected (EIA report every Thursday at ~8:30 PM IST), winter heating demand is strong in the US or Europe, LNG export capacity increases tighten US domestic supply, or the rupee weakens. It falls when storage builds exceed expectations, weather forecasts are mild, or US production hits new highs.' },
       { q: 'What is the EIA natural gas report and when is it released?', a: 'The US Energy Information Administration (EIA) releases weekly natural gas storage data every Thursday at approximately 8:30 PM IST. This is the most important weekly event for MCX Natural Gas traders. A storage draw larger than the market consensus is bullish (price rises); a build larger than consensus is bearish (price falls). The 5-year average storage level is used as the benchmark.' },
       { q: 'What is the MCX Natural Gas lot size and margin?', a: 'MCX Natural Gas standard contract has a lot size of 1,250 mmBtu, quoted in ₹ per mmBtu. At ~₹320/mmBtu, one lot is worth approximately ₹4 lakh. SPAN margin is approximately ₹20,000–₹30,000. The Natural Gas Mini (250 mmBtu) requires only ₹4,000–₹6,000 margin — but natural gas is the most volatile MCX contract (5–10% single-day moves are common), so even the Mini carries significant risk for beginners.' },
+    ],
+  },
+  electricity: {
+    title: 'Why MCX Electricity Is Moving Today — IEX & Power Demand Analysis',
+    description: 'MCX electricity futures price live today — why it is up or down: IEX Day-Ahead Market price, power demand, coal and hydro supply, and renewable output. Contract specs and daily intelligence for Indian traders.',
+    keywords: [
+      'MCX electricity futures price today',
+      'why is MCX electricity moving today',
+      'MCX electricity contract lot size',
+      'MCX electricity futures margin',
+      'IEX day ahead market price MCX',
+      'MCX electricity futures explained India',
+      'MCX electricity options',
+    ],
+    faq: [
+      { q: 'Why is MCX electricity futures price up or down today?', a: 'MCX Electricity futures cash-settle against the IEX Day-Ahead Market (DAM) clearing price. Prices rise when power demand spikes (heatwaves, cold snaps, high industrial load) or when supply tightens (coal shortages, low hydro generation, low renewable output). Prices fall when demand is mild or renewable (solar/wind) generation is abundant, pushing down the marginal cost of power on the grid.' },
+      { q: 'What is the MCX Electricity futures lot size and margin?', a: 'MCX Electricity futures have a lot size of 50 MWh, quoted in ₹ per MWh, with a tick size of ₹1/MWh (₹50 per lot per tick). Margin is 10% of contract value or SPAN, whichever is higher. All contracts are cash-settled only — there is no physical delivery.' },
+      { q: 'Are there options on MCX Electricity futures?', a: 'Not currently. As of this writing, MCX only lists electricity futures — no options chain exists for this contract yet, unlike gold, silver, crude oil, natural gas, and copper.' },
     ],
   },
 }

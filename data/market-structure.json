@@ -377,5 +377,44 @@
       "LNG freight rates"
     ],
     "expiryNote": "Front-month contract expires 25 Sept 2026"
+  },
+  "electricity": {
+    "name": "Electricity",
+    "mcxSymbol": "ELECTRICITY",
+    "unit": "₹ per MWh",
+    "lotSize": "50 MWh",
+    "tickSize": "₹1 per MWh = ₹50/lot",
+    "typicalMargin": "10% of contract value, or SPAN, whichever is higher",
+    "contractValue": "50 x MCX Electricity price per MWh",
+    "importParity": "Not applicable — Electricity is a domestically cash-settled derivative referencing the IEX Day-Ahead Market (DAM) clearing price, not an imported commodity. There is no import-parity/LME-style formula.",
+    "supplyControl": "India's power supply is a mix of coal (largest share), hydro, nuclear, and rapidly growing renewables (solar, wind), coordinated by Grid-India (POSOCO) as the national grid operator. Unlike metals, there is no single dominant global producer — this is a domestic, grid-balancing market.",
+    "keyBodies": [
+      "Indian Energy Exchange (IEX)",
+      "Central Electricity Regulatory Commission (CERC)",
+      "Grid-India (POSOCO)",
+      "Multi Commodity Exchange (MCX)"
+    ],
+    "demandDrivers": [
+      "Seasonal peak demand — summer air-conditioning load (Apr–Jun) and winter heating in the north",
+      "Industrial and commercial power consumption cycles",
+      "DISCOM (state power distribution company) short-term buying to cover shortfalls",
+      "Renewable generation variability — solar/wind output swings shift how much thermal/hydro power is needed"
+    ],
+    "priceDrivers": [
+      "IEX Day-Ahead Market (DAM) clearing price — the direct reference price the MCX contract cash-settles against",
+      "Coal supply and availability at thermal power plants",
+      "Monsoon strength — drives hydro generation output",
+      "Temperature extremes — heatwaves and cold snaps spike demand faster than supply can adjust",
+      "Renewable (solar/wind) output — high renewable generation can push prices down sharply during the day"
+    ],
+    "keyRisk": "This is MCX's newest derivative (launched 2026) with a dual-regulator structure — SEBI regulates the MCX futures contract while CERC regulates the underlying IEX spot market — a still-untested split. Liquidity, while growing quickly, remains thinner than legacy MCX contracts like gold or crude.",
+    "taxNote": "MCX Electricity futures are cash-settled only (no physical delivery). Expected to follow the same non-speculative business income treatment as other MCX commodity futures (CTT 0.01% on sell side), but this had not been separately confirmed for this newly launched contract type as of this writing — confirm with a tax advisor before relying on this for filing.",
+    "macroLinks": [
+      "IEX Day-Ahead Market price",
+      "Coal India output/availability",
+      "Monsoon/hydro generation data",
+      "Grid-India demand reports",
+      "Temperature forecasts (IMD)"
+    ]
   }
 }

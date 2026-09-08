@@ -329,3 +329,62 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
 }
 
 export const getOptionsChain = cache(getOptionsChainUncached)
+
+// ── Futures-only instruments (no options chain) ─────────────────────────────
+// Deliberately NOT added to MCX_INSTRUMENTS above — that registry feeds 11
+// options-only consumers (OI/PCR/IV-rank/max-pain/Greeks tool pages, the
+// oi-snapshot/iv-snapshot crons, and the options history/margin routes), all
+// of which are concepts that don't exist for a futures-only instrument. This
+// parallel, minimal path exists solely so the Strategy Builder can show a
+// live futures price and let a user model a plain long/short position —
+// see components/mcx/StrategyBuilder.tsx's Futures Position panel.
+export const FUTURES_ONLY_INSTRUMENTS: Record<string, { label: string; unit: string; lotSize: number }> = {
+  ELECTRICITY: { label: 'Electricity', unit: 'MWh', lotSize: 50 },
+}
+
+async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: string | null = null) {
+  if (!FUTURES_ONLY_INSTRUMENTS[instrument]) {
+    throw new Error(`Invalid instrument. Valid: ${Object.keys(FUTURES_ONLY_INSTRUMENTS).join(', ')}`)
+  }
+  if (!process.env.KITE_API_KEY || !process.env.KITE_ACCESS_TOKEN) {
+    throw new Error('Kite credentials not configured')
+  }
+
+  const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
+  const allInstruments = await getFullMCXInstrumentsCached()
+
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const futures = allInstruments
+    .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+    .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())
+
+  if (!futures.length) {
+    throw new Error(`No futures contracts found for ${instrument}`)
+  }
+
+  const expiries   = futures.map(f => f.expiry)
+  const activeFut  = (requestedExpiry ? futures.find(f => f.expiry === requestedExpiry) : null) ?? futures[0]
+
+  const quotes = await kc.getQuotes(futures.map(f => f.instrument_token))
+  const futurePrice = quotes[String(activeFut.instrument_token)]?.last_price ?? 0
+
+  return {
+    instrument,
+    meta:        FUTURES_ONLY_INSTRUMENTS[instrument],
+    expiry:      activeFut.expiry,
+    expiries,
+    futurePrice,
+    maxPain:     null,
+    pcr:         0,
+    ivix:        null,
+    aav:         { '5d': null, '10d': null, '20d': null, '40d': null, '60d': null },
+    volPremium:  null,
+    marketOpen:  isMCXMarketOpen(),
+    riskFreeRate:      RISK_FREE_RATE,
+    riskFreeRateAsOf:  RISK_FREE_RATE_ASOF,
+    chain: [] as never[],
+    lastUpdated: new Date().toISOString(),
+  }
+}
+
+export const getFuturesOnlyChain = cache(getFuturesOnlyChainUncached)

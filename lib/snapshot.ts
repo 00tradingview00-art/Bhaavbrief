@@ -154,6 +154,7 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     ...(i.MCX_LEAD      ? { lead:      mcxRow('MCX_LEAD')      } : {}),
     ...(i.MCX_ALUMINIUM ? { aluminium: mcxRow('MCX_ALUMINIUM') } : {}),
     ...(i.MCX_NICKEL    ? { nickel:    mcxRow('MCX_NICKEL')    } : {}),
+    ...(i.MCX_ELECTRICITY ? { electricity: mcxRow('MCX_ELECTRICITY') } : {}),
 
     currencies: {
       usdinr: { ltp: i.USDINR?.price ?? 0,  changePct: i.USDINR?.changePct  ?? 0, change: 0, open: 0, high: 0, low: 0, prevClose: i.USDINR?.prevClose  ?? 0, volume: 0, symbol: '', expiry: '' },
