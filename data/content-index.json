@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-08-options-selling-vs-buying-mcx-india",
+    "href": "/articles/2026-09-08-options-selling-vs-buying-mcx-india",
+    "title": "Options Selling vs Buying — Which Strategy Suits MCX Commodity Traders?",
+    "description": "Understand options selling vs buying strategy MCX commodity India — mechanics, margin impact, and historical episodes to sharpen your trading edge.",
+    "excerpt": "The debate around options selling vs buying strategy MCX commodity India centres on one core trade-off: premium collection against unlimited risk exposure versus defined loss against asymmetric payoff",
+    "date": "2026-09-08",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-101",
     "href": "/briefs/edition-101",
