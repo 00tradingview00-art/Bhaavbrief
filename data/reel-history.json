@@ -1,5 +1,22 @@
 [
   {
+    "file": "brief-edition-102",
+    "topic": "Silver Breaks Out While Gold Holds Still — The Industrial Bid Returns",
+    "content_type": "price_move",
+    "mood": "VOLATILE",
+    "hook_caption": "Silver's on the move. Gold's not.",
+    "stat_line": "Global silver +2.03%. Your price hasn't caught up.",
+    "payoff": "Silver's finally moving like a metal, not just a safe bet.",
+    "beat1": "Silver jumped 2.03% overnight globally to $67.39/oz. MCX silver at ₹239,016/kg hasn't absorbed that yet.",
+    "beat2": "Industrial demand is back. Energy supply worries plus factory orders are pulling silver higher—gold's sitting out.",
+    "beat3": "If MCX silver holds above ₹239,016 in the first hour, the global move is real here. Breaks below, domestic traders are betting against it.",
+    "instagram_id": "17904583236332082",
+    "generated_at": "2026-09-08T03:01:56.989Z",
+    "edition": 102,
+    "hi_path": "public/reels/brief-edition-102-hi.mp4",
+    "posted_at": "2026-09-08T03:04:31.391Z"
+  },
+  {
     "file": "news-20260907-mcx-circuit-limits",
     "topic": "MCX Circuit Limits",
     "content_type": "explainer",
@@ -46,7 +63,14 @@
     "generated_at": "2026-09-07T00:48:09.315Z",
     "edition": 101,
     "hi_path": "public/reels/brief-edition-101-hi.mp4",
-    "posted_at": "2026-09-07T00:50:29.925Z"
+    "posted_at": "2026-09-07T00:50:29.925Z",
+    "insights": {
+      "views": 25,
+      "reach": 23,
+      "ig_reels_avg_watch_time": 1707,
+      "ig_reels_video_view_total_time": 40991,
+      "fetched_at": "2026-09-08T02:54:48.895Z"
+    }
   },
   {
     "file": "news-20260906-how-much-money-to-start-mcx-trading",
@@ -77,7 +101,14 @@
     "instagram_id": "18112253570282363",
     "generated_at": "2026-09-06T13:45:46.926Z",
     "edition": null,
-    "posted_at": "2026-09-06T13:46:30.130Z"
+    "posted_at": "2026-09-06T13:46:30.130Z",
+    "insights": {
+      "views": 53,
+      "reach": 53,
+      "ig_reels_avg_watch_time": 1540,
+      "ig_reels_video_view_total_time": 81621,
+      "fetched_at": "2026-09-08T02:54:50.011Z"
+    }
   },
   {
     "file": "news-20260905-mcx-gold-vs-gold-etf",
