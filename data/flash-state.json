@@ -20,33 +20,33 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-09-08T08:58:35.222Z",
-    "lastFlashPrice": 8952,
+    "lastFlashAt": "2026-09-08T16:59:23.302Z",
+    "lastFlashPrice": 8746,
     "lastRoundLevel": 8500,
     "recentFlashIds": [
+      "2026-09-08-22-29-mcx-crude-slips-on-profit-taking-after-recovery-run",
       "2026-09-08-14-28-mcx-crude-rallies-2-19-on-sustained-recovery-momentum",
-      "2026-09-03-18-17-mcx-crude-extends-rally-on-sustained-recovery-momentum",
-      "2026-09-01-22-58-mcx-crude-surges-4-32-on-fresh-rally-extension"
+      "2026-09-03-18-17-mcx-crude-extends-rally-on-sustained-recovery-momentum"
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": "2026-09-01T18:47:41.270Z",
-    "lastFlashPrice": 1371.5,
+    "lastFlashAt": "2026-09-08T16:59:23.302Z",
+    "lastFlashPrice": 1410.55,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-08-22-29-mcx-copper-surges-1-72-on-base-metal-recovery",
       "2026-09-02-00-17-mcx-copper-falls-1-31-on-rupee-strength-and-risk-off-se",
-      "2026-08-26-09-36-mcx-copper-edges-higher-on-rupee-weakness-and-base-meta",
-      "2026-08-18-20-18-mcx-copper-slides-0-84-on-rupee-strength"
+      "2026-08-26-09-36-mcx-copper-edges-higher-on-rupee-weakness-and-base-meta"
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-09-03T09:04:39.297Z",
-    "lastFlashPrice": 283,
+    "lastFlashAt": "2026-09-08T16:59:23.302Z",
+    "lastFlashPrice": 274.5,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-08-22-29-mcx-natural-gas-falls-2-38-on-profit-taking-reversal",
       "2026-09-03-14-34-mcx-natural-gas-rebounds-1-43-on-rupee-weakness-tailwin",
-      "2026-08-28-21-00-mcx-natural-gas-falls-2-72-on-demand-softness",
-      "2026-08-27-19-35-mcx-natural-gas-surges-2-12-on-rupee-weakness"
+      "2026-08-28-21-00-mcx-natural-gas-falls-2-72-on-demand-softness"
     ]
   },
   "USDINR": {
