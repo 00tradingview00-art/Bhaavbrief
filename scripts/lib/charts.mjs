@@ -265,3 +265,48 @@ export function drawSparkline(ctx, {
 
   return true
 }
+
+function wrapText(ctx, text, maxW) {
+  const words = text.split(' '), lines = []
+  let cur = ''
+  for (const w of words) {
+    const test = cur ? `${cur} ${w}` : w
+    if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w }
+    else cur = test
+  }
+  if (cur) lines.push(cur)
+  return lines
+}
+
+/**
+ * Word-synced caption band — a fixed-position pill with its own semi-opaque
+ * background (readable over any phase background, light or dark) and up to
+ * 2 lines of bold centered text. `chunk` is a
+ * scripts/lib/reelCaptions.mjs-shaped `{text, start, end}` (only `.text` is
+ * used here — timing/frame-selection is the caller's job); `null`/no-text
+ * draws nothing.
+ * @returns {boolean} false if there's no chunk/text to show.
+ */
+export function drawCaptionOverlay(ctx, {
+  x, y, w, chunk, fontFamily = '"NotoSans", "Inter", sans-serif',
+  bgColor = 'rgba(10,10,8,0.72)', textColor = '#FFFFFF',
+  minHeight = 84, fontSize = 44, lineHeight = 50, radius = 14,
+}) {
+  if (!chunk?.text) return false
+
+  ctx.font = `bold ${fontSize}px ${fontFamily}`
+  ctx.textAlign = 'center'
+  const lines = wrapText(ctx, chunk.text, w - 48).slice(0, 2)
+  const textBlockH = lines.length * lineHeight
+  const boxH = Math.max(minHeight, textBlockH + 34)
+
+  roundRect(ctx, x, y, w, boxH, radius)
+  ctx.fillStyle = bgColor
+  ctx.fill()
+
+  const startY = y + (boxH - textBlockH) / 2 + lineHeight * 0.72
+  ctx.fillStyle = textColor
+  lines.forEach((line, i) => ctx.fillText(line, x + w / 2, startY + i * lineHeight))
+
+  return true
+}
