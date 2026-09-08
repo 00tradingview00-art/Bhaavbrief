@@ -25,7 +25,7 @@ const SCHEMA = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'Product',
+      '@type': 'Service',
       name: 'BhaavBrief Pro',
       description: 'Unlock the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data.',
       brand: { '@id': 'https://bhaavbrief.in/#organization' },
