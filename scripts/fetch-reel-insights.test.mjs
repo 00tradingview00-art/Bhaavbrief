@@ -53,4 +53,38 @@ describe('parseInsightsResponse', () => {
     expect(parseInsightsResponse({})).toEqual({})
     expect(parseInsightsResponse(undefined)).toEqual({})
   })
+
+  it('reads a full engagement-metrics response (likes/comments/shares/saved/total_interactions)', () => {
+    const body = {
+      data: [
+        { name: 'likes', total_value: { value: 12 } },
+        { name: 'comments', total_value: { value: 3 } },
+        { name: 'shares', total_value: { value: 5 } },
+        { name: 'saved', total_value: { value: 2 } },
+        { name: 'total_interactions', total_value: { value: 22 } },
+      ],
+    }
+    expect(parseInsightsResponse(body)).toEqual({
+      likes: 12, comments: 3, shares: 5, saved: 2, total_interactions: 22,
+    })
+  })
+})
+
+describe('engagement + primary metrics merge (as done in main())', () => {
+  it('engagement fields sit alongside views/reach/watch-time without clobbering them', () => {
+    const metrics = { views: 44, reach: 40, ig_reels_avg_watch_time: 2400 }
+    const engagement = { likes: 5, shares: 1 }
+    const merged = { ...metrics, ...engagement, fetched_at: '2026-09-08T00:00:00.000Z' }
+    expect(merged).toEqual({
+      views: 44, reach: 40, ig_reels_avg_watch_time: 2400,
+      likes: 5, shares: 1, fetched_at: '2026-09-08T00:00:00.000Z',
+    })
+  })
+
+  it('a failed engagement fetch (empty object) still leaves the primary metrics intact', () => {
+    const metrics = { views: 44, reach: 40 }
+    const engagement = {}
+    const merged = { ...metrics, ...engagement, fetched_at: 'x' }
+    expect(merged).toEqual({ views: 44, reach: 40, fetched_at: 'x' })
+  })
 })
