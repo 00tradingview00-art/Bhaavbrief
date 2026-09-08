@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 152768,
-    "silver": 238324,
-    "crude": 8889,
-    "copper": 1404,
-    "natgas": 285.6,
+    "gold": 152810,
+    "silver": 238902,
+    "crude": 8826,
+    "copper": 1412,
+    "natgas": 277.6,
     "usdinr": 94.49
   },
-  "lastChecked": "2026-09-08T12:14:23.688Z",
+  "lastChecked": "2026-09-08T13:45:36.642Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -22,11 +22,13 @@
     "mideast": "Oil up about 2% as renewed US-Iran strikes stoke supply fears - reuters.com",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-09-03T16:22:41.543Z",
+  "articlesToday": [
+    "2026-09-08/2026-09-08-mcx-nat-gas-falls-2-8-as-henry-hub-weakens-on-storage-surplu"
+  ],
+  "lastArticleAt": "2026-09-08T13:45:49.372Z",
   "lastCoveredAt": {
     "crude": "2026-08-31T08:59:13.057Z",
     "silver": "2026-07-28T05:36:23.461Z",
-    "natgas": "2026-09-03T16:22:41.543Z"
+    "natgas": "2026-09-08T13:45:49.372Z"
   }
 }
