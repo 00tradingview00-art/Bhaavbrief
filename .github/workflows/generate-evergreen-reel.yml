@@ -1,0 +1,138 @@
+name: Generate Evergreen Reel (Learn / Campaign)
+
+# Single shared daily slot for BhaavBrief's two "evergreen" content streams
+# (not tied to daily market news) — alternates between the Learn (MCX 101)
+# rotation and the 30-day Campaign queue instead of both posting every day
+# independently, per scripts/lib/evergreenRotation.mjs. Replaces the
+# schedule triggers previously on generate-campaign-reel.yml and
+# generate-learn-reel.yml (both kept as workflow_dispatch-only for manual
+# runs/backfill — neither script itself changed).
+
+on:
+  schedule:
+    - cron: '0 14 * * *'  # 7:30 PM IST daily — reuses the prior learn-reel slot
+  workflow_dispatch:
+
+concurrency:
+  group: generate-evergreen-reel
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Pick today's evergreen type
+        id: pick
+        run: node scripts/pick-evergreen-type.mjs
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      # ── Learn branch — same script/steps as the old generate-learn-reel.yml ──
+      - name: Generate learn reel
+        id: reel_learn
+        if: steps.pick.outputs.type == 'learn'
+        env:
+          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: node scripts/generate-learn-reel.mjs
+
+      # ── Campaign branch — same script/steps as the old generate-campaign-reel.yml ──
+      - name: Generate campaign reel
+        id: reel_campaign
+        if: steps.pick.outputs.type == 'campaign'
+        env:
+          ANTHROPIC_API_KEY:      ${{ secrets.ANTHROPIC_API_KEY }}
+          ELEVENLABS_API_KEY:     ${{ secrets.ELEVENLABS_API_KEY }}
+          INTERNAL_ACCESS_SECRET: ${{ secrets.INTERNAL_ACCESS_SECRET }}
+        run: node scripts/generate-campaign-reel.mjs
+
+      # Whichever branch ran is the only one with a real reel_file output —
+      # the other step didn't run at all (its `if:` was false), so its
+      # `steps.*.outputs.reel_file` is simply empty rather than needing a
+      # composed conditional expression here.
+      - name: Post reel to Instagram
+        if: steps.reel_learn.outcome == 'success' || steps.reel_campaign.outcome == 'success'
+        continue-on-error: true
+        env:
+          REEL_FILE:              ${{ steps.reel_learn.outputs.reel_file }}${{ steps.reel_campaign.outputs.reel_file }}
+          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
+          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
+        run: |
+          if [ -n "$REEL_FILE" ] && [ -f "$REEL_FILE" ]; then
+            node scripts/post-reel-instagram.mjs
+          else
+            echo "No reel file produced (type: ${{ steps.pick.outputs.type }}) — skipping post"
+          fi
+
+      # data/reel-history.json, data/learn-reel-history.json,
+      # data/reel-campaign-state.json, and data/evergreen-rotation.json all
+      # live only on this runner until committed back — same save/rebase/
+      # restore-via-/tmp pattern the other reel workflows already use.
+      - name: Persist reel + rotation state
+        continue-on-error: true
+        run: |
+          [ -f data/reel-history.json ]        && cp data/reel-history.json /tmp/bb-reel-history.json || true
+          [ -f data/learn-reel-history.json ]  && cp data/learn-reel-history.json /tmp/bb-learn-history.json || true
+          [ -f data/reel-campaign-state.json ] && cp data/reel-campaign-state.json /tmp/bb-campaign-state.json || true
+          [ -f data/evergreen-rotation.json ]  && cp data/evergreen-rotation.json /tmp/bb-evergreen-rotation.json || true
+          git checkout -- . 2>/dev/null || true
+          git pull --rebase origin main
+          [ -f /tmp/bb-reel-history.json ]       && cp /tmp/bb-reel-history.json data/reel-history.json || true
+          [ -f /tmp/bb-learn-history.json ]      && cp /tmp/bb-learn-history.json data/learn-reel-history.json || true
+          [ -f /tmp/bb-campaign-state.json ]     && cp /tmp/bb-campaign-state.json data/reel-campaign-state.json || true
+          [ -f /tmp/bb-evergreen-rotation.json ] && cp /tmp/bb-evergreen-rotation.json data/evergreen-rotation.json || true
+          git add data/reel-history.json data/learn-reel-history.json data/reel-campaign-state.json data/evergreen-rotation.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "Reel/rotation state unchanged — nothing to commit"
+            exit 0
+          fi
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Evergreen reel (${{ steps.pick.outputs.type }}) — $(date +'%d %b %Y')"
+          for attempt in 1 2 3; do
+            git push origin main && break
+            if [ $attempt -lt 3 ]; then
+              echo "Push attempt $attempt rejected — rebasing and retrying..."
+              git pull --rebase origin main || { git rebase --abort; exit 1; }
+              sleep $((attempt * 3))
+            else
+              echo "::error::Push failed after 3 attempts"
+              exit 1
+            fi
+          done
+
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "sender": { "name": "BhaavBrief Bot", "email": "${{ secrets.SENDER_EMAIL }}" },
+              "to": [{ "email": "00tradingview00@gmail.com" }],
+              "subject": "ACTION REQUIRED: Evergreen reel pipeline failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'",
+              "htmlContent": "<p>The <strong>Generate Evergreen Reel</strong> workflow failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong> (type: ${{ steps.pick.outputs.type }}).</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/generate-evergreen-reel.yml\">Re-run workflow →</a></p>"
+            }'
