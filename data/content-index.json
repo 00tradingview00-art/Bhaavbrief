@@ -21,6 +21,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-09-mcx-risk-management-position-sizing",
+    "href": "/articles/2026-09-09-mcx-risk-management-position-sizing",
+    "title": "MCX Risk Management — Position Sizing Rules for Indian Commodity Traders",
+    "description": "Master mcx risk management position sizing strategy india with proven rules on lot size, margin math, and stop-loss calibration for commodity traders.",
+    "excerpt": "A sound mcx risk management position sizing strategy india commodity traders can actually apply starts with one rule: never let a single trade risk more than 1–2% of total trading capital. Position si",
+    "date": "2026-09-09",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-08-mcx-nat-gas-falls-2-8-as-henry-hub-weakens-on-storage-surplu",
     "href": "/articles/2026-09-08-mcx-nat-gas-falls-2-8-as-henry-hub-weakens-on-storage-surplu",
     "title": "MCX Nat Gas Falls 2.8% as Henry Hub Weakens on Storage Surplus",
