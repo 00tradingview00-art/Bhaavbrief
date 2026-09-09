@@ -10,13 +10,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-09-04T07:55:37.752Z",
-    "lastFlashPrice": 241543,
-    "lastRoundLevel": 230000,
+    "lastFlashAt": "2026-09-09T08:04:27.305Z",
+    "lastFlashPrice": 240872,
+    "lastRoundLevel": 240000,
     "recentFlashIds": [
+      "2026-09-09-13-34-mcx-silver-rallies-0-60-through-round-number-threshold",
       "2026-09-04-13-25-mcx-silver-slides-0-33-as-rupee-steadies",
-      "2026-09-01-19-11-mcx-silver-falls-1-73-on-broad-precious-metals-retreat",
-      "2026-08-31-16-31-mcx-silver-retreats-on-profit-taking-after-rally"
+      "2026-09-01-19-11-mcx-silver-falls-1-73-on-broad-precious-metals-retreat"
     ]
   },
   "MCX_CRUDE": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-08T08:11:31.848Z",
-    "lastFlashPrice": 94.78,
-    "lastRoundLevel": 94.5,
+    "lastFlashAt": "2026-09-09T08:04:27.305Z",
+    "lastFlashPrice": 95.15,
+    "lastRoundLevel": 95,
     "recentFlashIds": [
+      "2026-09-09-13-34-usd-inr-strengthens-0-33-amid-rupee-appreciation-moment",
       "2026-09-08-13-41-usd-inr-strengthens-0-23-amid-rupee-appreciation-moment",
-      "2026-09-07-13-42-usd-inr-breaks-94-5-support-on-rupee-strength",
-      "2026-09-03-13-29-usd-inr-weakens-0-54-on-rupee-inflow-momentum"
+      "2026-09-07-13-42-usd-inr-breaks-94-5-support-on-rupee-strength"
     ]
   }
 }
