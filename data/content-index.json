@@ -1,6 +1,28 @@
 [
   {
     "type": "article",
+    "slug": "2026-09-09-mcx-close-10sep2026-silver-metals-rally",
+    "href": "/articles/2026-09-09-mcx-close-10sep2026-silver-metals-rally",
+    "title": "MCX Close 10Sep: Silver Leads Metals Rally +2%",
+    "description": "MCX evening close 10 Sep 2026: Silver +2.04% to ₹244300/kg leads broad metals advance. COMEX Gold +1.48%, WTI +3.12% extend overnight gains amid dollar weakness.",
+    "excerpt": "MCX metals complex closed in broad advance Thursday, led by silver's +2.04% surge to ₹244300/kg. Gold followed with +0.75% close at ₹153721/10g, while copper added +0.84% to ₹1424.5/kg. Energy sector ",
+    "date": "2026-09-09T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Silver",
+      "Gold",
+      "Metals Rally"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-09-mcx-crude-surges-2-40-to-8950-as-iran-tensions-lift-wti",
     "href": "/articles/2026-09-09-mcx-crude-surges-2-40-to-8950-as-iran-tensions-lift-wti",
     "title": "MCX Crude Surges 2.40% to ₹8950 as Iran Tensions Lift WTI",
