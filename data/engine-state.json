@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 153147,
-    "silver": 239532,
-    "crude": 9088,
-    "copper": 1411.15,
-    "natgas": 272.7,
+    "gold": 153915,
+    "silver": 242811,
+    "crude": 9087,
+    "copper": 1416.4,
+    "natgas": 271.5,
     "usdinr": 94.83
   },
-  "lastChecked": "2026-09-09T12:28:53.319Z",
+  "lastChecked": "2026-09-09T13:49:14.069Z",
   "lastCirculars": {
     "sebi": null,
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "223"
   },
   "lastGeoNews": {
-    "mideast": "Iran attacks US base in Jordan, ships near Hormuz after tankers sunk - Reuters",
+    "mideast": "Brent crude oil rises above $100 a barrel as Middle East conflict intensifies - ",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [
