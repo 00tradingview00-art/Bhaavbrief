@@ -1,5 +1,27 @@
 [
   {
+    "file": "brief-edition-103",
+    "topic": "Brent Crosses $99 as the Geopolitical Premium Reclaims the Wheel",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Oil just crossed $99. Your petrol bill's next.",
+    "stat_line": "Brent $99. MCX crude +2.15% overnight.",
+    "payoff": "Oil fears oil. Gold's not convinced yet.",
+    "beat1": "Middle East tension pushed crude past $99/barrel globally.",
+    "beat2": "Geopolitical fear, not demand. Supply risk reprices everything.",
+    "beat3": "Watch if gold breaks $4,422 tonight—or stays flat.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18308890303304615",
+    "generated_at": "2026-09-09T05:07:52.985Z",
+    "edition": 103,
+    "hi_path": "public/reels/brief-edition-103-hi.mp4",
+    "posted_at": "2026-09-09T05:09:42.487Z"
+  },
+  {
     "file": "news-20260908-mcx-commodity-trading-tax-in-india",
     "topic": "MCX Commodity Trading Tax in India",
     "content_type": "explainer",
@@ -35,7 +57,19 @@
     "generated_at": "2026-09-08T03:01:56.989Z",
     "edition": 102,
     "hi_path": "public/reels/brief-edition-102-hi.mp4",
-    "posted_at": "2026-09-08T03:04:31.391Z"
+    "posted_at": "2026-09-08T03:04:31.391Z",
+    "insights": {
+      "views": 14,
+      "reach": 14,
+      "ig_reels_avg_watch_time": 990,
+      "ig_reels_video_view_total_time": 13865,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-09T05:00:56.757Z"
+    }
   },
   {
     "file": "news-20260907-mcx-circuit-limits",
@@ -51,7 +85,19 @@
     "instagram_id": "18214229527347756",
     "generated_at": "2026-09-07T18:42:08.452Z",
     "edition": null,
-    "posted_at": "2026-09-07T18:42:57.746Z"
+    "posted_at": "2026-09-07T18:42:57.746Z",
+    "insights": {
+      "views": 7,
+      "reach": 7,
+      "ig_reels_avg_watch_time": 2764,
+      "ig_reels_video_view_total_time": 19348,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-09T05:00:58.430Z"
+    }
   },
   {
     "file": "news-20260907-full-free-option-chain-all-5-commodities",
@@ -67,7 +113,19 @@
     "instagram_id": "17906978982519239",
     "generated_at": "2026-09-07T15:59:27.303Z",
     "edition": null,
-    "posted_at": "2026-09-07T16:00:11.953Z"
+    "posted_at": "2026-09-07T16:00:11.953Z",
+    "insights": {
+      "views": 12,
+      "reach": 9,
+      "ig_reels_avg_watch_time": 1902,
+      "ig_reels_video_view_total_time": 20930,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-09T05:00:59.854Z"
+    }
   },
   {
     "file": "brief-edition-101",
