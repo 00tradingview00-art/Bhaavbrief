@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-103",
+    "href": "/briefs/edition-103",
+    "title": "Brent Crosses $99 as the Geopolitical Premium Reclaims the Wheel",
+    "description": "Crude's biggest single-session jump in weeks pulls energy and gold apart, exposing a fracture in the war-trade narrative.",
+    "excerpt": "MCX Gold ₹152687 | Crude ₹8922 | USDINR ₹95.09 — Gold +0.07% | Crude +2.15% | Silver +0.14% Yesterday's Edge — Result: Edition #102 watched whether COMEX SILVER would close above 67.39. Rejected ✗, no",
+    "date": "2026-09-09T05:01:02.679Z",
+    "edition": "103",
+    "tags": [
+      "MCX Crude",
+      "Geopolitics",
+      "MCX Gold"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-08-mcx-nat-gas-falls-2-8-as-henry-hub-weakens-on-storage-surplu",
     "href": "/articles/2026-09-08-mcx-nat-gas-falls-2-8-as-henry-hub-weakens-on-storage-surplu",
