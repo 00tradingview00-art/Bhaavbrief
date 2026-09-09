@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-09-mcx-crude-surges-2-40-to-8950-as-iran-tensions-lift-wti",
+    "href": "/articles/2026-09-09-mcx-crude-surges-2-40-to-8950-as-iran-tensions-lift-wti",
+    "title": "MCX Crude Surges 2.40% to ₹8950 as Iran Tensions Lift WTI",
+    "description": "MCX Crude Oil jumps ₹215/bbl to ₹8950 on Iran-US escalation near Hormuz. WTI at $94.62 signals insurance premium, not supply disruption yet. OMCs may pause petrol cuts.",
+    "excerpt": "WHAT HAPPENED MCX Crude Oil jumped ₹215/bbl to ₹8950 (+2.40%) in morning trade as WTI climbed $2.32 to $94.62/bbl, driven by news of Iran's attack on a US military base in Jordan and Iranian threats t",
+    "date": "2026-09-09T13:07:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "Iran Tensions",
+      "Hormuz Strait",
+      "WTI"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8950
+  },
+  {
     "type": "brief",
     "slug": "edition-103",
     "href": "/briefs/edition-103",
