@@ -21,6 +21,27 @@
     "priceAtPublish": 9678
   },
   {
+    "type": "article",
+    "slug": "2026-09-10-mcx-close-11sep2026-crude-surge",
+    "href": "/articles/2026-09-10-mcx-close-11sep2026-crude-surge",
+    "title": "MCX Close 11Sep: Crude Surges +6.85%, Metals Fade",
+    "description": "11 Sep 2026 | MCX Crude rallies ₹9722/bbl +6.85% led by geopolitical supply fears. Gold, copper retreat as USD strengthens. COMEX fading overnight.",
+    "excerpt": "MCX crude dominated Friday's session, closing at ₹9722/bbl with a +6.85% gain on geopolitical supply concerns and overnight OPEC+ production signals. The commodity traded a ₹710 range (high ₹9774, low",
+    "date": "2026-09-10T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Rally",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-104",
     "href": "/briefs/edition-104",
