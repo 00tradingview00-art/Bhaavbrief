@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-10-mcx-crude-rallies-2-as-wti-breaches-101-refinery-maintenance",
+    "href": "/articles/2026-09-10-mcx-crude-rallies-2-as-wti-breaches-101-refinery-maintenance",
+    "title": "MCX Crude Rallies 2% as WTI Breaches $101, Refinery Maintenance Looms",
+    "description": "MCX Crude Oil surges to ₹9,678/bbl (+2.08%) tracking WTI $101.85 amid US refinery turnarounds. Key support at ₹9,064.",
+    "excerpt": "WHAT HAPPENED MCX Crude Oil rallied ₹201/bbl (+2.08%) to ₹9,678/bbl, riding WTI's breach of $101.85/bbl, while MCX Natural Gas edged up just +1.09% to ₹270/mmBtu. The divergence is precise: crude is r",
+    "date": "2026-09-10T22:03:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "MCX Nat Gas",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9678
+  },
+  {
     "type": "brief",
     "slug": "edition-104",
     "href": "/briefs/edition-104",
