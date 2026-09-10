@@ -1,4 +1,9 @@
-# BhaavBrief — repo guide for Claude Code
+# BhaavBrief — repo guide for Codex
+
+This is the OpenAI-agent (Codex) counterpart to `CLAUDE.md`. The facts below are shared with
+that file — read whichever one your tool loads, they should never diverge on anything factual.
+Codex itself runs on OpenAI's models; **the app's own AI stack is Anthropic Claude** (brief
+generation + semantic validation) plus ElevenLabs (reel voiceover) — see Stack below.
 
 MCX commodity intelligence for Indian traders: a daily AI-generated market brief, a live
 options chain (Black-76), and a price bridge/import-parity engine, published on a
@@ -32,12 +37,12 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 
 ## The gate is sacred
 
-`scripts/validate-brief.mjs` is the publication gate — **never bypass it, never weaken a check
-to make a specific brief pass.** If a check is wrong, fix the check with a real test proving
-the fix, in its own change. The gate's exit-code contract matters: 0 = publish, 1 = a
-legitimate content rejection (stay silent, working as intended), 2 = the gate itself couldn't
-run (must alert a human — this is the class of bug that caused a real 51-day silent failure
-before the Part 3/4 work landed).
+`scripts/validate-brief.mjs` (and `scripts/validate-research.mjs` for Pro Research articles) is
+the publication gate — **never bypass it, never weaken a check to make a specific brief pass.**
+If a check is wrong, fix the check with a real test proving the fix, in its own change. The
+gate's exit-code contract matters: 0 = publish, 1 = a legitimate content rejection (stay silent,
+working as intended), 2 = the gate itself couldn't run (must alert a human — this is the class
+of bug that caused a real 51-day silent failure before the Part 3/4 work landed).
 
 The G-12 human-approval gate (`scripts/apply-human-gate.mjs`) sits after the publish gate and
 is dormant until `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` secrets exist — see
@@ -81,22 +86,38 @@ preview URL instead of production for manual testing.
   TS can import these; the reverse — a script importing `.ts` — does not work without adding a
   TS-execution runtime, which this repo deliberately hasn't done).
 
-## Working alongside Codex/ChatGPT (Part 9)
+## Working alongside Claude Code (Part 9)
 
-Claude Code stays the primary/default driver on this repo. `AGENTS.md` is the Codex-side
-counterpart of this file — same facts, so they should never diverge — with its own "Working
-alongside Claude Code" section covering the reverse direction. In short: Codex/ChatGPT works in
-a separate `git worktree` or cloud task (never a concurrent session in this working tree, since
-the cron pipeline commits straight to `main`), is best used for independent review of
-risk-sensitive changes and for Deep-Research-fed input to `scripts/generate-research.mjs`'s
-`--context` argument (never as a `data/claims.json` substitute), and computer-use is for
-occasional manual lookups only — never wired into a GitHub Actions workflow.
+Claude Code is the primary/default driver on this repo — it already has the discipline above
+baked in (verify-before/after, one-defect-per-commit, the postmortem history). When you (Codex)
+are brought in alongside it:
+
+- **Don't run a concurrent session in the same working tree Claude Code is using.** The cron
+  pipeline commits straight to `main` (Part 8.5) — tuned for one agent editing at a time. Work
+  in a separate `git worktree` (this repo already uses `.claude/worktrees/*` for exactly this
+  kind of parallel work) or a cloud task, so your changes land as a diff to review rather than
+  racing another agent's edits.
+- **Your best fit here**: independent review of risk-sensitive changes (anything touching
+  `lib/snapshot.ts`, `lib/prices.ts`, `lib/options.ts`, `lib/black76.ts`,
+  `scripts/validate-brief.mjs`), and self-contained cloud-task work run in parallel with
+  whatever Claude Code is doing.
+- **Deep Research output** (market/policy research for `scripts/generate-research.mjs`'s
+  `--context` argument) is fine to feed in directly. It is **not** a substitute for
+  `data/claims.json` — see Part 9.1.
+- **Computer-use / browser control** is for occasional manual lookups only (e.g. an exchange
+  notice not covered by an existing `monitor-*.js` script). Never wire it into a GitHub Actions
+  workflow — nondeterministic browser runs have no place in the cron pipeline, which already
+  automates circular monitoring (`scripts/monitor-mcx-circulars.js`, every 15 min via Claude).
+- Both Claude Desktop and the ChatGPT app may end up with the same connectors (Gmail, Google
+  Calendar) enabled — be deliberate about which agent actually sends/edits vs. just reads.
 
 ### Part 9.1 — the rule that holds no matter which agent wrote the draft
 
 **Every statistic in a draft must either match a `data/claims.json` record, or be removed, or
-be explicitly labeled as analysis.** Label an interpretive/typical-pattern sentence that doesn't
-cite a real dataset with `*(analysis)*` or `<!-- analysis -->` right after it. An unlabeled
-statistic that isn't in the ledger is rejected by `checkClaims` in `scripts/lib/claimsCheck.mjs`
-(G-07), which both `validate-brief.mjs` and `validate-research.mjs` run — this applies
-regardless of which agent produced the sentence.
+be explicitly labeled as analysis.** This applies whether Claude, Codex, or a Deep-Research
+paraphrase produced the sentence. The label convention: append `*(analysis)*` or
+`<!-- analysis -->` immediately after a sentence that states an interpretive/typical pattern
+without citing a real dataset — e.g. "...this often precedes a pullback. *(analysis)*". An
+unlabeled statistic that isn't in the ledger will be rejected by `checkClaims` in
+`scripts/lib/claimsCheck.mjs` (G-07), which both `validate-brief.mjs` and `validate-research.mjs`
+run.
