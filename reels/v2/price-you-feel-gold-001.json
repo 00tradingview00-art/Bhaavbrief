@@ -1,0 +1,22 @@
+{
+  "id": "price-you-feel-gold-001",
+  "series": "price-you-feel",
+  "status": "concept",
+  "review_status": "draft",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 10,
+  "hook": "Gold changed your wedding budget overnight.",
+  "visual_asset": "public/reels/v2/assets/gold-price-pressure-v1.png",
+  "storyboard": [
+    { "seconds": "0.0-0.8", "visual": "Bangle emerges from black; rising amber waveform flashes alive.", "copy": "GOLD JUST GOT HEAVIER" },
+    { "seconds": "0.8-3.5", "visual": "Camera pushes through the bangle into the rising light trace.", "copy": "Not just a chart." },
+    { "seconds": "3.5-6.5", "visual": "Three clean symbols assemble: global gold → rupee → jewellery price.", "copy": "Global gold + rupee = your quote" },
+    { "seconds": "6.5-9.0", "visual": "Return to bangle; price tag swings once, then settles.", "copy": "Markets become moments." },
+    { "seconds": "9.0-10.0", "visual": "BhaavBrief wordmark on black.", "copy": "Educational data, not investment advice." }
+  ],
+  "voiceover": "Gold can move before your jeweller opens. Global gold sets the base. The rupee changes the Indian quote. Markets become moments. BhaavBrief.",
+  "caption": "A gold price is not just a number on a screen. It reaches the jewellery counter through global gold and the rupee. Educational data, not investment advice.",
+  "overlays": ["Educational data, not investment advice."],
+  "approval_note": "Concept only. Replace abstract copy with source-verified data before any live-data version is considered."
+}
