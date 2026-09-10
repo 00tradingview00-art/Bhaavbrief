@@ -67,7 +67,17 @@ export function checkClaims(briefBody, claims) {
   for (const m of briefBody.matchAll(HISTORICAL_PHRASE)) {
     const stated = parseFloat(m[2])
     const context = briefBody.slice(Math.max(0, m.index - 150), m.index + m[0].length + 50)
-    const trailing = briefBody.slice(m.index + m[0].length, m.index + m[0].length + 80)
+    // The marker must belong to *this* sentence, not a later one. A naive
+    // fixed-length lookahead lets a marker on the next sentence excuse this
+    // one too — e.g. "Gold tends to fall 6%. Silver historically falls 7%.
+    // *(analysis)*" wrongly cleared BOTH claims with an empty ledger before
+    // this fix (found by Codex's first review of this file, verified by
+    // reproducing it directly). Cut the window at the second sentence
+    // terminator so a marker past it can't reach backward.
+    const afterMatch = briefBody.slice(m.index + m[0].length, m.index + m[0].length + 80)
+    const firstEnd = afterMatch.indexOf(".")
+    const secondEnd = firstEnd === -1 ? -1 : afterMatch.indexOf(".", firstEnd + 1)
+    const trailing = secondEnd === -1 ? afterMatch : afterMatch.slice(0, secondEnd)
     if (ANALYSIS_MARKER.test(trailing)) continue
     const isLedgered = claims.some((c) => {
       const commodity = c.claim_id.split("__")[1]

@@ -91,6 +91,13 @@ describe("checkClaims — widened trigger phrases (Codex/Deep-Research backstop)
     expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
   });
 
+  test("Codex regression: a marker on a LATER sentence must not excuse an earlier, unrelated unledgered claim", () => {
+    const brief = "Gold tends to fall 6%. Silver historically falls 7%. *(analysis)*";
+    const issues = checkClaims(brief, []);
+    expect(issues.length).toBe(1);
+    expect(issues[0]).toContain("6%");
+  });
+
   test("the analysis marker does not excuse an unrelated claim later in the text", () => {
     const brief =
       "Gold usually gives back 3% into the close on these days. *(analysis)* " +
