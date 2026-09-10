@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-09-10T09:03:10.164Z",
-    "lastFlashPrice": 9264,
-    "lastRoundLevel": 9000,
+    "lastFlashAt": "2026-09-10T12:53:36.302Z",
+    "lastFlashPrice": 9560,
+    "lastRoundLevel": 9500,
     "recentFlashIds": [
+      "2026-09-10-18-23-mcx-crude-surges-5-07-on-sustained-recovery-momentum",
       "2026-09-10-14-33-mcx-crude-rallies-1-81-on-sustained-recovery-momentum",
-      "2026-09-09-19-19-mcx-crude-surges-4-00-on-sustained-recovery-momentum",
-      "2026-09-09-13-45-mcx-crude-surges-2-43-extending-multi-leg-recovery-rall"
+      "2026-09-09-19-19-mcx-crude-surges-4-00-on-sustained-recovery-momentum"
     ]
   },
   "MCX_COPPER": {
@@ -40,23 +40,23 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-09-08T16:59:23.302Z",
-    "lastFlashPrice": 274.5,
+    "lastFlashAt": "2026-09-10T12:53:36.302Z",
+    "lastFlashPrice": 267.2,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-10-18-23-mcx-natural-gas-slips-0-93-as-crude-strength-fades",
       "2026-09-08-22-29-mcx-natural-gas-falls-2-38-on-profit-taking-reversal",
-      "2026-09-03-14-34-mcx-natural-gas-rebounds-1-43-on-rupee-weakness-tailwin",
-      "2026-08-28-21-00-mcx-natural-gas-falls-2-72-on-demand-softness"
+      "2026-09-03-14-34-mcx-natural-gas-rebounds-1-43-on-rupee-weakness-tailwin"
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-09T08:04:27.305Z",
-    "lastFlashPrice": 95.15,
-    "lastRoundLevel": 95,
+    "lastFlashAt": "2026-09-10T12:53:36.302Z",
+    "lastFlashPrice": 95.53,
+    "lastRoundLevel": 95.5,
     "recentFlashIds": [
+      "2026-09-10-18-23-usd-inr-strengthens-0-38-on-sustained-fpi-inflows",
       "2026-09-09-13-34-usd-inr-strengthens-0-33-amid-rupee-appreciation-moment",
-      "2026-09-08-13-41-usd-inr-strengthens-0-23-amid-rupee-appreciation-moment",
-      "2026-09-07-13-42-usd-inr-breaks-94-5-support-on-rupee-strength"
+      "2026-09-08-13-41-usd-inr-strengthens-0-23-amid-rupee-appreciation-moment"
     ]
   }
 }
