@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260910-lot-size-guide-crude-mini-8-15k-vs-gold-mini",
+    "topic": "Lot size guide (Crude Mini ₹8-15K vs Gold Mini ₹1-1.25L)",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your first MCX lot size matters more than entry price",
+    "stat_line": "Crude Mini ₹8-15K vs Gold Mini ₹1-1.25L",
+    "payoff": "Cheaper entry ≠ easier trade. Know your lot first.",
+    "beat1": "Gold Mini needs ₹1-1.25L margin. Crude Mini needs ₹8-15K only.",
+    "beat2": "Gold trades at ₹1,52,550/10g. Crude at ₹9,678/barrel. Lot sizes match the price.",
+    "beat3": "Start with what you can actually afford to hold. Don't stretch for gold.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18226967761331826",
+    "generated_at": "2026-09-10T17:39:01.488Z",
+    "edition": null,
+    "posted_at": "2026-09-10T17:39:47.731Z"
+  },
+  {
     "file": "brief-edition-103",
     "topic": "Brent Crosses $99 as the Geopolitical Premium Reclaims the Wheel",
     "content_type": "macro_trend",

@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 5,
+  "nextDay": 6,
   "log": [
+    {
+      "day": 5,
+      "pillar": "EDU",
+      "feature": "Lot size guide (Crude Mini ₹8-15K vs Gold Mini ₹1-1.25L)",
+      "file": "public/reels/news-20260910-lot-size-guide-crude-mini-8-15k-vs-gold-mini.mp4",
+      "generated_at": "2026-09-10T17:39:01.714Z"
+    },
     {
       "day": 4,
       "pillar": "OPT",
