@@ -50,3 +50,58 @@ describe("checkClaims — regression tests for the numeric-coincidence false neg
     expect(issues.length).toBe(1);
   });
 });
+
+describe("checkClaims — widened trigger phrases (Codex/Deep-Research backstop)", () => {
+  test("a fabricated stat using a trigger word outside the original four is still caught", () => {
+    const brief = "Silver tends to fall 6% in the week after such an announcement.";
+    const issues = checkClaims(brief, REAL_LEDGER);
+    expect(issues.length).toBe(1);
+    expect(issues[0]).toContain("6%");
+  });
+
+  test("'seasonally' is also recognized as a historical-claim trigger", () => {
+    expect(checkClaims("Crude seasonally drops 9% into year-end.", REAL_LEDGER).length).toBe(1);
+  });
+
+  test("'data shows'/'records show' deliberately NOT treated as triggers — too often just live-data narration, not a historical claim (verified against real published content)", () => {
+    expect(checkClaims("Data shows gold rallying 8% today on safe-haven demand.", REAL_LEDGER)).toEqual([]);
+  });
+
+  test("'often' requires a word boundary — must not match inside 'softened'/'softening'", () => {
+    expect(checkClaims("Silver softened 2% in early trade on profit-taking.", REAL_LEDGER)).toEqual([]);
+  });
+
+  test("the search window stops at an em dash so an unrelated live figure in an aside isn't misattributed", () => {
+    const brief = "Gold historically stays resilient — the COMEX crude gain of 4.17% is separate.";
+    expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
+  });
+
+  test("a real ledger-backed claim using a widened trigger phrase is not flagged", () => {
+    const brief = "CFTC positioning reports often move MCX Copper by up to 4.98% in the following session.";
+    expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
+  });
+
+  test("an unledgered stat marked '(analysis)' right after the sentence is excused", () => {
+    const brief = "Silver tends to fall 6% in the week after such an announcement. *(analysis)*";
+    expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
+  });
+
+  test("an unledgered stat marked with an <!-- analysis --> comment is excused", () => {
+    const brief = "Gold usually gives back 3% into the close on these days. <!-- analysis -->";
+    expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
+  });
+
+  test("the analysis marker does not excuse an unrelated claim later in the text", () => {
+    const brief =
+      "Gold usually gives back 3% into the close on these days. *(analysis)* " +
+      "Separately, silver has historically fallen 7% on similar days.";
+    const issues = checkClaims(brief, REAL_LEDGER);
+    expect(issues.length).toBe(1);
+    expect(issues[0]).toContain("7%");
+  });
+
+  test("live/computed figures with no historical trigger word still pass through untouched", () => {
+    const brief = "MCX Gold is trading 13.46% above import parity today.";
+    expect(checkClaims(brief, REAL_LEDGER)).toEqual([]);
+  });
+});
