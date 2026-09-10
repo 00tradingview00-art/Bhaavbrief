@@ -21,6 +21,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-10-rbi-gold-buying-mcx-gold",
+    "href": "/articles/2026-09-10-rbi-gold-buying-mcx-gold",
+    "title": "How RBI Gold Reserve Buying Affects MCX Gold Prices",
+    "description": "Understand how RBI gold buying affects MCX gold India prices — the full transmission from central bank reserves to your ₹/10g screen.",
+    "excerpt": "Understanding how RBI gold buying affects MCX gold India prices requires tracing a chain that runs from sovereign reserve decisions through global benchmarks, import parity arithmetic, and rupee conve",
+    "date": "2026-09-10",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-09-mcx-close-10sep2026-silver-metals-rally",
     "href": "/articles/2026-09-09-mcx-close-10sep2026-silver-metals-rally",
     "title": "MCX Close 10Sep: Silver Leads Metals Rally +2%",
