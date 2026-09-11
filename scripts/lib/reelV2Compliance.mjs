@@ -7,6 +7,7 @@
  */
 
 export const REQUIRED_DISCLAIMER = 'Educational data, not investment advice.'
+export const REQUIRED_VOICE_PROFILE = 'female'
 
 const ACTION_LANGUAGE = [
   /\b(?:buy|sell|go long|go short|enter|exit|accumulate|book profits?)\b/i,
@@ -38,13 +39,17 @@ function allCopy(reel) {
  */
 export function validateReelV2(reel) {
   const issues = []
-  const required = ['id', 'series', 'hook', 'voiceover', 'caption', 'review_status']
+  const required = ['id', 'series', 'hook', 'voiceover', 'caption', 'review_status', 'voice_profile']
   for (const field of required) {
     if (!reel?.[field]) issues.push(`Missing required field: ${field}`)
   }
 
   if (reel?.review_status !== 'approved') {
     issues.push('Reel is not human-approved')
+  }
+
+  if (reel?.voice_profile && reel.voice_profile !== REQUIRED_VOICE_PROFILE) {
+    issues.push(`Voice profile must be "${REQUIRED_VOICE_PROFILE}"`)
   }
 
   if (words(reel?.hook).length > 9) {
