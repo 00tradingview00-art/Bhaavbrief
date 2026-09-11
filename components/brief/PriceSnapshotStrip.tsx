@@ -33,14 +33,14 @@ export default function PriceSnapshotStrip({ commodities, data }: { commodities:
     .filter(Boolean)
     .slice(0, 3)
     .map(cfg => {
-      const d = data[cfg.key] as { mcx?: number; mcxChangePct?: number } | undefined
+      const d = data[cfg.key] as { mcx?: number; mcxChangePct?: number; mcxStale?: boolean } | undefined
       if (!d?.mcx) return null
-      return { label: cfg.label, unit: cfg.unit, price: d.mcx, pct: d.mcxChangePct ?? 0, isUSD: false }
+      return { label: cfg.label, unit: cfg.unit, price: d.mcx, pct: d.mcxChangePct ?? 0, isUSD: false, stale: d.mcxStale ?? false }
     })
     .filter((x): x is NonNullable<typeof x> => x !== null)
 
   if (data.usdinr) {
-    items.push({ label: 'USD/INR', unit: '', price: data.usdinr, pct: data.usdinrChangePct ?? 0, isUSD: true })
+    items.push({ label: 'USD/INR', unit: '', price: data.usdinr, pct: data.usdinrChangePct ?? 0, isUSD: true, stale: false })
   }
 
   if (items.length === 0) return null
@@ -63,9 +63,15 @@ export default function PriceSnapshotStrip({ commodities, data }: { commodities:
             <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, fontWeight: 700, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
               {item.isUSD ? fmtRate(item.price) : fmtINR(item.price)}
             </span>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 700, color: up ? 'var(--up)' : 'var(--down)' }}>
-              {up ? '+' : ''}{item.pct.toFixed(2)}%
-            </span>
+            {item.stale ? (
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 600, color: 'var(--ink-4)' }} title="Last known price — today's live change is unavailable">
+                last known
+              </span>
+            ) : (
+              <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 700, color: up ? 'var(--up)' : 'var(--down)' }}>
+                {up ? '+' : ''}{item.pct.toFixed(2)}%
+              </span>
+            )}
           </div>
         )
       })}

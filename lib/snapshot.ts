@@ -92,7 +92,7 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
   const snapshotStale = marketOpen ? ageMin > 120 : ageMin > 720
 
   function mcxRow(key: string) {
-    const d = i[key] ?? { price: 0, prevClose: 0, changePct: 0 }
+    const d = i[key] ?? { price: 0, prevClose: 0, changePct: 0, stale: true }
     return {
       mcx:          d.price,
       mcxChangePct: d.changePct,
@@ -105,6 +105,13 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
       mcxOI:        0,
       mcxSymbol:    '',
       mcxExpiry:    '',
+      // scripts/fetch-snapshot.mjs never writes 0/null on a failed live fetch — it
+      // carries forward the last good value and marks it stale instead (see that
+      // script's header comment). Propagate that flag rather than dropping it, so
+      // a carried-forward price doesn't get narrated with the same confidence as
+      // a fresh one. A genuinely missing instrument key (shouldn't happen given
+      // Snapshot's required fields, but defensive) is treated as stale too.
+      mcxStale:     d.stale ?? false,
     }
   }
 

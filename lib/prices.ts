@@ -378,6 +378,13 @@ export interface MCXData {
   mcxOI:        number   // open interest in lots (0 if Kite unavailable)
   mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
   mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
+  // true when this instrument's price/changePct is a carried-forward last-known
+  // value (scripts/fetch-snapshot.mjs's SnapshotInstrument.stale), not a fresh
+  // live read — only ever set by lib/snapshot.ts's snapshotToPriceData(), so it's
+  // undefined (not false) for data sourced from the live lib/prices.ts fetch path.
+  // Consumers that narrate a %-change as if it's today's move should check this
+  // before presenting it with the same confidence as fresh data.
+  mcxStale?:    boolean
 }
 
 export interface ForexData {

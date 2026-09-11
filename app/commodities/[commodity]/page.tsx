@@ -355,6 +355,9 @@ export default async function CommodityPage({ params }: Props) {
   const high      = priceData?.mcxHigh      ?? 0
   const low       = priceData?.mcxLow       ?? 0
   const prevClose = priceData?.mcxPrevClose  ?? 0
+  // A carried-forward last-known price (see MCXData.mcxStale) shouldn't be
+  // narrated with the same "live/real-time" confidence as a fresh one.
+  const isStale   = priceData?.mcxStale     ?? false
 
   // ── Live import parity computation ──────────────────────────────────────────
   const commodityConsts = loadCommodityConstants()
@@ -552,7 +555,7 @@ export default async function CommodityPage({ params }: Props) {
               MCX {info.name} Price Today
             </h1>
             <p style={{ fontSize: 15, color: 'var(--ink-4)', margin: 0 }}>
-              Live MCX price · Updated in real time
+              {isStale ? 'Last known MCX price · live update unavailable' : 'Live MCX price · Updated in real time'}
             </p>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -560,7 +563,12 @@ export default async function CommodityPage({ params }: Props) {
               {ltp > 0 ? `₹${fmt(ltp)}` : '—'}
             </div>
             <div style={{ marginTop: 6 }}>
-              {pct !== 0 ? pctBadge(pct) : null}
+              {isStale ? (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', fontSize: 12, fontWeight: 600,
+                  color: 'var(--ink-4)', background: 'var(--surface-2, #F3F2EC)', padding: '2px 8px', borderRadius: 4,
+                }}>last known</span>
+              ) : (pct !== 0 ? pctBadge(pct) : null)}
             </div>
           </div>
         </div>

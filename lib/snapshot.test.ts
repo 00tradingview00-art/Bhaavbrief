@@ -7,8 +7,8 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-function makeInstrument(price: number, prevClose: number, changePct: number) {
-  return { price, prevClose, changePct, unit: 'INR' }
+function makeInstrument(price: number, prevClose: number, changePct: number, stale = false) {
+  return { price, prevClose, changePct, unit: 'INR', stale }
 }
 
 function makeSnapshot(overrides: Partial<Snapshot> = {}): Snapshot {
@@ -138,6 +138,28 @@ describe('snapshotToPriceData', () => {
     const data = snapshotToPriceData(snap)
     expect(data.copper.mcx).toBe(0)
     expect(data.copper.mcxChangePct).toBe(0)
+    // A genuinely missing instrument key must be flagged stale — it should
+    // never be narrated with the same confidence as a real reading.
+    expect(data.copper.mcxStale).toBe(true)
+  })
+
+  test('propagates a carried-forward instrument\'s stale flag through to mcxStale', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-17T04:05:00.000Z'))
+    const snap = makeSnapshot({
+      instruments: { ...makeSnapshot().instruments, MCX_GOLD: makeInstrument(88200, 87700, 0.57, true) },
+    })
+    const data = snapshotToPriceData(snap)
+    expect(data.gold.mcx).toBe(88200) // price/changePct still surfaced — carried forward, not hidden
+    expect(data.gold.mcxChangePct).toBe(0.57)
+    expect(data.gold.mcxStale).toBe(true)
+  })
+
+  test('a fresh (non-stale) instrument is not flagged stale', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-17T04:05:00.000Z'))
+    const data = snapshotToPriceData(makeSnapshot())
+    expect(data.gold.mcxStale).toBe(false)
   })
 
   test('optional minor metals appear only when present in the snapshot', () => {
