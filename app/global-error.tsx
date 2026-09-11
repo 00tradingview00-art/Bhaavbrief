@@ -3,7 +3,6 @@
 import { useEffect } from 'react'
 import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
-import '../styles/bhaav.css'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
