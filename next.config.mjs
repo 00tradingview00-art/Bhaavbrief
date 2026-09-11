@@ -8,6 +8,10 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.pexels.com' },
     ],
+    // Sitewide next/image usage is just the nav logo (components/Nav.tsx) —
+    // rarely changes, so cache the optimizer output long instead of Next's
+    // 60s default.
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [
@@ -20,6 +24,15 @@ const nextConfig = {
           { key: 'Referrer-Policy',            value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy',         value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'Strict-Transport-Security',  value: 'max-age=63072000; includeSubDomains; preload' },
+        ],
+      },
+      // Raw /public image files (logos etc.) serve max-age=0 by default —
+      // long-cache them since they change rarely; rename the file rather than
+      // overwriting in place if one is ever replaced.
+      {
+        source: '/:all*(png|jpg|jpeg|gif|svg|webp|ico)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
       // dev.bhaavbrief.in is the staging domain (real Cashfree sandbox testing,
