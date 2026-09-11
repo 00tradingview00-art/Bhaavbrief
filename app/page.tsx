@@ -13,6 +13,7 @@ import TerminalTabbar from '@/components/terminal/TerminalTabbar'
 import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
 import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligencePanel'
 import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
+import MacroCard from '@/components/terminal/MacroCard'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -25,6 +26,7 @@ const TERMINAL_SECTIONS = [
   { id: 'pulse',       label: 'Market Pulse' },
   { id: 'commodities', label: 'Commodities' },
   { id: 'options',     label: 'Options Intelligence' },
+  { id: 'macro',       label: 'Macro' },
   { id: 'brief',       label: 'Brief & Calendar' },
 ]
 
@@ -48,6 +50,60 @@ export const metadata = {
   ],
 }
 
+// ── Macro (Cross-Asset) ────────────────────────────────────────────────────────
+// 3 derivable metrics only — DXY, US 10Y yield, and FII/DII net flow have no
+// fetched-data source anywhere in this codebase (confirmed by repo-wide grep;
+// they appear only as copy text in learn articles and prompt strings), so
+// they're omitted rather than faked. Each metric below is plain arithmetic on
+// fields the snapshot already carries — no new fetches.
+interface MacroMetric {
+  label: string
+  value: string
+  delta: { text: string; up: boolean } | null
+  note:  string
+}
+
+function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
+  if (!snap) return []
+  const { BRENT, WTI, COMEX_GOLD, COMEX_SILVER } = snap.instruments
+  const metrics: MacroMetric[] = []
+
+  if (BRENT?.price > 0 && WTI?.price > 0) {
+    const spread = BRENT.price - WTI.price
+    const priorSpread = BRENT.prevClose > 0 && WTI.prevClose > 0 ? BRENT.prevClose - WTI.prevClose : null
+    metrics.push({
+      label: 'Brent–WTI Spread',
+      value: `$${spread.toFixed(2)}`,
+      delta: priorSpread !== null ? { text: `${spread >= priorSpread ? '+' : ''}${(spread - priorSpread).toFixed(2)} vs prior close`, up: spread >= priorSpread } : null,
+      note:  'Brent minus WTI, both COMEX/NYMEX reference (15-min delayed)',
+    })
+  }
+
+  if (snap.derived?.goldSilverRatio > 0) {
+    const ratio = snap.derived.goldSilverRatio
+    const priorRatio = COMEX_GOLD?.prevClose > 0 && COMEX_SILVER?.prevClose > 0 ? COMEX_GOLD.prevClose / COMEX_SILVER.prevClose : null
+    metrics.push({
+      label: 'Gold/Silver Ratio',
+      value: `${ratio.toFixed(1)}x`,
+      delta: priorRatio !== null ? { text: `${ratio >= priorRatio ? '+' : ''}${(ratio - priorRatio).toFixed(1)}x vs prior close`, up: ratio >= priorRatio } : null,
+      note:  'COMEX gold ÷ COMEX silver, USD basis',
+    })
+  }
+
+  if (COMEX_GOLD?.price > 0 && WTI?.price > 0) {
+    const ratio = COMEX_GOLD.price / WTI.price
+    const priorRatio = COMEX_GOLD.prevClose > 0 && WTI.prevClose > 0 ? COMEX_GOLD.prevClose / WTI.prevClose : null
+    metrics.push({
+      label: 'Gold/Crude Ratio',
+      value: `${ratio.toFixed(1)}x`,
+      delta: priorRatio !== null ? { text: `${ratio >= priorRatio ? '+' : ''}${(ratio - priorRatio).toFixed(1)}x vs prior close`, up: ratio >= priorRatio } : null,
+      note:  'Barrels of WTI crude one troy oz of gold buys',
+    })
+  }
+
+  return metrics
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
@@ -55,6 +111,7 @@ export default async function HomePage() {
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
   const terminalData = await getTerminalData()
+  const macroMetrics = computeMacro(snap)
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
@@ -175,6 +232,26 @@ export default async function HomePage() {
         </div>
         <OptionsIntelligencePanel terminalData={terminalData} />
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          CROSS-ASSET & MACRO — 3 derivable metrics (see computeMacro's own
+          comment for why DXY/US10Y/FII-DII are omitted rather than faked).
+          Renders nothing if the snapshot is unavailable.
+          ══════════════════════════════════════════════════════════════════ */}
+      {macroMetrics.length > 0 && (
+        <section id="macro" style={{ marginBottom: 48 }}>
+          <div style={{
+            fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+            letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+            marginBottom: 14,
+          }}>
+            Cross-Asset &amp; Macro
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+            {macroMetrics.map(m => <MacroCard key={m.label} {...m} />)}
+          </div>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════════════════════════════════
           BRIEF & CALENDAR — today's edition, developing stories, upcoming
