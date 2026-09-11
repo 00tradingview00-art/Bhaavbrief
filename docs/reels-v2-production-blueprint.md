@@ -63,6 +63,14 @@ approval state of `approved`. A live-data reel must include the exact disclaimer
 V2 scripts are review-only until a human explicitly authorizes the new Instagram
 release workflow.
 
+### Narration
+
+V2 uses a **female narrator only**. Every manifest must declare
+`"voice_profile": "female"`; the release gate rejects any other value. The final
+production voice is calm, direct, and Indian-English first, with a female Hinglish
+variant available when the editorial script calls for it. Music always ducks below
+the narration, and captions are timed to the final voice track.
+
 ## Measurement and decisions
 
 Use Trial Reels for format tests. At 24 hours, record reach, plays, average watch

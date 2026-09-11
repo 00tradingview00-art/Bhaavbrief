@@ -3,6 +3,7 @@
   "series": "market-myth",
   "status": "concept",
   "review_status": "draft",
+  "voice_profile": "female",
   "uses_live_data": false,
   "uses_synthetic_persona": false,
   "duration_target_seconds": 12,

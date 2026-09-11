@@ -10,6 +10,7 @@ const safe = {
   caption: 'A data-led explanation of how global gold reaches an Indian jewellery price.',
   uses_live_data: true,
   uses_synthetic_persona: false,
+  voice_profile: 'female',
   review_status: 'approved',
 }
 
@@ -29,5 +30,9 @@ describe('validateReelV2', () => {
   it('requires a disclaimer for live data', () => {
     const { overlays, ...withoutDisclaimer } = safe
     expect(validateReelV2({ ...withoutDisclaimer, voiceover: 'Gold moved overnight.' })).toContain(`Live-data reel must include: "${REQUIRED_DISCLAIMER}"`)
+  })
+
+  it('blocks a narrator profile other than female', () => {
+    expect(validateReelV2({ ...safe, voice_profile: 'male' })).toContain('Voice profile must be "female"')
   })
 })
