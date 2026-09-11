@@ -47,7 +47,7 @@ export default function MarketPulsePanel({ terminalData, prices }: Props) {
           {compositeIvix !== null ? compositeIvix.toFixed(1) + '%' : '—'}
         </div>
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
-          Simple average of implied volatility across Gold, Silver, Crude, Nat Gas, Copper
+          BhaavBrief&apos;s composite read on options-market volatility across MCX&apos;s core commodities
         </div>
       </div>
 
@@ -62,7 +62,7 @@ export default function MarketPulsePanel({ terminalData, prices }: Props) {
           {compositeVolPremium !== null ? `${compositeVolPremium >= 0 ? '+' : ''}${compositeVolPremium.toFixed(1)}pp` : '—'}
         </div>
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
-          Implied vol (iVIX) minus 20-day realized vol (AAV), averaged across the 5 instruments
+          Whether options are pricing in more movement than these commodities have actually delivered lately
         </div>
       </div>
 

@@ -25,7 +25,7 @@ export default function OptionsIntelligencePanel({ terminalData }: Props) {
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
         <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Put-Call Ratio</h3>
         <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>
-          Total put OI ÷ call OI · &gt;1.2 skews bullish positioning, &lt;0.8 skews bearish
+          How options positioning is leaning across puts and calls
         </p>
         {CORE_INSTRUMENTS.map(instrument => {
           const data = terminalData[instrument]
@@ -57,7 +57,7 @@ export default function OptionsIntelligencePanel({ terminalData }: Props) {
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
         <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Max Pain Proximity</h3>
         <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>
-          Distance of the futures price from the strike where option-writer payout is minimized
+          Where the options market may be pulling price toward by expiry
         </p>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
           <thead>

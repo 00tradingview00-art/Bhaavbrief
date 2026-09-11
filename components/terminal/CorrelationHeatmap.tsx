@@ -59,7 +59,7 @@ export default function CorrelationHeatmap({ correlation, isPro }: Props) {
         </table>
       </div>
       <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 10, fontSize: 10, color: 'var(--ink-3)' }}>
-        <span>Pearson correlation of daily returns, {sampleSize}-day window</span>
+        <span>How closely these markets have been moving together ({sampleSize}-day window)</span>
       </div>
     </ProBlurGate>
   )

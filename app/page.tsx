@@ -82,7 +82,7 @@ function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
       label: 'Brent–WTI Spread',
       value: `$${spread.toFixed(2)}`,
       delta: priorSpread !== null ? { text: `${spread >= priorSpread ? '+' : ''}${(spread - priorSpread).toFixed(2)} vs prior close`, up: spread >= priorSpread } : null,
-      note:  'Brent minus WTI, both COMEX/NYMEX reference (15-min delayed)',
+      note:  'Global crude benchmark spread (15-min delayed)',
     })
   }
 
@@ -93,7 +93,7 @@ function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
       label: 'Gold/Silver Ratio',
       value: `${ratio.toFixed(1)}x`,
       delta: priorRatio !== null ? { text: `${ratio >= priorRatio ? '+' : ''}${(ratio - priorRatio).toFixed(1)}x vs prior close`, up: ratio >= priorRatio } : null,
-      note:  'COMEX gold ÷ COMEX silver, USD basis',
+      note:  "Gold's value relative to silver, on global prices",
     })
   }
 
@@ -104,7 +104,7 @@ function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
       label: 'Gold/Crude Ratio',
       value: `${ratio.toFixed(1)}x`,
       delta: priorRatio !== null ? { text: `${ratio >= priorRatio ? '+' : ''}${(ratio - priorRatio).toFixed(1)}x vs prior close`, up: ratio >= priorRatio } : null,
-      note:  'Barrels of WTI crude one troy oz of gold buys',
+      note:  'How gold is pricing against crude oil globally',
     })
   }
 
@@ -257,7 +257,7 @@ export default async function HomePage() {
           </div>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Cross-Asset Correlation</h3>
-            <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR, daily-return correlation</p>
+            <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR</p>
             <CorrelationHeatmap correlation={correlationMatrix} isPro={isPro} />
           </div>
         </div>
