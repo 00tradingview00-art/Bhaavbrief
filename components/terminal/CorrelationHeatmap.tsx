@@ -30,7 +30,7 @@ export default function CorrelationHeatmap({ correlation, isPro }: Props) {
             <tr>
               <th />
               {labels.map(l => (
-                <th key={l} style={{ fontWeight: 500, color: 'var(--ink-3)', padding: '4px 6px', fontSize: 10.5 }}>{l}</th>
+                <th key={l} style={{ fontWeight: 500, color: 'var(--ink-3)', padding: '4px 6px', fontSize: 10 }}>{l}</th>
               ))}
             </tr>
           </thead>
@@ -45,7 +45,7 @@ export default function CorrelationHeatmap({ correlation, isPro }: Props) {
                     <td key={colLabel} style={{ textAlign: 'center', padding: '4px 6px' }}>
                       <span style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        width: 38, height: 24, borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 10.5,
+                        width: 38, height: 24, borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 10,
                         ...style,
                       }}>
                         {v !== null ? v.toFixed(2) : '—'}
@@ -58,7 +58,7 @@ export default function CorrelationHeatmap({ correlation, isPro }: Props) {
           </tbody>
         </table>
       </div>
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 10, fontSize: 10.5, color: 'var(--ink-3)' }}>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 10, fontSize: 10, color: 'var(--ink-3)' }}>
         <span>Pearson correlation of daily returns, {sampleSize}-day window</span>
       </div>
     </ProBlurGate>

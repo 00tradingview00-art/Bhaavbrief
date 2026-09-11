@@ -218,9 +218,7 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12,
-        }}>
+        <div className="terminal-commodity-grid" style={{ display: 'grid', gap: 12 }}>
           {CORE_INSTRUMENTS.map(instrument => {
             const meta = GATEWAY_META[instrument]
             return (
@@ -252,14 +250,14 @@ export default async function HomePage() {
           Volatility &amp; Correlation
         </div>
         <div className="terminal-two-col" style={{ display: 'grid', gap: 16 }}>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: 18 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>iVIX Term Structure</h3>
-            <p style={{ margin: '0 0 14px', fontSize: 11.5, color: 'var(--ink-3)' }}>Implied volatility by expiry bucket, across the 5 core MCX chains</p>
+            <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>Implied volatility by expiry bucket, across the 5 core MCX chains</p>
             <IVTermStructureChart termStructure={termStructure} isPro={isPro} />
           </div>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: 18 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Cross-Asset Correlation</h3>
-            <p style={{ margin: '0 0 14px', fontSize: 11.5, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR, daily-return correlation</p>
+            <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR, daily-return correlation</p>
             <CorrelationHeatmap correlation={correlationMatrix} isPro={isPro} />
           </div>
         </div>

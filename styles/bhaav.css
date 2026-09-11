@@ -306,3 +306,18 @@
 @media (min-width: 860px) {
   .terminal-two-col { grid-template-columns: 1.15fr 0.85fr; }
 }
+
+/* Terminal commodity gateway cards and Market Pulse tiles: explicit mobile
+   column count, same reasoning as .markets-card-grid above — bare
+   auto-fill/auto-fit collapses to 1 column on a phone with no cap, which
+   here means scrolling past 5 full-width commodity cards (or 3 pulse
+   tiles) before reaching Volatility & Correlation below. */
+.terminal-commodity-grid { grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 768px) {
+  .terminal-commodity-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+}
+
+.terminal-pulse-grid { grid-template-columns: 1fr; }
+@media (min-width: 640px) {
+  .terminal-pulse-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}

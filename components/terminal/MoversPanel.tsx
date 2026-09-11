@@ -36,14 +36,14 @@ export default function MoversPanel({ prices }: { prices: PriceData | null }) {
   if (rows.length === 0) return null
 
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18, overflowX: 'auto' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
         <thead>
           <tr>
             {['Instrument', 'Price', 'Change'].map((h, i) => (
               <th key={h} style={{
                 textAlign: i === 0 ? 'left' : 'right', fontWeight: 500, color: 'var(--ink-3)',
-                fontSize: 10.5, textTransform: 'uppercase', letterSpacing: '0.04em',
+                fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em',
                 padding: '8px 10px', borderBottom: '1px solid var(--border)',
               }}>{h}</th>
             ))}
@@ -57,12 +57,12 @@ export default function MoversPanel({ prices }: { prices: PriceData | null }) {
                 <td style={{ padding: '9px 10px', borderBottom: '1px solid var(--border-2)' }}>
                   <Link href={`/commodities/${r.slug}`} style={{ color: 'var(--ink)', textDecoration: 'none' }}>{r.label}</Link>
                 </td>
-                <td style={{ padding: '9px 10px', borderBottom: '1px solid var(--border-2)', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
-                  {r.data.mcx.toLocaleString('en-IN', { maximumFractionDigits: r.data.mcx < 1000 ? 2 : 0 })}
+                <td style={{ padding: '9px 10px', borderBottom: '1px solid var(--border-2)', textAlign: 'right', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums' }}>
+                  ₹{r.data.mcx.toLocaleString('en-IN', { maximumFractionDigits: r.data.mcx < 1000 ? 2 : 0 })}
                   <span style={{ fontSize: 10, color: 'var(--ink-4)', marginLeft: 3 }}>{r.unit}</span>
                 </td>
                 <td style={{
-                  padding: '9px 10px', borderBottom: '1px solid var(--border-2)', textAlign: 'right', fontFamily: 'var(--font-mono)',
+                  padding: '9px 10px', borderBottom: '1px solid var(--border-2)', textAlign: 'right', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums',
                   color: r.data.mcxStale ? 'var(--ink-4)' : up ? 'var(--up)' : 'var(--down)',
                 }}>
                   {r.data.mcxStale ? 'last known' : `${up ? '▲' : '▼'} ${up ? '+' : ''}${r.data.mcxChangePct.toFixed(2)}%`}

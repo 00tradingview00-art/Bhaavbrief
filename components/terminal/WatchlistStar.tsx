@@ -48,7 +48,7 @@ export default function WatchlistStar({ instrumentKey }: { instrumentKey: string
       aria-pressed={starred}
       title={starred ? 'Remove from watchlist' : 'Add to watchlist'}
       style={{
-        flex: 'none', width: 22, height: 22, borderRadius: 6, border: 'none',
+        flex: 'none', width: 22, height: 22, borderRadius: 'var(--radius-sm)', border: 'none',
         background: 'transparent', cursor: 'pointer', display: 'flex',
         alignItems: 'center', justifyContent: 'center',
         color: starred ? 'var(--gold)' : 'var(--ink-4)',
