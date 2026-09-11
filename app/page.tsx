@@ -14,6 +14,7 @@ import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
 import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligencePanel'
 import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import MacroCard from '@/components/terminal/MacroCard'
+import MoversPanel from '@/components/terminal/MoversPanel'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -27,6 +28,7 @@ const TERMINAL_SECTIONS = [
   { id: 'commodities', label: 'Commodities' },
   { id: 'options',     label: 'Options Intelligence' },
   { id: 'macro',       label: 'Macro' },
+  { id: 'movers',      label: 'Movers' },
   { id: 'brief',       label: 'Brief & Calendar' },
 ]
 
@@ -252,6 +254,21 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          MOVERS — MCX contracts ranked by session change. MCX-only: no NSE
+          sector-index data source exists in this codebase.
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="movers" style={{ marginBottom: 48 }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Movers
+        </div>
+        <MoversPanel prices={prices} />
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
           BRIEF & CALENDAR — today's edition, developing stories, upcoming
