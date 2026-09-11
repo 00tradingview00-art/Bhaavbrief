@@ -15,12 +15,12 @@ import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligenceP
 import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import MacroCard from '@/components/terminal/MacroCard'
 import MoversPanel from '@/components/terminal/MoversPanel'
-import IVTermStructureChart from '@/components/terminal/IVTermStructureChart'
 import CorrelationHeatmap from '@/components/terminal/CorrelationHeatmap'
 import { getTermStructureData } from '@/lib/terminalData'
 import { getCorrelationMatrix } from '@/lib/correlation'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
+import IVTermStructureChart from '@/components/terminal/IVTermStructureChartLazy'
 
 // BhaavBrief Terminal — the homepage as a unified dashboard rather than a
 // standalone landing page. Built incrementally (see
