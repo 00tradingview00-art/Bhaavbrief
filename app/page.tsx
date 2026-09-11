@@ -19,8 +19,6 @@ import IVTermStructureChart from '@/components/terminal/IVTermStructureChart'
 import CorrelationHeatmap from '@/components/terminal/CorrelationHeatmap'
 import { getTermStructureData } from '@/lib/terminalData'
 import { getCorrelationMatrix } from '@/lib/correlation'
-import { auth } from '@clerk/nextjs/server'
-import { isProUser } from '@/lib/subscription'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -122,8 +120,16 @@ export default async function HomePage() {
   const terminalData = await getTerminalData()
   const macroMetrics = computeMacro(snap)
   const correlationMatrix = getCorrelationMatrix(20)
-  const [termStructure, { userId }] = await Promise.all([getTermStructureData(), auth()])
-  const isPro = await isProUser(userId)
+  const termStructure = await getTermStructureData()
+  // Server always seeds isPro=false, never calls auth() here — reading real
+  // entitlement server-side is a dynamic API that would force this whole
+  // route off ISR (revalidate=60 above), turning every homepage visit into a
+  // fresh live re-fetch of ~15 option-chain calls against Kite instead of at
+  // most one per 60s. Matches the established site-wide convention (see
+  // app/tools/mcx-iv-rank/page.tsx's getDefaultVolatilityData comment and
+  // components/markets/MarketsClient.tsx's isPro=false comment) — a real Pro
+  // visitor gets upgraded client-side by ProBlurGate's own useIsPro() check.
+  const isPro = false
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
