@@ -11,6 +11,17 @@ import GoldHeroCard from '@/components/GoldHeroCard'
 import ContinueReading from '@/components/ContinueReading'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
+import TerminalTabbar from '@/components/terminal/TerminalTabbar'
+
+// BhaavBrief Terminal — the homepage as a unified dashboard rather than a
+// standalone landing page. Built incrementally (see
+// ~/.claude/plans/fancy-nibbling-fern.md): each section below is only added
+// to TERMINAL_SECTIONS once its real module exists, so the tabbar never
+// links to an empty/placeholder section on a live page.
+const TERMINAL_SECTIONS = [
+  { id: 'commodities', label: 'Commodities' },
+  { id: 'brief',       label: 'Brief & Calendar' },
+]
 
 // Cache homepage for 60s — TickerStrip handles live prices client-side
 export const revalidate = 60
@@ -175,7 +186,88 @@ export default async function HomePage() {
 
       <ContinueReading />
 
-      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      <TerminalTabbar sections={TERMINAL_SECTIONS} />
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          COMMODITY TERMINAL — live prices + market data modules.
+          Step 1 scaffold: today's existing price widgets, repositioned.
+          GoldHeroCard/MarketSnapshot/mini price card are superseded by a
+          5-instrument gateway-card grid in a later build step.
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="commodities" style={{ marginBottom: 48 }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Commodity Terminal
+        </div>
+
+        <GoldHeroCard data={prices} />
+
+        <div style={{ marginTop: 16 }}>
+          <MarketSnapshot data={prices} />
+        </div>
+
+        <Link href="/markets" style={{ textDecoration: 'none', display: 'block', marginTop: 16, maxWidth: 420 }}>
+          <Card padding="sm" hoverLift>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <div style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: 10, letterSpacing: '0.1em',
+                textTransform: 'uppercase', color: 'var(--up)',
+                display: 'flex', alignItems: 'center', gap: 5,
+              }}>
+                <span className="live-dot" />
+                Live MCX
+              </div>
+              <span style={{ color: 'var(--gold)', fontSize: 14, flexShrink: 0 }}>All markets →</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[
+                { label: 'Gold',   price: prices?.gold?.mcx,   pct: prices?.gold?.mcxChangePct,   unit: '/10g', stale: prices?.gold?.mcxStale },
+                { label: 'Crude',  price: prices?.crude?.mcx,  pct: prices?.crude?.mcxChangePct,  unit: '/bbl', stale: prices?.crude?.mcxStale },
+                { label: 'Silver', price: prices?.silver?.mcx, pct: prices?.silver?.mcxChangePct, unit: '/kg',  stale: prices?.silver?.mcxStale },
+              ].map(({ label, price, pct, unit, stale }) => {
+                const up = (pct ?? 0) >= 0
+                return (
+                  <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
+                      {price ? fmtINR(price) : '—'}
+                      <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
+                    </span>
+                    {stale ? (
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', minWidth: 52, textAlign: 'right' }}>last known</span>
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
+                        {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
+              OHLC · Volume · Open Interest · 5 commodities
+            </div>
+          </Card>
+        </Link>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          BRIEF & CALENDAR — today's edition, developing stories, upcoming
+          events, and the subscribe growth loop.
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="brief">
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Brief &amp; Calendar
+        </div>
+
       {latest && (
         <section style={{
           borderTop: '3px solid var(--gold)',
@@ -314,17 +406,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ── GOLD HERO CARD (Part 12 §12.5) ──────────────────────────────────── */}
-      <GoldHeroCard data={prices} />
-
-      {/* ── TWO-COLUMN BODY ──────────────────────────────────────────────────── */}
       <div className="home-body">
 
-        {/* LEFT ─ market snap + previous briefs */}
+        {/* LEFT ─ previous briefs */}
         <div style={{ minWidth: 0 }}>
-
-          {/* Market snapshot */}
-          <MarketSnapshot data={prices} />
 
           {/* Previous editions — compact 3-item list (was a bare link with no
               visible briefs, which read as broken/empty rather than
@@ -438,51 +523,6 @@ export default async function HomePage() {
               </Link>
             )
           })()}
-
-          {/* Live markets CTA */}
-          <Link href="/markets" style={{ textDecoration: 'none', display: 'block', marginBottom: 16 }}>
-            <Card padding="sm" hoverLift>
-              {/* Header row */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                <div style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: 10, letterSpacing: '0.1em',
-                  textTransform: 'uppercase', color: 'var(--up)',
-                  display: 'flex', alignItems: 'center', gap: 5,
-                }}>
-                  <span className="live-dot" />
-                  Live MCX
-                </div>
-                <span style={{ color: 'var(--gold)', fontSize: 14, flexShrink: 0 }}>All markets →</span>
-              </div>
-              {/* Mini price rows */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {[
-                  { label: 'Gold',   price: prices?.gold?.mcx,   pct: prices?.gold?.mcxChangePct,   unit: '/10g' },
-                  { label: 'Crude',  price: prices?.crude?.mcx,  pct: prices?.crude?.mcxChangePct,  unit: '/bbl' },
-                  { label: 'Silver', price: prices?.silver?.mcx, pct: prices?.silver?.mcxChangePct, unit: '/kg'  },
-                ].map(({ label, price, pct, unit }) => {
-                  const up = (pct ?? 0) >= 0
-                  return (
-                    <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
-                        {price ? fmtINR(price) : '—'}
-                        <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
-                      </span>
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
-                        {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-              {/* Footer hint */}
-              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
-                OHLC · Volume · Open Interest · 5 commodities
-              </div>
-            </Card>
-          </Link>
 
           {/* Next high-impact event teaser */}
           {nextEvent && (
@@ -600,6 +640,7 @@ export default async function HomePage() {
         </div>
 
       </div>
+      </section>
 
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 1.25rem 2rem' }}>
         <p style={{ fontSize: 11, color: 'var(--ink-4)', lineHeight: 1.6 }}>
