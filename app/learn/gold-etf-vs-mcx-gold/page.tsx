@@ -7,6 +7,7 @@ import { safeJsonLd } from '@/lib/seo'
 interface Prices {
   gold: number
   snapshotDate: string
+  isLive: boolean
 }
 
 function loadPrices(): Prices {
@@ -17,10 +18,13 @@ function loadPrices(): Prices {
       return {
         gold:         snap.instruments.MCX_GOLD.price,
         snapshotDate: snap.generatedAtIST ?? new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }),
+        isLive:       true,
       }
     }
   } catch { /* fall through */ }
-  return { gold: 149000, snapshotDate: 'Jun 2026' }
+  // Snapshot unavailable — this is an illustrative example price, not live data.
+  // Never label figures built from this fallback as "live" (see project data-integrity rule).
+  return { gold: 149000, snapshotDate: 'illustrative example', isLive: false }
 }
 
 function fmt(n: number, decimals = 0) {
@@ -146,7 +150,7 @@ export default function Page() {
           MCX Gold vs Gold ETF India 2026: Which Is Better For You?
         </h1>
         <p style={{ fontSize: 12, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginBottom: 24 }}>
-          MCX Gold at <strong style={{ color: '#18180F' }}>₹{fmt(p.gold)}/10g</strong> · {p.snapshotDate} · Covers Budget 2024 LTCG change
+          MCX Gold at <strong style={{ color: '#18180F' }}>₹{fmt(p.gold)}/10g</strong> · {p.isLive ? p.snapshotDate : 'illustrative example, not live'} · Covers Budget 2024 LTCG change
         </p>
 
         <p style={prose}>
@@ -189,12 +193,12 @@ export default function Page() {
           </table>
         </div>
         <p style={{ ...sub, marginBottom: 32 }}>
-          Gold ETF examples: GOLDBEES (Nippon), HDFCGOLD, ICICIGOLD (all on NSE). Gold FoF examples: Nippon India Gold Savings Fund, HDFC Gold Fund, SBI Gold Fund. At MCX Gold ₹{fmt(p.gold)}/10g as of {p.snapshotDate}.
+          Gold ETF examples: GOLDBEES (Nippon), HDFCGOLD, ICICIGOLD (all on NSE). Gold FoF examples: Nippon India Gold Savings Fund, HDFC Gold Fund, SBI Gold Fund. At MCX Gold ₹{fmt(p.gold)}/10g{p.isLive ? ` as of ${p.snapshotDate}` : ' (illustrative example, not live)'}.
         </p>
 
         {/* Live capital comparison */}
         <div style={infoBox}>
-          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Capital required — live numbers at ₹{fmt(p.gold)}/10g</div>
+          <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Capital required — {p.isLive ? 'live numbers' : 'example numbers'} at ₹{fmt(p.gold)}/10g</div>
           <div style={{ overflowX: 'auto' }}>
           <div style={{ fontFamily: 'var(--font-sans)', fontSize: 15, lineHeight: 2.2, color: '#18180F', minWidth: 300 }}>
             MCX Gold Standard (1 kg):<br />
@@ -414,7 +418,7 @@ export default function Page() {
         </div>
 
         <p style={{ fontSize: 11, color: '#8A8A7A', fontFamily: 'var(--font-sans)', marginTop: 24, lineHeight: 1.6 }}>
-          BhaavBrief · MCX commodity intelligence · Last updated {p.snapshotDate}
+          BhaavBrief · MCX commodity intelligence{p.isLive ? ` · Last updated ${p.snapshotDate}` : ' · Gold price above is an illustrative example, not live'}
         </p>
       </div>
     </>
