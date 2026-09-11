@@ -30,13 +30,13 @@
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": "2026-09-08T16:59:23.302Z",
-    "lastFlashPrice": 1410.55,
+    "lastFlashAt": "2026-09-11T13:42:10.140Z",
+    "lastFlashPrice": 1380.6,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-11-19-12-mcx-copper-edges-higher-on-rupee-support",
       "2026-09-08-22-29-mcx-copper-surges-1-72-on-base-metal-recovery",
-      "2026-09-02-00-17-mcx-copper-falls-1-31-on-rupee-strength-and-risk-off-se",
-      "2026-08-26-09-36-mcx-copper-edges-higher-on-rupee-weakness-and-base-meta"
+      "2026-09-02-00-17-mcx-copper-falls-1-31-on-rupee-strength-and-risk-off-se"
     ]
   },
   "MCX_NATGAS": {
