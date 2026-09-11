@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260911-mcx-contract-expiry-dates",
+    "topic": "MCX Contract Expiry Dates",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX trade has a hidden expiry date.",
+    "stat_line": "Gold expires 5th. You're already late.",
+    "payoff": "Don't learn expiry dates after you're trapped.",
+    "beat1": "MCX Gold and Silver contracts expire on the 5th of delivery month, or prior trading day if 5th is a holiday.",
+    "beat2": "After expiry, your position cash-settles at DVCAL—volume-weighted average price. No choice, no extension.",
+    "beat3": "Exit or roll 3–4 trading days before expiry. Final days see liquidity collapse, slippage hits hard.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18032928398909722",
+    "generated_at": "2026-09-11T17:43:56.244Z",
+    "edition": null,
+    "posted_at": "2026-09-11T17:44:43.047Z"
+  },
+  {
     "file": "news-20260910-lot-size-guide-crude-mini-8-15k-vs-gold-mini",
     "topic": "Lot size guide (Crude Mini ₹8-15K vs Gold Mini ₹1-1.25L)",
     "content_type": "explainer",
