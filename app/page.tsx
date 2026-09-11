@@ -1,17 +1,18 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { isTodaysBriefDelayed } from '@/lib/tradingCalendar'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
-import type { PriceData } from '@/lib/prices'
 import Pill from '@/components/ui/Pill'
 import { tagTone } from '@/lib/tagType'
 import Card from '@/components/ui/Card'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
-import GoldHeroCard from '@/components/GoldHeroCard'
 import ContinueReading from '@/components/ContinueReading'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 import TerminalTabbar from '@/components/terminal/TerminalTabbar'
+import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
+import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
+import { getSparklineCloses } from '@/lib/history'
 
 // BhaavBrief Terminal — the homepage as a unified dashboard rather than a
 // standalone landing page. Built incrementally (see
@@ -43,99 +44,13 @@ export const metadata = {
   ],
 }
 
-// ── Market Snapshot ───────────────────────────────────────────────────────────
-
-function fmtINR(n: number) {
-  if (!n) return '—'
-  return '₹' + n.toLocaleString('en-IN', { maximumFractionDigits: 0 })
-}
-function fmtUSD(n: number, dp = 2) {
-  if (!n) return '—'
-  return '$' + n.toFixed(dp)
-}
-function fmtPct(n: number) {
-  if (n === undefined || n === null) return '—'
-  const sign = n >= 0 ? '+' : ''
-  return sign + n.toFixed(2) + '%'
-}
-
-interface SnapItem {
-  label: string
-  price: string
-  pct: number
-  unit: string
-  href?: string
-}
-
-function MarketSnapshot({ data }: { data: PriceData | null }) {
-  if (!data) return null
-
-  const items: SnapItem[] = [
-    { label: 'MCX Gold',   price: fmtINR(data.gold?.mcx),   pct: data.gold?.mcxChangePct  ?? 0, unit: '/ 10g', href: '/commodities/gold'      },
-    { label: 'MCX Crude',  price: fmtINR(data.crude?.mcx),  pct: data.crude?.mcxChangePct ?? 0, unit: '/ bbl', href: '/commodities/crude-oil' },
-    { label: 'MCX Silver', price: fmtINR(data.silver?.mcx), pct: data.silver?.mcxChangePct ?? 0, unit: '/ kg',  href: '/commodities/silver'    },
-    { label: 'USD / INR',  price: fmtUSD(data.usdinr, 4),   pct: data.usdinrChangePct      ?? 0, unit: ''                                     },
-  ]
-
-  return (
-    <div className="market-snap">
-      {items.map((item) => {
-        const up = item.pct >= 0
-        const tile = (
-          <div style={{
-            background: 'var(--surface)',
-            padding: '14px 16px',
-          }}>
-            <div style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 10,
-              letterSpacing: '0.09em',
-              textTransform: 'uppercase',
-              color: 'var(--ink-3)',
-              marginBottom: 6,
-            }}>
-              {item.label}
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 17,
-              fontWeight: 500,
-              color: 'var(--ink)',
-              lineHeight: 1,
-              marginBottom: 5,
-            }}>
-              {item.price}
-              {item.unit && (
-                <span style={{ fontSize: 10, color: 'var(--ink-4)', marginLeft: 3, fontWeight: 400 }}>
-                  {item.unit}
-                </span>
-              )}
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-sans)',
-              fontSize: 11,
-              fontWeight: 500,
-              color: up ? 'var(--up)' : 'var(--down)',
-            }}>
-              {fmtPct(item.pct)}
-            </div>
-          </div>
-        )
-        if (item.href) {
-          return <Link key={item.label} href={item.href} style={{ textDecoration: 'none', display: 'block' }}>{tile}</Link>
-        }
-        return <div key={item.label}>{tile}</div>
-      })}
-    </div>
-  )
-}
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function HomePage() {
   const briefs = await getAllBriefs()
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
+  const terminalData = await getTerminalData()
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
@@ -189,70 +104,41 @@ export default async function HomePage() {
       <TerminalTabbar sections={TERMINAL_SECTIONS} />
 
       {/* ══════════════════════════════════════════════════════════════════════
-          COMMODITY TERMINAL — live prices + market data modules.
-          Step 1 scaffold: today's existing price widgets, repositioned.
-          GoldHeroCard/MarketSnapshot/mini price card are superseded by a
-          5-instrument gateway-card grid in a later build step.
+          COMMODITY TERMINAL — the 5 core MCX instruments as gateway cards:
+          price, day change, iVIX/AAV/vol premium/PCR/Max Pain/OI, sparkline,
+          and deep links — all from getTerminalData() (lib/options.ts's
+          already-cached getOptionsChain, one call per instrument) plus the
+          existing price snapshot and daily-close history.
           ══════════════════════════════════════════════════════════════════ */}
       <section id="commodities" style={{ marginBottom: 48 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div style={{
+            fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+            letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          }}>
+            Commodity Terminal
+          </div>
+          <Link href="/markets" style={{ fontSize: 12, color: 'var(--gold)', textDecoration: 'none' }}>
+            All 10 MCX markets →
+          </Link>
+        </div>
+
         <div style={{
-          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
-          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
-          marginBottom: 14,
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12,
         }}>
-          Commodity Terminal
+          {CORE_INSTRUMENTS.map(instrument => {
+            const meta = GATEWAY_META[instrument]
+            return (
+              <CommodityGatewayCard
+                key={instrument}
+                meta={meta}
+                priceData={prices ? prices[meta.priceKey] : null}
+                optionsData={terminalData[instrument]}
+                sparkCloses={getSparklineCloses(meta.historyField, 20)}
+              />
+            )
+          })}
         </div>
-
-        <GoldHeroCard data={prices} />
-
-        <div style={{ marginTop: 16 }}>
-          <MarketSnapshot data={prices} />
-        </div>
-
-        <Link href="/markets" style={{ textDecoration: 'none', display: 'block', marginTop: 16, maxWidth: 420 }}>
-          <Card padding="sm" hoverLift>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <div style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 10, letterSpacing: '0.1em',
-                textTransform: 'uppercase', color: 'var(--up)',
-                display: 'flex', alignItems: 'center', gap: 5,
-              }}>
-                <span className="live-dot" />
-                Live MCX
-              </div>
-              <span style={{ color: 'var(--gold)', fontSize: 14, flexShrink: 0 }}>All markets →</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {[
-                { label: 'Gold',   price: prices?.gold?.mcx,   pct: prices?.gold?.mcxChangePct,   unit: '/10g', stale: prices?.gold?.mcxStale },
-                { label: 'Crude',  price: prices?.crude?.mcx,  pct: prices?.crude?.mcxChangePct,  unit: '/bbl', stale: prices?.crude?.mcxStale },
-                { label: 'Silver', price: prices?.silver?.mcx, pct: prices?.silver?.mcxChangePct, unit: '/kg',  stale: prices?.silver?.mcxStale },
-              ].map(({ label, price, pct, unit, stale }) => {
-                const up = (pct ?? 0) >= 0
-                return (
-                  <div key={label} style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', minWidth: 44 }}>{label}</span>
-                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: 15, color: 'var(--ink)', fontWeight: 500 }}>
-                      {price ? fmtINR(price) : '—'}
-                      <span style={{ fontSize: 10, color: 'var(--ink-4)', fontWeight: 400, marginLeft: 2 }}>{unit}</span>
-                    </span>
-                    {stale ? (
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', minWidth: 52, textAlign: 'right' }}>last known</span>
-                    ) : (
-                      <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: up ? 'var(--up)' : 'var(--down)', minWidth: 52, textAlign: 'right' }}>
-                        {pct != null ? `${up ? '+' : ''}${pct.toFixed(2)}%` : '—'}
-                      </span>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', marginTop: 10, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
-              OHLC · Volume · Open Interest · 5 commodities
-            </div>
-          </Card>
-        </Link>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
