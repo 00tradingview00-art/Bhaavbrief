@@ -387,62 +387,6 @@ function IVHistoryTooltip({ active, payload, color }: IVHistoryTooltipProps) {
   )
 }
 
-interface PayoffTooltipProps {
-  active?:     boolean
-  payload?:    { dataKey: string; value: number; color: string; name: string }[]
-  label?:      number
-  netCostINR:  number
-  futurePrice: number
-  sigmaT:      number | null
-}
-
-// Shows ₹ + % P&L per line (the original ask), plus how many standard
-// deviations the hovered price is from the current price — the piece a
-// generic tooltip can't show, since it needs our own IV-regime math.
-function PayoffTooltip({ active, payload, label, netCostINR, futurePrice, sigmaT }: PayoffTooltipProps) {
-  if (!active || !payload?.length || label == null) return null
-  const movePct = futurePrice > 0 ? ((label - futurePrice) / futurePrice) * 100 : null
-  const sigmasAway = sigmaT && sigmaT > 0 && futurePrice > 0
-    ? Math.log(label / futurePrice) / sigmaT
-    : null
-  return (
-    <div style={{
-      background: 'var(--ink, #0E0D0A)', color: '#fff', border: '1px solid var(--ink-2, #3A3830)',
-      padding: '8px 10px', borderRadius: 'var(--radius-sm)', boxShadow: 'var(--shadow-md)',
-      fontSize: 12, fontFamily: 'var(--font-sans)', minWidth: 160,
-    }}>
-      <div style={{ marginBottom: 4 }}>
-        F = ₹{fmt(label)}
-        {movePct !== null && (
-          // var(--up)/var(--down) fail WCAG AA as text on this dark background
-          // (measured 3.64:1 / 3.33:1) — same on-dark green/red TickerStrip.tsx
-          // already uses on this exact var(--ink) background (11.15:1 / 7.03:1).
-          <span style={{ color: movePct >= 0 ? '#4ADE80' : '#F87171' }}>
-            {' '}({movePct >= 0 ? '+' : ''}{movePct.toFixed(1)}%)
-          </span>
-        )}
-        {sigmasAway !== null && (
-          <span style={{ color: 'var(--ink-4, #B8B4A8)' }}> · {Math.abs(sigmasAway).toFixed(1)}σ {sigmasAway >= 0 ? 'above' : 'below'}</span>
-        )}
-      </div>
-      {payload.map(p => {
-        const v = Number(p.value)
-        const pct = netCostINR !== 0 ? (v / Math.abs(netCostINR)) * 100 : null
-        // The lines' own stroke colors (gold-dark / ink-3) are tuned for
-        // contrast against the white chart background, not this dark
-        // tooltip — use lighter tokens here so the text stays readable.
-        const tooltipColor = p.dataKey === 'Expiry' ? 'var(--gold-light, #D4A853)' : 'var(--ink-4, #B8B4A8)'
-        return (
-          <div key={p.dataKey} style={{ fontWeight: 700, color: tooltipColor }}>
-            {p.name}: {v >= 0 ? '+' : ''}₹{fmt(v)}
-            {pct !== null ? ` (${pct >= 0 ? '+' : ''}${pct.toFixed(0)}%)` : ''}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
 // Slim proportional strip from today to expiry, marking real upcoming events
 // for the current commodity. Clicking one re-anchors the payoff chart's
 // second line to that date instead of "now".
@@ -933,6 +877,16 @@ export default function StrategyBuilder({
     Expiry: Math.round(p.pnlExpiry),
     AsOf:   targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
   })), [payoff, secondaryPayoff, targetT])
+
+  // The core outcome should be visible without making a user hunt for a
+  // tooltip over a moving line. Use the nearest computed point to current F;
+  // the payoff range always includes the live future price in its domain.
+  const payoffAtCurrentPrice = useMemo(() => {
+    if (chartData.length === 0 || futurePrice <= 0) return null
+    return chartData.reduce((closest, point) => (
+      Math.abs(point.F - futurePrice) < Math.abs(closest.F - futurePrice) ? point : closest
+    ), chartData[0])
+  }, [chartData, futurePrice])
 
 
   // Events between today and expiry, for the target-date timeline
@@ -1522,15 +1476,34 @@ export default function StrategyBuilder({
           {/* Payoff chart */}
           {chartData.length > 0 && (
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>Payoff Diagram</div>
+              <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 2 }}>Payoff at expiry</div>
               <ProBlurGate isPro={isPro} label="Payoff Diagram — P&L at expiry with IV cone" timestamp="Live">
               {cone && ivRegime && (
-                <div style={{ fontSize: 13, color: 'var(--ink-2, #3A3830)', marginBottom: 6, lineHeight: 1.4 }}>
-                  Shaded: BhaavBrief&apos;s expected price range at expiry, based on today&apos;s IV shown above
+                <div style={{ fontSize: 13, color: 'var(--ink-2, #3A3830)', marginBottom: 8, lineHeight: 1.4 }}>
+                  IV-implied range by expiry: <strong>₹{fmt(cone.oneSigma[0])}–₹{fmt(cone.oneSigma[1])}</strong> (68%)
+                  <span style={{ color: 'var(--ink-3, #7A7668)' }}> · lighter band ₹{fmt(cone.twoSigma[0])}–₹{fmt(cone.twoSigma[1])} (95%)</span>
+                </div>
+              )}
+              {payoffAtCurrentPrice && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 8, marginBottom: 10 }}>
+                  <div style={{ border: '1px solid var(--border, #E5E1D7)', borderRadius: 6, padding: '7px 10px', background: 'var(--surface-2, #F8F6F0)' }}>
+                    <div style={{ fontSize: 11, color: 'var(--ink-2, #3A3830)' }}>CURRENT FUTURE</div>
+                    <div style={{ fontSize: 15, fontWeight: 700 }}>₹{fmt(futurePrice)}</div>
+                  </div>
+                  {payoffAtCurrentPrice.AsOf !== undefined && (
+                    <div style={{ border: '1px solid var(--border, #E5E1D7)', borderRadius: 6, padding: '7px 10px', background: 'var(--surface-2, #F8F6F0)' }}>
+                      <div style={{ fontSize: 11, color: 'var(--ink-2, #3A3830)' }}>{targetDate ? secondaryLabel.toUpperCase() : 'P&L TODAY'}</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: payoffAtCurrentPrice.AsOf >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>{fmtPnl(payoffAtCurrentPrice.AsOf)}</div>
+                    </div>
+                  )}
+                  <div style={{ border: '1px solid var(--gold-light, #D4A853)', borderRadius: 6, padding: '7px 10px', background: 'var(--gold-bg, #FCF7E8)' }}>
+                    <div style={{ fontSize: 11, color: 'var(--ink-2, #3A3830)' }}>P&amp;L AT EXPIRY</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: payoffAtCurrentPrice.Expiry >= 0 ? 'var(--up, #1B7A4A)' : 'var(--down, #B53A2A)' }}>{fmtPnl(payoffAtCurrentPrice.Expiry)}</div>
+                  </div>
                 </div>
               )}
               <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={chartData} margin={{ top: 4, right: 12, bottom: 4, left: 10 }}>
+                <LineChart data={chartData} margin={{ top: 8, right: 12, bottom: 4, left: 10 }}>
                   <XAxis dataKey="F" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(v: number) => {
                     const n = Number(v)
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
@@ -1538,12 +1511,7 @@ export default function StrategyBuilder({
                     return `₹${Math.round(n)}`
                   }} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} interval="preserveStartEnd" tickCount={7} />
                   <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} width={68} />
-                  <Tooltip content={<PayoffTooltip netCostINR={netCostINR} futurePrice={futurePrice} sigmaT={cone?.sigmaT ?? null} />} />
-                  {/* Legend text color is forced independent of each line's own stroke —
-                      Recharts defaults legend labels to match their series' stroke, which
-                      made "Today (Nd left)" (intentionally the fainter, dashed reference
-                      line — see comment below) unreadable as label text too. */}
-                  <Legend wrapperStyle={{ fontSize: 14 }} formatter={(value: string) => (
+                  <Legend wrapperStyle={{ fontSize: 13, paddingTop: 8 }} formatter={(value: string) => (
                     <span style={{ color: 'var(--ink-2, #3A3830)' }}>{value}</span>
                   )} />
                   {cone && ivRegime && (
@@ -1555,7 +1523,7 @@ export default function StrategyBuilder({
                   <ReferenceLine y={0} stroke="var(--ink-4, #B8B4A8)" strokeDasharray="3 3" />
                   {/* Current price reference */}
                   {futurePrice > 0 && (
-                    <ReferenceLine x={futurePrice} stroke="var(--border-2, #D4CFC0)" strokeDasharray="2 3" strokeWidth={1} />
+                    <ReferenceLine x={futurePrice} stroke="var(--ink-3, #7A7668)" strokeDasharray="2 3" strokeWidth={1} label={{ value: 'NOW', position: 'insideTop', fill: 'var(--ink-2, #3A3830)', fontSize: 10 }} />
                   )}
                   {/* Breakeven lines — no label; values shown in stats below. Exact
                       value now that the axis is numeric (no need to snap to a grid point). */}
@@ -1569,9 +1537,9 @@ export default function StrategyBuilder({
                       (Confirmed via direct SVG/DOM inspection, not screenshots —
                       this repo's screenshot tool crops above the real viewport
                       height, which looked like a rendering bug but wasn't one.) */}
-                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" dot={false} strokeWidth={1.5}
-                    strokeDasharray="5 3" name={secondaryLabel} />}
-                  <Line type="monotone" dataKey="Expiry" stroke="var(--gold-dark, #8B6520)" dot={false} strokeWidth={2} name="At Expiry" />
+                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" strokeOpacity={0.68} dot={false} strokeWidth={1.25}
+                    strokeDasharray="5 3" name={`${secondaryLabel} P&L`} />}
+                  <Line type="monotone" dataKey="Expiry" stroke="var(--gold-dark, #8B6520)" dot={false} strokeWidth={2.75} name="Expiry P&L" />
                 </LineChart>
               </ResponsiveContainer>
               {upcomingEvents.length > 0 && expiry && (
