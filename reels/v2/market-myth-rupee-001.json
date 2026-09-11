@@ -1,0 +1,22 @@
+{
+  "id": "market-myth-rupee-001",
+  "series": "market-myth",
+  "status": "concept",
+  "review_status": "draft",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 12,
+  "hook": "Gold can move here without moving there.",
+  "visual_asset": "public/reels/v2/assets/rupee-gold-parity-v1.png",
+  "storyboard": [
+    { "seconds": "0.0-1.0", "visual": "Gold bars float into frame, wrapped by a cool-blue currency ribbon.", "copy": "GOLD CAN MOVE HERE" },
+    { "seconds": "1.0-3.5", "visual": "Camera moves through the ribbon; the bar reflects two distinct light sources.", "copy": "without moving there." },
+    { "seconds": "3.5-7.0", "visual": "Three abstract markers assemble around the bar: global gold, dollar, rupee.", "copy": "MCX price = gold × dollar × rupee" },
+    { "seconds": "7.0-10.5", "visual": "Currency ribbon tightens gently around the gold reflection.", "copy": "The rupee changes the Indian quote." },
+    { "seconds": "10.5-12.0", "visual": "BhaavBrief wordmark settles on black.", "copy": "Educational data, not investment advice." }
+  ],
+  "voiceover": "Indian gold is not just global gold. The dollar and rupee sit in the middle. That is why MCX can move when global gold barely does. BhaavBrief.",
+  "caption": "MCX gold reflects global gold, the dollar, and USD/INR—not one price alone. Educational data, not investment advice.",
+  "overlays": ["Educational data, not investment advice."],
+  "approval_note": "Evergreen education concept. Any figures added later must be source-verified before human approval."
+}

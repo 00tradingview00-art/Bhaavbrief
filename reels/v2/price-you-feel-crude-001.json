@@ -1,0 +1,22 @@
+{
+  "id": "price-you-feel-crude-001",
+  "series": "price-you-feel",
+  "status": "concept",
+  "review_status": "draft",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 10,
+  "hook": "Your petrol bill starts far from home.",
+  "visual_asset": "public/reels/v2/assets/crude-to-petrol-v1.png",
+  "storyboard": [
+    { "seconds": "0.0-0.7", "visual": "Nozzle enters; molten fuel route ignites across the globe.", "copy": "YOUR PETROL BILL" },
+    { "seconds": "0.7-3.0", "visual": "Camera travels with the fuel route past a tanker.", "copy": "starts in global crude" },
+    { "seconds": "3.0-6.5", "visual": "Route resolves at the city fuel marker.", "copy": "oil → shipping → India" },
+    { "seconds": "6.5-9.0", "visual": "Fuel stream slows; the city remains illuminated.", "copy": "A market move travels." },
+    { "seconds": "9.0-10.0", "visual": "BhaavBrief wordmark on black.", "copy": "Educational data, not investment advice." }
+  ],
+  "voiceover": "Your petrol bill starts far from home. Crude moves through shipping and refining before India sees the effect. A market move travels. BhaavBrief.",
+  "caption": "Crude is only the first link. Shipping, refining and domestic pricing determine how a global move eventually reaches a fuel bill. Educational data, not investment advice.",
+  "overlays": ["Educational data, not investment advice."],
+  "approval_note": "Concept only. A current-event version needs a source-verified causal chain and compliance review."
+}
