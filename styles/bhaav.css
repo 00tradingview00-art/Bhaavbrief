@@ -297,3 +297,12 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/* ── Terminal homepage: shared 2-col → 1-col responsive panel row ──────────
+   Used by Options Intelligence and Volatility & Correlation. Inline styles
+   can't carry a media query, hence one shared class instead of repeating
+   this breakpoint per component. */
+.terminal-two-col { grid-template-columns: 1fr; }
+@media (min-width: 860px) {
+  .terminal-two-col { grid-template-columns: 1.15fr 0.85fr; }
+}

@@ -11,6 +11,7 @@ import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 import TerminalTabbar from '@/components/terminal/TerminalTabbar'
 import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
+import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligencePanel'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -21,6 +22,7 @@ import { getSparklineCloses } from '@/lib/history'
 // links to an empty/placeholder section on a live page.
 const TERMINAL_SECTIONS = [
   { id: 'commodities', label: 'Commodities' },
+  { id: 'options',     label: 'Options Intelligence' },
   { id: 'brief',       label: 'Brief & Calendar' },
 ]
 
@@ -139,6 +141,21 @@ export default async function HomePage() {
             )
           })}
         </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          OPTIONS INTELLIGENCE — PCR and Max Pain across the 5 core
+          instruments, from the same terminalData fetch as the gateway cards.
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="options" style={{ marginBottom: 48 }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Options Intelligence
+        </div>
+        <OptionsIntelligencePanel terminalData={terminalData} />
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
