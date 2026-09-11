@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
@@ -19,6 +19,15 @@ const inter = Inter({
 })
 
 const BASE = 'https://bhaavbrief.in'
+
+// Explicitly retain the device-width viewport. Without this, embedded mobile
+// browsers can use a desktop layout viewport, which was causing two-column
+// market cards to overflow a phone screen.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
 
 // P-01 (build-ID stamping): Vercel sets VERCEL_GIT_COMMIT_SHA at build time;
 // GITHUB_SHA covers CI-only builds (e.g. `npm run build` in test.yml). The
@@ -112,7 +121,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
         <Nav />
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
-        <div style={{ position: 'sticky', top: 56, zIndex: 39 }}>
+        <div className="bb-ticker-shell" style={{ position: 'sticky', top: 56, zIndex: 39 }}>
           <TickerStrip initialPrices={initialPrices} />
         </div>
         <main className="bb-main" style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(20px, 4vw, 32px) clamp(16px, 4vw, 24px)' }}>

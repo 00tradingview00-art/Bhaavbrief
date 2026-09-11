@@ -10,11 +10,14 @@ const SIZES = {
 interface SparklineProps {
   closes: number[]
   size?: keyof typeof SIZES
+  /** Match the surrounding live-price direction when the chart represents a
+      different time window from the displayed daily percentage. */
+  trendUp?: boolean
 }
 
 // Hand-rolled inline SVG per Part 12 §12.4.1 — not recharts, to avoid
 // instantiating a full chart library 6-9 times per page for an 80x32 line.
-export default function Sparkline({ closes, size = 'card' }: SparklineProps) {
+export default function Sparkline({ closes, size = 'card', trendUp }: SparklineProps) {
   const gradientId = useId()
   const { width, height } = SIZES[size]
 
@@ -23,7 +26,7 @@ export default function Sparkline({ closes, size = 'card' }: SparklineProps) {
   const min = Math.min(...closes)
   const max = Math.max(...closes)
   const range = max - min || 1
-  const up = closes[closes.length - 1] >= closes[0]
+  const up = trendUp ?? (closes[closes.length - 1] >= closes[0])
   const color = up ? 'var(--up)' : 'var(--down)'
 
   const padY = 3

@@ -44,14 +44,14 @@ export default function Nav() {
 
   return (
     <>
-      <nav style={{
+      <nav className="bb-site-nav" style={{
         background: 'var(--surface)',
         borderBottom: '1px solid var(--border)',
         position: 'sticky',
         top: 0,
         zIndex: 100,
       }}>
-        <div style={{
+        <div className="bb-site-nav__inner" style={{
           maxWidth: 1200,
           margin: '0 auto',
           padding: '0 20px',
@@ -63,7 +63,7 @@ export default function Nav() {
         }}>
 
           {/* Wordmark */}
-          <Link href="/" style={{
+          <Link href="/" className="nav-wordmark" style={{
             textDecoration: 'none',
             marginRight: 28,
             flexShrink: 0,
@@ -71,8 +71,8 @@ export default function Nav() {
             alignItems: 'center',
             gap: 9,
           }}>
-            <Image src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} style={{ display: 'block' }} />
-            <span style={{
+            <Image className="nav-logo-mark" src="/logo-mark.png" alt="BhaavBrief" width={26} height={26} style={{ display: 'block' }} />
+            <span className="nav-wordmark-text" style={{
               fontFamily: 'var(--font-serif)',
               fontSize: 18,
               fontWeight: 700,

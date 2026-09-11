@@ -354,6 +354,12 @@ body {
   }
   .bb-mobile-home { display: block; }
   .bb-desktop-home { display: none; }
+  .bb-site-nav { padding-top: env(safe-area-inset-top); }
+  .bb-site-nav__inner { height: 52px !important; padding: 0 14px !important; }
+  .bb-ticker-shell { top: calc(52px + env(safe-area-inset-top)) !important; }
+  .nav-wordmark { width: 42px; min-width: 42px; margin-right: 0 !important; justify-content: center; }
+  .nav-wordmark-text { display: none; }
+  .nav-logo-mark { width: 28px !important; height: 28px !important; }
 }
 
 @media (min-width: 768px) {

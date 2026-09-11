@@ -129,7 +129,7 @@ function PriceCard({
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
           {data.mcx > 0 ? cfg.fmtP(data.mcx) : '—'}
         </div>
-        {closes && closes.length >= 2 && <Sparkline closes={closes} size="card" />}
+        {closes && closes.length >= 2 && <Sparkline closes={closes} size="card" trendUp={isUp} />}
       </div>
       <div style={{ fontSize: 10, color: 'var(--ink-4)', marginBottom: hasKite ? 10 : 0 }}>
         {data.mcxChange !== 0 && (
