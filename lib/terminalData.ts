@@ -36,9 +36,9 @@ export interface TerminalInstrumentData {
   aav:         { '5d': number | null; '10d': number | null; '20d': number | null; '40d': number | null; '60d': number | null }
   volPremium:  number | null
   // Sum of each strike's CE+PE oiChange (oi vs. that strike's day low — see
-  // lib/options.ts, D-06/D-something's oi_day_low field) across the chain.
-  // This is an INTRADAY figure, not a day-over-day change — label it as
-  // "vs day low", never as a plain "OI Δ", which would imply the latter.
+  // lib/options.ts's oi_day_low field) across the chain. This is an
+  // INTRADAY figure, not a day-over-day change — label it as "vs day low",
+  // never as a plain "OI Δ", which would imply the latter.
   oiVsDayLow:  number | null
   marketOpen:  boolean
   expiries:    string[]
@@ -82,4 +82,42 @@ export async function getTerminalData(): Promise<Record<CoreInstrument, Terminal
     }),
   )
   return Object.fromEntries(entries) as Record<CoreInstrument, TerminalInstrumentData | null>
+}
+
+export interface TermStructurePoint {
+  expiry: string
+  ivix:   number | null
+}
+
+// Near/next/far iVIX per instrument, for the term-structure chart. A single
+// getOptionsChain(instrument) call only returns the NEAREST expiry's chain —
+// expiries[] is just the list of what's available — so getting 3 points per
+// instrument genuinely needs 3 separate calls with an explicit
+// requestedExpiry each (verified against lib/options.ts directly, not
+// assumed). getOptionsChain() is cache()-deduped per render but keyed on
+// (instrument, requestedExpiry), so these don't reuse getTerminalData()'s
+// default-expiry calls — this is real, additional fetch volume, not free.
+export async function getTermStructureData(): Promise<Record<CoreInstrument, TermStructurePoint[]>> {
+  const entries = await Promise.all(
+    CORE_INSTRUMENTS.map(async (instrument): Promise<[CoreInstrument, TermStructurePoint[]]> => {
+      try {
+        const nearest = await getOptionsChain(instrument)
+        const expiries = nearest.expiries.slice(0, 3)
+        const points = await Promise.all(
+          expiries.map(async (expiry): Promise<TermStructurePoint> => {
+            try {
+              const chain = expiry === nearest.expiry ? nearest : await getOptionsChain(instrument, expiry)
+              return { expiry, ivix: chain.ivix }
+            } catch {
+              return { expiry, ivix: null }
+            }
+          }),
+        )
+        return [instrument, points]
+      } catch {
+        return [instrument, []]
+      }
+    }),
+  )
+  return Object.fromEntries(entries) as Record<CoreInstrument, TermStructurePoint[]>
 }

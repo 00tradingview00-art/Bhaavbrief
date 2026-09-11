@@ -15,6 +15,12 @@ import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligenceP
 import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import MacroCard from '@/components/terminal/MacroCard'
 import MoversPanel from '@/components/terminal/MoversPanel'
+import IVTermStructureChart from '@/components/terminal/IVTermStructureChart'
+import CorrelationHeatmap from '@/components/terminal/CorrelationHeatmap'
+import { getTermStructureData } from '@/lib/terminalData'
+import { getCorrelationMatrix } from '@/lib/correlation'
+import { auth } from '@clerk/nextjs/server'
+import { isProUser } from '@/lib/subscription'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -26,6 +32,7 @@ import { getSparklineCloses } from '@/lib/history'
 const TERMINAL_SECTIONS = [
   { id: 'pulse',       label: 'Market Pulse' },
   { id: 'commodities', label: 'Commodities' },
+  { id: 'volcorr',     label: 'Vol & Correlation' },
   { id: 'options',     label: 'Options Intelligence' },
   { id: 'macro',       label: 'Macro' },
   { id: 'movers',      label: 'Movers' },
@@ -114,6 +121,9 @@ export default async function HomePage() {
   const prices = snap ? snapshotToPriceData(snap) : null
   const terminalData = await getTerminalData()
   const macroMetrics = computeMacro(snap)
+  const correlationMatrix = getCorrelationMatrix(20)
+  const [termStructure, { userId }] = await Promise.all([getTermStructureData(), auth()])
+  const isPro = await isProUser(userId)
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
@@ -217,6 +227,35 @@ export default async function HomePage() {
               />
             )
           })}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          VOLATILITY & CORRELATION — iVIX term structure (3 expiries × 5
+          instruments) and a 6×6 correlation matrix (5 core commodities +
+          USDINR — no Nifty 50, no equity-index data source exists here).
+          Both Pro-gated, mirroring /tools' Volatility Analytics / Basis
+          Dashboard gates.
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="volcorr" style={{ marginBottom: 48 }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Volatility &amp; Correlation
+        </div>
+        <div className="terminal-two-col" style={{ display: 'grid', gap: 16 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: 18 }}>
+            <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>iVIX Term Structure</h3>
+            <p style={{ margin: '0 0 14px', fontSize: 11.5, color: 'var(--ink-3)' }}>Implied volatility by expiry bucket, across the 5 core MCX chains</p>
+            <IVTermStructureChart termStructure={termStructure} isPro={isPro} />
+          </div>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: 18 }}>
+            <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Cross-Asset Correlation</h3>
+            <p style={{ margin: '0 0 14px', fontSize: 11.5, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR, daily-return correlation</p>
+            <CorrelationHeatmap correlation={correlationMatrix} isPro={isPro} />
+          </div>
         </div>
       </section>
 
