@@ -360,6 +360,34 @@ body {
   .nav-wordmark { width: 42px; min-width: 42px; margin-right: 0 !important; justify-content: center; }
   .nav-wordmark-text { display: none; }
   .nav-logo-mark { width: 28px !important; height: 28px !important; }
+
+  /* Briefs: prevent long dates and article metadata from wrapping into a
+     second, visually broken breadcrumb row. */
+  .bb-brief-breadcrumb,
+  .bb-commodity-breadcrumb {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .bb-brief-breadcrumb::-webkit-scrollbar,
+  .bb-commodity-breadcrumb::-webkit-scrollbar { display: none; }
+  .bb-brief-breadcrumb > span,
+  .bb-commodity-breadcrumb > * { flex: 0 0 auto; }
+  .layout-brief-page { gap: 1.25rem; padding-top: .75rem !important; }
+  .bb-brief-article > header { padding-bottom: 1.1rem !important; margin-bottom: 1.1rem !important; }
+  .bb-brief-article h1 { font-size: clamp(1.7rem, 8vw, 2.05rem) !important; line-height: 1.12 !important; }
+  .bb-brief-article .brief-prose p { font-size: 1.05rem; line-height: 1.72; }
+
+  /* Commodity pages: a price summary needs one clear vertical reading order
+     on a phone, rather than the desktop's two-column hero. */
+  .commodity-price-summary { padding: 20px !important; margin-bottom: 20px !important; border-radius: 14px !important; }
+  .bb-commodity-hero-content { display: block !important; }
+  .bb-commodity-hero-content > div:last-child { margin-top: 20px; text-align: left !important; }
+  .commodity-price-summary h1 { font-size: clamp(1.75rem, 8vw, 2.2rem) !important; }
+  .commodity-price-summary p { font-size: 14px !important; line-height: 1.5; }
+  .bb-commodity-ohlc { grid-template-columns: repeat(2, 1fr) !important; gap: 14px 12px !important; margin-top: 18px !important; }
 }
 
 @media (min-width: 768px) {

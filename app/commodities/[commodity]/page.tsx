@@ -522,7 +522,7 @@ export default async function CommodityPage({ params }: Props) {
       <CommodityVisitTracker slug={commodity} name={info.name} />
 
       {/* Breadcrumb */}
-      <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 12, display: 'flex', gap: 8 }}>
+      <div className="bb-commodity-breadcrumb" style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 12, display: 'flex', gap: 8 }}>
         <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
         <span>›</span>
         <span style={{ color: 'var(--ink-3)' }}>Commodities</span>
@@ -535,7 +535,7 @@ export default async function CommodityPage({ params }: Props) {
         borderRadius: 12, padding: '28px 32px', marginBottom: 32,
         borderTop: `3px solid ${color}`,
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+        <div className="bb-commodity-hero-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
               <span style={{
@@ -573,7 +573,7 @@ export default async function CommodityPage({ params }: Props) {
 
         {/* OHLC strip */}
         {(open > 0 || high > 0) && (
-          <div style={{
+          <div className="bb-commodity-ohlc" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 12, marginTop: 24,
             padding: '16px 0 0', borderTop: '1px solid var(--border)',

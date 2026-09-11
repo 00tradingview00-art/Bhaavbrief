@@ -158,7 +158,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
 
-      <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+      <nav className="bb-brief-breadcrumb" aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Home',   href: '/' },
           { label: 'Briefs', href: '/briefs' },
@@ -177,7 +177,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
 
       <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <main>
-          <article itemScope itemType="https://schema.org/NewsArticle">
+          <article className="bb-brief-article" itemScope itemType="https://schema.org/NewsArticle">
             <header style={{ paddingBottom: '1.5rem', marginBottom: '1.5rem', borderBottom: '0.5px solid #DDDDD0' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: '0.75rem', flexWrap: 'wrap' }}>
                 <Pill tone={tagTone(brief.tags?.[0])} size="sm">{brief.tags?.[0] ?? 'Brief'}</Pill>
