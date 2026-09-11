@@ -31,7 +31,7 @@ export const revalidate = 60
 
 export const metadata: Metadata = {
   title:       'MCX Max Pain Today — Crude Oil, Natural Gas, Gold, Silver',
-  description: 'Live MCX Max Pain strike price for Gold, Silver, Crude Oil, Natural Gas, and Copper. The max pain strike is where aggregate option-holder losses are maximized at expiry.',
+  description: 'Live MCX Max Pain strike price for Gold, Silver, Crude Oil, Natural Gas, and Copper — where the options market may be pulling price toward by expiry.',
   keywords:    [
     'MCX max pain today India', 'MCX gold max pain strike',
     'MCX options max pain theory India', 'MCX silver max pain expiry',
@@ -67,8 +67,7 @@ export default async function MCXMaxPainPage() {
         MCX Max Pain Today
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        Max Pain = the strike price where option buyers collectively lose the most at expiry, calculated from aggregate CE+PE OI.
-        Futures often gravitate toward max pain in the last week before expiry.
+        Where the options market may be pulling price toward by expiry — futures often gravitate here in the last week before expiry.
       </p>
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>

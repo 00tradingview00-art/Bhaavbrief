@@ -726,15 +726,15 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
           <Pill label="Underlying" value={fmtINR(data.futurePrice)}
             info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks." />
           <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold}
-            info="The strike where option writers (sellers) owe the least at expiry — often acts as a magnet for price as expiry nears." />
+            info="Where the options market may be pulling price toward by expiry." />
           <PCRPill pcr={data.pcr}
-            info="Put-Call Ratio — total Put OI divided by total Call OI. Above 1.2 (more puts open) is conventionally read as bullish positioning; below 0.8 (more calls open) as bearish." />
+            info="Put-Call Ratio — how options positioning is leaning across puts and calls." />
           {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6"
             info="Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices." />}
           {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV}
-            info="Annualized Actual Volatility — realized historical volatility computed from the last 20 trading days of closing prices." />}
+            info="Annualized Actual Volatility — how much this commodity has actually moved recently." />}
           {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor}
-            info="iVIX minus AAV 20d. Positive means options are pricing in more movement than has actually occurred recently." />}
+            info="Whether options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
             <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700 }}>Status</span>
             <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>

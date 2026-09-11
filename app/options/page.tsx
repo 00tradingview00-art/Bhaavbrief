@@ -56,17 +56,17 @@ const FAQ_SCHEMA = {
     {
       '@type': 'Question',
       name: 'What is Max Pain in MCX options?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Max Pain is the strike price at which option writers (sellers) collectively lose the least money at expiry, and option buyers as a group lose the most. It is calculated by finding the strike where total payout to all in-the-money Call and Put holders is minimized. Traders watch it because MCX prices often gravitate toward the Max Pain strike as expiry approaches, though it is not a guarantee.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Max Pain is the strike price where the options market is putting the least weight behind a big move. Traders watch it because MCX prices often gravitate toward the Max Pain strike as expiry approaches, though it is not a guarantee.' },
     },
     {
       '@type': 'Question',
       name: 'What is iVIX and how is it different from AAV?',
-      acceptedAnswer: { '@type': 'Answer', text: 'iVIX is the implied volatility the options market is currently pricing in, derived from live MCX option premiums using the Black-76 model. AAV (Annualized Actual Volatility) is the realized volatility computed from historical price closes over trailing windows (5, 10, 20, 40, 60 days). Comparing iVIX to 20-day AAV shows the volatility premium — whether options are pricing in more or less movement than has actually occurred recently.' },
+      acceptedAnswer: { '@type': 'Answer', text: "iVIX is the implied volatility the options market is currently pricing in, derived from live MCX option premiums using the Black-76 model. AAV (Annualized Actual Volatility) is BhaavBrief's read on how much a commodity has actually moved recently. Comparing the two shows the volatility premium — whether options are pricing in more or less movement than has actually occurred recently." },
     },
     {
       '@type': 'Question',
       name: 'What does PCR (Put-Call Ratio) tell you?',
-      acceptedAnswer: { '@type': 'Answer', text: 'PCR is total Put open interest divided by total Call open interest for an expiry. A PCR above 1.2 (more Put OI than Call OI) is conventionally read as bullish positioning; below 0.8 (more Call OI) as bearish. Extreme readings are sometimes treated as a contrarian indicator near market turning points.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'PCR (Put-Call Ratio) reflects how options positioning is leaning across puts and calls for an expiry. Extreme readings are sometimes treated as a contrarian indicator near market turning points.' },
     },
     {
       '@type': 'Question',

@@ -138,7 +138,7 @@ export default function IVRankHistoryChart({ title, instruments, isPro }: Props)
     <Card padding="md">
       <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>{title}</h2>
       <p style={{ fontSize: '0.8rem', color: 'var(--ink-3)', marginBottom: '1rem' }}>
-        How current IV compares to its own recent range — above 70 is rich, below 30 is cheap.
+        How current IV compares to its own recent range.
       </p>
 
       <ProBlurGate isPro={isPro} label={`${title} — see how volatility has moved over time`} timestamp="Updated today">

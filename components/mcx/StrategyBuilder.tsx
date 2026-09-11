@@ -1526,7 +1526,7 @@ export default function StrategyBuilder({
               <ProBlurGate isPro={isPro} label="Payoff Diagram — P&L at expiry with IV cone" timestamp="Live">
               {cone && ivRegime && (
                 <div style={{ fontSize: 13, color: 'var(--ink-2, #3A3830)', marginBottom: 6, lineHeight: 1.4 }}>
-                  Shaded: expected price range at expiry — ±1 and ±2 standard deviations (σ), based on today&apos;s IV shown above
+                  Shaded: BhaavBrief&apos;s expected price range at expiry, based on today&apos;s IV shown above
                 </div>
               )}
               <ResponsiveContainer width="100%" height={280}>

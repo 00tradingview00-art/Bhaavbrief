@@ -55,7 +55,7 @@ const FREE_TOOLS = [
   {
     href: '/tools/mcx-pcr',
     label: 'Put-Call Ratio (PCR)',
-    desc: 'Live PCR and IVIX for all MCX instruments. PCR > 1.2 = contrarian bullish signal.',
+    desc: 'Live PCR and IVIX for all MCX instruments — see how options positioning is leaning.',
   },
   {
     href: '/tools/mcx-open-interest',

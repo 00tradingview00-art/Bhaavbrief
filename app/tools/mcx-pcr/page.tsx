@@ -32,7 +32,7 @@ export const revalidate = 60
 
 export const metadata: Metadata = {
   title:       'MCX Put-Call Ratio Today — BhaavBrief',
-  description: 'Live MCX Put-Call Ratio (PCR) and IVIX for Gold, Silver, Crude Oil, Natural Gas, and Copper. PCR above 1 is bullish; below 0.7 is bearish.',
+  description: 'Live MCX Put-Call Ratio (PCR) and IVIX for Gold, Silver, Crude Oil, Natural Gas, and Copper — see how options positioning is leaning for each.',
   keywords:    [
     'MCX put call ratio today India', 'MCX PCR gold silver crude',
     'MCX options PCR analysis India', 'MCX IVIX today',
@@ -80,8 +80,7 @@ export default async function MCXPCRPage() {
         MCX Put-Call Ratio (PCR)
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        PCR &gt; 1.2 = more puts than calls = market expects downside, short-sellers protecting = contrarian bullish signal.
-        PCR &lt; 0.8 = complacency = contrarian bearish. Live data, updated every 60 seconds.
+        How options positioning is leaning across puts and calls for each instrument. Live data, updated every 60 seconds.
       </p>
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>

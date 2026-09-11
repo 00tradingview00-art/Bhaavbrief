@@ -160,7 +160,7 @@ export default async function MCXIVRankPage() {
         MCX Implied Volatility Rank
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        IV Rank 0–100: how current IV compares to {windowLabel}. &gt;70 = expensive options, &lt;30 = cheap options.
+        Whether options are currently cheap or expensive versus {windowLabel}.
       </p>
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>

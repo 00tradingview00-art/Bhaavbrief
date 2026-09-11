@@ -86,7 +86,7 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
     faq: [
       { q: 'Why is MCX gold price up today?', a: 'MCX gold rises when any of these happen: the US dollar weakens (making dollar-priced gold cheaper globally), the Indian rupee falls against the dollar (requiring more rupees to buy the same gold), geopolitical tensions rise (safe-haven demand), US Federal Reserve signals rate cuts, or global central banks increase gold buying. A 1% rupee depreciation alone can add ₹1,000–₹1,500 to MCX gold per 10g even if COMEX gold is flat.' },
       { q: 'Why is MCX gold price falling today?', a: 'MCX gold falls when: the US dollar strengthens (COMEX gold drops), the Indian rupee appreciates, US real yields rise (raising the opportunity cost of holding gold), the Fed signals rate hikes, or geopolitical tensions ease. Import duty cuts by the Indian government can also cause a sharp fall — each 1% duty reduction drops MCX gold by roughly ₹1,000/10g.' },
-      { q: 'Why does MCX gold price differ from international (COMEX) gold price?', a: 'MCX gold is priced in Indian rupees, not US dollars. The formula is: MCX Gold (₹/10g) = (COMEX $/oz ÷ 31.1035) × 10 × USD/INR × (1 + import duty + GST). At current duty levels (~15%), a COMEX price of $3,000/oz with USD/INR at ₹84 gives an MCX theoretical of ~₹93,000/10g. When actual MCX price is higher than this, it signals strong domestic demand or import tightness.' },
+      { q: 'Why does MCX gold price differ from international (COMEX) gold price?', a: "MCX gold is priced in Indian rupees, not US dollars — it reflects the global COMEX price converted to ₹ and adjusted for import duty and taxes. When the actual MCX price runs higher than this landed-cost benchmark, it signals strong domestic demand or import tightness." },
       { q: 'What is the MCX Gold Mini lot size and margin?', a: 'MCX Gold Mini has a lot size of 100 grams, quoted in ₹ per 10 grams. At mid-2026 gold prices (~₹1,00,000/10g), one lot of Gold Mini is worth approximately ₹10 lakh. The required SPAN margin is approximately ₹55,000–₹75,000 per lot — making it the most accessible gold futures contract for retail traders. The standard 1 kg Gold contract requires ₹5–7 lakh in margin.' },
     ],
   },
@@ -110,7 +110,7 @@ const COMMODITY_META: Record<string, { title: string; description: string; keywo
     ],
     faq: [
       { q: 'Why is MCX silver price up or down today?', a: 'Silver moves on two separate demand streams: monetary (like gold) and industrial. It rises when gold rises, but also when industrial demand is strong — particularly solar panel manufacturing, electronics, and EVs. Silver typically moves 2–3× more than gold in percentage terms. If gold is up 0.5% and silver is up 1.2%, the extra industrial demand or a favourable gold-silver ratio is likely driving the outperformance.' },
-      { q: 'What is the gold-silver ratio and why does it matter for MCX?', a: 'The gold-silver ratio is the price of gold divided by the price of silver. Historically it oscillates between 60x and 90x. When the ratio is above 85x, silver is considered cheap relative to gold — traders watch for a mean reversion rally in silver. When below 65x, gold is relatively cheap. Indian traders use this ratio to time switches between MCX Gold and MCX Silver positions.' },
+      { q: 'What is the gold-silver ratio and why does it matter for MCX?', a: "The gold-silver ratio compares gold's price to silver's price, and tends to move within a well-known historical range. When it drifts to an extreme, traders watch for a mean-reversion move in the cheaper metal. Indian traders use this ratio to time switches between MCX Gold and MCX Silver positions." },
       { q: 'What is the MCX Silver Mini lot size and margin?', a: 'MCX Silver Mini has a lot size of 5 kg, quoted in ₹ per kg. At mid-2026 silver prices (~₹1,00,000/kg), one Silver Mini lot is worth approximately ₹5 lakh. SPAN margin is approximately ₹25,000–₹40,000 per lot. The Silver Micro (1 kg) requires only ₹5,000–₹8,000 margin — suitable for beginners.' },
     ],
   },
@@ -370,24 +370,22 @@ export default async function CommodityPage({ params }: Props) {
       const base       = snap.derived.importParityGoldINR
       const dutyInclusive = Math.round(base * dutyFactor)
       const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
-      const comexGold     = snap.instruments?.COMEX_GOLD?.price ?? 0
       liveParity = {
         dutyInclusivePrice: dutyInclusive,
         premiumPct,
-        formula: `COMEX $${comexGold.toFixed(0)}/oz ÷ 31.10 × 10 × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty`,
-        dutyNote: commodityConsts.gold?.importDutyBreakdown ?? '6% BCD + 3% AIDC + 3% GST',
+        formula: 'Global (COMEX) gold price, converted to ₹ and duty-inclusive',
+        dutyNote: 'Includes applicable import duty',
       }
     } else if (entry.key === 'silver' && snap.derived?.importParitySilverINR && usdinr > 0) {
       const dutyFactor = commodityConsts.silver?.importDutyFactor ?? 1.10
       const base       = snap.derived.importParitySilverINR
       const dutyInclusive = Math.round(base * dutyFactor)
       const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
-      const comexSilver   = snap.instruments?.COMEX_SILVER?.price ?? 0
       liveParity = {
         dutyInclusivePrice: dutyInclusive,
         premiumPct,
-        formula: `COMEX $${comexSilver.toFixed(2)}/oz ÷ 31.10 × 1000 × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty`,
-        dutyNote: '~10% effective import duty',
+        formula: 'Global (COMEX) silver price, converted to ₹ and duty-inclusive',
+        dutyNote: 'Includes applicable import duty',
       }
     } else if (entry.key === 'crude') {
       const wti = snap.instruments?.WTI?.price ?? 0
@@ -398,8 +396,8 @@ export default async function CommodityPage({ params }: Props) {
         liveParity = {
           dutyInclusivePrice: dutyInclusive,
           premiumPct,
-          formula: `WTI $${wti.toFixed(2)}/bbl × ₹${usdinr.toFixed(2)}/USD × ${dutyFactor} duty factor`,
-          dutyNote: 'Import duty differential (~2.5%)',
+          formula: 'Global (WTI) crude price, converted to ₹ and duty-inclusive',
+          dutyNote: 'Includes applicable import duty',
         }
       }
     }

@@ -26,7 +26,7 @@ const SCHEMA = {
       '@type': 'Dataset',
       '@id': 'https://bhaavbrief.in/basis',
       name: 'MCX Commodity Basis',
-      description: '% premium/discount of MCX Gold, Silver, and Crude Oil price vs import parity (COMEX/WTI × USDINR conversion), 30-day trailing mean and standard deviation.',
+      description: '% premium/discount of MCX Gold, Silver, and Crude Oil price vs global import parity, with historical context.',
       url: 'https://bhaavbrief.in/basis',
       creator: { '@type': 'Organization', name: 'BhaavBrief', url: 'https://bhaavbrief.in' },
       variableMeasured: ['Gold basis %', 'Silver basis %', 'Crude Oil basis %'],
@@ -101,7 +101,7 @@ export default async function BasisPage() {
         MCX Commodity Basis
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        % premium / discount of MCX price vs import parity (COMEX × USDINR conversion)
+        How MCX prices compare to global import parity, in % premium or discount
       </p>
 
       <Suspense fallback={null}>
