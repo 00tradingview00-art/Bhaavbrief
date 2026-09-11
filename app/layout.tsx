@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import Link from 'next/link'
@@ -11,24 +11,10 @@ import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { safeJsonLd } from '@/lib/seo'
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '700', '800'],
-  display: 'swap',
-})
-
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-dm-sans',
-  weight: ['300', '400', '500', '600'],
-  display: 'swap',
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-dm-mono',
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -114,7 +100,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={inter.variable}>
       <head>
         {/* Rendered directly here (not via the Metadata API's `other` field) so it
             can't be silently dropped by a child route's own metadata export —

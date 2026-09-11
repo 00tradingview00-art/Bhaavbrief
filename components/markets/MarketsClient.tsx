@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import type { PriceData, MCXData } from '@/lib/prices'
 import type { EIAResponse } from '@/lib/eia'
-import OptionChain from '@/components/mcx/OptionChain'
 import EIACard from '@/components/EIACard'
 import Sparkline from '@/components/ui/Sparkline'
 import Pill from '@/components/ui/Pill'
@@ -388,19 +387,13 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
         </div>
       )}
 
-      {/* ── MCX Option Chain ── */}
-      <div style={{ marginBottom: 32 }}>
-        <SectionHeader label="MCX Option Chain" right={
-          <Link href="/options" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--gold)', textDecoration: 'none', fontWeight: 600 }}>
-            View full chain →
-          </Link>
-        } />
-        {/* isPro=false here is correct, not a placeholder — OptionChain determines the
-            real value itself via its own live useIsPro() check client-side. Hardcoding
-            true here previously granted the Pro-only IV Skew/Volatility tabs to every
-            visitor regardless of actual entitlement. */}
-        <OptionChain isPro={false} preview />
-      </div>
+      {/* Keep heavyweight option-chain controls on their own route. This is
+          particularly important on mobile, where a price-board visit should
+          not hydrate a full options application below the fold. */}
+      <Link href="/options" className="bb-market-options-cta">
+        <span><strong>Options intelligence</strong><small>Explore iVIX, PCR, Greeks and expiry context</small></span>
+        <b aria-hidden="true">→</b>
+      </Link>
 
       {/* ── Subscribe CTA ── */}
       <div style={{

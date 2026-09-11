@@ -14,6 +14,7 @@
 export const ROUTES = [
   '/',
   '/about',
+  '/alerts',
   '/api/brief-edge',
   '/api/chart/[commodity]',
   '/api/commodity-pulse',

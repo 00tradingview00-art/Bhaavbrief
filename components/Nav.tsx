@@ -188,6 +188,21 @@ export default function Nav() {
             </div>
           </div>
 
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="nav-search-mobile"
+            aria-label="Search BhaavBrief"
+            style={{
+              marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
+              color: 'var(--ink)', padding: 8, alignSelf: 'center',
+            }}
+          >
+            <svg width="19" height="19" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" strokeWidth="1.7" />
+              <path d="M12.7 12.7L17 17" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            </svg>
+          </button>
+
           {/* Hamburger — mobile only, opens MobileMenu */}
           <button
             onClick={() => setMenuOpen(true)}
@@ -195,7 +210,7 @@ export default function Nav() {
             aria-label="Open menu"
             aria-expanded={menuOpen}
             style={{
-              marginLeft: 'auto',
+              marginLeft: 2,
               background: 'none',
               border: 'none',
               cursor: 'pointer',
@@ -233,10 +248,12 @@ export default function Nav() {
           .nav-links a { padding: 0 8px !important; font-size: 13px !important; }
         }
         .nav-hamburger { display: none; }
+        .nav-search-mobile { display: none; }
         @media (max-width: 767px) {
           .nav-links { display: none !important; }
           .nav-actions-desktop { display: none !important; }
           .nav-hamburger { display: flex !important; }
+          .nav-search-mobile { display: flex !important; }
         }
       `}</style>
     </>
