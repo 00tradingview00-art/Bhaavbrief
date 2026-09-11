@@ -12,6 +12,7 @@ import { getNextHighImpactEvent } from '@/lib/eventMap'
 import TerminalTabbar from '@/components/terminal/TerminalTabbar'
 import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
 import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligencePanel'
+import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 
@@ -21,6 +22,7 @@ import { getSparklineCloses } from '@/lib/history'
 // to TERMINAL_SECTIONS once its real module exists, so the tabbar never
 // links to an empty/placeholder section on a live page.
 const TERMINAL_SECTIONS = [
+  { id: 'pulse',       label: 'Market Pulse' },
   { id: 'commodities', label: 'Commodities' },
   { id: 'options',     label: 'Options Intelligence' },
   { id: 'brief',       label: 'Brief & Calendar' },
@@ -104,6 +106,22 @@ export default async function HomePage() {
       <ContinueReading />
 
       <TerminalTabbar sections={TERMINAL_SECTIONS} />
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          MARKET PULSE — composite iVIX + vol premium + USDINR. Numeric facts
+          only, no narrative "why" text (see MarketPulsePanel's own comment
+          for why a Calm/Elevated/Stress regime read isn't shown here).
+          ══════════════════════════════════════════════════════════════════ */}
+      <section id="pulse" style={{ marginBottom: 48 }}>
+        <div style={{
+          fontFamily: 'var(--font-sans)', fontSize: 11, fontWeight: 600,
+          letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink)',
+          marginBottom: 14,
+        }}>
+          Market Pulse
+        </div>
+        <MarketPulsePanel terminalData={terminalData} prices={prices} />
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
           COMMODITY TERMINAL — the 5 core MCX instruments as gateway cards:
