@@ -12,7 +12,7 @@
 
 import { createCanvas, loadImage } from '@napi-rs/canvas'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, isAbsolute, join, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -49,22 +49,36 @@ if (nonApprovalIssues.length || (!isDraft && issues.length)) {
   process.exit(1)
 }
 
-const assetPath = isAbsolute(reel.visual_asset)
-  ? reel.visual_asset
-  : join(ROOT, reel.visual_asset)
-if (!existsSync(assetPath)) {
-  console.error(`Visual asset not found: ${assetPath}`)
-  process.exit(2)
+function resolveAssetPath(asset) {
+  return isAbsolute(asset) ? asset : join(ROOT, asset)
 }
 
-const image = await loadImage(assetPath)
+// A storyboard may specify a scene asset. That makes a V2 reel a short
+// editorial sequence instead of a single still with a slow zoom.
+const assetRefs = [...new Set([
+  reel.visual_asset,
+  ...(reel.storyboard ?? []).map((scene) => scene.visual_asset),
+].filter(Boolean))]
+const images = new Map()
+for (const asset of assetRefs) {
+  const assetPath = resolveAssetPath(asset)
+  if (!existsSync(assetPath)) {
+    console.error(`Visual asset not found: ${assetPath}`)
+    process.exit(2)
+  }
+  images.set(asset, await loadImage(assetPath))
+}
 const duration = Number(reel.duration_target_seconds ?? 10)
 const frameCount = Math.round(duration * FPS)
 const framesDir = mkdtempSync(join(tmpdir(), 'bhaavbrief-reel-v2-'))
 const outDir = join(ROOT, 'public/reels/v2/previews')
 mkdirSync(outDir, { recursive: true })
 const suffix = isDraft ? '-draft' : '-review'
-const outFile = join(outDir, `${reel.id}${suffix}.mp4`)
+// Versioned review artifacts avoid colliding with a previous, interrupted
+// renderer. Encode to a per-process temporary file and atomically reveal the
+// final file only after ffmpeg exits successfully.
+const outFile = join(outDir, `${reel.id}${suffix}-v2.mp4`)
+const temporaryOutFile = join(outDir, `.${reel.id}-${process.pid}.mp4`)
 
 function sceneAt(time) {
   return (reel.storyboard ?? []).find((scene) => {
@@ -73,7 +87,7 @@ function sceneAt(time) {
   }) ?? reel.storyboard?.at(-1)
 }
 
-function drawCover(ctx, t) {
+function drawCover(ctx, image, t) {
   const scale = Math.max(W / image.width, H / image.height) * (1.04 + t * 0.06)
   const width = image.width * scale
   const height = image.height * scale
@@ -164,21 +178,30 @@ try {
     const time = frame / FPS
     const canvas = createCanvas(W, H)
     const ctx = canvas.getContext('2d')
-    drawCover(ctx, time / duration)
+    const scene = sceneAt(time)
+    const sceneImage = images.get(scene?.visual_asset ?? reel.visual_asset)
+    drawCover(ctx, sceneImage, time / duration)
     drawBrand(ctx)
-    drawCopy(ctx, sceneAt(time)?.copy, time % 1)
+    drawCopy(ctx, scene?.copy, time % 1)
     drawSignal(ctx, time / duration)
     drawFooter(ctx, time)
-    writeFileSync(join(framesDir, `frame-${String(frame).padStart(4, '0')}.png`), canvas.toBuffer('image/png'))
+    // JPEG intermediates are visually sufficient for a watermarked review
+    // export and render far faster than lossless 1080×1920 PNG frames.
+    writeFileSync(
+      join(framesDir, `frame-${String(frame).padStart(4, '0')}.jpg`),
+      canvas.toBuffer('image/jpeg', 82),
+    )
   }
 
   execFileSync('ffmpeg', [
     '-y', '-loglevel', 'error', '-framerate', String(FPS),
-    '-i', join(framesDir, 'frame-%04d.png'),
+    '-i', join(framesDir, 'frame-%04d.jpg'),
     '-c:v', 'libx264', '-profile:v', 'high', '-pix_fmt', 'yuv420p',
-    '-movflags', '+faststart', '-r', String(FPS), outFile,
+    '-movflags', '+faststart', '-r', String(FPS), temporaryOutFile,
   ])
+  renameSync(temporaryOutFile, outFile)
   console.log(`Preview rendered: ${outFile}`)
 } finally {
+  if (existsSync(temporaryOutFile)) rmSync(temporaryOutFile, { force: true })
   rmSync(framesDir, { recursive: true, force: true })
 }
