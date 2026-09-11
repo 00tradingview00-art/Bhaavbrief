@@ -377,6 +377,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
             5.25
           </div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
+          <div style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 6 }}>Set by RBI MPC · not a live/streaming figure</div>
         </div>
       </div>
 
