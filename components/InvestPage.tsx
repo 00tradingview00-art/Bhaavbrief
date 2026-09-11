@@ -298,6 +298,9 @@ export default function InvestPage() {
             </>
           )}
         </div>
+        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', margin: '8px 0 0' }}>
+          Expense ratio and AUM figures below are periodic snapshots, not live data — check your platform for current values before investing.
+        </p>
       </div>
 
       {/* RBI LRS note for global */}
