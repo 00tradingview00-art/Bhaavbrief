@@ -84,6 +84,7 @@ export const ROUTES = [
   '/llms.txt',
   '/markets',
   '/methodology',
+  '/mobile',
   '/news',
   '/news-sitemap.xml',
   '/account',

@@ -21,7 +21,6 @@ import { getCorrelationMatrix } from '@/lib/correlation'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
 import IVTermStructureChart from '@/components/terminal/IVTermStructureChartLazy'
-import DailyBriefHome from '@/components/home/DailyBriefHome'
 
 // BhaavBrief Terminal — the homepage as a unified dashboard rather than a
 // standalone landing page. Built incrementally (see
@@ -137,20 +136,6 @@ export default async function HomePage() {
   const briefDelayed = isTodaysBriefDelayed(latest?.date)
 
   return (
-    <>
-      {/* The redesigned Daily Brief is intentionally mobile-only. Desktop keeps
-          the established terminal homepage until a separate desktop redesign
-          is reviewed and approved. */}
-      <div className="bb-mobile-home">
-        <DailyBriefHome
-          latest={latest}
-          prices={prices}
-          nextEvent={nextEvent}
-          briefDelayed={briefDelayed}
-          activeArc={activeArcs[0]}
-        />
-      </div>
-      <div className="bb-desktop-home">
     <div>
       {/* ── SITE INTRO ───────────────────────────────────────────────────────── */}
       <div style={{ marginBottom: 16 }}>
@@ -721,7 +706,5 @@ export default async function HomePage() {
         </p>
       </div>
     </div>
-      </div>
-    </>
   )
 }

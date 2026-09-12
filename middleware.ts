@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
 // Only /account requires sign-in via middleware redirect.
 // /options and /pro are intentionally excluded:
@@ -8,6 +9,17 @@ const isProtectedPage = createRouteMatcher(['/account'])
 
 export default clerkMiddleware((auth, req) => {
   if (isProtectedPage(req)) auth.protect()
+
+  // Keep the high-density terminal as the desktop root, but serve the mobile
+  // Daily Brief from a separate lightweight route. The rewrite preserves `/`
+  // in the address bar and avoids shipping hidden terminal content to phones.
+  const userAgent = req.headers.get('user-agent') ?? ''
+  const isPhone = /Android|iPhone|iPod|Mobile/i.test(userAgent)
+  if (req.nextUrl.pathname === '/' && isPhone) {
+    const mobileUrl = req.nextUrl.clone()
+    mobileUrl.pathname = '/mobile'
+    return NextResponse.rewrite(mobileUrl)
+  }
 })
 
 export const config = {
