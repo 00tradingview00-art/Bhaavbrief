@@ -6,6 +6,7 @@ import type { EIAResponse } from '@/lib/eia'
 import EIACard from '@/components/EIACard'
 import Sparkline from '@/components/ui/Sparkline'
 import Pill from '@/components/ui/Pill'
+import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -59,6 +60,14 @@ const CARDS = [
   { key: 'nickel',    label: 'MCX Nickel',    unit: '/kg',    fmtP: (v: number) => fmtINR(v),     href: '/commodities/nickel'      },
   { key: 'electricity', label: 'MCX Electricity', unit: '/MWh', fmtP: (v: number) => fmtINR(v),   href: '/commodities/electricity' },
 ]
+
+const OPTIONS_HREF: Record<CoreInstrument, string> = {
+  GOLD: '/options/gold',
+  SILVER: '/options/silver',
+  CRUDEOIL: '/options/crude-oil',
+  NATURALGAS: '/options/natural-gas',
+  COPPER: '/options/copper',
+}
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -208,9 +217,49 @@ function SectionHeader({ label, right }: { label: string; right?: React.ReactNod
   )
 }
 
+function optionsSignal(pcr: number | null) {
+  if (pcr === null) return { label: 'Unavailable', tone: 'neutral' as const }
+  if (pcr > 1.2) return { label: 'Put-heavy', tone: 'up' as const }
+  if (pcr < 0.8) return { label: 'Call-heavy', tone: 'down' as const }
+  return { label: 'Balanced', tone: 'neutral' as const }
+}
+
+function OptionsSnapshot({ data }: { data: Record<CoreInstrument, TerminalInstrumentData | null> }) {
+  const rows = (Object.entries(data) as [CoreInstrument, TerminalInstrumentData | null][]).filter(([, item]) => item)
+  return (
+    <section className="bb-markets-options" aria-labelledby="options-snapshot-heading">
+      <div className="bb-markets-options__header">
+        <div>
+          <span className="bb-section-label">Options intelligence</span>
+          <h2 id="options-snapshot-heading">Positioning at a glance</h2>
+          <p>Live PCR, implied volatility and expiry reference points.</p>
+        </div>
+        <Link href="/options" className="bb-options-link">Open chain <span aria-hidden="true">→</span></Link>
+      </div>
+      {rows.length ? (
+        <div className="bb-options-list" role="list">
+          {rows.map(([instrument, item]) => {
+            const signal = optionsSignal(item!.pcr)
+            return (
+              <Link key={instrument} href={OPTIONS_HREF[instrument]} className="bb-options-row" role="listitem">
+                <span className="bb-options-row__name">{item!.label}<small>Nearest expiry</small></span>
+                <span><small>PCR</small><strong>{item!.pcr === null ? '—' : item!.pcr.toFixed(2)}</strong></span>
+                <span><small>iVIX</small><strong>{item!.ivix === null ? '—' : `${item!.ivix.toFixed(1)}%`}</strong></span>
+                <Pill tone={signal.tone} size="xs">{signal.label}</Pill>
+              </Link>
+            )
+          })}
+        </div>
+      ) : (
+        <div className="bb-options-unavailable">Options data is temporarily unavailable. <Link href="/options">Open the options desk</Link>.</div>
+      )}
+    </section>
+  )
+}
+
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
-export default function MarketsClient({ initialPrices, eiaData, sparklines }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]> }) {
+export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null> }) {
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
   const [loading, setLoading]       = useState(false)
@@ -304,6 +353,8 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines }: { 
           )
         })}
       </div>
+
+      {optionsData && <OptionsSnapshot data={optionsData} />}
 
       {/* ── Currencies & Rates ── */}
       <SectionHeader label="Currencies & Rates" />

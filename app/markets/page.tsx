@@ -3,6 +3,7 @@ import SectionTabs from '@/components/SectionTabs'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { loadEIA } from '@/lib/eia'
 import { getSparklineCloses } from '@/lib/history'
+import { getTerminalData } from '@/lib/terminalData'
 import { safeJsonLd } from '@/lib/seo'
 
 const SPARKLINE_COMMODITIES = ['gold', 'silver', 'crude', 'copper', 'natgas']
@@ -63,7 +64,7 @@ const SCHEMA = {
 export default async function MarketsPage() {
   const snap = loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
-  const eiaData = await loadEIA()
+  const [eiaData, optionsData] = await Promise.all([loadEIA(), getTerminalData()])
   const sparklines = Object.fromEntries(
     SPARKLINE_COMMODITIES.map(key => [key, getSparklineCloses(key)])
   )
@@ -77,7 +78,7 @@ export default async function MarketsPage() {
           { label: 'Basis',   href: '/basis' },
         ]}
       />
-      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} />
+      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} optionsData={optionsData} />
     </>
   )
 }
