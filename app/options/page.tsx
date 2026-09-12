@@ -112,12 +112,12 @@ export default async function OptionsPage() {
   })
 
   return (
-    <div>
+    <div className="bb-options-page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(BREADCRUMB_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(FAQ_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(WEBAPP_SCHEMA) }} />
 
-      <div style={{ marginBottom: 24 }}>
+      <div className="bb-options-intro" style={{ marginBottom: 24 }}>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(22px, 4vw, 28px)', fontWeight: 500, color: 'var(--ink)', margin: '0 0 4px' }}>
           MCX Option Chain
         </h1>
@@ -127,13 +127,13 @@ export default async function OptionsPage() {
       </div>
 
       {initialData && (
-        <p style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
+        <p className="bb-options-context" style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
           As of {new Date(initialData.lastUpdated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST, MCX {INSTRUMENT_LABELS[instrument] ?? instrument} Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
           {initialData.ivix != null ? ` and implied volatility (iVIX) of ${initialData.ivix.toFixed(1)}%` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: 'var(--gold)' }}>rollover mechanics</Link> for the underlying futures contract.
         </p>
       )}
 
-      <div style={{ marginBottom: 20 }}>
+      <div className="bb-options-actions" style={{ marginBottom: 20 }}>
         <Link href={`/options/strategy?instrument=${instrument}`} style={{
           display: 'inline-flex', alignItems: 'center', gap: 6,
           padding: '8px 16px', borderRadius: 6,
@@ -142,7 +142,7 @@ export default async function OptionsPage() {
         }}>
           Strategy Builder →
         </Link>
-        <span style={{ marginLeft: 10, fontSize: 12, color: 'var(--ink-3)' }}>
+        <span className="bb-options-actions__note" style={{ marginLeft: 10, fontSize: 12, color: 'var(--ink-3)' }}>
           Build multi-leg strategies · payoff diagrams
           {initialData?.ivix != null && (
             <> · Gold iVIX <strong style={{ color: 'var(--ink)' }}>{initialData.ivix.toFixed(1)}%</strong></>

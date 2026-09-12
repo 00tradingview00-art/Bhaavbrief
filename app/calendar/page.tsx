@@ -101,11 +101,11 @@ export default function CalendarPage() {
   }
 
   return (
-    <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
+    <div className="bb-calendar-page" style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(eventListSchema) }} />
 
-      <nav aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
+      <nav className="bb-calendar-breadcrumb" aria-label="Breadcrumb" style={{ maxWidth: 980, margin: '0 auto', padding: '0.75rem 1.25rem', display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
         {[
           { label: 'Home', href: '/' },
           { label: 'Calendar', href: null },
@@ -121,7 +121,7 @@ export default function CalendarPage() {
         ))}
       </nav>
 
-      <div style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
+      <div className="bb-calendar-content" style={{ maxWidth: 980, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <header style={{ marginBottom: '1.5rem' }}>
           <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: '0.5rem' }}>
             MCX Event Calendar

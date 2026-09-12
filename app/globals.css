@@ -389,6 +389,22 @@ body {
   .commodity-price-summary p { font-size: 14px !important; line-height: 1.5; }
   .bb-commodity-ohlc { grid-template-columns: repeat(2, 1fr) !important; gap: 14px 12px !important; margin-top: 18px !important; }
   .markets-card-grid { grid-template-columns: 1fr !important; }
+
+  /* Options and calendar are data-dense by nature: preserve information, but
+     give each screen a compact phone-level hierarchy and avoid inline-action
+     wrapping or desktop breadcrumb behaviour. */
+  .bb-options-intro { margin-bottom: 18px !important; }
+  .bb-options-intro h1 { font-size: clamp(1.7rem, 8vw, 2.05rem) !important; line-height: 1.08; }
+  .bb-options-intro p { font-size: 13px !important; line-height: 1.5; }
+  .bb-options-context { margin: 0 0 16px !important; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-3); font-size: 12px !important; line-height: 1.6 !important; }
+  .bb-options-actions { display: grid; gap: 9px; margin-bottom: 16px !important; }
+  .bb-options-actions > a { width: fit-content; min-height: 44px; align-items: center; }
+  .bb-options-actions__note { margin-left: 0 !important; font-size: 11px !important; line-height: 1.5; }
+  .bb-calendar-breadcrumb { flex-wrap: nowrap !important; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .bb-calendar-breadcrumb::-webkit-scrollbar { display: none; }
+  .bb-calendar-content { padding-top: 1rem !important; }
+  .bb-calendar-content h1 { font-size: clamp(1.75rem, 8vw, 2.15rem) !important; }
+  .bb-calendar-content > header > p { font-size: 15px !important; line-height: 1.6 !important; }
 }
 
 @media (min-width: 768px) {
