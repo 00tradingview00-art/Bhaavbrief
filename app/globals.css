@@ -294,12 +294,9 @@ body {
   --down: #B53A2A;
   --down-bg: #FAF0EE;
 
-  /* Long-form brief and article prose still deliberately uses this token.
-     The new product surfaces use --font-sans directly; preserving a serif
-     fallback here prevents the mobile shell from silently restyling research. */
-  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-serif: var(--font-playfair), 'Georgia', serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-dm-mono), 'JetBrains Mono', ui-monospace, monospace;
 
   /* Spacing scale (4px base) — normalizes what was previously ad-hoc px/rem
      values scattered per-component (padding strings like '16px 20px',
@@ -351,6 +348,13 @@ body {
     --surface-3: #EFF3F8;
     --border: #DEE6F0;
     --border-2: #C8D5E5;
+
+    /* Long-form brief and article prose still deliberately uses --font-serif.
+       Fall back to system fonts on mobile only, so phones never pull down
+       the Playfair Display / JetBrains Mono webfonts the desktop editorial
+       palette uses — that palette itself stays untouched at :root. */
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
   .bb-mobile-home { display: block; }
   .bb-desktop-home { display: none; }
