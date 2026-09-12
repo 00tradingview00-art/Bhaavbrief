@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 6,
+  "nextDay": 7,
   "log": [
+    {
+      "day": 6,
+      "pillar": "TRUST",
+      "feature": "Educational/informational positioning",
+      "file": "public/reels/news-20260912-educational-informational-positioning.mp4",
+      "generated_at": "2026-09-12T16:55:57.256Z"
+    },
     {
       "day": 5,
       "pillar": "EDU",

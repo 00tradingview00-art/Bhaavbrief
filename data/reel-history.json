@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260912-educational-informational-positioning",
+    "topic": "Educational/informational positioning",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "We're not a tip channel. Here's why that matters.",
+    "stat_line": "Tips expire. Truth compounds.",
+    "payoff": "Tip channels predict. We educate.",
+    "beat1": "We don't tell you when to buy gold or oil.",
+    "beat2": "Because your trade depends on YOUR lot size, tax bracket, and timeline—not ours.",
+    "beat3": "Today: gold ₹1,52,655. Tomorrow: the reason behind the move matters more than the move itself.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18094254470544423",
+    "generated_at": "2026-09-12T16:55:57.011Z",
+    "edition": null,
+    "posted_at": "2026-09-12T16:56:49.768Z"
+  },
+  {
     "file": "news-20260911-mcx-contract-expiry-dates",
     "topic": "MCX Contract Expiry Dates",
     "content_type": "explainer",
