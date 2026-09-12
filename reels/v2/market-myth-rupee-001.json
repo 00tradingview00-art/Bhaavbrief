@@ -1,23 +1,36 @@
 {
   "id": "market-myth-rupee-001",
   "series": "market-myth",
-  "status": "concept",
-  "review_status": "draft",
+  "status": "approved",
+  "review_status": "approved",
   "voice_profile": "female",
   "uses_live_data": false,
   "uses_synthetic_persona": false,
-  "duration_target_seconds": 12,
-  "hook": "Gold can move here without moving there.",
+  "duration_target_seconds": 22,
+  "hook": "Gold rises globally. Why is MCX different?",
   "visual_asset": "public/reels/v2/assets/rupee-gold-parity-v1.png",
+  "editorial_brief": {
+    "viewer_question": "Why can MCX gold move differently from global gold?",
+    "misconception": "MCX gold is the same price as the global gold chart.",
+    "mechanism": "Global gold is converted into rupees, so USD/INR can amplify or offset the global move.",
+    "proof_plan": "Use same-timestamp global gold, USD/INR and MCX data when a live version is made.",
+    "boundary": "This does not predict the next gold move or a jewellery quote.",
+    "memory_check": "Before reading MCX gold, check global gold and USD/INR.",
+    "human_opening": "A trader watches global gold rally on their phone while the MCX chart barely moves and wonders which one is wrong.",
+    "primary_source": "MCX Gold futures contract specification plus the FBIL/RBI USD/INR reference rate.",
+    "save_frame": "Before reacting to an MCX gold move, check global gold and USD/INR together.",
+    "voice_tone": "Calm and clarifying — an experienced friend untangling why two accurate numbers can disagree."
+  },
   "storyboard": [
-    { "seconds": "0.0-1.0", "visual": "Gold bars float into frame, wrapped by a cool-blue currency ribbon.", "copy": "GOLD CAN MOVE HERE" },
-    { "seconds": "1.0-3.5", "visual": "Camera moves through the ribbon; the bar reflects two distinct light sources.", "copy": "without moving there." },
-    { "seconds": "3.5-7.0", "visual": "Three abstract markers assemble around the bar: global gold, dollar, rupee.", "copy": "MCX price = gold × dollar × rupee" },
-    { "seconds": "7.0-10.5", "visual": "Currency ribbon tightens gently around the gold reflection.", "copy": "The rupee changes the Indian quote." },
-    { "seconds": "10.5-12.0", "visual": "BhaavBrief wordmark settles on black.", "copy": "Educational data, not investment advice." }
+    { "seconds": "0.0-3.0", "visual": "Gold bars float into frame, wrapped by a cool-blue currency ribbon.", "copy": "GLOBAL GOLD UP. MCX DIFFERENT?" },
+    { "seconds": "3.0-6.0", "visual": "Camera moves through the ribbon; the bar reflects two distinct light sources.", "copy": "THAT IS NOT A CONTRADICTION." },
+    { "seconds": "6.0-10.0", "visual": "Three abstract markers assemble around the bar: global gold, dollar, rupee.", "copy": "STEP 1  •  GLOBAL GOLD SETS THE BASE" },
+    { "seconds": "10.0-15.0", "visual": "Currency ribbon passes through the gold reflection.", "copy": "STEP 2  •  USD/INR CHANGES THE RUPEE PRICE" },
+    { "seconds": "15.0-19.0", "visual": "The ribbon tightens gently around the gold reflection.", "copy": "WEAKER RUPEE CAN LIFT MCX GOLD" },
+    { "seconds": "19.0-22.0", "visual": "BhaavBrief wordmark settles over the two price forces.", "copy": "CHECK: GOLD • DOLLAR • RUPEE" }
   ],
-  "voiceover": "Indian gold is not just global gold. The dollar and rupee sit in the middle. That is why MCX can move when global gold barely does. BhaavBrief.",
-  "caption": "MCX gold reflects global gold, the dollar, and USD/INR—not one price alone. Educational data, not investment advice.",
+  "voiceover": "Seeing gold rise globally but not on MCX? That is not a contradiction. Indian gold begins with the global price, then gets converted through the dollar and USD/INR. When the rupee weakens, MCX gold can rise even if global gold is flat. Before reacting, check all three.",
+  "caption": "Why can MCX gold differ from the global gold chart? The India price begins with global gold, then USD/INR changes the rupee value. A weaker rupee can lift MCX gold even when global gold is flat. Educational data, not investment advice.",
   "overlays": ["Educational data, not investment advice."],
-  "approval_note": "Evergreen education concept. Any figures added later must be source-verified before human approval."
+  "approval_note": "Revised and approved 2026-09-11 after launch review. Evergreen education concept; any figures added later must be source-verified before publication."
 }

@@ -21,7 +21,14 @@ try {
   process.exit(2)
 }
 
-const issues = validateReelV2(reel)
+let claims = []
+try {
+  claims = JSON.parse(readFileSync('data/claims.json', 'utf8')).claims ?? []
+} catch {
+  // No ledger file yet — every historical-% claim below correctly fails
+  // closed (nothing to match against), which is the safe default.
+}
+const issues = validateReelV2(reel, claims)
 if (issues.length) {
   console.error(`BLOCKED — ${issues.length} issue(s):`)
   for (const issue of issues) console.error(`- ${issue}`)

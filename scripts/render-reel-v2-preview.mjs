@@ -153,10 +153,21 @@ function drawSignal(ctx, progress) {
   ctx.stroke()
 }
 
+function drawSource(ctx, source) {
+  if (!source) return
+  ctx.fillStyle = 'rgba(8, 12, 16, 0.72)'
+  // Keep evidence labels visually adjacent to, but never inside, the large
+  // memory copy (which begins around y=1346 for two-line captions).
+  ctx.fillRect(72, 1210, Math.min(780, 38 + source.length * 13), 48)
+  ctx.fillStyle = 'rgba(255,255,255,0.88)'
+  ctx.font = '600 20px Arial'
+  ctx.fillText(source.toUpperCase(), 90, 1242)
+}
+
 function drawFooter(ctx, time) {
   ctx.fillStyle = 'rgba(255,255,255,0.72)'
   ctx.font = '500 24px Arial'
-  ctx.fillText('EDUCATIONAL DATA  •  NOT INVESTMENT ADVICE', 72, 1780)
+  ctx.fillText('Educational data, not investment advice.', 72, 1780)
   ctx.fillStyle = '#C8720A'
   ctx.fillRect(72, 1810, 180, 4)
   if (isDraft) {
@@ -182,7 +193,12 @@ try {
     const sceneImage = images.get(scene?.visual_asset ?? reel.visual_asset)
     drawCover(ctx, sceneImage, time / duration)
     drawBrand(ctx)
-    drawCopy(ctx, scene?.copy, time % 1)
+    // Fade copy in once at the beginning of its scene, then hold it. Passing
+    // `time % 1` here restarted opacity every second and made every caption
+    // visibly blink in the published cut.
+    const sceneStart = scene?.seconds ? Number(scene.seconds.split('-')[0]) : time
+    drawCopy(ctx, scene?.copy, time - sceneStart)
+    drawSource(ctx, scene?.source)
     drawSignal(ctx, time / duration)
     drawFooter(ctx, time)
     // JPEG intermediates are visually sufficient for a watermarked review
