@@ -40,7 +40,14 @@ if (!existsSync(manifestAbsolute)) {
 }
 
 const reel = JSON.parse(readFileSync(manifestAbsolute, 'utf8'))
-const issues = validateReelV2(reel)
+let claims = []
+try {
+  claims = JSON.parse(readFileSync(join(ROOT, 'data/claims.json'), 'utf8')).claims ?? []
+} catch {
+  // No ledger file yet — every historical-% claim below correctly fails
+  // closed (nothing to match against), which is the safe default.
+}
+const issues = validateReelV2(reel, claims)
 const nonApprovalIssues = issues.filter((issue) => issue !== 'Reel is not human-approved')
 if (nonApprovalIssues.length || (!isDraft && issues.length)) {
   console.error('Preview blocked:')
@@ -121,17 +128,23 @@ function drawCopy(ctx, copy, time) {
   ctx.shadowColor = 'rgba(0,0,0,0.8)'
   ctx.shadowBlur = 18
   const maxWidth = 866
-  const words = copy.toUpperCase().split(/\s+/)
+  // Respect manual \n breaks authored into the copy (used to pair a number/
+  // label with its descriptor) before word-wrapping each resulting line by
+  // pixel width — a bare /\s+/ split treats \n as ordinary whitespace and
+  // silently re-flows those pairings.
   const lines = []
-  let line = ''
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word
-    if (ctx.measureText(candidate).width > maxWidth && line) {
-      lines.push(line)
-      line = word
-    } else line = candidate
+  for (const rawLine of copy.toUpperCase().split('\n')) {
+    const words = rawLine.split(/\s+/).filter(Boolean)
+    let line = ''
+    for (const word of words) {
+      const candidate = line ? `${line} ${word}` : word
+      if (ctx.measureText(candidate).width > maxWidth && line) {
+        lines.push(line)
+        line = word
+      } else line = candidate
+    }
+    if (line) lines.push(line)
   }
-  if (line) lines.push(line)
   const y = 1420 - (lines.length - 1) * 74
   lines.forEach((value, i) => ctx.fillText(value, 72, y + i * 80))
   ctx.shadowBlur = 0
