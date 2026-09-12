@@ -7,7 +7,7 @@ export default function Masthead() {
   })
 
   return (
-    <header style={{ borderBottom: '3px double #C8C8B8', background: '#FAFAF6' }}>
+    <header className="bb-editorial-masthead" style={{ borderBottom: '3px double #C8C8B8', background: '#FAFAF6' }}>
       <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 1.5rem' }}>
 
         {/* Top row */}

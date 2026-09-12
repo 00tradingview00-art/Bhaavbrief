@@ -120,11 +120,11 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
   ]
 
   return (
-    <div style={{ background: '#FAFAF6', minHeight: '100vh' }}>
+    <div className="bb-flash-page" style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
       <Masthead />
 
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
+      <div className="bb-flash-content" style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <nav style={{ marginBottom: '1.5rem' }}>
           <Link href="/" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em', color: '#C8720A', textDecoration: 'none', borderBottom: '1px solid #C8720A', paddingBottom: 1 }}>
             ← Home

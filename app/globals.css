@@ -405,6 +405,22 @@ body {
   .bb-calendar-content { padding-top: 1rem !important; }
   .bb-calendar-content h1 { font-size: clamp(1.75rem, 8vw, 2.15rem) !important; }
   .bb-calendar-content > header > p { font-size: 15px !important; line-height: 1.6 !important; }
+
+  /* Reading surfaces share the global mobile navigation. The older print-like
+     masthead is desktop-only so Flash pages no longer show a second header. */
+  .bb-editorial-masthead { display: none; }
+  .bb-brief-index { gap: 0; }
+  .bb-brief-index h1 { font-size: 1.9rem !important; }
+  .bb-brief-index main > a { padding: 18px 0 !important; }
+  .bb-brief-index main > a h2 { font-size: 19px !important; line-height: 1.3 !important; }
+  .bb-brief-index main > a p { font-size: 14px !important; line-height: 1.55 !important; }
+  .bb-article-page { max-width: none !important; }
+  .bb-article-breadcrumb { overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .bb-article-breadcrumb::-webkit-scrollbar { display: none; }
+  .bb-article-page h1 { font-size: clamp(1.8rem, 8vw, 2.2rem) !important; line-height: 1.12 !important; }
+  .bb-article-page .article-body { font-size: 1.05rem !important; line-height: 1.72 !important; }
+  .bb-flash-content { padding-top: 1rem !important; }
+  .bb-flash-content h1 { font-size: clamp(1.75rem, 8vw, 2.1rem) !important; }
 }
 
 @media (min-width: 768px) {

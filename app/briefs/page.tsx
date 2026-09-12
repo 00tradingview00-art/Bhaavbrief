@@ -64,7 +64,7 @@ export default async function BriefsPage() {
   }
 
   return (
-    <div className="layout-brief-page" style={{ maxWidth: 980, margin: '0 auto' }}>
+    <div className="layout-brief-page bb-brief-index" style={{ maxWidth: 980, margin: '0 auto' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
 
       {/* Main — briefs list */}

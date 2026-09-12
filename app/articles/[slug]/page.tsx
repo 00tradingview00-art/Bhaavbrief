@@ -125,9 +125,9 @@ export default async function ArticlePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
 
-      <article style={{ maxWidth: 720 }}>
+      <article className="bb-article-page" style={{ maxWidth: 720 }}>
         {/* Breadcrumb */}
-        <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div className="bb-article-breadcrumb" style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
           <Link href="/articles" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>{sectionLabel}</Link>
