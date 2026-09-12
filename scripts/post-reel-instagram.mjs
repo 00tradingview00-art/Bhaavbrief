@@ -17,7 +17,7 @@
  */
 
 import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from 'fs'
-import { join, dirname, basename } from 'path'
+import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -41,22 +41,63 @@ if (!IG_USER || !IG_TOKEN) {
   process.exit(1)
 }
 
+const HISTORY_FILE = join(ROOT, 'data/reel-history.json')
+function loadHistory() {
+  try { return JSON.parse(readFileSync(HISTORY_FILE, 'utf8')) } catch { return [] }
+}
+// The v1 file key is the bare filename ("brief-edition-103"); v2 reels live
+// one directory deeper (public/reels/v2/<id>.mp4) and are keyed "v2/<id>" in
+// reel-history.json — deriving the key from the path relative to
+// public/reels/ (not just basename()) makes both conventions fall out of
+// the same logic instead of needing a v2 special case.
+function historyKeyFor(reelRelPath) {
+  return reelRelPath.replace(/^public\/reels\//, '').replace(/\.mp4$/, '')
+}
+
+// Only ever auto-picks a reel that hasn't already been posted (no
+// instagram_id yet in reel-history.json) — scans both the v1 root and the
+// v2 subdirectory. Previously this only scanned public/reels/ itself for a
+// brief-edition-*/news-* filename pattern, so it could never even see a v2
+// reel, and had no concept of "already posted" — it just grabbed whatever
+// file had the newest mtime, which risked re-posting or posting the wrong
+// reel if more than one produced-but-unposted file was sitting around.
 function detectLatestReel() {
+  const history = loadHistory()
+  const postedKeys = new Set(history.filter((h) => h.instagram_id).map((h) => h.file))
   try {
-    const dir = join(ROOT, 'public/reels')
-    const mp4s = readdirSync(dir)
-      .filter(f => /^(brief-edition|news)-.*\.mp4$/.test(f))
-      .map(f => ({ f, mtime: statSync(join(dir, f)).mtimeMs }))
-      .sort((a, b) => b.mtime - a.mtime)
-    if (mp4s.length) return `public/reels/${mp4s[0].f}`
+    const candidates = []
+    for (const sub of ['', 'v2']) {
+      const dir = join(ROOT, 'public/reels', sub)
+      let files
+      try { files = readdirSync(dir) } catch { continue }
+      for (const f of files) {
+        if (!f.endsWith('.mp4')) continue
+        const relPath = sub ? `public/reels/${sub}/${f}` : `public/reels/${f}`
+        if (postedKeys.has(historyKeyFor(relPath))) continue // already posted — never auto-repost
+        candidates.push({ relPath, mtime: statSync(join(ROOT, relPath)).mtimeMs })
+      }
+    }
+    candidates.sort((a, b) => b.mtime - a.mtime)
+    if (candidates.length) return candidates[0].relPath
   } catch {}
   return 'public/reels/usdinr-forward-reel.mp4'
 }
 const REEL_REL  = process.env.REEL_FILE ?? detectLatestReel()
 const REEL_PATH = join(ROOT, REEL_REL)
+const REEL_KEY  = historyKeyFor(REEL_REL)
 
 if (!existsSync(REEL_PATH)) {
   console.error(`❌  Reel not found: ${REEL_PATH}`)
+  process.exit(1)
+}
+
+// A file explicitly passed via REEL_FILE still goes through this guard —
+// auto-detection already excludes posted reels, but an explicit path is
+// exactly how someone would accidentally re-post one (e.g. a stale REEL_FILE
+// left over from a previous run). Override with REEL_FORCE_REPOST=1.
+const existingHistory = loadHistory().find((h) => h.file === REEL_KEY)
+if (existingHistory?.instagram_id && !process.env.REEL_FORCE_REPOST) {
+  console.error(`❌  ${REEL_KEY} already posted (instagram_id: ${existingHistory.instagram_id}, ${existingHistory.posted_at}). Set REEL_FORCE_REPOST=1 to post again anyway.`)
   process.exit(1)
 }
 
@@ -179,17 +220,22 @@ if (publishData.error) {
 }
 
 // Update reel history with Instagram ID
-const HISTORY_FILE = join(ROOT, 'data/reel-history.json')
 if (existsSync(HISTORY_FILE)) {
   try {
-    const reelKey = basename(REEL_PATH, '.mp4')
     const history = JSON.parse(readFileSync(HISTORY_FILE, 'utf8'))
-    const entry = history.find(h => h.file === reelKey)
+    const entry = history.find(h => h.file === REEL_KEY)
     if (entry) {
       entry.instagram_id = publishData.id
       entry.posted_at    = new Date().toISOString()
       writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
-      console.log(`  📚  History updated: ${reelKey}`)
+      console.log(`  📚  History updated: ${REEL_KEY}`)
+    } else {
+      // No pre-existing row (e.g. posted a file manually, bypassing
+      // produce-reel-v2.mjs's own history upsert) — record it now rather
+      // than silently losing the instagram_id/posted_at.
+      history.push({ file: REEL_KEY, instagram_id: publishData.id, posted_at: new Date().toISOString() })
+      writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
+      console.log(`  📚  History created: ${REEL_KEY} (no prior entry found)`)
     }
   } catch (e) { console.warn('  ⚠️  History update failed:', e.message) }
 }
