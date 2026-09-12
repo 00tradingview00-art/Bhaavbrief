@@ -13,12 +13,24 @@ export default clerkMiddleware((auth, req) => {
   // Keep the high-density terminal as the desktop root, but serve the mobile
   // Daily Brief from a separate lightweight route. The rewrite preserves `/`
   // in the address bar and avoids shipping hidden terminal content to phones.
-  const userAgent = req.headers.get('user-agent') ?? ''
-  const isPhone = /Android|iPhone|iPod|Mobile/i.test(userAgent)
-  if (req.nextUrl.pathname === '/' && isPhone) {
-    const mobileUrl = req.nextUrl.clone()
-    mobileUrl.pathname = '/mobile'
-    return NextResponse.rewrite(mobileUrl)
+  //
+  // `Vary: User-Agent` is required on both branches below: without it, the
+  // edge/ISR cache for path `/` has no way to know its content differs by
+  // device, so a phone's cached response can get served to a desktop visitor
+  // (or vice versa) within the same revalidate window.
+  if (req.nextUrl.pathname === '/') {
+    const userAgent = req.headers.get('user-agent') ?? ''
+    const isPhone = /Android|iPhone|iPod|Mobile/i.test(userAgent)
+    if (isPhone) {
+      const mobileUrl = req.nextUrl.clone()
+      mobileUrl.pathname = '/mobile'
+      const response = NextResponse.rewrite(mobileUrl)
+      response.headers.set('Vary', 'User-Agent')
+      return response
+    }
+    const response = NextResponse.next()
+    response.headers.set('Vary', 'User-Agent')
+    return response
   }
 })
 
