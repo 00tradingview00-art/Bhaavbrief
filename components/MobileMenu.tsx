@@ -16,8 +16,20 @@ const FOOTER_LINKS = [
   { href: '/feedback', label: 'Feedback'       },
 ]
 
-// Mobile-only overflow drawer for whatever doesn't fit in the 8-item bottom
-// tab bar (BottomNav.tsx already covers every primary destination) — Search,
+// BottomNav.tsx only covers 5 destinations (Brief/Markets/Calendar/Alerts/
+// Account) — everything else desktop's Nav.tsx links to (Briefs archive,
+// Options, Tools, Feed, Learn) has to live here or it's unreachable on
+// mobile.
+const PRIMARY_LINKS = [
+  { href: '/briefs', label: 'Brief archive' },
+  { href: '/options', label: 'Options' },
+  { href: '/tools',   label: 'Tools'   },
+  { href: '/news',    label: 'Feed'    },
+  { href: '/learn',   label: 'Learn'   },
+]
+
+// Mobile-only overflow drawer for whatever doesn't fit in the 5-item bottom
+// tab bar — the rest of the primary nav (PRIMARY_LINKS above), Search,
 // Subscribe, Sign in/Account, and the footer-tier links. Lets the top nav
 // bar itself shrink to just the logo + this trigger on mobile instead of
 // cramming a search button and 1-2 auth buttons into the same 52px row.
@@ -95,6 +107,23 @@ export default function MobileMenu({ open, onClose, onOpenSearch }: MobileMenuPr
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
           <AuthNavChip />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {PRIMARY_LINKS.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={onClose}
+              style={{
+                display: 'block', padding: 'var(--space-3) 0', fontFamily: 'var(--font-sans)',
+                fontSize: 15, fontWeight: 600, color: 'var(--ink)', textDecoration: 'none',
+                borderBottom: '1px solid var(--border)',
+              }}
+            >
+              {label}
+            </Link>
+          ))}
         </div>
 
         <Link
