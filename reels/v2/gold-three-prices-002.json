@@ -1,0 +1,63 @@
+{
+  "id": "gold-three-prices-002",
+  "series": "gold-but-whose-gold",
+  "status": "approved",
+  "review_status": "approved",
+  "voice_profile": "female",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 18,
+  "hook": "Why is her gold quote different?",
+  "visual_asset": "public/reels/v2/assets/gold-jeweller-comparison-v1.png",
+  "editorial_brief": {
+    "viewer_question": "Why can the jeweller quote and gold price on my phone disagree?",
+    "misconception": "A gold price shown anywhere must be the same price a jeweller uses.",
+    "mechanism": "The phone may show a global dollar benchmark, MCX is a rupee futures contract, and a jeweller quote adds purity and retail components.",
+    "proof_plan": "The companion carousel will label a dated global benchmark, the applicable MCX Gold contract and a retail quote's purity/cost components; no live price is claimed in this Reel.",
+    "boundary": "This explains references only; it does not determine a fair jewellery price or predict gold.",
+    "memory_check": "Before comparing gold prices, name the reference: global, MCX, or retail.",
+    "human_opening": "At a jeweller counter, a family compares the quote in front of them with a different number on a phone.",
+    "primary_source": "MCX Gold contract specification plus named global benchmark documentation; retail components must be sourced in the companion carousel.",
+    "save_frame": "Before comparing gold: name the reference — global, MCX, or retail.",
+    "voice_tone": "Warm, matter-of-fact and slightly protective of the viewer's time; a capable friend explaining a family purchase moment."
+  },
+  "storyboard": [
+    {
+      "seconds": "0.0-3.0",
+      "visual_asset": "public/reels/v2/assets/gold-jeweller-comparison-v1.png",
+      "visual": "Jeweller counter: a quote card and phone create a recognisable comparison moment.",
+      "copy": "WHY IS HER GOLD QUOTE DIFFERENT?"
+    },
+    {
+      "seconds": "3.0-7.5",
+      "visual_asset": "public/reels/v2/assets/gold-local-quote-v1.png",
+      "visual": "One reference is isolated as the global dollar benchmark.",
+      "copy": "PHONE PRICE\nMAY BE GLOBAL GOLD",
+      "source": "NAMED GLOBAL BENCHMARK"
+    },
+    {
+      "seconds": "7.5-12.0",
+      "visual_asset": "public/reels/v2/assets/gold-futures-contract-v1.png",
+      "visual": "The MCX contract becomes a distinct Indian reference.",
+      "copy": "MCX GOLD\nRUPEE CONTRACT + EXPIRY",
+      "source": "MCX • CONTRACT SPECIFICATION"
+    },
+    {
+      "seconds": "12.0-15.0",
+      "visual_asset": "public/reels/v2/assets/gold-price-pressure-v1.png",
+      "visual": "The jeweller quote is framed as a retail reference.",
+      "copy": "JEWELLER QUOTE\nPURITY + RETAIL COSTS",
+      "source": "RETAIL • 22K / 24K"
+    },
+    {
+      "seconds": "15.0-18.0",
+      "visual_asset": "public/reels/v2/assets/gold-jeweller-comparison-v1.png",
+      "visual": "Return to the human moment with one repeatable check.",
+      "copy": "BEFORE YOU COMPARE:\nNAME THE REFERENCE"
+    }
+  ],
+  "voiceover": "This quote and the gold price on your phone can differ. Neither is necessarily wrong. Your phone may show global gold in dollars. MCX is a rupee futures contract with an expiry. A jeweller quote includes purity and retail costs. Before comparing gold, name the reference.",
+  "caption": "A jeweller quote, MCX Gold and a global gold chart do not all describe the same thing. First identify the reference; then compare the right numbers.\n\nEducational data, not investment advice.",
+  "overlays": ["Educational data, not investment advice."],
+  "approval_note": "Creative direction approved 2026-09-11. Publish only after final motion/audio QA and a dated-source companion carousel are ready."
+}

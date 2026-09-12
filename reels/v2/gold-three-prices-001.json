@@ -1,0 +1,35 @@
+{
+  "id": "gold-three-prices-001",
+  "series": "gold-but-whose-gold",
+  "status": "approved",
+  "review_status": "approved",
+  "voice_profile": "female",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 16,
+  "hook": "Three gold prices. All can be right.",
+  "visual_asset": "public/reels/v2/assets/gold-local-quote-v1.png",
+  "editorial_brief": {
+    "viewer_question": "Why does the global chart, MCX screen and jeweller show different gold prices?",
+    "misconception": "There is one universal gold price that every screen should match.",
+    "mechanism": "Global gold is a dollar benchmark, MCX is an Indian futures contract, and a jeweller quote is a retail price with local components.",
+    "proof_plan": "Use dated global benchmark, MCX contract and retail-quote labels in the companion carousel; no live figures appear in this Reel.",
+    "boundary": "This does not establish a fair retail price or predict the next market move.",
+    "memory_check": "Before comparing gold prices, ask which gold price you are seeing.",
+    "human_opening": "Someone checking a jeweller quote after seeing a different gold price on their phone.",
+    "primary_source": "MCX Gold contract specification, LBMA/World Gold Council reference material, and dated retail quote documentation for the companion carousel.",
+    "save_frame": "Before comparing gold prices: name the reference — global, MCX, or retail.",
+    "voice_tone": "Warm and matter-of-fact, like a financially literate friend clearing up a family purchase conversation."
+  },
+  "storyboard": [
+    { "seconds": "0.0-2.5", "visual_asset": "public/reels/v2/assets/gold-local-quote-v1.png", "visual": "Gold bangle and globe introduce the competing references.", "copy": "3 GOLD PRICES. ALL CAN BE RIGHT." },
+    { "seconds": "2.5-6.0", "visual_asset": "public/reels/v2/assets/gold-local-quote-v1.png", "visual": "The globe becomes the global benchmark.", "copy": "1  GLOBAL GOLD\nA DOLLAR BENCHMARK", "source": "GLOBAL SPOT / FUTURES" },
+    { "seconds": "6.0-10.0", "visual_asset": "public/reels/v2/assets/gold-futures-contract-v1.png", "visual": "A futures contract and gold bar establish the Indian exchange reference.", "copy": "2  MCX GOLD\nA RUPEE FUTURES CONTRACT", "source": "MCX • CONTRACT + EXPIRY" },
+    { "seconds": "10.0-13.5", "visual_asset": "public/reels/v2/assets/gold-price-pressure-v1.png", "visual": "A gold bangle becomes the retail reference.", "copy": "3  JEWELLER QUOTE\nPURITY + RETAIL COSTS", "source": "RETAIL • 22K / 24K" },
+    { "seconds": "13.5-16.0", "visual_asset": "public/reels/v2/assets/gold-local-quote-v1.png", "visual": "All three references settle into one clear comparison.", "copy": "ASK: WHICH GOLD PRICE AM I SEEING?" }
+  ],
+  "voiceover": "Your gold chart, MCX screen and jeweller can show different prices—and all be right. Global gold is a dollar benchmark. MCX is an Indian futures contract. A jeweller quote includes purity and retail costs. Before comparing gold prices, ask: which gold price am I seeing?",
+  "caption": "The global gold chart, MCX Gold and a jeweller’s quote answer different questions. One is a global dollar benchmark, one is an Indian futures contract, and one is a retail price. Before comparing gold prices, identify the reference first.\n\nEducational data, not investment advice.",
+  "overlays": ["Educational data, not investment advice."],
+  "approval_note": "Research-led pilot approved 2026-09-11. The companion carousel must cite dated sources before publication."
+}

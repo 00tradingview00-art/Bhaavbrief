@@ -22,18 +22,19 @@
   },
   {
     "file": "v2/gold-three-prices-002",
-    "topic": "Why a jeweller quote, MCX Gold and global gold can differ",
-    "content_type": "india_lens_v2",
-    "series": "Gold, but whose gold?",
+    "topic": "Why is her gold quote different?",
+    "content_type": "reel_v2",
+    "series": "gold-but-whose-gold",
     "mood": "CALM",
     "hook_caption": "Why is her gold quote different?",
     "payoff": "Before comparing gold, name the reference: global, MCX, or retail.",
     "voice_profile": "female",
     "replaces_instagram_id": "18120509293715061",
-    "generated_at": "2026-09-11T07:40:00.000Z",
+    "generated_at": "2026-09-12T07:36:32.126Z",
     "instagram_id": "18013818101818860",
     "permalink": "https://www.instagram.com/reel/DdJCcu7CqHP/",
-    "posted_at": "2026-09-11T09:00:14.000Z"
+    "posted_at": "2026-09-11T09:00:14.000Z",
+    "voice_source": "say_fallback"
   },
   {
     "file": "v2/gold-three-prices-001",
