@@ -1,4 +1,4 @@
 {
   "_note": "Rotation state for the shared evergreen reel slot (learn vs campaign) — see scripts/lib/evergreenRotation.mjs and .github/workflows/generate-evergreen-reel.yml.",
-  "lastType": "campaign"
+  "lastType": "learn"
 }

@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260913-mcx-gold-contracts-standard-mini-guinea-peta",
+    "topic": "MCX Gold Contracts: Standard, Mini, Guinea, Petal",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Four gold contracts. Wrong one costs you.",
+    "stat_line": "From 1 kg down to 1 gram.",
+    "payoff": "Pick your lot size. Then pick your expiry date.",
+    "beat1": "Standard is 1 kg. Mini is 100g. Guinea is 8g. Petal is 1g.",
+    "beat2": "Smaller contracts let jewellers, importers, small traders hedge real orders without oversizing.",
+    "beat3": "Standard and Mini expire 5th of month. Guinea and Petal expire last working day.",
+    "charts": {
+      "beat1": "icon_array",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18029778461895997",
+    "generated_at": "2026-09-13T17:23:32.381Z",
+    "edition": null,
+    "posted_at": "2026-09-13T17:24:11.032Z"
+  },
+  {
     "file": "news-20260912-educational-informational-positioning",
     "topic": "Educational/informational positioning",
     "content_type": "explainer",
