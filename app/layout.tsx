@@ -16,6 +16,10 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
   weight: ['400', '700', '800'],
   display: 'swap',
+  // Mobile CSS (app/globals.css, max-width:767px) overrides --font-serif to
+  // Georgia and hides the one Nav element that uses it — this font never
+  // renders on mobile, so don't eagerly preload it into the mobile critical path.
+  preload: false,
 })
 
 const inter = Inter({
@@ -30,6 +34,9 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-dm-mono',
   weight: ['400', '500'],
   display: 'swap',
+  // Mobile CSS overrides --font-mono to the system stack — this font never
+  // renders on mobile, so don't eagerly preload it into the mobile critical path.
+  preload: false,
 })
 
 const BASE = 'https://bhaavbrief.in'

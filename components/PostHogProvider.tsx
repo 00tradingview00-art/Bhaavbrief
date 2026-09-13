@@ -53,6 +53,10 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         persistence:               'localStorage+cookie',
         autocapture:               false,
         disable_session_recording: false,
+        // No survey is defined anywhere in this repo — skip fetching the
+        // surveys extension bundle (33 KiB incl. a bundled Preact copy),
+        // flagged as pure waste in PageSpeed Insights' unused-JS audit.
+        disable_surveys:           true,
       })
       const aiEngine = detectAiEngineReferrer(document.referrer)
       ph.capture('$pageview', {
