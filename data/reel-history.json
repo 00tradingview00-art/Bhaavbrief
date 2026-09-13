@@ -39,7 +39,19 @@
     "instagram_id": "18032928398909722",
     "generated_at": "2026-09-11T17:43:56.244Z",
     "edition": null,
-    "posted_at": "2026-09-11T17:44:43.047Z"
+    "posted_at": "2026-09-11T17:44:43.047Z",
+    "insights": {
+      "views": 3,
+      "reach": 2,
+      "ig_reels_avg_watch_time": 5637,
+      "ig_reels_video_view_total_time": 11275,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-13T04:46:48.634Z"
+    }
   },
   {
     "file": "v2/gold-three-prices-002",
@@ -55,7 +67,19 @@
     "instagram_id": "18013818101818860",
     "permalink": "https://www.instagram.com/reel/DdJCcu7CqHP/",
     "posted_at": "2026-09-11T09:00:14.000Z",
-    "voice_source": "say_fallback"
+    "voice_source": "say_fallback",
+    "insights": {
+      "views": 5,
+      "reach": 5,
+      "ig_reels_avg_watch_time": 7683,
+      "ig_reels_video_view_total_time": 46098,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-13T04:46:50.070Z"
+    }
   },
   {
     "file": "v2/gold-three-prices-001",
