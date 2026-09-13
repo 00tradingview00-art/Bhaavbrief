@@ -33,6 +33,15 @@ export async function GET(req: NextRequest) {
     // Update Vercel env (for website API routes)
     const vercelUpdated = await updateVercelEnv(accessToken)
 
+    // Hand off to the personal vol-dashboard project (~/Downloads/vol-dashboard) —
+    // same Kite app, deliberately reused (see that project's lib/kite.ts and
+    // ~/.claude/plans/lexical-fluttering-taco.md). This is THE real daily
+    // refresh path (the founder logs in each morning via
+    // scripts/kite-morning-auth.js, which redirects here) — not
+    // scripts/kite-auto-token.mjs, which isn't wired into anything.
+    // Best-effort only: never blocks or fails this response.
+    void writeTokenToSharedRedis(accessToken)
+
     // Discover and cache MCX instrument tokens immediately
     let instrumentsMsg = ''
     try {
@@ -60,6 +69,22 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error('Kite callback error:', err)
     return html('❌ Token Exchange Failed', `Error: ${String(err)}`)
+  }
+}
+
+// ── Handoff to shared Redis (vol-dashboard) ───────────────────────────────────
+async function writeTokenToSharedRedis(accessToken: string): Promise<void> {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return
+  try {
+    const res = await fetch(`${url}/set/kite:access_token/${encodeURIComponent(accessToken)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) console.error('[kite/callback] Redis handoff failed:', res.status)
+  } catch (err) {
+    console.error('[kite/callback] Redis handoff error:', err)
   }
 }
 
