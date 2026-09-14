@@ -1,96 +1,96 @@
 {
   "eia_natural_gas_storage": {
     "natgas": {
-      "avgAbsMovePct": 2.37,
+      "avgAbsMovePct": 2.32,
       "maxAbsMovePct": 6.53,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     }
   },
   "eia_petroleum_status_report": {
     "crude": {
-      "avgAbsMovePct": 3.49,
+      "avgAbsMovePct": 3.55,
       "maxAbsMovePct": 16.95,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     }
   },
   "api_crude_inventories": {
     "crude": {
-      "avgAbsMovePct": 3.25,
+      "avgAbsMovePct": 3.07,
       "maxAbsMovePct": 7.37,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     }
   },
   "baker_hughes_rig_count": {
     "crude": {
-      "avgAbsMovePct": 2.47,
+      "avgAbsMovePct": 2.37,
       "maxAbsMovePct": 12.3,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "natgas": {
-      "avgAbsMovePct": 1.66,
+      "avgAbsMovePct": 1.56,
       "maxAbsMovePct": 4.52,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     }
   },
   "cftc_cot_report": {
     "gold": {
-      "avgAbsMovePct": 1.14,
-      "maxAbsMovePct": 3.43,
+      "avgAbsMovePct": 1.01,
+      "maxAbsMovePct": 2.12,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "silver": {
-      "avgAbsMovePct": 1.91,
+      "avgAbsMovePct": 1.77,
       "maxAbsMovePct": 6.6,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "crude": {
-      "avgAbsMovePct": 2.47,
+      "avgAbsMovePct": 2.37,
       "maxAbsMovePct": 12.3,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "copper": {
-      "avgAbsMovePct": 0.9,
+      "avgAbsMovePct": 0.84,
       "maxAbsMovePct": 3.17,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "natgas": {
-      "avgAbsMovePct": 1.66,
+      "avgAbsMovePct": 1.56,
       "maxAbsMovePct": 4.52,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "zinc": {
-      "avgAbsMovePct": 0.82,
+      "avgAbsMovePct": 0.81,
       "maxAbsMovePct": 1.92,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "aluminium": {
-      "avgAbsMovePct": 0.73,
+      "avgAbsMovePct": 0.69,
       "maxAbsMovePct": 2.52,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "lead": {
-      "avgAbsMovePct": 0.72,
+      "avgAbsMovePct": 0.71,
       "maxAbsMovePct": 4.35,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     },
     "nickel": {
-      "avgAbsMovePct": 1.01,
+      "avgAbsMovePct": 1.03,
       "maxAbsMovePct": 3.52,
       "sampleSize": 24,
-      "computedAt": "2026-09-07T08:38:38.724Z"
+      "computedAt": "2026-09-14T09:16:02.338Z"
     }
   }
 }
