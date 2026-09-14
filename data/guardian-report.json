@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-09-13T03:11:57.809Z",
+  "generatedAt": "2026-09-14T03:24:57.554Z",
   "overallStatus": "yellow",
   "health": {
-    "status": "green",
-    "issues": []
+    "status": "yellow",
+    "issues": [
+      {
+        "level": "yellow",
+        "component": "content/briefs",
+        "message": "No brief dated 2026-09-14 or 2026-09-13"
+      }
+    ]
   },
   "audit": {
     "learnIssues": [],
     "investIssues": [],
-    "circularImpact": [
-      {
-        "circular": "Sebi eases commodity position limits, caps penalties for breaches - Livemint (2026-09-09)",
-        "affectedPage": "Learn",
-        "change": "Position limit rules and penalty structure for MCX commodity contracts may have changed. Recommend review of any content discussing position limits, margin requirements, or regulatory penalties to ensure alignment with latest SEBI circular."
-      }
-    ]
+    "circularImpact": []
   }
 }
