@@ -9,8 +9,9 @@
  * takes one daily follower-count snapshot (data/follower-history.json) —
  * the account-level counterpart to per-reel insights.
  *
- * Selection: entries with an instagram_id, posted_at ≥ 24h ago (Meta's
- * insights aren't stable immediately after publish), and no insights field yet.
+ * Selection: first eligible observation after 24h, a later observation after
+ * seven days, and one engagement backfill for older incomplete observations.
+ * Actual ages/timestamps are retained; late fetches are never called 24h data.
  *
  * Observability only — never the publish gate. Any single reel's API failure
  * is logged and skipped; the script always exits 0 (the workflow step is also
@@ -59,16 +60,22 @@ const FALLBACK_METRICS = ['views', 'reach']
 // shares/saves/total_interactions are the closest proxy available.
 const ENGAGEMENT_METRICS = ['likes', 'comments', 'shares', 'saved', 'total_interactions']
 
-/** Pure selection logic — exported for tests. */
+/** Pure selection logic. Bounded refresh avoids freezing the first observation. */
+export function insightRefreshReason(entry, now = Date.now()) {
+  if (!entry?.instagram_id || !entry.posted_at) return null
+  const posted = Date.parse(entry.posted_at)
+  if (!Number.isFinite(posted) || now - posted < MIN_AGE_MS) return null
+  if (!entry.insights) return 'initial'
+  const fetched = Date.parse(entry.insights.fetched_at)
+  if (Number.isFinite(fetched) && now - fetched < MIN_AGE_MS) return null
+  if (now - posted >= 7 * MIN_AGE_MS && (!Number.isFinite(fetched) || fetched - posted < 7 * MIN_AGE_MS)) return 'seven_day'
+  if (ENGAGEMENT_METRICS.some(k => !Number.isFinite(entry.insights[k])) && !entry.engagement_backfill_attempted_at) return 'engagement_backfill'
+  return null
+}
+
 export function selectReelsForInsights(history, now = Date.now()) {
   if (!Array.isArray(history)) return []
-  return history.filter((entry) =>
-    entry &&
-    entry.instagram_id &&
-    entry.posted_at &&
-    !entry.insights &&
-    now - new Date(entry.posted_at).getTime() >= MIN_AGE_MS
-  )
+  return history.filter(entry => insightRefreshReason(entry, now))
 }
 
 /** Flatten a Graph API insights response into { metricName: value }. */
@@ -125,11 +132,15 @@ async function main() {
     return
   }
 
+  // New observations take priority over migration backfills. Bound API work per run.
   const pending = selectReelsForInsights(history)
+    .sort((a, b) => Number(insightRefreshReason(a) === 'engagement_backfill') - Number(insightRefreshReason(b) === 'engagement_backfill'))
+    .slice(0, 20)
   console.log(`📊  ${pending.length} posted reel(s) awaiting insights`)
 
   let updated = 0
   for (const entry of pending) {
+    const reason = insightRefreshReason(entry)
     let metrics
     try {
       try {
@@ -154,7 +165,19 @@ async function main() {
       console.warn(`  ⚠️  ${entry.file}: engagement metrics unavailable (${e.message})`)
     }
 
-    entry.insights = { ...metrics, ...engagement, fetched_at: new Date().toISOString() }
+    const fetchedAt = new Date().toISOString()
+    const ageHours = (Date.parse(fetchedAt) - Date.parse(entry.posted_at)) / 3600000
+    entry.insight_snapshots ??= []
+    if (entry.insights && entry.insight_snapshots.length === 0) {
+      entry.insight_snapshots.push({ ...entry.insights, observation: 'historical' })
+    }
+    entry.insights = { ...metrics, ...engagement, fetched_at: fetchedAt }
+    entry.insight_snapshots.push({
+      ...entry.insights, age_hours: ageHours,
+      observation: reason === 'initial' ? (ageHours < 48 ? 'first_after_24h' : 'late_initial')
+        : reason === 'seven_day' ? (ageHours < 8 * 24 ? 'first_after_7d' : 'late_seven_day') : reason,
+    })
+    if (reason === 'engagement_backfill') entry.engagement_backfill_attempted_at = fetchedAt
     updated++
     const watch = metrics.ig_reels_avg_watch_time
     console.log(`  ✅  ${entry.file}: views=${metrics.views ?? '?'} reach=${metrics.reach ?? '?'}${watch != null ? ` avg_watch=${watch}ms` : ''}${engagement.shares != null ? ` shares=${engagement.shares}` : ''}`)

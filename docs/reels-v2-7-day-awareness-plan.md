@@ -1,5 +1,7 @@
 # BhaavBrief — 7-day market-awareness run
 
+> Historical input, superseded 14 September 2026 by [the active production plan](reels-v2-production-blueprint.md). Do not execute old calendars or treat these creative rules as current. Analytics correction: missing saves/shares in older records are unknown, not zero.
+
 **Run:** 11–17 September 2026  
 **Job:** Make people feel more fluent in Indian commodity markets. BhaavBrief earns attention by explaining the gap between a headline and an Indian price, not by asking viewers to buy a product.
 

@@ -1,5 +1,7 @@
 # BhaavBrief — Week 1 production plan
 
+> Historical input, superseded 14 September 2026 by [the active production plan](reels-v2-production-blueprint.md). Do not execute old calendars or treat these creative rules as current. Analytics correction: missing saves/shares in older records are unknown, not zero.
+
 **Run:** 11–17 September 2026  
 **Audience:** Indian commodity-curious viewers first; active MCX learners second.  
 **Publishing rule:** Do not publish because a slot exists. Publish only after the

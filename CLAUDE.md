@@ -92,6 +92,19 @@ risk-sensitive changes and for Deep-Research-fed input to `scripts/generate-rese
 `--context` argument (never as a `data/claims.json` substitute), and computer-use is for
 occasional manual lookups only — never wired into a GitHub Actions workflow.
 
+## Reels creative ownership — 14 September 2026
+
+Prabal assigned the reels reset to Codex. `docs/reels-v2-production-blueprint.md`
+is the single active creative plan; older calendars/research are historical inputs.
+Scope is gold, silver, crude, copper, aluminium, options and practical learning.
+The first rotation has two posts per lane across 14 releases; silver is next after
+the existing gold draft. Do not let gold dominate or treat untested lanes as failures.
+Use the actual metric coverage in `scripts/analyze-reel-history.mjs`; missing
+saves/shares are not zero. `scripts/render-reel-v2-reset.mjs` produces an audio-first
+review draft; it never posts or grants approval. Preserve existing posts/history.
+Do not silently substitute the legacy 35-second generator or redefine the strategy
+from a tiny pilot sample. Keep these facts synchronized with `AGENTS.md`.
+
 ### Part 9.1 — the rule that holds no matter which agent wrote the draft
 
 **Every statistic in a draft must either match a `data/claims.json` record, or be removed, or

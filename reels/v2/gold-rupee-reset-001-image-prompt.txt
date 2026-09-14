@@ -1,0 +1,6 @@
+Built-in image_gen tool; generated 14 September 2026.
+Saved asset: public/reels/v2/assets/gold-rupee-reset-001.png
+The imagegen skill supplied the original bitmap workflow; the comparison and all text are rendered in code.
+
+Final prompt:
+Use case: product-mockup. Asset type: original editorial art for BhaavBrief's vertical 9:16 commodity explainer Reel. Create a photorealistic cinematic macro photograph of ONE beautifully textured plain gold bangle resting diagonally on dark charcoal jeweller's velvet. The bangle occupies the middle third of the portrait composition, sharp tactile engraved fine ridges and authentic imperfect gold reflections, warm amber sidelight against ink black with a tiny restrained cool reflection. A confident contemporary financial magazine art direction, striking silhouette readable instantly on a phone, realistic jewellery rather than fantasy. Generous dark negative space in top 30% and bottom 30% for animated headlines to be added separately. No people, hands, coins, charts, floating currency, text, numbers, brand logos or watermarks. Portrait 1080x1920 or closest 9:16.

@@ -11,6 +11,7 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { validateReelV2 } from './lib/reelV2Compliance.mjs'
+import { assertNarrationFits } from './lib/reelV2Timing.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const manifestArg = process.argv[2]
@@ -113,6 +114,11 @@ if (!premiumVoice) {
 
 const fadeStart = Math.max(0, duration - 2.5)
 try {
+  const voiceDuration = Number(execFileSync('ffprobe', [
+    '-v', 'error', '-show_entries', 'format=duration',
+    '-of', 'default=noprint_wrappers=1:nokey=1', voice,
+  ], { encoding: 'utf8' }).trim())
+  assertNarrationFits(voiceDuration, duration)
   execFileSync('ffmpeg', [
     '-y', '-loglevel', 'error', '-i', visual, '-stream_loop', '-1', '-i', music, '-i', voice,
     '-filter_complex', `[1:a]atrim=0:${duration},afade=t=out:st=${fadeStart}:d=2.5,volume=0.12[music];[2:a]volume=1.0[voice];[music][voice]amix=inputs=2:duration=first:normalize=0[a]`,

@@ -1,0 +1,61 @@
+{
+  "id": "gold-rupee-reset-001",
+  "series": "price-you-feel",
+  "status": "draft",
+  "review_status": "draft",
+  "voice_profile": "female",
+  "uses_live_data": false,
+  "uses_synthetic_persona": false,
+  "duration_target_seconds": 13,
+  "hook": "Gold didn't move. Your price did.",
+  "visual_asset": "public/reels/v2/assets/gold-rupee-reset-001.png",
+  "editorial_brief": {
+    "viewer_question": "How can the rupee cost of gold rise when its dollar price stays flat?",
+    "misconception": "A flat dollar price means an unchanged rupee cost.",
+    "mechanism": "With a constant dollar value, more rupees per dollar increases the rupee equivalent.",
+    "proof_plan": "Show an illustrative $100 amount at 80 then 85 rupees per dollar: 8000 then 8500 rupees. Hold the dollar amount constant. Label all frames as illustration, not today's prices.",
+    "boundary": "Currency conversion only; not a jewellery quote, MCX fair value, current price, prediction or complete import-cost model.",
+    "memory_check": "Check gold and the rupee together.",
+    "human_opening": "A person sees a flat global gold headline but a higher rupee cost.",
+    "primary_source": "World Gold Council: Indian premium/discount methodology and gold-pricing primer; direct links in sources.",
+    "save_frame": "Same gold. Different rupee cost.",
+    "voice_tone": "Warm, concise female Indian-English narration, conversational rather than dramatic."
+  },
+  "storyboard": [
+    {
+      "seconds": "0-3",
+      "kind": "hook",
+      "copy": "Gold didn't move.\nYour price did.",
+      "narration": "Gold stayed flat. Your rupee cost rose.",
+      "min_seconds": 2.8,
+      "visual": "Immediate tactile gold close-up; the complete hook is visible on frame zero. A small illustration label prevents a live-price implication."
+    },
+    {
+      "seconds": "3-9.5",
+      "kind": "comparison",
+      "copy": "A weaker rupee.\nA higher rupee cost.",
+      "narration": "A weaker rupee makes the same dollar-priced gold cost more.",
+      "min_seconds": 6,
+      "visual": "Fixed $100 tile; exchange-rate tile changes from 80 to 85. Computed rupee equivalent changes from 8000 to 8500. Before and after remain visible together; no market chart."
+    },
+    {
+      "seconds": "9.5-13",
+      "kind": "payoff",
+      "copy": "Same gold.\nDifferent rupee cost.",
+      "narration": "Same gold. Different rupee cost. Check both.",
+      "min_seconds": 3.2,
+      "visual": "Return to the same bangle, holding the two-variable takeaway without a sales end card."
+    }
+  ],
+  "voiceover": "Gold stayed flat. Your rupee cost rose. A weaker rupee makes the same dollar-priced gold cost more. Same gold. Different rupee cost. Check both.",
+  "caption": "The gold can stay the same while its rupee equivalent changes.\n\nIllustration only: $100 × ₹80/$ = ₹8,000; $100 × ₹85/$ = ₹8,500. These are invented round numbers to isolate currency conversion, not today's prices or the price of the pictured bangle. Local taxes, premiums, purity and retail costs are outside this example.\n\nMechanism: World Gold Council, Indian premium/discount methodology: https://www.gold.org/sites/default/files/downloads/2019-02/Indian_premium-discount_methodology.pdf\n\nWhich comparison has confused you: global gold versus MCX, or MCX versus a jeweller's quote?\n\nEducational data, not investment advice.\n#Gold #Rupee #IndianMarkets #BhaavBrief",
+  "overlays": ["ILLUSTRATION • NOT TODAY'S PRICES", "Currency conversion only • not a retail quote", "Educational data, not investment advice."],
+  "sources": [
+    { "publisher": "World Gold Council", "url": "https://www.gold.org/sites/default/files/downloads/2019-02/Indian_premium-discount_methodology.pdf", "supports": "Exchange rates and local factors affect local pricing.", "checked_on": "2026-09-14" },
+    { "publisher": "World Gold Council", "url": "https://www.gold.org/goldhub/research/market-primer/gold-prices", "supports": "Global benchmark and regional price distinction.", "checked_on": "2026-09-14" }
+  ],
+  "illustration": { "dollar_value": 100, "inr_per_dollar_before": 80, "inr_per_dollar_after": 85 },
+  "coverage_lane": "gold",
+  "experiment": { "cohort": "reset-14-post-coverage", "variant": "consequence-statement-A", "primary_readout": "average watch seconds and viewing-depth proxy", "secondary_readout": "measured saves/shares per reach", "comparison": "Gold is one of seven coverage lanes. Test a matched variant after the broad initial rotation; not randomized." },
+  "approval_note": "New creative draft. Earlier approvals and Instagram media IDs do not apply."
+}

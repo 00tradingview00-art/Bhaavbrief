@@ -1,5 +1,7 @@
 # BhaavBrief Reels — Research, Audit and Content Reset
 
+> Historical input, superseded 14 September 2026 by [the active production plan](reels-v2-production-blueprint.md). Do not execute old calendars or treat these creative rules as current. Analytics correction: missing saves/shares in older records are unknown, not zero.
+
 ## Decision
 
 Pause the current V2 publishing cadence. Keep the premium visual direction, but

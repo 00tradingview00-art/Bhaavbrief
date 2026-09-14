@@ -2,6 +2,8 @@
 .env.local
 .env.*.local
 node_modules/
+/node_modules
+/output/reels-reset/cache/
 .next/
 out/
 .DS_Store
