@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 7,
+  "nextDay": 8,
   "log": [
+    {
+      "day": 7,
+      "pillar": "LIVE",
+      "feature": "Event Calendar impact tagging",
+      "file": "public/reels/news-20260914-event-calendar-impact-tagging.mp4",
+      "generated_at": "2026-09-14T19:13:43.845Z"
+    },
     {
       "day": 6,
       "pillar": "TRUST",

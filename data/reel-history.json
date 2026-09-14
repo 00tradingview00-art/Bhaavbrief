@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260914-event-calendar-impact-tagging",
+    "topic": "Event Calendar impact tagging",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Oil moves on Wednesday. Your petrol bill follows.",
+    "stat_line": "EIA report hits Wednesday. High impact.",
+    "payoff": "Mark your calendar. One report moves your fuel costs.",
+    "beat1": "US crude inventory data drops every Wednesday evening—most-watched supply signal for MCX Crude.",
+    "beat2": "When US oil reserves shrink, global crude tightens. India imports, so MCX Crude reacts first.",
+    "beat3": "September 16: EIA Weekly Petroleum Status Report. Watch this number move MCX Crude.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "17900921997584970",
+    "generated_at": "2026-09-14T19:13:43.641Z",
+    "edition": null,
+    "posted_at": "2026-09-14T19:14:28.727Z"
+  },
+  {
     "file": "news-20260913-mcx-gold-contracts-standard-mini-guinea-peta",
     "topic": "MCX Gold Contracts: Standard, Mini, Guinea, Petal",
     "content_type": "explainer",
