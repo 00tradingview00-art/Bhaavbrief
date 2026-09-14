@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-14-gold-etf-demand-mcx-price",
+    "href": "/articles/2026-09-14-gold-etf-demand-mcx-price",
+    "title": "How Global Gold ETF Flows Affect MCX Gold Prices in India",
+    "description": "Understand how ETF gold demand affects MCX gold price through COMEX transmission, import parity, rupee conversion, and India-specific duty structures.",
+    "excerpt": "How ETF gold demand affects MCX gold price is one of the most direct yet misunderstood transmission channels in Indian commodity markets. Global gold ETF inflows and outflows move COMEX spot prices fi",
+    "date": "2026-09-14",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-105",
     "href": "/briefs/edition-105",
