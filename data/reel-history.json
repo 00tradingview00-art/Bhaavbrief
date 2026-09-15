@@ -1,5 +1,27 @@
 [
   {
+    "file": "brief-edition-106",
+    "topic": "Gas Slips While Oil Holds — Two Energy Markets, Two Stories",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Gas crashes. Oil stays firm. Your heating bill splits.",
+    "stat_line": "Gas ₹277.30 | Crude ₹9,875 | Diverging paths",
+    "payoff": "Same energy source. Two opposite stories unfolding.",
+    "beat1": "Natural gas tumbled ₹1.10 as US storage swells faster than seasonal normal.",
+    "beat2": "Mild autumn demand forecast from EIA kills the heating-season premium gas usually carries.",
+    "beat3": "Wednesday's EIA storage report: if it prints larger-than-expected build, gas falls further.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18128145970682452",
+    "generated_at": "2026-09-15T04:21:58.687Z",
+    "edition": 106,
+    "hi_path": "public/reels/brief-edition-106-hi.mp4",
+    "posted_at": "2026-09-15T04:23:43.737Z"
+  },
+  {
     "file": "news-20260914-event-calendar-impact-tagging",
     "topic": "Event Calendar impact tagging",
     "content_type": "explainer",
@@ -39,7 +61,35 @@
     "instagram_id": "18029778461895997",
     "generated_at": "2026-09-13T17:23:32.381Z",
     "edition": null,
-    "posted_at": "2026-09-13T17:24:11.032Z"
+    "posted_at": "2026-09-13T17:24:11.032Z",
+    "insight_snapshots": [
+      {
+        "views": 19,
+        "reach": 15,
+        "ig_reels_avg_watch_time": 3082,
+        "ig_reels_video_view_total_time": 49316,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-15T04:15:01.271Z",
+        "age_hours": 34.84728861111111,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 19,
+      "reach": 15,
+      "ig_reels_avg_watch_time": 3082,
+      "ig_reels_video_view_total_time": 49316,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-15T04:15:01.271Z"
+    }
   },
   {
     "file": "news-20260912-educational-informational-positioning",
@@ -1959,5 +2009,10 @@
       "ig_reels_video_view_total_time": 83150,
       "fetched_at": "2026-08-11T04:01:19.795Z"
     }
+  },
+  {
+    "file": "brief-edition-106-hi",
+    "instagram_id": "18087328265243955",
+    "posted_at": "2026-09-15T04:24:36.221Z"
   }
 ]
