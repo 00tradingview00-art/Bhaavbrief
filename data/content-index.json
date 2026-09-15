@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-106",
+    "href": "/briefs/edition-106",
+    "title": "Gas Slips While Oil Holds — Two Energy Markets, Two Stories",
+    "description": "Henry Hub weakness pulls MCX NatGas lower even as WTI at $102.94 keeps crude's geopolitical premium intact.",
+    "excerpt": "MCX Gold ₹151270 | Crude ₹9875 | USDINR ₹95.89 — Gold +0.03% | Crude +1.63% | Silver -0.17% Yesterday's Edge — Result: Edition #105 watched whether WTI would close above 102.53. Confirmed ✓, now at 10",
+    "date": "2026-09-15T04:15:11.984Z",
+    "edition": "106",
+    "tags": [
+      "MCX NatGas",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX NatGas",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-14-gold-etf-demand-mcx-price",
     "href": "/articles/2026-09-14-gold-etf-demand-mcx-price",
