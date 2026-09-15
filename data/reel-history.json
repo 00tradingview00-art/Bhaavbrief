@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260915-mcx-gold-vs-physical-gold",
+    "topic": "MCX Gold vs Physical Gold",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹500 gold buy ≠ MCX gold trade.",
+    "stat_line": "Same metal. Completely different games.",
+    "payoff": "Pick the gold game that matches your wallet and risk appetite.",
+    "beat1": "MCX gold is a cash-settled futures contract, not actual metal in your hand.",
+    "beat2": "Physical gold lets you buy from ₹500 with zero leverage; MCX needs ₹55,000–₹75,000 margin with 16x leverage.",
+    "beat3": "If you hold MCX through delivery, you'll pay full contract value and receive digital vault receipts instead.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "17963751933199747",
+    "generated_at": "2026-09-15T18:06:48.811Z",
+    "edition": null,
+    "posted_at": "2026-09-15T18:07:34.685Z"
+  },
+  {
     "file": "brief-edition-106",
     "topic": "Gas Slips While Oil Holds — Two Energy Markets, Two Stories",
     "content_type": "macro_trend",
