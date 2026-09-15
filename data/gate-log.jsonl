@@ -335,4 +335,8 @@
 {"type":"generation_call","promptVersion":"flash_monitor_v1","model":"claude-haiku-4-5-20251001","inputTokens":954,"outputTokens":291,"latencyMs":3173,"payloadHash":"3f26e6202382bba0","ts":"2026-09-15T08:36:26.575Z","instrument":"USDINR","trigger":"T1","slug":"2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows"}
 {"type":"generation_call","promptVersion":"flash_monitor_v1","model":"claude-haiku-4-5-20251001","inputTokens":1030,"outputTokens":344,"latencyMs":3977,"payloadHash":"7db8d47c9165ec34","ts":"2026-09-15T08:47:49.317Z","instrument":"MCX_COPPER","trigger":"T1","slug":"2026-09-15-14-17-mcx-copper-falls-on-rupee-strength-precious-metals-pres"}
 {"type":"generation_call","promptVersion":"flash_monitor_v1","model":"claude-haiku-4-5-20251001","inputTokens":1039,"outputTokens":320,"latencyMs":3757,"payloadHash":"732920b7652ad30b","ts":"2026-09-15T13:52:33.975Z","instrument":"MCX_GOLD","trigger":"T1","slug":"2026-09-15-19-22-mcx-gold-slides-on-rupee-strength-usd-weakness"}
+<<<<<<< Updated upstream
 {"type":"generation_call","promptVersion":"flash_monitor_v1","model":"claude-haiku-4-5-20251001","inputTokens":1076,"outputTokens":334,"latencyMs":4128,"payloadHash":"6a24aab78b33f3ea","ts":"2026-09-15T19:10:37.696Z","instrument":"MCX_CRUDE","trigger":"T1","slug":"2026-09-16-00-40-mcx-crude-edges-higher-on-rupee-weakness"}
+=======
+{"type":"gate_run","edition":null,"briefPath":"content/articles/2026-09-15-mcx-close-16sep2026-natgas-rally.mdx","clean":false,"issueCount":2,"blockerCount":0,"warningCount":2,"hasInternalError":false,"durationMs":2836,"checkedAt":"2026-09-15T19:10:47.826Z"}
+>>>>>>> Stashed changes
