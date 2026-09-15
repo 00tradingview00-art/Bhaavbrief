@@ -22,6 +22,27 @@
     "priceAtPublish": 282
   },
   {
+    "type": "article",
+    "slug": "2026-09-15-mcx-close-16sep2026-natgas-rally",
+    "href": "/articles/2026-09-15-mcx-close-16sep2026-natgas-rally",
+    "title": "MCX Close 16 Sep: NatGas Rallies +0.72%, Metals Fade",
+    "description": "16 Sep 2026 — MCX NatGas led at +0.72% to ₹280.4/mmBtu. Gold and silver retreated. COMEX crude surges +4.21% overnight — bullish signal for tomorrow's open.",
+    "excerpt": "NatGas dominated MCX, closing +0.72% at ₹280.4/mmBtu on demand recovery and supply tightness ahead of winter seasonality. Copper followed with +0.45% to ₹1366.55/kg, supported by softer dollar and man",
+    "date": "2026-09-15T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
     "href": "/articles/2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
