@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
+    "href": "/articles/2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
+    "title": "MCX Crude: ₹9,931/bbl, +4.15% — Brent-WTI spread signals tightness",
+    "description": "MCX Crude surges ₹9,931/bbl (+4.15%) as WTI $103.55 breaks into triple digits; Brent-WTI spread at $0.84 suggests physical supply tightness, not geopolitical shock.",
+    "excerpt": "TRIGGER MCX Crude has risen 4.15% to ₹9,931/bbl as WTI climbed 2.20% to $103.55/bbl, crossing into three-digit pricing and signalling renewed supply-side tightness in the Northern Hemisphere. PRICE ₹9",
+    "date": "2026-09-15T13:35:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Brent",
+      "Supply",
+      "September Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9931
+  },
+  {
     "type": "brief",
     "slug": "edition-106",
     "href": "/briefs/edition-106",

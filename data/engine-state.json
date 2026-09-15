@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 152680,
-    "silver": 234752,
-    "crude": 9535,
-    "copper": 1377.75,
-    "natgas": 269.8,
+    "gold": 150154,
+    "silver": 229961,
+    "crude": 9931,
+    "copper": 1352.2,
+    "natgas": 278.9,
     "usdinr": 95.56
   },
-  "lastChecked": "2026-09-11T17:48:32.953Z",
+  "lastChecked": "2026-09-15T08:05:13.607Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -22,10 +22,12 @@
     "mideast": "Brent crude oil rises above $100 a barrel as Middle East conflict intensifies - ",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-09-10T16:33:17.555Z",
+  "articlesToday": [
+    "2026-09-15/2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-"
+  ],
+  "lastArticleAt": "2026-09-15T08:05:24.711Z",
   "lastCoveredAt": {
-    "crude": "2026-09-10T16:33:17.555Z",
+    "crude": "2026-09-15T08:05:24.711Z",
     "silver": "2026-07-28T05:36:23.461Z",
     "natgas": "2026-09-08T13:45:49.372Z"
   }
