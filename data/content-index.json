@@ -1,5 +1,27 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-15-mcx-nat-gas-surges-to-282-on-supply-tightness",
+    "href": "/articles/2026-09-15-mcx-nat-gas-surges-to-282-on-supply-tightness",
+    "title": "MCX Nat Gas Surges to ₹282 on Supply Tightness",
+    "description": "MCX Natural Gas +2.02% to ₹282/mmBtu alongside crude +1.45% signals energy complex supply concerns. Henry Hub rises as storage draws accelerate.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has climbed ₹282.40/mmBtu (+2.02%) while crude oil simultaneously rallied +1.45%, signaling the energy complex is responding to a shared supply tightening narrative rathe",
+    "date": "2026-09-15T18:59:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver",
+      "Energy Complex",
+      "Henry Hub",
+      "Supply Risk"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 282
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
     "href": "/articles/2026-09-15-hawk-scan-mcx-crude-9-931-bbl-4-15-brent-wti-spread-signals-",
