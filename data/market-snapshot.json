@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-15T08:47:50.624Z",
+  "generatedAt": "2026-09-15T08:47:53.795Z",
   "generatedAtIST": "2026-09-15 14:17 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -58,9 +58,9 @@
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 102.74,
+      "price": 102.79,
       "prevClose": 105.68,
-      "changePct": -2.782,
+      "changePct": -2.7347,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
