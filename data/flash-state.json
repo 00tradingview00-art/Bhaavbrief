@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-09-11T09:01:41.998Z",
-    "lastFlashPrice": 9509,
+    "lastFlashAt": "2026-09-15T08:36:26.575Z",
+    "lastFlashPrice": 9927,
     "lastRoundLevel": 9500,
     "recentFlashIds": [
+      "2026-09-15-14-06-mcx-crude-rallies-2-16-on-usd-strength-and-geopolitical",
       "2026-09-11-14-31-mcx-crude-falls-2-19-as-rally-momentum-breaks",
-      "2026-09-11-00-10-mcx-crude-surges-6-85-as-geopolitical-supply-risk-reign",
-      "2026-09-10-18-23-mcx-crude-surges-5-07-on-sustained-recovery-momentum"
+      "2026-09-11-00-10-mcx-crude-surges-6-85-as-geopolitical-supply-risk-reign"
     ]
   },
   "MCX_COPPER": {
@@ -40,23 +40,23 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-09-10T12:53:36.302Z",
-    "lastFlashPrice": 267.2,
+    "lastFlashAt": "2026-09-15T08:36:26.575Z",
+    "lastFlashPrice": 278.3,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-15-14-06-mcx-natural-gas-steadies-after-overnight-selloff-revers",
       "2026-09-10-18-23-mcx-natural-gas-slips-0-93-as-crude-strength-fades",
-      "2026-09-08-22-29-mcx-natural-gas-falls-2-38-on-profit-taking-reversal",
-      "2026-09-03-14-34-mcx-natural-gas-rebounds-1-43-on-rupee-weakness-tailwin"
+      "2026-09-08-22-29-mcx-natural-gas-falls-2-38-on-profit-taking-reversal"
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-10T12:53:36.302Z",
-    "lastFlashPrice": 95.53,
-    "lastRoundLevel": 95.5,
+    "lastFlashAt": "2026-09-15T08:36:26.575Z",
+    "lastFlashPrice": 96,
+    "lastRoundLevel": 96,
     "recentFlashIds": [
+      "2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows",
       "2026-09-10-18-23-usd-inr-strengthens-0-38-on-sustained-fpi-inflows",
-      "2026-09-09-13-34-usd-inr-strengthens-0-33-amid-rupee-appreciation-moment",
-      "2026-09-08-13-41-usd-inr-strengthens-0-23-amid-rupee-appreciation-moment"
+      "2026-09-09-13-34-usd-inr-strengthens-0-33-amid-rupee-appreciation-moment"
     ]
   }
 }
