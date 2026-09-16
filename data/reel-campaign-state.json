@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 8,
+  "nextDay": 9,
   "log": [
+    {
+      "day": 8,
+      "pillar": "OPT",
+      "feature": "IV Rank & Percentile",
+      "file": "public/reels/news-20260916-iv-rank-percentile.mp4",
+      "generated_at": "2026-09-16T18:07:16.991Z"
+    },
     {
       "day": 7,
       "pillar": "LIVE",

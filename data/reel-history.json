@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260916-iv-rank-percentile",
+    "topic": "IV Rank & Percentile",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "MCX gold options cost more than usual today",
+    "stat_line": "97th percentile — nearly at peak pricing",
+    "payoff": "Before you trade options, check if you're overpaying.",
+    "beat1": "Gold option premiums sitting at their highest in a month.",
+    "beat2": "When volatility spikes, option sellers raise prices to match risk.",
+    "beat3": "If you're buying calls or puts, expect steeper entry costs now.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18407809129087854",
+    "generated_at": "2026-09-16T18:07:16.840Z",
+    "edition": null,
+    "posted_at": "2026-09-16T18:08:03.205Z"
+  },
+  {
     "file": "brief-edition-107",
     "topic": "Oil Breaks $105 While Gold Climbs — the Divergence Is Widening",
     "content_type": "macro_trend",
