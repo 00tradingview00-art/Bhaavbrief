@@ -340,3 +340,7 @@
 =======
 {"type":"gate_run","edition":null,"briefPath":"content/articles/2026-09-15-mcx-close-16sep2026-natgas-rally.mdx","clean":false,"issueCount":2,"blockerCount":0,"warningCount":2,"hasInternalError":false,"durationMs":2836,"checkedAt":"2026-09-15T19:10:47.826Z"}
 >>>>>>> Stashed changes
+{"type":"generation_call","call":"brief","promptVersion":"brief_v4","model":"claude-sonnet-4-6","inputTokens":8859,"outputTokens":1476,"stopReason":"end_turn","latencyMs":37990,"payloadHash":"87b26a14522baee6","calledAt":"2026-09-16T04:15:05.671Z"}
+{"type":"generation_call","call":"consistency_check","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":749,"outputTokens":9,"latencyMs":1406,"payloadHash":"3c30cce923109f93","calledAt":"2026-09-16T04:15:43.662Z"}
+{"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":843,"outputTokens":188,"latencyMs":4559,"payloadHash":"b616b9d22d5cc01a","calledAt":"2026-09-16T04:15:45.070Z"}
+{"type":"gate_run","edition":107,"briefPath":"content/briefs/edition-107.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":3434,"checkedAt":"2026-09-16T04:15:53.112Z"}
