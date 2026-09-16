@@ -62,7 +62,35 @@
     "generated_at": "2026-09-15T04:21:58.687Z",
     "edition": 106,
     "hi_path": "public/reels/brief-edition-106-hi.mp4",
-    "posted_at": "2026-09-15T04:23:43.737Z"
+    "posted_at": "2026-09-15T04:23:43.737Z",
+    "insight_snapshots": [
+      {
+        "views": 7,
+        "reach": 6,
+        "ig_reels_avg_watch_time": 3320,
+        "ig_reels_video_view_total_time": 26562,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-16T08:42:08.043Z",
+        "age_hours": 28.306751666666667,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 7,
+      "reach": 6,
+      "ig_reels_avg_watch_time": 3320,
+      "ig_reels_video_view_total_time": 26562,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-16T08:42:08.043Z"
+    }
   },
   {
     "file": "news-20260914-event-calendar-impact-tagging",
