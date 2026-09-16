@@ -1,5 +1,27 @@
 [
   {
+    "file": "brief-edition-107",
+    "topic": "Oil Breaks $105 While Gold Climbs — the Divergence Is Widening",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Gold rises while oil falls—same fear, two exits",
+    "stat_line": "Gold +0.55% | Crude −1.68%",
+    "payoff": "Geopolitical fear doesn't disappear. It just changes address.",
+    "beat1": "Gold climbed ₹835 per 10g as crude lost ground today.",
+    "beat2": "Middle East tensions easing. Investors rotating risk into safe havens.",
+    "beat3": "Watch WTI crude hold above $104—signals whether premium is deflating.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18098873669148048",
+    "generated_at": "2026-09-16T04:21:15.528Z",
+    "edition": 107,
+    "hi_path": "public/reels/brief-edition-107-hi.mp4",
+    "posted_at": "2026-09-16T04:22:47.041Z"
+  },
+  {
     "file": "news-20260915-mcx-gold-vs-physical-gold",
     "topic": "MCX Gold vs Physical Gold",
     "content_type": "explainer",
@@ -61,7 +83,35 @@
     "instagram_id": "17900921997584970",
     "generated_at": "2026-09-14T19:13:43.641Z",
     "edition": null,
-    "posted_at": "2026-09-14T19:14:28.727Z"
+    "posted_at": "2026-09-14T19:14:28.727Z",
+    "insight_snapshots": [
+      {
+        "views": 4,
+        "reach": 4,
+        "ig_reels_avg_watch_time": 854,
+        "ig_reels_video_view_total_time": 3418,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-16T04:14:52.102Z",
+        "age_hours": 33.00649305555555,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 4,
+      "reach": 4,
+      "ig_reels_avg_watch_time": 854,
+      "ig_reels_video_view_total_time": 3418,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-16T04:14:52.102Z"
+    }
   },
   {
     "file": "news-20260913-mcx-gold-contracts-standard-mini-guinea-peta",
@@ -2035,5 +2085,10 @@
     "file": "brief-edition-106-hi",
     "instagram_id": "18087328265243955",
     "posted_at": "2026-09-15T04:24:36.221Z"
+  },
+  {
+    "file": "brief-edition-107-hi",
+    "instagram_id": "17905753548508473",
+    "posted_at": "2026-09-16T04:23:40.561Z"
   }
 ]
