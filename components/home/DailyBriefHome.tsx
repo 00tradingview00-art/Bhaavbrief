@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { BriefMeta } from '@/lib/briefs'
 import type { EventMapEntry } from '@/lib/eventMap'
@@ -50,7 +53,7 @@ function MarketRow({ item }: { item: WatchItem }) {
 
 export default function DailyBriefHome({
   latest,
-  prices,
+  prices: initialPrices,
   nextEvent,
   briefDelayed,
   activeArc,
@@ -61,6 +64,45 @@ export default function DailyBriefHome({
   briefDelayed: boolean
   activeArc: StoryArc | undefined
 }) {
+  // This component is rendered exclusively by app/mobile/page.tsx. The page
+  // starts with the deploy-time snapshot for a fast first paint, then replaces
+  // it with the live endpoint so a long-lived mobile deployment can never keep
+  // showing an old snapshot as "delayed" after Kite has refreshed.
+  const [livePrices, setLivePrices] = useState(initialPrices)
+
+  useEffect(() => {
+    let cancelled = false
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined
+
+    const refresh = async () => {
+      try {
+        const response = await fetch('/api/prices', { cache: 'no-store' })
+        if (!response.ok || cancelled) return
+        const next = await response.json() as PriceData
+        if (cancelled) return
+        setLivePrices(next)
+        refreshTimer = setTimeout(refresh, next.marketOpen ? 30_000 : 300_000)
+      } catch {
+        // Keep the server snapshot visible if the live request is unavailable.
+        refreshTimer = setTimeout(refresh, 60_000)
+      }
+    }
+
+    void refresh()
+    return () => {
+      cancelled = true
+      if (refreshTimer) clearTimeout(refreshTimer)
+    }
+  }, [])
+
+  const prices = livePrices
+  const updatedLabel = prices?.generatedAtIST
+    ? `Updated ${prices.generatedAtIST}`
+    : prices?.updatedAt
+      ? `Updated ${new Date(prices.updatedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: false })} IST`
+      : 'India'
+  const liveData = Boolean(prices?.source?.includes('kite') && !prices?.snapshotStale)
+
   const watchItems: WatchItem[] = [
     { label: 'Gold', href: '/commodities/gold', value: prices?.gold.mcx, change: prices?.gold.mcxChangePct, stale: prices?.gold.mcxStale, unit: 'MCX · /10g', decimals: 0 },
     { label: 'Silver', href: '/commodities/silver', value: prices?.silver.mcx, change: prices?.silver.mcxChangePct, stale: prices?.silver.mcxStale, unit: 'MCX · /kg', decimals: 0 },
@@ -72,7 +114,7 @@ export default function DailyBriefHome({
   return (
     <div className="bb-brief-home">
       <section className="bb-brief-hero" aria-labelledby="brief-heading">
-        <div className="bb-eyebrow"><span className="bb-live-dot" /> {prices?.snapshotStale ? 'Data delayed' : 'Market intelligence'} <span>·</span> {prices?.generatedAtIST ? `Updated ${prices.generatedAtIST}` : 'India'}</div>
+        <div className="bb-eyebrow"><span className="bb-live-dot" /> {prices?.snapshotStale ? 'Data delayed' : liveData ? 'Live market data' : 'Market intelligence'} <span>·</span> {updatedLabel}</div>
         <h1 id="brief-heading">Know what moves commodities today.</h1>
         <p>Prices, context and the events that matter—built for India&apos;s commodity markets.</p>
         <div className="bb-hero-actions">
