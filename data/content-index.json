@@ -21,6 +21,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-16-mcx-silver-lot-size-contract-value",
+    "href": "/articles/2026-09-16-mcx-silver-lot-size-contract-value",
+    "title": "MCX Silver Contract Specifications — Lot Size, Margin and Contract Value in India",
+    "description": "Understand MCX silver lot size contract value India — 30 kg lots, margin mechanics, import parity formula, and key price drivers explained for serious traders.",
+    "excerpt": "The MCX silver lot size contract value in India is built around a 30 kg lot quoted in rupees per kilogram, making each standard contract worth approximately ₹27–32 lakh at prevailing prices. Understan",
+    "date": "2026-09-16",
+    "edition": "keyword-brief",
+    "tags": [
+      "silver",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "silver",
+    "commodities": [
+      "silver"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-15-mcx-nat-gas-surges-to-282-on-supply-tightness",
     "href": "/articles/2026-09-15-mcx-nat-gas-surges-to-282-on-supply-tightness",
     "title": "MCX Nat Gas Surges to ₹282 on Supply Tightness",
