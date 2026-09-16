@@ -46,16 +46,16 @@
     "expiry": "2026-09-30"
   },
   "nickel": {
-    "token": 146253831,
-    "symbol": "NICKEL26SEPFUT",
-    "expiry": "2026-09-16"
+    "token": 147156999,
+    "symbol": "NICKEL26OCTFUT",
+    "expiry": "2026-10-21"
   },
   "electricity": {
     "token": 147161095,
     "symbol": "ELECDMBL26SEPFUT",
     "expiry": "2026-09-29"
   },
-  "updatedAt": "2026-09-15T08:41:54.893Z",
+  "updatedAt": "2026-09-16T08:36:49.903Z",
   "currencies": {
     "usdinr": {
       "token": 452867,
