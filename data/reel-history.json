@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260917-mcx-lot-sizes",
+    "topic": "MCX Lot Sizes",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your ₹500 gold bet isn't the same as MCX.",
+    "stat_line": "Mini lot is one-tenth the contract.",
+    "payoff": "Wrong lot size kills your risk math.",
+    "beat1": "MCX Gold Mini: 100g. Standard: 1kg. Ten times smaller, ten times cheaper entry.",
+    "beat2": "Tick size shrinks too. Mini moves ₹10 per tick versus Standard's ₹100.",
+    "beat3": "Pick Mini to learn. Pick Standard when your margin account is ready.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "two_bar",
+      "beat3": "none"
+    },
+    "instagram_id": "17886345933479485",
+    "generated_at": "2026-09-17T18:08:09.126Z",
+    "edition": null,
+    "posted_at": "2026-09-17T18:08:43.506Z"
+  },
+  {
     "file": "brief-edition-108",
     "topic": "Oil Retreats From $105 — Gold Is Not Playing Along",
     "content_type": "macro_trend",
