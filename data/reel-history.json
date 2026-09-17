@@ -40,7 +40,35 @@
     "generated_at": "2026-09-16T04:21:15.528Z",
     "edition": 107,
     "hi_path": "public/reels/brief-edition-107-hi.mp4",
-    "posted_at": "2026-09-16T04:22:47.041Z"
+    "posted_at": "2026-09-16T04:22:47.041Z",
+    "insight_snapshots": [
+      {
+        "views": 9,
+        "reach": 9,
+        "ig_reels_avg_watch_time": 2019,
+        "ig_reels_video_view_total_time": 18178,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-17T08:45:26.039Z",
+        "age_hours": 28.377499444444446,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 9,
+      "reach": 9,
+      "ig_reels_avg_watch_time": 2019,
+      "ig_reels_video_view_total_time": 18178,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-17T08:45:26.039Z"
+    }
   },
   {
     "file": "news-20260915-mcx-gold-vs-physical-gold",
@@ -61,7 +89,35 @@
     "instagram_id": "17963751933199747",
     "generated_at": "2026-09-15T18:06:48.811Z",
     "edition": null,
-    "posted_at": "2026-09-15T18:07:34.685Z"
+    "posted_at": "2026-09-15T18:07:34.685Z",
+    "insight_snapshots": [
+      {
+        "views": 4,
+        "reach": 4,
+        "ig_reels_avg_watch_time": 1200,
+        "ig_reels_video_view_total_time": 4800,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-17T08:45:27.899Z",
+        "age_hours": 38.63144833333333,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 4,
+      "reach": 4,
+      "ig_reels_avg_watch_time": 1200,
+      "ig_reels_video_view_total_time": 4800,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-17T08:45:27.899Z"
+    }
   },
   {
     "file": "brief-edition-106",

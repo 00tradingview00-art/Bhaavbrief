@@ -182,6 +182,26 @@
       ],
       "endDate": "2026-08-17",
       "outcome": "The natural gas market narrative dissipated after seven days without updates as prices remained below the ₹261.30 key level at ₹255.7, failing to sustain the initial 2.23% surge driven by storage draw concerns."
+    },
+    {
+      "id": "middle-east-deescalation-crude-gold-divergence",
+      "title": "Middle East De-escalation: Crude Falls While Gold Holds Firm",
+      "startDate": "2026-09-17",
+      "status": "active",
+      "editions": [
+        108
+      ],
+      "latestDay": 1,
+      "summary": "Diplomatic cease-fire signals in Middle East conflict trigger crude oil retreat below $101, but gold resists the risk-off move—signaling market uncertainty about durability of peace talks.",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹9709",
+      "tags": [
+        "MCX Crude",
+        "MCX Gold",
+        "Geopolitics",
+        "Middle East",
+        "De-escalation"
+      ]
     }
   ]
 }
