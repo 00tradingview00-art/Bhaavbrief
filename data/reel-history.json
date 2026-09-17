@@ -1,5 +1,27 @@
 [
   {
+    "file": "brief-edition-108",
+    "topic": "Oil Retreats From $105 — Gold Is Not Playing Along",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Oil falls ₹118. Gold won't budge.",
+    "stat_line": "Crude -1.12% | Gold -0.60%",
+    "payoff": "Fear exits oil. Where does it hide next?",
+    "beat1": "Crude dropped ₹118 on ceasefire whispers from Middle East.",
+    "beat2": "Geopolitical premium unwinding—fear premium leaving the energy trade first.",
+    "beat3": "Watch WTI close below $101.38 today—real unwinding, not pause.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18283720204294137",
+    "generated_at": "2026-09-17T08:51:50.925Z",
+    "edition": 108,
+    "hi_path": "public/reels/brief-edition-108-hi.mp4",
+    "posted_at": "2026-09-17T08:53:34.639Z"
+  },
+  {
     "file": "news-20260916-iv-rank-percentile",
     "topic": "IV Rank & Percentile",
     "content_type": "explainer",
@@ -2195,5 +2217,10 @@
     "file": "brief-edition-107-hi",
     "instagram_id": "17905753548508473",
     "posted_at": "2026-09-16T04:23:40.561Z"
+  },
+  {
+    "file": "brief-edition-108-hi",
+    "instagram_id": "17951712876039172",
+    "posted_at": "2026-09-17T08:54:25.145Z"
   }
 ]
