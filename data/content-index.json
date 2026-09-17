@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-09-17-spr-release-mcx-crude-india",
+    "href": "/articles/2026-09-17-spr-release-mcx-crude-india",
+    "title": "How US Strategic Petroleum Reserve (SPR) Releases Affect MCX Crude Prices",
+    "description": "Learn how strategic petroleum reserve release affects crude oil prices and MCX contracts, with India-specific impact, historical examples, and key data signals.",
+    "excerpt": "Understanding how strategic petroleum reserve release affects crude oil prices is essential for any Indian trader with open MCX positions — the mechanism transmits from Washington to Mumbai within hou",
+    "date": "2026-09-17",
+    "edition": "keyword-brief",
+    "tags": [
+      "crude",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "crude",
+    "commodities": [
+      "crude"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-16-mcx-close-17sep2026-metals-rally-dollar",
     "href": "/articles/2026-09-16-mcx-close-17sep2026-metals-rally-dollar",
     "title": "MCX Close 17 Sep: Metals Rally on Dollar Weakness",
