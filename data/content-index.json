@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-109",
+    "href": "/briefs/edition-109",
+    "title": "Silver Surges 3.3% as Gold Holds — Crude Retreats From Its Own Story",
+    "description": "Silver's industrial bid decouples from crude's retreat, signalling the safe-haven trade is being joined by a growth-demand component.",
+    "excerpt": "MCX Gold ₹152981 | Crude ₹9758 | USDINR ₹95.94 Yesterday's Edge — Result: Edition #108 watched whether WTI would close below 101.38. Confirmed ✓, now at 101.29. | Commodity | Global Price | USD/INR | ",
+    "date": "2026-09-18T02:40:56.179Z",
+    "edition": "109",
+    "tags": [
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-108",
     "href": "/briefs/edition-108",
     "title": "Oil Retreats From $105 — Gold Is Not Playing Along",
