@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-09-18T08:21:43.921Z",
+=======
+  "generatedAt": "2026-09-18T08:21:47.913Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-09-18 13:51 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -48,6 +52,7 @@
     "COMEX_SILVER": {
       "price": 67.52,
       "prevClose": 65.47,
+<<<<<<< Updated upstream
       "changePct": 3.1236,
       "unit": "USD/oz"
     },
@@ -55,6 +60,15 @@
       "price": 95.43,
       "prevClose": 101.91,
       "changePct": -6.3586,
+=======
+      "changePct": 3.1312,
+      "unit": "USD/oz"
+    },
+    "WTI": {
+      "price": 95.46,
+      "prevClose": 101.91,
+      "changePct": -6.3291,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "BRENT": {
