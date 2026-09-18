@@ -1,5 +1,27 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-18-mcx-crude-falls-2-36-as-us-refinery-maintenance-weighs",
+    "href": "/articles/2026-09-18-mcx-crude-falls-2-36-as-us-refinery-maintenance-weighs",
+    "title": "MCX Crude Falls 2.36% as US Refinery Maintenance Weighs",
+    "description": "MCX Crude at ₹9519/bbl; WTI weakness signals seasonal refinery turnarounds, not demand destruction. Silver rallies 1.78%.",
+    "excerpt": "WHAT HAPPENED MCX Crude has fallen ₹225/bbl (2.36%) to ₹9519/bbl, while WTI dropped to $99.58, matching the typical September refinery maintenance cycle in the US. This is not a demand-destruction sig",
+    "date": "2026-09-18T07:10:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "MCX Silver",
+      "Energy",
+      "Seasonal"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9519
+  },
+  {
     "type": "brief",
     "slug": "edition-109",
     "href": "/briefs/edition-109",
