@@ -1,6 +1,26 @@
 [
   {
     "type": "article",
+    "slug": "2026-09-18-mcx-crude-falls-2-14-as-us-refinery-demand-weakens",
+    "href": "/articles/2026-09-18-mcx-crude-falls-2-14-as-us-refinery-demand-weakens",
+    "title": "MCX Crude Falls 2.14% as US Refinery Demand Weakens",
+    "description": "MCX Crude at ₹9699/bbl, down 2.14%, signals seasonal refinery maintenance choking demand. WTI $96.62 pressured by falling gasoline inventories post–Labour Day.",
+    "excerpt": "WHAT HAPPENED MCX Crude has fallen ₹207/bbl (2.14%) to ₹9699/bbl, tracking WTI's retreat to $96.62/bbl — a move consistent with the US driving season fade and the onset of September–October refinery t",
+    "date": "2026-09-18T22:04:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9699
+  },
+  {
+    "type": "article",
     "slug": "2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso",
     "href": "/articles/2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso",
     "title": "MCX Nat Gas Rallies 2.3% as Henry Hub Signals Injection Season Tightness",

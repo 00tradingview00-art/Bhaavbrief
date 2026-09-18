@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 153467,
-    "silver": 240330,
-    "crude": 9911,
-    "copper": 1397.7,
-    "natgas": 279.9,
-    "usdinr": 95.94
+    "gold": 154245,
+    "silver": 241449,
+    "crude": 9699,
+    "copper": 1401.1,
+    "natgas": 279.4,
+    "usdinr": 95.88
   },
-  "lastChecked": "2026-09-18T13:43:09.373Z",
+  "lastChecked": "2026-09-18T16:34:55.218Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -24,11 +24,12 @@
   },
   "articlesToday": [
     "2026-09-18/2026-09-18-mcx-crude-falls-2-36-as-us-refinery-maintenance-weighs",
-    "2026-09-18/2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso"
+    "2026-09-18/2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso",
+    "2026-09-18/2026-09-18-mcx-crude-falls-2-14-as-us-refinery-demand-weakens"
   ],
-  "lastArticleAt": "2026-09-18T12:22:13.687Z",
+  "lastArticleAt": "2026-09-18T16:35:10.469Z",
   "lastCoveredAt": {
-    "crude": "2026-09-18T07:40:25.890Z",
+    "crude": "2026-09-18T16:35:10.469Z",
     "silver": "2026-07-28T05:36:23.461Z",
     "natgas": "2026-09-18T12:22:13.687Z"
   }
