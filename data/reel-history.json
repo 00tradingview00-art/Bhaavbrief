@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260918-pcr-tool-deeper-explainer",
+    "topic": "PCR tool, deeper explainer",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Gold options traders are acting nervous right now",
+    "stat_line": "PCR at 0.84 — way below 1.2 signal",
+    "payoff": "Options positioning just flipped. Watch what gold does next.",
+    "beat1": "Put-call ratio measures fear vs. greed in options pits.",
+    "beat2": "Right now it's 0.84—traders betting on gold falling, not rising.",
+    "beat3": "When PCR drops below 0.7, it's contrarian bearish. We're close.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18122067317303095",
+    "generated_at": "2026-09-18T17:39:26.397Z",
+    "edition": null,
+    "posted_at": "2026-09-18T17:40:09.999Z"
+  },
+  {
     "file": "news-20260917-mcx-lot-sizes",
     "topic": "MCX Lot Sizes",
     "content_type": "explainer",
