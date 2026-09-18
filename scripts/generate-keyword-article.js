@@ -18,6 +18,7 @@ import fs   from 'fs'
 import path from 'path'
 import { execFileSync } from 'child_process'
 import { fileURLToPath } from 'url'
+import { escapeBareLessThan } from './lib/mdxSafe.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
@@ -231,7 +232,7 @@ keywords: ["${entry.keyword}"]
 `
 
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
-  fs.writeFileSync(filePath, frontmatter + body, 'utf8')
+  fs.writeFileSync(filePath, frontmatter + escapeBareLessThan(body), 'utf8')
   console.log(`  Saved: content/articles/${filename}`)
   return filename
 }

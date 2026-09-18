@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 import { fetchPexelsImage } from './lib/pexels.js'
 import { extractFlashTitle } from './lib/flashTitle.mjs'
+import { escapeBareLessThan } from './lib/mdxSafe.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
@@ -461,7 +462,7 @@ category: "${category}"
 published: true${coverLine}
 ---
 
-${content}
+${escapeBareLessThan(content)}
 `
   fs.writeFileSync(path.join(FLASH_DIR, `${slug}.mdx`), mdx, 'utf8')
   console.log(`  Saved: content/flash/${slug}.mdx`)

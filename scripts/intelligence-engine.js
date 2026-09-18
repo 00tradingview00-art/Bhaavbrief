@@ -26,6 +26,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 import { formatApprovedLinks } from '../lib/learn-link-map.js'
+import { escapeBareLessThan } from './lib/mdxSafe.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -1291,7 +1292,7 @@ function saveArticle(mdx) {
     return null
   }
 
-  const cleanMdx = applyBodyBold(
+  const cleanMdx = applyBodyBold(escapeBareLessThan(
     mdx
       .replace(/^```[a-z]*\n/m, '')       // strip any leading code fence (```yaml, ```mdx, etc.)
       .replace(/\n```\s*$/, '')           // strip trailing code fence
@@ -1299,7 +1300,7 @@ function saveArticle(mdx) {
       .replace(/^slug:.*$/m, '')
       .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
       .trim()
-  )
+  ))
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
 
   const title = titleMatch?.[1] ?? 'Market Update'
