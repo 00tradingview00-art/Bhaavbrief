@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso",
+    "href": "/articles/2026-09-18-mcx-nat-gas-rallies-2-3-as-henry-hub-signals-injection-seaso",
+    "title": "MCX Nat Gas Rallies 2.3% as Henry Hub Signals Injection Season Tightness",
+    "description": "MCX Natural Gas jumps to ₹281/mmBtu (+2.30%) — Henry Hub strength amid storage data divergence triggers Indian LNG margin squeeze.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has surged 2.30% to ₹281/mmBtu — the session high — signalling renewed strength in Henry Hub-linked valuations as the US enters late-injection season. Henry Hub itself tr",
+    "date": "2026-09-18T17:51:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "LNG",
+      "Energy"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 281
+  },
+  {
+    "type": "article",
     "slug": "2026-09-18-mcx-crude-falls-2-36-as-us-refinery-maintenance-weighs",
     "href": "/articles/2026-09-18-mcx-crude-falls-2-36-as-us-refinery-maintenance-weighs",
     "title": "MCX Crude Falls 2.36% as US Refinery Maintenance Weighs",
