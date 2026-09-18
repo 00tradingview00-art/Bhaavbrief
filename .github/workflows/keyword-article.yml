@@ -41,6 +41,13 @@ jobs:
           VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
         run: node scripts/generate-keyword-article.js
 
+      - name: Drop the article if it won't compile as MDX
+        # One uncompilable bot-written article fails `next build` and blocks every
+        # later deploy. Remove it and rebuild the index instead of pushing it.
+        run: |
+          node scripts/check-mdx-compiles.mjs --delete
+          node scripts/build-content-index.js
+
       - name: Commit article
         run: |
           git config user.name  "BhaavBrief Bot"

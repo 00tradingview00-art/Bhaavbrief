@@ -64,6 +64,11 @@ jobs:
           SENDER_EMAIL:       ${{ secrets.SENDER_EMAIL }}
         run: node scripts/intelligence-engine.js
 
+      - name: Drop any article that won't compile as MDX
+        # One uncompilable bot-written article fails `next build` and blocks every
+        # later deploy. Remove it (and rebuild the index below) instead of pushing it.
+        run: node scripts/check-mdx-compiles.mjs --delete
+
       - name: Rebuild content search index
         continue-on-error: true
         run: node scripts/build-content-index.js

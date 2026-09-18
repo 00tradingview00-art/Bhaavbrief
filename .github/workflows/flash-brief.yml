@@ -90,6 +90,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
+      - name: Drop any article that won't compile as MDX
+        # One uncompilable bot-written article fails `next build` and blocks every
+        # later deploy. Remove it instead of pushing it.
+        run: node scripts/check-mdx-compiles.mjs --delete
+
       - name: Commit and push
         run: |
           git config user.name "BhaavBrief Bot"
