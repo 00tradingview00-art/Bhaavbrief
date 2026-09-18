@@ -6,6 +6,7 @@ import type { EIAResponse } from '@/lib/eia'
 import EIACard from '@/components/EIACard'
 import Sparkline from '@/components/ui/Sparkline'
 import Pill from '@/components/ui/Pill'
+import WatchlistStar from '@/components/terminal/WatchlistStar'
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -93,12 +94,13 @@ function RangeBar({ low, high, current, isUp }: { low: number; high: number; cur
 }
 
 function PriceCard({
-  cfg, data, flashing, closes,
+  cfg, data, flashing, closes, slug,
 }: {
   cfg: typeof CARDS[0]
   data: MCXData
   flashing: boolean
   closes?: number[]
+  slug: string
 }) {
   const isUp       = data.mcxChangePct >= 0
   const hasKite    = data.mcxHigh > 0
@@ -119,8 +121,11 @@ function PriceCard({
     }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
-          {cfg.label}
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+            {cfg.label}
+          </span>
+          <WatchlistStar instrumentKey={slug} />
         </span>
         {hasChangePct ? (
           <Pill tone={isUp ? 'up' : 'down'} size="xs" style={{ fontWeight: 600 }}>
@@ -348,7 +353,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
           )
           return (
             <Link key={cfg.key} href={cfg.href} style={{ textDecoration: 'none' }}>
-              <PriceCard cfg={cfg} data={data} flashing={flashing} closes={sparklines?.[cfg.key]} />
+              <PriceCard cfg={cfg} data={data} flashing={flashing} closes={sparklines?.[cfg.key]} slug={cfg.href.split('/').pop()!} />
             </Link>
           )
         })}

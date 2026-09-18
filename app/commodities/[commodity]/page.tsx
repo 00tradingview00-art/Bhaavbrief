@@ -13,6 +13,8 @@ import path                 from 'path'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
 import UpcomingEventsForCommodity from '@/components/UpcomingEventsForCommodity'
 import CommodityVisitTracker from '@/components/CommodityVisitTracker'
+import SinceLastVisit from '@/components/SinceLastVisit'
+import WatchlistStar from '@/components/terminal/WatchlistStar'
 import { safeJsonLd } from '@/lib/seo'
 
 // Revalidate every 5 minutes — live prices + new articles
@@ -549,8 +551,10 @@ export default async function CommodityPage({ params }: Props) {
             <h1 style={{
               fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500,
               color: 'var(--ink)', margin: '0 0 4px', lineHeight: 1.2,
+              display: 'flex', alignItems: 'center', gap: 8,
             }}>
               MCX {info.name} Price Today
+              <WatchlistStar instrumentKey={commodity} />
             </h1>
             <p style={{ fontSize: 15, color: 'var(--ink-4)', margin: 0 }}>
               {isStale ? 'Last known MCX price · live update unavailable' : 'Live MCX price · Updated in real time'}
@@ -570,6 +574,8 @@ export default async function CommodityPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        <SinceLastVisit slug={commodity} price={ltp} isStale={isStale} />
 
         {/* OHLC strip */}
         {(open > 0 || high > 0) && (
