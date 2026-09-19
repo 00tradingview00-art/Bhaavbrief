@@ -39,7 +39,35 @@
     "instagram_id": "17886345933479485",
     "generated_at": "2026-09-17T18:08:09.126Z",
     "edition": null,
-    "posted_at": "2026-09-17T18:08:43.506Z"
+    "posted_at": "2026-09-17T18:08:43.506Z",
+    "insight_snapshots": [
+      {
+        "views": 21,
+        "reach": 19,
+        "ig_reels_avg_watch_time": 2039,
+        "ig_reels_video_view_total_time": 38753,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-19T03:06:48.706Z",
+        "age_hours": 32.968111111111114,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 21,
+      "reach": 19,
+      "ig_reels_avg_watch_time": 2039,
+      "ig_reels_video_view_total_time": 38753,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-19T03:06:48.706Z"
+    }
   },
   {
     "file": "brief-edition-108",
@@ -61,7 +89,35 @@
     "generated_at": "2026-09-17T08:51:50.925Z",
     "edition": 108,
     "hi_path": "public/reels/brief-edition-108-hi.mp4",
-    "posted_at": "2026-09-17T08:53:34.639Z"
+    "posted_at": "2026-09-17T08:53:34.639Z",
+    "insight_snapshots": [
+      {
+        "views": 38,
+        "reach": 34,
+        "ig_reels_avg_watch_time": 1967,
+        "ig_reels_video_view_total_time": 64938,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-19T03:06:50.220Z",
+        "age_hours": 42.22099472222222,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 38,
+      "reach": 34,
+      "ig_reels_avg_watch_time": 1967,
+      "ig_reels_video_view_total_time": 64938,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-19T03:06:50.220Z"
+    }
   },
   {
     "file": "news-20260916-iv-rank-percentile",
@@ -413,17 +469,46 @@
     "edition": null,
     "posted_at": "2026-09-11T17:44:43.047Z",
     "insights": {
-      "views": 3,
-      "reach": 2,
-      "ig_reels_avg_watch_time": 5637,
-      "ig_reels_video_view_total_time": 11275,
+      "views": 4,
+      "reach": 3,
+      "ig_reels_avg_watch_time": 6029,
+      "ig_reels_video_view_total_time": 18089,
       "likes": 0,
       "comments": 0,
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-13T04:46:48.634Z"
-    }
+      "fetched_at": "2026-09-19T03:06:51.168Z"
+    },
+    "insight_snapshots": [
+      {
+        "views": 3,
+        "reach": 2,
+        "ig_reels_avg_watch_time": 5637,
+        "ig_reels_video_view_total_time": 11275,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-13T04:46:48.634Z",
+        "observation": "historical"
+      },
+      {
+        "views": 4,
+        "reach": 3,
+        "ig_reels_avg_watch_time": 6029,
+        "ig_reels_video_view_total_time": 18089,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-19T03:06:51.168Z",
+        "age_hours": 177.3689225,
+        "observation": "first_after_7d"
+      }
+    ]
   },
   {
     "file": "v2/gold-three-prices-002",
@@ -443,15 +528,44 @@
     "insights": {
       "views": 5,
       "reach": 5,
-      "ig_reels_avg_watch_time": 7683,
-      "ig_reels_video_view_total_time": 46098,
+      "ig_reels_avg_watch_time": 6769,
+      "ig_reels_video_view_total_time": 47387,
       "likes": 0,
       "comments": 0,
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-13T04:46:50.070Z"
-    }
+      "fetched_at": "2026-09-19T03:06:52.150Z"
+    },
+    "insight_snapshots": [
+      {
+        "views": 5,
+        "reach": 5,
+        "ig_reels_avg_watch_time": 7683,
+        "ig_reels_video_view_total_time": 46098,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-13T04:46:50.070Z",
+        "observation": "historical"
+      },
+      {
+        "views": 5,
+        "reach": 5,
+        "ig_reels_avg_watch_time": 6769,
+        "ig_reels_video_view_total_time": 47387,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-19T03:06:52.150Z",
+        "age_hours": 186.11059722222222,
+        "observation": "first_after_7d"
+      }
+    ]
   },
   {
     "file": "v2/gold-three-prices-001",
