@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260919-mcx-margin-calculation",
+    "topic": "MCX Margin Calculation",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Your MCX margin call isn't what you think.",
+    "stat_line": "Brokers can liquidate you overnight.",
+    "payoff": "One bad day. One margin call. One forced exit.",
+    "beat1": "Your account balance drops below 75% of initial margin—broker auto-sells your position.",
+    "beat2": "MTM losses hit your account every night. You can't defer them till tomorrow.",
+    "beat3": "SPAN margin recalculates twice daily using extreme price scenarios—your cushion shifts constantly.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "two_bar",
+      "beat3": "icon_array"
+    },
+    "instagram_id": "18114210562819133",
+    "generated_at": "2026-09-19T17:09:03.951Z",
+    "edition": null,
+    "posted_at": "2026-09-19T17:09:45.129Z"
+  },
+  {
     "file": "news-20260918-pcr-tool-deeper-explainer",
     "topic": "PCR tool, deeper explainer",
     "content_type": "explainer",
