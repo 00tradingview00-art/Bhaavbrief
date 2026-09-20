@@ -86,7 +86,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'What is iVIX and how is it different from AAV?',
-    a: "iVIX is the implied volatility the options market is currently pricing in, derived from live MCX option premiums using the Black-76 model. AAV (Annualized Actual Volatility) is BhaavBrief's read on how much a commodity has actually moved recently. Comparing the two shows the volatility premium — whether options are pricing in more or less movement than has actually occurred recently.",
+    a: "iVIX is the implied volatility the options market is currently pricing in, derived from live MCX option premiums using the Black-76 model. AAV (Annualized Actual Volatility) is BhaavBrief's read on how much a commodity has actually moved recently — an estimate that can differ by a few points from the figure the exchange publishes. Comparing the two shows the volatility premium — whether options are pricing in more or less movement than has actually occurred recently.",
   },
   {
     q: 'What does PCR (Put-Call Ratio) tell you?',
