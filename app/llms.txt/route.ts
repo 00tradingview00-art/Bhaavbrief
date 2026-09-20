@@ -86,7 +86,7 @@ BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strateg
 - [PCR Trend](${BASE}/tools/mcx-pcr): Put-Call Ratio trend over time
 - [Max Pain Calculator](${BASE}/tools/mcx-max-pain): Options Max Pain by expiry
 - [MCX Greeks](${BASE}/tools/mcx-greeks): Black-76 Greeks calculator
-- [MCX Bhavcopy](${BASE}/tools/mcx-bhavcopy): Daily settlement data lookup (OHLC, volume, OI)
+- [MCX Bhavcopy](${BASE}/tools/mcx-bhavcopy): Where to download the MCX bhavcopy, what each column means, and a free in-browser viewer for a file you provide (open interest, PCR, max pain)
 - [MCX P&L Calculator](${BASE}/tools/mcx-pl-calculator): Profit/loss calculator by contract and lot size
 - [MCX Basis](${BASE}/tools/mcx-basis): Basis (futures vs spot) calculator
 
