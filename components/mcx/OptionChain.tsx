@@ -732,7 +732,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
           {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6"
             info="Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices." />}
           {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV}
-            info="Annualized Actual Volatility — how much this commodity has actually moved recently." />}
+            info="Annualized Actual Volatility — BhaavBrief's estimate of how much this commodity has actually moved recently. It can differ by a few points from the exchange's own published figure." />}
           {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor}
             info="Whether options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
@@ -753,8 +753,10 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
       {/* ── AAV breakdown ── */}
       {data && showAAV && (
         <div style={{ padding: '7px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', flexWrap: 'wrap', gap: '4px 24px', alignItems: 'center', background: C.surf2 }}>
-          <span style={{ fontSize: 10, color: C.ink4, fontFamily: C.sans, letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>Annualized Actual Volatility</span>
-          {(['5d','10d','20d','40d','60d'] as const).map(w => (
+          <span style={{ fontSize: 10, color: C.ink4, fontFamily: C.sans, letterSpacing: '0.06em', textTransform: 'uppercase', fontWeight: 500 }}>Annualized Actual Volatility (estimate)</span>
+          {/* 60d is intentionally not shown: the candle window feeding it is too short to fill it, and an
+              estimate we can't reconcile with the exchange's figure shouldn't be added as a new number. */}
+          {(['5d','10d','20d','40d'] as const).map(w => (
             <span key={w} style={{ fontSize: 12, ...numStyle }}>
               <span style={{ color: C.ink4, fontSize: 10 }}>{w} </span>
               <span style={{ color: w === '20d' ? '#0369a1' : C.ink2, fontWeight: 600 }}>{data.aav[w] ?? '·'}</span>

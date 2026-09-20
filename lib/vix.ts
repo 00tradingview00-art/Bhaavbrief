@@ -5,8 +5,12 @@
  * MCX iVIX: India's equivalent of OVX (crude), GVZ (gold), VXSLV (silver).
  * Computed using the CBOE variance-swap formula applied to MCX option chain data.
  *
- * MCX AAV: Realized historical volatility over rolling windows (5/10/20/40/60 days).
- * Formula confirmed against MCX official AAV data file — uses √252 annualization.
+ * AAV: BhaavBrief's own estimate of realized volatility over rolling windows (5/10/20/40/60 days),
+ * √252 annualization. MCX publishes an official AAV of the same name; ours is NOT guaranteed to match it.
+ * Checked 2026-09-20 with scripts/validate-aav-vs-official.mjs against the official figures for the
+ * 18 Sep 2026 close: some windows (e.g. Gold and Crude 20d) agreed closely, others differed by several
+ * vol points — most likely because continuous-futures candles are not back-adjusted at contract
+ * rolls (see MAX_DAILY_LOG_RETURN below). That cause is a hypothesis, not yet tested.
  */
 
 export interface ChainRowForVIX {
@@ -138,7 +142,7 @@ const clampReturn = (r: number) => Math.max(-MAX_DAILY_LOG_RETURN, Math.min(MAX_
 /**
  * Compute MCX AAV (Annualized Actual Volatility) for all standard windows.
  * Formula: σ_daily = std_dev(log_returns, ddof=1); AAV = σ_daily × √252 × 100
- * Matches MCX official AAV publication (√252 annualization confirmed).
+ * An estimate — see the file header: it can differ from MCX's published AAV.
  *
  * @param closes  Daily close prices, most recent LAST (ascending date order)
  *                Needs at least 61 values to compute all 5 windows.
