@@ -1,5 +1,26 @@
 [
   {
+    "file": "news-20260920-max-pain-tool",
+    "topic": "Max Pain tool",
+    "content_type": "explainer",
+    "mood": "CALM",
+    "hook_caption": "Option sellers have a price they're rooting for",
+    "stat_line": "₹155,000 — the strike that costs them least",
+    "payoff": "Your gold's destination isn't random—it's engineered.",
+    "beat1": "Gold's at ₹154,263. Option sellers collectively profit most if it hits ₹155,000.",
+    "beat2": "Max Pain is where option expiry pain concentrates—the price sellers engineered to collect premiums.",
+    "beat3": "Watch ₹155,000 this month. It's the gravitational pull on gold's final move.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "18125396140651735",
+    "generated_at": "2026-09-20T17:24:08.191Z",
+    "edition": null,
+    "posted_at": "2026-09-20T17:24:49.160Z"
+  },
+  {
     "file": "news-20260919-mcx-margin-calculation",
     "topic": "MCX Margin Calculation",
     "content_type": "explainer",

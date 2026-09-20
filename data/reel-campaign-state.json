@@ -1,7 +1,14 @@
 {
   "_note": "Rotation state for the 30-day reel campaign — see data/reel-campaign-queue.json for the plan. nextDay advances by 1 after each successful generation.",
-  "nextDay": 10,
+  "nextDay": 11,
   "log": [
+    {
+      "day": 10,
+      "pillar": "OPT",
+      "feature": "Max Pain tool",
+      "file": "public/reels/news-20260920-max-pain-tool.mp4",
+      "generated_at": "2026-09-20T17:24:08.476Z"
+    },
     {
       "day": 9,
       "pillar": "OPT",
