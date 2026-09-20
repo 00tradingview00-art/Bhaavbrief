@@ -39,7 +39,35 @@
     "instagram_id": "18122067317303095",
     "generated_at": "2026-09-18T17:39:26.397Z",
     "edition": null,
-    "posted_at": "2026-09-18T17:40:09.999Z"
+    "posted_at": "2026-09-18T17:40:09.999Z",
+    "insight_snapshots": [
+      {
+        "views": 31,
+        "reach": 29,
+        "ig_reels_avg_watch_time": 1329,
+        "ig_reels_video_view_total_time": 39895,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-20T05:41:44.317Z",
+        "age_hours": 36.026199444444444,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 31,
+      "reach": 29,
+      "ig_reels_avg_watch_time": 1329,
+      "ig_reels_video_view_total_time": 39895,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-20T05:41:44.317Z"
+    }
   },
   {
     "file": "news-20260917-mcx-lot-sizes",
@@ -457,17 +485,46 @@
     "edition": null,
     "posted_at": "2026-09-12T16:56:49.768Z",
     "insights": {
-      "views": 40,
-      "reach": 36,
-      "ig_reels_avg_watch_time": 1671,
-      "ig_reels_video_view_total_time": 60175,
+      "views": 41,
+      "reach": 37,
+      "ig_reels_avg_watch_time": 1981,
+      "ig_reels_video_view_total_time": 75286,
       "likes": 1,
       "comments": 0,
       "shares": 0,
       "saved": 0,
       "total_interactions": 1,
-      "fetched_at": "2026-09-14T02:50:50.221Z"
-    }
+      "fetched_at": "2026-09-20T05:41:45.363Z"
+    },
+    "insight_snapshots": [
+      {
+        "views": 40,
+        "reach": 36,
+        "ig_reels_avg_watch_time": 1671,
+        "ig_reels_video_view_total_time": 60175,
+        "likes": 1,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 1,
+        "fetched_at": "2026-09-14T02:50:50.221Z",
+        "observation": "historical"
+      },
+      {
+        "views": 41,
+        "reach": 37,
+        "ig_reels_avg_watch_time": 1981,
+        "ig_reels_video_view_total_time": 75286,
+        "likes": 1,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 1,
+        "fetched_at": "2026-09-20T05:41:45.363Z",
+        "age_hours": 180.7487763888889,
+        "observation": "first_after_7d"
+      }
+    ]
   },
   {
     "file": "news-20260911-mcx-contract-expiry-dates",
