@@ -79,8 +79,8 @@ const FREE_TOOLS = [
   },
   {
     href: '/tools/mcx-bhavcopy',
-    label: 'Bhavcopy Guide',
-    desc: 'What is MCX bhavcopy, how to download it, and what the settlement columns mean.',
+    label: 'Bhavcopy Viewer',
+    desc: 'Drop your MCX bhavcopy file to see futures, open interest, PCR and max pain by commodity. Read in your browser, not uploaded.',
   },
   {
     href: '/tools/mcx-basis',
