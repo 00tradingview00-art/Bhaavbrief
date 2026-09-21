@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-21T21:10:27.795Z",
-  "generatedAtIST": "2026-09-22 02:40 IST",
+  "generatedAt": "2026-09-21T21:53:35.159Z",
+  "generatedAtIST": "2026-09-22 03:23 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -41,32 +41,32 @@
     },
     "COMEX_GOLD": {
       "price": 4381,
-      "prevClose": 4424.9,
-      "changePct": -0.9921,
+      "prevClose": 4383.9,
+      "changePct": -0.0662,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
       "price": 66.53,
-      "prevClose": 67.15,
-      "changePct": -0.9218,
+      "prevClose": 66.42,
+      "changePct": 0.1732,
       "unit": "USD/oz"
     },
     "WTI": {
       "price": 91.97,
-      "prevClose": 96.08,
-      "changePct": -4.2777,
+      "prevClose": 92.37,
+      "changePct": -0.433,
       "unit": "USD/bbl"
     },
     "BRENT": {
       "price": 95.96,
-      "prevClose": 99.29,
-      "changePct": -3.3538,
+      "prevClose": 96.24,
+      "changePct": -0.2909,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.83,
-      "prevClose": 2.91,
-      "changePct": -2.8503,
+      "prevClose": 2.84,
+      "changePct": -0.2468,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
