@@ -66,7 +66,7 @@ function detectLatestReel() {
   const postedKeys = new Set(history.filter((h) => h.instagram_id).map((h) => h.file))
   try {
     const candidates = []
-    for (const sub of ['', 'v2']) {
+    for (const sub of ['', 'v2', 'v3']) {
       const dir = join(ROOT, 'public/reels', sub)
       let files
       try { files = readdirSync(dir) } catch { continue }
