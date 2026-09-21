@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   ],
 }
 
-const VALID_INSTRUMENTS = ['GOLD', 'GOLDM', 'SILVER', 'SILVERM', 'CRUDEOIL', 'CRUDEOILM', 'NATURALGAS', 'COPPER']
+const VALID_INSTRUMENTS = ['GOLD', 'GOLDM', 'SILVER', 'SILVERM', 'CRUDEOIL', 'CRUDEOILM', 'NATURALGAS', 'COPPER', 'ELECTRICITY']
 
 // StrategyBuilder's instrument codes → data/market-structure.json's key scheme
 const MARGIN_KEY_MAP: Record<string, string> = {
@@ -82,13 +82,23 @@ function loadMarginByInstrument(): Record<string, string | null> {
 export default async function StrategyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ instrument?: string }>
+  searchParams: Promise<{ instrument?: string; tab?: string; near?: string; far?: string; side?: string; lots?: string }>
 }) {
-  const { instrument } = await searchParams
+  const { instrument, tab, near, far, side, lots } = await searchParams
   const defaultInstrument = VALID_INSTRUMENTS.includes(instrument?.toUpperCase() ?? '')
     ? instrument!.toUpperCase()
     : 'GOLD'
   const marginByInstrument = loadMarginByInstrument()
+  // Shared spread links: ?tab=spreads&near=YYYY-MM-DD&far=YYYY-MM-DD&side=BUY|SELL&lots=N.
+  // Anything malformed is dropped; the Spreads tab re-validates against live months anyway.
+  const isDate = (v?: string) => !!v && /^\d{4}-\d{2}-\d{2}$/.test(v)
+  const lotsN = Number(lots)
+  const spreadInit = {
+    near: isDate(near) ? near : undefined,
+    far:  isDate(far)  ? far  : undefined,
+    side: side === 'BUY' || side === 'SELL' ? side : undefined,
+    lots: Number.isInteger(lotsN) && lotsN >= 1 && lotsN <= 999 ? lotsN : undefined,
+  } as const
   const { userId } = await auth()
   const isPro = await isProUser(userId ?? null)
   // Keyed on defaultInstrument: StrategyBuilder seeds its `instrument` state
@@ -100,7 +110,8 @@ export default async function StrategyPage({
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
-      <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro} />
+      <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro}
+        defaultTab={tab === 'spreads' ? 'spreads' : 'build'} spreadInit={spreadInit} />
     </>
   )
 }

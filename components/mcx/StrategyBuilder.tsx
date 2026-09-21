@@ -19,6 +19,7 @@ import { MCX_INSTRUMENTS } from '@/lib/options'
 import { formatRemaining, formatIST } from '@/lib/formatTime'
 import type { EventMapEntry } from '@/lib/eventMapTypes'
 import ProBlurGate from '@/components/ProBlurGate'
+import CalendarSpreads, { type SpreadInit } from '@/components/mcx/CalendarSpreads'
 
 // ── Types mirrored from getOptionsChain return shape ─────────────────────────
 
@@ -509,16 +510,20 @@ export default function StrategyBuilder({
   defaultInstrument = 'GOLD',
   marginByInstrument,
   isPro = false,
+  defaultTab = 'build',
+  spreadInit,
 }: {
   defaultInstrument?: string
   marginByInstrument?: Record<string, string | null>
   isPro?: boolean
+  defaultTab?: 'build' | 'spreads'
+  spreadInit?: SpreadInit
 }) {
   const [instrument,    setInstrument]    = useState(defaultInstrument)
   const [chainData,     setChainData]     = useState<ChainData | null>(null)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
   const [legs,          setLegs]          = useState<Leg[]>([])
-  const [tab,           setTab]           = useState<'build' | 'saved'>('build')
+  const [tab,           setTab]           = useState<'build' | 'saved' | 'spreads'>(defaultTab)
   const [saved,         setSaved]         = useState<SavedStrategy[]>([])
   const [savedPnls,     setSavedPnls]     = useState<Record<string, number | null>>({})
   const [loading,       setLoading]       = useState(false)
@@ -1080,10 +1085,15 @@ export default function StrategyBuilder({
           <Link href={FUTURES_ONLY_LEARN_LINK[instrument] ?? '/learn'} style={{ color: 'var(--gold-dark, #8B6520)', fontWeight: 600, textDecoration: 'none' }}>
             See contract specs →
           </Link>
+          {' · '}
+          <button onClick={() => setTab('spreads')}
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit', color: 'var(--gold-dark, #8B6520)', fontWeight: 600 }}>
+            Calendar spreads →
+          </button>
         </div>
       )}
 
-      {error && (
+      {error && tab !== 'spreads' && (
         <div style={{ background: 'var(--down-bg, #FAF0EE)', border: '1px solid var(--down, #B53A2A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--down, #B53A2A)', fontSize: 15 }}>
           {error} — please try again in a moment.
           {errorNextOpenAt && ` Market reopens in ${formatRemaining(new Date(errorNextOpenAt).getTime() - Date.now())}.`}
@@ -1092,17 +1102,17 @@ export default function StrategyBuilder({
 
       {/* var(--gold) text on this pale background measured 3.02:1 (fails
           WCAG AA) — gold-dark passes (4.86:1). */}
-      {chainData?.stale && (
+      {chainData?.stale && tab !== 'spreads' && (
         <div style={{ background: 'rgba(181, 134, 42, 0.08)', border: '1px solid var(--gold, #B5862A)', borderRadius: 6, padding: '10px 14px', marginBottom: 16, color: 'var(--gold-dark, #8B6520)', fontSize: 14 }}>
           ⚠ Showing the last known chain, as of {formatIST(chainData.lastUpdated)}.
           {chainData.nextOpenAt && ` Market reopens in ${formatRemaining(new Date(chainData.nextOpenAt).getTime() - Date.now())}.`}
         </div>
       )}
 
-      {loading && <div style={{ color: 'var(--ink-2, #3A3830)', fontSize: 15, marginBottom: 12 }}>Loading chain…</div>}
+      {loading && tab !== 'spreads' && <div style={{ color: 'var(--ink-2, #3A3830)', fontSize: 15, marginBottom: 12 }}>Loading chain…</div>}
 
       {/* IV Regime Banner */}
-      {ivRegime && (
+      {ivRegime && tab !== 'spreads' && (
         <div style={{
           background: 'var(--surface-2)', border: `1px solid ${regimeColors[ivRegime.regime]}`,
           borderRadius: 8, padding: '12px 16px', marginBottom: 16,
@@ -1128,14 +1138,14 @@ export default function StrategyBuilder({
         </div>
       )}
 
-      {ivRegime && ivHistory.length > 0 && (
+      {ivRegime && ivHistory.length > 0 && tab !== 'spreads' && (
         <IVHistorySparkline history={ivHistory} color={regimeColors[ivRegime.regime]} />
       )}
 
       {/* Quick Setup — all templates, no IV-based filtering. Hidden for
           futures-only instruments (Electricity) — every template needs at
           least one CE/PE leg, which no chain exists to build here. */}
-      {chainData && !isFuturesOnly && (
+      {chainData && !isFuturesOnly && tab !== 'spreads' && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Quick Setup</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 6 }}>
@@ -1171,7 +1181,7 @@ export default function StrategyBuilder({
 
       {/* Tabs */}
       <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
-        {([['build', 'Strategy Builder'], ['saved', `My Strategies (${saved.length})`]] as const).map(([t, label]) => (
+        {([['build', 'Strategy Builder'], ['saved', `My Strategies (${saved.length})`], ['spreads', 'Spreads']] as const).map(([t, label]) => (
           <button key={t} onClick={() => setTab(t)}
             style={{
               padding: '8px 16px', border: 'none', background: 'none', cursor: 'pointer',
@@ -1770,6 +1780,16 @@ export default function StrategyBuilder({
             </div>
           )}
         </>
+      )}
+
+      {/* ── Spreads Tab ── */}
+      {tab === 'spreads' && (
+        <CalendarSpreads
+          instrument={instrument}
+          instrumentLabel={INSTRUMENTS.find(i => i.key === instrument)?.label ?? instrument}
+          isPro={isPro}
+          init={spreadInit}
+        />
       )}
 
       {/* ── Saved Strategies Tab ── */}

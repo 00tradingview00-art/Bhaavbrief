@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFuturesCurve, SPREAD_INSTRUMENTS, isMCXMarketOpen } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
+import { todayIST } from '@/lib/tradingCalendar'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -23,7 +24,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const payload = await getFuturesCurve(instrument)
-    return NextResponse.json(payload, {
+    // asOfDate: today's IST date, so the client can count days to expiry
+    // without reading its own clock or timezone.
+    return NextResponse.json({ ...payload, asOfDate: todayIST() }, {
       headers: { 'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=10' },
     })
   } catch (err) {

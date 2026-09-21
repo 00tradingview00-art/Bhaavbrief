@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { buildCurve, adjacentSpreads, spreadBetween, spreadPnl, hasLiveFuturesPrice, type CurveQuote } from './spreads'
+import { buildCurve, adjacentSpreads, spreadBetween, spreadPnl, hasLiveFuturesPrice, daysBetween, type CurveQuote } from './spreads'
 
 const q = (expiry: string, price: number | null): CurveQuote => ({ expiry, tradingsymbol: `X${expiry}`, price })
 
@@ -138,5 +138,23 @@ describe('spreadPnl', () => {
     expect(spreadPnl({ ...base, side: 'BUY', exitSpread: NaN })).toBeNull()
     expect(spreadPnl({ ...base, side: 'BUY', exitSpread: Infinity })).toBeNull()
     expect(spreadPnl({ side: 'BUY', lots: NaN, lotSize: 100, entrySpread: 1, exitSpread: 2 })).toBeNull()
+  })
+})
+
+describe('daysBetween', () => {
+  test('counts calendar days, same day is 0, past is negative', () => {
+    expect(daysBetween('2026-09-21', '2026-09-29')).toBe(8)
+    expect(daysBetween('2026-09-21', '2026-09-21')).toBe(0)
+    expect(daysBetween('2026-09-21', '2026-09-20')).toBe(-1)
+  })
+
+  test('crosses month, year and leap-day boundaries correctly', () => {
+    expect(daysBetween('2026-12-30', '2027-01-02')).toBe(3)
+    expect(daysBetween('2028-02-28', '2028-03-01')).toBe(2)
+  })
+
+  test('garbage input returns null', () => {
+    expect(daysBetween('nope', '2026-09-21')).toBeNull()
+    expect(daysBetween('2026-09-21', '')).toBeNull()
   })
 })

@@ -114,3 +114,15 @@ export function spreadPnl(args: {
   const sign = side === 'BUY' ? 1 : -1
   return sign * (exitSpread - entrySpread) * lots * lotSize
 }
+
+/**
+ * Whole calendar days from one YYYY-MM-DD date to another (negative if `to` is
+ * earlier). Date-only maths in UTC so the runtime's timezone can't shift a day;
+ * the caller supplies "today" (IST) from the server rather than reading a clock.
+ */
+export function daysBetween(from: string, to: string): number | null {
+  const a = Date.parse(`${from}T00:00:00Z`)
+  const b = Date.parse(`${to}T00:00:00Z`)
+  if (!Number.isFinite(a) || !Number.isFinite(b)) return null
+  return Math.round((b - a) / 86_400_000)
+}
