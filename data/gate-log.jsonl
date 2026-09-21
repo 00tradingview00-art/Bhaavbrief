@@ -371,3 +371,4 @@
 =======
 {"type":"gate_run","edition":null,"briefPath":"content/articles/2026-09-21-mcx-close-22sep2026-natgas-leads-selloff.mdx","clean":false,"issueCount":1,"blockerCount":0,"warningCount":1,"hasInternalError":false,"durationMs":679,"checkedAt":"2026-09-21T20:07:41.702Z"}
 >>>>>>> Stashed changes
+{"type":"generation_call","promptVersion":"flash_monitor_v1","model":"claude-haiku-4-5-20251001","inputTokens":1019,"outputTokens":302,"latencyMs":3815,"payloadHash":"6b407c4ff5d0b377","ts":"2026-09-21T21:56:18.386Z","instrument":"MCX_CRUDE","trigger":"T1","slug":"2026-09-22-03-26-mcx-crude-edges-higher-on-flat-rupee-support"}
