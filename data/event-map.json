@@ -7,18 +7,18 @@
       "source_url": "https://ir.eia.gov/ngs/ngs.html",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-09-17T14:30:00.000Z",
+      "next_release_utc": "2026-09-24T14:30:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": 40,
+        "value": 44,
         "unit": "Bcf",
-        "as_of_period": "week ending 2026-09-04",
+        "as_of_period": "week ending 2026-09-11",
         "source": "eia_api",
-        "as_of": "2026-09-14"
+        "as_of": "2026-09-21"
       },
       "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR."
     },
@@ -28,18 +28,18 @@
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-09-16T14:30:00.000Z",
+      "next_release_utc": "2026-09-23T14:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": -1.6,
+        "value": -1,
         "unit": "million barrels",
-        "as_of_period": "week ending 2026-09-04",
+        "as_of_period": "week ending 2026-09-11",
         "source": "eia_api",
-        "as_of": "2026-09-14"
+        "as_of": "2026-09-21"
       },
       "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate."
     },
@@ -49,7 +49,7 @@
       "source_url": "https://www.api.org/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-09-15T20:30:00.000Z",
+      "next_release_utc": "2026-09-22T20:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
@@ -270,7 +270,7 @@
       "source_url": "https://rigcount.bakerhughes.com/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-09-18T17:00:00.000Z",
+      "next_release_utc": "2026-09-25T17:00:00.000Z",
       "affected_contracts": [
         "crude",
         "natgas"
@@ -407,7 +407,7 @@
       "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-09-18T19:30:00.000Z",
+      "next_release_utc": "2026-09-25T19:30:00.000Z",
       "affected_contracts": [
         "gold",
         "silver",
