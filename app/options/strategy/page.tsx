@@ -45,6 +45,9 @@ export const metadata: Metadata = {
     'MCX covered call India',
     'MCX options multi-leg strategy',
     'MCX gold silver crude options strategy',
+    'MCX calendar spread',
+    'MCX futures calendar spread India',
+    'MCX spread trading',
   ],
 }
 

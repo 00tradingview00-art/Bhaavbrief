@@ -68,7 +68,7 @@ const PRO_WORKFLOWS: {
   },
   {
     title: 'Strategy Builder',
-    description: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table.',
+    description: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table, plus a calendar-spread calculator with margin.',
     chips: ['12 templates', 'Payoff chart', 'Greeks per leg'],
     href: '/options/strategy',
   },

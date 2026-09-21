@@ -80,7 +80,7 @@ BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strateg
 - [BhaavBrief Pro](${BASE}/pro): Pricing and full feature breakdown for the MCX options analytics subscription
 - [Pro Research](${BASE}/research): Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours
 - [Basis Dashboard](${BASE}/basis): Live import-parity spread for MCX Gold, Silver, and Crude Oil vs COMEX/WTI benchmarks
-- [Strategy Builder](${BASE}/options/strategy): 12 pre-built multi-leg options strategy templates with payoff charts and per-leg Greeks
+- [Strategy Builder](${BASE}/options/strategy): 12 pre-built multi-leg options strategy templates with payoff charts and per-leg Greeks, plus live calendar spreads (near vs far month futures) for gold, silver, crude oil, natural gas, copper and electricity
 - [IV Rank & Skew](${BASE}/tools/mcx-iv-rank): Implied volatility rank/percentile and CE vs PE skew by strike
 - [Open Interest Buildup](${BASE}/tools/mcx-open-interest): OI buildup history by strike
 - [PCR Trend](${BASE}/tools/mcx-pcr): Put-Call Ratio trend over time

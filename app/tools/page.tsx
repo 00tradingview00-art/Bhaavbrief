@@ -27,7 +27,7 @@ const PRO_TOOLS = [
   {
     href: '/options/strategy',
     label: 'Strategy Builder',
-    desc: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table.',
+    desc: '12 pre-built multi-leg templates — straddle, strangle, bull/bear spreads, covered calls. Payoff at expiry + P&L table, plus calendar spreads across contract months.',
   },
   {
     href: '/basis',
