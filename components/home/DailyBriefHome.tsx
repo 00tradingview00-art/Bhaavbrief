@@ -40,7 +40,7 @@ function MarketRow({ item }: { item: WatchItem }) {
   const hasChange = (item.value ?? 0) > 0 && typeof item.change === 'number'
 
   return (
-    <Link href={item.href} className="bb-watch-row" role="listitem">
+    <Link href={item.href} className="bb-watch-row">
       <span className="bb-watch-name">{item.label}<small>{item.unit}</small></span>
       <span className="bb-watch-price">{formatPrice(item.value, item.decimals)}{item.stale && <small>Delayed</small>}</span>
       <span className={hasChange ? (positive ? 'bb-move bb-move--up' : 'bb-move bb-move--down') : 'bb-move'}>
@@ -156,7 +156,7 @@ export default function DailyBriefHome({
           </div>
           <Link href="/markets">All markets <span aria-hidden="true">→</span></Link>
         </div>
-        <div className="bb-watchlist" role="list">
+        <div className="bb-watchlist">
           {watchItems.map(item => <MarketRow key={item.label} item={item} />)}
         </div>
         <p className="bb-data-note">{prices?.snapshotStale ? 'Prices may be delayed. ' : ''}Source: MCX and market-data providers · Values are informational only.</p>
