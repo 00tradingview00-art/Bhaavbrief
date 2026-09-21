@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-110",
+    "href": "/briefs/edition-110",
+    "title": "Oil Crashes 6% While Gold Holds — the Premium Is Unwinding",
+    "description": "WTI drops sharply toward $94 as geopolitical risk reprices; gold holds ground, testing whether safe-haven demand can stand alone.",
+    "excerpt": "MCX Gold ₹154381 | Crude ₹9223 | USDINR ₹95.97 Yesterday's Edge — Result: Edition #109 watched whether WTI would close below 101.29. Confirmed ✓, now at 94.05. | Commodity | Global Price | USD/INR | M",
+    "date": "2026-09-21T03:09:33.853Z",
+    "edition": "110",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-18-mcx-crude-falls-2-14-as-us-refinery-demand-weakens",
     "href": "/articles/2026-09-18-mcx-crude-falls-2-14-as-us-refinery-demand-weakens",
@@ -3246,7 +3266,7 @@
     "href": "/articles/2026-07-03-mcx-bhavcopy",
     "title": "MCX Bhavcopy: What It Is, What It Contains, and How to Use It",
     "description": "MCX bhavcopy is the official end-of-day price bulletin for all commodity futures traded on the exchange. Learn what data it contains and how traders use it.",
-    "excerpt": "MCX bhavcopy is the official end-of-day price report published by the Multi Commodity Exchange of India after each trading session. The word \"bhavcopy\" combines two Hindi words — *bhaav* (price) and *",
+    "excerpt": "MCX bhavcopy is the exchange's end-of-day file for a trading date. The word \"bhavcopy\" combines two Hindi words: *bhaav* (price) and *copy* (record). For MCX it is a downloadable data file that lists,",
     "date": "2026-07-03",
     "edition": "keyword-brief",
     "tags": [
