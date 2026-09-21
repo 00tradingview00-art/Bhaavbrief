@@ -349,7 +349,7 @@ export const FUTURES_ONLY_INSTRUMENTS: Record<string, { label: string; unit: str
 // ELECDMBL26SEPFUT), not "ELECTRICITY". Falls back to the registry key
 // itself for any future futures-only instrument whose Kite name happens to
 // match it directly.
-const KITE_NAME_OVERRIDE: Record<string, string> = {
+export const KITE_NAME_OVERRIDE: Record<string, string> = {
   ELECTRICITY: 'ELECDMBL',
 }
 

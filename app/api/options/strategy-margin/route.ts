@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser, hasInternalAccess } from '@/lib/subscription'
 import { KiteClient, getFullMCXInstrumentsCached, type KiteBasketOrder } from '@/lib/kite'
-import { MCX_INSTRUMENTS } from '@/lib/options'
+import { MCX_INSTRUMENTS, FUTURES_ONLY_INSTRUMENTS, KITE_NAME_OVERRIDE } from '@/lib/options'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -12,6 +12,9 @@ interface LegInput {
   type:   'CE' | 'PE' | 'FUT'
   action: 'BUY' | 'SELL'
   qty:    number
+  // FUT legs only: which futures expiry (YYYY-MM-DD). Omitted = nearest, which
+  // is what every caller before calendar spreads relied on.
+  expiry?: string
 }
 
 function isLegInput(v: unknown): v is LegInput {
@@ -21,6 +24,7 @@ function isLegInput(v: unknown): v is LegInput {
     && (l.type === 'CE' || l.type === 'PE' || l.type === 'FUT')
     && (l.action === 'BUY' || l.action === 'SELL')
     && typeof l.qty === 'number' && Number.isInteger(l.qty) && l.qty > 0
+    && (l.expiry === undefined || typeof l.expiry === 'string')
 }
 
 export async function POST(request: Request) {
@@ -40,9 +44,11 @@ export async function POST(request: Request) {
   const expiry      = body.expiry
   const legs         = body.legs
 
-  if (!instrument || !MCX_INSTRUMENTS[instrument]) {
+  // Futures-only instruments (Electricity) are accepted so a calendar spread on
+  // them can be margined; they have no option legs, which then fail to resolve.
+  if (!instrument || !(MCX_INSTRUMENTS[instrument] || FUTURES_ONLY_INSTRUMENTS[instrument])) {
     return NextResponse.json(
-      { error: `Invalid instrument. Valid: ${Object.keys(MCX_INSTRUMENTS).join(', ')}` },
+      { error: `Invalid instrument. Valid: ${[...Object.keys(MCX_INSTRUMENTS), ...Object.keys(FUTURES_ONLY_INSTRUMENTS)].join(', ')}` },
       { status: 400 },
     )
   }
@@ -63,16 +69,17 @@ export async function POST(request: Request) {
     // external API call. Same source getOptionsChain() already uses.
     const allInstruments = await getFullMCXInstrumentsCached()
 
+    const kiteName = KITE_NAME_OVERRIDE[instrument] ?? instrument
     const today = new Date(); today.setHours(0, 0, 0, 0)
-    const nearFut = allInstruments
-      .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
-      .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())[0]
+    const futures = allInstruments
+      .filter(i => i.name.toUpperCase() === kiteName && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+      .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())
 
     const orders: KiteBasketOrder[] = []
 
     for (const leg of legs as LegInput[]) {
       const resolved = leg.type === 'FUT'
-        ? nearFut
+        ? (leg.expiry ? futures.find(f => f.expiry === leg.expiry) : futures[0])
         : allInstruments.find(i =>
             i.name.toUpperCase() === instrument &&
             i.instrument_type === leg.type &&
