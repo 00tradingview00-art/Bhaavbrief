@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T09:06:35.186Z",
+  "generatedAt": "2026-09-21T09:06:34.054Z",
   "generatedAtIST": "2026-09-21 14:36 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -66,7 +66,7 @@
     "HENRY_HUB": {
       "price": 2.88,
       "prevClose": 2.91,
-      "changePct": -1.0646,
+      "changePct": -1.0989,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
