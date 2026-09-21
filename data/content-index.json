@@ -1,6 +1,27 @@
 [
   {
     "type": "article",
+    "slug": "2026-09-21-mcx-close-22sep2026-natgas-leads-selloff",
+    "href": "/articles/2026-09-21-mcx-close-22sep2026-natgas-leads-selloff",
+    "title": "MCX Close 22Sep: NatGas Leads Selloff on US Weakness",
+    "description": "MCX Close 22Sep 2026: NatGas fell 2.36% to ₹273/mmBtu. COMEX fading across complex as US crude tumbles 4.06%. Overnight watch: Henry Hub and crude inventory.",
+    "excerpt": "NatGas dominated MCX's bearish close, sliding 2.36% to ₹273/mmBtu—the day's largest loser. Silver followed with a -0.89% retreat to ₹239455/kg. Weakness across the energy complex reflected a softer US",
+    "date": "2026-09-21T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-21-mcx-close-22sep2026-natgas-selloff",
     "href": "/articles/2026-09-21-mcx-close-22sep2026-natgas-selloff",
     "title": "MCX Close 22 Sept: NatGas Leads Selloff on US Weakness",
