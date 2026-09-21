@@ -1,7 +1,44 @@
 import { describe, test, expect } from 'vitest'
-import { buildCurve, adjacentSpreads, spreadBetween, spreadPnl, type CurveQuote } from './spreads'
+import { buildCurve, adjacentSpreads, spreadBetween, spreadPnl, hasLiveFuturesPrice, type CurveQuote } from './spreads'
 
 const q = (expiry: string, price: number | null): CurveQuote => ({ expiry, tradingsymbol: `X${expiry}`, price })
+
+describe('hasLiveFuturesPrice', () => {
+  const live = { price: 153500, volume: 120, bid: 153490, ask: 153510 }
+
+  test('traded today with a two-sided book is live', () => {
+    expect(hasLiveFuturesPrice(live)).toBe(true)
+  })
+
+  test('no depth from the feed at all does not disqualify a traded contract', () => {
+    expect(hasLiveFuturesPrice({ ...live, bid: null, ask: null })).toBe(true)
+  })
+
+  test('a one-sided book is still live (thin far months often are)', () => {
+    expect(hasLiveFuturesPrice({ ...live, ask: 0 })).toBe(true)
+    expect(hasLiveFuturesPrice({ ...live, bid: 0 })).toBe(true)
+  })
+
+  test('no volume this session means the price may be a leftover print', () => {
+    expect(hasLiveFuturesPrice({ ...live, volume: 0 })).toBe(false)
+  })
+
+  test('depth present but empty on both sides is not live', () => {
+    expect(hasLiveFuturesPrice({ ...live, bid: 0, ask: 0 })).toBe(false)
+  })
+
+  test('crossed book is rejected', () => {
+    expect(hasLiveFuturesPrice({ ...live, bid: 153600, ask: 153500 })).toBe(false)
+  })
+
+  test('zero, negative and non-finite values are rejected', () => {
+    expect(hasLiveFuturesPrice({ ...live, price: 0 })).toBe(false)
+    expect(hasLiveFuturesPrice({ ...live, price: -1 })).toBe(false)
+    expect(hasLiveFuturesPrice({ ...live, price: NaN })).toBe(false)
+    expect(hasLiveFuturesPrice({ ...live, volume: NaN })).toBe(false)
+    expect(hasLiveFuturesPrice({ ...live, bid: NaN })).toBe(false)
+  })
+})
 
 describe('buildCurve', () => {
   test('sorts by expiry regardless of input order', () => {

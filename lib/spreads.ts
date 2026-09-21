@@ -33,6 +33,32 @@ export type SpreadSide = 'BUY' | 'SELL'
 const isUsablePrice = (p: unknown): p is number => typeof p === 'number' && Number.isFinite(p) && p > 0
 
 /**
+ * Whether a futures quote is a live price worth putting in a spread. Far months
+ * are often thin: a last price left over from an earlier session would produce
+ * a spread that looks real and isn't, so this is deliberately strict.
+ *  - needs a positive, finite price and volume traded in the current session
+ *  - bid/ask are null when the feed gave no depth at all (then depth is not
+ *    required); when depth IS present, a crossed book, or no bid and no ask
+ *    at all, is rejected
+ */
+export function hasLiveFuturesPrice(q: {
+  price: number
+  volume: number
+  bid: number | null
+  ask: number | null
+}): boolean {
+  if (!isUsablePrice(q.price)) return false
+  if (!Number.isFinite(q.volume) || q.volume <= 0) return false
+  if (q.bid == null && q.ask == null) return true
+  const bid = q.bid ?? 0
+  const ask = q.ask ?? 0
+  if (!Number.isFinite(bid) || !Number.isFinite(ask)) return false
+  if (bid <= 0 && ask <= 0) return false
+  if (bid > 0 && ask > 0 && ask < bid) return false
+  return true
+}
+
+/**
  * Sort by expiry and normalise prices. A month with no usable quote keeps its
  * row with price null — never 0, never a last-known value — so the UI can show
  * "unavailable" instead of a number that looks real.

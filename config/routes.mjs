@@ -44,6 +44,7 @@ export const ROUTES = [
   '/api/cashfree/poll-status',
   '/api/cashfree/webhook',
   '/api/search',
+  '/api/spreads',
   '/api/subscribe',
   '/api/thesis',
   '/arcs/[id]',

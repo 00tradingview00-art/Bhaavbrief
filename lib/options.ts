@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
+import { buildCurve, adjacentSpreads, hasLiveFuturesPrice } from '@/lib/spreads'
 
 // Code-review follow-up: these were all bare constants requiring a code
 // review + deploy to adjust, even though they're tuning knobs calibrated
@@ -399,3 +400,57 @@ async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: 
 }
 
 export const getFuturesOnlyChain = cache(getFuturesOnlyChainUncached)
+
+// ── Futures curve (calendar spreads) ────────────────────────────────────────
+// Every listed futures expiry for one commodity, priced from a single quote
+// call. Works for both registries: options-listed commodities and the
+// futures-only ones (Electricity). A month without a live price comes back with
+// price null — see hasLiveFuturesPrice in lib/spreads.ts for what "live" means.
+async function getFuturesCurveUncached(instrument: string) {
+  const meta = MCX_INSTRUMENTS[instrument] ?? FUTURES_ONLY_INSTRUMENTS[instrument]
+  if (!meta) {
+    throw new Error(`Invalid instrument. Valid: ${[...Object.keys(MCX_INSTRUMENTS), ...Object.keys(FUTURES_ONLY_INSTRUMENTS)].join(', ')}`)
+  }
+  if (!process.env.KITE_API_KEY || !process.env.KITE_ACCESS_TOKEN) {
+    throw new Error('Kite credentials not configured')
+  }
+
+  const kc = new KiteClient(process.env.KITE_API_KEY, process.env.KITE_ACCESS_TOKEN)
+  const allInstruments = await getFullMCXInstrumentsCached()
+
+  const kiteName = KITE_NAME_OVERRIDE[instrument] ?? instrument
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const futures = allInstruments
+    .filter(i => i.name.toUpperCase() === kiteName && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+    .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())
+
+  if (!futures.length) {
+    throw new Error(`No futures contracts found for ${instrument}`)
+  }
+
+  const quotes = await kc.getQuotes(futures.map(f => f.instrument_token))
+  const curve = buildCurve(futures.map(f => {
+    const q = quotes[String(f.instrument_token)]
+    const live = q != null && hasLiveFuturesPrice({
+      price:  q.last_price,
+      volume: q.volume,
+      bid:    q.depth ? (q.depth.buy?.[0]?.price  ?? 0) : null,
+      ask:    q.depth ? (q.depth.sell?.[0]?.price ?? 0) : null,
+    })
+    return { expiry: f.expiry, tradingsymbol: f.tradingsymbol, price: live ? q.last_price : null }
+  }))
+
+  return {
+    instrument,
+    label:       meta.label,
+    unit:        meta.unit,
+    lotSize:     meta.lotSize,
+    curve,
+    spreads:     adjacentSpreads(curve),
+    marketOpen:  isMCXMarketOpen(),
+    lastUpdated: new Date().toISOString(),
+  }
+}
+
+export const getFuturesCurve = cache(getFuturesCurveUncached)
+export const SPREAD_INSTRUMENTS = [...Object.keys(MCX_INSTRUMENTS), ...Object.keys(FUTURES_ONLY_INSTRUMENTS)]
