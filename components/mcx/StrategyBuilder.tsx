@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef, useId } from 'react'
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceArea, Legend,
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine, ReferenceArea, Legend, CartesianGrid, ComposedChart,
   AreaChart, Area,
 } from 'recharts'
 import {
@@ -873,9 +873,15 @@ export default function StrategyBuilder({
     : `Today (${Math.round(dte)}d left)`
 
   const chartData = useMemo(() => payoff.map((p, i) => ({
-    F:      Math.round(p.F),
-    Expiry: Math.round(p.pnlExpiry),
-    AsOf:   targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
+    F:           Math.round(p.F),
+    Expiry:      Math.round(p.pnlExpiry),
+    // Split the expiration payoff around zero so the chart communicates risk
+    // and reward as areas, not merely as a thin line. Keeping both series at
+    // zero outside their respective regions gives Recharts a clean baseline
+    // at every breakeven.
+    ExpiryGain:  Math.max(0, Math.round(p.pnlExpiry)),
+    ExpiryLoss:  Math.min(0, Math.round(p.pnlExpiry)),
+    AsOf:        targetT > 0 ? Math.round((secondaryPayoff[i] ?? p).pnlToday) : undefined,
   })), [payoff, secondaryPayoff, targetT])
 
   // The core outcome should be visible without making a user hunt for a
@@ -1502,33 +1508,52 @@ export default function StrategyBuilder({
                   </div>
                 </div>
               )}
-              <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={chartData} margin={{ top: 8, right: 12, bottom: 4, left: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, fontSize: 12, color: 'var(--ink-2, #3A3830)', margin: '2px 0 6px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><i style={{ width: 18, height: 3, borderRadius: 2, background: 'var(--up, #1B7A4A)', display: 'inline-block' }} />Profit at expiry</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><i style={{ width: 18, height: 3, borderRadius: 2, background: 'var(--down, #B53A2A)', display: 'inline-block' }} />Loss at expiry</span>
+                {targetT > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><i style={{ width: 18, borderTop: '2px dashed var(--ink-3, #7A7668)', display: 'inline-block' }} />{secondaryLabel}</span>}
+              </div>
+              <ResponsiveContainer width="100%" height={336}>
+                <ComposedChart data={chartData} margin={{ top: 20, right: 18, bottom: 8, left: 10 }}>
+                  <defs>
+                    <linearGradient id="payoff-profit" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--up, #1B7A4A)" stopOpacity={0.28} />
+                      <stop offset="100%" stopColor="var(--up, #1B7A4A)" stopOpacity={0.06} />
+                    </linearGradient>
+                    <linearGradient id="payoff-loss" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--down, #B53A2A)" stopOpacity={0.06} />
+                      <stop offset="100%" stopColor="var(--down, #B53A2A)" stopOpacity={0.28} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid vertical={false} stroke="var(--border, #E5E1D7)" strokeDasharray="2 4" />
                   <XAxis dataKey="F" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(v: number) => {
                     const n = Number(v)
                     if (futurePrice >= 10000) return `₹${Math.round(n / 1000)}K`
                     if (futurePrice >= 1000)  return `₹${(n / 1000).toFixed(1)}K`
                     return `₹${Math.round(n)}`
-                  }} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} interval="preserveStartEnd" tickCount={7} />
-                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} width={68} />
-                  <Legend wrapperStyle={{ fontSize: 13, paddingTop: 8 }} formatter={(value: string) => (
-                    <span style={{ color: 'var(--ink-2, #3A3830)' }}>{value}</span>
-                  )} />
+                  }} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} axisLine={{ stroke: 'var(--border, #E5E1D7)' }} tickLine={false} interval="preserveStartEnd" tickCount={7} />
+                  <YAxis tickFormatter={v => fmtPnlAxis(Number(v))} tick={{ fontSize: 12, fill: 'var(--ink-2, #3A3830)' }} axisLine={false} tickLine={false} width={68} />
+                  <Tooltip
+                    cursor={{ stroke: 'var(--ink-3, #7A7668)', strokeDasharray: '3 3' }}
+                    labelFormatter={v => `Future ₹${fmt(Number(v))}`}
+                    formatter={(value, name) => [fmtPnl(Number(value ?? 0)), String(name)]}
+                    contentStyle={{ border: '1px solid var(--border, #E5E1D7)', borderRadius: 6, boxShadow: '0 4px 16px rgba(46,44,39,.10)', fontSize: 12 }}
+                  />
                   {cone && ivRegime && (
                     <>
-                      <ReferenceArea x1={cone.twoSigma[0]} x2={cone.twoSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.06} ifOverflow="hidden" />
-                      <ReferenceArea x1={cone.oneSigma[0]} x2={cone.oneSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.13} ifOverflow="hidden" />
+                      <ReferenceArea x1={cone.twoSigma[0]} x2={cone.twoSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.035} ifOverflow="hidden" />
+                      <ReferenceArea x1={cone.oneSigma[0]} x2={cone.oneSigma[1]} fill={regimeColors[ivRegime.regime]} fillOpacity={0.08} ifOverflow="hidden" />
                     </>
                   )}
-                  <ReferenceLine y={0} stroke="var(--ink-4, #B8B4A8)" strokeDasharray="3 3" />
+                  <ReferenceLine y={0} stroke="var(--ink-2, #3A3830)" strokeWidth={1.25} />
                   {/* Current price reference */}
                   {futurePrice > 0 && (
-                    <ReferenceLine x={futurePrice} stroke="var(--ink-3, #7A7668)" strokeDasharray="2 3" strokeWidth={1} label={{ value: 'NOW', position: 'insideTop', fill: 'var(--ink-2, #3A3830)', fontSize: 10 }} />
+                    <ReferenceLine x={futurePrice} stroke="var(--gold-dark, #8B6520)" strokeDasharray="3 3" strokeWidth={1.5} label={{ value: `NOW ₹${fmt(futurePrice)}`, position: 'insideTop', fill: 'var(--gold-dark, #8B6520)', fontSize: 10, fontWeight: 700 }} />
                   )}
                   {/* Breakeven lines — no label; values shown in stats below. Exact
                       value now that the axis is numeric (no need to snap to a grid point). */}
                   {breakevens.map((be, i) => (
-                    <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.5} />
+                    <ReferenceLine key={i} x={be} stroke="var(--gold, #B5862A)" strokeDasharray="4 2" strokeWidth={1.25} label={{ value: `BE ₹${fmt(be)}`, position: 'insideBottom', fill: 'var(--gold-dark, #8B6520)', fontSize: 10 }} />
                   ))}
                   {/* "Today" drawn first so "At Expiry" paints on top when they
                       coincide exactly (e.g. a futures-only position has no time
@@ -1537,10 +1562,12 @@ export default function StrategyBuilder({
                       (Confirmed via direct SVG/DOM inspection, not screenshots —
                       this repo's screenshot tool crops above the real viewport
                       height, which looked like a rendering bug but wasn't one.) */}
-                  {targetT > 0 && <Line type="monotone" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" strokeOpacity={0.68} dot={false} strokeWidth={1.25}
+                  <Area type="linear" dataKey="ExpiryLoss" stroke="none" fill="url(#payoff-loss)" baseValue={0} name="Loss at expiry" tooltipType="none" isAnimationActive={false} />
+                  <Area type="linear" dataKey="ExpiryGain" stroke="none" fill="url(#payoff-profit)" baseValue={0} name="Profit at expiry" tooltipType="none" isAnimationActive={false} />
+                  {targetT > 0 && <Line type="linear" dataKey="AsOf" stroke="var(--ink-3, #7A7668)" strokeOpacity={0.78} dot={false} strokeWidth={1.5}
                     strokeDasharray="5 3" name={`${secondaryLabel} P&L`} />}
-                  <Line type="monotone" dataKey="Expiry" stroke="var(--gold-dark, #8B6520)" dot={false} strokeWidth={2.75} name="Expiry P&L" />
-                </LineChart>
+                  <Line type="linear" dataKey="Expiry" stroke="var(--ink, #2E2C27)" dot={false} strokeWidth={2.6} activeDot={{ r: 4, fill: 'var(--ink, #2E2C27)', stroke: 'var(--surface, #FCFCFB)', strokeWidth: 2 }} name="Expiry P&L" />
+                </ComposedChart>
               </ResponsiveContainer>
               {upcomingEvents.length > 0 && expiry && (
                 <EventTimeline
