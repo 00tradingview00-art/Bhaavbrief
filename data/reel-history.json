@@ -39,7 +39,35 @@
     "instagram_id": "18114210562819133",
     "generated_at": "2026-09-19T17:09:03.951Z",
     "edition": null,
-    "posted_at": "2026-09-19T17:09:45.129Z"
+    "posted_at": "2026-09-19T17:09:45.129Z",
+    "insight_snapshots": [
+      {
+        "views": 41,
+        "reach": 35,
+        "ig_reels_avg_watch_time": 5162,
+        "ig_reels_video_view_total_time": 185848,
+        "likes": 2,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 2,
+        "fetched_at": "2026-09-21T03:09:18.247Z",
+        "age_hours": 33.992532777777775,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 41,
+      "reach": 35,
+      "ig_reels_avg_watch_time": 5162,
+      "ig_reels_video_view_total_time": 185848,
+      "likes": 2,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 2,
+      "fetched_at": "2026-09-21T03:09:18.247Z"
+    }
   },
   {
     "file": "news-20260918-pcr-tool-deeper-explainer",
@@ -470,6 +498,20 @@
         "fetched_at": "2026-09-15T04:15:01.271Z",
         "age_hours": 34.84728861111111,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 19,
+        "reach": 15,
+        "ig_reels_avg_watch_time": 3082,
+        "ig_reels_video_view_total_time": 49316,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-21T03:09:19.699Z",
+        "age_hours": 177.7524075,
+        "observation": "first_after_7d"
       }
     ],
     "insights": {
@@ -482,7 +524,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-15T04:15:01.271Z"
+      "fetched_at": "2026-09-21T03:09:19.699Z"
     }
   },
   {
