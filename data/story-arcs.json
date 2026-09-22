@@ -187,7 +187,7 @@
       "id": "middle-east-deescalation-crude-gold-divergence",
       "title": "Middle East De-escalation: Crude Falls While Gold Holds Firm",
       "startDate": "2026-09-17",
-      "status": "active",
+      "status": "closed",
       "editions": [
         108
       ],
@@ -201,7 +201,9 @@
         "Geopolitics",
         "Middle East",
         "De-escalation"
-      ]
+      ],
+      "endDate": "2026-09-22",
+      "outcome": "The Middle East de-escalation narrative concluded as crude oil declined from ₹9,709 to ₹8,951 while gold maintained support, reflecting mixed market conviction on the durability of diplomatic peace efforts before the story faded after five days without updates."
     }
   ]
 }
