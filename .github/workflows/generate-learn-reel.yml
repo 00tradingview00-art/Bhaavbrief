@@ -17,6 +17,8 @@ permissions:
 
 jobs:
   generate:
+    # Retired 22 September 2026. V3 evergreen owns educational Reel releases.
+    if: false
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"

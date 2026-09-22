@@ -1,11 +1,10 @@
-name: Generate Search-Led Evergreen Reel
+name: Generate V3 Context Reel
 
-# One demand-led evergreen explainer per day. Legacy learn/campaign generators
-# remain available for manual backfills but no longer control this daily slot.
+# One editorial context Reel at a time. Legacy generators are retired and cannot publish.
 
 on:
-  schedule:
-    - cron: '0 14 * * *'  # 7:30 PM IST daily — reuses the prior learn-reel slot
+  # No daily Reel quota. V3 ships only when an editorial context story has a
+  # real tension, a sourced mechanism and a useful decision-check.
   workflow_dispatch:
 
 concurrency:
@@ -44,9 +43,19 @@ jobs:
       - name: Install Edge TTS
         run: python3 -m pip install edge-tts
 
-      - name: Generate search-led V3 explainer
+      - name: Generate V3 context Reel
         id: reel
         run: node scripts/generate-v3-evergreen-reel.mjs
+
+      - name: Archive rendered V3 Reel
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-reel-${{ github.run_id }}
+          path: |
+            ${{ steps.reel.outputs.reel_file }}
+            ${{ steps.reel.outputs.reel_caption }}
+          if-no-files-found: error
+          retention-days: 90
 
       # Whichever branch ran is the only one with a real reel_file output —
       # the other step didn't run at all (its `if:` was false), so its
@@ -54,7 +63,6 @@ jobs:
       # composed conditional expression here.
       - name: Post reel to Instagram
         if: steps.reel.outcome == 'success' && steps.reel.outputs.reel_file != ''
-        continue-on-error: true
         env:
           REEL_FILE:              ${{ steps.reel.outputs.reel_file }}
           INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}

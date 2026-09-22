@@ -63,5 +63,5 @@ jobs:
       - name: KB freshness check
         run: node scripts/check-kb-freshness.mjs
 
-      - name: Reel V2 consistency check
-        run: node scripts/check-reel-v2-consistency.mjs
+      - name: Reel V3 release-contract check
+        run: node scripts/check-reel-v3-consistency.mjs

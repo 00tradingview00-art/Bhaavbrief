@@ -263,70 +263,12 @@ jobs:
           INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
         run: node scripts/post-instagram.js
 
-      - name: Install ffmpeg
-        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      # Reels deliberately removed 22 September 2026. The daily brief remains
+      # a site, email and image-post pipeline; V3 is the only Reel standard.
 
-      - name: Generate brief reel
-        id: reel
-        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
-        continue-on-error: true
-        env:
-          EDITION:                    ${{ steps.edition.outputs.number }}
-          ANTHROPIC_API_KEY:          ${{ secrets.ANTHROPIC_API_KEY }}
-          ELEVENLABS_API_KEY:         ${{ secrets.ELEVENLABS_API_KEY }}
-          ELEVENLABS_HINDI_VOICE_ID:  ${{ secrets.ELEVENLABS_HINDI_VOICE_ID }}
-          GENERATE_HINDI_REEL:        ${{ vars.GENERATE_HINDI_REEL || 'false' }}
-          KITE_API_KEY:               ${{ secrets.KITE_API_KEY }}
-          KITE_ACCESS_TOKEN:          ${{ secrets.KITE_ACCESS_TOKEN }}
-        run: |
-          node scripts/generate-brief-reel.mjs
-          PADDED=$(printf '%03d' ${{ steps.edition.outputs.number }})
-          echo "padded=$PADDED" >> $GITHUB_OUTPUT
-
-      - name: Post reel to Instagram
-        # steps.reel.outcome stays 'success' even on a low-impact day that
-        # the script intentionally skipped (exit 0, no file written — see
-        # scripts/lib/reelImpact.mjs) — so the thing that actually gates
-        # posting here is the file-existence check below, not this outcome
-        # check alone. Same pattern the adjacent Hindi step already uses.
-        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true' && steps.reel.outcome == 'success'
-        continue-on-error: true
-        env:
-          EDITION:                ${{ steps.edition.outputs.number }}
-          REEL_FILE:              public/reels/brief-edition-${{ steps.reel.outputs.padded }}.mp4
-          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: |
-          if [ -f "$REEL_FILE" ]; then
-            node scripts/post-reel-instagram.mjs
-          else
-            echo "Reel not found at $REEL_FILE (brief was not high-impact today) — skipping"
-          fi
-
-      - name: Post Hindi reel to Instagram
-        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true' && steps.reel.outcome == 'success' && env.GENERATE_HINDI_REEL == 'true'
-        continue-on-error: true
-        env:
-          GENERATE_HINDI_REEL:    ${{ vars.GENERATE_HINDI_REEL || 'false' }}
-          REEL_FILE:              public/reels/brief-edition-${{ steps.reel.outputs.padded }}-hi.mp4
-          INSTAGRAM_USER_ID:      ${{ secrets.INSTAGRAM_USER_ID }}
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: |
-          if [ -f "$REEL_FILE" ]; then
-            sleep 10
-            node scripts/post-reel-instagram.mjs
-          else
-            echo "Hindi reel not found at $REEL_FILE — skipping"
-          fi
-
-      # data/reel-history.json is written on the runner by fetch-reel-insights
-      # (insights, early in this job), generate-brief-reel (new entry), and
-      # post-reel-instagram (instagram_id/posted_at) — the latter two AFTER
-      # "Commit brief to main" pushed. data/follower-history.json is written
-      # once per run by that same early fetch-reel-insights step. Without
-      # this step every one of those writes is discarded with the runner,
-      # and fetch-reel-insights finds an empty history every day.
+      # Brief Reels were retired on 22 September 2026. This still persists
+      # settled historical insights and the account-level follower snapshot
+      # written by fetch-reel-insights earlier in this job.
       - name: Persist reel history
         continue-on-error: true
         run: |

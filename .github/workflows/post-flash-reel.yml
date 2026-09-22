@@ -1,10 +1,8 @@
 name: Post Flash Reel to Instagram
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'content/flash/**'
+  # Retired 22 September 2026. Flash articles still publish to the site, but
+  # legacy flash videos must not bypass the V3 editorial/review contract.
   workflow_dispatch:
 
 # Serialize — avoid two flash articles racing to post simultaneously
@@ -17,6 +15,9 @@ permissions:
 
 jobs:
   generate-and-post:
+    # Kept as a visible historical workflow rather than deleted, but cannot
+    # publish legacy Reels. A dedicated V3 flash format may replace it later.
+    if: false
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"

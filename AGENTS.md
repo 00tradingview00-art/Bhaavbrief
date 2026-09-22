@@ -1,17 +1,22 @@
 # BhaavBrief — repo guide for Codex
 
-## Reels creative ownership — 14 September 2026
+## Reels creative ownership — 22 September 2026
 
-Prabal assigned the reels reset to Codex. `docs/reels-v2-production-blueprint.md`
-is the single active creative plan; older calendars/research are historical inputs.
+Prabal assigned the reels reset to Codex. `docs/reels-v3-production-standard.md`
+is the single active creative and release plan; V2 and older pipelines are historical inputs.
 Scope is gold, silver, crude, copper, aluminium, options and practical learning.
-The first rotation has two posts per lane across 14 releases; silver is next after
-the existing gold draft. Do not let gold dominate or treat untested lanes as failures.
+There is no daily Reel quota. Publish only a sourced context narrative with a real
+tension, mechanism, affected audience, decision-check and non-advice boundary.
+Do not let gold dominate or treat untested lanes as failures.
 Use the actual metric coverage in `scripts/analyze-reel-history.mjs`; missing
-saves/shares are not zero. `scripts/render-reel-v2-reset.mjs` produces an audio-first
-review draft; it never posts or grants approval. Preserve existing posts/history.
-Do not silently substitute the legacy 35-second generator or redefine the strategy
-from a tiny pilot sample. Keep these facts synchronized with `CLAUDE.md`.
+saves/shares are not zero. V3 is the only permitted publishing format and uses
+the female Edge voice; preserve existing posts/history. Legacy Reel workflows
+and uploads are retired. Do not redefine the strategy from a tiny pilot sample.
+Keep these facts synchronized with `CLAUDE.md`.
+
+**Permanent V3 rule:** Reels explain what a market fact means and what a viewer
+can verify next; they never exist merely to fill a slot, repeat a generic
+definition, or tell a viewer to buy, sell, hold, enter, exit or predict a price.
 
 This is the OpenAI-agent (Codex) counterpart to `CLAUDE.md`. The facts below are shared with
 that file — read whichever one your tool loads, they should never diverge on anything factual.

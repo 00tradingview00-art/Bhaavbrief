@@ -86,6 +86,19 @@ const REEL_REL  = process.env.REEL_FILE ?? detectLatestReel()
 const REEL_PATH = join(ROOT, REEL_REL)
 const REEL_KEY  = historyKeyFor(REEL_REL)
 
+// Since 22 September 2026 V3 is the sole release format. Leaving the shared
+// uploader permissive would allow a forgotten manual workflow or local command
+// to publish a legacy brief/flash/V2 video after the migration. The escape hatch
+// is intentionally noisy and only for a founder-approved recovery.
+if (!REEL_REL.startsWith('public/reels/v3/') && process.env.ALLOW_LEGACY_REEL_POST !== '1') {
+  console.error(`❌  Legacy Reel posting is retired: ${REEL_REL}. Only public/reels/v3/* may publish. Set ALLOW_LEGACY_REEL_POST=1 for an explicit recovery.`)
+  process.exit(1)
+}
+if (/-(?:review|visual-review|draft)(?:-v2)?\.mp4$/i.test(REEL_REL)) {
+  console.error(`❌  Review artifact cannot be published: ${REEL_REL}`)
+  process.exit(1)
+}
+
 if (!existsSync(REEL_PATH)) {
   console.error(`❌  Reel not found: ${REEL_PATH}`)
   process.exit(1)
