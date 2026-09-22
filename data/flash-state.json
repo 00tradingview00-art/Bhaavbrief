@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-15T08:36:26.575Z",
-    "lastFlashPrice": 96,
+    "lastFlashAt": "2026-09-22T09:24:46.510Z",
+    "lastFlashPrice": 95.71,
     "lastRoundLevel": 96,
     "recentFlashIds": [
+      "2026-09-22-14-54-usd-inr-weakens-0-12-as-rupee-consolidates-inflow-gains",
       "2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows",
-      "2026-09-10-18-23-usd-inr-strengthens-0-38-on-sustained-fpi-inflows",
-      "2026-09-09-13-34-usd-inr-strengthens-0-33-amid-rupee-appreciation-moment"
+      "2026-09-10-18-23-usd-inr-strengthens-0-38-on-sustained-fpi-inflows"
     ]
   }
 }
