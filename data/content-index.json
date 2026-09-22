@@ -1,5 +1,24 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-111",
+    "href": "/briefs/edition-111",
+    "title": "Crude Crashes to $93 While MCX Rises — Something Doesn't Add Up",
+    "description": "WTI falls nearly 3% overnight yet MCX Crude climbs — the rupee and geopolitical lag are creating a visible split.",
+    "excerpt": "MCX Gold ₹153155 | Crude ₹8945 | USDINR ₹95.78 — Gold +0.04% | Crude +1.23% | Silver +0.15% Yesterday's Edge — Result: Edition #110 watched whether WTI would close below 94.05. Confirmed ✓, now at 93.",
+    "date": "2026-09-22T04:15:14.412Z",
+    "edition": "111",
+    "tags": [
+      "MCX Crude",
+      "Macro",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-21-mcx-close-22sep2026-natgas-leads-selloff",
     "href": "/articles/2026-09-21-mcx-close-22sep2026-natgas-leads-selloff",
