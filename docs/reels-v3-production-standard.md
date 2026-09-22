@@ -15,6 +15,11 @@ There is no daily Reel quota. A market fact alone is not a story. Publish only w
 the viewer gets useful context: what changed, why the obvious interpretation may be
 wrong, who feels the consequence, and the specific fact to check next.
 
+The operating cadence is three V3 releases each week—Monday, Wednesday and Friday
+at 7:30 PM IST. Use one current-context story, one durable mechanism and one
+options/contract-risk lesson where the slate supports it. A material event may
+replace a planned story, but never creates an extra quota post.
+
 ## Purpose
 
 Make one market mechanism understandable in one viewing. Each Reel earns attention

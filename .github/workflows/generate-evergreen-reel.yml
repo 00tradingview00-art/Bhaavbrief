@@ -3,8 +3,10 @@ name: Generate V3 Context Reel
 # One editorial context Reel at a time. Legacy generators are retired and cannot publish.
 
 on:
-  # No daily Reel quota. V3 ships only when an editorial context story has a
-  # real tension, a sourced mechanism and a useful decision-check.
+  # Three deliberate context releases a week — never a daily filler quota.
+  # 7:30 PM IST, Monday / Wednesday / Friday.
+  schedule:
+    - cron: '0 14 * * 1,3,5'
   workflow_dispatch:
 
 concurrency:
