@@ -22,6 +22,28 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-22-mcx-close-23sep2026-natgas-surge",
+    "href": "/articles/2026-09-22-mcx-close-23sep2026-natgas-surge",
+    "title": "MCX Close 23Sep: NatGas Surge Leads Rally",
+    "description": "MCX evening close: NatGas +3.55% to ₹282.6/mmBtu on weather data; Crude retreats -2.91%. COMEX gas +10.58% signals overnight strength.",
+    "excerpt": "NatGas dominated MCX today, closing at ₹282.6/mmBtu with a +3.55% gain — the session's clearest directional move. Weather forecast updates and US storage data sparked the rally, with the contract trad",
+    "date": "2026-09-22T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "NatGas",
+      "Crude Oil",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge",
     "href": "/articles/2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge",
     "title": "MCX Close 23 Sep: Silver Surge, Crude Plunges on Demand Fears",
