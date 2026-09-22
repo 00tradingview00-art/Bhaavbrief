@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-22-mcx-crude-falls-2-3-as-us-refinery-maintenance-erodes-demand",
+    "href": "/articles/2026-09-22-mcx-crude-falls-2-3-as-us-refinery-maintenance-erodes-demand",
+    "title": "MCX Crude Falls 2.3% as US Refinery Maintenance Erodes Demand",
+    "description": "MCX Crude drops to ₹8745/bbl on seasonal US refinery turnarounds. WTI weakness transmits at ₹95.8 per dollar. Indian import bill at risk if trend sustains.",
+    "excerpt": "WHAT HAPPENED MCX Crude has fallen ₹201/bbl to ₹8745 (a 2.30% decline), with WTI at $91.27 confirming the move. The trigger is not geopolitical — no active Hormuz, OPEC, or sanctions narrative is acti",
+    "date": "2026-09-22T14:54:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "WTI",
+      "Refinery Maintenance",
+      "Seasonal"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8745
+  },
+  {
     "type": "brief",
     "slug": "edition-111",
     "href": "/briefs/edition-111",
