@@ -1,5 +1,27 @@
 [
   {
+    "file": "brief-edition-111",
+    "topic": "Crude Crashes to $93 While MCX Rises — Something Doesn't Add Up",
+    "content_type": "macro_trend",
+    "mood": "VOLATILE",
+    "hook_caption": "Global oil crashes. Your petrol pump doesn't.",
+    "stat_line": "WTI $93.01 | MCX ₹8,945 — moving opposite.",
+    "payoff": "Oil's global price and local price are decoupling now.",
+    "beat1": "Crude fell $2.77 overnight. MCX crude rose ₹109 instead.",
+    "beat2": "Global demand fears hit oil. Rupee pricing lag trapped MCX higher.",
+    "beat3": "Watch if WTI holds above $93 — break below pressures MCX toward ₹8,800.",
+    "charts": {
+      "beat1": "two_bar",
+      "beat2": "none",
+      "beat3": "none"
+    },
+    "instagram_id": "17953376718027448",
+    "generated_at": "2026-09-22T04:22:06.280Z",
+    "edition": 111,
+    "hi_path": "public/reels/brief-edition-111-hi.mp4",
+    "posted_at": "2026-09-22T04:23:55.838Z"
+  },
+  {
     "file": "news-20260920-max-pain-tool",
     "topic": "Max Pain tool",
     "content_type": "explainer",
@@ -18,7 +40,35 @@
     "instagram_id": "18125396140651735",
     "generated_at": "2026-09-20T17:24:08.191Z",
     "edition": null,
-    "posted_at": "2026-09-20T17:24:49.160Z"
+    "posted_at": "2026-09-20T17:24:49.160Z",
+    "insight_snapshots": [
+      {
+        "views": 101,
+        "reach": 93,
+        "ig_reels_avg_watch_time": 1751,
+        "ig_reels_video_view_total_time": 171673,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-22T04:14:59.941Z",
+        "age_hours": 34.836328055555555,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 101,
+      "reach": 93,
+      "ig_reels_avg_watch_time": 1751,
+      "ig_reels_video_view_total_time": 171673,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-09-22T04:14:59.941Z"
+    }
   },
   {
     "file": "news-20260919-mcx-margin-calculation",
@@ -449,6 +499,20 @@
         "fetched_at": "2026-09-16T04:14:52.102Z",
         "age_hours": 33.00649305555555,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 4,
+        "reach": 4,
+        "ig_reels_avg_watch_time": 854,
+        "ig_reels_video_view_total_time": 3418,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-22T04:15:01.483Z",
+        "age_hours": 177.0090988888889,
+        "observation": "first_after_7d"
       }
     ],
     "insights": {
@@ -461,7 +525,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-16T04:14:52.102Z"
+      "fetched_at": "2026-09-22T04:15:01.483Z"
     }
   },
   {
@@ -2552,5 +2616,10 @@
     "file": "v3/what-is-mcx-001",
     "instagram_id": "17949644667050521",
     "posted_at": "2026-09-21T19:15:31.686Z"
+  },
+  {
+    "file": "brief-edition-111-hi",
+    "instagram_id": "18095806505428153",
+    "posted_at": "2026-09-22T04:24:52.495Z"
   }
 ]
