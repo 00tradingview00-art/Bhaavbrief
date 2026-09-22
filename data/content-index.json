@@ -22,6 +22,28 @@
   },
   {
     "type": "article",
+    "slug": "2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge",
+    "href": "/articles/2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge",
+    "title": "MCX Close 23 Sep: Silver Surge, Crude Plunges on Demand Fears",
+    "description": "23 Sep 2026: Silver leads MCX with strong gains; WTI crude crashes 5.43% on demand slowdown signals. COMEX silver +2.40%, Henry Hub gas +10.51%.",
+    "excerpt": "MCX session data remained inaccessible at close, yet COMEX benchmarks signal divergent momentum across the complex. COMEX silver led with a +2.40% rally to 67.41 $/oz, driven by safe-haven demand and ",
+    "date": "2026-09-22T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Silver",
+      "Crude Oil",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-09-22-mcx-crude-falls-2-3-as-us-refinery-maintenance-erodes-demand",
     "href": "/articles/2026-09-22-mcx-crude-falls-2-3-as-us-refinery-maintenance-erodes-demand",
     "title": "MCX Crude Falls 2.3% as US Refinery Maintenance Erodes Demand",
