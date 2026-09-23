@@ -1,6 +1,11 @@
 {
-  "next": 0,
-  "published": [],
+  "next": 1,
+  "published": [
+    {
+      "id": "gold-india-story-001",
+      "generated_at": "2026-09-23T18:18:59.013Z"
+    }
+  ],
   "retired_queue_history": [
     {
       "id": "what-is-mcx-001",
