@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 151169,
-    "silver": 236150,
-    "crude": 8816,
-    "copper": 1404,
-    "natgas": 283.9,
+    "gold": 151418,
+    "silver": 236085,
+    "crude": 8805,
+    "copper": 1406.9,
+    "natgas": 288.2,
     "usdinr": 95.74
   },
-  "lastChecked": "2026-09-23T14:18:49.070Z",
+  "lastChecked": "2026-09-23T17:58:56.114Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-09-11",
-    "value": "409"
+    "period": "2026-09-18",
+    "value": "164"
   },
   "lastGeoNews": {
     "mideast": "Brent crude oil rises above $100 a barrel as Middle East conflict intensifies - ",
