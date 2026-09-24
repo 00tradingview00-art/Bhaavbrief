@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
+    "href": "/articles/2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
+    "title": "MCX Nat Gas: +9.34% to ₹317 — storage draw signal",
+    "description": "MCX Natural Gas spiked 9.34% to ₹317/mmBtu. Henry Hub at $3.37 tracking EIA storage data.",
+    "excerpt": "TRIGGER MCX Natural Gas has surged 9.34% to ₹317.10/mmBtu as Henry Hub ($3.37) broke above the $3.25 pivot — likely triggered by a larger-than-seasonal EIA storage draw reported Thursday evening (8:30",
+    "date": "2026-09-24T23:11:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "EIA Storage"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 317
+  },
+  {
     "type": "article",
     "slug": "2026-09-24-mcx-crude-surges-9058-bbl-energy-complex-tightens",
     "href": "/articles/2026-09-24-mcx-crude-surges-9058-bbl-energy-complex-tightens",
