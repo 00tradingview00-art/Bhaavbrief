@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-09-24-mcx-crude-surges-9058-bbl-energy-complex-tightens",
+    "href": "/articles/2026-09-24-mcx-crude-surges-9058-bbl-energy-complex-tightens",
+    "title": "MCX Crude Surges ₹9058/bbl—Energy Complex Tightens",
+    "description": "MCX Crude +2.26% to ₹9058/bbl as energy sector rallies. WTI at $94.40 signals physical demand, not geopolitical shock. OMC fuel procurement costs rising.",
+    "excerpt": "WHAT HAPPENED MCX Crude has rallied ₹9058/bbl (+2.26%) while simultaneously MCX Natural Gas climbed +1.87% — a coordinated energy-sector move that rules out single-commodity liquidation and points ins",
+    "date": "2026-09-24T14:04:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "Energy",
+      "WTI",
+      "Intraday"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9058
+  },
+  {
     "type": "brief",
     "slug": "edition-113",
     "href": "/briefs/edition-113",
