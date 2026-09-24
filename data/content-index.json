@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-113",
+    "href": "/briefs/edition-113",
+    "title": "Natural Gas Surges 1.84% as Brent's Worst Day in Months Goes Unnoticed",
+    "description": "Henry Hub's 5.66% spike is driving MCX NatGas higher even as crude's geopolitical premium continues its quiet unwind.",
+    "excerpt": "MCX Gold ₹150910 | Crude ₹8782 | USDINR ₹95.84 — Gold -0.26% | Crude -0.49% | Silver -0.53% Yesterday's Edge — Result: Edition #112 watched whether WTI would close below 89.11. Rejected ✗, now at 91.4",
+    "date": "2026-09-24T04:15:06.481Z",
+    "edition": "113",
+    "tags": [
+      "MCX NatGas",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX NatGas",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-09-23-mcx-close-24sep2026-energy-outperforms",
     "href": "/articles/2026-09-23-mcx-close-24sep2026-energy-outperforms",
