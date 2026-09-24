@@ -441,16 +441,22 @@ function EventTimeline({
   )
 }
 
-// Last 10 trading days of ATM IV, same convention as OptionChain.tsx's
-// IVHistoryChart — real gaps (missed cron snapshot days) are left as gaps,
-// never interpolated.
+const IV_HISTORY_RANGES = [10, 30, 90] as const
+type IVHistoryRange = typeof IV_HISTORY_RANGES[number]
+
+// Trading days of ATM IV for a selectable window (10/30/90), real gaps
+// (missed cron snapshot days) are left as gaps, never interpolated. The
+// title never claims more history than actually exists yet (D-07 convention,
+// same as app/tools/mcx-iv-rank/page.tsx's chartTitle logic) — selecting 90D
+// before 90 days of data have accumulated shows the real count instead.
 function IVHistorySparkline({ history, color }: { history: { date: string; iv: number }[]; color: string }) {
   // Stable per-instance id — `color` is now a `var(--x, #hex)` CSS token
   // string, not a plain hex, so deriving the gradient id from it (as this
   // used to) left spaces/parens/commas in the id, breaking the url(#...)
   // fragment reference and silently falling back to a solid black fill.
   const gradId = `grad-strategy-iv-${useId()}`
-  const recent = history.slice(-10)
+  const [range, setRange] = useState<IVHistoryRange>(10)
+  const recent = history.slice(-range)
   if (recent.length < 2) {
     return (
       <div style={{ fontSize: 13, color: 'var(--ink-2, #3A3830)', marginBottom: 16 }}>
@@ -462,11 +468,32 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
   const ivValues = recent.map(d => d.iv)
   const minIV = Math.min(...ivValues)
   const maxIV = Math.max(...ivValues)
+  const windowLabel = recent.length < range ? `${recent.length}-Day` : `${range}-Day`
 
   return (
     <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 14px', marginBottom: 16 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2, #3A3830)', marginBottom: 6 }}>
-        ATM IV — 10-Day
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2, #3A3830)' }}>
+          ATM IV — {windowLabel}
+        </div>
+        <div role="tablist" aria-label="IV history range" style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 5, overflow: 'hidden' }}>
+          {IV_HISTORY_RANGES.map(r => (
+            <button
+              key={r}
+              type="button"
+              role="tab"
+              aria-selected={range === r}
+              onClick={() => setRange(r)}
+              style={{
+                fontSize: 11, fontWeight: 600, padding: '3px 8px', border: 'none', cursor: 'pointer',
+                background: range === r ? color : 'transparent',
+                color: range === r ? '#fff' : 'var(--ink-2, #3A3830)',
+              }}
+            >
+              {r}D
+            </button>
+          ))}
+        </div>
       </div>
       <div style={{ height: 110 }}>
         <ResponsiveContainer width="100%" height="100%">
