@@ -1,12 +1,25 @@
 {
-  "generatedAt": "2026-09-23T03:21:57.868Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-09-24T03:11:19.904Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [],
+    "learnIssues": [
+      {
+        "field": "MCX Gold lot size",
+        "currentValue": "Gold Mini contract with a 100g lot size",
+        "correctValue": "Contract specs show standard Gold lot size is 1 kg (1,000 grams); no Gold Mini contract specifications provided in authoritative data",
+        "location": "FAQ Schema - 'What is the MCX Gold lot size in 2026?'"
+      },
+      {
+        "field": "MCX Crude trading hours",
+        "currentValue": "MCX Gold trades until 11:30 PM IST",
+        "correctValue": "11:30 PM IST mentioned is outdated; MCX extended trading hours end at 11:55 PM IST as of 2026",
+        "location": "FAQ Schema - 'What is the difference between NSE Gold Futures and MCX Gold?'"
+      }
+    ],
     "investIssues": [],
     "circularImpact": []
   }
