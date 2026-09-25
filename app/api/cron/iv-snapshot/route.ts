@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { redisCommand, todayIST } from '@/lib/redis'
+import { CORE_INSTRUMENTS, type CoreInstrument } from '@/lib/terminalData'
+
+// A composite value only gets written once at least this many of the 5 core
+// instruments produced a real ivix/volPremium today — avoids a "composite"
+// that's really just 1-2 commodities on a bad-data day.
+const MIN_COMPOSITE_CONTRIBUTORS = 3
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -17,6 +23,13 @@ export const dynamic  = 'force-dynamic'
  * own function-log retention for this project turned out to hold only a
  * couple of minutes of history, nowhere near enough to debug a multi-day
  * freeze after the fact.
+ *
+ * Also persists a 5-commodity composite — `iv-hist:COMPOSITE` /
+ * `volpremium-hist:COMPOSITE` — of the full-chain `ivix`/`volPremium` values
+ * `getOptionsChain()` already computes (a different metric from the
+ * single-strike ATM IV above; this is the number the free Market Pulse panel
+ * displays live, now given a real history). Not yet consumed anywhere —
+ * building up ~1-2 weeks of real data before the UI reads it.
  */
 
 type ATMSource = 'live' | 'stale-traded'
@@ -101,6 +114,8 @@ export async function GET(req: Request) {
 
   const date = todayIST()
   const results: Record<string, number | string> = {}
+  const compositeIvixValues: number[] = []
+  const compositeVolPremiumValues: number[] = []
 
   async function writeMeta(instrument: string, reason: string): Promise<void> {
     await redisCommand('hset', `iv-hist-meta:${instrument}`, date, reason).catch(() => {})
@@ -108,7 +123,17 @@ export async function GET(req: Request) {
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
-      const { chain, futurePrice } = await getOptionsChain(instrument)
+      const { chain, futurePrice, ivix, volPremium } = await getOptionsChain(instrument)
+
+      // Full-chain ivix/volPremium succeed or fail independently of the
+      // ATM-tier read below — accumulate before any of that logic's early
+      // continues, so a core instrument's contribution isn't silently
+      // dropped on a day its (unrelated) ATM-tier read fails.
+      if (CORE_INSTRUMENTS.includes(instrument as CoreInstrument)) {
+        if (ivix != null) compositeIvixValues.push(ivix)
+        if (volPremium != null) compositeVolPremiumValues.push(volPremium)
+      }
+
       if (!(futurePrice > 0)) {
         const carried = await mostRecentIV(instrument)
         if (carried != null) {
@@ -154,6 +179,22 @@ export async function GET(req: Request) {
         await writeMeta(instrument, `error: ${(e as Error).message}`)
       }
     }
+  }
+
+  if (compositeIvixValues.length >= MIN_COMPOSITE_CONTRIBUTORS) {
+    const compositeIvix = compositeIvixValues.reduce((s, v) => s + v, 0) / compositeIvixValues.length
+    await redisCommand('hset', 'iv-hist:COMPOSITE', date, String(compositeIvix)).catch(() => {})
+    results.COMPOSITE_IVIX = `${compositeIvix.toFixed(2)} (${compositeIvixValues.length}/${CORE_INSTRUMENTS.length} contributors)`
+  } else {
+    results.COMPOSITE_IVIX = `skipped (only ${compositeIvixValues.length}/${CORE_INSTRUMENTS.length} contributors, need ${MIN_COMPOSITE_CONTRIBUTORS})`
+  }
+
+  if (compositeVolPremiumValues.length >= MIN_COMPOSITE_CONTRIBUTORS) {
+    const compositeVolPremium = compositeVolPremiumValues.reduce((s, v) => s + v, 0) / compositeVolPremiumValues.length
+    await redisCommand('hset', 'volpremium-hist:COMPOSITE', date, String(compositeVolPremium)).catch(() => {})
+    results.COMPOSITE_VOL_PREMIUM = `${compositeVolPremium.toFixed(2)} (${compositeVolPremiumValues.length}/${CORE_INSTRUMENTS.length} contributors)`
+  } else {
+    results.COMPOSITE_VOL_PREMIUM = `skipped (only ${compositeVolPremiumValues.length}/${CORE_INSTRUMENTS.length} contributors, need ${MIN_COMPOSITE_CONTRIBUTORS})`
   }
 
   console.log('[cron/iv-snapshot]', date, results)
