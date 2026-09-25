@@ -119,4 +119,49 @@ describe('getCorrelationMatrix', () => {
     expect(result.sampleSize).toBe(0)
     result.matrix.flat().forEach(v => expect(v).toBeNull())
   })
+
+  it('priorMatrix is null when there is not enough history for a second full window', () => {
+    const days = ['2026-09-01', '2026-09-02', '2026-09-03', '2026-09-04']
+    mockReaddir.mockReturnValue(days.map(d => `${d}.json`) as unknown as ReturnType<typeof fs.readdirSync>)
+    mockReadFile.mockReturnValue(JSON.stringify({
+      instruments: {
+        MCX_GOLD: { price: 100 }, MCX_SILVER: { price: 50 }, MCX_CRUDE: { price: 70 },
+        MCX_COPPER: { price: 8 }, MCX_NATGAS: { price: 3 }, USDINR: { price: 88 },
+      },
+    }))
+    const result = getCorrelationMatrix(20)
+    expect(result.priorMatrix).toBeNull()
+    expect(result.priorSampleSize).toBe(0)
+  })
+
+  it('priorMatrix reflects the window immediately before the current one, not the current one again', () => {
+    // 5 days -> with days=2: current window = last 3 closes (2 returns),
+    // prior window = the 3 closes before that (2 returns). Gold and copper
+    // move oppositely in the prior window and together in the current one —
+    // values verified independently against the Pearson formula.
+    const days = ['2026-09-01', '2026-09-02', '2026-09-03', '2026-09-04', '2026-09-05']
+    mockReaddir.mockReturnValue(days.map(d => `${d}.json`) as unknown as ReturnType<typeof fs.readdirSync>)
+    const goldPrices   = [100, 112, 90, 101, 132]
+    const copperPrices = [8, 7, 9.5, 8.6, 11.9]
+    let i = 0
+    mockReadFile.mockImplementation(() => {
+      const price = goldPrices[i]
+      const copper = copperPrices[i]
+      i++
+      return JSON.stringify({
+        instruments: {
+          MCX_GOLD: { price }, MCX_SILVER: { price: 50 }, MCX_CRUDE: { price: 70 },
+          MCX_COPPER: { price: copper }, MCX_NATGAS: { price: 3 }, USDINR: { price: 88 },
+        },
+      })
+    })
+    const result = getCorrelationMatrix(2)
+    expect(result.sampleSize).toBe(2)
+    expect(result.priorSampleSize).toBe(2)
+    expect(result.priorMatrix).not.toBeNull()
+    // gold/copper: positively correlated in the current window, inversely
+    // correlated in the prior window — the whole point of tracking both.
+    expect(result.matrix[0][3]).toBeCloseTo(1, 6)
+    expect((result.priorMatrix as (number | null)[][])[0][3]).toBeCloseTo(-1, 6)
+  })
 })

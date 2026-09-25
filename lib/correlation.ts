@@ -94,32 +94,49 @@ export interface CorrelationMatrix {
   labels:     string[]
   matrix:     (number | null)[][]
   sampleSize: number // number of paired daily returns actually used
+  // The immediately preceding `days`-day window's matrix, same shape as
+  // `matrix` — lets the caller show whether a relationship is strengthening,
+  // weakening, or unchanged rather than only a single current-window value.
+  // null entries where there wasn't enough prior history to compute one.
+  priorMatrix:     (number | null)[][] | null
+  priorSampleSize: number
 }
 
-/**
- * Builds the 6×6 correlation matrix over the most recent `days` trading
- * days of aligned daily returns. sampleSize tells the caller (and should be
- * shown in the UI) exactly how many observations back each number — with
- * only ~86 days of history on disk today, a 20-day window is meaningful,
- * but this is written to degrade honestly (fewer real observations, not a
- * silently-padded window) as the window size approaches what's on disk.
- */
-export function getCorrelationMatrix(days = 20): CorrelationMatrix {
-  const { series } = readAlignedCloses()
-  const windowed: Record<CorrelationKey, number[]> = { gold: [], silver: [], crude: [], copper: [], natgas: [], usdinr: [] }
-  for (const key of CORRELATION_KEYS) {
-    const closes = series[key].slice(-(days + 1)) // +1 close to get `days` returns
-    windowed[key] = dailyLogReturns(closes)
-  }
-
+function buildMatrix(windowed: Record<CorrelationKey, number[]>): { matrix: (number | null)[][]; sampleSize: number } {
   const sampleSize = windowed.gold.length
-  const labels = CORRELATION_KEYS.map(k => CORRELATION_LABELS[k])
   const matrix: (number | null)[][] = CORRELATION_KEYS.map(rowKey =>
     CORRELATION_KEYS.map(colKey => {
       if (rowKey === colKey) return sampleSize > 0 ? 1 : null
       return pearsonCorrelation(windowed[rowKey], windowed[colKey])
     }),
   )
+  return { matrix, sampleSize }
+}
 
-  return { labels, matrix, sampleSize }
+/**
+ * Builds the 6×6 correlation matrix over the most recent `days` trading
+ * days of aligned daily returns, plus the same matrix for the `days`-day
+ * window immediately before it. sampleSize tells the caller (and should be
+ * shown in the UI) exactly how many observations back each number — with
+ * only ~86 days of history on disk today, a 20-day window is meaningful,
+ * but this is written to degrade honestly (fewer real observations, not a
+ * silently-padded window) as the window size approaches what's on disk —
+ * priorMatrix is simply null once there isn't enough history for a second
+ * full window, rather than a partial/misleading one.
+ */
+export function getCorrelationMatrix(days = 20): CorrelationMatrix {
+  const { series } = readAlignedCloses()
+  const windowed:      Record<CorrelationKey, number[]> = { gold: [], silver: [], crude: [], copper: [], natgas: [], usdinr: [] }
+  const priorWindowed: Record<CorrelationKey, number[]> = { gold: [], silver: [], crude: [], copper: [], natgas: [], usdinr: [] }
+  for (const key of CORRELATION_KEYS) {
+    windowed[key]      = dailyLogReturns(series[key].slice(-(days + 1)))               // most recent `days` returns
+    priorWindowed[key] = dailyLogReturns(series[key].slice(-(2 * days + 1), -days))    // the `days` returns before that
+  }
+
+  const labels = CORRELATION_KEYS.map(k => CORRELATION_LABELS[k])
+  const { matrix, sampleSize } = buildMatrix(windowed)
+  const { matrix: priorMatrixRaw, sampleSize: priorSampleSize } = buildMatrix(priorWindowed)
+  const priorMatrix = priorSampleSize >= 2 ? priorMatrixRaw : null
+
+  return { labels, matrix, sampleSize, priorMatrix, priorSampleSize: priorMatrix ? priorSampleSize : 0 }
 }
