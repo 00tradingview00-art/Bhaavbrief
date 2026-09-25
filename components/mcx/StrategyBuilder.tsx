@@ -574,6 +574,11 @@ export default function StrategyBuilder({
   const marginCacheRef = useRef<Record<string, { total: number; span: number | null; exposure: number | null }>>({})
   const [events,     setEvents]     = useState<EventMapEntry[]>([])
   const [targetDate, setTargetDate] = useState<string | null>(null)  // null = "now"
+  // null = use live IV. Lets a trader ask "what if IV moves by this date"
+  // instead of the Today/As-of line always assuming IV stays exactly where
+  // it is now — reuses computePayoff's existing liveIV override param, no
+  // new pricing logic.
+  const [ivShockPct, setIvShockPct] = useState<number | null>(null)
   // Cross-instrument/cross-expiry chain data for My Strategies P&L, keyed by
   // `${instrument}:${expiry}`. It's a ref (not state) so writes don't cause a
   // re-render on their own — chainVersion is bumped alongside every write so
@@ -904,11 +909,17 @@ export default function StrategyBuilder({
   // event marker on the timeline below re-anchors it to that event's date.
   const targetDaysOut = targetDate ? Math.max(0, (new Date(targetDate).getTime() - nowMs) / 86400000) : 0
   const targetT        = targetDate ? Math.max(0, T - targetDaysOut / 365) : T
+  // The Today/As-of line's IV: the live reading unless the trader has typed
+  // a scenario override above (ivShockPct).
+  const scenarioIV = (ivShockPct != null && ivShockPct > 0) ? ivShockPct : currentIV
+  // Recompute (rather than reuse `payoff`) whenever either scenario control
+  // is active — a target date, an IV shock, or both together.
+  const ivShocked = ivShockPct != null && ivShockPct > 0
   const secondaryPayoff: PayoffPoint[] = useMemo(
-    () => (targetDate && legs.length > 0 && futurePrice > 0
-      ? computePayoff(legs, fRange, lotSize, targetT, r, currentIV > 0 ? currentIV : undefined)
+    () => ((targetDate || ivShocked) && legs.length > 0 && futurePrice > 0
+      ? computePayoff(legs, fRange, lotSize, targetT, r, scenarioIV > 0 ? scenarioIV : undefined)
       : payoff),
-    [targetDate, legs, fRange, lotSize, targetT, r, currentIV, payoff, futurePrice],
+    [targetDate, ivShocked, legs, fRange, lotSize, targetT, r, scenarioIV, payoff, futurePrice],
   )
   const secondaryLabel = targetDate
     ? `As of ${new Date(targetDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
@@ -1621,6 +1632,31 @@ export default function StrategyBuilder({
                   <Line type="linear" dataKey="Expiry" stroke="var(--ink, #2E2C27)" dot={false} strokeWidth={2.6} activeDot={{ r: 4, fill: 'var(--ink, #2E2C27)', stroke: 'var(--surface, #FCFCFB)', strokeWidth: 2 }} name="Expiry P&L" />
                 </ComposedChart>
               </ResponsiveContainer>
+              {currentIV > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--ink-2, #3A3830)', margin: '2px 0 10px' }}>
+                  <label htmlFor="iv-shock-input">
+                    {secondaryLabel} IV scenario — live is {currentIV.toFixed(1)}%:
+                  </label>
+                  <input
+                    id="iv-shock-input"
+                    type="number" min={0.1} step={0.5}
+                    placeholder={currentIV.toFixed(1)}
+                    value={ivShockPct ?? ''}
+                    onChange={e => {
+                      const v = parseFloat(e.target.value)
+                      setIvShockPct(Number.isFinite(v) && v > 0 ? v : null)
+                    }}
+                    style={{ width: 68, padding: '3px 6px', border: '1px solid var(--border, #E5E1D7)', borderRadius: 4, fontSize: 12 }}
+                  />
+                  <span>%</span>
+                  {ivShocked && (
+                    <button type="button" onClick={() => setIvShockPct(null)}
+                      style={{ border: 'none', background: 'none', color: 'var(--gold-dark, #8B6520)', fontSize: 12, cursor: 'pointer', padding: 0 }}>
+                      Reset to live
+                    </button>
+                  )}
+                </div>
+              )}
               {upcomingEvents.length > 0 && expiry && (
                 <EventTimeline
                   events={upcomingEvents}
