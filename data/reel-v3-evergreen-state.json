@@ -1,9 +1,13 @@
 {
-  "next": 0,
+  "next": 1,
   "published": [
     {
       "id": "gold-india-story-001",
       "generated_at": "2026-09-23T18:18:59.013Z"
+    },
+    {
+      "id": "gold-labels-002",
+      "generated_at": "2026-09-25T18:19:20.787Z"
     }
   ],
   "retired_queue_history": [
