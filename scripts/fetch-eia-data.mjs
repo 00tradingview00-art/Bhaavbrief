@@ -6,6 +6,14 @@
  * request path (unlike lib/eia.ts, which fetches on every request; that
  * pattern is not repeated here).
  *
+ * Also writes recent_values — the trailing HISTORY_ROWS weekly changes —
+ * so scripts/compute-event-impact.mjs can condition historical reactions on
+ * whether a release was above/below its own trailing average (see
+ * scripts/lib/eventSurprise.mjs). This is deliberately NOT third-party
+ * consensus data — data/event-map.json's header note prohibits scraping
+ * that (ToS risk, product decision) — it's the EIA's own official history,
+ * same source prior_field already uses.
+ *
  * Usage: node scripts/fetch-eia-data.mjs
  * Env:   EIA_API_KEY
  */
@@ -24,6 +32,9 @@ if (fs.existsSync(envFile)) {
 
 const EVENT_MAP_PATH = path.join(process.cwd(), 'data/event-map.json')
 const API_KEY = process.env.EIA_API_KEY
+// Matches compute-event-impact.mjs's OCCURRENCES_WANTED — one trailing
+// change value per historical occurrence it pairs a price reaction against.
+const HISTORY_ROWS = 24
 
 if (!API_KEY) {
   console.error('EIA_API_KEY not set — aborting')
@@ -36,6 +47,16 @@ async function fetchSeries(url, params) {
   if (!res.ok) throw new Error(`EIA API error ${res.status} for ${url}`)
   const json = await res.json()
   return json?.response?.data ?? []
+}
+
+// Turns a desc-sorted EIA rows series into HISTORY_ROWS week-over-week
+// changes (rows[0]-rows[1], rows[1]-rows[2], ...), most recent first.
+function weeklyChanges(rows, roundFn) {
+  const changes = []
+  for (let i = 0; i < rows.length - 1 && changes.length < HISTORY_ROWS; i++) {
+    changes.push({ period: rows[i].period, value: roundFn(Number(rows[i].value) - Number(rows[i + 1].value)) })
+  }
+  return changes
 }
 
 async function fetchNaturalGasStorage() {
@@ -51,14 +72,13 @@ async function fetchNaturalGasStorage() {
     'sort[0][column]': 'period',
     'sort[0][direction]': 'desc',
     offset: '0',
-    length: '2',
+    length: String(HISTORY_ROWS + 1),
   })
   if (rows.length < 2) throw new Error('Not enough natural gas storage rows returned')
-  const change = Number(rows[0].value) - Number(rows[1].value)
+  const recentValues = weeklyChanges(rows, v => Math.round(v))
   return {
-    value: Math.round(change),
-    unit: 'Bcf',
-    as_of_period: `week ending ${rows[0].period}`,
+    latest: { value: recentValues[0].value, unit: 'Bcf', as_of_period: `week ending ${recentValues[0].period}` },
+    recentValues,
   }
 }
 
@@ -73,14 +93,13 @@ async function fetchPetroleumStatus() {
     'sort[0][column]': 'period',
     'sort[0][direction]': 'desc',
     offset: '0',
-    length: '2',
+    length: String(HISTORY_ROWS + 1),
   })
   if (rows.length < 2) throw new Error('Not enough petroleum stock rows returned')
-  const changeKb = Number(rows[0].value) - Number(rows[1].value)
+  const recentValues = weeklyChanges(rows, v => Math.round((v / 1000) * 10) / 10)
   return {
-    value: Math.round((changeKb / 1000) * 10) / 10,
-    unit: 'million barrels',
-    as_of_period: `week ending ${rows[0].period}`,
+    latest: { value: recentValues[0].value, unit: 'million barrels', as_of_period: `week ending ${recentValues[0].period}` },
+    recentValues,
   }
 }
 
@@ -91,17 +110,19 @@ let updated = 0
 const natgas = await fetchNaturalGasStorage()
 const natgasEvent = data.events.find(e => e.id === 'eia_natural_gas_storage')
 if (natgasEvent) {
-  natgasEvent.prior_field = { ...natgas, source: 'eia_api', as_of: now }
+  natgasEvent.prior_field = { ...natgas.latest, source: 'eia_api', as_of: now }
+  natgasEvent.recent_values = natgas.recentValues
   updated++
-  console.log(`eia_natural_gas_storage: ${natgas.value >= 0 ? '+' : ''}${natgas.value} ${natgas.unit} (${natgas.as_of_period})`)
+  console.log(`eia_natural_gas_storage: ${natgas.latest.value >= 0 ? '+' : ''}${natgas.latest.value} ${natgas.latest.unit} (${natgas.latest.as_of_period}), ${natgas.recentValues.length} trailing values stored`)
 }
 
 const petroleum = await fetchPetroleumStatus()
 const petroleumEvent = data.events.find(e => e.id === 'eia_petroleum_status_report')
 if (petroleumEvent) {
-  petroleumEvent.prior_field = { ...petroleum, source: 'eia_api', as_of: now }
+  petroleumEvent.prior_field = { ...petroleum.latest, source: 'eia_api', as_of: now }
+  petroleumEvent.recent_values = petroleum.recentValues
   updated++
-  console.log(`eia_petroleum_status_report: ${petroleum.value >= 0 ? '+' : ''}${petroleum.value} ${petroleum.unit} (${petroleum.as_of_period})`)
+  console.log(`eia_petroleum_status_report: ${petroleum.latest.value >= 0 ? '+' : ''}${petroleum.latest.value} ${petroleum.latest.unit} (${petroleum.latest.as_of_period}), ${petroleum.recentValues.length} trailing values stored`)
 }
 
 if (updated > 0) {

@@ -10,11 +10,26 @@
 import fs from 'fs'
 import path from 'path'
 
+export interface SurpriseBucket {
+  avgAbsMovePct: number
+  maxAbsMovePct: number
+  sampleSize:    number
+}
+
+export interface SurpriseSplit {
+  baselineAvg: number
+  aboveAvg:    SurpriseBucket | null
+  belowAvg:    SurpriseBucket | null
+}
+
 export interface EventImpactEntry {
   avgAbsMovePct: number
   maxAbsMovePct: number
   sampleSize:    number
   computedAt:    string
+  // Present only for events with a real historical release series (the two
+  // EIA-sourced events today) — see scripts/lib/eventSurprise.mjs.
+  surpriseSplit?: SurpriseSplit
 }
 
 type EventImpactStats = Record<string, Record<string, EventImpactEntry>>

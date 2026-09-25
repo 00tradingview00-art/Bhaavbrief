@@ -28,6 +28,13 @@ export interface EventMapEntry {
   prior_field:            EventPriorField
   description_educational: string
   research_href?:         string
+  // Trailing weekly release values, most-recent-first — only populated for
+  // events with a real official-source history (currently the two
+  // EIA-sourced events, via scripts/fetch-eia-data.mjs). Lets
+  // scripts/compute-event-impact.mjs condition historical reactions on
+  // whether a release was above/below its own trailing average, without
+  // scraping third-party consensus estimates (see this file's header note).
+  recent_values?:         { period: string; value: number }[]
 }
 
 // Maps event-map.json's affected_contracts keys to the URL slugs used by

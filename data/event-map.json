@@ -1,5 +1,5 @@
 {
-  "_note": "Scheduled recurring macro/data-release events mapped to MCX contracts. Complementary to impact-map.json (ad-hoc geopolitical narrative KB, loaded into brief-writing prompts) — this file is NOT fed into brief generation, it is a display-layer data source for /calendar, TapeMovers, and UpcomingEventsForCommodity only. consensus_field is reserved/unused on every entry — never scrape consensus estimates from third-party calendars (ToS risk, product decision). Rule-based weekly entries (cadence_type: 'rule_based') have next_release_utc kept current by scripts/refresh-event-calendar.mjs. Irregular-cadence entries (cadence_type: 'manual') have next_release_utc manually seeded and need periodic manual refresh against each source's official calendar — treat any date more than ~6 weeks stale as suspect. MCX expiry entries (cadence_type: 'mcx_expiry') derive from data/kite-instruments.json and go stale every contract rollover — refresh alongside that file.",
+  "_note": "Scheduled recurring macro/data-release events mapped to MCX contracts. Complementary to impact-map.json (ad-hoc geopolitical narrative KB, loaded into brief-writing prompts) — this file is NOT fed into brief generation, it is a display-layer data source for /calendar, TapeMovers, and UpcomingEventsForCommodity only. consensus_field is reserved/unused on every entry — never scrape consensus estimates from third-party calendars (ToS risk, product decision). recent_values (currently only on the two EIA-sourced events, written by scripts/fetch-eia-data.mjs) is a trailing history of the release's own official-source values, most-recent-first — used by scripts/compute-event-impact.mjs to condition historical reactions on whether a release was above/below its own trailing average, WITHOUT touching the consensus-scraping prohibition above; it is not a forecast of any kind. Rule-based weekly entries (cadence_type: 'rule_based') have next_release_utc kept current by scripts/refresh-event-calendar.mjs. Irregular-cadence entries (cadence_type: 'manual') have next_release_utc manually seeded and need periodic manual refresh against each source's official calendar — treat any date more than ~6 weeks stale as suspect. MCX expiry entries (cadence_type: 'mcx_expiry') derive from data/kite-instruments.json and go stale every contract rollover — refresh alongside that file.",
   "events": [
     {
       "id": "eia_natural_gas_storage",
@@ -14,13 +14,111 @@
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": 44,
+        "value": 53,
         "unit": "Bcf",
-        "as_of_period": "week ending 2026-09-11",
+        "as_of_period": "week ending 2026-09-18",
         "source": "eia_api",
-        "as_of": "2026-09-21"
+        "as_of": "2026-09-25"
       },
-      "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR."
+      "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR.",
+      "recent_values": [
+        {
+          "period": "2026-09-18",
+          "value": 53
+        },
+        {
+          "period": "2026-09-11",
+          "value": 44
+        },
+        {
+          "period": "2026-09-04",
+          "value": 40
+        },
+        {
+          "period": "2026-08-28",
+          "value": 30
+        },
+        {
+          "period": "2026-08-21",
+          "value": 15
+        },
+        {
+          "period": "2026-08-14",
+          "value": 16
+        },
+        {
+          "period": "2026-08-07",
+          "value": 36
+        },
+        {
+          "period": "2026-07-31",
+          "value": 33
+        },
+        {
+          "period": "2026-07-24",
+          "value": 28
+        },
+        {
+          "period": "2026-07-17",
+          "value": 32
+        },
+        {
+          "period": "2026-07-10",
+          "value": 41
+        },
+        {
+          "period": "2026-07-03",
+          "value": 61
+        },
+        {
+          "period": "2026-06-26",
+          "value": 87
+        },
+        {
+          "period": "2026-06-19",
+          "value": 76
+        },
+        {
+          "period": "2026-06-12",
+          "value": 73
+        },
+        {
+          "period": "2026-06-05",
+          "value": 108
+        },
+        {
+          "period": "2026-05-29",
+          "value": 95
+        },
+        {
+          "period": "2026-05-22",
+          "value": 92
+        },
+        {
+          "period": "2026-05-15",
+          "value": 101
+        },
+        {
+          "period": "2026-05-08",
+          "value": 85
+        },
+        {
+          "period": "2026-05-01",
+          "value": 63
+        },
+        {
+          "period": "2026-04-24",
+          "value": 79
+        },
+        {
+          "period": "2026-04-17",
+          "value": 103
+        },
+        {
+          "period": "2026-04-10",
+          "value": 60
+        }
+      ]
     },
     {
       "id": "eia_petroleum_status_report",
@@ -35,13 +133,111 @@
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": -1,
+        "value": 2.6,
         "unit": "million barrels",
-        "as_of_period": "week ending 2026-09-11",
+        "as_of_period": "week ending 2026-09-18",
         "source": "eia_api",
-        "as_of": "2026-09-21"
+        "as_of": "2026-09-25"
       },
-      "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate."
+      "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate.",
+      "recent_values": [
+        {
+          "period": "2026-09-18",
+          "value": 2.6
+        },
+        {
+          "period": "2026-09-11",
+          "value": -1
+        },
+        {
+          "period": "2026-09-04",
+          "value": -1.6
+        },
+        {
+          "period": "2026-08-28",
+          "value": -7.6
+        },
+        {
+          "period": "2026-08-21",
+          "value": -3.6
+        },
+        {
+          "period": "2026-08-14",
+          "value": -0.9
+        },
+        {
+          "period": "2026-08-07",
+          "value": 11.3
+        },
+        {
+          "period": "2026-07-31",
+          "value": -0.4
+        },
+        {
+          "period": "2026-07-24",
+          "value": -11
+        },
+        {
+          "period": "2026-07-17",
+          "value": -3
+        },
+        {
+          "period": "2026-07-10",
+          "value": -4.7
+        },
+        {
+          "period": "2026-07-03",
+          "value": -3.2
+        },
+        {
+          "period": "2026-06-26",
+          "value": -9.3
+        },
+        {
+          "period": "2026-06-19",
+          "value": -15.1
+        },
+        {
+          "period": "2026-06-12",
+          "value": -17.2
+        },
+        {
+          "period": "2026-06-05",
+          "value": -15.2
+        },
+        {
+          "period": "2026-05-29",
+          "value": -16
+        },
+        {
+          "period": "2026-05-22",
+          "value": -12.4
+        },
+        {
+          "period": "2026-05-15",
+          "value": -17.8
+        },
+        {
+          "period": "2026-05-08",
+          "value": -12.9
+        },
+        {
+          "period": "2026-05-01",
+          "value": -7.5
+        },
+        {
+          "period": "2026-04-24",
+          "value": -13.4
+        },
+        {
+          "period": "2026-04-17",
+          "value": -2.2
+        },
+        {
+          "period": "2026-04-10",
+          "value": -5.1
+        }
+      ]
     },
     {
       "id": "api_crude_inventories",

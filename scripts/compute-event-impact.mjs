@@ -23,6 +23,7 @@
 
 import fs from 'node:fs'
 import path from 'node:path'
+import { splitMovesBySurprise, pairOccurrencesWithValues } from './lib/eventSurprise.mjs'
 
 const envFile = path.join(process.cwd(), '.env.local')
 if (fs.existsSync(envFile)) {
@@ -148,9 +149,8 @@ for (const event of ruleBasedEvents) {
     const series = seriesByCommodity[commodity]
     if (!series) continue
 
-    const moves = occurrences
-      .map(d => reactionMove(series, d))
-      .filter((m) => m != null)
+    const rawMoves = occurrences.map(d => reactionMove(series, d))
+    const moves = rawMoves.filter((m) => m != null)
 
     if (moves.length === 0) continue
 
@@ -160,6 +160,18 @@ for (const event of ruleBasedEvents) {
       sampleSize: moves.length,
       computedAt: now.toISOString(),
     }
+
+    // Surprise-conditioned split, only for events with a real historical
+    // release series (currently the two EIA-sourced events — see
+    // scripts/fetch-eia-data.mjs). occurrences[] and event.recent_values[]
+    // are both ordered most-recent-first on the same weekly cadence.
+    if (event.recent_values?.length > 0) {
+      const { pairedValues, pairedMoves } = pairOccurrencesWithValues(rawMoves, event.recent_values)
+      const split = splitMovesBySurprise(pairedValues, pairedMoves)
+      if (split && (split.aboveAvg || split.belowAvg)) {
+        stats[event.id][commodity].surpriseSplit = split
+      }
+    }
   }
 }
 
@@ -168,5 +180,9 @@ console.log(`\nWrote ${STATS_PATH}`)
 for (const [eventId, byCommodity] of Object.entries(stats)) {
   for (const [commodity, s] of Object.entries(byCommodity)) {
     console.log(`  ${eventId} / ${commodity}: avg ±${s.avgAbsMovePct}%, max ±${s.maxAbsMovePct}%, n=${s.sampleSize}`)
+    if (s.surpriseSplit) {
+      const { aboveAvg, belowAvg, baselineAvg } = s.surpriseSplit
+      console.log(`    surprise split (baseline ${baselineAvg}): above avg ${aboveAvg ? `±${aboveAvg.avgAbsMovePct}% n=${aboveAvg.sampleSize}` : 'n/a'}, below avg ${belowAvg ? `±${belowAvg.avgAbsMovePct}% n=${belowAvg.sampleSize}` : 'n/a'}`)
+    }
   }
 }

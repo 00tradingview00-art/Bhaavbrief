@@ -9,10 +9,23 @@ import {
   COMMODITY_LABELS,
 } from '@/lib/eventMapTypes'
 
+type SurpriseBucket = {
+  avgAbsMovePct: number
+  maxAbsMovePct: number
+  sampleSize:    number
+}
+
+type SurpriseSplit = {
+  baselineAvg: number
+  aboveAvg:    SurpriseBucket | null
+  belowAvg:    SurpriseBucket | null
+}
+
 type EventImpactEntry = {
   avgAbsMovePct: number
   maxAbsMovePct: number
   sampleSize:    number
+  surpriseSplit?: SurpriseSplit
 }
 
 const TIER_TONE: Record<string, PillTone> = {
@@ -55,7 +68,11 @@ function EventCard({
   const tierTone = TIER_TONE[event.impact_tier] ?? 'neutral'
   const prior = formatPrior(event)
 
-  // Build per-commodity historical reaction summary
+  // Build per-commodity historical reaction summary. surpriseLine is a
+  // secondary, honest-labeling addition: not market consensus (this repo
+  // never scrapes that — see data/event-map.json's header note), just
+  // whether the release itself came in above or below its own trailing
+  // average, and whether that correlated with a bigger price reaction.
   const impactLines = event.affected_contracts
     .map(c => {
       const s = eventImpact[c]
@@ -64,9 +81,17 @@ function EventCard({
       const lotNote = tv
         ? ` · ₹${tv}/lot per ₹1 move`
         : ''
-      return `${COMMODITY_LABELS[c] ?? c}: avg ±${s.avgAbsMovePct.toFixed(2)}% · max ±${s.maxAbsMovePct.toFixed(2)}% (${s.sampleSize} events)${lotNote}`
+      const main = `${COMMODITY_LABELS[c] ?? c}: avg ±${s.avgAbsMovePct.toFixed(2)}% · max ±${s.maxAbsMovePct.toFixed(2)}% (${s.sampleSize} events)${lotNote}`
+      const split = s.surpriseSplit
+      const surpriseLine = split && (split.aboveAvg || split.belowAvg)
+        ? [
+            split.aboveAvg ? `above its trailing avg: ±${split.aboveAvg.avgAbsMovePct.toFixed(2)}% (n=${split.aboveAvg.sampleSize})` : null,
+            split.belowAvg ? `below: ±${split.belowAvg.avgAbsMovePct.toFixed(2)}% (n=${split.belowAvg.sampleSize})` : null,
+          ].filter(Boolean).join(' · ')
+        : null
+      return { main, surpriseLine }
     })
-    .filter(Boolean) as string[]
+    .filter((l): l is { main: string; surpriseLine: string | null } => l !== null)
 
   return (
     <div
@@ -109,8 +134,15 @@ function EventCard({
             Historical reaction
           </div>
           {impactLines.map((line, i) => (
-            <div key={i} style={{ fontFamily: 'var(--font-sans)', fontSize: 10.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>
-              {line}
+            <div key={i} style={{ marginBottom: line.surpriseLine ? 3 : 0 }}>
+              <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10.5, color: 'var(--ink-2)', lineHeight: 1.6 }}>
+                {line.main}
+              </div>
+              {line.surpriseLine && (
+                <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-3)', lineHeight: 1.6, paddingLeft: 8 }}>
+                  When release was {line.surpriseLine}
+                </div>
+              )}
             </div>
           ))}
         </div>
