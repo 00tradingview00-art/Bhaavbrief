@@ -49,15 +49,39 @@ function drawVisual(c, plan, reel, t) {
   }
   box(c,90,1495,900,112,'rgba(8,11,15,.92)','#EAB64E88'); txt(c,reel.mechanism,540,1562,23,'#F8F5EE',600)
 }
+function drawStage(c, eyebrow, copy, y, accent = '#F0B44C', size = 36) {
+  box(c,70,y,940,470,'rgba(8,11,15,.96)','#ffffff38')
+  c.fillStyle = `${accent}22`; c.fillRect(70,y,10,470)
+  txt(c,eyebrow,540,y+70,18,accent,800)
+  wrapTxt(c,copy,540,y+235,820,size,'#F8F5EE',800,Math.round(size*1.18))
+}
+function drawSteps(c, reel, t) {
+  const reveal = Math.floor(Math.max(0, Math.min(2.99, (t - 8.3) / .85)))
+  reel.steps.forEach((step, index) => {
+    const y = 720 + index * 155
+    const active = index <= reveal
+    c.globalAlpha = active ? 1 : .22
+    box(c,140,y,800,104,active ? 'rgba(234,182,78,.18)' : 'rgba(8,11,15,.82)', active ? '#EAB64E' : '#ffffff34')
+    txt(c,`0${index + 1}`,205,y+64,24,active ? '#F0B44C' : '#D7D1C7',800)
+    txt(c,step,565,y+64,29,'#F8F5EE',800)
+  })
+  c.globalAlpha = 1
+}
 try {
   for (let i=0;i<FPS*DURATION;i++) {
-    const t=i/FPS, c=createCanvas(W,H), x=c.getContext('2d'); x.drawImage(image,0,0,W,H)
-    x.fillStyle='rgba(5,8,12,.65)'; x.fillRect(0,760,W,1160); txt(x,'BHAAVBRIEF',72,94,26,'#F8F5EE',800,'left'); x.fillStyle='#D79A35'; x.fillRect(72,112,124,5)
+    const t=i/FPS, c=createCanvas(W,H), x=c.getContext('2d'); x.fillStyle='#080B10'; x.fillRect(0,0,W,H)
+    // A presenter anchors the opening only. The explanation itself takes over
+    // as a full-screen motion graphic instead of leaving a talking head behind.
+    if (t < 2.8) { x.drawImage(image,-18,0,W+36,940); const shade=x.createLinearGradient(0,0,0,1000); shade.addColorStop(0,'rgba(5,8,12,.12)'); shade.addColorStop(1,'rgba(5,8,12,.9)'); x.fillStyle=shade; x.fillRect(0,0,W,1040) }
+    else { const g=x.createLinearGradient(0,0,W,H); g.addColorStop(0,'#111a27'); g.addColorStop(.55,'#080B10'); g.addColorStop(1,'#17120a'); x.fillStyle=g; x.fillRect(0,0,W,H); x.strokeStyle='rgba(234,182,78,.10)'; x.lineWidth=2; for(let y=220;y<1650;y+=112){x.beginPath();x.moveTo(70,y);x.lineTo(1010,y-55);x.stroke()} }
+    txt(x,'BHAAVBRIEF',72,94,26,'#F8F5EE',800,'left'); x.fillStyle='#D79A35'; x.fillRect(72,112,124,5)
     box(x,710,58,300,52,'rgba(10,13,17,.64)'); txt(x,'MARKETS, EXPLAINED',860,92,17,'#F8F5EE',700)
-    if (t<3.4) { x.globalAlpha=show(t,0,3.4); box(x,70,920,940,285,'rgba(8,11,15,.92)'); txt(x,reel.hook,540,1032,48,'#F0B44C',800); txt(x,reel.hook_detail,540,1100,25,'#D7D1C7',500); x.globalAlpha=1 }
-    if (t>=3 && t<10.8) { x.globalAlpha=show(t,3,10.8); drawVisual(x,plan,reel,t); x.globalAlpha=1 }
-    if (t>=10.4) { x.globalAlpha=show(t,10.4,15); box(x,70,1430,940,190,'rgba(8,11,15,.94)','#EAB64E88'); wrapTxt(x,reel.conclusion.toUpperCase(),540,1498,820,30,'#F0B44C',800,38); wrapTxt(x,reel.decision_check ?? 'The comparison to remember.',540,1568,800,18,'#D7D1C7',500,23); x.globalAlpha=1 }
-    box(x,72,165,500,42,'rgba(8,11,15,.82)'); txt(x,`SOURCE: ${reel.source}`,94,193,16,'#D7D1C7',700,'left'); txt(x,'Educational, not investment advice.',1008,193,16,'#D7D1C7',500,'right')
+    if (t<2.8) { x.globalAlpha=show(t,0,2.8); drawStage(x,'THE TENSION',reel.hook,650,'#F0B44C',48); txt(x,reel.hook_detail,540,1030,24,'#D7D1C7',500); x.globalAlpha=1 }
+    if (t>=2.4 && t<5.9) { x.globalAlpha=show(t,2.4,5.9); drawStage(x,'THE MISSING LINK',reel.mechanism,650); x.globalAlpha=1 }
+    if (t>=5.5 && t<8.8) { x.globalAlpha=show(t,5.5,8.8); drawStage(x,'WHY THIS MATTERS',reel.stakes,650,'#EAB64E',34); x.globalAlpha=1 }
+    if (t>=8.3 && t<11.9) { x.globalAlpha=show(t,8.3,11.9); txt(x,'TRACE THE MECHANISM',540,620,20,'#F0B44C',800); drawSteps(x,reel,t); x.globalAlpha=1 }
+    if (t>=11.5) { x.globalAlpha=show(t,11.5,15); drawStage(x,'CHECK THIS NEXT',reel.decision_check,650,'#F0B44C',34); wrapTxt(x,reel.conclusion.toUpperCase(),540,1090,820,27,'#F0B44C',800,34); x.globalAlpha=1 }
+    box(x,72,1710,500,42,'rgba(8,11,15,.82)'); txt(x,`SOURCE: ${reel.source}`,94,1738,16,'#D7D1C7',700,'left'); txt(x,'Educational, not investment advice.',1008,1738,16,'#D7D1C7',500,'right')
     writeFileSync(join(frames,`f-${String(i).padStart(4,'0')}.jpg`),c.toBuffer('image/jpeg',88))
   }
   execFileSync('python3',['-m','edge_tts','--voice','en-IN-NeerjaNeural','--text',reel.voiceover,'--write-media',voice])
