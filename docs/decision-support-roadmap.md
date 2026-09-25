@@ -1,8 +1,11 @@
 # Decision-Support Roadmap
 
-**Status:** all items shipped except Calendar surprise-conditioning, which stays blocked on a
-data-sourcing decision (no forecast/consensus feed exists in this codebase yet — see that
-section). Each item shipped as its own plan and its own commit, per this repo's "one
+**Status:** all items shipped. Calendar surprise-conditioning was initially blocked on a
+data-sourcing decision (no forecast/consensus feed exists in this codebase, and
+`data/event-map.json`'s own header note explicitly prohibits scraping third-party consensus
+calendars — ToS risk, product decision) — resolved by conditioning on each release's own
+trailing history instead of external consensus, scoped to the two EIA-sourced events that
+actually have one. Each item shipped as its own plan and its own commit, per this repo's "one
 defect/feature per commit" convention (CLAUDE.md, Working conventions).
 
 ## Premise
@@ -123,12 +126,20 @@ dense tables; don't implement those literally.
   the option chain's iVIX tooltip and the per-commodity options page's intro line —
   progressive disclosure, no new visible chrome.
 
-### Calendar: no surprise-conditioned reactions
+### ✅ Done (`f5c0de59`) — Calendar: no surprise-conditioned reactions
 - `lib/eventMapTypes.ts:18-31` — `consensus_field` is always null; only a single `prior_field`
-  exists. `scripts/compute-event-impact.mjs` computes one blended `avgAbsMovePct`/`maxAbsMovePct`
-  regardless of whether a release beat or missed expectations.
-- **Blocked on a data source decision**, not just code — there's no forecast/consensus feed to
-  condition on yet. This item needs a sourcing plan before an implementation plan.
+  exists. `scripts/compute-event-impact.mjs` computed one blended `avgAbsMovePct`/`maxAbsMovePct`
+  regardless of whether a release beat or missed anything.
+- Was genuinely blocked on a sourcing decision, not just code: `data/event-map.json`'s own
+  header note explicitly prohibits scraping third-party consensus calendars (ToS risk, product
+  decision), so real market consensus was never an option without a licensed data vendor.
+- Shipped: condition on the release's own trailing history instead of external consensus.
+  `scripts/fetch-eia-data.mjs` now stores a trailing 24-week series (`recent_values`) for the two
+  EIA-sourced events (Natural Gas Storage, Petroleum Status) via the same official EIA API
+  already in use. `scripts/lib/eventSurprise.mjs` splits historical price reactions into
+  "release above its own trailing average" vs "below" buckets; `CalendarFilterBar.tsx` shows
+  this as a secondary line, neutrally labeled. Scoped to just the two EIA events — other events
+  (FOMC, OPEC+, CPI) have no API enumerating past releases at all and are unaffected.
 
 ### ✅ Done (`9b1493c4`) — Commodity "What Moves X" driver lists are fully static
 - `data/market-structure.json`'s `priceDrivers` arrays, rendered via `loadMarketStructure()` at
@@ -180,6 +191,6 @@ dense tables; don't implement those literally.
 
 ## Sequencing
 
-Tier 1 → Tier 2 → Tier 3: all shipped, one commit per item, in that order. Calendar's
-surprise-conditioning stays blocked on a data-sourcing decision — pick it up once there's an
-actual forecast/consensus feed to condition on.
+Tier 1 → Tier 2 → Tier 3: all shipped, one commit per item, in that order, including Calendar's
+surprise-conditioning (resolved via a self-referential trailing-average baseline rather than
+external consensus — see that section). Nothing left open from this roadmap.
