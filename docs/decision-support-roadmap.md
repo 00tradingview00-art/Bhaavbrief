@@ -194,3 +194,56 @@ dense tables; don't implement those literally.
 Tier 1 → Tier 2 → Tier 3: all shipped, one commit per item, in that order, including Calendar's
 surprise-conditioning (resolved via a self-referential trailing-average baseline rather than
 external consensus — see that section). Nothing left open from this roadmap.
+
+## Calendar coverage audit (2026-09-26)
+
+A follow-up ask, separate from the roadmap above: audit every calendar event (India + global)
+for actual relevance to the commodities BhaavBrief covers, and set up an ongoing weekly
+mechanism so a newly-relevant event doesn't get missed. Full research is in the approved plan
+this was built from; summary of what shipped:
+
+**Removed** (`381dea99`) — `usda_wasde`, `mpob_palm_oil_stocks`: neither maps to any MCX
+contract this product tracks (`affected_contracts: []` on both, confirming they were never
+wired to anything) — legacy leftovers from a broader plan `project-founding-principles`'
+"Agri is v2.0" line later scoped out.
+
+**Upgraded** (`b01d8570`) — `cftc_cot_report` now has `recent_values` (and surprise-conditioning)
+for the 5 commodities that actually trade on a CFTC-jurisdiction exchange: gold, silver, copper
+(COMEX), crude (NYMEX WTI-Physical), natgas (NYMEX). Required migrating `recent_values` from a
+flat array to an object keyed by commodity (`lib/eventMapTypes.ts`, with matching changes in
+`compute-event-impact.mjs`, `fetch-eia-data.mjs`, and `validate-event-map.mjs`'s schema check) —
+COT covers 9 commodities per event with genuinely different series, unlike EIA's one-event-one-
+commodity shape. zinc/aluminium/lead/nickel positioning is tracked by the LME's own COTR (a UK
+exchange, not CFTC), which requires a licensed distributor — same access constraint as LME
+warehouse data below, not built.
+
+**Added** (`8a8c7d0d`, `53843611`, `6a08c236`):
+- `us_pce_price_index` — the Fed's own preferred inflation gauge, absent despite mattering more
+  than CPI for rate-path expectations. Seeded with BEA's real published next release
+  (2026-09-30), confirmed live against bea.gov.
+- `akshaya_tritiya`, `dhanteras`, `diwali` — India festival gold-demand dates, named directly in
+  `project-founding-principles`' own vision doc but never actually tracked. Not data releases —
+  lunar-calendar (tithi) dates from the published Hindu panchang, seeded with real confirmed
+  2026/2027 dates.
+- `us_ism_manufacturing_pmi` — completes the industrial-demand PMI trio alongside China's
+  NBS/Caixin readings. No automated actuals feed: ISM's own real-time data isn't freely
+  API-accessible, and FRED republishes it but this session didn't confirm same-day latency —
+  noted honestly in the entry rather than built on an unconfirmed assumption.
+
+**Researched, not built** (free/official-only scope, confirmed this session):
+- OPEC Monthly Oil Market Report — free PDF from opec.org, no structured API (PDF-parsing
+  engineering, a bigger lift than the API-based fixes above).
+- IEA Oil Market Report — subscription service; only one edition a year is free.
+- LME warehouse stock data and LME's own COTR — real-time/structured access goes through
+  licensed data distributors, not a free public API.
+- India gold import data (DGCIS) — confirmed official government source, but a query-based web
+  portal, not a REST/JSON API; scraping it would be a materially bigger, more fragile lift than
+  the EIA/CFTC-style fixes. Revisit if DGCIS ever exposes a real API.
+
+**Weekly new-event discovery** — a scheduled Claude Code cloud routine,
+[BhaavBrief Calendar Watch](https://claude.ai/code/routines/trig_013PwyfpKjLVvWwnme34rWtz)
+(Wednesdays ~9 AM IST, deliberately offset from the existing Monday data-fetch pipeline), reads
+`data/event-map.json` live, researches for new/changed events, and emails a digest to
+`00tradingview00@gmail.com` via the Gmail connector — it never edits the repo. Distinct from
+`.github/workflows/refresh-event-impact.yml`'s existing staleness check, which only catches
+date-drift on events already tracked, not new event types.
