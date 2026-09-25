@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
+import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
 import { formatRemaining, formatIST } from '@/lib/formatTime'
 import { useIVHistory } from '@/lib/useIVHistory'
 import { useIsPro } from '@/lib/useIsPro'
@@ -759,7 +760,14 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
           <PCRPill pcr={data.pcr}
             info="Put-Call Ratio — how options positioning is leaning across puts and calls." />
           {data.ivix    != null && <Pill label="iVIX"       value={data.ivix}       color="#6941c6"
-            info="Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices." />}
+            info={(() => {
+              const base = "Implied volatility index — the market's expected annualized volatility, derived from at-the-money option prices."
+              const dte  = daysToExpiry(data.expiry)
+              const move = expectedMoveToExpiry(data.futurePrice, data.ivix, dte)
+              return move != null
+                ? `${base} At today's iVIX, the market is pricing roughly a ±${fmtINR(move)} move by the ${data.expiry} expiry (${dte}d away), 1 standard deviation.`
+                : base
+            })()} />}
           {data.aav['20d'] != null && <Pill label="AAV 20d" value={data.aav['20d']} color="#0369a1" onClick={() => setShowAAV(v => !v)} expand={showAAV}
             info="Annualized Actual Volatility — BhaavBrief's estimate of how much this commodity has actually moved recently. It can differ by a few points from the exchange's own published figure." />}
           {data.volPremium != null && <Pill label="Vol Premium" value={vpStr}        color={vpColor}
