@@ -79,9 +79,9 @@ const PRO_WORKFLOWS: {
     href: '/basis',
   },
   {
-    title: 'Pro Research',
-    description: 'Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours.',
-    chips: ['Macro event analysis', 'MCX implications', 'Published within hours'],
+    title: 'The Weekly Catalyst',
+    description: 'Every Saturday: one macro, policy, or fundamental shift that can reprice MCX next week—plus the evidence and scenario map.',
+    chips: ['Saturday 9:30 AM', 'One clear thesis', 'MCX scenario map'],
     href: '/research',
   },
 ]

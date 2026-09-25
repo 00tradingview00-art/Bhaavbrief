@@ -16,6 +16,7 @@ export interface ResearchMeta {
   published:   boolean
   tags:        string[]
   edition:     string
+  coverImage:  string | null
   readingMinutes: number
   displayDate: string
 }
@@ -49,6 +50,7 @@ export function getAllResearch(): ResearchMeta[] {
           published:   data.published   === true,
           tags:        data.tags        ?? [],
           edition:     data.edition     ?? 'macro-research',
+          coverImage:  data.coverImage  ?? null,
           readingMinutes,
           displayDate: data.date
             ? new Date(data.date).toLocaleDateString('en-IN', {
@@ -95,6 +97,7 @@ export function getResearchBySlug(slug: string): { meta: ResearchMeta; content: 
     published:   true,
     tags:        data.tags        ?? [],
     edition:     data.edition     ?? 'macro-research',
+    coverImage:  data.coverImage  ?? null,
     readingMinutes,
     displayDate: data.date
       ? new Date(data.date).toLocaleDateString('en-IN', {

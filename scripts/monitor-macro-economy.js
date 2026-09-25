@@ -405,7 +405,7 @@ async function main() {
         console.log(`    Skipped (no direct MCX commodity angle): ${event.title.slice(0, 60)}`)
         continue
       }
-      maybeQueueResearchEvent(event, body)
+      // Pro Research is a weekly Saturday synthesis; this remains a Flash item.
       const coverImage = await fetchPexelsImage(aiTitle, 'macro')
       const fname = saveFlashArticle(event, aiTitle, body, coverImage)
       if (fname) {
@@ -415,17 +415,6 @@ async function main() {
     } catch (e) {
       console.warn(`    ⚠️  Failed: ${e.message}`)
     }
-  }
-
-  // Research-event tagging runs against every new event this run detected,
-  // not just the one flash-generated above (flash gen is capped at 1/run for
-  // cost reasons, but missing a real FOMC/RBI-MPC headline because a
-  // different story happened to be first in the queue would defeat the
-  // point) — falls back to the raw headline as context when no flash
-  // breakdown was generated for that particular item.
-  for (const event of newEvents) {
-    if (flashGenerated.has(event.id)) continue // already handled above, with real context
-    maybeQueueResearchEvent(event, null)
   }
 
   const now = new Date().toISOString()

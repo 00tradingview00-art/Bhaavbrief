@@ -1493,15 +1493,9 @@ async function main() {
   const startTime = Date.now()
   console.log(`\nBhaavBrief Intelligence Engine — ${new Date().toISOString()}\n`)
 
-  // Runs before the holiday/pre-market sleep checks below — a macro event
-  // (FOMC, RBI MPC) can fire at any time and doesn't wait for MCX pre-market
-  // open, unlike the regular flash/hawk-scan article throttle this function
-  // otherwise gates on.
-  try {
-    await processResearchQueue()
-  } catch (e) {
-    console.error('[research] Queue processing failed:', e.message)
-  }
+  // Pro Research is intentionally a single Saturday Weekly Catalyst, not a
+  // second real-time feed. Macro developments remain Flash items and are
+  // synthesized after Friday's close by generate-weekly-catalyst.mjs.
 
   const today = todayIST()
   if (isTradingHoliday(today)) {

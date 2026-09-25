@@ -106,12 +106,7 @@ jobs:
           }
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           git add content/articles/ content/events/ data/content-index.json
-          # Pro Research: published/rejected articles from this run's queue
-          # processing, plus the queue file itself (processed:true markers) —
-          # without this, generated research would never actually get
-          # committed, same class of bug as content/events/ not being staged.
           [ -d content/research ] && git add content/research/ || true
-          git add data/pending-research-events.json 2>/dev/null || true
           git add data/gate-log.jsonl 2>/dev/null || true
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
           git add data/market-snapshot.json data/story-arcs.json data/site-stats.json data/market-structure.json 2>/dev/null || true

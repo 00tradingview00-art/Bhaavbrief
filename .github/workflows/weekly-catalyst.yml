@@ -1,0 +1,51 @@
+name: Publish Pro Weekly Catalyst
+
+on:
+  schedule:
+    - cron: '0 4 * * 6' # Saturday 9:30 AM IST, after Friday's MCX close
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-catalyst
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+      - run: npm ci
+      - name: Generate Friday-close Weekly Catalyst
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: node scripts/generate-weekly-catalyst.mjs
+      - name: Validate and publish
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          FILE="content/research/$(TZ=Asia/Kolkata date +%Y-%m-%d)-weekly-catalyst.mdx"
+          node scripts/validate-research.mjs "$FILE"
+          sed -i 's/^published: false$/published: true/' "$FILE"
+          node scripts/build-content-index.js
+      - name: Commit published Catalyst
+        run: |
+          git config user.name "BhaavBrief Research"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/research/ data/content-index.json data/gate-log.jsonl
+          git diff --staged --quiet && exit 0
+          git commit -m "feat(research): Weekly Catalyst $(TZ=Asia/Kolkata date +%Y-%m-%d)"
+          git push origin main

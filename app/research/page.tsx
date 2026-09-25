@@ -8,7 +8,7 @@ export const revalidate = 900
 
 export const metadata: Metadata = {
   title:       'Pro Research — BhaavBrief',
-  description: 'Macro event analysis for MCX traders — FOMC, Jackson Hole, EIA, RBI MPC — with commodity-specific implications and options positioning notes.',
+  description: 'Saturday Pro Weekly Catalyst: the macro, policy, and fundamental shift most likely to reprice MCX in the week ahead.',
   alternates: { canonical: 'https://bhaavbrief.in/research' },
 }
 
@@ -22,7 +22,7 @@ export default function ResearchIndexPage() {
         '@type':     'CollectionPage',
         '@id':       'https://bhaavbrief.in/research',
         name:        'Pro Research',
-        description: 'Macro event analysis for MCX traders — FOMC, Jackson Hole, EIA, RBI MPC — with commodity-specific implications and options positioning notes.',
+        description: 'A Saturday analysis of the economic, policy, or fundamental catalyst most relevant for MCX next week.',
         url:         'https://bhaavbrief.in/research',
       },
       {
@@ -47,8 +47,7 @@ export default function ResearchIndexPage() {
         Pro Research
       </h1>
       <p style={{ fontSize: '0.88rem', color: 'var(--ink-3)', marginBottom: '2rem' }}>
-        Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications
-        and options positioning notes.
+        Every Saturday: one evidence-led catalyst, the week&apos;s material shifts, and the data that can reprice MCX next.
       </p>
 
       {articles.length === 0 ? (
@@ -59,7 +58,9 @@ export default function ResearchIndexPage() {
         <div style={{ display: 'grid', gap: '0.9rem' }}>
           {articles.map(a => (
             <Link key={a.slug} href={`/research/${a.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-              <Card padding="md" hoverLift>
+              <Card padding="md" hoverLift style={{ display: 'flex', gap: '1rem', alignItems: 'stretch' }}>
+                {a.coverImage && <img src={a.coverImage} alt="" style={{ width: 132, minHeight: 106, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />}
+                <div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.6rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>{a.displayDate}</span>
                   {a.premium && (
@@ -79,6 +80,7 @@ export default function ResearchIndexPage() {
                 <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', margin: 0, lineHeight: 1.5 }}>
                   {a.description}
                 </p>
+                </div>
               </Card>
             </Link>
           ))}

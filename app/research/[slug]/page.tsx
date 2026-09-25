@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type:        'article',
       publishedTime: meta.date,
       tags:        meta.tags,
+      images:      meta.coverImage ? [{ url: meta.coverImage }] : undefined,
     },
     twitter: {
       card:        'summary',
@@ -165,6 +166,10 @@ export default async function ResearchSlugPage({ params }: Props) {
             {meta.description}
           </p>
         </header>
+
+        {meta.coverImage && (
+          <img src={meta.coverImage} alt="" style={{ width: '100%', aspectRatio: '16 / 7', objectFit: 'cover', borderRadius: 10, marginBottom: '1.5rem' }} />
+        )}
 
         {isPro ? (
           <div className="pro-content" style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75 }}>
