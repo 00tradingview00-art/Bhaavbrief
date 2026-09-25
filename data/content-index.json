@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-25-mcx-commodity-arbitrage-india",
+    "href": "/articles/2026-09-25-mcx-commodity-arbitrage-india",
+    "title": "How MCX Commodity Arbitrage Works in India — Inter-Exchange and Cash-Futures",
+    "description": "Learn how MCX commodity arbitrage works in India — the exact inter-exchange and cash-futures mechanisms, Indian price drivers, and key data triggers.",
+    "excerpt": "Understanding how MCX commodity arbitrage works in India requires knowing two distinct pathways: inter-exchange arbitrage between MCX and global benchmarks like COMEX or LME, and cash-futures arbitrag",
+    "date": "2026-09-25",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
     "href": "/articles/2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
