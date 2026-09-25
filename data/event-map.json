@@ -587,6 +587,72 @@
       "description_educational": "RBI's repo-rate decision and INR-management stance directly move USD/INR — since every MCX contract is INR-denominated, a rupee move around an MPC decision shows up mechanically across all 9 commodities even without any change in the underlying USD/international price. High-priority for an India-focused platform: this is one of the few events that moves every MCX contract at once, not just one commodity's benchmark."
     },
     {
+      "id": "akshaya_tritiya",
+      "name": "Akshaya Tritiya (India gold-buying festival)",
+      "source_url": "https://www.drikpanchang.com/festivals/akshaya-tritiya/akshaya-tritiya-date-time.html",
+      "frequency": "annual",
+      "cadence_type": "manual",
+      "next_release_utc": "2027-05-09T00:00:00Z",
+      "affected_contracts": [
+        "gold",
+        "silver"
+      ],
+      "impact_tier": "context",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-09-26"
+      },
+      "description_educational": "One of India's two dedicated gold-buying auspicious days (alongside Dhanteras) — widely considered the most propitious day of the year to purchase gold, driving a real seasonal demand pulse independent of price level. A lunar-calendar (tithi) date, not a fixed calendar date, so it shifts year to year — this date is drawn from the published Hindu panchang, not fabricated or estimated."
+    },
+    {
+      "id": "dhanteras",
+      "name": "Dhanteras (India gold-buying festival)",
+      "source_url": "https://www.calendarlabs.com/holidays/india/dhanteras.php",
+      "frequency": "annual",
+      "cadence_type": "manual",
+      "next_release_utc": "2026-11-06T00:00:00Z",
+      "affected_contracts": [
+        "gold",
+        "silver"
+      ],
+      "impact_tier": "context",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-09-26"
+      },
+      "description_educational": "India's other dedicated gold-buying auspicious day, two days before Diwali — the single biggest concentrated retail gold-demand day of the year, when jewellers see the year's highest single-day footfall. A lunar-calendar (tithi) date, drawn from the published Hindu panchang."
+    },
+    {
+      "id": "diwali",
+      "name": "Diwali (India festival gifting/demand season)",
+      "source_url": "https://en.wikipedia.org/wiki/Diwali",
+      "frequency": "annual",
+      "cadence_type": "manual",
+      "next_release_utc": "2026-11-08T00:00:00Z",
+      "affected_contracts": [
+        "gold",
+        "silver"
+      ],
+      "impact_tier": "context",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": null,
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-09-26"
+      },
+      "description_educational": "India's largest festival season — gold and silver gifting (coins, jewellery) alongside Dhanteras drives the broader wedding-and-festival-season demand window that jewellers stock ahead of. Directly named in BhaavBrief's own coverage thesis: India-specific demand context no global commodity site tracks. A lunar-calendar (tithi) date, drawn from the published Hindu panchang."
+    },
+    {
       "id": "cftc_cot_report",
       "name": "CFTC Commitment of Traders (COT) Report",
       "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/",
