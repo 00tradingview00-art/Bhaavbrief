@@ -153,10 +153,22 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
   const activeExpiry  = requestedExpiry ?? expiries[0]
   const activeOptions = allOptions.filter(i => i.expiry === activeExpiry)
 
-  // Nearest future
-  const today = new Date(); today.setHours(0, 0, 0, 0)
+  // Future matching this option series' own cycle — must still be alive
+  // through activeExpiry, not simply the nearest calendar future for the
+  // instrument overall. MCX options settle against a specific same-cycle
+  // futures contract (its expiry always falls a few days after the option's
+  // own), so "nearest to today" is only a proxy for that and breaks the day
+  // a nearer, unrelated future is mid-expiry while the currently-served
+  // option series belongs to a later contract — confirmed live 2026-09-25:
+  // Nat Gas's Sep future expired today with no Sep options series, so
+  // "nearest to today" fed the Oct options a forward ~3.3% off the true one
+  // (parity-implied from live CE/PE prices), enough to solve Call IV to
+  // ~77% against Put IV ~47% at the same strike — a mismatch the put-call
+  // parity check downstream correctly refused to trust, hiding the chain's
+  // live IV entirely. Requiring expiry >= activeExpiry picks Oct instead.
+  const activeExpiryDate = new Date(activeExpiry)
   const nearFut = allInstruments
-    .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= today)
+    .filter(i => i.name.toUpperCase() === instrument && i.instrument_type === 'FUT' && new Date(i.expiry) >= activeExpiryDate)
     .sort((a, b) => new Date(a.expiry).getTime() - new Date(b.expiry).getTime())[0]
 
   // Fetch quotes (future + active-expiry options, up to 500). The AAV
