@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { notionalExposure, adverseMoveImpacts } from '@/lib/plRisk'
 
 const INSTRUMENTS = {
   GOLD:       { label: 'Gold',         unit: 'INR/10g',   lotSize: 100,  tickSize: 1,    tickValue: 100,  priceMin: 80000,  priceMax: 200000, placeholder: '141000' },
@@ -31,6 +32,13 @@ export default function PLCalculatorClient() {
   const pnl = hasVal
     ? (side === 'long' ? sell - buy : buy - sell) * meta.lotSize * lots
     : null
+
+  // `buy` is always the opening/entry price regardless of side — the field
+  // above swaps its label (Buy Price when long, Sell Price when short), not
+  // its meaning. Notional and adverse-move figures are sized off that
+  // entry price, not the still-unknown exit price.
+  const notional = hasVal ? notionalExposure(buy, meta.lotSize, lots) : null
+  const adverseMoves = notional !== null ? adverseMoveImpacts(notional) : null
 
   const priceWarning = hasVal && (
     isPriceUnusual(buy, meta.priceMin, meta.priceMax) ||
@@ -122,6 +130,19 @@ export default function PLCalculatorClient() {
           <div style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: 5, fontFamily: 'var(--font-sans)' }}>
             {lots} lot{lots > 1 ? 's' : ''} × {meta.lotSize} {meta.unit.split('/')[1]} × ₹{Math.abs(side === 'long' ? parseFloat(sellPrice) - parseFloat(buyPrice) : parseFloat(buyPrice) - parseFloat(sellPrice)).toFixed(2)} per unit
           </div>
+        </div>
+      )}
+
+      {notional !== null && adverseMoves && (
+        <div style={{ fontSize: '0.78rem', color: 'var(--ink-3)', lineHeight: 1.8 }}>
+          <strong style={{ color: 'var(--ink-2)' }}>Notional exposure:</strong> ₹{notional.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+          <br />
+          <strong style={{ color: 'var(--ink-2)' }}>₹ impact of an adverse move:</strong>{' '}
+          {adverseMoves.map(({ pct, amount }, i) => (
+            <span key={pct}>
+              {i > 0 ? ' · ' : ''}{pct}%: −₹{amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+            </span>
+          ))}
         </div>
       )}
 
