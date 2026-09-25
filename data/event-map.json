@@ -309,6 +309,29 @@
       "description_educational": "US inflation prints shape Fed rate-path expectations, which move real yields and the dollar — the two primary transmission channels into MCX Gold and Silver."
     },
     {
+      "id": "us_pce_price_index",
+      "name": "US PCE Price Index (Personal Income and Outlays)",
+      "source_url": "https://www.bea.gov/data/personal-consumption-expenditures-price-index",
+      "frequency": "monthly",
+      "cadence_type": "manual",
+      "next_release_utc": "2026-09-30T12:30:00Z",
+      "affected_contracts": [
+        "gold",
+        "silver",
+        "crude"
+      ],
+      "impact_tier": "high",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": "% MoM",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-09-26"
+      },
+      "description_educational": "The Fed's own preferred inflation gauge — unlike CPI, PCE captures shifting consumer spending patterns, which the Fed weights more heavily in its rate-path decisions. Same transmission channel into MCX Gold and Silver as CPI: real yields and the dollar."
+    },
+    {
       "id": "fomc_rate_decision",
       "name": "FOMC Rate Decision + Press Conference",
       "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
