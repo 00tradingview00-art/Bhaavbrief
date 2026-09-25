@@ -43,10 +43,10 @@ export default function MCXBasisPage() {
   const latest  = history[history.length - 1]
 
   const items = [
-    { label: 'Gold',       key: 'goldSpreadPct',   unit: 'vs COMEX import parity (INR/10g)' },
-    { label: 'Silver',     key: 'silverSpreadPct', unit: 'vs COMEX import parity (INR/kg)' },
-    { label: 'Crude Oil',  key: 'crudeSpreadPct',  unit: 'vs WTI import parity (INR/bbl)' },
-    { label: 'Copper',     key: 'copperSpreadPct', unit: 'vs COMEX HG (coming soon)' },
+    { label: 'Gold',       key: 'goldSpreadPct',   dutyKey: 'goldDutySpreadPct',   unit: 'vs COMEX, FX-converted (INR/10g)' },
+    { label: 'Silver',     key: 'silverSpreadPct', dutyKey: 'silverDutySpreadPct', unit: 'vs COMEX, FX-converted (INR/kg)' },
+    { label: 'Crude Oil',  key: 'crudeSpreadPct',  dutyKey: 'crudeDutySpreadPct',  unit: 'vs WTI, FX-converted (INR/bbl)' },
+    { label: 'Copper',     key: 'copperSpreadPct', dutyKey: null,                  unit: 'vs COMEX HG (coming soon)' },
   ] as const
 
   return (
@@ -56,19 +56,27 @@ export default function MCXBasisPage() {
         MCX Commodity Basis
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        How much MCX prices trade above (+) or below (−) their import-parity equivalent.
+        How much MCX prices trade above (+) or below (−) a raw FX conversion of the global
+        benchmark. This does not net out import duty — see the duty-inclusive import parity
+        figure on each commodity page for the landed-cost comparison.
         {latest && <> Data as of {latest.date}.</>}
       </p>
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
-        {items.map(({ label, key, unit }) => {
+        {items.map(({ label, key, dutyKey, unit }) => {
           const val = latest?.[key] ?? null
+          const dutyVal = dutyKey ? (latest?.[dutyKey] ?? null) : null
           const color = val === null ? 'var(--ink-3)' : val > 0 ? 'var(--up)' : 'var(--down)'
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--surface)' }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{label}</div>
                 <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)' }}>{unit}</div>
+                {dutyVal !== null && (
+                  <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)', marginTop: 2 }}>
+                    Duty-inclusive import parity: {dutyVal > 0 ? '+' : ''}{dutyVal.toFixed(2)}%
+                  </div>
+                )}
               </div>
               <div style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 700, color }}>
                 {val !== null ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : '—'}

@@ -22,7 +22,7 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 | Fact | Owning module | Notes |
 |---|---|---|
 | Prices/FX | `lib/snapshot.ts` (brief generators, gate, email) | `lib/prices.ts` is a second, independent live-fetch path still used by the ticker/`\/api\/prices` — a known, documented C-01 gap, not yet consolidated. See the header comment in `lib/snapshot.ts`. |
-| Import parity/duty conversion | `lib/parity.mjs` | `.mjs`, not `.ts` — called from a plain Node script (`scripts/fetch-snapshot.mjs`) that can't import TypeScript directly. |
+| Import parity (raw FX conversion, no duty) | `lib/parity.mjs` | `.mjs`, not `.ts` — called from a plain Node script (`scripts/fetch-snapshot.mjs`) that can't import TypeScript directly. Despite the name, this module does *not* apply import duty — it's a pure benchmark-price × USDINR conversion. Duty factors live in `data/commodity-constants.json` and are applied separately by `app/commodities/[commodity]/page.tsx` ("Duty-inclusive import parity") and `lib/basis.ts` (`*DutySpreadPct` fields) — each computes its own duty-inclusive figure from `lib/parity.mjs`'s raw output rather than `lib/parity.mjs` doing it once. If a third consumer needs duty-inclusive parity, prefer factoring this into a shared helper over a third inline computation. |
 | Holidays / trading calendar | `lib/tradingCalendar.ts` → `scripts/lib/holidays.js` | The IST-anchor date logic lives once in `holidays.js`; don't reimplement `isWeekend`/`todayIST` elsewhere — a duplicate copy in `app/api/health/route.ts` caused a real Monday-detection bug (fixed 2026-07). |
 | Risk-free rate | `lib/options.ts` (`RISK_FREE_RATE`) | Single hardcoded monthly constant today, no live MIBOR feed yet. |
 | Event calendar | `data/event-map.json` via `lib/eventMap.ts` | |

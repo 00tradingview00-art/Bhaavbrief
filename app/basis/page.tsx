@@ -61,25 +61,31 @@ export default async function BasisPage() {
 
   const commodities = [
     {
-      id:    'gold',
-      label: 'Gold',
-      unit:  'INR/10g vs COMEX',
-      key:   'goldSpreadPct' as const,
-      stats: calcStats(last30, 'goldSpreadPct'),
+      id:      'gold',
+      label:   'Gold',
+      unit:    'INR/10g vs COMEX, FX-converted',
+      key:     'goldSpreadPct' as const,
+      stats:   calcStats(last30, 'goldSpreadPct'),
+      dutyKey: 'goldDutySpreadPct' as const,
+      dutyLatest: last30[last30.length - 1]?.goldDutySpreadPct ?? null,
     },
     {
-      id:    'silver',
-      label: 'Silver',
-      unit:  'INR/kg vs COMEX',
-      key:   'silverSpreadPct' as const,
-      stats: calcStats(last30, 'silverSpreadPct'),
+      id:      'silver',
+      label:   'Silver',
+      unit:    'INR/kg vs COMEX, FX-converted',
+      key:     'silverSpreadPct' as const,
+      stats:   calcStats(last30, 'silverSpreadPct'),
+      dutyKey: 'silverDutySpreadPct' as const,
+      dutyLatest: last30[last30.length - 1]?.silverDutySpreadPct ?? null,
     },
     {
-      id:    'crude',
-      label: 'Crude Oil',
-      unit:  'INR/bbl vs WTI',
-      key:   'crudeSpreadPct' as const,
-      stats: calcStats(last30, 'crudeSpreadPct'),
+      id:      'crude',
+      label:   'Crude Oil',
+      unit:    'INR/bbl vs WTI, FX-converted',
+      key:     'crudeSpreadPct' as const,
+      stats:   calcStats(last30, 'crudeSpreadPct'),
+      dutyKey: 'crudeDutySpreadPct' as const,
+      dutyLatest: last30[last30.length - 1]?.crudeDutySpreadPct ?? null,
     },
     // Copper deliberately excluded: lib/basis.ts's copperSpreadPct is a
     // permanent null stub (no COMEX HG price feed wired up yet) — shipping an
@@ -101,7 +107,9 @@ export default async function BasisPage() {
         MCX Commodity Basis
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        How MCX prices compare to global import parity, in % premium or discount
+        How MCX prices compare to a raw FX conversion of the global benchmark, in % premium or
+        discount. This spread includes import duty (not netted out) — each card also shows the
+        duty-inclusive import parity figure for the landed-cost comparison.
       </p>
 
       <Suspense fallback={null}>

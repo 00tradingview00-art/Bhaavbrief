@@ -13,6 +13,7 @@ interface CommodityMeta {
   unit: string
   key: keyof BasisPoint
   stats: { mean: number; std: number; latest: number | null } | null
+  dutyLatest: number | null
 }
 
 interface Props {
@@ -117,9 +118,12 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
       </div>
 
       {stats && (
-        <div style={{ fontSize: '0.78rem', opacity: 0.6, marginBottom: '0.75rem', display: 'flex', gap: '1.25rem' }}>
+        <div style={{ fontSize: '0.78rem', opacity: 0.6, marginBottom: '0.75rem', display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
           <span>30d avg: {stats.mean.toFixed(2)}%</span>
           <span>±1σ: {stats.std.toFixed(2)}%</span>
+          {c.dutyLatest !== null && (
+            <span>Duty-inclusive import parity: {c.dutyLatest > 0 ? '+' : ''}{c.dutyLatest.toFixed(2)}%</span>
+          )}
         </div>
       )}
 
