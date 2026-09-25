@@ -1,5 +1,30 @@
 import { describe, test, expect } from 'vitest'
-import { classifyQuote } from './options'
+import { classifyQuote, pickDefaultExpiry } from './options'
+
+describe('pickDefaultExpiry', () => {
+  test('picks the nearest expiry that is today or later, skipping already-passed ones', () => {
+    // Reproduces the live bug: Kite's instrument master still listed
+    // 2026-09-25 the Saturday after it expired, alongside real upcoming
+    // expiries — the default must skip the dead one.
+    const expiries = ['2026-09-25', '2026-10-30', '2026-11-27']
+    expect(pickDefaultExpiry(expiries, '2026-09-26')).toBe('2026-10-30')
+  })
+
+  test("today's own expiry is still picked (not skipped) on expiry day itself", () => {
+    const expiries = ['2026-09-25', '2026-10-30']
+    expect(pickDefaultExpiry(expiries, '2026-09-25')).toBe('2026-09-25')
+  })
+
+  test('falls back to the last entry instead of throwing if every expiry has passed', () => {
+    const expiries = ['2026-01-01', '2026-02-01']
+    expect(pickDefaultExpiry(expiries, '2026-09-26')).toBe('2026-02-01')
+  })
+
+  test('returns the only expiry when there is just one, whether past or future', () => {
+    expect(pickDefaultExpiry(['2026-12-31'], '2026-09-26')).toBe('2026-12-31')
+    expect(pickDefaultExpiry(['2026-01-01'], '2026-09-26')).toBe('2026-01-01')
+  })
+})
 
 // Regression tests for the D-06 no-arbitrage/liquidity filter. Every case
 // below (except the synthetic NaN/crossed-market ones) is a real row pulled

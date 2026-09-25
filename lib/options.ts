@@ -16,6 +16,20 @@ function envNumber(name: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback
 }
 
+// Deliberately NOT importing scripts/lib/holidays.js's todayIST() (the
+// canonical source — see lib/tradingCalendar.ts) here: this file's
+// client-safe exports (MCX_INSTRUMENTS, classifyQuote, pickDefaultExpiry)
+// are imported into client bundles (lib/terminalData.ts ->
+// components/terminal/IVTermStructureChart.tsx), and holidays.js has a
+// top-level `fs` import that breaks that build the moment anything in this
+// file references it, even from a function only ever called server-side.
+// This is the exact same formula as todayIST() — keep in sync with it if
+// that ever changes; it's duplicated only because of this bundling
+// constraint, not because the logic needed reinventing.
+function todayIST(): string {
+  return new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+}
+
 // Single source of truth for the risk-free rate — read by the chain response
 // below so the UI (components/mcx/OptionChain.tsx) can display the same value
 // instead of an independently hardcoded string that can drift out of sync.
@@ -35,6 +49,20 @@ const SPREAD_JUNK_MAX_RATIO = envNumber('OPTIONS_SPREAD_JUNK_MAX_RATIO', 0.40)  
 const IV_PARITY_TOLERANCE_VOL_PTS = envNumber('OPTIONS_IV_PARITY_TOLERANCE_VOL_PTS', 5)  // CE/PE IV mismatch beyond this at the same strike demotes both
 
 export type Tier = 'LIVE' | 'STALE' | 'JUNK'
+
+// Exported for lib/options.test.ts. Kite's instrument master can still list
+// a just-expired options series for a day or more after its actual expiry
+// (settlement/reporting lag) — confirmed live 2026-09-26: Gold's Sep-25
+// options were still present the Saturday after expiry. Picking expiries[0]
+// unconditionally would default every visitor to a dead contract instead of
+// the next live one. Falls back to the last (most recent) entry only if
+// every expiry has already passed, which shouldn't happen in practice but
+// must never throw. `expiries` must be sorted ascending and non-empty —
+// the one call site already guarantees this before calling in.
+export function pickDefaultExpiry(expiries: string[], today: string): string {
+  const liveExpiries = expiries.filter(e => e >= today)
+  return liveExpiries.length > 0 ? liveExpiries[0] : expiries[expiries.length - 1]
+}
 
 // Exported for lib/options.test.ts — this is the financially-consequential
 // no-arbitrage/liquidity filter (D-06), it should not be tested only by
@@ -150,7 +178,7 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
     throw new Error(`No options found for ${instrument}`)
   }
 
-  const activeExpiry  = requestedExpiry ?? expiries[0]
+  const activeExpiry  = requestedExpiry ?? pickDefaultExpiry(expiries, todayIST())
   const activeOptions = allOptions.filter(i => i.expiry === activeExpiry)
 
   // Future matching this option series' own cycle — must still be alive
