@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-114",
+    "href": "/briefs/edition-114",
+    "title": "Brent Jumps to $105 While Gold Falls — The Market Is Confused",
+    "description": "Brent crude surged to $105.58 as Middle East tensions reignite, but gold fell — a rare split that signals the market is repricing which asset carries the war premium.",
+    "excerpt": "MCX Gold ₹151044 | Crude ₹8949 | USDINR ₹95.92 — Gold +0.22% | Crude -2.38% | Silver +0.22% Yesterday's Edge — Result: Edition #113 watched whether MCX NATGAS would close above 293.9. Confirmed ✓, now",
+    "date": "2026-09-25T03:42:34.020Z",
+    "edition": "114",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
     "href": "/articles/2026-09-24-hawk-scan-mcx-nat-gas-9-34-to-317-storage-draw-signal",
