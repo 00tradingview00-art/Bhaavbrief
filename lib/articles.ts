@@ -35,7 +35,12 @@ export async function getAllArticles(): Promise<ArticleMeta[]> {
       title:          (data.title ?? 'Market Update').replace(/^\[HAWK-SCAN\]\s*/i, ''),
       description:    data.description  ?? '',
       date:           data.date         ?? '',
-      time:           data.time         ?? '',
+      // The LLM that writes article frontmatter sometimes echoes the "...IST"
+      // suffix from its own prompt into this field verbatim (instead of the
+      // bare time). Every render site appends " IST" itself, so an
+      // un-stripped value here produces "11:11 pm IST IST" on the page.
+      // Strip defensively at the source rather than at each render site.
+      time:           (data.time ?? '').replace(/(\s*ist)+$/i, '').trim(),
       commodity:      data.commodity    ?? 'macro',
       tags:           data.tags         ?? [],
       priceAtPublish: data.priceAtPublish ?? 0,
@@ -66,7 +71,12 @@ export async function getArticleBySlug(slug: string) {
       title:          (data.title ?? 'Market Update').replace(/^\[HAWK-SCAN\]\s*/i, ''),
       description:    data.description  ?? '',
       date:           data.date         ?? '',
-      time:           data.time         ?? '',
+      // The LLM that writes article frontmatter sometimes echoes the "...IST"
+      // suffix from its own prompt into this field verbatim (instead of the
+      // bare time). Every render site appends " IST" itself, so an
+      // un-stripped value here produces "11:11 pm IST IST" on the page.
+      // Strip defensively at the source rather than at each render site.
+      time:           (data.time ?? '').replace(/(\s*ist)+$/i, '').trim(),
       commodity:      data.commodity    ?? 'macro',
       tags:           data.tags         ?? [],
       priceAtPublish: data.priceAtPublish ?? 0,

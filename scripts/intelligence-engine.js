@@ -842,7 +842,9 @@ FACT vs INFERENCE — MANDATORY DISCIPLINE:
 - TRIGGER/PRICE/CROSS-ASSET: state only what is directly supported by the CURRENT PRICES block above. Never assert a causal driver without naming the exact event or data point.
 - SIGNAL/TWIST: frame inferences explicitly — "This is consistent with...", "Historically [X], though today's context differs in [Y]". Never write "The market has front-run X" as fact; write "This is consistent with markets anticipating X."
 
-RETURN EXACTLY THIS STRUCTURE — no extra prose, no section reordering:
+RETURN EXACTLY THIS STRUCTURE — no extra prose, no section reordering. The date and time
+values below are already correct — copy them byte-for-byte; do not append "IST" or reformat
+them, even though the TIME line above this block shows "IST" for your own context:
 
 ---
 title: "[HAWK-SCAN] [Commodity]: [What happened + key level] — under 70 chars. BANNED: act, buy, sell, enter, exit, trade, now, urgent, alert"
@@ -1034,7 +1036,9 @@ SEO:
 - Description: under 155 chars, ₹ price + key reason
 - Slug: lowercase hyphens, max 8 words
 
-RETURN ONLY valid MDX frontmatter + article body with the 5 sections:
+RETURN ONLY valid MDX frontmatter + article body with the 5 sections. The date and time
+values below are already correct — copy them byte-for-byte; do not append "IST" or reformat
+them, even though the CURRENT MCX PRICES line above shows "IST" for your own context:
 
 ---
 title: "[under 65 chars]"
@@ -1153,7 +1157,9 @@ SEO:
 - Description: under 155 chars, include the event name and price impact
 - Slug: lowercase hyphens, max 8 words, include the event keyword (e.g. iran-strike, opec-cut)
 
-RETURN ONLY valid MDX frontmatter + article body with the 5 sections:
+RETURN ONLY valid MDX frontmatter + article body with the 5 sections. The date and time
+values below are already correct — copy them byte-for-byte; do not append "IST" or reformat
+them, even though the CURRENT MCX PRICES line above shows "IST" for your own context:
 
 ---
 title: "[under 65 chars]"
@@ -1299,6 +1305,14 @@ function saveArticle(mdx) {
       .replace(/^```\s*$/gm, '')          // strip bare ``` lines anywhere in body
       .replace(/^slug:.*$/m, '')
       .replace(/^(title:\s*["']?)\[HAWK-SCAN\]\s*/m, '$1')  // [HAWK-SCAN] prefix is internal; edition:hawk-scan marks it
+      // The `time:` value handed to the model is already bare (e.g. "11:11 pm"),
+      // but the same prompt also has a "TIME: ... IST" context line elsewhere,
+      // and the model sometimes echoes that "IST" suffix into this field instead
+      // of copying the frontmatter template verbatim — producing "11:11 pm IST"
+      // here, which every render site then doubles to "11:11 pm IST IST" by
+      // appending its own " IST". Strip it at the source so a bad model output
+      // never reaches disk.
+      .replace(/^(time:\s*"[^"]*?)(\s*ist)+(")/im, '$1$3')
       .trim()
   ))
   fs.writeFileSync(filepath, cleanMdx, 'utf8')
