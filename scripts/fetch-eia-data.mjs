@@ -111,7 +111,10 @@ const natgas = await fetchNaturalGasStorage()
 const natgasEvent = data.events.find(e => e.id === 'eia_natural_gas_storage')
 if (natgasEvent) {
   natgasEvent.prior_field = { ...natgas.latest, source: 'eia_api', as_of: now }
-  natgasEvent.recent_values = natgas.recentValues
+  // Keyed by commodity — see lib/eventMapTypes.ts's recent_values comment
+  // (cftc_cot_report needs multiple keys on one event; this event only
+  // ever has one, but stays keyed the same way for consistency).
+  natgasEvent.recent_values = { natgas: natgas.recentValues }
   updated++
   console.log(`eia_natural_gas_storage: ${natgas.latest.value >= 0 ? '+' : ''}${natgas.latest.value} ${natgas.latest.unit} (${natgas.latest.as_of_period}), ${natgas.recentValues.length} trailing values stored`)
 }
@@ -120,7 +123,7 @@ const petroleum = await fetchPetroleumStatus()
 const petroleumEvent = data.events.find(e => e.id === 'eia_petroleum_status_report')
 if (petroleumEvent) {
   petroleumEvent.prior_field = { ...petroleum.latest, source: 'eia_api', as_of: now }
-  petroleumEvent.recent_values = petroleum.recentValues
+  petroleumEvent.recent_values = { crude: petroleum.recentValues }
   updated++
   console.log(`eia_petroleum_status_report: ${petroleum.latest.value >= 0 ? '+' : ''}${petroleum.latest.value} ${petroleum.latest.unit} (${petroleum.latest.as_of_period}), ${petroleum.recentValues.length} trailing values stored`)
 }

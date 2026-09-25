@@ -69,6 +69,30 @@ if (!Array.isArray(data.events)) {
     } else {
       issues.push(`${where}: affected_contracts must be an array`)
     }
+
+    // recent_values (optional) — keyed by commodity, not a flat array, since
+    // one event (e.g. cftc_cot_report) can cover several commodities with
+    // genuinely different historical series. See lib/eventMapTypes.ts.
+    if ('recent_values' in e && e.recent_values !== undefined) {
+      if (Array.isArray(e.recent_values) || typeof e.recent_values !== 'object' || e.recent_values === null) {
+        issues.push(`${where}: recent_values must be an object keyed by commodity, not a flat array`)
+      } else {
+        for (const [commodity, series] of Object.entries(e.recent_values)) {
+          if (Array.isArray(e.affected_contracts) && !e.affected_contracts.includes(commodity)) {
+            issues.push(`${where}: recent_values has key "${commodity}" not present in affected_contracts`)
+          }
+          if (!Array.isArray(series)) {
+            issues.push(`${where}: recent_values.${commodity} must be an array`)
+            continue
+          }
+          for (const [i, point] of series.entries()) {
+            if (typeof point?.period !== 'string' || typeof point?.value !== 'number') {
+              issues.push(`${where}: recent_values.${commodity}[${i}] must be { period: string, value: number }`)
+            }
+          }
+        }
+      }
+    }
   }
 }
 

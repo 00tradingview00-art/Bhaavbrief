@@ -34,6 +34,12 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: node scripts/fetch-eia-data.mjs
 
+      - name: Fetch CFTC COT positioning
+        id: cftc_fetch
+        continue-on-error: true
+        # Free public Socrata dataset — no API key required.
+        run: node scripts/fetch-cftc-data.mjs
+
       - name: Roll forward rule-based event dates
         run: node scripts/refresh-event-calendar.mjs
 

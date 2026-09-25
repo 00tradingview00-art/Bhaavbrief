@@ -162,11 +162,16 @@ for (const event of ruleBasedEvents) {
     }
 
     // Surprise-conditioned split, only for events with a real historical
-    // release series (currently the two EIA-sourced events — see
-    // scripts/fetch-eia-data.mjs). occurrences[] and event.recent_values[]
-    // are both ordered most-recent-first on the same weekly cadence.
-    if (event.recent_values?.length > 0) {
-      const { pairedValues, pairedMoves } = pairOccurrencesWithValues(rawMoves, event.recent_values)
+    // release series for THIS commodity (currently the two EIA-sourced
+    // events, and cftc_cot_report for the commodities CFTC actually covers
+    // — see scripts/fetch-eia-data.mjs / scripts/fetch-cftc-data.mjs).
+    // recent_values is keyed by commodity since one event (e.g. COT) can
+    // cover several with genuinely different series. occurrences[] and
+    // recentValuesForCommodity[] are both ordered most-recent-first on the
+    // same weekly cadence.
+    const recentValuesForCommodity = event.recent_values?.[commodity]
+    if (recentValuesForCommodity?.length > 0) {
+      const { pairedValues, pairedMoves } = pairOccurrencesWithValues(rawMoves, recentValuesForCommodity)
       const split = splitMovesBySurprise(pairedValues, pairedMoves)
       if (split && (split.aboveAvg || split.belowAvg)) {
         stats[event.id][commodity].surpriseSplit = split
