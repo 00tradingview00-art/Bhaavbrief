@@ -8,6 +8,7 @@ import Sparkline from '@/components/ui/Sparkline'
 import Pill from '@/components/ui/Pill'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
+import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -429,7 +430,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
             </div>
           </div>
           <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
-            5.25
+            {REPO_RATE_PCT}
           </div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 6 }}>Set by RBI MPC · not a live/streaming figure</div>

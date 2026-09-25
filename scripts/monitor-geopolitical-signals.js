@@ -11,6 +11,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchPexelsImage } from './lib/pexels.js'
+import { buildKnownFactsBlock } from './lib/knownFacts.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
@@ -130,10 +131,12 @@ async function fetchFeed(feed) {
 // ── AI breakdown ──────────────────────────────────────────────────────────────
 
 async function generateBreakdown(item, commodities) {
+  const knownFacts = buildKnownFactsBlock({ includeSnapshot: true })
   const prompt = `You are BhaavBrief's market analyst. A breaking geopolitical event has been detected.
 
 EVENT: "${item.title}"
 MCX COMMODITIES AFFECTED: ${commodities}
+${knownFacts}
 
 Write a flash article for Indian MCX commodity traders. Use this exact format:
 
@@ -161,7 +164,7 @@ Example (silver rising on safe-haven demand): "Silver fabricators and industrial
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
-- Never fabricate specific price targets
+- Never fabricate specific price targets, rates, or dates not in the headline or the KNOWN CURRENT FACTS block above
 - Never include news outlet names (Reuters, BBC, etc.) anywhere
 - Write for an ET Markets reader, not a geopolitics expert
 - Total body length 220-270 words

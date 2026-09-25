@@ -12,6 +12,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchPexelsImage } from './lib/pexels.js'
+import { buildKnownFactsBlock } from './lib/knownFacts.js'
 
 const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 const ROOT       = path.join(__dirname, '..')
@@ -149,10 +150,12 @@ async function fetchFeed(feed) {
 // ── AI breakdown ──────────────────────────────────────────────────────────────
 
 async function generateBreakdown(item, commodities) {
+  const knownFacts = buildKnownFactsBlock({ includeRepoRate: true, includeSnapshot: true })
   const prompt = `You are BhaavBrief's policy analyst. A new Indian government or regulatory policy change has been detected that affects commodity markets.
 
 POLICY EVENT: "${item.title}"
 MCX COMMODITIES AFFECTED: ${commodities}
+${knownFacts}
 
 Write a flash article for Indian MCX commodity traders. Use this exact format:
 
@@ -184,7 +187,7 @@ Do not write the article. Do not explain. Just: SKIP
 RULES:
 - SEBI-compliant: educational only, no buy/sell advice
 - FORMATTING: Use **bold** inline for key data — price levels, % moves, commodity/company names on first mention, critical thresholds. Bold specific numbers and names only, never full sentences.
-- Never fabricate specific price targets or percentages not in the headline
+- Never fabricate specific price targets, percentages, rates, or dates not in the headline or the KNOWN CURRENT FACTS block above
 - Never include news outlet names (ET, Mint, Reuters, etc.) anywhere
 - Write for an ET Markets/Mint reader, not a policy wonk
 - Total body length 220-270 words
