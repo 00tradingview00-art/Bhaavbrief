@@ -202,6 +202,20 @@
         "fetched_at": "2026-09-19T03:06:48.706Z",
         "age_hours": 32.968111111111114,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 21,
+        "reach": 19,
+        "ig_reels_avg_watch_time": 2039,
+        "ig_reels_video_view_total_time": 38753,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-25T03:42:18.719Z",
+        "age_hours": 177.5597813888889,
+        "observation": "first_after_7d"
       }
     ],
     "insights": {
@@ -214,7 +228,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-19T03:06:48.706Z"
+      "fetched_at": "2026-09-25T03:42:18.719Z"
     }
   },
   {
@@ -252,6 +266,20 @@
         "fetched_at": "2026-09-19T03:06:50.220Z",
         "age_hours": 42.22099472222222,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 38,
+        "reach": 34,
+        "ig_reels_avg_watch_time": 1967,
+        "ig_reels_video_view_total_time": 64938,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-25T03:42:20.551Z",
+        "age_hours": 186.81275333333335,
+        "observation": "first_after_7d"
       }
     ],
     "insights": {
@@ -264,7 +292,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-19T03:06:50.220Z"
+      "fetched_at": "2026-09-25T03:42:20.551Z"
     }
   },
   {
