@@ -245,14 +245,17 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
     : null
   const regimeColors: Record<IVRegime['regime'], string> = { CHEAP: C.up, NORMAL: C.gold, RICH: C.dn }
 
-  // Last 10 trading days with data — real gaps (missed cron days) are left as
-  // gaps, never interpolated or backfilled. The "10-Day" label names the
-  // intended window even when fewer points exist; the point count itself
-  // communicates sparseness.
-  const recent = history.slice(-10)
+  // Selectable trading-day window with data — real gaps (missed cron days)
+  // are left as gaps, never interpolated or backfilled. The label names the
+  // real available window even when fewer points exist than the selected
+  // range (D-07: never claim more history than exists, same convention as
+  // app/tools/mcx-iv-rank/page.tsx's chartTitle).
+  const [ivRange, setIvRange] = useState<10 | 30 | 90>(10)
+  const recent = history.slice(-ivRange)
   const ivValues = recent.map(d => d.iv)
   const minIV = ivValues.length ? Math.min(...ivValues) : 0
   const maxIV = ivValues.length ? Math.max(...ivValues) : 0
+  const ivWindowLabel = recent.length < ivRange ? `${recent.length}-Day` : `${ivRange}-Day`
   const gradId = `grad-iv-${instrument}`
 
   return (
@@ -290,8 +293,29 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
         </div>
       )}
 
-      <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, margin: '14px 0 6px' }}>
-        ATM IV — 10-Day
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, margin: '14px 0 6px' }}>
+        <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans }}>
+          ATM IV — {ivWindowLabel}
+        </div>
+        <div role="tablist" aria-label="IV history range" style={{ display: 'flex', border: `1px solid ${C.bdr}`, borderRadius: 5, overflow: 'hidden' }}>
+          {([10, 30, 90] as const).map(r => (
+            <button
+              key={r}
+              type="button"
+              role="tab"
+              aria-selected={ivRange === r}
+              onClick={() => setIvRange(r)}
+              style={{
+                fontSize: 10, fontWeight: 600, padding: '2px 7px', border: 'none', cursor: 'pointer',
+                fontFamily: C.sans,
+                background: ivRange === r ? IV_LINE : 'transparent',
+                color: ivRange === r ? '#fff' : C.ink4,
+              }}
+            >
+              {r}D
+            </button>
+          ))}
+        </div>
       </div>
 
       {histLoading ? (
