@@ -58,12 +58,12 @@ export const metadata: Metadata = {
 // the live chain fetch fails or has no LIVE-tier quote anywhere (e.g. a Kite
 // outage) — never regresses to "No history yet" over a live-fetch hiccup
 // when real historical data already exists.
-async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[] }>> {
+async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; history: IVHistoryPoint[]; realizedVol20d: number | null }>> {
   const entries = await Promise.all(
-    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { regime: IVRegime | null; history: IVHistoryPoint[] }]> => {
+    Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, { regime: IVRegime | null; history: IVHistoryPoint[]; realizedVol20d: number | null }]> => {
       try {
         const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
-        if (!raw || raw.length < 4) return [instrument, { regime: null, history: [] }]
+        if (!raw || raw.length < 4) return [instrument, { regime: null, history: [], realizedVol20d: null }]
         const points: { date: string; iv: number }[] = []
         for (let i = 0; i < raw.length; i += 2) {
           const iv = parseFloat(raw[i + 1])
@@ -73,17 +73,21 @@ async function getIVRanks(): Promise<Record<string, { regime: IVRegime | null; h
         const history = points.map(e => ({ date: e.date, iv: e.iv }))
 
         let currentIV = points[points.length - 1]?.iv ?? 0
+        // Same getOptionsChain() call already provides realized vol (aav) —
+        // no second fetch needed to compute the IV-RV spread below.
+        let realizedVol20d: number | null = null
         try {
           const chain = await getOptionsChain(instrument)
           const live = liveAtmIV(chain.chain)
           if (live.iv != null) currentIV = live.iv
+          realizedVol20d = chain.aav?.['20d'] ?? null
         } catch {
           // Live fetch failed (stale Kite auth, outage) — keep the snapshot fallback.
         }
 
-        return [instrument, { regime: computeIVRegime(history, currentIV), history: history.slice(-90) }]
+        return [instrument, { regime: computeIVRegime(history, currentIV), history: history.slice(-90), realizedVol20d }]
       } catch {
-        return [instrument, { regime: null, history: [] }]
+        return [instrument, { regime: null, history: [], realizedVol20d: null }]
       }
     }),
   )
@@ -165,13 +169,19 @@ export default async function MCXIVRankPage() {
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
-          const { regime } = ivRanks[key] ?? { regime: null, history: [] }
+          const { regime, realizedVol20d } = ivRanks[key] ?? { regime: null, history: [], realizedVol20d: null }
           const color = regimeColor(regime?.regime)
+          const spread = (regime && realizedVol20d != null) ? regime.currentIV - realizedVol20d : null
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{meta.label}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{key}</div>
+                {spread !== null && (
+                  <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)', marginTop: 4 }}>
+                    IV−RV: {spread >= 0 ? '+' : ''}{spread.toFixed(1)}pp <span style={{ opacity: 0.8 }}>(20d realized {realizedVol20d?.toFixed(1)}%)</span>
+                  </div>
+                )}
               </div>
               {regime ? (
                 <div style={{ textAlign: 'right' }}>
