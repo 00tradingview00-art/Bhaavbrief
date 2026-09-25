@@ -449,13 +449,18 @@ type IVHistoryRange = typeof IV_HISTORY_RANGES[number]
 // title never claims more history than actually exists yet (D-07 convention,
 // same as app/tools/mcx-iv-rank/page.tsx's chartTitle logic) — selecting 90D
 // before 90 days of data have accumulated shows the real count instead.
-function IVHistorySparkline({ history, color }: { history: { date: string; iv: number }[]; color: string }) {
+// `range` is controlled by the parent (not owned locally) — the parent also
+// feeds the same window into computeIVRegime() for the CHEAP/RICH badge
+// above this chart, so both must agree on which range is selected.
+function IVHistorySparkline({ history, color, range, onRangeChange }: {
+  history: { date: string; iv: number }[]; color: string
+  range: IVHistoryRange; onRangeChange: (r: IVHistoryRange) => void
+}) {
   // Stable per-instance id — `color` is now a `var(--x, #hex)` CSS token
   // string, not a plain hex, so deriving the gradient id from it (as this
   // used to) left spaces/parens/commas in the id, breaking the url(#...)
   // fragment reference and silently falling back to a solid black fill.
   const gradId = `grad-strategy-iv-${useId()}`
-  const [range, setRange] = useState<IVHistoryRange>(10)
   const recent = history.slice(-range)
   if (recent.length < 2) {
     return (
@@ -483,7 +488,7 @@ function IVHistorySparkline({ history, color }: { history: { date: string; iv: n
               type="button"
               role="tab"
               aria-selected={range === r}
-              onClick={() => setRange(r)}
+              onClick={() => onRangeChange(r)}
               style={{
                 fontSize: 11, fontWeight: 600, padding: '3px 8px', border: 'none', cursor: 'pointer',
                 background: range === r ? color : 'transparent',
@@ -549,6 +554,7 @@ export default function StrategyBuilder({
   const [instrument,    setInstrument]    = useState(defaultInstrument)
   const [chainData,     setChainData]     = useState<ChainData | null>(null)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
+  const [ivHistoryRange, setIvHistoryRange] = useState<IVHistoryRange>(10)
   const [legs,          setLegs]          = useState<Leg[]>([])
   const [tab,           setTab]           = useState<'build' | 'saved' | 'spreads'>(defaultTab)
   const [saved,         setSaved]         = useState<SavedStrategy[]>([])
@@ -614,8 +620,12 @@ export default function StrategyBuilder({
     const chainVals = liveIVsIn(chain)
     return chainVals.length > 0 ? chainVals.reduce((a, b) => a + b, 0) / chainVals.length : 0
   })()
-  const ivRegime: IVRegime | null = currentIV > 0 && ivHistory.length > 0
-    ? computeIVRegime(ivHistory, currentIV)
+  // Same windowed slice the IVHistorySparkline chart below shows, not the
+  // full stored history — so the CHEAP/RICH badge tracks whichever of
+  // 10D/30D/90D is selected instead of always describing all of history.
+  const ivHistoryWindow = ivHistory.slice(-ivHistoryRange)
+  const ivRegime: IVRegime | null = currentIV > 0 && ivHistoryWindow.length > 0
+    ? computeIVRegime(ivHistoryWindow, currentIV)
     : null
 
   // Staleness counter
@@ -1166,7 +1176,12 @@ export default function StrategyBuilder({
       )}
 
       {ivRegime && ivHistory.length > 0 && tab !== 'spreads' && (
-        <IVHistorySparkline history={ivHistory} color={regimeColors[ivRegime.regime]} />
+        <IVHistorySparkline
+          history={ivHistory}
+          color={regimeColors[ivRegime.regime]}
+          range={ivHistoryRange}
+          onRangeChange={setIvHistoryRange}
+        />
       )}
 
       {/* Quick Setup — all templates, no IV-based filtering. Hidden for

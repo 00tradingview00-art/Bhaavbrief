@@ -240,9 +240,6 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
   const { iv: liveIV, atStrike: liveIVAtStrike, isExactATM: liveIVIsExactATM } = liveAtmIV(chain)
 
   const { history, loading: histLoading, error: histError } = useIVHistory(instrument)
-  const ivRegime: IVRegime | null = liveIV != null && history.length > 0
-    ? computeIVRegime(history, liveIV)
-    : null
   const regimeColors: Record<IVRegime['regime'], string> = { CHEAP: C.up, NORMAL: C.gold, RICH: C.dn }
 
   // Selectable trading-day window with data — real gaps (missed cron days)
@@ -257,6 +254,14 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
   const maxIV = ivValues.length ? Math.max(...ivValues) : 0
   const ivWindowLabel = recent.length < ivRange ? `${recent.length}-Day` : `${ivRange}-Day`
   const gradId = `grad-iv-${instrument}`
+
+  // Percentile/rank/regime computed from the *same* windowed slice the chart
+  // shows, not the full stored history — so switching 10D/30D/90D moves this
+  // badge too, instead of leaving it stuck describing a different window
+  // than what's plotted below it.
+  const ivRegime: IVRegime | null = liveIV != null && recent.length > 0
+    ? computeIVRegime(recent, liveIV)
+    : null
 
   return (
     <div style={{ padding: '16px 14px', borderBottom: `1px solid ${C.bdr}`, background: C.surf }}>
