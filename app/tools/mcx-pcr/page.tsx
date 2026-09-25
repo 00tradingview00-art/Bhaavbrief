@@ -58,11 +58,15 @@ async function getPCRData() {
   return Object.fromEntries(entries)
 }
 
+// Labels describe the positioning data itself (which side has more open
+// interest), not a translated market call — see components/mcx/OptionChain.tsx's
+// PCRPill, which this mirrors. "Conventionally read as bullish/bearish" belongs
+// in explanatory copy, not the at-a-glance label.
 function pcrSignal(pcr: number | null): { label: string; color: string } {
   if (pcr === null) return { label: 'N/A', color: 'var(--ink-3)' }
-  if (pcr > 1.2)   return { label: 'Bullish', color: 'var(--up)' }
-  if (pcr > 0.8)   return { label: 'Neutral', color: 'var(--ink-3)' }
-  return { label: 'Bearish', color: 'var(--down)' }
+  if (pcr > 1.2)   return { label: 'Put-heavy',  color: 'var(--up)' }
+  if (pcr < 0.8)   return { label: 'Call-heavy', color: 'var(--down)' }
+  return { label: 'Balanced', color: 'var(--saffron)' }
 }
 
 export default async function MCXPCRPage() {

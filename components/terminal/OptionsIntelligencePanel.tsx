@@ -7,13 +7,16 @@ interface Props {
   terminalData: Record<CoreInstrument, TerminalInstrumentData | null>
 }
 
-// Matches app/tools/mcx-pcr/page.tsx's pcrSignal() exactly. Tone maps onto
-// components/ui/Pill.tsx so this badge matches every other badge on the site.
+// Matches app/tools/mcx-pcr/page.tsx's pcrSignal() and
+// components/mcx/OptionChain.tsx's PCRPill exactly — labels describe the
+// positioning data itself, not a translated bullish/bearish market call.
+// Tone maps onto components/ui/Pill.tsx so this badge matches every other
+// badge on the site.
 function pcrSignal(pcr: number | null): { label: string; tone: PillTone } {
   if (pcr === null) return { label: 'N/A', tone: 'neutral' }
-  if (pcr > 1.2) return { label: 'Bullish', tone: 'up' }
-  if (pcr > 0.8) return { label: 'Neutral', tone: 'neutral' }
-  return { label: 'Bearish', tone: 'down' }
+  if (pcr > 1.2) return { label: 'Put-heavy', tone: 'up' }
+  if (pcr < 0.8) return { label: 'Call-heavy', tone: 'down' }
+  return { label: 'Balanced', tone: 'gold' }
 }
 
 const PCR_SCALE_MAX = 2.0

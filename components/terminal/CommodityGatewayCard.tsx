@@ -26,16 +26,19 @@ function fmtNum(n: number | null | undefined, dp = 2): string {
   return n.toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp })
 }
 
-// PCR signal thresholds match app/tools/mcx-pcr/page.tsx's pcrSignal() exactly
-// (>1.2 bullish, >0.8 neutral, else bearish) — not re-derived, just mirrored,
-// so the same PCR reading never gets a different label on two pages. Tone
-// maps onto components/ui/Pill.tsx's tone system rather than hand-rolling
-// color/background, so this badge matches every other badge on the site.
+// PCR signal thresholds match app/tools/mcx-pcr/page.tsx's pcrSignal() and
+// components/mcx/OptionChain.tsx's PCRPill exactly (>1.2 put-heavy, <0.8
+// call-heavy, else balanced) — not re-derived, just mirrored, so the same
+// PCR reading never gets a different label on two pages. Labels describe the
+// positioning data itself, not a translated bullish/bearish market call.
+// Tone maps onto components/ui/Pill.tsx's tone system rather than
+// hand-rolling color/background, so this badge matches every other badge on
+// the site.
 function pcrSignal(pcr: number | null): { label: string; tone: PillTone } {
   if (pcr === null) return { label: 'N/A', tone: 'neutral' }
-  if (pcr > 1.2) return { label: 'Bullish OI', tone: 'up' }
-  if (pcr > 0.8) return { label: 'Balanced',   tone: 'neutral' }
-  return { label: 'Bearish OI', tone: 'down' }
+  if (pcr > 1.2) return { label: 'Put-heavy',  tone: 'up' }
+  if (pcr < 0.8) return { label: 'Call-heavy', tone: 'down' }
+  return { label: 'Balanced', tone: 'gold' }
 }
 
 export default function CommodityGatewayCard({ meta, priceData, optionsData, sparkCloses }: Props) {
