@@ -450,6 +450,30 @@
       "description_educational": "Caixin's PMI skews toward smaller/export-facing manufacturers, complementing the official NBS PMI — divergence between the two is itself a watched signal for base-metals demand momentum."
     },
     {
+      "id": "us_ism_manufacturing_pmi",
+      "name": "US ISM Manufacturing PMI",
+      "source_url": "https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/",
+      "frequency": "monthly",
+      "cadence_type": "manual",
+      "next_release_utc": "2026-10-01T14:00:00Z",
+      "affected_contracts": [
+        "copper",
+        "aluminium",
+        "zinc",
+        "crude"
+      ],
+      "impact_tier": "medium",
+      "consensus_field": null,
+      "prior_field": {
+        "value": null,
+        "unit": "index",
+        "as_of_period": null,
+        "source": "manual",
+        "as_of": "2026-09-26"
+      },
+      "description_educational": "The headline read on US industrial/manufacturing activity — complements China's NBS/Caixin PMIs as the other major demand-side signal for base metals and, via broader economic-activity expectations, crude. No automated actuals feed yet (ISM's own real-time data isn't freely API-accessible; FRED republishes it but with unconfirmed same-day latency — see docs/decision-support-roadmap.md's Calendar research)."
+    },
+    {
       "id": "baker_hughes_rig_count",
       "name": "Baker Hughes US Rig Count",
       "source_url": "https://rigcount.bakerhughes.com/",
