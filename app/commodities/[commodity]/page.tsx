@@ -318,6 +318,18 @@ function fmt(n: number, decimals = 0): string {
   return n.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
 }
 
+// Maps a commodity to the international benchmark instrument already in
+// every snapshot (see lib/snapshot.ts's Snapshot.instruments) — used to
+// show a live value next to the otherwise-static "What Moves X" driver
+// list. Copper has no COMEX/LME feed wired up yet (see lib/basis.ts's
+// comment on copperSpreadPct); left out rather than showing a fake number.
+const BENCHMARK_INSTRUMENT: Partial<Record<string, { key: string; label: string; prefix: string }>> = {
+  gold:   { key: 'COMEX_GOLD', label: 'COMEX Gold',  prefix: '$' },
+  silver: { key: 'COMEX_SILVER', label: 'COMEX Silver', prefix: '$' },
+  crude:  { key: 'WTI', label: 'WTI Crude', prefix: '$' },
+  natgas: { key: 'HENRY_HUB', label: 'Henry Hub', prefix: '$' },
+}
+
 function pctBadge(pct: number) {
   const up    = pct >= 0
   const color = up ? '#16A34A' : '#DC2626'
@@ -793,6 +805,23 @@ export default async function CommodityPage({ params }: Props) {
             background: 'var(--surface-1)', border: '1px solid var(--border)',
             borderRadius: 4, padding: '20px 24px', marginBottom: 32,
           }}>
+            {(() => {
+              const usdinrLive = snap?.instruments?.USDINR
+              const benchmark  = BENCHMARK_INSTRUMENT[entry.key]
+              const benchLive  = benchmark ? snap?.instruments?.[benchmark.key] : null
+              if (!usdinrLive?.price && !benchLive?.price) return null
+              return (
+                <div style={{ fontSize: 12.5, color: 'var(--ink-3)', marginBottom: 14, paddingBottom: 14, borderBottom: '1px solid var(--border)' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--ink-2)' }}>Live right now — </span>
+                  {usdinrLive?.price ? (
+                    <>USD/INR: ₹{usdinrLive.price.toFixed(2)} ({usdinrLive.changePct >= 0 ? '+' : ''}{usdinrLive.changePct.toFixed(2)}%)</>
+                  ) : null}
+                  {benchmark && benchLive?.price ? (
+                    <> · {benchmark.label}: {benchmark.prefix}{benchLive.price.toFixed(2)} ({benchLive.changePct >= 0 ? '+' : ''}{benchLive.changePct.toFixed(2)}%)</>
+                  ) : null}
+                </div>
+              )
+            })()}
             <ul style={{ margin: 0, padding: '0 0 0 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {info.priceDrivers.map((driver, i) => (
                 <li key={i} style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.6 }}>{driver}</li>
