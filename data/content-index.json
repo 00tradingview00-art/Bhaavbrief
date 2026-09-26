@@ -1,5 +1,27 @@
 [
   {
+    "type": "research",
+    "slug": "2026-09-26-weekly-catalyst",
+    "href": "/research/2026-09-26-weekly-catalyst",
+    "title": "Brent's $7 Risk-Premium Unwind Resets the MCX Energy Week",
+    "description": "Brent fell 8.56% against WTI's 2.29%, collapsing the Brent-WTI spread to about $5 — the seaborne war premium has deflated, handing next week back to inventory and macro data.",
+    "excerpt": "The single most informative number in this snapshot is not an MCX price. It is the gap between two international crude benchmarks. Brent printed 97.47 against a previous close of 106.60 — a fall of 8.",
+    "date": "2026-09-26",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "copper"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "copper"
+    ],
+    "premium": true
+  },
+  {
     "type": "brief",
     "slug": "edition-114",
     "href": "/briefs/edition-114",
