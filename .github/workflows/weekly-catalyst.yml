@@ -2,7 +2,10 @@ name: Publish Pro Weekly Catalyst
 
 on:
   schedule:
-    - cron: '0 4 * * 6' # Saturday 9:30 AM IST, after Friday's MCX close
+    # Minute offset from :00 — GitHub Actions documents exact-top-of-hour cron
+    # firings as the most likely to be delayed or dropped under load; this
+    # missed its first-ever run entirely on 2026-09-26 with zero runs logged.
+    - cron: '7 4 * * 6' # Saturday ~9:37 AM IST, after Friday's MCX close
   workflow_dispatch:
 
 concurrency:
@@ -49,3 +52,18 @@ jobs:
           git diff --staged --quiet && exit 0
           git commit -m "feat(research): Weekly Catalyst $(TZ=Asia/Kolkata date +%Y-%m-%d)"
           git push origin main
+
+      - name: Alert on failure
+        if: failure()
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          REPO: ${{ github.repository }}
+        run: |
+          TIME_IN=$(TZ=Asia/Kolkata date '+%d %b %Y, %I:%M %p IST')
+          LINK="https://github.com/${REPO}/actions/workflows/weekly-catalyst.yml"
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${BREVO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{\"sender\":{\"name\":\"BhaavBrief Bot\",\"email\":\"${SENDER_EMAIL}\"},\"to\":[{\"email\":\"00tradingview00@gmail.com\"}],\"subject\":\"ACTION REQUIRED: Weekly Catalyst failed -- ${TIME_IN}\",\"htmlContent\":\"<p>Weekly Catalyst workflow failed on ${TIME_IN}.</p><p><a href='${LINK}'>Re-run workflow</a></p>\"}" \
+            || true
