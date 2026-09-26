@@ -66,8 +66,26 @@ function parseFrontmatter(raw) {
 
 // ─── Convert MDX to HTML email ────────────────────────────────────────────────
 
-function mdxToHtml(content, title, edition, date) {
-  const body = content
+// Splits the brief into its lead-in text (the price-bar line) and each ## section
+// in order, so the email can keep the factual sections (Price Bridge, Macro Thread)
+// in full and tease the interpretive ones (Dominant Theme + the 4 SACRED sections —
+// see feedback-brief-structure memory) — those are the reason to click through.
+function extractSections(content) {
+  const headingRe = /^## (?:\[(\w+)\] )?(.+)$/gm
+  const indices = []
+  let m
+  while ((m = headingRe.exec(content))) indices.push({ index: m.index, tag: m[1], heading: m[2] })
+  const preamble = content.slice(0, indices[0]?.index ?? content.length)
+  const sections = indices.map((s, i) => ({
+    tag: s.tag,
+    heading: s.heading,
+    raw: content.slice(s.index, i + 1 < indices.length ? indices[i + 1].index : content.length),
+  }))
+  return { preamble, sections }
+}
+
+function formatMarkdown(text) {
+  return text
     .replace(/^## \[(\w+)\] (.+)$/gm, (_, tag, heading) => {
       const colors = { WATCH: '#996600', NEUTRAL: '#48483A' }
       const bgs    = { WATCH: '#FFF7E0', NEUTRAL: '#F3F2EC' }
@@ -79,6 +97,25 @@ function mdxToHtml(content, title, edition, date) {
     .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#18180F;font-weight:600">$1</strong>')
     .replace(/^- (.+)$/gm, '<p style="margin:4px 0;color:#48483A;font-size:14px;font-weight:300">— $1</p>')
     .replace(/\n\n/g, '</p><p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 12px">')
+}
+
+function mdxToHtml(content, title, edition, date) {
+  const { preamble, sections } = extractSections(content)
+  // Keep the first two sections (Price Bridge, Macro Thread) in full — they're
+  // factual/data, already visible on the site's ticker, nothing withheld there.
+  const FULL_SECTION_COUNT = 2
+  const shown    = sections.slice(0, FULL_SECTION_COUNT)
+  const withheld = sections.slice(FULL_SECTION_COUNT)
+
+  const body = formatMarkdown(preamble + shown.map(s => s.raw).join(''))
+
+  // The withheld sections are the interpretive core (dominant theme + the SACRED
+  // 4 — see feedback-brief-structure memory): naming them is the actual incentive
+  // to click, no fake cliffhanger or truncated sentence required.
+  const teaserHeading = withheld[0]
+    ? `<h2 style="font-family:Georgia,serif;font-size:18px;font-weight:700;margin:24px 0 4px;border-left:3px solid #C8720A;padding-left:12px;color:#8A8A7A">${withheld[0].heading.replace(/\s*—\s*\w+$/, '')}</h2>`
+    : ''
+  const remainingList = withheld.slice(1).map(s => s.heading.replace(/\s*—\s*\w+$/, '')).join(' · ')
 
   const slug = `edition-${String(edition).padStart(3, '0')}`
 
@@ -95,8 +132,10 @@ function mdxToHtml(content, title, edition, date) {
   <div>
     <p style="font-size:15px;line-height:1.75;color:#48483A;font-weight:300;margin:0 0 12px">${body}</p>
   </div>
+  ${teaserHeading}
+  ${remainingList ? `<p style="font-size:13px;color:#8A8A7A;font-style:italic;margin:0 0 16px">Plus ${remainingList} — on the full edition.</p>` : ''}
   <a href="https://bhaavbrief.in/briefs/${slug}?utm_source=newsletter&utm_medium=email&utm_campaign=daily_brief" style="display:block;background:#C8720A;color:#FAFAF6;text-decoration:none;padding:12px 24px;text-align:center;font-family:monospace;font-size:12px;letter-spacing:0.04em;margin:24px 0">
-    Read full edition on BhaavBrief →
+    Read the full edition on BhaavBrief →
   </a>
   <div style="border-top:0.5px solid #DDDDD0;margin-top:32px;padding-top:16px;font-size:10px;color:#8A8A7A;font-family:monospace;line-height:1.8">
     © 2026 BhaavBrief · bhaavbrief.in<br>
