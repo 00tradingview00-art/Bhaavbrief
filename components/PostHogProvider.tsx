@@ -44,26 +44,40 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
     const host = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://app.posthog.com'
     if (!key) return
 
-    import('posthog-js').then(mod => {
-      ph = mod.default
-      ph.init(key, {
-        api_host:                  host,
-        capture_pageview:          false,
-        capture_pageleave:         true,
-        persistence:               'localStorage+cookie',
-        autocapture:               false,
-        disable_session_recording: false,
-        // No survey is defined anywhere in this repo — skip fetching the
-        // surveys extension bundle (33 KiB incl. a bundled Preact copy),
-        // flagged as pure waste in PageSpeed Insights' unused-JS audit.
-        disable_surveys:           true,
+    function load() {
+      import('posthog-js').then(mod => {
+        ph = mod.default
+        ph.init(key as string, {
+          api_host:                  host,
+          capture_pageview:          false,
+          capture_pageleave:         true,
+          persistence:               'localStorage+cookie',
+          autocapture:               false,
+          disable_session_recording: false,
+          // No survey is defined anywhere in this repo — skip fetching the
+          // surveys extension bundle (33 KiB incl. a bundled Preact copy),
+          // flagged as pure waste in PageSpeed Insights' unused-JS audit.
+          disable_surveys:           true,
+        })
+        const aiEngine = detectAiEngineReferrer(document.referrer)
+        ph.capture('$pageview', {
+          $current_url: window.location.href,
+          ...(aiEngine ? { visited_from_ai_engine: aiEngine } : {}),
+        })
       })
-      const aiEngine = detectAiEngineReferrer(document.referrer)
-      ph.capture('$pageview', {
-        $current_url: window.location.href,
-        ...(aiEngine ? { visited_from_ai_engine: aiEngine } : {}),
-      })
-    })
+    }
+
+    // Deferred to idle time rather than run inline on mount — this used to
+    // fire during hydration, competing for the same main-thread window
+    // Lighthouse measures as Total Blocking Time (confirmed via a throttled
+    // profile: this chunk's execution landed squarely inside that window).
+    // requestIdleCallback isn't in Safari, hence the setTimeout fallback.
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(load)
+      return () => window.cancelIdleCallback(id)
+    }
+    const id = setTimeout(load, 1)
+    return () => clearTimeout(id)
   }, [])
 
   return (
