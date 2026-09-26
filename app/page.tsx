@@ -30,7 +30,7 @@ import IVTermStructureChart from '@/components/terminal/IVTermStructureChartLazy
 const TERMINAL_SECTIONS = [
   { id: 'pulse',       label: 'Market Pulse' },
   { id: 'commodities', label: 'Commodities' },
-  { id: 'volcorr',     label: 'Vol & Correlation' },
+  { id: 'volcorr',     label: 'Vol & Correlation', pro: true },
   { id: 'options',     label: 'Options Intelligence' },
   { id: 'macro',       label: 'Macro' },
   { id: 'movers',      label: 'Movers' },

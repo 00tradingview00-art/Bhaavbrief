@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from 'react'
 export interface TerminalSection {
   id:    string
   label: string
+  // Marks a section that has Pro-gated content — surfaced here (sticky, top
+  // of page, seen by ~every homepage visitor) rather than only where the
+  // ProBlurGate itself sits further down, which most visitors never scroll to.
+  pro?:  boolean
 }
 
 const SCROLL_OFFSET = 96 // sticky header + tabbar height
@@ -73,6 +77,14 @@ export default function TerminalTabbar({ sections }: { sections: TerminalSection
               }}
             >
               {s.label}
+              {s.pro && (
+                <span style={{
+                  marginLeft: 5, fontSize: 9, fontWeight: 700,
+                  letterSpacing: '0.05em', color: 'var(--gold)',
+                }}>
+                  PRO
+                </span>
+              )}
             </button>
           )
         })}
