@@ -153,6 +153,20 @@
         "fetched_at": "2026-09-20T05:41:44.317Z",
         "age_hours": 36.026199444444444,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 31,
+        "reach": 29,
+        "ig_reels_avg_watch_time": 1329,
+        "ig_reels_video_view_total_time": 39895,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-09-26T03:22:09.380Z",
+        "age_hours": 177.69982805555554,
+        "observation": "first_after_7d"
       }
     ],
     "insights": {
@@ -165,7 +179,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-09-20T05:41:44.317Z"
+      "fetched_at": "2026-09-26T03:22:09.380Z"
     }
   },
   {
