@@ -449,7 +449,9 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
   return {
     mcx:          hasLive ? q!.last_price            : (prevClose > 0 ? prevClose : fallbackPrice),
     mcxChangePct: hasLive ? KiteClient.changePct(q!) : fallbackPct,
-    mcxChange:    hasLive ? q!.net_change            : 0,
+    // Kite's net_change comes back 0 for MCX futures (seen live 2026-09-28), so
+    // derive it from the same prev close changePct uses. 0 = hidden by the UI.
+    mcxChange:    hasLive && prevClose > 0 ? parseFloat((q!.last_price - prevClose).toFixed(2)) : 0,
     mcxOpen:      hasLive ? (q!.ohlc?.open   ?? 0)  : 0,
     mcxHigh:      hasLive ? (q!.ohlc?.high   ?? 0)  : 0,
     mcxLow:       hasLive ? (q!.ohlc?.low    ?? 0)  : 0,

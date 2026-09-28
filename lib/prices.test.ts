@@ -64,6 +64,16 @@ describe('buildMCXData', () => {
     expect(d.mcx).toBe(87700) // own ohlc.close wins over the unrelated fallback price
     expect(d.mcxVolume).toBe(0) // still not "live" — OHLC/volume/OI stay zeroed
   })
+
+  test('mcxChange is LTP − prev close, not Kite net_change (which comes back 0 for MCX futures)', () => {
+    const q = makeQuote({ last_price: 149738, net_change: 0, ohlc: { open: 0, high: 0, low: 0, close: 153277 } })
+    expect(buildMCXData(q, 0, 0, goldInfo).mcxChange).toBe(-3539)
+  })
+
+  test('mcxChange stays 0 (hidden) when the prev close is missing', () => {
+    const q = makeQuote({ ohlc: { open: 0, high: 0, low: 0, close: 0 } })
+    expect(buildMCXData(q, 0, 0, goldInfo).mcxChange).toBe(0)
+  })
 })
 
 describe('buildForexData', () => {
