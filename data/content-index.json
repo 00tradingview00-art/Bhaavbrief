@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-28-mcx-vwap-india",
+    "href": "/articles/2026-09-28-mcx-vwap-india",
+    "title": "What Is MCX VWAP and How Institutional Traders Use It in India",
+    "description": "Understand what is MCX VWAP and how to use it in India — the calculation, institutional logic, and real market episodes explained for serious traders.",
+    "excerpt": "Understanding what is MCX VWAP and how to use it in India is essential for any trader who wants to decode where institutional money is positioned on any given session. VWAP — Volume Weighted Average P",
+    "date": "2026-09-28",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-09-26-weekly-catalyst",
     "href": "/research/2026-09-26-weekly-catalyst",
