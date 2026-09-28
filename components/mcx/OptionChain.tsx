@@ -55,6 +55,8 @@ interface AAVResult {
 interface OptionsData {
   instrument: string; expiry: string; expiries: string[]
   futurePrice: number; maxPain: number; pcr: number
+  // Optional: last-known-good cached payloads from before this field existed won't carry it
+  futureChange?: number|null; futureChangePct?: number|null
   ivix: number|null; aav: AAVResult; volPremium: number|null
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
   riskFreeRate: number; riskFreeRateAsOf: string
@@ -448,6 +450,22 @@ function Pill({ label, value, color, onClick, expand, info }: {
   )
 }
 
+function UnderlyingValue({ price, change, changePct }: {
+  price: number; change?: number|null; changePct?: number|null
+}) {
+  if (change == null || changePct == null) return <>{fmtINR(price)}</>
+  const color = change > 0 ? C.up : change < 0 ? C.dn : C.ink4
+  const sign  = change > 0 ? '+' : change < 0 ? '−' : ''
+  return (
+    <span style={{ whiteSpace: 'nowrap' }}>
+      {fmtINR(price)}
+      <span style={{ marginLeft: 6, fontSize: 11, fontWeight: 500, color }}>
+        {sign}{fmtN(Math.abs(change), 0)} ({sign}{fmtN(Math.abs(changePct), 2)}%)
+      </span>
+    </span>
+  )
+}
+
 function PCRPill({ pcr, info }: { pcr: number; info?: string }) {
   // Labels describe the positioning data itself (which side has more open
   // interest), not a translated market call — "conventionally read as
@@ -753,8 +771,8 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         <div style={{
           borderBottom: `1px solid ${C.bdr}`, display: 'flex', overflowX: 'auto', background: C.surf, scrollbarWidth: 'none',
         }}>
-          <Pill label="Underlying" value={fmtINR(data.futurePrice)}
-            info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks." />
+          <Pill label="Underlying" value={<UnderlyingValue price={data.futurePrice} change={data.futureChange} changePct={data.futureChangePct} />}
+            info="The current MCX futures price for the nearest expiry — used as the reference price for ATM and the Greeks. The change shown is versus the previous session's close." />
           <Pill label="Max Pain"   value={fmtINR(data.maxPain)}    color={C.gold}
             info="Where the options market may be pulling price toward by expiry." />
           <PCRPill pcr={data.pcr}
