@@ -1,5 +1,5 @@
 {
-  "next": 1,
+  "next": 2,
   "published": [
     {
       "id": "gold-india-story-001",
@@ -8,6 +8,10 @@
     {
       "id": "gold-labels-002",
       "generated_at": "2026-09-25T18:19:20.787Z"
+    },
+    {
+      "id": "rupee-gold-001",
+      "generated_at": "2026-09-28T20:27:21.486Z"
     }
   ],
   "retired_queue_history": [
