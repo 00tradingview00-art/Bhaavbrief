@@ -1,6 +1,24 @@
 [
   {
     "type": "hawk-scan",
+    "slug": "2026-09-28-mcx-crude-breaks-4-refinery-maintenance-seasonality-wti-hold",
+    "href": "/articles/2026-09-28-mcx-crude-breaks-4-refinery-maintenance-seasonality-wti-hold",
+    "title": "MCX Crude breaks 4% — refinery maintenance seasonality, WTI holds $92.84",
+    "description": "MCX Crude ₹8,904/bbl, down 4.00%. No geopolitical trigger detected; Sep–Oct refinery turnarounds typical.",
+    "excerpt": "TRIGGER MCX Crude has fallen 4.00% to ₹8,904/bbl as US refinery maintenance turnarounds intensify in September–October, reducing crude throughput demand from refiners. PRICE ₹8,904/bbl · −4.00% · PLUN",
+    "date": "2026-09-28T17:37:24.109Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8904
+  },
+  {
+    "type": "hawk-scan",
     "slug": "2026-09-28-mcx-crude-surges-9195-bbl-3-92-spike-above-hawk-threshold",
     "href": "/articles/2026-09-28-mcx-crude-surges-9195-bbl-3-92-spike-above-hawk-threshold",
     "title": "MCX Crude surges ₹9195/bbl — 3.92% spike above Hawk threshold",
