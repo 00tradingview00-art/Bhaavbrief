@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-115",
+    "href": "/briefs/edition-115",
+    "title": "Gold Falls $77 as Oil Climbs — The Safe-Haven Trade Is Splitting",
+    "description": "COMEX gold dropped sharply while WTI crude rose, revealing a fracture between geopolitical fear and rate-driven selling.",
+    "excerpt": "MCX Gold ₹150881 | Crude ₹8848 | USDINR ₹95.77 Yesterday's Edge — Result: Edition #114 watched whether WTI would close above 93.11. Confirmed ✓, now at 93.59. | Commodity | Global Price | USD/INR | MC",
+    "date": "2026-09-28T02:43:56.222Z",
+    "edition": "115",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "research",
     "slug": "2026-09-26-weekly-catalyst",
     "href": "/research/2026-09-26-weekly-catalyst",
