@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { classifyQuote, pickDefaultExpiry } from './options'
+import { classifyQuote, pickDefaultExpiry, underlyingChange } from './options'
 
 describe('pickDefaultExpiry', () => {
   test('picks the nearest expiry that is today or later, skipping already-passed ones', () => {
@@ -107,5 +107,26 @@ describe('classifyQuote — liquidity tier boundaries', () => {
   test('traded today, wide but not JUNK-level spread (15-40% of mid) -> STALE', () => {
     const r = classifyQuote(100, 10, 5, 80, 120, 0, 300000) // spread 40/100 = 40%, right at the JUNK boundary
     expect(r.tier).not.toBe('LIVE')
+  })
+})
+
+describe('underlyingChange', () => {
+  test('up day', () => {
+    expect(underlyingChange(150499, 149265)).toEqual({ change: 1234, changePct: 0.83 })
+  })
+  test('down day, rounds to 2 decimals', () => {
+    expect(underlyingChange(312.4, 318.15)).toEqual({ change: -5.75, changePct: -1.81 })
+  })
+  test('flat', () => {
+    expect(underlyingChange(1000, 1000)).toEqual({ change: 0, changePct: 0 })
+  })
+  test('missing or invalid previous close → null, never a fake 0', () => {
+    expect(underlyingChange(150499, 0)).toBeNull()
+    expect(underlyingChange(150499, undefined)).toBeNull()
+    expect(underlyingChange(150499, null)).toBeNull()
+    expect(underlyingChange(150499, NaN)).toBeNull()
+  })
+  test('missing LTP → null', () => {
+    expect(underlyingChange(0, 149265)).toBeNull()
   })
 })

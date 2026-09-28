@@ -64,6 +64,22 @@ export function pickDefaultExpiry(expiries: string[], today: string): string {
   return liveExpiries.length > 0 ? liveExpiries[0] : expiries[expiries.length - 1]
 }
 
+// Today's move of the underlying future vs the previous session's close
+// (Kite's ohlc.close — the same reference the CE/PE Chng columns use).
+// Returns null rather than 0 when either side is missing, so a missing close
+// hides the change instead of rendering a fake "0.00%".
+export function underlyingChange(
+  ltp: number, prevClose: number | null | undefined,
+): { change: number; changePct: number } | null {
+  if (!Number.isFinite(ltp) || ltp <= 0) return null
+  if (prevClose == null || !Number.isFinite(prevClose) || prevClose <= 0) return null
+  const change = ltp - prevClose
+  return {
+    change:    parseFloat(change.toFixed(2)),
+    changePct: parseFloat(((change / prevClose) * 100).toFixed(2)),
+  }
+}
+
 // Exported for lib/options.test.ts — this is the financially-consequential
 // no-arbitrage/liquidity filter (D-06), it should not be tested only by
 // manual live-data spot-checks that don't survive the next refactor.
@@ -216,7 +232,9 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
     historicalPromise,
   ])
 
-  const futurePrice = nearFut ? (quotes[String(nearFut.instrument_token)]?.last_price ?? 0) : 0
+  const futQuote    = nearFut ? quotes[String(nearFut.instrument_token)] : undefined
+  const futurePrice = futQuote?.last_price ?? 0
+  const futChange   = underlyingChange(futurePrice, futQuote?.ohlc?.close)
 
   // Time to expiry in years
   const T = Math.max(
@@ -354,6 +372,8 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
     expiry:      activeExpiry,
     expiries,
     futurePrice,
+    futureChange:    futChange?.change    ?? null,
+    futureChangePct: futChange?.changePct ?? null,
     maxPain,
     pcr,
     ivix,
@@ -418,7 +438,9 @@ async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: 
   const activeFut  = (requestedExpiry ? futures.find(f => f.expiry === requestedExpiry) : null) ?? futures[0]
 
   const quotes = await kc.getQuotes(futures.map(f => f.instrument_token))
-  const futurePrice = quotes[String(activeFut.instrument_token)]?.last_price ?? 0
+  const futQuote    = quotes[String(activeFut.instrument_token)]
+  const futurePrice = futQuote?.last_price ?? 0
+  const futChange   = underlyingChange(futurePrice, futQuote?.ohlc?.close)
 
   return {
     instrument,
@@ -426,6 +448,8 @@ async function getFuturesOnlyChainUncached(instrument: string, requestedExpiry: 
     expiry:      activeFut.expiry,
     expiries,
     futurePrice,
+    futureChange:    futChange?.change    ?? null,
+    futureChangePct: futChange?.changePct ?? null,
     maxPain:     null,
     pcr:         0,
     ivix:        null,
