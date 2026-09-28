@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-09-28-mcx-crude-surges-9195-bbl-3-92-spike-above-hawk-threshold",
+    "href": "/articles/2026-09-28-mcx-crude-surges-9195-bbl-3-92-spike-above-hawk-threshold",
+    "title": "MCX Crude surges ₹9195/bbl — 3.92% spike above Hawk threshold",
+    "description": "MCX Crude +3.92% to ₹9,195/bbl. WTI $95.20. Trigger: 3% move threshold breached.",
+    "excerpt": "TRIGGER MCX Crude has spiked 3.92% to ₹9,195/bbl — exceeding the 3% Hawk-Scan threshold — as WTI tracks $95.20 amid steady geopolitical undertone and no active relief signals from US refinery maintena",
+    "date": "2026-09-28T09:02:14.406Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Nat Gas",
+      "Crude Oil"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9195
+  },
+  {
     "type": "brief",
     "slug": "edition-115",
     "href": "/briefs/edition-115",
