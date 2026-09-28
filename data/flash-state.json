@@ -10,13 +10,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-09-22T08:28:04.339Z",
-    "lastFlashPrice": 236404,
-    "lastRoundLevel": 240000,
+    "lastFlashAt": "2026-09-28T09:57:25.549Z",
+    "lastFlashPrice": 227548,
+    "lastRoundLevel": 230000,
     "recentFlashIds": [
+      "2026-09-28-15-27-mcx-silver-falls-3-05-as-precious-metals-retreat-deepen",
       "2026-09-22-13-58-mcx-silver-falls-1-22-on-cross-asset-pressure",
-      "2026-09-18-14-36-mcx-silver-rallies-1-99-on-safe-haven-bid",
-      "2026-09-11-02-18-mcx-silver-slides-0-11-as-gold-weakness-persists"
+      "2026-09-18-14-36-mcx-silver-rallies-1-99-on-safe-haven-bid"
     ]
   },
   "MCX_CRUDE": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-22T09:24:46.510Z",
-    "lastFlashPrice": 95.71,
+    "lastFlashAt": "2026-09-28T09:57:25.549Z",
+    "lastFlashPrice": 96.39,
     "lastRoundLevel": 96,
     "recentFlashIds": [
+      "2026-09-28-15-27-usd-inr-strengthens-0-28-on-rupee-consolidation-reversa",
       "2026-09-22-14-54-usd-inr-weakens-0-12-as-rupee-consolidates-inflow-gains",
-      "2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows",
-      "2026-09-10-18-23-usd-inr-strengthens-0-38-on-sustained-fpi-inflows"
+      "2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows"
     ]
   }
 }
