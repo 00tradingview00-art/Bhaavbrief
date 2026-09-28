@@ -104,19 +104,33 @@
         "fetched_at": "2026-09-21T03:09:18.247Z",
         "age_hours": 33.992532777777775,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 41,
+        "reach": 35,
+        "ig_reels_avg_watch_time": 5163,
+        "ig_reels_video_view_total_time": 191056,
+        "likes": 2,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 2,
+        "fetched_at": "2026-09-28T02:43:46.089Z",
+        "age_hours": 201.56693333333334,
+        "observation": "late_seven_day"
       }
     ],
     "insights": {
       "views": 41,
       "reach": 35,
-      "ig_reels_avg_watch_time": 5162,
-      "ig_reels_video_view_total_time": 185848,
+      "ig_reels_avg_watch_time": 5163,
+      "ig_reels_video_view_total_time": 191056,
       "likes": 2,
       "comments": 0,
       "shares": 0,
       "saved": 0,
       "total_interactions": 2,
-      "fetched_at": "2026-09-21T03:09:18.247Z"
+      "fetched_at": "2026-09-28T02:43:46.089Z"
     }
   },
   {
