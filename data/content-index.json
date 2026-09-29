@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-116",
+    "href": "/briefs/edition-116",
+    "title": "Brent at $99 While Gold Slips — Oil's War Premium Widens the Split",
+    "description": "Crude surges toward $100 on Middle East tensions as gold retreats, deepening the safe-haven divergence that began three sessions ago.",
+    "excerpt": "MCX Gold ₹146804 | Crude ₹8911 | USDINR ₹96.41 Yesterday's Edge — Result: Edition #115 watched whether COMEX GOLD would close below 4,244.7. Confirmed ✓, now at 4,164.1. | Commodity | Global Price | U",
+    "date": "2026-09-29T02:22:57.633Z",
+    "edition": "116",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-09-28-mcx-crude-breaks-4-refinery-maintenance-seasonality-wti-hold",
     "href": "/articles/2026-09-28-mcx-crude-breaks-4-refinery-maintenance-seasonality-wti-hold",
