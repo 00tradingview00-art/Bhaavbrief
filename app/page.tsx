@@ -16,7 +16,6 @@ import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import MacroCard from '@/components/terminal/MacroCard'
 import MoversPanel from '@/components/terminal/MoversPanel'
 import CorrelationHeatmap from '@/components/terminal/CorrelationHeatmap'
-import { getTermStructureData } from '@/lib/terminalData'
 import { getCorrelationMatrix } from '@/lib/correlation'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
 import { getSparklineCloses } from '@/lib/history'
@@ -119,17 +118,11 @@ export default async function HomePage() {
   const prices = snap ? snapshotToPriceData(snap) : null
   const terminalData = await getTerminalData()
   const macroMetrics = computeMacro(snap)
+  // Only the matrix's labels/sample size go into this shared ISR page. This
+  // route never calls auth() (that would force it off ISR), so it can't know
+  // who is Pro — Pro-only values (correlations, term structure) are fetched
+  // client-side from /api/pro/data by the chart components themselves.
   const correlationMatrix = getCorrelationMatrix(20)
-  const termStructure = await getTermStructureData()
-  // Server always seeds isPro=false, never calls auth() here — reading real
-  // entitlement server-side is a dynamic API that would force this whole
-  // route off ISR (revalidate=60 above), turning every homepage visit into a
-  // fresh live re-fetch of ~15 option-chain calls against Kite instead of at
-  // most one per 60s. Matches the established site-wide convention (see
-  // app/tools/mcx-iv-rank/page.tsx's getDefaultVolatilityData comment and
-  // components/markets/MarketsClient.tsx's isPro=false comment) — a real Pro
-  // visitor gets upgraded client-side by ProBlurGate's own useIsPro() check.
-  const isPro = false
   const activeArcs = getActiveArcs()
   const [latest, ...previous] = briefs
   const nextEvent = getNextHighImpactEvent()
@@ -253,12 +246,12 @@ export default async function HomePage() {
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>iVIX Term Structure</h3>
             <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>Implied volatility by expiry bucket, across the 5 core MCX chains</p>
-            <IVTermStructureChart termStructure={termStructure} isPro={isPro} />
+            <IVTermStructureChart />
           </div>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>Cross-Asset Correlation</h3>
             <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>5 MCX commodities × USDINR</p>
-            <CorrelationHeatmap correlation={correlationMatrix} isPro={isPro} />
+            <CorrelationHeatmap labels={correlationMatrix.labels} sampleSize={correlationMatrix.sampleSize} />
           </div>
         </div>
       </section>
