@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-117",
+    "href": "/briefs/edition-117",
+    "title": "Brent Drops $8.79 While Gold Climbs — Oil's War Premium Is Cracking",
+    "description": "Brent crude shed nearly $9 in a single session while gold surged, signalling the geopolitical risk trade is rotating sharply.",
+    "excerpt": "MCX Gold ₹146232 | Crude ₹8678 | USDINR ₹96.27 Yesterday's Edge — Result: Edition #116 watched whether WTI would close above 93.59. Rejected ✗, now at 89.68. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-09-30T03:14:45.945Z",
+    "edition": "117",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-116",
     "href": "/briefs/edition-116",
     "title": "Brent at $99 While Gold Slips — Oil's War Premium Widens the Split",
