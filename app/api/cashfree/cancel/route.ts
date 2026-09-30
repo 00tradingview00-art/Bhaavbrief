@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { cancelCashfreeSubscription } from '@/lib/cashfree'
-import { deactivateSubscription, isProUser, markSubscriptionEnded } from '@/lib/subscription'
+import { isProUser, markCancelling, markSubscriptionEnded } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 
 export const dynamic = 'force-dynamic'
@@ -25,6 +25,14 @@ export async function POST(): Promise<NextResponse> {
     return NextResponse.json({ error: 'No active subscription to cancel' }, { status: 400 })
   }
 
+  const status = (await redisCommand('GET', `sub:${userId}:status`)) as string | null
+  if (status === 'cancelling') {
+    return NextResponse.json(
+      { error: 'Your plan is already cancelled — Pro stays active until the end of your paid period' },
+      { status: 400 },
+    )
+  }
+
   const merchantSubId = (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
   if (!merchantSubId) {
     // Subscription activated before this field was tracked, or a non-Cashfree
@@ -44,11 +52,12 @@ export async function POST(): Promise<NextResponse> {
     return NextResponse.json({ error: message }, { status: 502 })
   }
 
-  // Deactivate immediately for instant UI feedback rather than waiting on the
-  // webhook — safe to do twice; the webhook's own CANCELLED event will just
-  // set the same status again when it arrives.
+  // Renewal is stopped at Cashfree; the user keeps Pro for the days they have
+  // already paid for (the Cancel button promises exactly this). isProUser
+  // turns it off once expires_at passes. Cashfree's own CANCELLED webhook for
+  // this subscription sets the same state again when it arrives.
   await markSubscriptionEnded(merchantSubId)
-  await deactivateSubscription(userId)
+  await markCancelling(userId)
 
   return NextResponse.json({ ok: true })
 }

@@ -184,7 +184,7 @@ describe('webhook replay protection', () => {
   })
 })
 
-describe.skip('cancelling keeps access until the paid period ends', () => {
+describe('cancelling keeps access until the paid period ends', () => {
   it('cancel keeps Pro until expiry and stops renewal at Cashfree', async () => {
     seedActive('sub_A')
     const res = await cancel()
@@ -223,7 +223,7 @@ describe.skip('cancelling keeps access until the paid period ends', () => {
   })
 })
 
-describe.skip('change plan', () => {
+describe('change plan', () => {
   function changeRequest(plan: string) {
     return new NextRequest('https://bhaavbrief.in/api/cashfree/change-plan', {
       method: 'POST',

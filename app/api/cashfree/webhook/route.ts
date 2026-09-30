@@ -4,6 +4,7 @@ import {
   deactivateSubscription,
   isCurrentSubscription,
   isSubscriptionEnded,
+  markCancelling,
   markSubscriptionEnded,
   refreshSubscriptionExpiry,
   type Plan,
@@ -50,6 +51,11 @@ const DEACTIVATE_STATUSES = new Set([
   'COMPLETED',
   'CARD_EXPIRED',
 ])
+
+// Of those, the ones where renewal has stopped but the current paid period
+// is still valid — the user keeps Pro until expires_at. EXPIRED/COMPLETED
+// mean the subscription itself has run out, so access ends now.
+const KEEP_UNTIL_PERIOD_END = new Set(['CANCELLED', 'CUSTOMER_CANCELLED', 'CARD_EXPIRED'])
 
 // Durable trail of every webhook outcome for a subscription — not just
 // unresolved-user misses. console.error alone isn't enough to debug this:
@@ -191,8 +197,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: not current subscription' })
           return NextResponse.json({ ok: true })
         }
-        await deactivateSubscription(userId)
-        await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
+        if (KEEP_UNTIL_PERIOD_END.has(status)) {
+          await markCancelling(userId)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'cancelling: access until period end' })
+        } else {
+          await deactivateSubscription(userId)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
+        }
       } else {
         // A recognized user/subscription, but a status this route has no
         // branch for — e.g. an intermediate "still processing" state on a

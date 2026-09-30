@@ -4,7 +4,7 @@ import { useUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
-import { useIsPro } from '@/lib/useIsPro'
+import { useProStatus } from '@/lib/useIsPro'
 import { trackProPurchase } from '@/lib/analytics'
 import { PLAN_PRICES } from '@/lib/proPlans'
 
@@ -28,7 +28,10 @@ export default function ProCheckout({ plan, cta }: Props) {
   const { isSignedIn } = useUser()
   const { openSignIn } = useClerk()
   const router = useRouter()
-  const isPro = useIsPro()
+  // A user whose plan is cancelling still has Pro but is allowed to buy a new
+  // plan (change-plan sends them here) — only a renewing plan blocks checkout.
+  const { isPro: hasPro, cancelling } = useProStatus()
+  const isPro = hasPro && !cancelling
   const [loading, setLoading] = useState(false)
   const [phone, setPhone] = useState('')
   const [needPhone, setNeedPhone] = useState(false)
@@ -108,8 +111,8 @@ export default function ProCheckout({ plan, cta }: Props) {
       await new Promise(r => setTimeout(r, 2000))
       const res = await fetch('/api/cashfree/poll-status')
       if (res.ok) {
-        const { isPro, plan: activatedPlan, merchantSubId } = await res.json()
-        if (isPro) return { plan: activatedPlan ?? null, merchantSubId: merchantSubId ?? null }
+        const { isPro, cancelling: stillCancelling, plan: activatedPlan, merchantSubId } = await res.json()
+        if (isPro && !stillCancelling) return { plan: activatedPlan ?? null, merchantSubId: merchantSubId ?? null }
       }
     }
     return null

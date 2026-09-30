@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { cancelCashfreeSubscription } from '@/lib/cashfree'
-import { deactivateSubscription, isProUser, markSubscriptionEnded, type Plan } from '@/lib/subscription'
+import { isProUser, markCancelling, markSubscriptionEnded, type Plan } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 
 export const dynamic = 'force-dynamic'
@@ -43,6 +43,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Already on this plan' }, { status: 400 })
   }
 
+  // Already cancelled: renewal is stopped, nothing to cancel at Cashfree —
+  // the caller just goes on to checkout for the new plan.
+  const status = (await redisCommand('GET', `sub:${userId}:status`)) as string | null
+  if (status === 'cancelling') {
+    return NextResponse.json({ ok: true })
+  }
+
   const merchantSubId = (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
   if (!merchantSubId) {
     return NextResponse.json(
@@ -59,11 +66,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: message }, { status: 502 })
   }
 
-  // Deactivate immediately so the account page reflects "no active plan" right
-  // away — the caller then sends the user through a fresh checkout for the new
-  // plan. Same pattern as /api/cashfree/cancel.
+  // Stop the old plan renewing but keep its paid days, so a user who abandons
+  // the new checkout still has Pro until the old period ends (previously they
+  // were left with nothing). When the new plan's payment lands, its webhook
+  // activates it as the current subscription, and the old plan's late
+  // CANCELLED event is ignored as not-current.
   await markSubscriptionEnded(merchantSubId)
-  await deactivateSubscription(userId)
+  await markCancelling(userId)
 
   return NextResponse.json({ ok: true })
 }

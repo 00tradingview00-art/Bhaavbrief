@@ -1,7 +1,8 @@
 // Subscription status for BhaavBrief Pro.
 //
 // Redis key schema (Upstash, via redisCommand):
-//   sub:{userId}:status          → "active" | "cancelled" | "expired"
+//   sub:{userId}:status          → "active" | "cancelling" | "cancelled" | "expired"
+//                                   ("cancelling" = renewal stopped, Pro kept until expires_at)
 //   sub:{userId}:plan            → "daily" | "monthly" | "yearly"
 //   sub:{userId}:provider        → "cashfree"
 //   sub:{userId}:provider_sub_id → Cashfree's cf_subscription_id (display/support use)
@@ -26,12 +27,16 @@ import { clerkClient } from '@clerk/nextjs/server'
 import type { Plan } from './proPlans'
 
 export type { Plan } from './proPlans'
-export type SubStatus = 'active' | 'cancelled' | 'expired'
+export type SubStatus = 'active' | 'cancelling' | 'cancelled' | 'expired'
+
+// Statuses that still grant Pro until expires_at. A cancelled plan keeps the
+// days the user already paid for — access ends when the period does.
+const PRO_STATUSES = new Set(['active', 'cancelling'])
 
 export async function isProUser(userId: string | null): Promise<boolean> {
   if (!userId) return false
   const status = await redisCommand('GET', `sub:${userId}:status`)
-  if (status !== 'active') return false
+  if (!PRO_STATUSES.has(status as string)) return false
   const expiresAt = await redisCommand('GET', `sub:${userId}:expires_at`)
   if (!expiresAt) return false
   return new Date(expiresAt as string) > new Date()
@@ -68,7 +73,17 @@ export async function activateSubscription(
   await redisCommand('MSET', ...kv)
   const clerk = await clerkClient()
   await clerk.users.updateUserMetadata(userId, {
-    publicMetadata: { isPro: true, planExpires: expiresISO, plan },
+    publicMetadata: { isPro: true, planExpires: expiresISO, plan, cancelling: false },
+  })
+}
+
+// Renewal stopped (user cancelled, or Cashfree reported the mandate ended):
+// Pro stays on until the existing expires_at, which is left untouched.
+export async function markCancelling(userId: string): Promise<void> {
+  await redisCommand('SET', `sub:${userId}:status`, 'cancelling')
+  const clerk = await clerkClient()
+  await clerk.users.updateUserMetadata(userId, {
+    publicMetadata: { cancelling: true },
   })
 }
 
@@ -76,7 +91,7 @@ export async function deactivateSubscription(userId: string): Promise<void> {
   await redisCommand('SET', `sub:${userId}:status`, 'cancelled')
   const clerk = await clerkClient()
   await clerk.users.updateUserMetadata(userId, {
-    publicMetadata: { isPro: false, planExpires: null, plan: null },
+    publicMetadata: { isPro: false, planExpires: null, plan: null, cancelling: false },
   })
 }
 

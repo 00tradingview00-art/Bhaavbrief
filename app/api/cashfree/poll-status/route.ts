@@ -29,6 +29,11 @@ export async function GET(): Promise<NextResponse> {
   const merchantSubId = pro
     ? (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
     : null
+  // Pro but renewal stopped — still unlocks content, but the user may buy a
+  // new plan, and a purchase poller must not mistake it for a fresh activation.
+  const cancelling = pro
+    ? (await redisCommand('GET', `sub:${userId}:status`)) === 'cancelling'
+    : false
 
-  return NextResponse.json({ isPro: pro, planExpires: expiresAt, plan, merchantSubId })
+  return NextResponse.json({ isPro: pro, cancelling, planExpires: expiresAt, plan, merchantSubId })
 }

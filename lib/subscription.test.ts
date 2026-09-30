@@ -35,6 +35,22 @@ describe('isProUser', () => {
     expect(await isProUser('user1')).toBe(true)
   })
 
+  it('returns true for a cancelling user until the paid period ends', async () => {
+    const future = new Date(Date.now() + 86400_000).toISOString()
+    mockRedis
+      .mockResolvedValueOnce('cancelling')
+      .mockResolvedValueOnce(future)
+    expect(await isProUser('user1')).toBe(true)
+  })
+
+  it('returns false for a cancelling user once the paid period has passed', async () => {
+    const past = new Date(Date.now() - 1000).toISOString()
+    mockRedis
+      .mockResolvedValueOnce('cancelling')
+      .mockResolvedValueOnce(past)
+    expect(await isProUser('user1')).toBe(false)
+  })
+
   it('returns false for cancelled user', async () => {
     mockRedis.mockResolvedValueOnce('cancelled')
     expect(await isProUser('user1')).toBe(false)

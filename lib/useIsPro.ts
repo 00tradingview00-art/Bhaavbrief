@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 // No Clerk import here, deliberately — mirrors components/AuthNavChip.tsx's
 // fix. This hook's only Clerk client usage was useUser(), used solely to
 // seed an initial value and gate the fetch behind isSignedIn — both already
-// covered by fetchIsPro()'s own 200(+isPro)/401 response. But because this
+// covered by fetchProStatus()'s own 200(+isPro)/401 response. But because this
 // hook is pulled into OptionChain/IVSkewChart/OIBuildupChart/StrategyBuilder/
 // MarketsClient/BasisClient/ProBlurGate/ProToolsBanner, that one useUser()
 // call forced app/options, app/tools, app/markets, app/basis and
@@ -27,36 +27,49 @@ import { useEffect, useState } from 'react'
 // for one fetch round-trip instead of an instant unlock — the same
 // trade-off AuthNavChip.tsx already made.
 
-let cached: { isPro: boolean; expiresAt: number } | null = null
-let inFlight: Promise<boolean> | null = null
+export interface ProStatus {
+  isPro: boolean
+  /** Pro until the paid period ends, but renewal stopped — may buy a new plan. */
+  cancelling: boolean
+}
+
+const FREE: ProStatus = { isPro: false, cancelling: false }
+
+let cached: { status: ProStatus; expiresAt: number } | null = null
+let inFlight: Promise<ProStatus> | null = null
 const CACHE_MS = 15_000
 
-function fetchIsPro(): Promise<boolean> {
+function fetchProStatus(): Promise<ProStatus> {
   const now = Date.now()
-  if (cached && cached.expiresAt > now) return Promise.resolve(cached.isPro)
+  if (cached && cached.expiresAt > now) return Promise.resolve(cached.status)
   if (inFlight) return inFlight
 
   inFlight = fetch('/api/cashfree/poll-status')
     .then(r => (r.ok ? r.json() : null))
-    .then((d: { isPro?: boolean } | null) => {
+    .then((d: { isPro?: boolean; cancelling?: boolean } | null) => {
       const isPro = d?.isPro === true
-      cached = { isPro, expiresAt: Date.now() + CACHE_MS }
-      return isPro
+      const status = { isPro, cancelling: isPro && d?.cancelling === true }
+      cached = { status, expiresAt: Date.now() + CACHE_MS }
+      return status
     })
-    .catch(() => false)
+    .catch(() => FREE)
     .finally(() => { inFlight = null })
 
   return inFlight
 }
 
-export function useIsPro(): boolean {
-  const [isPro, setIsPro] = useState(false)
+export function useProStatus(): ProStatus {
+  const [status, setStatus] = useState<ProStatus>(FREE)
 
   useEffect(() => {
     let cancelled = false
-    fetchIsPro().then(v => { if (!cancelled) setIsPro(v) })
+    fetchProStatus().then(v => { if (!cancelled) setStatus(v) })
     return () => { cancelled = true }
   }, [])
 
-  return isPro
+  return status
+}
+
+export function useIsPro(): boolean {
+  return useProStatus().isPro
 }

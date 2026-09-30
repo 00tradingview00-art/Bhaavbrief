@@ -22,8 +22,9 @@ export default function ProPaidPoller() {
         if (cancelled) return
         const res = await fetch('/api/cashfree/poll-status')
         if (res.ok) {
-          const { isPro, plan, merchantSubId } = await res.json()
-          if (isPro) {
+          const { isPro, cancelling, plan, merchantSubId } = await res.json()
+          // A still-cancelling old plan reads as Pro too — wait for the new one.
+          if (isPro && !cancelling) {
             if (merchantSubId && plan in PLAN_PRICES) {
               trackProPurchase(plan, PLAN_PRICES[plan as Plan], merchantSubId)
             }
