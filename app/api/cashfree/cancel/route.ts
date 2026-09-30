@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { cancelCashfreeSubscription } from '@/lib/cashfree'
-import { deactivateSubscription, isProUser } from '@/lib/subscription'
+import { deactivateSubscription, isProUser, markSubscriptionEnded } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 
 export const dynamic = 'force-dynamic'
@@ -47,6 +47,7 @@ export async function POST(): Promise<NextResponse> {
   // Deactivate immediately for instant UI feedback rather than waiting on the
   // webhook — safe to do twice; the webhook's own CANCELLED event will just
   // set the same status again when it arrives.
+  await markSubscriptionEnded(merchantSubId)
   await deactivateSubscription(userId)
 
   return NextResponse.json({ ok: true })

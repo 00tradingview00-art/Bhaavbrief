@@ -80,6 +80,35 @@ export async function deactivateSubscription(userId: string): Promise<void> {
   })
 }
 
+// A user can have more than one Cashfree subscription over time (change-plan,
+// abandoned checkouts, re-subscribing). Webhooks for a subscription that is
+// no longer the user's current one must never change their access — e.g. the
+// old plan's CANCELLED event arriving after the new plan was bought.
+// Legacy rows with no stored merchant_sub_id are treated as current.
+export async function isCurrentSubscription(
+  userId: string,
+  merchantSubId: string | undefined,
+): Promise<boolean> {
+  if (!merchantSubId) return true
+  const stored = (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
+  return !stored || stored === merchantSubId
+}
+
+// Subscriptions we have cancelled (or Cashfree reported as ended) are recorded
+// so a late or replayed activation/payment webhook for them can never turn
+// Pro back on. Kept a little over a year — longer than any plan period.
+const ENDED_TTL_SECONDS = String(400 * 24 * 3600)
+
+export async function markSubscriptionEnded(merchantSubId: string | undefined): Promise<void> {
+  if (!merchantSubId) return
+  await redisCommand('SET', `cfsub:ended:${merchantSubId}`, '1', 'EX', ENDED_TTL_SECONDS)
+}
+
+export async function isSubscriptionEnded(merchantSubId: string | undefined): Promise<boolean> {
+  if (!merchantSubId) return false
+  return (await redisCommand('GET', `cfsub:ended:${merchantSubId}`)) !== null
+}
+
 export async function refreshSubscriptionExpiry(
   userId: string,
   expiresAt: Date,

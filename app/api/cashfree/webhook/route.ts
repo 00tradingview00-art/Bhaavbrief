@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import {
   activateSubscription,
   deactivateSubscription,
+  isCurrentSubscription,
+  isSubscriptionEnded,
+  markSubscriptionEnded,
   refreshSubscriptionExpiry,
   type Plan,
 } from '@/lib/subscription'
@@ -133,6 +136,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (type === 'SUBSCRIPTION_STATUS_CHANGED') {
       const status = details?.subscription_status ?? ''
       if (status === 'ACTIVE') {
+        if (await isSubscriptionEnded(merchantSubId)) {
+          await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: subscription already ended' })
+          return NextResponse.json({ ok: true })
+        }
         const existing = await redisCommand('GET', `sub:${userId}:status`)
         const expiresAt =
           parseCashfreeDate(details?.next_schedule_date ?? undefined) ??
@@ -154,6 +161,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           await logWebhookEvent(merchantSubId, { type, status, action: 'activated' })
         }
       } else if (DEACTIVATE_STATUSES.has(status)) {
+        await markSubscriptionEnded(merchantSubId)
+        if (!(await isCurrentSubscription(userId, merchantSubId))) {
+          // e.g. the old plan's CANCELLED event arriving after a change-plan
+          // purchase — must not touch the user's current, paid subscription.
+          await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: not current subscription' })
+          return NextResponse.json({ ok: true })
+        }
         await deactivateSubscription(userId)
         await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
       } else {
@@ -166,6 +180,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: unhandled status' })
       }
     } else if (type === 'SUBSCRIPTION_PAYMENT_SUCCESS') {
+      if (await isSubscriptionEnded(merchantSubId)) {
+        await logWebhookEvent(merchantSubId, { type, action: 'ignored: subscription already ended' })
+        return NextResponse.json({ ok: true })
+      }
       const expiresAt =
         parseCashfreeDate(details?.next_schedule_date ?? undefined) ??
         parseCashfreeDate(body.data?.payment_schedule_date) ??

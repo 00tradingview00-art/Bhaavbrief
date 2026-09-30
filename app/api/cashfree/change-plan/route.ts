@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { cancelCashfreeSubscription } from '@/lib/cashfree'
-import { deactivateSubscription, isProUser, type Plan } from '@/lib/subscription'
+import { deactivateSubscription, isProUser, markSubscriptionEnded, type Plan } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 
 export const dynamic = 'force-dynamic'
@@ -62,6 +62,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // Deactivate immediately so the account page reflects "no active plan" right
   // away — the caller then sends the user through a fresh checkout for the new
   // plan. Same pattern as /api/cashfree/cancel.
+  await markSubscriptionEnded(merchantSubId)
   await deactivateSubscription(userId)
 
   return NextResponse.json({ ok: true })
