@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { redisCommand } from '@/lib/redis'
-import { computeIVRegime, liveAtmIV, ivRankSeries, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
+import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
 import Link from 'next/link'
 import Card from '@/components/ui/Card'
 import VolatilityHub from './VolatilityHub'
-import IVRankHistoryChart from './IVRankHistoryChart'
+import IVRankHistoryGate from './IVRankHistoryGate'
 import { safeJsonLd } from '@/lib/seo'
 
 const SCHEMA = {
@@ -198,11 +198,13 @@ export default async function MCXIVRankPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <IVRankHistoryChart
+        <IVRankHistoryGate
           title={chartTitle}
-          isPro={false}
           instruments={Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({
-            key, label: meta.label, series: ivRankSeries(ivRanks[key]?.history ?? []),
+            // Same "enough history" bar the chart used (≥2 points) — below it
+            // computeIVRegime returns a placeholder 50, not a real reading.
+            key, label: meta.label,
+            latest: (ivRanks[key]?.history.length ?? 0) >= 2 ? ivRanks[key]?.regime?.ivRank ?? null : null,
           }))}
         />
       </section>
