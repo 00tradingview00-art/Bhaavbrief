@@ -64,8 +64,8 @@ const FREE_TOOLS = [
   },
   {
     href: '/tools/mcx-greeks',
-    label: 'Options Greeks (ATM)',
-    desc: 'Black-76 delta, gamma, theta, and vega for the at-the-money strike. All 5 instruments.',
+    label: 'Options Greeks',
+    desc: 'Black-76 delta, gamma, theta, and vega for the 11 strikes around the money, for every MCX option chain.',
   },
   {
     href: '/tools/mcx-max-pain',
