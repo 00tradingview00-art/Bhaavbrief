@@ -61,7 +61,6 @@ export const ROUTES = [
   '/calendar',
   '/commodities/[commodity]',
   '/event-impact-data',
-  '/events',
   '/events/[slug]',
   '/feed.xml',
   '/feedback',

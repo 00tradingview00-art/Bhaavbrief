@@ -64,7 +64,6 @@ const STATIC_PAGES = [
   { url: `${BASE}/commodities/lead`,        priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/nickel`,      priority: '0.7', changefreq: 'hourly' },
   { url: `${BASE}/commodities/electricity`, priority: '0.7', changefreq: 'hourly' },
-  { url: `${BASE}/events`,                  priority: '0.6', changefreq: 'daily'  },
   { url: `${BASE}/options/strategy`,        priority: '0.7', changefreq: 'monthly'},
   { url: `${BASE}/methodology`,             priority: '0.5', changefreq: 'monthly'},
   { url: `${BASE}/pro`,                     priority: '0.8', changefreq: 'daily'  },

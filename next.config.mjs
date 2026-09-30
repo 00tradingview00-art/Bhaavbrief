@@ -70,6 +70,9 @@ const nextConfig = {
         permanent: true,
       },
       { source: '/articles', destination: '/news', permanent: true },
+      // /events listed a single July write-up and nothing linked to it; the
+      // calendar is where events live. Individual /events/[slug] pages stay.
+      { source: '/events', destination: '/calendar', permanent: true },
       // Instagram bio link — sends visitors to markets
       { source: '/ig', destination: '/markets', permanent: false },
       // Broken "ay2026" slugs (slug-generator bug, capital M stripped from "May")
