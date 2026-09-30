@@ -41,6 +41,7 @@ jobs:
         run: npm ci
 
       - name: Fetch market snapshot
+        id: snapshot
         continue-on-error: true
         env:
           KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
@@ -63,6 +64,15 @@ jobs:
           BREVO_API_KEY:      ${{ secrets.BREVO_API_KEY }}
           SENDER_EMAIL:       ${{ secrets.SENDER_EMAIL }}
         run: node scripts/intelligence-engine.js
+
+      # Both core steps are continue-on-error so later housekeeping still runs,
+      # which also meant a run where nothing worked reported success. If the
+      # snapshot AND the engine both failed, fail the run so it's alerted.
+      - name: Fail if snapshot and engine both failed
+        if: steps.snapshot.outcome == 'failure' && steps.engine.outcome == 'failure'
+        run: |
+          echo "::error::Snapshot and Intelligence Engine both failed this run — check Kite token and API keys"
+          exit 1
 
       - name: Drop any article that won't compile as MDX
         # One uncompilable bot-written article fails `next build` and blocks every
@@ -139,7 +149,11 @@ jobs:
             sleep $((attempt * 3))
           done
           if [ "$PUSHED" -eq 0 ]; then
-            echo "WARNING: all 3 push attempts failed — state will recover on next run"
+            # Used to only print a WARNING and exit 0: a one-off collision does
+            # recover on the next run, but a persistent failure (auth, branch
+            # protection, conflict) never reached anyone. Fail so it alerts.
+            echo "::error::All 3 push attempts failed"
+            exit 1
           fi
 
       - name: Alert on failure

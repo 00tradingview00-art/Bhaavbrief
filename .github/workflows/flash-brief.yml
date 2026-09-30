@@ -20,6 +20,8 @@ permissions:
 jobs:
   flash:
     runs-on: ubuntu-latest
+    # Every 15 minutes — a hung run must not sit for GitHub's 6-hour default.
+    timeout-minutes: 15
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
@@ -40,6 +42,7 @@ jobs:
       # the workflow and cause GitHub to disable the cron schedule.
 
       - name: Fetch market snapshot
+        id: snapshot
         continue-on-error: true
         run: node scripts/fetch-snapshot.mjs
         env:
@@ -47,6 +50,7 @@ jobs:
           KITE_ACCESS_TOKEN:   ${{ secrets.KITE_ACCESS_TOKEN }}
 
       - name: Flash monitor (trigger-based T1+T2)
+        id: flash_monitor
         continue-on-error: true
         run: node scripts/flash-monitor.mjs
         env:
@@ -56,6 +60,7 @@ jobs:
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor MCX/SEBI circulars
+        id: mon_circulars
         continue-on-error: true
         run: node scripts/monitor-mcx-circulars.js
         env:
@@ -63,6 +68,7 @@ jobs:
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor geopolitical signals
+        id: mon_geo
         continue-on-error: true
         run: node scripts/monitor-geopolitical-signals.js
         env:
@@ -70,6 +76,7 @@ jobs:
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor India policy signals
+        id: mon_policy
         continue-on-error: true
         run: node scripts/monitor-india-policy-signals.js
         env:
@@ -77,6 +84,7 @@ jobs:
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor NCDEX agri signals
+        id: mon_agri
         continue-on-error: true
         run: node scripts/monitor-ncdex-agri.js
         env:
@@ -84,11 +92,22 @@ jobs:
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
 
       - name: Monitor macro economy signals
+        id: mon_macro
         continue-on-error: true
         run: node scripts/monitor-macro-economy.js
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PEXELS_API_KEY:    ${{ secrets.PEXELS_API_KEY }}
+
+      # continue-on-error keeps one flaky source from blocking the others, but
+      # it also hid total breakage (bad key, dead snapshot, npm issue) — every
+      # run "succeeded". If every monitor failed, fail the run so the alert
+      # step below emails it.
+      - name: Fail if every monitor failed
+        if: steps.snapshot.outcome == 'failure' && steps.flash_monitor.outcome == 'failure' && steps.mon_circulars.outcome == 'failure' && steps.mon_geo.outcome == 'failure' && steps.mon_policy.outcome == 'failure' && steps.mon_agri.outcome == 'failure' && steps.mon_macro.outcome == 'failure'
+        run: |
+          echo "::error::Every flash monitor step failed this run — check secrets/API keys and the snapshot step"
+          exit 1
 
       - name: Drop any article that won't compile as MDX
         # One uncompilable bot-written article fails `next build` and blocks every
@@ -124,13 +143,17 @@ jobs:
           git diff --staged --quiet && echo "Nothing after rebase" && exit 0
           git commit -m "flash: ${FLASH} signal(s) $(date -u '+%H:%M UTC')"
           for attempt in 1 2 3; do
-            git push origin main && break
+            git push origin main && exit 0
             if [ $attempt -lt 3 ]; then
               echo "Push attempt $attempt rejected — rebasing and retrying..."
               git pull --rebase origin main || { git rebase --abort; exit 1; }
               sleep $((attempt * 3))
             fi
           done
+          # Used to fall through and exit 0 here — flash signals silently
+          # never reached the site.
+          echo "::error::Push failed after 3 attempts"
+          exit 1
 
       - name: Alert on failure
         if: failure()
