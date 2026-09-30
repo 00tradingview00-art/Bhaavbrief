@@ -7,6 +7,13 @@ vi.mock('fs', () => ({
   },
 }))
 
+// Tests below run on fixture dates; treat every day as a trading day except
+// the one weekend used by the weekend-filter test (the real calendar would
+// read the mocked fs).
+vi.mock('./tradingCalendar', () => ({
+  isTradingDay: (d: string) => !['2026-09-26', '2026-09-27'].includes(d),
+}))
+
 import fs from 'fs'
 import { getBasisHistory } from './basis'
 

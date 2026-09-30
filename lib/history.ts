@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { isTradingDay } from './tradingCalendar'
 
 const FIELD_BY_COMMODITY: Record<string, string> = {
   gold: 'MCX_GOLD',
@@ -26,8 +27,11 @@ export function getSparklineCloses(commodity: string, days = 30): number[] {
   const dir = path.join(process.cwd(), 'data/history')
   if (!fs.existsSync(dir)) return []
 
+  // Weekend/holiday-dated files repeat the last session's prices (written by
+  // runs outside a session before fetch-snapshot keyed files by session) —
+  // skipping them keeps every day-over-day change a real one.
   const dateFiles = fs.readdirSync(dir)
-    .filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f))
+    .filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f) && isTradingDay(f.slice(0, 10)))
     .sort() // ascending YYYY-MM-DD
     .slice(-days)
 

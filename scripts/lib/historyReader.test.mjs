@@ -57,8 +57,16 @@ describe("getCloses", () => {
     writeDay("2026-07-01", { MCX_GOLD: { price: 141000 } });
     writeDay("2026-07-02", { MCX_GOLD: { price: 0 } });
     writeDay("2026-07-03", { MCX_GOLD: { price: -50 } });
-    writeDay("2026-07-04", { MCX_GOLD: { price: NaN } });
-    writeDay("2026-07-05", { MCX_GOLD: { price: 142000 } });
+    writeDay("2026-07-06", { MCX_GOLD: { price: NaN } });
+    writeDay("2026-07-07", { MCX_GOLD: { price: 142000 } });
+    expect(getCloses("MCX_GOLD", 30, dir)).toEqual([141000, 142000]);
+  });
+
+  test("ignores weekend-dated files, which only repeat the last session's prices", () => {
+    writeDay("2026-07-03", { MCX_GOLD: { price: 141000 } }); // Fri
+    writeDay("2026-07-04", { MCX_GOLD: { price: 141000 } }); // Sat — stale copy
+    writeDay("2026-07-05", { MCX_GOLD: { price: 141000 } }); // Sun — stale copy
+    writeDay("2026-07-06", { MCX_GOLD: { price: 142000 } }); // Mon
     expect(getCloses("MCX_GOLD", 30, dir)).toEqual([141000, 142000]);
   });
 

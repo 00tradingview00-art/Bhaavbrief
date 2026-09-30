@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { isTradingDay } from './tradingCalendar'
 
 // 5 core MCX commodities + USDINR — matches the plan's "6×6, no Nifty 50"
 // scope: no NSE equity-index data source exists anywhere in this codebase.
@@ -65,8 +66,11 @@ export function readAlignedCloses(): { dates: string[]; series: Record<Correlati
   const dates: string[] = []
   if (!fs.existsSync(dir)) return { dates, series }
 
+  // Weekend/holiday-dated files repeat the last session's prices (written by
+  // runs outside a session before fetch-snapshot keyed files by session) —
+  // skipping them keeps every day-over-day change a real one.
   const files = fs.readdirSync(dir)
-    .filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f))
+    .filter(f => /^\d{4}-\d{2}-\d{2}\.json$/.test(f) && isTradingDay(f.slice(0, 10)))
     .sort()
 
   for (const fileName of files) {
