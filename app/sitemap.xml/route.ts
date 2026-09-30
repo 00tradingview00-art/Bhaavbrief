@@ -39,6 +39,13 @@ const STATIC_PAGES = [
   { url: `${BASE}/learn/which-mcx-commodity-to-trade`, priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-trading-hours`,            priority: '0.8', changefreq: 'monthly' },
   { url: `${BASE}/learn/mcx-order-types`,              priority: '0.8', changefreq: 'monthly' },
+  // New evergreen Learn URLs. Existing sitemap entries above are intentionally untouched.
+  { url: `${BASE}/learn/mcx-silver-contracts`,         priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-crude-oil-contracts`,      priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-natural-gas-contracts`,    priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-open-interest-explained`,  priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-import-parity-explained`,  priority: '0.7', changefreq: 'monthly' },
+  { url: `${BASE}/learn/mcx-contango-backwardation`,   priority: '0.7', changefreq: 'monthly' },
   { url: `${BASE}/invest`,          priority: '0.5', changefreq: 'monthly' },
   { url: `${BASE}/event-impact-data`, priority: '0.6', changefreq: 'weekly' },
   { url: `${BASE}/about`,           priority: '0.4', changefreq: 'monthly' },

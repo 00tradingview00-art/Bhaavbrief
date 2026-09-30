@@ -62,6 +62,7 @@ export const ROUTES = [
   '/flash/[slug]',
   '/invest',
   '/learn',
+  '/learn/[guide]',
   '/learn-cards',
   '/learn/best-time-to-trade-mcx',
   '/learn/comex-vs-mcx-gold',
