@@ -184,7 +184,7 @@ export default function EventImpactDataPage() {
             <p style={{ margin: 0 }}>
               Each figure is the average and maximum absolute percentage move in the named MCX commodity
               future, from the prior trading session&apos;s close to the reaction-day close, following the
-              last N occurrences of the named event — computed from MCX Kite historical daily candles via
+              last N occurrences of the named event — computed from MCX historical daily data via
               a fixed script (not manually curated).
             </p>
             <p style={{ margin: 0 }}>
