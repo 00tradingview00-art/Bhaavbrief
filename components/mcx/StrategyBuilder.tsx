@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 import { formatRemaining, formatIST } from '@/lib/formatTime'
 import type { EventMapEntry } from '@/lib/eventMapTypes'
+import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
 import ProBlurGate from '@/components/ProBlurGate'
 import CalendarSpreads, { type SpreadInit } from '@/components/mcx/CalendarSpreads'
 
@@ -596,7 +597,7 @@ export default function StrategyBuilder({
   const expiries    = chainData?.expiries ?? []
   const chain       = chainData?.chain ?? []
   const futurePrice = chainData?.futurePrice ?? 0
-  const r           = chainData?.riskFreeRate ?? 0.065
+  const r           = chainData?.riskFreeRate ?? REPO_RATE_PCT / 100
   // Rounded to the minute, not raw Date.now() — T feeds the useMemo deps
   // below for the payoff/Greeks pricing sweep, and the 1s "seconds ago"
   // ticker re-renders this component every second regardless. A T that
