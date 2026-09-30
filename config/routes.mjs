@@ -33,7 +33,6 @@ export const ROUTES = [
   '/api/kite/discover',
   '/api/learn-card/[topic]',
   '/api/logo',
-  '/api/news',
   '/api/og',
   '/api/options',
   '/api/options/aav-history',
