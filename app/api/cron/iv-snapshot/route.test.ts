@@ -62,4 +62,12 @@ describe('iv-snapshot session dating', () => {
     expect(getOptionsChain).toHaveBeenLastCalledWith('GOLD', '2026-10-26')
     expect(hsetCalls()[0]).toEqual(['hset', 'iv-hist:GOLD', '2026-09-25', '24'])
   })
+
+  it('leaves a gap instead of storing an implausible reading', async () => {
+    vi.setSystemTime(new Date('2026-09-23T18:05:00Z')) // Wed 23:35 IST
+    getOptionsChain.mockResolvedValue(liveChain(1.17))
+    const body = await (await GET(authed())).json()
+    expect(hsetCalls()).toHaveLength(0)
+    expect(String(body.results.GOLD)).toMatch(/^rejected: 1.17/)
+  })
 })

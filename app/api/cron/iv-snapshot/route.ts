@@ -3,7 +3,7 @@ import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { redisCommand } from '@/lib/redis'
 import { tradingSessionDate } from '@/lib/tradingCalendar'
 import { CORE_INSTRUMENTS, type CoreInstrument } from '@/lib/terminalData'
-import { snapshotExpiry } from '@/lib/ivSnapshotRules'
+import { implausibleIVReason, snapshotExpiry } from '@/lib/ivSnapshotRules'
 
 // A composite value only gets written once at least this many of the 5 core
 // instruments produced a real ivix/volPremium today — avoids a "composite"
@@ -86,6 +86,18 @@ function nearestTradedATMIV(
   }
 
   return null
+}
+
+// Up to `n` most recent stored IVs for an instrument, newest first.
+async function recentIVs(instrument: string, n: number): Promise<number[]> {
+  const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+  if (!raw) return []
+  const entries: { date: string; iv: number }[] = []
+  for (let i = 0; i < raw.length; i += 2) {
+    const iv = parseFloat(raw[i + 1])
+    if (!isNaN(iv)) entries.push({ date: raw[i], iv })
+  }
+  return entries.sort((a, b) => b.date.localeCompare(a.date)).slice(0, n).map(e => e.iv)
 }
 
 // Most recent stored IV for an instrument, or null if none exists yet.
@@ -183,6 +195,16 @@ export async function GET(req: Request) {
           results[instrument] = 'skipped (no live/stale-traded ATM IV, no prior history to carry forward)'
           await writeMeta(instrument, 'skipped: no live/stale-traded quote, no prior history')
         }
+        continue
+      }
+
+      // Last line of defence: an implausible reading is left as an honest gap
+      // (charts and IV Rank already handle missing days) rather than stored,
+      // where it would distort IV Rank/percentile for the next 90 days.
+      const rejection = implausibleIVReason(atm.iv, await recentIVs(instrument, 20))
+      if (rejection) {
+        results[instrument] = `rejected: ${atm.iv} (${atm.source}) — ${rejection}`
+        await writeMeta(instrument, `rejected: ${atm.iv} (${atm.source}) — ${rejection}`)
         continue
       }
 
