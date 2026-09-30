@@ -8,6 +8,13 @@ vi.mock('fs', () => ({
   },
 }))
 
+// Tests below run on fixture dates; treat every day as a trading day except
+// the one weekend used by the weekend-filter test (the real calendar would
+// read the mocked fs).
+vi.mock('./tradingCalendar', () => ({
+  isTradingDay: (d: string) => !['2026-09-26', '2026-09-27'].includes(d),
+}))
+
 import fs from 'fs'
 import { pearsonCorrelation, dailyLogReturns, readAlignedCloses, getCorrelationMatrix } from './correlation'
 
@@ -76,6 +83,12 @@ describe('readAlignedCloses', () => {
     expect(dates).toEqual(['2026-09-01'])
     expect(series.gold).toEqual([100])
     expect(series.copper).toEqual([8])
+  })
+
+  it('ignores weekend-dated files, which only repeat the last session', () => {
+    mockReaddir.mockReturnValue(['2026-09-25.json', '2026-09-26.json', '2026-09-27.json', '2026-09-28.json'] as unknown as ReturnType<typeof fs.readdirSync>)
+    mockReadFile.mockReturnValue(fixture({}))
+    expect(readAlignedCloses().dates).toEqual(['2026-09-25', '2026-09-28'])
   })
 
   it('keeps every complete date, in ascending file-sort order', () => {

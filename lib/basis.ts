@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { isTradingDay } from './tradingCalendar'
 import {
   computeImportParityCrudeINR,
   computeSpreadPct,
@@ -63,7 +64,12 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
   const historyDir = path.join(process.cwd(), 'data', 'history')
   let files: string[]
   try {
-    files = fs.readdirSync(historyDir).filter(f => f.endsWith('.json')).sort()
+    // Weekend/holiday-dated files repeat the last session's prices (written by
+    // runs outside a session before fetch-snapshot keyed files by session) —
+    // skipping them keeps every day-over-day change a real one.
+    files = fs.readdirSync(historyDir)
+      .filter(f => f.endsWith('.json') && isTradingDay(f.slice(0, 10)))
+      .sort()
   } catch {
     return []
   }
