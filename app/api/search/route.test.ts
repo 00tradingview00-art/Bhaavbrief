@@ -3,7 +3,9 @@ import { NextRequest } from 'next/server'
 
 const create = vi.fn()
 vi.mock('@anthropic-ai/sdk', () => ({
-  default: vi.fn().mockImplementation(() => ({ messages: { create: (...a: unknown[]) => create(...a) } })),
+  default: class {
+    messages = { create: (...a: unknown[]) => create(...a) }
+  },
 }))
 
 let status: 'allowed' | 'limited' | 'unknown' = 'allowed'
