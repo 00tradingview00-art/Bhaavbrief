@@ -291,7 +291,7 @@
       "source_url": "https://www.bls.gov/cpi/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-09-11T12:30:00Z",
+      "next_release_utc": "2026-10-14T12:30:00Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -337,7 +337,7 @@
       "source_url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
       "frequency": "8x/year",
       "cadence_type": "manual",
-      "next_release_utc": "2026-09-16T18:00:00Z",
+      "next_release_utc": "2026-10-28T18:00:00Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -384,7 +384,7 @@
       "source_url": "https://www.bls.gov/ces/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-09-04T12:30:00Z",
+      "next_release_utc": "2026-10-02T12:30:00Z",
       "affected_contracts": [
         "gold",
         "silver"
