@@ -400,10 +400,9 @@ export interface MCXData {
   mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
   mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
   // true when this instrument's price/changePct is a carried-forward last-known
-  // value (scripts/fetch-snapshot.mjs's SnapshotInstrument.stale), not a fresh
-  // live read — only ever set by lib/snapshot.ts's snapshotToPriceData(), so it's
-  // undefined (not false) for data sourced from the live lib/prices.ts fetch path.
-  // Consumers that narrate a %-change as if it's today's move should check this
+  // value, not a fresh live read — set by lib/snapshot.ts's
+  // snapshotToPriceData() (SnapshotInstrument.stale) and by buildMCXData()
+  // whenever an instrument has no live Kite quote. Consumers that narrate a %-change as if it's today's move should check this
   // before presenting it with the same confidence as fresh data.
   mcxStale?:    boolean
 }
@@ -481,6 +480,9 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
     mcxOI:        hasLive ? (q!.oi            ?? 0)  : 0,
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
+    // No live quote → the price is a carried-forward last-known value; the
+    // UI (MoversPanel, gateway cards, commodity pages) marks it "last known".
+    mcxStale:     !hasLive,
   }
 }
 
@@ -535,8 +537,10 @@ export async function getPrices(): Promise<PriceData | null> {
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
 
-    // When Kite is down, use last cached prev-close prices so ticker shows real data
-    const cache = usingKite ? null : loadMCXCache()
+    // Last cached prices, for any instrument without a live quote — not only
+    // when Kite is down entirely: a single missing/expired contract token used
+    // to fall through to a fallback of 0 and show ₹0 on the ticker.
+    const cache = loadMCXCache()
 
     return {
       source: usingKite

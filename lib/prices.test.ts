@@ -41,6 +41,13 @@ describe('buildMCXData', () => {
     expect(d.mcxOI).toBe(4500)
     expect(d.mcxSymbol).toBe('GOLD')
     expect(d.mcxExpiry).toBe('2026-08-05')
+    expect(d.mcxStale).toBe(false)
+  })
+
+  test('marks a carried-forward price as stale when there is no live quote', () => {
+    const d = buildMCXData(null, 146650, 0.4, goldInfo)
+    expect(d.mcx).toBe(146650)
+    expect(d.mcxStale).toBe(true)
   })
 
   test('falls back to the cached price when Kite has no quote (null)', () => {
