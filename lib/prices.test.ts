@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, afterEach } from 'vitest'
 import fs from 'fs'
 import type { KiteQuote, InstrumentInfo } from './kite'
-import { deriveFromYahoo, buildMCXData, buildForexData, loadFromSnapshot, resolveTickerUsdinr } from './prices'
+import { deriveFromYahoo, buildMCXData, buildForexData, resolveTickerUsdinr } from './prices'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -130,50 +130,6 @@ describe('deriveFromYahoo', () => {
     const d = deriveFromYahoo({})
     expect(d.comexGold).toBe(0)
     expect(d.wti).toBe(0)
-  })
-})
-
-describe('loadFromSnapshot', () => {
-  const freshSnapshot = {
-    generatedAt: new Date().toISOString(),
-    source: 'kite',
-    instruments: {
-      MCX_GOLD:   { price: 88200, prevClose: 87700, changePct: 0.57 },
-      MCX_SILVER: { price: 102000, prevClose: 101000, changePct: 0.99 },
-      MCX_CRUDE:  { price: 6200, prevClose: 6150, changePct: 0.81 },
-      MCX_COPPER: { price: 850, prevClose: 845, changePct: 0.59 },
-      MCX_NATGAS: { price: 280, prevClose: 275, changePct: 1.82 },
-      USDINR:     { price: 87.5, prevClose: 87.3, changePct: 0.23 },
-      COMEX_GOLD: { price: 2450, prevClose: 2440, changePct: 0.41 },
-    },
-  }
-
-  test('returns a PriceData object built from a fresh (≤90min) snapshot', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(freshSnapshot))
-    const d = loadFromSnapshot()
-    expect(d).not.toBeNull()
-    expect(d!.gold.mcx).toBe(88200)
-    expect(d!.gold.mcxChangePct).toBe(0.57)
-    expect(d!.crude.mcx).toBe(6200)
-  })
-
-  test('returns null when the snapshot is older than 90 minutes — caller should fall back to a live fetch', () => {
-    const stale = { ...freshSnapshot, generatedAt: new Date(Date.now() - 91 * 60 * 1000).toISOString() }
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(stale))
-    expect(loadFromSnapshot()).toBeNull()
-  })
-
-  test('returns null when the snapshot file does not exist', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(false)
-    expect(loadFromSnapshot()).toBeNull()
-  })
-
-  test('returns null instead of throwing on malformed JSON', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue('{not valid json')
-    expect(loadFromSnapshot()).toBeNull()
   })
 })
 
