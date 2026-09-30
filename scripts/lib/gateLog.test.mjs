@@ -37,4 +37,16 @@ describe('appendGateLogEntry', () => {
     expect(JSON.parse(lines[0]).type).toBe('a')
     expect(JSON.parse(lines[1]).type).toBe('b')
   })
+
+  it('writes to GATE_LOG_PATH instead when set (keeps test runs out of the real log)', () => {
+    const redirected = path.join(tmpDir, 'elsewhere.jsonl')
+    process.env.GATE_LOG_PATH = redirected
+    try {
+      appendGateLogEntry({ type: 'gate_run' }, tmpDir)
+    } finally {
+      delete process.env.GATE_LOG_PATH
+    }
+    expect(JSON.parse(fs.readFileSync(redirected, 'utf8').trim())).toEqual({ type: 'gate_run' })
+    expect(fs.existsSync(path.join(tmpDir, 'data/gate-log.jsonl'))).toBe(false)
+  })
 })

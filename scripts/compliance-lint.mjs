@@ -12,6 +12,7 @@
  *   node scripts/compliance-lint.mjs <snapshot.json> <brief.mdx>
  *
  * Exit 0 = clean. Exit 1 = blocked, with every offending line printed.
+ * Exit 2 = the lint itself couldn't run (bad arguments, missing file, crash).
  *
  * Mirrors validate-brief.mjs's CLI shape and issue-array/exit-code
  * conventions so the two scripts slot into the pipeline identically.
@@ -21,15 +22,29 @@
 
 import fs from "node:fs";
 
+// Exit-code contract (same as validate-brief.mjs): 0 = clean, 1 = blocked
+// content, 2 = the lint itself couldn't run. Without these handlers any
+// uncaught error (e.g. an unreadable file) crashed Node with exit 1 — read by
+// generate-brief.yml as a silent content block instead of an alert. (A
+// failure while importing modules still exits 1: it happens before this runs.)
+process.on("uncaughtException", (err) => {
+  console.error("LINT-INTERNAL-ERROR:", err?.stack ?? err);
+  process.exit(2);
+});
+process.on("unhandledRejection", (err) => {
+  console.error("LINT-INTERNAL-ERROR:", err?.stack ?? err);
+  process.exit(2);
+});
+
 const [, , snapshotPath, briefPath] = process.argv;
 if (!snapshotPath || !briefPath) {
   console.error("usage: node compliance-lint.mjs <snapshot.json> <brief.mdx>");
-  process.exit(1);
+  process.exit(2);
 }
 
 if (!fs.existsSync(briefPath)) {
   console.error(`Brief not found: ${briefPath}`);
-  process.exit(1);
+  process.exit(2);
 }
 
 const fullFile = fs.readFileSync(briefPath, "utf8");

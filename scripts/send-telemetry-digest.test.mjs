@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { buildDigest } from './send-telemetry-digest.mjs'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
+import { buildDigest, readGateLog } from './send-telemetry-digest.mjs'
 
 describe('buildDigest', () => {
   it('reports n/a pass rate with zero gate runs', () => {
@@ -28,5 +31,23 @@ describe('buildDigest', () => {
     const edgeLedger = { entries: [{ result: 'confirmed' }, { result: 'confirmed' }, { result: 'rejected' }, { result: 'unresolved' }] }
     const digest = buildDigest({ gateEntries: [], edgeLedger, incidents: null })
     expect(digest).toContain('2 confirmed, 1 rejected, 1 unresolved')
+  })
+})
+
+describe('readGateLog', () => {
+  it('ignores fixture rows the test suite once wrote into the real log', () => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bb-digest-'))
+    const file = path.join(dir, 'gate-log.jsonl')
+    const now = new Date().toISOString()
+    fs.writeFileSync(file, [
+      { type: 'gate_run', briefPath: 'content/briefs/edition-117.mdx', clean: false, checkedAt: now },
+      { type: 'gate_run', briefPath: '/var/folders/_q/x/T/validate-brief-test-abc/brief.mdx', hasInternalError: true, checkedAt: now },
+      { type: 'generation_call', checkedAt: now },
+    ].map(r => JSON.stringify(r)).join('\n') + '\n')
+    try {
+      expect(readGateLog(file).map(r => r.briefPath)).toEqual(['content/briefs/edition-117.mdx'])
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true })
+    }
   })
 })

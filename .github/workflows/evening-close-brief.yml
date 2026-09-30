@@ -116,6 +116,27 @@ jobs:
             fi
           done
 
+      # A rejection (gate exit 1) ends the job before the commit step, so the
+      # committed gate log only ever recorded passing runs — the digest's pass
+      # rate was survivorship-biased. Commit just the log line for it. Not an
+      # alertable failure: the run already failed as a legitimate rejection.
+      - name: Record rejected brief in gate log
+        if: failure() && steps.validate.outputs.exit_code == '1'
+        continue-on-error: true
+        run: |
+          git config user.name "BhaavBrief Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/gate-log.jsonl
+          if git diff --cached --quiet; then echo "No gate-log change"; exit 0; fi
+          git commit -q -m "chore: record rejected ${{ github.workflow }} gate run [skip ci]"
+          git stash push --include-untracked -q || true   # the rejected draft stays unpublished
+          for i in 1 2 3; do
+            git pull --rebase -q origin main && git push -q origin main && exit 0
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 5))
+          done
+          echo "::warning::Could not push the rejected-run gate-log entry"
+
       - name: Alert on failure
         # Alert on infrastructure failures, or a gate-internal failure (validate
         # exit code 2) — not when validate exited 1 (a legitimate content
