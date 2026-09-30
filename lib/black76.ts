@@ -31,7 +31,7 @@ function normalPDF(x: number): number {
  * @param F     Futures price
  * @param K     Strike price
  * @param T     Time to expiry in years
- * @param r     Risk-free rate (RBI repo ~0.065)
+ * @param r     Risk-free rate as a decimal (lib/options.ts RISK_FREE_RATE — the RBI repo rate)
  * @param sigma Implied volatility as decimal (0.25 = 25%)
  * @param type  'CE' or 'PE'
  */

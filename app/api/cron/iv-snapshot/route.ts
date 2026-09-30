@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
-import { redisCommand, todayIST } from '@/lib/redis'
+import { redisCommand } from '@/lib/redis'
+import { tradingSessionDate } from '@/lib/tradingCalendar'
 import { CORE_INSTRUMENTS, type CoreInstrument } from '@/lib/terminalData'
+import { implausibleIVReason, snapshotExpiry } from '@/lib/ivSnapshotRules'
 
 // A composite value only gets written once at least this many of the 5 core
 // instruments produced a real ivix/volPremium today — avoids a "composite"
@@ -86,6 +88,18 @@ function nearestTradedATMIV(
   return null
 }
 
+// Up to `n` most recent stored IVs for an instrument, newest first.
+async function recentIVs(instrument: string, n: number): Promise<number[]> {
+  const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
+  if (!raw) return []
+  const entries: { date: string; iv: number }[] = []
+  for (let i = 0; i < raw.length; i += 2) {
+    const iv = parseFloat(raw[i + 1])
+    if (!isNaN(iv)) entries.push({ date: raw[i], iv })
+  }
+  return entries.sort((a, b) => b.date.localeCompare(a.date)).slice(0, n).map(e => e.iv)
+}
+
 // Most recent stored IV for an instrument, or null if none exists yet.
 async function mostRecentIV(instrument: string): Promise<number | null> {
   const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
@@ -112,7 +126,17 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const date = todayIST()
+  // Dated by the trading session the run belongs to, not the IST calendar
+  // date: this cron fires anywhere in 23:30–00:29 IST, and a post-midnight
+  // run used to file Friday's data under Saturday. On a weekend/holiday
+  // there is no session — write nothing rather than a copied-forward value
+  // that would later read as a real observation.
+  const session = tradingSessionDate()
+  if (!session) {
+    console.log('[cron/iv-snapshot] skipped — not a trading session')
+    return NextResponse.json({ ok: true, skipped: 'not a trading session' })
+  }
+  const date: string = session
   const results: Record<string, number | string> = {}
   const compositeIvixValues: number[] = []
   const compositeVolPremiumValues: number[] = []
@@ -123,7 +147,19 @@ export async function GET(req: Request) {
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
-      const { chain, futurePrice, ivix, volPremium } = await getOptionsChain(instrument)
+      // Never snapshot a series in (or one day from) its expiry session: its
+      // options stop trading during that session, and pricing the leftover
+      // quotes with almost no time left produced the near-zero IVs found in
+      // iv-hist:* (all on/right after each commodity's option expiry).
+      let snap = await getOptionsChain(instrument)
+      const target = snapshotExpiry(snap.expiries, date)
+      if (!target) {
+        results[instrument] = 'skipped (no expiry with 2+ days left)'
+        await writeMeta(instrument, 'skipped: no expiry with 2+ days left')
+        continue
+      }
+      if (target !== snap.expiry) snap = await getOptionsChain(instrument, target)
+      const { chain, futurePrice, ivix, volPremium } = snap
 
       // Full-chain ivix/volPremium succeed or fail independently of the
       // ATM-tier read below — accumulate before any of that logic's early
@@ -159,6 +195,16 @@ export async function GET(req: Request) {
           results[instrument] = 'skipped (no live/stale-traded ATM IV, no prior history to carry forward)'
           await writeMeta(instrument, 'skipped: no live/stale-traded quote, no prior history')
         }
+        continue
+      }
+
+      // Last line of defence: an implausible reading is left as an honest gap
+      // (charts and IV Rank already handle missing days) rather than stored,
+      // where it would distort IV Rank/percentile for the next 90 days.
+      const rejection = implausibleIVReason(atm.iv, await recentIVs(instrument, 20))
+      if (rejection) {
+        results[instrument] = `rejected: ${atm.iv} (${atm.source}) — ${rejection}`
+        await writeMeta(instrument, `rejected: ${atm.iv} (${atm.source}) — ${rejection}`)
         continue
       }
 

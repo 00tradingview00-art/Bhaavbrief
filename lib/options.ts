@@ -2,6 +2,7 @@ import { cache } from 'react'
 import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
+import { REPO_RATE_PCT, REPO_RATE_ASOF }         from '@/lib/rbiRepoRate'
 import { buildCurve, adjacentSpreads, hasLiveFuturesPrice } from '@/lib/spreads'
 
 // Code-review follow-up: these were all bare constants requiring a code
@@ -33,10 +34,12 @@ function todayIST(): string {
 // Single source of truth for the risk-free rate — read by the chain response
 // below so the UI (components/mcx/OptionChain.tsx) can display the same value
 // instead of an independently hardcoded string that can drift out of sync.
-// TODO: replace with a daily-fetched 91-day T-bill / MIBOR rate (D-11); this
-// constant is a dated, disclosed fallback in the meantime, not a silent one.
-const RISK_FREE_RATE = envNumber('OPTIONS_RISK_FREE_RATE', 0.065)
-const RISK_FREE_RATE_ASOF = process.env.OPTIONS_RISK_FREE_RATE_ASOF ?? '2026-08'
+// TODO: replace with a daily-fetched 91-day T-bill / MIBOR rate (D-11). Until
+// then it defaults to the RBI repo rate from lib/rbiRepoRate.js — the one
+// rate this repo keeps updated after each MPC decision — instead of a second,
+// independently hardcoded 6.5% that had drifted from it (repo: 5.25%).
+const RISK_FREE_RATE = envNumber('OPTIONS_RISK_FREE_RATE', REPO_RATE_PCT / 100)
+const RISK_FREE_RATE_ASOF = process.env.OPTIONS_RISK_FREE_RATE_ASOF ?? REPO_RATE_ASOF
 
 // ── Quote quality tiering (D-06) ────────────────────────────────────────────
 // Verified live 2026-07-17 against the real GOLD chain: zero-OI/zero-volume
@@ -59,6 +62,19 @@ export type Tier = 'LIVE' | 'STALE' | 'JUNK'
 // every expiry has already passed, which shouldn't happen in practice but
 // must never throw. `expiries` must be sorted ascending and non-empty —
 // the one call site already guarantees this before calling in.
+// Time to expiry in years, measured to the close of the expiry session.
+// `new Date('YYYY-MM-DD')` is UTC midnight = 05:30 IST on expiry day, which
+// understated T by ~18 hours and made every expiry-day reading hit the
+// 1-day floor. Close is taken as 23:30 IST (18:00 UTC); the floor still
+// guards the solver on expiry day itself.
+const MCX_CLOSE_UTC = 'T18:00:00Z'
+export function timeToExpiryYears(expiry: string, now: number = Date.now()): number {
+  return Math.max(
+    (Date.parse(`${expiry}${MCX_CLOSE_UTC}`) - now) / (365 * 24 * 60 * 60 * 1000),
+    1 / 365,
+  )
+}
+
 export function pickDefaultExpiry(expiries: string[], today: string): string {
   const liveExpiries = expiries.filter(e => e >= today)
   return liveExpiries.length > 0 ? liveExpiries[0] : expiries[expiries.length - 1]
@@ -236,11 +252,7 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
   const futurePrice = futQuote?.last_price ?? 0
   const futChange   = underlyingChange(futurePrice, futQuote?.ohlc?.close)
 
-  // Time to expiry in years
-  const T = Math.max(
-    (new Date(activeExpiry).getTime() - Date.now()) / (365 * 24 * 60 * 60 * 1000),
-    1 / 365,
-  )
+  const T = timeToExpiryYears(activeExpiry)
 
   // Build chain rows grouped by strike
   const strikeMap: Record<number, { CE?: typeof activeOptions[0]; PE?: typeof activeOptions[0] }> = {}
