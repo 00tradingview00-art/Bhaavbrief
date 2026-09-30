@@ -13,6 +13,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { EventMapEntry } from './eventMapTypes'
+import { applyComputedDates } from '../scripts/lib/eventRules.mjs'
 
 export type { EventMapEntry, EventPriorField, ImpactTier, CadenceType } from './eventMapTypes'
 export { COMMODITY_URL_SLUGS, COMMODITY_LABELS } from './eventMapTypes'
@@ -23,16 +24,29 @@ interface EventMapFile {
 }
 
 const EVENT_MAP_PATH = path.join(process.cwd(), 'data/event-map.json')
+const INSTRUMENTS_PATH = path.join(process.cwd(), 'data/kite-instruments.json')
 
 let cache: EventMapEntry[] | null = null
 
+function readInstruments(): Record<string, { expiry?: string }> | null {
+  try {
+    return JSON.parse(fs.readFileSync(INSTRUMENTS_PATH, 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+// Weekly rule_based events and MCX expiries are computed at read time
+// (scripts/lib/eventRules.mjs) — the file's stored dates for them went stale
+// between refreshes, dropping them off /calendar, /alerts and the next-event
+// cards. The raw file is cached; the dates are recomputed on each call.
 export function loadEventMap(): EventMapEntry[] {
-  if (cache) return cache
-  if (!fs.existsSync(EVENT_MAP_PATH)) return []
-  const raw = fs.readFileSync(EVENT_MAP_PATH, 'utf8')
-  const parsed = JSON.parse(raw) as EventMapFile
-  cache = parsed.events ?? []
-  return cache
+  if (!cache) {
+    if (!fs.existsSync(EVENT_MAP_PATH)) return []
+    const parsed = JSON.parse(fs.readFileSync(EVENT_MAP_PATH, 'utf8')) as EventMapFile
+    cache = parsed.events ?? []
+  }
+  return applyComputedDates(cache, new Date(), readInstruments()) as EventMapEntry[]
 }
 
 export function getUpcomingEvents(withinHours?: number): EventMapEntry[] {

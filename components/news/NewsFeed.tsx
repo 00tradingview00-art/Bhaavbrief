@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Pill, { type PillTone } from '@/components/ui/Pill'
@@ -115,24 +115,6 @@ function TypeBadge({ itemType, premium }: { itemType?: NewsItem['itemType']; pre
   return null
 }
 
-function Skeleton() {
-  const bar = (w: string, h = 14) => (
-    <div style={{ height: h, borderRadius: 2, background: '#E8E4D8', width: w, marginBottom: 8 }} />
-  )
-  return (
-    <div style={{ padding: '22px 0', borderBottom: '1px solid #E8E4D8' }}>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-        {bar('60px', 20)} {bar('64px', 16)} {bar('40px', 16)}
-      </div>
-      {bar('95%', 17)} {bar('75%', 17)}
-      {bar('88%', 13)} {bar('65%', 13)}
-      <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
-        {bar('44px', 18)} {bar('44px', 18)} {bar('44px', 18)}
-      </div>
-    </div>
-  )
-}
-
 const ITEMS_PER_PAGE = 20
 
 interface Props {
@@ -140,39 +122,19 @@ interface Props {
 }
 
 export default function NewsFeed({ serverItems = [] }: Props) {
-  const [news,         setNews]         = useState<NewsItem[]>([])
-  const [loading,      setLoading]      = useState(true)
-  const [error,        setError]        = useState(false)
   const [activeFilter, setActiveFilter] = useState('All')
   const [page,         setPage]         = useState(1)
-  const [lastFetched,  setLastFetched]  = useState<Date | null>(null)
 
-  const fetchNews = useCallback(async () => {
-    try {
-      const res = await fetch('/api/news')
-      if (!res.ok) throw new Error('bad response')
-      setNews(await res.json())
-      setLastFetched(new Date())
-      setError(false)
-    } catch {
-      setError(true)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchNews()
-    const id = setInterval(fetchNews, 5 * 60 * 1000)
-    return () => clearInterval(id)
-  }, [fetchNews])
-
-  // Merge server items (flash + articles) with live API items, dedup by id and href
+  // Server items (flash + articles), deduped by id and href. This used to be
+  // merged with a 5-minute poll of /api/news, whose source file
+  // (data/ai-news.json) hasn't been written since July — it always returned
+  // [], yet held back pagination/counts until it answered and drove a
+  // misleading "● updated just now" label.
   // Hawk-scan items always float to the top, then sort newest first within each tier
   const allItems = useMemo(() => {
     const seenIds  = new Set<string>()
     const seenHrefs = new Set<string>()
-    return [...serverItems, ...news]
+    return serverItems
       .filter(item => {
         if (seenIds.has(item.id)) return false
         if (item.href && seenHrefs.has(item.href)) return false
@@ -191,7 +153,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
         if (bHawk !== aHawk) return bHawk - aHawk
         return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
       })
-  }, [serverItems, news])
+  }, [serverItems])
 
   const filtered   = allItems.filter(item => matchesFilter(item, activeFilter))
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
@@ -199,15 +161,6 @@ export default function NewsFeed({ serverItems = [] }: Props) {
 
   return (
     <div>
-
-      {/* Last updated indicator */}
-      {!loading && lastFetched && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>
-            ● updated {relativeTime(lastFetched.toISOString())}
-          </span>
-        </div>
-      )}
 
       {/* Filter pills with counts */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
@@ -238,18 +191,8 @@ export default function NewsFeed({ serverItems = [] }: Props) {
         })}
       </div>
 
-      {/* Loading skeleton — only while live API is loading */}
-      {loading && news.length === 0 && serverItems.length === 0 && [0, 1, 2, 3, 4].map(i => <Skeleton key={i} />)}
-
-      {/* Error state */}
-      {!loading && error && allItems.length === 0 && (
-        <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', padding: '24px 0', letterSpacing: '0.04em' }}>
-          Intelligence feed offline — retrying in 5 min
-        </p>
-      )}
-
       {/* Empty state */}
-      {!loading && !error && filtered.length === 0 && (
+      {filtered.length === 0 && (
         <div style={{ padding: '32px 0', borderTop: '0.5px solid #DDDDD0' }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
             No {activeFilter === 'All' ? '' : activeFilter.toLowerCase() + ' '}intelligence right now.
@@ -390,7 +333,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       })()}
 
       {/* Pagination */}
-      {!loading && !error && totalPages > 1 && (
+      {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 24, marginTop: 8 }}>
           <button
             onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
@@ -441,7 +384,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       )}
 
       {/* Item count */}
-      {!loading && !error && filtered.length > 0 && (
+      {filtered.length > 0 && (
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
           {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} intelligence items`}
         </div>

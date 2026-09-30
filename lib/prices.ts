@@ -11,6 +11,7 @@
  */
 
 import { unstable_cache } from 'next/cache'
+import { resolveUsdinr } from '../scripts/lib/resolveUsdinr.mjs'
 import { KiteClient, type KiteQuote, type InstrumentInfo } from './kite'
 import { isMcxOpen } from './tradingCalendar'
 import fs from 'fs'
@@ -313,14 +314,34 @@ function loadMCXCache(): MCXCache | null {
 
 const USDINR_MIN = 82, USDINR_MAX = 110
 
-export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallback = 0) {
-  const yahooUsd = yahoo['USDINR=X']?.regularMarketPrice ?? 0
-  // Prefer Frankfurter (daily ECB rate, reliable) over Yahoo FX which can be stale.
-  // Reject either value if outside the plausible ₹82–₹110 range.
-  const usdinr =
-    (usdinrFallback >= USDINR_MIN && usdinrFallback <= USDINR_MAX) ? usdinrFallback :
-    (yahooUsd      >= USDINR_MIN && yahooUsd      <= USDINR_MAX) ? yahooUsd      :
-    0
+const inUsdinrRange = (v: number | undefined | null): v is number =>
+  typeof v === 'number' && v >= USDINR_MIN && v <= USDINR_MAX
+
+// USD/INR for the live price feed: the same precedence as the snapshot
+// (scripts/lib/resolveUsdinr.mjs — Kite CDS future, then Yahoo spot, then
+// the ECB reference rate), with price and % change always taken from the
+// same source. This used to prefer Frankfurter's ECB rate — a once-a-day
+// fixing, i.e. usually yesterday's — over live data, while taking the % change
+// from Yahoo: the ticker showed 95.98 while the snapshot/brief said 96.24 on
+// 30 Sep. Each source must sit in the plausible ₹82–₹110 range.
+export function resolveTickerUsdinr(
+  kite: ForexData | null,
+  yahoo: QuoteShape | undefined,
+  frankfurter: number,
+): { usdinr: number; usdinrChangePct: number } {
+  const kiteQuote = kite && inUsdinrRange(kite.ltp)
+    ? { price: kite.ltp, prevClose: kite.prevClose, changePct: kite.changePct }
+    : null
+  const yahooPrice = yahoo?.regularMarketPrice
+  const yahooPct = yahoo?.regularMarketChangePercent ?? 0
+  const yahooQuote = inUsdinrRange(yahooPrice)
+    ? { price: yahooPrice, prevClose: yahooPrice / (1 + yahooPct / 100), changePct: yahooPct }
+    : null
+  const resolved = resolveUsdinr(kiteQuote, yahooQuote, inUsdinrRange(frankfurter) ? frankfurter : null, null)
+  return { usdinr: resolved?.price ?? 0, usdinrChangePct: resolved?.changePct ?? 0 }
+}
+
+export function deriveFromYahoo(yahoo: Record<string, QuoteShape>) {
   const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
   const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
   const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0
@@ -328,7 +349,7 @@ export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallbac
   const comexCu   = yahoo['HG=F']?.regularMarketPrice     ?? 0
   const henryHub  = yahoo['NG=F']?.regularMarketPrice     ?? 0
   return {
-    usdinr, brent, comexGold, comexSilver: comexSilv,
+    brent, comexGold, comexSilver: comexSilv,
     wti, comexCopper: comexCu, henryHub,
     goldPct:   yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
     silverPct: yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
@@ -336,7 +357,6 @@ export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallbac
     brentPct:  yahoo['BZ=F']?.regularMarketChangePercent    ?? 0,
     copperPct: yahoo['HG=F']?.regularMarketChangePercent    ?? 0,
     gasPct:    yahoo['NG=F']?.regularMarketChangePercent    ?? 0,
-    usdinrPct: yahoo['USDINR=X']?.regularMarketChangePercent ?? 0,
   }
 }
 
@@ -380,10 +400,9 @@ export interface MCXData {
   mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
   mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
   // true when this instrument's price/changePct is a carried-forward last-known
-  // value (scripts/fetch-snapshot.mjs's SnapshotInstrument.stale), not a fresh
-  // live read — only ever set by lib/snapshot.ts's snapshotToPriceData(), so it's
-  // undefined (not false) for data sourced from the live lib/prices.ts fetch path.
-  // Consumers that narrate a %-change as if it's today's move should check this
+  // value, not a fresh live read — set by lib/snapshot.ts's
+  // snapshotToPriceData() (SnapshotInstrument.stale) and by buildMCXData()
+  // whenever an instrument has no live Kite quote. Consumers that narrate a %-change as if it's today's move should check this
   // before presenting it with the same confidence as fresh data.
   mcxStale?:    boolean
 }
@@ -461,6 +480,9 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
     mcxOI:        hasLive ? (q!.oi            ?? 0)  : 0,
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
+    // No live quote → the price is a carried-forward last-known value; the
+    // UI (MoversPanel, gateway cards, commodity pages) marks it "last known".
+    mcxStale:     !hasLive,
   }
 }
 
@@ -488,7 +510,7 @@ export async function getPrices(): Promise<PriceData | null> {
       fetchUsdInr(),
     ])
 
-    const y = deriveFromYahoo(comex, usdinrFallback)
+    const y = deriveFromYahoo(comex)
 
     // Shared DST- and holiday-aware clock — this was a bare UTC window with no
     // weekend/holiday check (Saturday afternoon read as open) and a 23:30 close.
@@ -515,8 +537,10 @@ export async function getPrices(): Promise<PriceData | null> {
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
 
-    // When Kite is down, use last cached prev-close prices so ticker shows real data
-    const cache = usingKite ? null : loadMCXCache()
+    // Last cached prices, for any instrument without a live quote — not only
+    // when Kite is down entirely: a single missing/expired contract token used
+    // to fall through to a fallback of 0 and show ₹0 on the ticker.
+    const cache = loadMCXCache()
 
     return {
       source: usingKite
@@ -525,8 +549,13 @@ export async function getPrices(): Promise<PriceData | null> {
       updatedAt:  new Date().toISOString(),
       marketOpen,
 
-      usdinr:         y.usdinr,
-      usdinrChangePct:y.usdinrPct,
+      ...resolveTickerUsdinr(
+        instruments.currencies
+          ? buildForexData(kiteByToken(instruments.currencies.usdinr.token), instruments.currencies.usdinr)
+          : null,
+        comex['USDINR=X'],
+        usdinrFallback,
+      ),
 
       comexGold:      y.comexGold,
       comexSilver:    y.comexSilver,
