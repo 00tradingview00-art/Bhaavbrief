@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { redisCommand } from '@/lib/redis'
 import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
@@ -137,12 +138,19 @@ async function getDefaultVolatilityData(instrument: string) {
   }
 }
 
+// Every Redis read (lib/redis.ts) is a no-store fetch, which opts a page out
+// of ISR entirely — this page declared revalidate = 900 but was rendered on
+// every request (1.7–3.3 s on production). Caching the two loaders for the
+// same 900 s window restores the intended behaviour.
+const getIVRanksCached = unstable_cache(getIVRanks, ['mcx-iv-rank:iv-ranks'], { revalidate: 900 })
+const getDefaultVolatilityDataCached = unstable_cache(getDefaultVolatilityData, ['mcx-iv-rank:volatility'], { revalidate: 900 })
+
 export default async function MCXIVRankPage() {
-  const ivRanks = await getIVRanks()
+  const ivRanks = await getIVRanksCached()
   const instrumentList = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({ key, label: meta.label }))
   const defaultInstrument = instrumentList[0]?.key ?? ''
   const { initialChain, initialOIHistory, initialPreview } = defaultInstrument
-    ? await getDefaultVolatilityData(defaultInstrument)
+    ? await getDefaultVolatilityDataCached(defaultInstrument)
     : { initialChain: null, initialOIHistory: undefined, initialPreview: undefined }
 
   // The comparison window grows daily as the IV-snapshot cron accumulates

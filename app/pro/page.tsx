@@ -50,7 +50,7 @@ const FREE_FEATURES = [
   'Flash intelligence during market hours',
   'Live MCX prices (gold, silver, crude, copper, natgas)',
   'MCX event calendar (EIA, FOMC, RBI MPC, OPEC)',
-  'Full MCX option chain — all strikes & expiries, Greeks, Max Pain, PCR, OI Map',
+  'MCX option chain — 11 strikes around the money, every expiry, with Max Pain, PCR and OI map',
   'Educational library (lot sizes, margin, Greeks basics)',
 ]
 
@@ -60,6 +60,12 @@ const PRO_WORKFLOWS: {
   chips: string[]
   href: string
 }[] = [
+  {
+    title: 'Full Option Chain',
+    description: 'Every strike and expiry, with live Black-76 Greeks (delta, gamma, theta, vega) per strike — the free chain shows the 11 strikes around the money without Greeks.',
+    chips: ['All strikes', 'Live Greeks', 'Every expiry'],
+    href: '/options',
+  },
   {
     title: 'Volatility Analytics',
     description: 'Know when to buy volatility and when to sell it — the analytical layer on top of the free option chain. IV Rank, IV Percentile, IV Skew (CE vs PE), OI buildup by strike.',

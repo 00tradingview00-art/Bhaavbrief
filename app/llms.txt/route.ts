@@ -81,7 +81,7 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 
 ## Pro Analytics Tools
 
-BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the full option chain (all strikes/expiries, Greeks, Max Pain, PCR, OI Map).
+BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the option chain around the money (11 strikes, every expiry, Max Pain, PCR, OI Map); Greeks and the full chain are Pro.
 
 - [BhaavBrief Pro](${BASE}/pro): Pricing and full feature breakdown for the MCX options analytics subscription
 - [Pro Research](${BASE}/research): Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours

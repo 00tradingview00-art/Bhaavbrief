@@ -19,3 +19,15 @@ export function formatIST(iso: string): string {
     timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
   }) + ' IST'
 }
+
+// "As of" label for data that may be carried forward from an earlier session:
+// time only when the timestamp is from today (IST), otherwise date + time —
+// a days-old cached option chain used to read "As of 23:25 IST" as if current.
+export function formatAsOfIST(iso: string, now: Date = new Date()): string {
+  const istDay = (d: Date) => new Date(d.getTime() + 5.5 * 3600 * 1000).toISOString().slice(0, 10)
+  const when = new Date(iso)
+  if (istDay(when) === istDay(now)) {
+    return when.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' }) + ' IST'
+  }
+  return formatIST(iso)
+}

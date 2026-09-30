@@ -101,7 +101,7 @@ export default async function EventResultPage({ params }: Props) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home',   item: 'https://bhaavbrief.in' },
-          { '@type': 'ListItem', position: 2, name: 'Events', item: 'https://bhaavbrief.in/events' },
+          { '@type': 'ListItem', position: 2, name: 'Calendar', item: 'https://bhaavbrief.in/calendar' },
           { '@type': 'ListItem', position: 3, name: event.title, item: eventUrl },
         ],
       },
@@ -117,7 +117,7 @@ export default async function EventResultPage({ params }: Props) {
         <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
-          <Link href="/events" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Events</Link>
+          <Link href="/calendar" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Calendar</Link>
           <span>›</span>
           <span style={{ color: 'var(--ink-3)' }}>{commodityLabel}</span>
         </div>
@@ -261,11 +261,11 @@ export default async function EventResultPage({ params }: Props) {
         )}
 
         <div style={{ marginTop: 32 }}>
-          <Link href="/events" style={{
+          <Link href="/calendar" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: 15, color: 'var(--gold)', textDecoration: 'none', fontWeight: 500,
           }}>
-            ← All Event Results
+            ← Event calendar
           </Link>
         </div>
       </article>

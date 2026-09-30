@@ -76,54 +76,62 @@ const BREADCRUMB_SCHEMA = {
   ],
 }
 
-const FAQ_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'How much margin do I need to trade MCX Gold Mini?',
-      acceptedAnswer: { '@type': 'Answer', text: 'MCX Gold Mini (100g) requires approximately ₹55,000–₹75,000 in SPAN margin at mid-2026 gold prices. The contract value at ₹1,52,000/10g is approximately ₹15.2 lakh (100g × ₹1,52,000 ÷ 10). The SPAN margin is roughly 4–5% of contract value. A 1% gold move = ₹15,200 P&L on your ₹65,000 margin — that is 23× leverage.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'How much margin is needed for MCX Crude Oil Mini?',
-      acceptedAnswer: { '@type': 'Answer', text: 'MCX Crude Oil Mini (10 barrels) requires approximately ₹3,000–₹5,000 SPAN margin at mid-2026 prices of ~₹7,100/bbl. Contract value is ₹71,000. A 1% crude move = ₹710 P&L. Crude Oil Mini is the most accessible MCX contract by margin. The standard 100-barrel contract needs ₹30,000–₹45,000.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'What is the difference between SPAN margin and exposure margin?',
-      acceptedAnswer: { '@type': 'Answer', text: 'SPAN margin (also called initial margin) is the minimum you must deposit to open an MCX position — calculated daily by the exchange based on price volatility. Exposure margin is an additional buffer your broker may collect, typically 3–5% of contract value on top of SPAN. Total margin = SPAN + exposure margin. Many brokers charge only SPAN at position open but require total margin to avoid MTM shortfall alerts.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'What happens if my MCX account falls below minimum margin?',
-      acceptedAnswer: { '@type': 'Answer', text: 'If your available balance falls below the required SPAN margin, your broker will issue a margin call. If you do not top up within the stipulated time (usually by the next morning), the broker will square off your position — called forced squareoff. To avoid this: always maintain 20–30% buffer above minimum margin. MCX MTM (Mark to Market) loss is debited from your account every evening, not at expiry.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is MCX margin the same for all brokers?',
-      acceptedAnswer: { '@type': 'Answer', text: 'The SPAN margin set by MCX is the same across all SEBI-registered brokers — it is exchange-mandated. However, brokers can and do charge additional exposure margin (typically 3–5%), which varies by broker. Discount brokers like Zerodha and Angel One typically charge SPAN + exposure margin at the exchange-set rate, while some full-service brokers charge a higher buffer. The most accurate number is always from your broker\'s SPAN calculator updated daily.' },
-    },
-  ],
+// Built from the live snapshot gold price — the answer text used to hard-code
+  // ₹1,52,000/10g while the page claims to use today's prices.
+  function faqSchema(gold: number) {
+    return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How much margin do I need to trade MCX Gold Mini?',
+        acceptedAnswer: { '@type': 'Answer', text: `MCX Gold Mini (100g) requires approximately ₹55,000–₹75,000 in SPAN margin at current gold prices. The contract value at ₹${fmt(gold)}/10g is approximately ₹${(gold * 10 / 100_000).toFixed(1)} lakh (100g × ₹${fmt(gold)} ÷ 10). The SPAN margin is roughly 4–5% of contract value. A 1% gold move = ₹${fmt(gold * 10 * 0.01)} P&L on your ₹65,000 margin — that is ${Math.round(gold * 10 / 65_000)}× leverage.` },
+      },
+      {
+        '@type': 'Question',
+        name: 'How much margin is needed for MCX Crude Oil Mini?',
+        acceptedAnswer: { '@type': 'Answer', text: 'MCX Crude Oil Mini (10 barrels) requires approximately ₹3,000–₹5,000 SPAN margin at mid-2026 prices of ~₹7,100/bbl. Contract value is ₹71,000. A 1% crude move = ₹710 P&L. Crude Oil Mini is the most accessible MCX contract by margin. The standard 100-barrel contract needs ₹30,000–₹45,000.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between SPAN margin and exposure margin?',
+        acceptedAnswer: { '@type': 'Answer', text: 'SPAN margin (also called initial margin) is the minimum you must deposit to open an MCX position — calculated daily by the exchange based on price volatility. Exposure margin is an additional buffer your broker may collect, typically 3–5% of contract value on top of SPAN. Total margin = SPAN + exposure margin. Many brokers charge only SPAN at position open but require total margin to avoid MTM shortfall alerts.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What happens if my MCX account falls below minimum margin?',
+        acceptedAnswer: { '@type': 'Answer', text: 'If your available balance falls below the required SPAN margin, your broker will issue a margin call. If you do not top up within the stipulated time (usually by the next morning), the broker will square off your position — called forced squareoff. To avoid this: always maintain 20–30% buffer above minimum margin. MCX MTM (Mark to Market) loss is debited from your account every evening, not at expiry.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is MCX margin the same for all brokers?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The SPAN margin set by MCX is the same across all SEBI-registered brokers — it is exchange-mandated. However, brokers can and do charge additional exposure margin (typically 3–5%), which varies by broker. Discount brokers like Zerodha and Angel One typically charge SPAN + exposure margin at the exchange-set rate, while some full-service brokers charge a higher buffer. The most accurate number is always from your broker\'s SPAN calculator updated daily.' },
+      },
+    ],
+  }
 }
 
-const HOWTO_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'HowTo',
-  name: 'How to calculate MCX margin requirement',
-  description: 'Step-by-step guide to calculating the margin needed to trade MCX gold, silver, crude oil, or copper futures.',
-  step: [
-    { '@type': 'HowToStep', position: 1, name: 'Find the contract lot size', text: 'MCX Gold standard = 1 kg (100 units of 10g). Gold Mini = 100g. Silver = 30 kg. Crude Oil = 100 barrels. Copper = 2.5 MT.' },
-    { '@type': 'HowToStep', position: 2, name: 'Calculate contract value', text: 'Contract value = MCX price × number of units in the lot. Example: Gold at ₹1,52,000/10g × 100 units = ₹1,52,00,000 (1 kg contract value).' },
-    { '@type': 'HowToStep', position: 3, name: 'Apply SPAN margin percentage', text: 'MCX publishes SPAN margin daily (typically 4–6% for gold/silver, 5–7% for crude, 4–5% for base metals). Multiply contract value by SPAN %.' },
-    { '@type': 'HowToStep', position: 4, name: 'Add exposure margin', text: 'Brokers typically add 2–4% exposure margin on top of SPAN. Total margin = SPAN + Exposure. Use the calculator on this page for current estimates.' },
-    { '@type': 'HowToStep', position: 5, name: 'Verify with your broker', text: 'SPAN margin changes daily based on volatility. Always check the exact margin on your broker platform (Zerodha SPAN calculator, Angel One margin calculator) on the day you trade.' },
-  ],
+function howtoSchema(gold: number) {
+    return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to calculate MCX margin requirement',
+    description: 'Step-by-step guide to calculating the margin needed to trade MCX gold, silver, crude oil, or copper futures.',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Find the contract lot size', text: 'MCX Gold standard = 1 kg (100 units of 10g). Gold Mini = 100g. Silver = 30 kg. Crude Oil = 100 barrels. Copper = 2.5 MT.' },
+      { '@type': 'HowToStep', position: 2, name: 'Calculate contract value', text: `Contract value = MCX price × number of units in the lot. Example: Gold at ₹${fmt(gold)}/10g × 100 units = ₹${fmt(gold * 100)} (1 kg contract value).` },
+      { '@type': 'HowToStep', position: 3, name: 'Apply SPAN margin percentage', text: 'MCX publishes SPAN margin daily (typically 4–6% for gold/silver, 5–7% for crude, 4–5% for base metals). Multiply contract value by SPAN %.' },
+      { '@type': 'HowToStep', position: 4, name: 'Add exposure margin', text: 'Brokers typically add 2–4% exposure margin on top of SPAN. Total margin = SPAN + Exposure. Use the calculator on this page for current estimates.' },
+      { '@type': 'HowToStep', position: 5, name: 'Verify with your broker', text: 'SPAN margin changes daily based on volatility. Always check the exact margin on your broker platform (Zerodha SPAN calculator, Angel One margin calculator) on the day you trade.' },
+    ],
+  }
 }
 
 export default function Page() {
   const p = loadPrices()
+  const FAQ_SCHEMA = faqSchema(p.gold)
+  const HOWTO_SCHEMA = howtoSchema(p.gold)
 
   const contracts = [
     {
