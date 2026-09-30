@@ -51,9 +51,13 @@ async function getGreeksData() {
           delta: s.delta ?? null, gamma: s.gamma ?? null, theta: s.theta ?? null, vega: s.vega ?? null, iv: s.iv ?? null,
         })
         const rows: StrikeRow[] = chain.map(r => ({ strike: r.strike, isATM: r.isATM, CE: toSide(r.CE), PE: toSide(r.PE) }))
-        const atm = rows.find(r => r.isATM)
-        if (!atm) return [instrument, null]
-        return [instrument, { atm, otm: rows.filter(r => !r.isATM) }]
+        const atmIdx = rows.findIndex(r => r.isATM)
+        if (atmIdx === -1) return [instrument, null]
+        // Same free depth as the option chain (/api/options: ATM ±5 strikes).
+        // Every strike with Greeks is a Pro feature; this page used to give it
+        // all away free — and at ~2,400 rows it was a multi-MB page.
+        const window = rows.slice(Math.max(0, atmIdx - 5), atmIdx + 6)
+        return [instrument, { atm: rows[atmIdx], otm: window.filter(r => !r.isATM) }]
       } catch {
         return [instrument, null]
       }
@@ -86,10 +90,11 @@ export default async function MCXGreeksPage() {
         .gk-table td.gk-num { text-align: right; }
       `}</style>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
-        MCX Options Greeks — Full Strike Depth
+        MCX Options Greeks — Around the Money
       </h1>
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
-        Black-76 model Delta, Gamma, Theta, and Vega for every strike, free. Refreshed every 60 seconds.
+        Black-76 model Delta, Gamma, Theta, and Vega for the 11 strikes around the money, free. Refreshed every 60 seconds.
+        Every strike and expiry is on <Link href="/pro" style={{ color: 'var(--gold)', fontWeight: 600 }}>BhaavBrief Pro</Link>.
       </p>
 
       <div style={{ display: 'grid', gap: '1.5rem' }}>
