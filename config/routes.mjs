@@ -32,7 +32,6 @@ export const ROUTES = [
   '/api/kite/callback',
   '/api/kite/discover',
   '/api/learn-card/[topic]',
-  '/api/logo',
   '/api/og',
   '/api/options',
   '/api/options/aav-history',
