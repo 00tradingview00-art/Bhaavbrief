@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'How Much Money Do You Need to Start MCX Trading in India? (2026)',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=How+Much+Money+for+MCX+Trading%3F&tags=Beginner,Capital,Margin,MCX+India', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "How Much Money for MCX Trading?", tags: "Beginner,Capital,Margin,MCX India" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'Minimum Capital for MCX Trading India 2026 | BhaavBrief', description: '₹3,000 for Crude Mini to ₹75,000 for Gold Mini — exact capital needed to start MCX trading in India.', site: '@bhaavbrief' },
 }

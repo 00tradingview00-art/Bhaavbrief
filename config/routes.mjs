@@ -17,7 +17,6 @@ export const ROUTES = [
   '/alerts',
   '/api/brief-edge',
   '/api/chart/[commodity]',
-  '/api/commodity-pulse',
   '/api/cron/brief',
   '/api/cron/flash',
   '/api/cron/intelligence',

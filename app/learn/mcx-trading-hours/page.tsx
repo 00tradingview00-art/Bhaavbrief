@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'MCX Trading Hours in India 2026 — Session Timings, Best Windows & Commodity Guide',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Trading+Hours+India+2026&tags=Beginner,Timing,MCX+India', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Trading Hours India 2026", tags: "Beginner,Timing,MCX India" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Trading Hours India 2026 | BhaavBrief', description: 'MCX: 9 AM–11:30 PM IST. Gold trades until 11:30 PM. Crude until 11:30 PM. Full commodity timing guide.', site: '@bhaavbrief' },
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'Best Time to Trade MCX in India 2026 — Session Guide for Gold, Crude & Silver',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=Best+Time+to+Trade+MCX+India&tags=Trading+Hours,Evening+Session,COMEX', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "Best Time to Trade MCX India", tags: "Trading Hours,Evening Session,COMEX" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'Best Time to Trade MCX 2026 | BhaavBrief', description: 'Morning vs evening session, COMEX overlap, EIA timing — complete guide to MCX trading hours India.', site: '@bhaavbrief' },
 }

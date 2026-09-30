@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'What is COMEX? Why It Matters for MCX Gold Traders in India',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=What+is+COMEX%3F&tags=Gold,MCX,New+York,Commodity+Exchange', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "What is COMEX?", tags: "Gold,MCX,New York,Commodity Exchange" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'What is COMEX? Explained for MCX Traders | BhaavBrief', description: 'COMEX is the New York exchange where gold, silver, and copper world prices are set — and why every MCX trader in India needs to know it.', site: '@bhaavbrief' },
 }

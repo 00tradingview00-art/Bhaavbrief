@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { scoreEntries, buildContentContext, type ScoredEntry } from '@/lib/searchIndex'
-import { checkRateLimit, getClientIp } from '@/lib/rateLimit'
+import { rateLimitStatus, getClientIp } from '@/lib/rateLimit'
 import { HAIKU_MODEL, extractJson } from '@/lib/claude'
 
 export const runtime = 'nodejs'
@@ -69,8 +69,8 @@ export async function GET(req: NextRequest) {
   }
 
   const ip = getClientIp(req)
-  const allowed = await checkRateLimit(`rl:search:${ip}`, 20, 60 * 60 * 1000)
-  if (!allowed) {
+  const limit = await rateLimitStatus(`rl:search:${ip}`, 20, 60 * 60 * 1000)
+  if (limit === 'limited') {
     return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
   }
 
@@ -80,6 +80,14 @@ export async function GET(req: NextRequest) {
   // Score content against query
   const topEntries = scoreEntries(q, 5)
   const contentCtx = buildContentContext(topEntries)
+
+  // Each AI answer costs money. If the rate limit couldn't be checked (Redis
+  // down/unconfigured) the route used to call the model with no limit at
+  // all — serve the local content matches instead.
+  if (limit === 'unknown') {
+    const result: SearchResult = { answer: '', answerType: 'lookup', contentMatches: topEntries, relatedQuestions: [] }
+    return NextResponse.json(result, { headers: { 'Cache-Control': 'no-store' } })
+  }
 
   // Call Claude
   let parsed: { answer: string; answerType: string; relevantSlugs: string[]; relatedQuestions: string[] }

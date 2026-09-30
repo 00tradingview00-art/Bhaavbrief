@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const dynamicParams = true
 // P-03: without this, a slug rendered on-demand (dynamicParams path) caches
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const canonical = `https://bhaavbrief.in/events/${slug}`
   const ogParams = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
-  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
   const commodityLabel = event.commodity !== 'macro' ? `MCX ${event.commodity} India` : 'MCX India'
   return {
     title:       event.title,
@@ -75,7 +76,7 @@ export default async function EventResultPage({ params }: Props) {
   const up           = event.mcxChangePct >= 0
   const eventUrl     = `https://bhaavbrief.in/events/${slug}`
   const ogParams     = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
-  const ogImage      = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage      = ogImageUrl(Object.fromEntries(ogParams))
 
   const schema = {
     '@context': 'https://schema.org',

@@ -1,10 +1,15 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest }   from 'next/server'
+import { isSignedOgRequest } from '@/lib/ogVerify'
 
 export const runtime = 'edge'
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = req.nextUrl
+  // Unsigned or tampered URLs get the generic card: this route used to render
+  // any `title`/`tags` given to it as a BhaavBrief-branded image.
+  const searchParams = (await isSignedOgRequest(req.nextUrl.searchParams, process.env.OG_SIGNING_SECRET || process.env.CRON_SECRET))
+    ? req.nextUrl.searchParams
+    : new URLSearchParams()
   const title   = searchParams.get('title')   ?? 'India Commodity Intelligence'
   const edition = searchParams.get('edition') ?? ''
   const date    = searchParams.get('date')    ?? ''

@@ -16,6 +16,36 @@ type FeedbackPayload = {
   email?:        string
 }
 
+// The feedback form posts client-controlled JSON. Before this, a rating above
+// 5 made '☆'.repeat(negative) throw, and a non-string field or non-array
+// `sections` crashed the HTML builder — every malformed submission was a 500.
+const MAX_TEXT = 2000
+const text = (v: unknown, max = MAX_TEXT): string | undefined =>
+  typeof v === 'string' || typeof v === 'number' ? String(v).trim().slice(0, max) || undefined : undefined
+const rating = (v: unknown): number | undefined => {
+  const n = typeof v === 'number' ? v : typeof v === 'string' ? Number(v) : NaN
+  return Number.isInteger(n) && n >= 1 && n <= 5 ? n : undefined
+}
+
+export function normalizeFeedback(data: unknown): FeedbackPayload {
+  const d = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>
+  const email = text(d.email, 254)
+  return {
+    userType:    text(d.userType, 100),
+    duration:    text(d.duration, 100),
+    r1: rating(d.r1), r2: rating(d.r2), r3: rating(d.r3), r4: rating(d.r4),
+    sections:    Array.isArray(d.sections)
+      ? d.sections.filter((x): x is string => typeof x === 'string').map(x => x.slice(0, 100)).slice(0, 20)
+      : undefined,
+    suggestion:  text(d.suggestion),
+    testimonial: text(d.testimonial),
+    permission:  text(d.permission, 100),
+    displayName: text(d.displayName, 100),
+    displayRole: text(d.displayRole, 100),
+    email:       email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : undefined,
+  }
+}
+
 function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
@@ -58,7 +88,7 @@ export async function submitFeedback(data: unknown): Promise<void> {
   const apiKey = process.env.BREVO_API_KEY
   if (!apiKey) throw new Error('Feedback endpoint not configured')
 
-  const f = (data ?? {}) as FeedbackPayload
+  const f = normalizeFeedback(data)
   const from = process.env.SENDER_EMAIL ?? 'brief@bhaavbrief.in'
 
   const res = await fetch(`${BREVO_API}/smtp/email`, {

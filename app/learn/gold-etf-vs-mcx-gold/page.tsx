@@ -3,6 +3,7 @@ import path from 'node:path'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 interface Prices {
   gold: number
@@ -60,9 +61,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Gold+vs+Gold+ETF+India+2026&tags=LTCG+Tax,Leverage,SIP', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Gold vs Gold ETF India 2026", tags: "LTCG Tax,Leverage,SIP" }), width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary_large_image' as const, title: 'MCX Gold vs Gold ETF India 2026 | BhaavBrief', description: 'Tax, leverage, capital, expiry — MCX gold vs gold ETF fully compared for Indian investors.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Gold+vs+Gold+ETF+India+2026&tags=LTCG+Tax,Leverage,SIP'] },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Gold vs Gold ETF India 2026 | BhaavBrief', description: 'Tax, leverage, capital, expiry — MCX gold vs gold ETF fully compared for Indian investors.', site: '@bhaavbrief', images: [ogImageUrl({ title: "MCX Gold vs Gold ETF India 2026", tags: "LTCG Tax,Leverage,SIP" })] },
 }
 
 const BREADCRUMB_SCHEMA = {

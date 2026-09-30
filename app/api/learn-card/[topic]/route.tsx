@@ -108,7 +108,9 @@ export async function GET(
   { params }: { params: Promise<{ topic: string }> }
 ) {
   const { topic } = await params
-  const card = LEARN_CARDS[topic]
+  // Own keys only: `LEARN_CARDS[topic]` also matched inherited properties, so
+  // /api/learn-card/constructor rendered Object's constructor and 500'd.
+  const card = Object.hasOwn(LEARN_CARDS, topic) ? LEARN_CARDS[topic] : undefined
   if (!card) return new Response('Not found', { status: 404 })
 
   const font = await getPlayfairFont()

@@ -1,3 +1,26 @@
+// Content-Security-Policy, shipped as Report-Only first: browsers log what
+// it WOULD block (DevTools console) without blocking anything, so it can be
+// checked against real traffic before being enforced. The site had no CSP.
+// Sources: Next.js inline bootstrap/JSON-LD ('unsafe-inline'), Google
+// Analytics, PostHog, Clerk (clerk.bhaavbrief.in; *.clerk.accounts.dev for
+// dev keys; Cloudflare Turnstile for bot checks), Cashfree checkout, Vercel
+// Analytics, Google Fonts, remote images (Pexels covers etc.). Checked
+// against the origins the home, Pro and sign-in pages actually load.
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.posthog.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev https://challenges.cloudflare.com https://sdk.cashfree.com https://va.vercel-scripts.com",
+  "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://*.posthog.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev https://clerk-telemetry.com https://*.cashfree.com https://vitals.vercel-insights.com",
+  "img-src 'self' data: blob: https:",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "frame-src https://*.cashfree.com https://challenges.cloudflare.com https://clerk.bhaavbrief.in",
+  "worker-src 'self' blob:",
+  "form-action 'self' https://*.cashfree.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "object-src 'none'",
+].join('; ')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
@@ -33,6 +56,7 @@ const nextConfig = {
           { key: 'Referrer-Policy',            value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy',         value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'Strict-Transport-Security',  value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
         ],
       },
       // Raw /public image files (logos etc.) serve max-age=0 by default —

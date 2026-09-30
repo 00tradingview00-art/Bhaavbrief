@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'Which MCX Commodity Should I Trade? — Beginner Guide India 2026',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=Which+MCX+Commodity+to+Trade%3F&tags=Beginner,Strategy,MCX+India', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "Which MCX Commodity to Trade?", tags: "Beginner,Strategy,MCX India" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'Best MCX Commodity for Beginners India 2026 | BhaavBrief', description: 'Crude Mini for <₹50k. Gold Mini for ₹1–1.5L. Full MCX commodity selection guide with capital, risk, and timing matrix.', site: '@bhaavbrief' },
 }

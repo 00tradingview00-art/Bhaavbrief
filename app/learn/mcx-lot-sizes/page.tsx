@@ -3,6 +3,7 @@ import path from 'node:path'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 // ── Live data ──────────────────────────────────────────────────────────────
 // Read market-snapshot.json (written by fetch-snapshot.mjs at deploy time).
@@ -102,9 +103,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Lot+Sizes+2026&tags=Gold+Mini,Silver+Mini,Crude+Mini', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Lot Sizes 2026", tags: "Gold Mini,Silver Mini,Crude Mini" }), width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary_large_image' as const, title: 'MCX Lot Sizes 2026 | BhaavBrief', description: 'Complete lot size table for every MCX futures contract — updated with live prices at each deploy.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Lot+Sizes+2026&tags=Gold+Mini,Silver+Mini,Crude+Mini'] },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Lot Sizes 2026 | BhaavBrief', description: 'Complete lot size table for every MCX futures contract — updated with live prices at each deploy.', site: '@bhaavbrief', images: [ogImageUrl({ title: "MCX Lot Sizes 2026", tags: "Gold Mini,Silver Mini,Crude Mini" })] },
 }
 
 // ── Structured data ────────────────────────────────────────────────────────
