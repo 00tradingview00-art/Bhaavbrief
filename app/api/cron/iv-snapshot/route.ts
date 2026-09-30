@@ -3,6 +3,7 @@ import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { redisCommand } from '@/lib/redis'
 import { tradingSessionDate } from '@/lib/tradingCalendar'
 import { CORE_INSTRUMENTS, type CoreInstrument } from '@/lib/terminalData'
+import { snapshotExpiry } from '@/lib/ivSnapshotRules'
 
 // A composite value only gets written once at least this many of the 5 core
 // instruments produced a real ivix/volPremium today — avoids a "composite"
@@ -134,7 +135,19 @@ export async function GET(req: Request) {
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {
     try {
-      const { chain, futurePrice, ivix, volPremium } = await getOptionsChain(instrument)
+      // Never snapshot a series in (or one day from) its expiry session: its
+      // options stop trading during that session, and pricing the leftover
+      // quotes with almost no time left produced the near-zero IVs found in
+      // iv-hist:* (all on/right after each commodity's option expiry).
+      let snap = await getOptionsChain(instrument)
+      const target = snapshotExpiry(snap.expiries, date)
+      if (!target) {
+        results[instrument] = 'skipped (no expiry with 2+ days left)'
+        await writeMeta(instrument, 'skipped: no expiry with 2+ days left')
+        continue
+      }
+      if (target !== snap.expiry) snap = await getOptionsChain(instrument, target)
+      const { chain, futurePrice, ivix, volPremium } = snap
 
       // Full-chain ivix/volPremium succeed or fail independently of the
       // ATM-tier read below — accumulate before any of that logic's early

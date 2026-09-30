@@ -50,4 +50,16 @@ describe('iv-snapshot session dating', () => {
     expect(body.date).toBe('2026-09-25')
     expect(hsetCalls()[0]).toEqual(['hset', 'iv-hist:GOLD', '2026-09-25', '24'])
   })
+
+  it("rolls to the next expiry on an option series' expiry session", async () => {
+    vi.setSystemTime(new Date('2026-09-25T18:05:00Z')) // Fri 23:35 IST, GOLD Sep options expire today
+    getOptionsChain.mockImplementation(async (_inst: string, expiry?: string) => ({
+      ...liveChain(expiry === '2026-10-26' ? 24 : 1.17),
+      expiry: expiry ?? '2026-09-25',
+      expiries: ['2026-09-25', '2026-10-26'],
+    }))
+    await GET(authed())
+    expect(getOptionsChain).toHaveBeenLastCalledWith('GOLD', '2026-10-26')
+    expect(hsetCalls()[0]).toEqual(['hset', 'iv-hist:GOLD', '2026-09-25', '24'])
+  })
 })
