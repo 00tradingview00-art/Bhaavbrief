@@ -72,6 +72,12 @@ const nextConfig = {
       // Broken "ay2026" slugs (slug-generator bug, capital M stripped from "May")
       { source: '/articles/:slug(.*ay2026.*)', destination: '/briefs', permanent: true },
       { source: '/briefs/:slug(.*ay2026.*)',   destination: '/briefs', permanent: true },
+      // Duplicate evening close briefs published for the same session (two
+      // workflow runs minutes apart, 21 & 22 Sep 2026 — see
+      // evening-close-brief.yml's checkout note). The first-published brief
+      // of each pair is kept; the later copy points to it.
+      { source: '/articles/2026-09-21-mcx-close-22sep2026-natgas-leads-selloff', destination: '/articles/2026-09-21-mcx-close-22sep2026-natgas-selloff', permanent: true },
+      { source: '/articles/2026-09-22-mcx-close-23sep2026-natgas-surge', destination: '/articles/2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge', permanent: true },
     ]
   },
 }
