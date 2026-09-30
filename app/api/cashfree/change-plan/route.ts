@@ -3,6 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { cancelCashfreeSubscription } from '@/lib/cashfree'
 import { isProUser, markCancelling, markSubscriptionEnded, type Plan } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
+import { incrementWindow } from '@/lib/userRateLimit'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -16,8 +17,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   const rlKey = `rl:change-plan:${userId}`
-  const count = Number(await redisCommand('INCR', rlKey))
-  if (count === 1) await redisCommand('EXPIRE', rlKey, '3600')
+  const count = await incrementWindow(rlKey, 3600)
   if (count > 5) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }
