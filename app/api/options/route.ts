@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { getOptionsChain, MCX_INSTRUMENTS, isMCXMarketOpen } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
 import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
-import { isProUser, hasInternalAccess } from '@/lib/subscription'
+import { isProUserOrFree, hasInternalAccess } from '@/lib/subscription'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
   }
 
   const { userId } = await auth()
-  const pro = hasInternalAccess(request.headers) || await isProUser(userId)
+  const pro = hasInternalAccess(request.headers) || await isProUserOrFree(userId)
 
   try {
     const rawPayload = await getOptionsChain(instrument, requestedExpiry) as OptionsPayload

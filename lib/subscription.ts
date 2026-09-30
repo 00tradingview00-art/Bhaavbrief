@@ -42,6 +42,18 @@ export async function isProUser(userId: string | null): Promise<boolean> {
   return new Date(expiresAt as string) > new Date()
 }
 
+// For routes that serve free data to everyone and only *extra* data to Pro:
+// a Redis outage should degrade a signed-in user to the free tier, not turn
+// the whole response into a 500 (anonymous users never reach Redis at all).
+export async function isProUserOrFree(userId: string | null): Promise<boolean> {
+  try {
+    return await isProUser(userId)
+  } catch (err) {
+    console.error('[subscription] Pro check failed, serving free tier', err)
+    return false
+  }
+}
+
 // Bearer-secret check for server-to-server internal access (backend scripts
 // hitting Pro-gated API routes with no Clerk session at all). A real
 // customer's browser never sends this header — there is no UI, cookie, or

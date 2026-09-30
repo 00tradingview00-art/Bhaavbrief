@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { isProUser, hasInternalAccess } from '@/lib/subscription'
+import { isProUserOrFree, hasInternalAccess } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
 import { MCX_INSTRUMENTS } from '@/lib/options'
 import { getOIHistory } from '@/lib/oiHistory'
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
   let isPro = true
   if (!isMonitoring && !hasInternalAccess(request.headers)) {
     const { userId } = await auth()
-    isPro = await isProUser(userId)
+    isPro = await isProUserOrFree(userId)
   }
 
   const { searchParams } = new URL(request.url)
