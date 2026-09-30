@@ -30,6 +30,21 @@ import { execFileSync } from 'node:child_process'
 import { checkClaims } from './lib/claimsCheck.mjs'
 import { appendGateLogEntry } from './lib/gateLog.mjs'
 
+// Exit-code contract: 0 = publish, 1 = legitimate rejection, 2 = the gate
+// itself couldn't run. Without these handlers any uncaught error (a network
+// failure in the semantic check, a malformed claim, bad JSON) crashed Node
+// with exit 1 — read by callers as a silent content rejection instead of an
+// alert. (A failure while importing modules still exits 1: it happens before
+// this module body runs.)
+process.on('uncaughtException', (err) => {
+  console.error('GATE-INTERNAL-ERROR:', err?.stack ?? err)
+  process.exit(2)
+})
+process.on('unhandledRejection', (err) => {
+  console.error('GATE-INTERNAL-ERROR:', err?.stack ?? err)
+  process.exit(2)
+})
+
 const gateStartedAt = Date.now()
 const [, , researchPath] = process.argv
 if (!researchPath) {
