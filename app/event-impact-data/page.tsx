@@ -133,7 +133,7 @@ export default function EventImpactDataPage() {
           this same ledger before publication (see <Link href="/methodology" style={{ color: '#C8720A' }}>Methodology</Link>).
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
           {[
             { label: 'Tracked event×commodity pairs', value: claims.length },
             { label: 'Commodities covered', value: commodityCount },
