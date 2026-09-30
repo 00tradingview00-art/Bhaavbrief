@@ -123,7 +123,14 @@ jobs:
             echo "No new brief generated — skipping compliance lint"
             exit 0
           fi
+          # Same exit-code contract as the publish gate: 1 = blocked content
+          # (silent, working as intended), 2 = the lint itself failed (alert).
+          set +e
           node scripts/compliance-lint.mjs data/market-snapshot.json "$BRIEF"
+          CODE=$?
+          set -e
+          echo "exit_code=$CODE" >> "$GITHUB_OUTPUT"
+          exit $CODE
 
       - name: Apply human approval gate (G-12)
         id: humangate
@@ -330,7 +337,7 @@ jobs:
         # control working as intended) or compliance-lint blocked a bad brief.
         # steps.validate.outputs.exit_code is empty if the validate step never ran
         # (e.g. an earlier step failed), which correctly falls through to alerting.
-        if: failure() && steps.validate.outputs.exit_code != '1' && steps.compliance.outcome != 'failure'
+        if: failure() && steps.validate.outputs.exit_code != '1' && steps.compliance.outputs.exit_code != '1'
         run: |
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
