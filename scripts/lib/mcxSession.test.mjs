@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { istDate, tradingSessionDate } from './mcxSession.js'
+import { istDate, isMcxOpen, tradingSessionDate } from './mcxSession.js'
 
 // All inputs are UTC instants; IST = UTC + 5:30.
 const at = iso => new Date(iso)
@@ -36,5 +36,19 @@ describe('tradingSessionDate', () => {
     expect(tradingSessionDate(at('2026-09-28T02:30:00Z'))).toBeNull()
     // Mon 28 Sep 10:00 IST
     expect(tradingSessionDate(at('2026-09-28T04:30:00Z'))).toBe('2026-09-28')
+  })
+})
+
+describe('isMcxOpen', () => {
+  it('is open during a normal session', () => {
+    expect(isMcxOpen(at('2026-09-30T06:30:00Z'))).toBe(true) // Wed 12:00 IST
+  })
+
+  it('is closed on an exchange holiday during trading hours (Gandhi Jayanti)', () => {
+    expect(isMcxOpen(at('2026-10-02T06:30:00Z'))).toBe(false) // Fri 12:00 IST
+  })
+
+  it('stays open to 23:55 IST once US DST ends', () => {
+    expect(isMcxOpen(at('2026-11-02T18:10:00Z'))).toBe(true) // Mon 23:40 IST
   })
 })
