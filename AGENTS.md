@@ -21,7 +21,7 @@ definition, or tell a viewer to buy, sell, hold, enter, exit or predict a price.
 This is the OpenAI-agent (Codex) counterpart to `CLAUDE.md`. The facts below are shared with
 that file — read whichever one your tool loads, they should never diverge on anything factual.
 Codex itself runs on OpenAI's models; **the app's own AI stack is Anthropic Claude** (brief
-generation + semantic validation) plus ElevenLabs (reel voiceover) — see Stack below.
+generation + semantic validation) plus Edge TTS (V3 reel voiceover) — see Stack below.
 
 MCX commodity intelligence for Indian traders: a daily AI-generated market brief, a live
 options chain (Black-76), and a price bridge/import-parity engine, published on a
@@ -33,8 +33,9 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 - **Content pipeline:** GitHub Actions workflows (`.github/workflows/*.yml`) run Node scripts
   (`scripts/*.mjs`/`.js`) on a cron, commit generated content straight to `main` — see Part 8.5
   below on why direct-to-main is deliberate here, not an oversight.
-- **AI:** Anthropic Claude for brief generation + semantic validation; ElevenLabs for reel
-  voiceover.
+- **AI:** Anthropic Claude for brief generation + semantic validation. Reel voiceover (V3) is
+  the Microsoft Edge TTS female voice `en-IN-NeerjaNeural`; ElevenLabs only in retired V1/V2
+  reel scripts.
 - **Data:** Kite Connect (MCX/NSE), Yahoo Finance (COMEX/FX fallback), Redis (options IV
   history), flat JSON files under `data/` (no database).
 - **Tests:** Vitest (`npm test`) — introduced 2026-07 alongside the observability/gate work;
