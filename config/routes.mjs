@@ -51,7 +51,6 @@ export const ROUTES = [
   '/api/search',
   '/api/spreads',
   '/api/subscribe',
-  '/api/thesis',
   '/arcs/[id]',
   '/basis',
   '/articles/[slug]',
