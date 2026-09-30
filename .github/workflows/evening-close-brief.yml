@@ -25,9 +25,14 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      # ref: main, not the commit that triggered the run: a run queued behind
+      # another (schedule + keepalive rescue + manual dispatch) otherwise
+      # checks out a tree without the brief the first run just pushed, and
+      # publishes a second one for the same session (happened 21 & 22 Sep).
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,8 +45,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # No continue-on-error: a failed snapshot used to let the brief be
+      # generated and gated against hours-old prices (29 Sep: blocked as
+      # STALE, 196 min). Failing here reaches the alert step below instead.
       - name: Fetch market snapshot
-        continue-on-error: true
         env:
           KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
