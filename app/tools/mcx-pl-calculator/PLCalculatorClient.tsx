@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 
 import { useState } from 'react'
 import { notionalExposure, adverseMoveImpacts } from '@/lib/plRisk'
@@ -149,7 +150,7 @@ export default function PLCalculatorClient() {
       <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
         <strong>Lot size:</strong> {meta.lotSize} {meta.unit.split('/')[1]} ·{' '}
         <strong>Tick:</strong> ₹{meta.tickSize} → ₹{meta.tickValue} per tick per lot ·{' '}
-        <strong>Margin:</strong> see <a href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin calculator</a>
+        <strong>Margin:</strong> see <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin calculator</Link>
       </div>
     </div>
   )
