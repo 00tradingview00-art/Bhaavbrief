@@ -72,6 +72,19 @@ export default async function MCXGreeksPage() {
   return (
     <main style={{ maxWidth: 800, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
+      {/* One stylesheet for the ~2,400 table rows instead of seven inline style
+          objects per row — those were serialized into the page twice (HTML +
+          RSC payload) and made it ~4 MB on production. */}
+      <style>{`
+        .gk-table tbody tr { border-top: 1px solid var(--border); }
+        .gk-table tbody tr.gk-atm { background: var(--gold-pale, #FFF6E0); }
+        .gk-table td { padding: 4px 8px; color: var(--ink); }
+        .gk-table td.gk-strike { font-weight: 500; }
+        .gk-table tr.gk-atm td.gk-strike { font-weight: 700; }
+        .gk-table td.gk-ce { font-weight: 600; color: var(--up); }
+        .gk-table td.gk-pe { font-weight: 600; color: var(--gold-dark); }
+        .gk-table td.gk-num { text-align: right; }
+      `}</style>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>
         MCX Options Greeks — Full Strike Depth
       </h1>
@@ -91,7 +104,7 @@ export default async function MCXGreeksPage() {
               </div>
               {rows.length ? (
                 <div style={{ overflowX: 'auto', maxHeight: 320, overflowY: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
+                  <table className="gk-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                     <thead>
                       <tr style={{ color: 'var(--ink-3)' }}>
                         <th style={{ textAlign: 'left', padding: '4px 8px' }}>Strike</th>
@@ -106,19 +119,14 @@ export default async function MCXGreeksPage() {
                     <tbody>
                       {rows.map(row => (
                         (['CE', 'PE'] as const).map(side => (
-                          <tr key={`${row.strike}-${side}`} style={{
-                            borderTop: '1px solid var(--border)',
-                            background: row.isATM ? 'var(--gold-pale, #FFF6E0)' : 'transparent',
-                          }}>
-                            <td style={{ padding: '4px 8px', fontWeight: row.isATM ? 700 : 500, color: 'var(--ink)' }}>
-                              {side === 'CE' ? row.strike.toLocaleString() : ''}
-                            </td>
-                            <td style={{ padding: '4px 8px', fontWeight: 600, color: side === 'CE' ? 'var(--up)' : 'var(--gold-dark)' }}>{side}</td>
-                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].iv, 1)}</td>
-                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].delta)}</td>
-                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].gamma, 6)}</td>
-                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].theta, 2)}</td>
-                            <td style={{ padding: '4px 8px', textAlign: 'right', color: 'var(--ink)' }}>{fmt(row[side].vega, 2)}</td>
+                          <tr key={`${row.strike}-${side}`} className={row.isATM ? 'gk-atm' : undefined}>
+                            <td className="gk-strike">{side === 'CE' ? row.strike.toLocaleString() : ''}</td>
+                            <td className={side === 'CE' ? 'gk-ce' : 'gk-pe'}>{side}</td>
+                            <td className="gk-num">{fmt(row[side].iv, 1)}</td>
+                            <td className="gk-num">{fmt(row[side].delta)}</td>
+                            <td className="gk-num">{fmt(row[side].gamma, 6)}</td>
+                            <td className="gk-num">{fmt(row[side].theta, 2)}</td>
+                            <td className="gk-num">{fmt(row[side].vega, 2)}</td>
                           </tr>
                         ))
                       ))}
