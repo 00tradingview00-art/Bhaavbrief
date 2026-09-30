@@ -17,6 +17,7 @@
 // not have this bug — that's why it's the one being kept as the source of
 // truth rather than the other way around.
 import { isTradingHoliday, todayIST } from '../scripts/lib/holidays.js'
+export { tradingSessionDate } from '../scripts/lib/mcxSession.js'
 
 export { todayIST }
 
