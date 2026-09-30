@@ -106,15 +106,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!verifyCashfreeWebhookSignature(rawBody, signature, timestamp)) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
-  if (!isWebhookTimestampFresh(timestamp)) {
-    return NextResponse.json({ error: 'Stale webhook' }, { status: 401 })
-  }
 
   let body: CashfreeWebhookBody
   try {
     body = JSON.parse(rawBody.toString('utf8'))
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  if (!isWebhookTimestampFresh(timestamp)) {
+    // Logged, not just refused: if Cashfree ever sent a timestamp format this
+    // check doesn't understand, every activation would be dropped — this
+    // makes that visible in the per-subscription log immediately.
+    const subId = body.data?.subscription_details?.subscription_id ?? body.data?.subscription_id
+    await logWebhookEvent(subId, { type: body.type ?? '', action: `rejected: stale or unreadable timestamp (${timestamp})` })
+    return NextResponse.json({ error: 'Stale webhook' }, { status: 401 })
   }
 
   // Each signed delivery is processed at most once. Released again if
