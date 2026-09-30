@@ -1421,6 +1421,8 @@ export default function StrategyBuilder({
           {legs.length > 0 && (
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 8 }}>Selected Legs</div>
+              {/* 8+ columns: scroll sideways on phones instead of overflowing the page */}
+              <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--ink-2, #3A3830)' }}>
@@ -1512,8 +1514,10 @@ export default function StrategyBuilder({
                       </td>
                       <td style={{ padding: '5px 8px', textAlign: 'right' }}>
                         <button onClick={() => removeLeg(i)}
-                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-2, #3A3830)', fontSize: 16 }}>
-                          ×
+                          type="button"
+                          aria-label={`Remove leg ${i + 1}`}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-2, #3A3830)', fontSize: 16, minWidth: 32, minHeight: 32 }}>
+                          <span aria-hidden="true">×</span>
                         </button>
                       </td>
                     </tr>
@@ -1521,6 +1525,7 @@ export default function StrategyBuilder({
                   })}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
