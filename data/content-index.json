@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-09-30-india-steel-zinc-mcx-price",
+    "href": "/articles/2026-09-30-india-steel-zinc-mcx-price",
+    "title": "How India's Steel and Construction Sector Drives MCX Zinc Demand",
+    "description": "Understand how India's steel sector affects MCX zinc price through galvanising demand, import parity formula, and key supply-side triggers.",
+    "excerpt": "Understanding how India's steel sector affects MCX zinc price starts with one fact: roughly 60% of global zinc consumption goes into galvanising steel, making construction and infrastructure activity ",
+    "date": "2026-09-30",
+    "edition": "keyword-brief",
+    "tags": [
+      "zinc",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "zinc",
+    "commodities": [
+      "zinc"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-116",
     "href": "/briefs/edition-116",
