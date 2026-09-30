@@ -5,6 +5,7 @@ import { isProUser } from '@/lib/subscription'
 import { getBasisHistory, type BasisPoint } from '@/lib/basis'
 import SectionTabs from '@/components/SectionTabs'
 import BasisClient from './BasisClient'
+import { previewDates, previewWave } from '@/lib/proPreview'
 import { safeJsonLd } from '@/lib/seo'
 
 export const revalidate = 900
@@ -48,6 +49,23 @@ function calcStats(history: BasisPoint[], key: keyof BasisPoint) {
   const variance = vals.reduce((s, v) => s + (v - mean) ** 2, 0) / vals.length
   const std = Math.sqrt(variance)
   return { mean, std, latest: vals[vals.length - 1] ?? null }
+}
+
+// Stand-in series for the blurred chart non-Pro visitors see — the real
+// history is Pro-only and must not be serialized into their page.
+function previewHistory(): BasisPoint[] {
+  const n = 30
+  const dates = previewDates(n)
+  const gold = previewWave(n, 12, 1.2, 2)
+  const silver = previewWave(n, 14, 1.8, 5)
+  const crude = previewWave(n, 0.4, 0.6, 9)
+  const noConstituents = { mcx: null, benchmark: null, usdinr: null }
+  return dates.map((date, i) => ({
+    date,
+    goldSpreadPct: gold[i], silverSpreadPct: silver[i], crudeSpreadPct: crude[i], copperSpreadPct: null,
+    goldDutySpreadPct: null, silverDutySpreadPct: null, crudeDutySpreadPct: null,
+    gold: noConstituents, silver: noConstituents, crude: noConstituents,
+  }))
 }
 
 export default async function BasisPage() {
@@ -115,7 +133,7 @@ export default async function BasisPage() {
       <Suspense fallback={null}>
         <BasisClient
           commodities={commodities}
-          history={history}
+          history={isPro ? history : previewHistory()}
           isPro={isPro}
         />
       </Suspense>

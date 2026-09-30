@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
-import { getPCRHistory } from '@/lib/pcrAnalysis'
 import PCRTrendChart from './PCRTrendChart'
 import { safeJsonLd } from '@/lib/seo'
 
@@ -71,11 +70,6 @@ function pcrSignal(pcr: number | null): { label: string; color: string } {
 
 export default async function MCXPCRPage() {
   const data = await getPCRData()
-  const trends = await Promise.all(
-    Object.entries(MCX_INSTRUMENTS).map(async ([key, meta]) => ({
-      key, label: meta.label, history: await getPCRHistory(key),
-    })),
-  )
 
   return (
     <main style={{ maxWidth: 720, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>
@@ -120,8 +114,8 @@ export default async function MCXPCRPage() {
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.75rem' }}>PCR Trend</h2>
-        {trends.map(t => (
-          <PCRTrendChart key={t.key} label={t.label} history={t.history} isPro={false} />
+        {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => (
+          <PCRTrendChart key={key} instrument={key} label={meta.label} />
         ))}
       </section>
     </main>

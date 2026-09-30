@@ -10,6 +10,18 @@ const isProtectedPage = createRouteMatcher(['/account'])
 export default clerkMiddleware((auth, req) => {
   if (isProtectedPage(req)) auth.protect()
 
+  // The anonymous (free, 11-strike, no-Greeks) option chain is shared-cached
+  // at the edge under its plain URL, and the edge cache can't tell visitors
+  // apart — so a signed-in Pro user requesting the same URL could be served
+  // that cached free response without the handler ever running. Requests
+  // carrying a Clerk session cookie get a distinct cache key instead; the
+  // handler never shared-caches a signed-in response (app/api/options/route.ts).
+  if (req.nextUrl.pathname === '/api/options' && req.cookies.has('__session')) {
+    const url = req.nextUrl.clone()
+    url.searchParams.set('viewer', 'session')
+    return NextResponse.rewrite(url)
+  }
+
   // Keep the high-density terminal as the desktop root, but serve the mobile
   // Daily Brief from a separate lightweight route. The rewrite preserves `/`
   // in the address bar and avoids shipping hidden terminal content to phones.

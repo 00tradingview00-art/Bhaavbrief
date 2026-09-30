@@ -4,11 +4,14 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
-  // Every route that asks "is today a trading day" reads the holiday calendar
-  // from disk (scripts/lib/holidays.js) — ship it with all of them explicitly
-  // rather than relying on per-route tracing.
+  // Files read from disk at request time — listed explicitly so the
+  // serverless bundles always ship them, rather than relying on tracing:
+  // - the holiday calendar, for every route that asks "is today a trading
+  //   day" (scripts/lib/holidays.js);
+  // - the daily history files, for /api/pro/data (lib/correlation.ts).
   outputFileTracingIncludes: {
     '/**': ['./data/market-holidays.json'],
+    '/api/pro/data': ['./data/history/**'],
   },
   images: {
     remotePatterns: [

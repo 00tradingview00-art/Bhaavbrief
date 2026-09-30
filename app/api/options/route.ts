@@ -5,6 +5,7 @@ import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
 import { isMcxOpen } from '@/lib/tradingCalendar'
 import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { isProUser, hasInternalAccess } from '@/lib/subscription'
+import { chainCacheControl } from '@/lib/optionsCacheControl'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -54,6 +55,9 @@ export async function GET(request: NextRequest) {
 
   const { userId } = await auth()
   const pro = hasInternalAccess(request.headers) || await isProUser(userId)
+  const cacheControl = chainCacheControl({
+    pro, signedIn: !!userId, hasSessionCookie: request.cookies.has('__session'),
+  })
 
   try {
     const rawPayload = await getOptionsChain(instrument, requestedExpiry) as OptionsPayload
@@ -73,12 +77,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(payload, {
       headers: {
-        // Only the free/anonymous response is identical for every visitor and
-        // safe to share-cache at the edge. The Pro (full-chain) response must
-        // never be shared-cached — a cache hit skips this handler entirely,
-        // which would otherwise let a free user transiently receive full
-        // Greeks data (or a Pro user get the truncated free view) at this URL.
-        'Cache-Control': pro ? 'private, no-store' : 'public, s-maxage=30, stale-while-revalidate=10',
+        'Cache-Control': cacheControl,
       },
     })
   } catch (err) {
@@ -100,7 +99,7 @@ export async function GET(request: NextRequest) {
         }
         return NextResponse.json(payload, {
           headers: {
-            'Cache-Control': pro ? 'private, no-store' : 'public, s-maxage=30, stale-while-revalidate=10',
+            'Cache-Control': cacheControl,
             'X-Chain-Source': 'stale-cache',
           },
         })

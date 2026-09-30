@@ -148,6 +148,53 @@ export default function IVRankHistoryChart({ title, instruments, isPro }: Props)
   // much harder than later, better-supported ones.
   const buildingHistoryEnd = data[Math.min(9, data.length - 1)]?.date
 
+  const chartBody = (
+    <>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data} margin={{ top: 8, right: selectedKey === 'ALL' ? 80 : 12, bottom: 4, left: -8 }}>
+          <CartesianGrid horizontal vertical={false} stroke="var(--border)" />
+          <ReferenceArea y1={70} y2={100} fill="var(--down)" fillOpacity={0.045} ifOverflow="visible" />
+          <ReferenceArea y1={0} y2={30} fill="var(--gold)" fillOpacity={0.06} ifOverflow="visible" />
+          {data.length > 1 && (
+            <ReferenceArea
+              x1={data[0].date} x2={buildingHistoryEnd} y1={0} y2={100}
+              fill="var(--surface-3)" fillOpacity={0.5} ifOverflow="visible"
+              label={{ value: 'Building history', position: 'insideTopLeft', fontSize: 9, fill: 'var(--ink-4)' }}
+            />
+          )}
+          <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--ink-3)' }} tickLine={false} axisLine={{ stroke: 'var(--border-2)' }} />
+          <YAxis tick={{ fontSize: 10, fill: 'var(--ink-3)' }} domain={[0, 100]} tickLine={false} axisLine={false} />
+          <Tooltip content={<ChartTooltip />} />
+          <ReferenceLine y={70} stroke="var(--ink-4)" strokeDasharray="3 3" strokeWidth={1} label={{ value: 'Rich', position: 'insideTopLeft', fontSize: 9, fill: 'var(--ink-4)' }} />
+          <ReferenceLine y={30} stroke="var(--ink-4)" strokeDasharray="3 3" strokeWidth={1} label={{ value: 'Cheap', position: 'insideBottomLeft', fontSize: 9, fill: 'var(--ink-4)' }} />
+          {visibleInstruments.map(inst => (
+            <Line
+              key={inst.key}
+              type="linear"
+              dataKey={inst.key}
+              name={inst.label}
+              stroke={COLORS[inst.key] ?? 'var(--ink-3)'}
+              dot={false}
+              strokeWidth={selectedKey === 'ALL' ? 1.4 : 2.5}
+              activeDot={{ r: 4, strokeWidth: 2, fill: 'var(--surface)' }}
+              connectNulls
+            />
+          ))}
+          {selectedKey === 'ALL' && <EndLabels items={endLabelItems} />}
+        </LineChart>
+      </ResponsiveContainer>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, gap: 10 }}>
+        <span style={{ fontSize: 11, color: 'var(--ink-3)' }}>
+          {selectedKey === 'ALL' ? 'Comparison view — each line is one commodity.' : `Showing ${selected?.label ?? 'selected market'} only.`}
+        </span>
+        <button type="button" onClick={() => setSelectedKey(selectedKey === 'ALL' ? (selected?.key ?? withData[0]?.key ?? 'ALL') : 'ALL')} style={{ appearance: 'none', cursor: 'pointer', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--ink-2)', borderRadius: 5, padding: '4px 7px', fontSize: 10, fontWeight: 600, whiteSpace: 'nowrap' }}>
+          {selectedKey === 'ALL' ? 'Focus one' : 'Compare all'}
+        </button>
+      </div>
+    </>
+  )
+
   return (
     <Card padding="md">
       <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.25rem' }}>{title}</h2>
@@ -183,50 +230,15 @@ export default function IVRankHistoryChart({ title, instruments, isPro }: Props)
         })}
       </div>
 
-      <ProBlurGate isPro={isPro} label={`${title} — see how volatility has moved over time`} timestamp="Updated today">
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data} margin={{ top: 8, right: selectedKey === 'ALL' ? 80 : 12, bottom: 4, left: -8 }}>
-            <CartesianGrid horizontal vertical={false} stroke="var(--border)" />
-            <ReferenceArea y1={70} y2={100} fill="var(--down)" fillOpacity={0.045} ifOverflow="visible" />
-            <ReferenceArea y1={0} y2={30} fill="var(--gold)" fillOpacity={0.06} ifOverflow="visible" />
-            {data.length > 1 && (
-              <ReferenceArea
-                x1={data[0].date} x2={buildingHistoryEnd} y1={0} y2={100}
-                fill="var(--surface-3)" fillOpacity={0.5} ifOverflow="visible"
-                label={{ value: 'Building history', position: 'insideTopLeft', fontSize: 9, fill: 'var(--ink-4)' }}
-              />
-            )}
-            <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--ink-3)' }} tickLine={false} axisLine={{ stroke: 'var(--border-2)' }} />
-            <YAxis tick={{ fontSize: 10, fill: 'var(--ink-3)' }} domain={[0, 100]} tickLine={false} axisLine={false} />
-            <Tooltip content={<ChartTooltip />} />
-            <ReferenceLine y={70} stroke="var(--ink-4)" strokeDasharray="3 3" strokeWidth={1} label={{ value: 'Rich', position: 'insideTopLeft', fontSize: 9, fill: 'var(--ink-4)' }} />
-            <ReferenceLine y={30} stroke="var(--ink-4)" strokeDasharray="3 3" strokeWidth={1} label={{ value: 'Cheap', position: 'insideBottomLeft', fontSize: 9, fill: 'var(--ink-4)' }} />
-            {visibleInstruments.map(inst => (
-              <Line
-                key={inst.key}
-                type="linear"
-                dataKey={inst.key}
-                name={inst.label}
-                stroke={COLORS[inst.key] ?? 'var(--ink-3)'}
-                dot={false}
-                strokeWidth={selectedKey === 'ALL' ? 1.4 : 2.5}
-                activeDot={{ r: 4, strokeWidth: 2, fill: 'var(--surface)' }}
-                connectNulls
-              />
-            ))}
-            {selectedKey === 'ALL' && <EndLabels items={endLabelItems} />}
-          </LineChart>
-        </ResponsiveContainer>
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, gap: 10 }}>
-          <span style={{ fontSize: 11, color: 'var(--ink-3)' }}>
-            {selectedKey === 'ALL' ? 'Comparison view — each line is one commodity.' : `Showing ${selected?.label ?? 'selected market'} only.`}
-          </span>
-          <button type="button" onClick={() => setSelectedKey(selectedKey === 'ALL' ? (selected?.key ?? withData[0]?.key ?? 'ALL') : 'ALL')} style={{ appearance: 'none', cursor: 'pointer', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--ink-2)', borderRadius: 5, padding: '4px 7px', fontSize: 10, fontWeight: 600, whiteSpace: 'nowrap' }}>
-            {selectedKey === 'ALL' ? 'Focus one' : 'Compare all'}
-          </button>
-        </div>
-      </ProBlurGate>
+      {isPro ? chartBody : (
+        // Non-Pro visitors receive synthetic series (see IVRankHistoryGate),
+        // so this must be preview mode — never un-blurred as if real.
+        <ProBlurGate
+          label={`${title} — see how volatility has moved over time`}
+          timestamp="Updated today"
+          preview={chartBody}
+        />
+      )}
     </Card>
   )
 }

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import ProBlurGate from '@/components/ProBlurGate'
-import { useIsPro } from '@/lib/useIsPro'
+import { useProData } from '@/lib/useProData'
 import type { CoreInstrument, TermStructurePoint } from '@/lib/terminalData'
 
 // recharts is only used by this one chart on the homepage — lazy-load it so
@@ -14,6 +14,10 @@ import type { CoreInstrument, TermStructurePoint } from '@/lib/terminalData'
 // Lighthouse profile as a real ~135ms contributor to Total Blocking Time.
 // `next/dynamic({ ssr: false })` must live in a Client Component, hence this
 // thin wrapper around the server-rendered app/page.tsx call site.
+//
+// The term-structure data itself is Pro-only: it is no longer passed in from
+// the shared ISR homepage (where every visitor received it), but fetched from
+// /api/pro/data once the visitor is confirmed Pro.
 const IVTermStructureChart = dynamic(
   () => import('./IVTermStructureChart'),
   {
@@ -24,22 +28,26 @@ const IVTermStructureChart = dynamic(
   },
 )
 
-interface Props {
-  termStructure: Record<CoreInstrument, TermStructurePoint[]>
-  isPro: boolean
-}
+type TermStructure = Record<CoreInstrument, TermStructurePoint[]>
 
-export default function IVTermStructureChartLazy({ termStructure, isPro: serverPro }: Props) {
-  const clientIsPro = useIsPro()
-  const isPro = serverPro || clientIsPro
+export default function IVTermStructureChartLazy() {
+  const { isPro, data, failed } = useProData<TermStructure>('kind=term-structure')
 
   if (!isPro) {
     return (
-      <ProBlurGate isPro={false} label="iVIX Term Structure — implied volatility by expiry bucket" timestamp="Live">
-        <div style={{ height: 240 }} />
-      </ProBlurGate>
+      <ProBlurGate
+        label="iVIX Term Structure — implied volatility by expiry bucket"
+        timestamp="Live"
+        preview={<div style={{ height: 240 }} />}
+      />
     )
   }
 
-  return <IVTermStructureChart termStructure={termStructure} />
+  if (failed) {
+    return <p style={{ fontSize: 11, color: 'var(--ink-3)' }}>Term structure is unavailable right now — try again shortly.</p>
+  }
+  if (!data) {
+    return <div style={{ height: 240, borderRadius: 'var(--radius-md)' }} className="bb-skeleton-bar" />
+  }
+  return <IVTermStructureChart termStructure={data} />
 }
