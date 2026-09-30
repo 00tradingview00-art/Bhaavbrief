@@ -451,7 +451,18 @@ async function main() {
   // never touched again once the date rolls over. Powers claims-ledger
   // verification and Yesterday's-Edge resolution without depending on a
   // live re-fetch from Kite's historical API each time.
-  appendDailySnapshot(path.join(ROOT, 'data/history'), todayIST(), snapshot)
+  //
+  // Keyed by trading session, not the IST calendar date: a post-midnight
+  // evening run used to write Friday's close into a Saturday file, and
+  // weekend runs wrote Saturday/Sunday files repeating Friday's prices —
+  // fake zero-change days in every return-based stat (e.g. correlations).
+  // Outside a session there is nothing new to record.
+  const historySession = tradingSessionDate()
+  if (historySession) {
+    appendDailySnapshot(path.join(ROOT, 'data/history'), historySession, snapshot)
+  } else {
+    console.log('  History: not a trading session — daily history file not written')
+  }
 
   // Log summary table
   console.log('\n  Instrument        Price          Chg%    Stale')
