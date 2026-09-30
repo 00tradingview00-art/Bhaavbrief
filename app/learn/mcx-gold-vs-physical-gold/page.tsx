@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'MCX Gold vs Physical Gold India — What is the Difference? (2026)',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Gold+vs+Physical+Gold&tags=Beginner,Gold,MCX+India', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Gold vs Physical Gold", tags: "Beginner,Gold,MCX India" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Gold vs Physical Gold India 2026 | BhaavBrief', description: 'MCX gold is NOT physical gold — it is a futures contract. Learn the difference and decide which is right for you.', site: '@bhaavbrief' },
 }

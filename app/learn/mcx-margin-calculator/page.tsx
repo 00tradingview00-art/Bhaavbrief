@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 interface Prices {
   gold: number; silver: number; crude: number; copper: number
@@ -61,7 +62,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Margin+Calculator+2026&tags=Margin,Leverage,Contract+Value', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Margin Calculator 2026", tags: "Margin,Leverage,Contract Value" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Margin Calculator 2026 | BhaavBrief', description: 'Exact SPAN margin for Gold, Silver, Crude, Copper and all MCX commodities.', site: '@bhaavbrief' },
 }

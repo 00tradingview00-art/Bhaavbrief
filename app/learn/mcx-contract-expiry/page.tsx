@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'MCX Contract Expiry 2026 — Gold, Silver, Crude Oil & Copper Expiry Dates',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Contract+Expiry+2026&tags=Gold,Silver,Crude+Oil,Futures+Expiry', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Contract Expiry 2026", tags: "Gold,Silver,Crude Oil,Futures Expiry" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Contract Expiry 2026 | BhaavBrief', description: 'When do MCX gold, silver, crude oil, and copper contracts expire? Complete expiry calendar and settlement guide.', site: '@bhaavbrief' },
 }

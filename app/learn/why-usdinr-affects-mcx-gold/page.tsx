@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 interface Prices { gold: number; usdinr: number; comexGold: number }
 
@@ -46,7 +47,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=USD%2FINR+and+MCX+Gold&tags=Rupee,COMEX,Import+Parity', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "USD/INR and MCX Gold", tags: "Rupee,COMEX,Import Parity" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'Why USD/INR Moves MCX Gold | BhaavBrief', description: 'The formula that connects COMEX gold, rupee-dollar, and MCX gold price — with live examples.', site: '@bhaavbrief' },
 }

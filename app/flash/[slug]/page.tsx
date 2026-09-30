@@ -5,6 +5,7 @@ import Link              from 'next/link'
 import CopyLinkButton    from '@/components/CopyLinkButton'
 import { getFlash, getAllFlash, getAdjacentFlash } from '@/lib/flash'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const revalidate = 300
 
@@ -44,7 +45,7 @@ export async function generateMetadata(
     tags:     flash.category ?? '',
     type:     'flash',
   })
-  const ogImage = `${BASE_URL}/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
 
   return {
     title,

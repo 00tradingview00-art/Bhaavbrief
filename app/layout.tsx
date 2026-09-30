@@ -10,6 +10,7 @@ import TickerStrip from '@/components/TickerStrip'
 import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -90,7 +91,7 @@ export const metadata: Metadata = {
     siteName: 'BhaavBrief',
     locale: 'en_IN',
     type: 'website',
-    images: [{ url: `${BASE}/api/og?title=India+Commodity+Intelligence&tags=MCX+Gold,MCX+Crude,USD%2FINR`, width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "India Commodity Intelligence", tags: "MCX Gold,MCX Crude,USD/INR" }), width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
