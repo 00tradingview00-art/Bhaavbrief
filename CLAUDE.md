@@ -10,8 +10,9 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 - **Content pipeline:** GitHub Actions workflows (`.github/workflows/*.yml`) run Node scripts
   (`scripts/*.mjs`/`.js`) on a cron, commit generated content straight to `main` — see Part 8.5
   below on why direct-to-main is deliberate here, not an oversight.
-- **AI:** Anthropic Claude for brief generation + semantic validation; ElevenLabs for reel
-  voiceover.
+- **AI:** Anthropic Claude for brief generation + semantic validation. Reel voiceover (V3) is
+  the Microsoft Edge TTS female voice `en-IN-NeerjaNeural`; ElevenLabs only in retired V1/V2
+  reel scripts.
 - **Data:** Kite Connect (MCX/NSE), Yahoo Finance (COMEX/FX fallback), Redis (options IV
   history), flat JSON files under `data/` (no database).
 - **Tests:** Vitest (`npm test`) — introduced 2026-07 alongside the observability/gate work;
