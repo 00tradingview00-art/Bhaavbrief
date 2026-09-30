@@ -37,6 +37,7 @@ import { resolveUsdinr } from './lib/resolveUsdinr.mjs'
 import { validateSnapshot } from './lib/snapshotSchema.mjs'
 import { appendDailySnapshot } from './lib/historicalStore.mjs'
 import { todayIST } from './lib/holidays.js'
+import { tradingSessionDate } from './lib/mcxSession.js'
 import { getExpiredCoreInstruments } from './lib/instrumentExpiryCheck.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -206,7 +207,13 @@ async function fetchFrankfurterUSDINR() {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 function checkExpiredCoreInstruments() {
-  return getExpiredCoreInstruments(loadJSON(INSTRUMENTS_FILE), todayIST())
+  // Judged against the trading session this run belongs to, not the IST
+  // calendar date: the evening brief routinely runs after midnight (GitHub
+  // schedules are hours late), and at 01:42 IST on 30 Sep this flagged
+  // COPPER26SEPFUT — still the live contract for the 29 Sep session it was
+  // reporting on — as expired, killing that night's close brief. Outside any
+  // session (weekend/holiday) fall back to the calendar date.
+  return getExpiredCoreInstruments(loadJSON(INSTRUMENTS_FILE), tradingSessionDate() ?? todayIST())
 }
 
 async function main() {
