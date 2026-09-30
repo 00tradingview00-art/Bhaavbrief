@@ -49,6 +49,13 @@ jobs:
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
         run: node scripts/compute-event-impact.mjs
 
+      # data/claims.json is the only source the brief generator may cite
+      # historical statistics from (G-07). It is derived from the stats just
+      # computed, but nothing rebuilt it — it was frozen at 2026-07-17 while
+      # the stats kept updating weekly.
+      - name: Rebuild claims ledger
+        run: node scripts/lib/buildClaimsLedger.mjs
+
       - name: Validate event-map.json schema
         run: node scripts/validate-event-map.mjs
 
@@ -56,7 +63,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/event-map.json data/event-impact-stats.json
+          git add data/event-map.json data/event-impact-stats.json data/claims.json
           git diff --cached --quiet && echo "No changes" || \
             git commit -m "chore: refresh event impact stats [skip ci]"
           git pull --rebase origin main
