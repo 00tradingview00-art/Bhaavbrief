@@ -16,10 +16,10 @@
 // moment safely inside the same calendar day in both UTC and IST), which does
 // not have this bug — that's why it's the one being kept as the source of
 // truth rather than the other way around.
-import { isTradingHoliday, todayIST } from '../scripts/lib/holidays.js'
+import { isTradingHoliday, todayIST, holidayCalendarStatus } from '../scripts/lib/holidays.js'
 export { tradingSessionDate, isMcxOpen } from '../scripts/lib/mcxSession.js'
 
-export { todayIST }
+export { todayIST, holidayCalendarStatus }
 
 export function isTradingDay(dateStr: string): boolean {
   return !isTradingHoliday(dateStr)
