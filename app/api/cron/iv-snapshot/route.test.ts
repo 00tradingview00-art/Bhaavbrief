@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const redisCommand = vi.fn(async (..._args: string[]) => null as unknown)
+const redisCommand = vi.fn(async (...args: string[]) => (void args, null as unknown))
 vi.mock('@/lib/redis', () => ({ redisCommand: (...a: string[]) => redisCommand(...a) }))
 
 const getOptionsChain = vi.fn()
