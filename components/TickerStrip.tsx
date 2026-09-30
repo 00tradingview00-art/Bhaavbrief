@@ -1,15 +1,9 @@
 'use client'
 import { useEffect, useState, useRef } from 'react'
 import type { PriceData } from '@/lib/prices'
+import { isWithinMcxHours } from '@/scripts/lib/mcxHours.js'
 
-// IST market hours: 9:00 AM – 11:30 PM = 03:30–18:00 UTC
-function isMCXOpen(): boolean {
-  const now = new Date()
-  const day = now.getUTCDay() // 0=Sun, 6=Sat
-  if (day === 0 || day === 6) return false
-  const mins = now.getUTCHours() * 60 + now.getUTCMinutes()
-  return mins >= 210 && mins <= 1080
-}
+// Poll faster during MCX hours — shared DST-aware clock (scripts/lib/mcxHours.js).
 
 function fmtINR(v: number): string {
   if (!v) return '—'
@@ -74,7 +68,7 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
 
     // During market hours refresh every 30 sec, outside every 5 min
     function scheduleNext() {
-      const delay = isMCXOpen() ? 30_000 : 300_000
+      const delay = isWithinMcxHours() ? 30_000 : 300_000
       intervalRef.current = setTimeout(async () => {
         await load()
         scheduleNext()

@@ -4,6 +4,12 @@ const nextConfig = {
   experimental: {
     mdxRs: false,
   },
+  // Every route that asks "is today a trading day" reads the holiday calendar
+  // from disk (scripts/lib/holidays.js) — ship it with all of them explicitly
+  // rather than relying on per-route tracing.
+  outputFileTracingIncludes: {
+    '/**': ['./data/market-holidays.json'],
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.pexels.com' },

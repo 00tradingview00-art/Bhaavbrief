@@ -8,14 +8,47 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const HOLIDAYS_FILE = path.join(__dirname, '../../data/market-holidays.json')
+
+// Where the calendar can live. In the Next.js server bundle, import.meta.url
+// is baked in at build time as the BUILD machine's absolute path (e.g.
+// /vercel/path0/scripts/lib/holidays.js), which doesn't exist where the
+// function runs (/var/task) — so the script-relative path alone silently
+// found nothing in production and every holiday read as a trading day.
+// process.cwd() is the app root in production and the repo root for the
+// GitHub Actions scripts; the script-relative path covers running a script
+// from another directory.
+const CANDIDATE_FILES = [
+  path.join(process.cwd(), 'data/market-holidays.json'),
+  path.join(__dirname, '../../data/market-holidays.json'),
+]
+
+let reportedMissing = false
 
 function loadHolidays() {
-  try {
-    return JSON.parse(fs.readFileSync(HOLIDAYS_FILE, 'utf8'))
-  } catch {
-    return []
+  for (const file of CANDIDATE_FILES) {
+    try {
+      if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, 'utf8'))
+    } catch (err) {
+      console.error(`[holidays] could not read ${file}:`, err.message)
+    }
   }
+  if (!reportedMissing) {
+    reportedMissing = true
+    console.error('[holidays] market-holidays.json not found — every weekday will be treated as a trading day. Looked in:', CANDIDATE_FILES.join(', '))
+  }
+  return []
+}
+
+/**
+ * Whether the holiday calendar loaded, and the latest year it covers — so
+ * the health check can alert instead of the calendar silently going empty
+ * (or running out at year end).
+ * @returns {{ loaded: boolean, latestYear: number | null }}
+ */
+export function holidayCalendarStatus() {
+  const holidays = loadHolidays()
+  const years = holidays.map(h => Number(String(h.date).slice(0, 4))).filter(Number.isFinite)
+  return { loaded: holidays.length > 0, latestYear: years.length ? Math.max(...years) : null }
 }
 
 /**

@@ -9,6 +9,11 @@ describe('timeToExpiryYears', () => {
     expect(timeToExpiryYears('2026-10-26', now) * YEAR_MS / 86400000).toBeCloseTo(3, 5)
   })
 
+  test('measures to the 23:55 IST close in winter', () => {
+    const now = Date.parse('2026-11-23T18:25:00Z') // 3 days before, at 23:55 IST
+    expect(timeToExpiryYears('2026-11-26', now) * YEAR_MS / 86400000).toBeCloseTo(3, 5)
+  })
+
   test('floors at one day on expiry day itself', () => {
     const now = Date.parse('2026-10-26T12:00:00Z')
     expect(timeToExpiryYears('2026-10-26', now)).toBeCloseTo(1 / 365, 8)

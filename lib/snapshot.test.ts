@@ -77,6 +77,14 @@ describe('isMCXOpenNow', () => {
   })
 })
 
+describe('isMCXOpenNow — winter session', () => {
+  test('still open at 23:40 IST after US DST ends (MCX closes 23:55 until March)', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-11-02T18:10:00.000Z')) // Monday, 23:40 IST
+    expect(isMCXOpenNow()).toBe(true)
+  })
+})
+
 describe('loadSnapshot', () => {
   test('returns the parsed snapshot when the file exists and is valid JSON', () => {
     const snap = makeSnapshot()

@@ -40,7 +40,8 @@ export async function GET(req: Request) {
   }
 
   // Dated by the trading session the run belongs to, not the IST calendar
-  // date: this cron fires anywhere in 23:30–00:29 IST, and a post-midnight
+  // date: this cron fires anywhere in 00:30–01:29 IST (after the 23:30/23:55
+  // close, see vercel.json), and a post-midnight
   // run used to file Friday's data under Saturday. On a weekend/holiday
   // there is no session — write nothing rather than a copied-forward value
   // that would later read as a real observation.

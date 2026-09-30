@@ -14,14 +14,19 @@ describe('isMCXOpenIST', () => {
     expect(isMCXOpenIST(new Date('2026-07-19T10:00:00Z'))).toBe(false) // Sunday
   })
 
-  it('is open at 9:00 AM IST (03:30 UTC) and 11:30 PM IST (18:00 UTC) on a weekday', () => {
+  it('is open from 9:00 AM IST (03:30 UTC) up to the 11:30 PM IST summer close', () => {
     expect(isMCXOpenIST(new Date('2026-07-17T03:30:00Z'))).toBe(true)
-    expect(isMCXOpenIST(new Date('2026-07-17T18:00:00Z'))).toBe(true)
+    expect(isMCXOpenIST(new Date('2026-07-17T17:59:00Z'))).toBe(true)
   })
 
-  it('is closed just before/after the trading window on a weekday', () => {
+  it('is closed just before/at the edges of the trading window on a weekday', () => {
     expect(isMCXOpenIST(new Date('2026-07-17T03:29:00Z'))).toBe(false)
-    expect(isMCXOpenIST(new Date('2026-07-17T18:01:00Z'))).toBe(false)
+    expect(isMCXOpenIST(new Date('2026-07-17T18:00:00Z'))).toBe(false)
+  })
+
+  it('stays open to 11:55 PM IST in winter, and is closed on exchange holidays', () => {
+    expect(isMCXOpenIST(new Date('2026-11-02T18:10:00Z'))).toBe(true)  // Mon 23:40 IST
+    expect(isMCXOpenIST(new Date('2026-10-02T06:30:00Z'))).toBe(false) // Gandhi Jayanti
   })
 })
 

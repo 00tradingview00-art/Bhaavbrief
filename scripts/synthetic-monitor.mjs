@@ -14,6 +14,7 @@
  */
 
 import { todayIST, isTradingHoliday } from './lib/holidays.js'
+import { isMcxOpen } from './lib/mcxSession.js'
 import { checkSitemapShape, expectedSitemapCount } from './lib/sitemapCheck.mjs'
 
 const BASE = process.env.MONITOR_BASE_URL ?? 'https://bhaavbrief.in'
@@ -22,15 +23,11 @@ const GOLD_PRICE_SPREAD_TOLERANCE_PCT = Number(process.env.MONITOR_GOLD_SPREAD_T
 const FEED_STALE_HOURS = Number(process.env.MONITOR_FEED_STALE_HOURS ?? '24')
 const DEADMAN_DEADLINE_IST_MINUTES = 9 * 60 + 45 // M-03: 9:45 AM IST
 
+// The shared DST- and holiday-aware clock (scripts/lib/mcxSession.js). This
+// used to be its own UTC-window copy with a fixed 23:30 close and no holiday
+// check.
 export function isMCXOpenIST(now = new Date()) {
-  // Mirrors components/TickerStrip.tsx's isMCXOpen() — same UTC-window logic,
-  // valid because the 3:30-18:00 UTC trading window never crosses an IST
-  // calendar-day boundary (03:30 UTC = 09:00 IST, 18:00 UTC = 23:30 IST,
-  // same date both ends).
-  const day = now.getUTCDay()
-  if (day === 0 || day === 6) return false
-  const mins = now.getUTCHours() * 60 + now.getUTCMinutes()
-  return mins >= 210 && mins <= 1080
+  return isMcxOpen(now)
 }
 
 export function istMinutesNow(now = new Date()) {

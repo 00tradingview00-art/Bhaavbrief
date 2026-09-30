@@ -3,6 +3,7 @@ import { KiteClient, getFullMCXInstrumentsCached } from '@/lib/kite'
 import { black76, calculateIV, calculateMaxPain, type Greeks } from '@/lib/black76'
 import { computeIVIX, computeAAV }                from '@/lib/vix'
 import { REPO_RATE_PCT, REPO_RATE_ASOF }         from '@/lib/rbiRepoRate'
+import { isWithinMcxHours, mcxCloseMinutesIST }  from '../scripts/lib/mcxHours.js'
 import { buildCurve, adjacentSpreads, hasLiveFuturesPrice } from '@/lib/spreads'
 
 // Code-review follow-up: these were all bare constants requiring a code
@@ -65,14 +66,11 @@ export type Tier = 'LIVE' | 'STALE' | 'JUNK'
 // Time to expiry in years, measured to the close of the expiry session.
 // `new Date('YYYY-MM-DD')` is UTC midnight = 05:30 IST on expiry day, which
 // understated T by ~18 hours and made every expiry-day reading hit the
-// 1-day floor. Close is taken as 23:30 IST (18:00 UTC); the floor still
+// 1-day floor. The close is DST-aware (23:30 or 23:55 IST); the floor still
 // guards the solver on expiry day itself.
-const MCX_CLOSE_UTC = 'T18:00:00Z'
 export function timeToExpiryYears(expiry: string, now: number = Date.now()): number {
-  return Math.max(
-    (Date.parse(`${expiry}${MCX_CLOSE_UTC}`) - now) / (365 * 24 * 60 * 60 * 1000),
-    1 / 365,
-  )
+  const closeUtcMs = Date.parse(`${expiry}T00:00:00Z`) + (mcxCloseMinutesIST(expiry) - 330) * 60 * 1000
+  return Math.max((closeUtcMs - now) / (365 * 24 * 60 * 60 * 1000), 1 / 365)
 }
 
 export function pickDefaultExpiry(expiries: string[], today: string): string {
@@ -173,12 +171,14 @@ export const MCX_INSTRUMENTS: Record<string, { label: string; unit: string; lotS
   COPPER:      { label: 'Copper',         unit: 'kg',    lotSize: 2500 },
 }
 
+// Weekday + DST-aware hours (scripts/lib/mcxHours.js). Holidays aren't known
+// here — this file is also bundled for the browser (StrategyBuilder imports
+// MCX_INSTRUMENTS) and the holiday calendar is read from disk; server routes
+// wanting holiday awareness use isMcxOpen() from lib/tradingCalendar.
+// Previously this checked Sunday only (Saturday read as open) and closed at
+// 23:30 year-round.
 export function isMCXMarketOpen(): boolean {
-  const now = new Date()
-  const ist = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-  const mins = ist.getHours() * 60 + ist.getMinutes()
-  if (ist.getDay() === 0) return false
-  return mins >= 9 * 60 && mins < 23 * 60 + 30
+  return isWithinMcxHours()
 }
 
 // Deduped per-request via React's cache() — a single page render can call

@@ -14,6 +14,7 @@
  */
 
 import { isTradingHoliday } from './holidays.js'
+import { isWithinMcxHours } from './mcxHours.js'
 
 const IST_OFFSET_MS = 5.5 * 3600 * 1000
 const SESSION_OPEN_IST_MINUTES = 9 * 60
@@ -34,4 +35,14 @@ export function tradingSessionDate(now = new Date()) {
   if (minutes < SESSION_OPEN_IST_MINUTES) ist.setUTCDate(ist.getUTCDate() - 1)
   const date = ist.toISOString().slice(0, 10)
   return isTradingHoliday(date) ? null : date
+}
+
+/**
+ * Whether MCX is open right now: trading hours (DST-aware close, see
+ * mcxHours.js) on a day that is not an exchange holiday. The single server-
+ * side answer to "is the market open" — replaces four copies that each
+ * hard-coded a 23:30 close and mostly ignored holidays.
+ */
+export function isMcxOpen(now = new Date()) {
+  return isWithinMcxHours(now) && !isTradingHoliday(istDate(now))
 }

@@ -12,6 +12,7 @@
 
 import { unstable_cache } from 'next/cache'
 import { KiteClient, type KiteQuote, type InstrumentInfo } from './kite'
+import { isMcxOpen } from './tradingCalendar'
 import fs from 'fs'
 import path from 'path'
 
@@ -489,8 +490,9 @@ export async function getPrices(): Promise<PriceData | null> {
 
     const y = deriveFromYahoo(comex, usdinrFallback)
 
-    const utcMins = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
-    const marketOpen = utcMins >= 210 && utcMins <= 1080  // 9 AM–11:30 PM IST
+    // Shared DST- and holiday-aware clock — this was a bare UTC window with no
+    // weekend/holiday check (Saturday afternoon read as open) and a 23:30 close.
+    const marketOpen = isMcxOpen()
 
     const instruments = loadInstrumentTokens()
 

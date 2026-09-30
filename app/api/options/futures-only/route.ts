@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getFuturesOnlyChain, FUTURES_ONLY_INSTRUMENTS, isMCXMarketOpen } from '@/lib/options'
+import { getFuturesOnlyChain, FUTURES_ONLY_INSTRUMENTS } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
+import { isMcxOpen } from '@/lib/tradingCalendar'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
     const publicMsg = msg.startsWith('No futures contracts found')
       ? msg
       : 'Futures price data is temporarily unavailable. Please check back shortly.'
-    const nextOpenAt = isMCXMarketOpen() ? null : nextMCXSessionOpenISO()
+    const nextOpenAt = isMcxOpen() ? null : nextMCXSessionOpenISO()
     return NextResponse.json({ error: publicMsg, nextOpenAt }, { status })
   }
 }

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { getOptionsChain, MCX_INSTRUMENTS, isMCXMarketOpen } from '@/lib/options'
+import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
+import { isMcxOpen } from '@/lib/tradingCalendar'
 import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { isProUser, hasInternalAccess } from '@/lib/subscription'
 
@@ -92,7 +93,7 @@ export async function GET(request: NextRequest) {
       if (cached && Array.isArray(cached.chain)) {
         // Computed fresh here rather than trusting anything inside `cached` — the cached
         // payload's own marketOpen/lastUpdated reflect the moment it was fetched, not now.
-        const nextOpenAt = isMCXMarketOpen() ? null : nextMCXSessionOpenISO()
+        const nextOpenAt = isMcxOpen() ? null : nextMCXSessionOpenISO()
         let payload = { ...cached, stale: true, nextOpenAt } as unknown as OptionsPayload
         if (!pro) {
           payload = limitChainForFree(payload)
@@ -110,7 +111,7 @@ export async function GET(request: NextRequest) {
     const publicMsg = msg.startsWith('No options found')
       ? msg
       : 'Option chain data is temporarily unavailable. Please check back shortly.'
-    const nextOpenAt = isMCXMarketOpen() ? null : nextMCXSessionOpenISO()
+    const nextOpenAt = isMcxOpen() ? null : nextMCXSessionOpenISO()
     return NextResponse.json({ error: publicMsg, nextOpenAt }, { status })
   }
 }
