@@ -2,7 +2,6 @@ import { notFound }      from 'next/navigation'
 import { Metadata }      from 'next'
 import { MDXRemote }     from 'next-mdx-remote/rsc'
 import Link              from 'next/link'
-import Masthead          from '@/components/Masthead'
 import CopyLinkButton    from '@/components/CopyLinkButton'
 import { getFlash, getAllFlash, getAdjacentFlash } from '@/lib/flash'
 import { safeJsonLd } from '@/lib/seo'
@@ -122,7 +121,6 @@ export default async function FlashPage({ params }: { params: Promise<{ slug: st
   return (
     <div className="bb-flash-page" style={{ background: '#FAFAF6', minHeight: '100vh' }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }} />
-      <Masthead />
 
       <div className="bb-flash-content" style={{ maxWidth: 680, margin: '0 auto', padding: '1.5rem 1.25rem 3rem' }}>
         <nav style={{ marginBottom: '1.5rem' }}>
