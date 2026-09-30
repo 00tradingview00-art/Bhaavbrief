@@ -5,6 +5,8 @@ import {
   planAmountInr,
   verifyCashfreeWebhookSignature,
   expiryFromPlan,
+  isWebhookTimestampFresh,
+  WEBHOOK_MAX_AGE_MS,
 } from './cashfree'
 
 describe('planFromCashfreePlanId', () => {
@@ -62,5 +64,28 @@ describe('expiryFromPlan', () => {
     const from = new Date('2026-08-31T00:00:00Z')
     const daily = expiryFromPlan('daily', from)
     expect(daily.getTime() - from.getTime()).toBe(24 * 3600 * 1000)
+  })
+})
+
+describe('isWebhookTimestampFresh', () => {
+  const now = Date.UTC(2026, 8, 30, 12, 0, 0)
+
+  it('accepts a current timestamp in milliseconds or seconds', () => {
+    expect(isWebhookTimestampFresh(String(now), now)).toBe(true)
+    expect(isWebhookTimestampFresh(String(Math.floor(now / 1000)), now)).toBe(true)
+  })
+
+  it('accepts a delivery retried within the replay window', () => {
+    expect(isWebhookTimestampFresh(String(now - 48 * 3600 * 1000), now)).toBe(true)
+  })
+
+  it('rejects timestamps older than the window or far in the future', () => {
+    expect(isWebhookTimestampFresh(String(now - WEBHOOK_MAX_AGE_MS - 1), now)).toBe(false)
+    expect(isWebhookTimestampFresh(String(now + 10 * 60 * 1000), now)).toBe(false)
+  })
+
+  it('rejects missing or non-numeric timestamps', () => {
+    expect(isWebhookTimestampFresh(null, now)).toBe(false)
+    expect(isWebhookTimestampFresh('2026-09-30T12:00:00Z', now)).toBe(false)
   })
 })

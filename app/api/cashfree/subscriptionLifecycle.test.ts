@@ -138,7 +138,7 @@ describe('webhook only acts on the subscription it belongs to', () => {
   })
 })
 
-describe.skip('webhook replay protection', () => {
+describe('webhook replay protection', () => {
   it('rejects a correctly-signed event whose timestamp is days old', async () => {
     const fourDaysAgo = String(Date.now() - 4 * DAY)
     const res = await webhook(signedRequest(paymentEvent('sub_X'), fourDaysAgo))
@@ -155,13 +155,14 @@ describe.skip('webhook replay protection', () => {
 
   it('processes an identical delivery only once', async () => {
     const ts = String(Date.now())
-    const first = await webhook(signedRequest(paymentEvent('sub_X'), ts))
+    const event = paymentEvent('sub_X') // built once so the replay is byte-identical
+    const first = await webhook(signedRequest(event, ts))
     expect(await first.json()).toEqual({ ok: true })
 
     // User cancels and the period ends; a replay of the original payment
     // must not re-grant access.
     store.set(`sub:${USER}:status`, 'cancelled')
-    const replay = await webhook(signedRequest(paymentEvent('sub_X'), ts))
+    const replay = await webhook(signedRequest(event, ts))
     expect(await replay.json()).toEqual({ ok: true, duplicate: true })
     expect(store.get(`sub:${USER}:status`)).toBe('cancelled')
   })
@@ -170,12 +171,14 @@ describe.skip('webhook replay protection', () => {
     const { redisCommand } = await import('@/lib/redis')
     const mocked = vi.mocked(redisCommand)
     const ts = String(Date.now())
-    mocked.mockImplementationOnce(async () => 'OK')            // de-dupe claim succeeds
+    const real = mocked.getMockImplementation()!
+    mocked.mockImplementationOnce(real)                         // de-dupe claim is stored for real
     mocked.mockImplementationOnce(async () => { throw new Error('redis down') })
-    const failed = await webhook(signedRequest(paymentEvent('sub_Y'), ts))
+    const event = paymentEvent('sub_Y') // identical retry — only passes if the claim was released
+    const failed = await webhook(signedRequest(event, ts))
     expect(failed.status).toBe(500)
 
-    const retry = await webhook(signedRequest(paymentEvent('sub_Y'), ts))
+    const retry = await webhook(signedRequest(event, ts))
     expect(retry.status).toBe(200)
     expect(await isProUser(USER)).toBe(true)
   })

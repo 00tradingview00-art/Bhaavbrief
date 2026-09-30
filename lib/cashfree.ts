@@ -198,6 +198,23 @@ export function verifyCashfreeWebhookSignature(
   }
 }
 
+// Replay window for signed webhooks. The signature covers the timestamp, so a
+// captured delivery can't be re-dated — anything older than this is refused,
+// and anything newer is caught by the per-delivery de-dupe key in the webhook
+// route (whose TTL matches). Deliberately days, not minutes: if Cashfree
+// retries a failed delivery with its original timestamp, a short window would
+// silently drop a real activation.
+export const WEBHOOK_MAX_AGE_MS = 72 * 3600 * 1000
+const WEBHOOK_MAX_FUTURE_SKEW_MS = 5 * 60 * 1000
+
+/** Accepts epoch milliseconds or seconds (both seen in Cashfree docs/examples). */
+export function isWebhookTimestampFresh(timestamp: string | null, now: number = Date.now()): boolean {
+  if (!timestamp || !/^\d+$/.test(timestamp)) return false
+  const n = Number(timestamp)
+  const ms = n < 1e12 ? n * 1000 : n
+  return ms <= now + WEBHOOK_MAX_FUTURE_SKEW_MS && now - ms <= WEBHOOK_MAX_AGE_MS
+}
+
 export interface CashfreeSubscriptionPayment {
   cf_payment_id?: number
   payment_amount?: number

@@ -8,8 +8,11 @@ import {
   refreshSubscriptionExpiry,
   type Plan,
 } from '@/lib/subscription'
+import { createHash } from 'crypto'
 import {
+  WEBHOOK_MAX_AGE_MS,
   expiryFromPlan,
+  isWebhookTimestampFresh,
   parseCashfreeDate,
   planFromCashfreePlanId,
   verifyCashfreeWebhookSignature,
@@ -97,12 +100,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!verifyCashfreeWebhookSignature(rawBody, signature, timestamp)) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
   }
+  if (!isWebhookTimestampFresh(timestamp)) {
+    return NextResponse.json({ error: 'Stale webhook' }, { status: 401 })
+  }
 
   let body: CashfreeWebhookBody
   try {
     body = JSON.parse(rawBody.toString('utf8'))
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+  }
+
+  // Each signed delivery is processed at most once. Released again if
+  // processing fails, so Cashfree's retry of the same delivery still lands.
+  const dedupeKey = `cf-evt:${createHash('sha256').update(`${timestamp}.${rawBody.toString('utf8')}`).digest('hex')}`
+  const claimed = await redisCommand(
+    'SET', dedupeKey, '1', 'NX', 'EX', String(Math.ceil(WEBHOOK_MAX_AGE_MS / 1000) + 3600),
+  )
+  if (claimed === null) {
+    return NextResponse.json({ ok: true, duplicate: true })
   }
 
   const type = body.type ?? ''
@@ -115,11 +131,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     merchantSubId ??
     ''
 
-  const resolved = await resolveUserAndPlan(
-    merchantSubId,
-    details?.subscription_tags ?? undefined,
-    body.data?.plan_details?.plan_id,
-  )
+  let resolved: Awaited<ReturnType<typeof resolveUserAndPlan>>
+  try {
+    resolved = await resolveUserAndPlan(
+      merchantSubId,
+      details?.subscription_tags ?? undefined,
+      body.data?.plan_details?.plan_id,
+    )
+  } catch (err) {
+    console.error('[cashfree/webhook] resolve failed', err)
+    await redisCommand('DEL', dedupeKey).catch(() => {})
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 })
+  }
 
   if (!resolved) {
     // Not a BhaavBrief checkout (or mapping expired) — ack and ignore, but
@@ -209,6 +232,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   } catch (err) {
     console.error('[cashfree/webhook]', err)
+    await redisCommand('DEL', dedupeKey).catch(() => {})
     await logWebhookEvent(merchantSubId, { type, action: `error: ${(err as Error).message}` })
     return NextResponse.json({ error: 'Processing failed' }, { status: 500 })
   }
