@@ -25,6 +25,19 @@ export async function GET(req: NextRequest) {
     const session = await KiteClient.exchangeToken(apiKey, requestToken, apiSecret)
     const accessToken = session.access_token
 
+    // Only the site owner's Kite account may replace the production token.
+    // This endpoint is public: without the check, anyone able to log into the
+    // Kite Connect app would overwrite KITE_ACCESS_TOKEN in GitHub + Vercel
+    // and trigger a redeploy with their session.
+    const allowed = allowedKiteUsers()
+    if (allowed && !allowed.includes(session.user_id)) {
+      console.error(`Kite callback rejected: user ${session.user_id} is not in KITE_ALLOWED_USER_IDS`)
+      return html('❌ Not Authorised', 'This Kite account is not allowed to update BhaavBrief\'s market-data session.')
+    }
+    if (!allowed) {
+      console.warn('KITE_ALLOWED_USER_IDS not set — accepting any Kite account. Set it in Vercel to lock this endpoint.')
+    }
+
     console.log(`✅ Kite session obtained for user ${session.user_id} at ${session.login_time}`)
 
     // Update GitHub Secrets (for intelligence engine GitHub Actions)
@@ -42,12 +55,12 @@ export async function GET(req: NextRequest) {
         <div class="step">✅ Instrument tokens discovered and cached</div>
       `
     } catch (err) {
-      instrumentsMsg = `<div class="warn">⚠️ Instrument discovery failed: ${err} — will retry on next request</div>`
+      instrumentsMsg = `<div class="warn">⚠️ Instrument discovery failed: ${escapeHtml(String(err))} — will retry on next request</div>`
     }
 
     return html('✅ Kite Auth Successful', `
       <p>BhaavBrief now has live MCX prices from Kite Connect.</p>
-      <div class="step">✅ Access token obtained for ${session.user_id}</div>
+      <div class="step">✅ Access token obtained for ${escapeHtml(session.user_id)}</div>
       <div class="step">${ghUpdated ? '✅' : '⚠️'} GitHub Secret KITE_ACCESS_TOKEN ${ghUpdated ? 'updated automatically' : 'needs manual update'}</div>
       <div class="step">${vercelUpdated ? '✅' : '⚠️'} Vercel env KITE_ACCESS_TOKEN ${vercelUpdated ? 'updated — redeploy triggered' : 'needs manual update'}</div>
       ${instrumentsMsg}
@@ -59,8 +72,21 @@ export async function GET(req: NextRequest) {
 
   } catch (err) {
     console.error('Kite callback error:', err)
-    return html('❌ Token Exchange Failed', `Error: ${String(err)}`)
+    return html('❌ Token Exchange Failed', `Error: ${escapeHtml(String(err))}`)
   }
+}
+
+// Comma-separated Kite user IDs allowed to set the production token, or null
+// when the setting is absent (then any account is accepted, with a warning).
+function allowedKiteUsers(): string[] | null {
+  const raw = process.env.KITE_ALLOWED_USER_IDS
+  if (!raw?.trim()) return null
+  return raw.split(',').map(s => s.trim()).filter(Boolean)
+}
+
+// Values from Kite (user id, error text) are interpolated into this HTML page.
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 }
 
 // ── Update GitHub Secret ──────────────────────────────────────────────────────
