@@ -253,12 +253,12 @@ jobs:
             echo "✓ OI-buildup snapshot present for all instruments on $CHECK_DATE"
           fi
 
-      - name: Check Kite daily login (9:45 AM IST run only)
+      - name: Check live Kite data (9:45 AM IST run only)
         id: kite_check
         run: |
           SCHEDULE="${{ github.event.schedule }}"
           if [ -n "$SCHEDULE" ] && [ "$SCHEDULE" != "15 4 * * 1-5" ]; then
-            echo "Not the 9:45 AM run — skipping Kite login check"
+            echo "Not the 9:45 AM run — skipping Kite data check"
             echo "kite_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
@@ -271,19 +271,28 @@ jobs:
             data/market-holidays.json 2>/dev/null || echo "0")
           IS_HOLIDAY="${IS_HOLIDAY:-0}"
           if [ "$IS_HOLIDAY" != "0" ]; then
-            echo "MCX holiday today ($TODAY) — skipping Kite login check"
+            echo "MCX holiday today ($TODAY) — skipping Kite data check"
             echo "kite_ok=true" >> $GITHUB_OUTPUT
             exit 0
           fi
 
-          LAST_AUTH=$(jq -r '.lastAuth // ""' data/last-kite-auth.json 2>/dev/null || echo "")
-          if [ "$LAST_AUTH" = "$TODAY" ]; then
+          # Is Kite data actually reaching the site? /api/options only builds a
+          # chain from a live Kite session; with a dead/expired token it serves
+          # the last cached chain marked "stale": true, or an error. This used
+          # to read data/last-kite-auth.json, whose only writer was removed on
+          # 19 Jul (commit 94bf1510) — so it emailed "login not done" every
+          # trading day even when Kite was live, burying real outages.
+          RESP=$(curl -s --max-time 30 -w '\n%{http_code}' \
+            "https://bhaavbrief.in/api/options?instrument=GOLD" || printf '\n000')
+          CODE=$(echo "$RESP" | tail -n1)
+          STALE=$(echo "$RESP" | sed '$d' | jq -r '.stale // false' 2>/dev/null || echo "unparseable")
+          if [ "$CODE" = "200" ] && [ "$STALE" = "false" ]; then
             echo "kite_ok=true" >> $GITHUB_OUTPUT
-            echo "✓ Kite login done today ($TODAY)"
+            echo "✓ Live Kite data reaching the site (GOLD chain HTTP $CODE, not stale)"
           else
             echo "kite_ok=false" >> $GITHUB_OUTPUT
-            echo "kite_last_auth=${LAST_AUTH:-never}" >> $GITHUB_OUTPUT
-            echo "::error::Kite login not done today ($TODAY) — data/last-kite-auth.json shows lastAuth=${LAST_AUTH:-never}"
+            echo "kite_detail=HTTP ${CODE}, stale=${STALE}" >> $GITHUB_OUTPUT
+            echo "::error::Kite data not reaching the site — /api/options GOLD returned HTTP ${CODE}, stale=${STALE}"
           fi
 
       - name: Check Basis daily snapshot (9:45 AM IST run only)
@@ -371,24 +380,24 @@ jobs:
           echo "Alert sent for silent engine"
           exit 1
 
-      - name: Alert — Kite login not done today
+      - name: Alert — Kite data not reaching the site
         if: steps.kite_check.outputs.kite_ok == 'false'
         env:
           BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
         run: |
           DATE_LABEL=$(TZ=Asia/Kolkata date +'%d %b %Y')
-          LAST_AUTH="${{ steps.kite_check.outputs.kite_last_auth }}"
+          DETAIL="${{ steps.kite_check.outputs.kite_detail }}"
           curl -s -X POST https://api.brevo.com/v3/smtp/email \
             -H "api-key: ${BREVO_API_KEY}" \
             -H "Content-Type: application/json" \
             -d "{
               \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
               \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
-              \"subject\": \"⚠️ Kite login not done today — ${DATE_LABEL}\",
-              \"htmlContent\": \"<p>The daily Kite Connect login has not been done today (<strong>${DATE_LABEL}</strong>) — data/last-kite-auth.json still shows lastAuth: <strong>${LAST_AUTH}</strong>.</p><p>Options Chain, Strategy Builder, and today's IV/OI snapshots will fail or serve stale data until this is done. Fix: run <code>node scripts/kite-morning-auth.js</code> and complete the login.</p>\"
+              \"subject\": \"⚠️ Live Kite data not reaching the site — ${DATE_LABEL}\",
+              \"htmlContent\": \"<p>The live option chain is not coming from Kite today (<strong>${DATE_LABEL}</strong>): /api/options GOLD returned <strong>${DETAIL}</strong>.</p><p>Options Chain, Strategy Builder and tonight's IV/OI snapshots serve stale data until this is fixed. Most likely the daily Kite login hasn't been done: run <code>node scripts/kite-morning-auth.js</code> and complete the login.</p>\"
             }"
-          echo "Alert sent for missing Kite login"
+          echo "Alert sent: Kite data not reaching the site"
           exit 1
 
       - name: Alert — ATM IV snapshot missing
