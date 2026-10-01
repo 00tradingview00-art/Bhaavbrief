@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-01T20:29:00.134Z",
-  "generatedAtIST": "2026-10-02 01:59 IST",
+  "generatedAt": "2026-10-01T21:20:07.700Z",
+  "generatedAtIST": "2026-10-02 02:50 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,15 +40,15 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4209.2,
+      "price": 4207.8,
       "prevClose": 4186.7,
-      "changePct": 0.5374,
+      "changePct": 0.504,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 61.41,
+      "price": 61.35,
       "prevClose": 60.1,
-      "changePct": 2.1748,
+      "changePct": 2.0833,
       "unit": "USD/oz"
     },
     "WTI": {
@@ -58,15 +58,15 @@
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 102.31,
+      "price": 102.21,
       "prevClose": 103.53,
-      "changePct": -1.1784,
+      "changePct": -1.275,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.95,
       "prevClose": 3.03,
-      "changePct": -2.5446,
+      "changePct": -2.5116,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 130646,
-    "mcxComexGoldSpreadPct": 13.07,
-    "importParitySilverINR": 190606,
-    "mcxComexSilverSpreadPct": 18.33,
-    "goldSilverRatio": 68.5
+    "importParityGoldINR": 130603,
+    "mcxComexGoldSpreadPct": 13.11,
+    "importParitySilverINR": 190420,
+    "mcxComexSilverSpreadPct": 18.45,
+    "goldSilverRatio": 68.6
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 13.07% vs silver 18.33% — 5.26pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 13.07,
-      "silverSpreadPct": 18.33,
-      "deltaPts": 5.26
+      "detail": "Gold import-parity spread 13.11% vs silver 18.45% — 5.34pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 13.11,
+      "silverSpreadPct": 18.45,
+      "deltaPts": 5.34
     }
   ]
 }
