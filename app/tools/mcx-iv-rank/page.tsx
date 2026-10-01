@@ -9,6 +9,8 @@ import Link from 'next/link'
 import Card from '@/components/ui/Card'
 import VolatilityHub from './VolatilityHub'
 import IVRankHistoryGate from './IVRankHistoryGate'
+import IVPosition from '@/components/visuals/IVPosition'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
 import { safeJsonLd } from '@/lib/seo'
 
 const SCHEMA = {
@@ -190,6 +192,19 @@ export default async function MCXIVRankPage() {
                     IV−RV: {spread >= 0 ? '+' : ''}{spread.toFixed(1)}pp <span style={{ opacity: 0.8 }}>(20d realized {realizedVol20d?.toFixed(1)}%)</span>
                   </div>
                 )}
+                {regime && <IVPosition
+                  value={regime.ivRank}
+                  label="IV position"
+                  description={regime.regime === 'RICH' ? 'Options are priced higher than usual for this market. This reflects expected movement, not direction.' : regime.regime === 'CHEAP' ? 'Options are priced lower than usual for this market. This reflects expected movement, not direction.' : 'Options pricing is in its usual range for this market. This reflects expected movement, not direction.'}
+                />}
+                {regime && <MetricExplainDrawer
+                  metric="IV Rank"
+                  current={regime.ivRank.toFixed(0)}
+                  shows="Where current options pricing sits between calmer and more active conditions for this market."
+                  doesNotMean="It does not predict whether the market will move up or down."
+                  href="/options"
+                  linkLabel="Explore the option chain"
+                />}
               </div>
               {regime ? (
                 <div style={{ textAlign: 'right' }}>
