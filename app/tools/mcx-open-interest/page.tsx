@@ -6,6 +6,8 @@ import OIBuildupSection from './OIBuildupSection'
 import { safeJsonLd } from '@/lib/seo'
 import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
 import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
+import OIPressureMap from '@/components/visuals/OIPressureMap'
+import { oiPressureView } from '@/lib/oiPressure'
 
 type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
@@ -49,7 +51,7 @@ export const metadata: Metadata = {
 }
 
 async function getOIData() {
-  type OIResult = { futurePrice: number; topCE: { strike: number; oi: number }[]; topPE: { strike: number; oi: number }[]; stale?: boolean } | null
+  type OIResult = { futurePrice: number; expiry?: string; topCE: { strike: number; oi: number }[]; topPE: { strike: number; oi: number }[]; stale?: boolean } | null
 
   const entries = await Promise.all(
     Object.keys(MCX_INSTRUMENTS).map(async (instrument): Promise<[string, OIResult]> => {
@@ -62,7 +64,7 @@ async function getOIData() {
           return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult & { stale: true }) : null
         })
         if (!result) return [instrument, null]
-        const { chain, futurePrice } = result
+        const { chain, futurePrice, expiry } = result
         const topCE = [...chain]
           .sort((a, b) => b.CE.oi - a.CE.oi)
           .slice(0, 5)
@@ -71,7 +73,7 @@ async function getOIData() {
           .sort((a, b) => b.PE.oi - a.PE.oi)
           .slice(0, 5)
           .map(r => ({ strike: r.strike, oi: r.PE.oi }))
-        return [instrument, { futurePrice, topCE, topPE, stale: 'stale' in result ? result.stale : false }]
+        return [instrument, { futurePrice, expiry, topCE, topPE, stale: 'stale' in result ? result.stale : false }]
       } catch {
         return [instrument, null]
       }
@@ -127,12 +129,14 @@ export default async function MCXOpenInterestPage() {
       <div style={{ display: 'grid', gap: '1.25rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
           const data = oi[key]
+          const pressure = data ? oiPressureView(data.topCE, data.topPE, data.futurePrice) : null
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', background: 'var(--surface)' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.75rem' }}>
                 <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--ink)', margin: 0 }}>{meta.label}</h2>
                 {data && <span style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>Futures: {data.futurePrice.toLocaleString()}</span>}
               </div>
+              {data && pressure && <OIPressureMap view={pressure} expiry={data.expiry} stale={data.stale} />}
               {data ? (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                   {(['topCE', 'topPE'] as const).map(side => (
