@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'MCX Order Types Explained — Limit, Market, SL, SL-M Orders India 2026',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Order+Types+Explained&tags=Beginner,Orders,MCX+India', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Order Types Explained", tags: "Beginner,Orders,MCX India" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Order Types India 2026 | BhaavBrief', description: 'Limit, Market, SL, SL-M orders for MCX explained with worked examples. The stop loss order most beginners place wrong.', site: '@bhaavbrief' },
 }

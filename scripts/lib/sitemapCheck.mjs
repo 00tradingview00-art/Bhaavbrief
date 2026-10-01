@@ -66,6 +66,22 @@ function countPublishedMdx(dir) {
     }).length;
 }
 
+// Mirrors lib/research.ts getAllResearch(): only `published: true` counts
+// (stricter than briefs/events, which count unless published === false).
+function countResearchInSitemap(dir) {
+  if (!fs.existsSync(dir)) return 0;
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"))
+    .filter((f) => {
+      try {
+        return matter(fs.readFileSync(path.join(dir, f), "utf8")).data.published === true;
+      } catch {
+        return false;
+      }
+    }).length;
+}
+
 /**
  * Expected sitemap URL count, composed from the same sources
  * app/sitemap.xml/route.ts uses: published briefs + published events + arcs +
@@ -87,6 +103,11 @@ export function expectedSitemapCount({ root = process.cwd() } = {}) {
     // missing/malformed arcs file → contributes 0, same as the route's catch path
   }
 
+  // Published research pages are listed too (app/sitemap.xml/route.ts); they
+  // were missing from this count, so the live sitemap (183) always ran 3
+  // over the expected value — beyond the ±2 tolerance.
+  const research = countResearchInSitemap(path.join(root, "content/research"));
+
   const routeSrc = fs.readFileSync(path.join(root, "app/sitemap.xml/route.ts"), "utf8");
   const staticBlock = routeSrc.match(/const STATIC_PAGES\s*=\s*\[([\s\S]*?)\n\]/);
   if (!staticBlock) {
@@ -94,5 +115,5 @@ export function expectedSitemapCount({ root = process.cwd() } = {}) {
   }
   const statics = (staticBlock[1].match(/\burl:/g) ?? []).length;
 
-  return statics + briefs + arcs + events;
+  return statics + briefs + arcs + events + research;
 }

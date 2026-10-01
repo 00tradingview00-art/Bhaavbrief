@@ -15,9 +15,13 @@ import fs from 'node:fs'
 import path from 'node:path'
 import crypto from 'node:crypto'
 
+// GATE_LOG_PATH redirects the log (tests run the real gate script from the
+// repo root, and used to append their fixture runs to the production
+// data/gate-log.jsonl — 48 of 114 gate_run rows at the 30 Sep review).
 export function appendGateLogEntry(entry, cwd = process.cwd()) {
   const line = JSON.stringify(entry)
-  fs.appendFileSync(path.join(cwd, 'data/gate-log.jsonl'), line + '\n')
+  const file = process.env.GATE_LOG_PATH || path.join(cwd, 'data/gate-log.jsonl')
+  fs.appendFileSync(file, line + '\n')
 }
 
 export function hashPayload(payload) {

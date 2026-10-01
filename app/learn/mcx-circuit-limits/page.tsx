@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'MCX Circuit Limits 2026 — Daily Price Bands for Gold, Silver, Crude Oil & Copper',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Circuit+Limits+2026&tags=Gold,Silver,Crude+Oil,Circuit+Breaker', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Circuit Limits 2026", tags: "Gold,Silver,Crude Oil,Circuit Breaker" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'MCX Circuit Limits 2026 | BhaavBrief', description: 'MCX daily price bands for gold, silver, crude oil, copper — what circuit limits are and what happens when they trigger.', site: '@bhaavbrief' },
 }

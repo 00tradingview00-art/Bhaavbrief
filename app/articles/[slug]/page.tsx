@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 // Allow slugs not pre-rendered at build time (new articles published by GitHub Actions)
 export const dynamicParams = true
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     tags:  (meta.tags ?? []).slice(0, 3).join(','),
     type:  'flash',
   })
-  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
 
   return {
     title:       meta.title,
@@ -86,7 +87,7 @@ export default async function ArticlePage({ params }: Props) {
     tags:  (meta.tags ?? []).slice(0, 3).join(','),
     type:  'flash',
   })
-  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [

@@ -3,6 +3,7 @@ import path from 'node:path'
 import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 interface Prices {
   electricity: number
@@ -68,9 +69,9 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=MCX+Electricity+Futures+2026&tags=Lot+Size,Margin,IEX+DAM', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "MCX Electricity Futures 2026", tags: "Lot Size,Margin,IEX DAM" }), width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary_large_image' as const, title: 'MCX Electricity Futures Contract 2026 | BhaavBrief', description: 'Lot size, margin, settlement and trading hours for MCX Electricity futures.', site: '@bhaavbrief', images: ['https://bhaavbrief.in/api/og?title=MCX+Electricity+Futures+2026&tags=Lot+Size,Margin,IEX+DAM'] },
+  twitter: { card: 'summary_large_image' as const, title: 'MCX Electricity Futures Contract 2026 | BhaavBrief', description: 'Lot size, margin, settlement and trading hours for MCX Electricity futures.', site: '@bhaavbrief', images: [ogImageUrl({ title: "MCX Electricity Futures 2026", tags: "Lot Size,Margin,IEX DAM" })] },
 }
 
 const BREADCRUMB_SCHEMA = {

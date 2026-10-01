@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, afterEach } from 'vitest'
 import fs from 'fs'
 import type { KiteQuote, InstrumentInfo } from './kite'
-import { deriveFromYahoo, buildMCXData, buildForexData, loadFromSnapshot } from './prices'
+import { deriveFromYahoo, buildMCXData, buildForexData, resolveTickerUsdinr } from './prices'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -41,6 +41,13 @@ describe('buildMCXData', () => {
     expect(d.mcxOI).toBe(4500)
     expect(d.mcxSymbol).toBe('GOLD')
     expect(d.mcxExpiry).toBe('2026-08-05')
+    expect(d.mcxStale).toBe(false)
+  })
+
+  test('marks a carried-forward price as stale when there is no live quote', () => {
+    const d = buildMCXData(null, 146650, 0.4, goldInfo)
+    expect(d.mcx).toBe(146650)
+    expect(d.mcxStale).toBe(true)
   })
 
   test('falls back to the cached price when Kite has no quote (null)', () => {
@@ -63,6 +70,16 @@ describe('buildMCXData', () => {
     const d = buildMCXData(q, 12345, 0, goldInfo)
     expect(d.mcx).toBe(87700) // own ohlc.close wins over the unrelated fallback price
     expect(d.mcxVolume).toBe(0) // still not "live" — OHLC/volume/OI stay zeroed
+  })
+
+  test('mcxChange is LTP − prev close, not Kite net_change (which comes back 0 for MCX futures)', () => {
+    const q = makeQuote({ last_price: 149738, net_change: 0, ohlc: { open: 0, high: 0, low: 0, close: 153277 } })
+    expect(buildMCXData(q, 0, 0, goldInfo).mcxChange).toBe(-3539)
+  })
+
+  test('mcxChange stays 0 (hidden) when the prev close is missing', () => {
+    const q = makeQuote({ ohlc: { open: 0, high: 0, low: 0, close: 0 } })
+    expect(buildMCXData(q, 0, 0, goldInfo).mcxChange).toBe(0)
   })
 })
 
@@ -97,24 +114,8 @@ describe('deriveFromYahoo', () => {
     'NG=F':     { regularMarketPrice: 2.8,  regularMarketChangePercent: 1.82 },
   }
 
-  test('prefers the Frankfurter fallback rate over Yahoo FX when both are in the plausible range', () => {
-    const d = deriveFromYahoo(yahoo, 87.9)
-    expect(d.usdinr).toBe(87.9)
-  })
-
-  test('falls back to Yahoo FX when the Frankfurter rate is out of the plausible ₹82–₹110 range', () => {
-    const d = deriveFromYahoo(yahoo, 0) // 0 is out of range
-    expect(d.usdinr).toBe(87.5)
-  })
-
-  test('resolves to 0 when both sources are implausible', () => {
-    const badYahoo = { ...yahoo, 'USDINR=X': { regularMarketPrice: 5, regularMarketChangePercent: 0 } }
-    const d = deriveFromYahoo(badYahoo, 200)
-    expect(d.usdinr).toBe(0)
-  })
-
   test('derives comex/wti/brent/copper/henryHub straight from the Yahoo map', () => {
-    const d = deriveFromYahoo(yahoo, 87.5)
+    const d = deriveFromYahoo(yahoo)
     expect(d.comexGold).toBe(2450)
     expect(d.comexSilver).toBe(29)
     expect(d.wti).toBe(78)
@@ -129,50 +130,26 @@ describe('deriveFromYahoo', () => {
     const d = deriveFromYahoo({})
     expect(d.comexGold).toBe(0)
     expect(d.wti).toBe(0)
-    expect(d.usdinr).toBe(0)
   })
 })
 
-describe('loadFromSnapshot', () => {
-  const freshSnapshot = {
-    generatedAt: new Date().toISOString(),
-    source: 'kite',
-    instruments: {
-      MCX_GOLD:   { price: 88200, prevClose: 87700, changePct: 0.57 },
-      MCX_SILVER: { price: 102000, prevClose: 101000, changePct: 0.99 },
-      MCX_CRUDE:  { price: 6200, prevClose: 6150, changePct: 0.81 },
-      MCX_COPPER: { price: 850, prevClose: 845, changePct: 0.59 },
-      MCX_NATGAS: { price: 280, prevClose: 275, changePct: 1.82 },
-      USDINR:     { price: 87.5, prevClose: 87.3, changePct: 0.23 },
-      COMEX_GOLD: { price: 2450, prevClose: 2440, changePct: 0.41 },
-    },
-  }
+describe('resolveTickerUsdinr', () => {
+  const kite = { ltp: 96.24, changePct: 0.05, change: 0.05, open: 96.2, high: 96.3, low: 96.1, prevClose: 96.19, volume: 1, symbol: 'USDINR26OCTFUT', expiry: '2026-10-28' }
+  const yahoo = { regularMarketPrice: 96.1, regularMarketChangePercent: -0.1 }
 
-  test('returns a PriceData object built from a fresh (≤90min) snapshot', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(freshSnapshot))
-    const d = loadFromSnapshot()
-    expect(d).not.toBeNull()
-    expect(d!.gold.mcx).toBe(88200)
-    expect(d!.gold.mcxChangePct).toBe(0.57)
-    expect(d!.crude.mcx).toBe(6200)
+  test('prefers the live Kite rate, with its own % change (not a day-old ECB fixing)', () => {
+    expect(resolveTickerUsdinr(kite, yahoo, 95.98)).toEqual({ usdinr: 96.24, usdinrChangePct: 0.05 })
   })
 
-  test('returns null when the snapshot is older than 90 minutes — caller should fall back to a live fetch', () => {
-    const stale = { ...freshSnapshot, generatedAt: new Date(Date.now() - 91 * 60 * 1000).toISOString() }
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(stale))
-    expect(loadFromSnapshot()).toBeNull()
+  test('falls back to Yahoo, price and % change together, when Kite has no live quote', () => {
+    expect(resolveTickerUsdinr({ ...kite, ltp: 0 }, yahoo, 95.98)).toEqual({ usdinr: 96.1, usdinrChangePct: -0.1 })
   })
 
-  test('returns null when the snapshot file does not exist', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(false)
-    expect(loadFromSnapshot()).toBeNull()
+  test('uses the ECB rate only as a last resort', () => {
+    expect(resolveTickerUsdinr(null, undefined, 95.98).usdinr).toBe(95.98)
   })
 
-  test('returns null instead of throwing on malformed JSON', () => {
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue('{not valid json')
-    expect(loadFromSnapshot()).toBeNull()
+  test('rejects values outside the plausible ₹82–₹110 range at every level', () => {
+    expect(resolveTickerUsdinr({ ...kite, ltp: 5 }, { regularMarketPrice: 200, regularMarketChangePercent: 0 }, 0)).toEqual({ usdinr: 0, usdinrChangePct: 0 })
   })
 })

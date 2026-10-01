@@ -207,6 +207,12 @@ export default function CalendarFilterBar({
         ))}
       </div>
 
+      {filtered.length === 0 && (
+        <p style={{ fontSize: 14, color: 'var(--ink-3)', padding: '24px 0' }}>
+          No upcoming scheduled events{active === 'all' ? '' : ` for ${COMMODITY_LABELS[active] ?? active}`} right now — check back soon.
+        </p>
+      )}
+
       <div className="calendar-week-grid">
         {filtered.map(event => (
           <EventCard

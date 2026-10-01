@@ -14,7 +14,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow:     '/',
+        // /api/og renders the link-preview images pages point to; blocking
+        // it stopped crawlers that honour robots.txt from showing them.
+        allow:     ['/', '/api/og'],
         disallow:  ['/api/'],
       },
       {
@@ -23,7 +25,7 @@ export default function robots(): MetadataRoute.Robots {
           'Google-Extended', 'PerplexityBot', 'Perplexity-User',
           'CCBot', 'Applebot-Extended', 'meta-externalagent',
         ],
-        allow:     '/',
+        allow:     ['/', '/api/og'],
         disallow:  ['/api/'],
       },
     ],

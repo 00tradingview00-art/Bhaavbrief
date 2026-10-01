@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
-import { redisCommand, todayIST } from '@/lib/redis'
+import { redisCommand } from '@/lib/redis'
+import { tradingSessionDate } from '@/lib/tradingCalendar'
 import { buildOiSnapshotRows } from '@/lib/oiHistory'
 
 export const runtime  = 'nodejs'
@@ -38,7 +39,18 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const date = todayIST()
+  // Dated by the trading session the run belongs to, not the IST calendar
+  // date: this cron fires anywhere in 00:30–01:29 IST (after the 23:30/23:55
+  // close, see vercel.json), and a post-midnight
+  // run used to file Friday's data under Saturday. On a weekend/holiday
+  // there is no session — write nothing rather than a copied-forward value
+  // that would later read as a real observation.
+  const session = tradingSessionDate()
+  if (!session) {
+    console.log('[cron/oi-snapshot] skipped — not a trading session')
+    return NextResponse.json({ ok: true, skipped: 'not a trading session' })
+  }
+  const date: string = session
   const results: Record<string, string | number> = {}
 
   for (const instrument of Object.keys(MCX_INSTRUMENTS)) {

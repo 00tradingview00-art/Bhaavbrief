@@ -15,6 +15,7 @@
 
 import fs from 'node:fs'
 import path from 'node:path'
+import { isTradingHoliday } from './holidays.js'
 
 const DATE_FILE_RE = /^\d{4}-\d{2}-\d{2}\.json$/
 
@@ -32,8 +33,11 @@ export function getCloses(instrumentKey, days = 30, historyDir) {
   const dir = historyDir ?? path.join(process.cwd(), 'data/history')
   if (!fs.existsSync(dir)) return []
 
+  // Weekend/holiday-dated files repeat the last session's prices (written by
+  // runs outside a session before fetch-snapshot keyed files by session) —
+  // skipping them keeps every day-over-day change a real one.
   const dateFiles = fs.readdirSync(dir)
-    .filter(f => DATE_FILE_RE.test(f))
+    .filter(f => DATE_FILE_RE.test(f) && !isTradingHoliday(f.slice(0, 10)))
     .sort() // ascending YYYY-MM-DD
     .slice(-days) // safe even when fewer than `days` files exist — slice(-30) on a 5-item array just returns all 5
 

@@ -28,6 +28,10 @@ function main() {
     const rel = relPath(file)
 
     const revalidateMatch = src.match(/export const revalidate\s*=\s*(-?\d+)/)
+    // `revalidate = false` (never refresh) is fine for a static page, but it
+    // slipped past the numeric match above entirely — so a live-data page
+    // could declare it and never refresh without CI noticing.
+    const revalidateFalse = /export const revalidate\s*=\s*false\b/.test(src)
     const hasForceDynamic = /export const dynamic\s*=\s*['"]force-dynamic['"]/.test(src)
     const hasForceStatic = /export const dynamic\s*=\s*['"]force-static['"]/.test(src)
 
@@ -41,7 +45,7 @@ function main() {
     // route.ts files with only POST/PUT/DELETE (no GET) aren't cacheable
     // pages at all — Next executes them per-request regardless of
     // revalidate, so the ISR policy doesn't apply to them.
-    const isRouteFile = file.endsWith('route.ts')
+    const isRouteFile = /route\.tsx?$/.test(file)
     const hasGetHandler = !isRouteFile || /export\s+(async\s+)?function\s+GET\b|export\s+const\s+GET\b/.test(src)
 
     // Content-detail pages (one static param per published item, e.g.
@@ -53,7 +57,9 @@ function main() {
     const importsLiveData = LIVE_DATA_IMPORT_MARKERS.some((marker) => src.includes(marker))
     const isExempt = LIVE_DATA_EXEMPT.includes(rel)
 
-    if (importsLiveData && !isExempt && hasGetHandler && !revalidateMatch && !hasForceDynamic) {
+    if (revalidateFalse && importsLiveData && !isExempt) {
+      violations.push(`${rel}: imports live/intra-day data but declares revalidate = false — it will never refresh without a redeploy`)
+    } else if (importsLiveData && !isExempt && hasGetHandler && !revalidateMatch && !hasForceDynamic) {
       if (hasForceStatic) {
         violations.push(`${rel}: imports live/intra-day data but declares dynamic = 'force-static' — data will never refresh without a redeploy`)
       } else {

@@ -12,6 +12,7 @@ permissions:
 jobs:
   fetch-holidays:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
@@ -32,6 +33,23 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/market-holidays.json
-          git diff --cached --quiet && echo "No changes" || \
-            git commit -m "chore: refresh MCX market holidays [skip ci]"
-          git push
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "chore: refresh MCX market holidays [skip ci]"
+          # Other workflows commit to main constantly — rebase and retry
+          # rather than failing on a moved branch.
+          for i in 1 2 3; do
+            git pull --rebase -q origin main && git push && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
+
+      # The holiday calendar decides every "is today a trading day" answer and
+      # must gain next year's dates each December — a failed refresh has to
+      # reach a human, not just sit in the Actions tab.
+      - name: Alert on failure
+        if: failure()
+        run: |
+          curl -s -X POST https://api.brevo.com/v3/smtp/email \
+            -H "api-key: ${{ secrets.BREVO_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"sender":{"name":"BhaavBrief Bot","email":"${{ secrets.SENDER_EMAIL }}"},"to":[{"email":"00tradingview00@gmail.com"}],"subject":"ACTION REQUIRED: MCX holiday refresh failed — '"$(TZ=Asia/Kolkata date +'%d %b %Y')"'","htmlContent":"<p><strong>Fetch MCX Market Holidays</strong> failed on <strong>'"$(TZ=Asia/Kolkata date +'%d %b %Y, %I:%M %p IST')"'</strong>. data/market-holidays.json drives every trading-day check on the site.</p><p><a href=\"https://github.com/${{ github.repository }}/actions/workflows/fetch-holidays.yml\">Re-run workflow →</a></p>"}'

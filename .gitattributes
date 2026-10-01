@@ -1,0 +1,4 @@
+# data/gate-log.jsonl is append-only JSONL written by five workflows (brief,
+# evening, flash, engine, catalyst). Concurrent appends at end-of-file always
+# conflicted on rebase; the built-in union driver keeps both sides' lines.
+data/gate-log.jsonl merge=union

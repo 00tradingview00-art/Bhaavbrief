@@ -72,10 +72,16 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 - [MCX Gold Contracts](${BASE}/learn/mcx-gold-contracts): Standard (1kg), Mini (100g), Guinea (8g), Petal (1g) — lot sizes, live contract values, margin, which to trade
 - [MCX Margin Calculation Explained](${BASE}/learn/mcx-margin-calculation): SPAN vs exposure margin, worked examples for Gold Mini, Crude Mini, Silver and Copper, how margin calls work
 - [MCX Gold vs Gold ETF](${BASE}/learn/gold-etf-vs-mcx-gold): Tax treatment, capital, leverage, liquidity, SIP options, LTCG rules — futures vs ETF comparison
+- [MCX Silver Contracts](${BASE}/learn/mcx-silver-contracts): Standard Silver lot size, quote unit, tick-value arithmetic, contract-value and expiry checks
+- [MCX Crude Oil Contracts](${BASE}/learn/mcx-crude-oil-contracts): Standard Crude Oil lot size, tick-value arithmetic, expiry and options context
+- [MCX Natural Gas Contracts](${BASE}/learn/mcx-natural-gas-contracts): Standard Natural Gas lot size, tick-value arithmetic, expiry and event context
+- [MCX Open Interest Explained](${BASE}/learn/mcx-open-interest-explained): OI versus volume, price–OI labels, and limits of OI interpretation
+- [MCX Import Parity Explained](${BASE}/learn/mcx-import-parity-explained): Benchmark, USD/INR and India-cost framework for price context—not a target
+- [Contango & Backwardation in MCX](${BASE}/learn/mcx-contango-backwardation): Futures curve, rollover arithmetic and why the curve is not a price forecast
 
 ## Pro Analytics Tools
 
-BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the full option chain (all strikes/expiries, Greeks, Max Pain, PCR, OI Map).
+BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the option chain around the money (11 strikes, every expiry, Max Pain, PCR, OI Map); Greeks and the full chain are Pro.
 
 - [BhaavBrief Pro](${BASE}/pro): Pricing and full feature breakdown for the MCX options analytics subscription
 - [Pro Research](${BASE}/research): Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours

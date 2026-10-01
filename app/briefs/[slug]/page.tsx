@@ -21,6 +21,7 @@ import { safeJsonLd, buildBriefTitle } from '@/lib/seo'
 import Pill from '@/components/ui/Pill'
 import { tagTone } from '@/lib/tagType'
 import { COMMODITY_PAGE_MAP, SLUG_TO_INSTRUMENT } from '@/lib/commodityPages'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const revalidate = 3600
 
@@ -48,7 +49,7 @@ export async function generateMetadata(
     date:    brief.displayDate ?? brief.date ?? '',
     tags:    (brief.tags ?? []).slice(0, 3).join(','),
   })
-  const ogImage = `${BASE_URL}/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
 
   return {
     title: { absolute: seoTitle },
@@ -115,7 +116,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
     date:    brief.displayDate ?? brief.date ?? '',
     tags:    (brief.tags ?? []).slice(0, 3).join(','),
   })
-  const ogImage = `${BASE_URL}/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
 
   const articleSchema = {
     '@context':          'https://schema.org',

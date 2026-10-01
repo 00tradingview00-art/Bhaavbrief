@@ -59,7 +59,12 @@ async function fetchJson(url, timeoutMs = 15000) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
-    const res = await fetch(url, { signal: controller.signal })
+    // Pro-gated routes (iv-history full depth, aav-history) need internal
+    // access — without it aav-history 403s and this report silently lost it.
+    const headers = process.env.INTERNAL_ACCESS_SECRET
+      ? { authorization: `Bearer ${process.env.INTERNAL_ACCESS_SECRET}` }
+      : {}
+    const res = await fetch(url, { signal: controller.signal, headers })
     if (!res.ok) return null
     return await res.json()
   } catch {

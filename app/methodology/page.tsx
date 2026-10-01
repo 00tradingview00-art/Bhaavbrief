@@ -152,7 +152,7 @@ export default function MethodologyPage() {
           keep ourselves honest about the calls we make — all in one place.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 1, marginBottom: '2.5rem', background: '#DDDDD0' }}>
           {[
             { label: 'Editions published', value: `${briefsCount}+` },
             { label: 'Ledgered claims', value: claimsCount },

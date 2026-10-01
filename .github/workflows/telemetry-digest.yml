@@ -38,4 +38,5 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INTERNAL_ACCESS_SECRET: ${{ secrets.INTERNAL_ACCESS_SECRET }}
         run: node scripts/send-telemetry-digest.mjs

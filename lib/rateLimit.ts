@@ -9,10 +9,18 @@ export function getClientIp(req: { headers: { get(name: string): string | null }
   return req.headers.get('x-real-ip') ?? 'unknown'
 }
 
-export async function checkRateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
+export type RateLimitStatus = 'allowed' | 'limited' | 'unknown'
+
+/**
+ * 'unknown' when Redis isn't configured or errors — the caller decides.
+ * checkRateLimit() below treats it as allowed (fail open), which is right for
+ * cheap routes but not for ones that spend money per request (see
+ * /api/search, which skips its paid AI call when the limit can't be checked).
+ */
+export async function rateLimitStatus(key: string, limit: number, windowMs: number): Promise<RateLimitStatus> {
   const url   = process.env.UPSTASH_REDIS_REST_URL
   const token = process.env.UPSTASH_REDIS_REST_TOKEN
-  if (!url || !token) return true  // fail open if Redis not configured
+  if (!url || !token) return 'unknown'
 
   const now = Date.now()
 
@@ -25,8 +33,12 @@ export async function checkRateLimit(key: string, limit: number, windowMs: numbe
     await fetch(`${url}/expire/${key}/${Math.ceil(windowMs / 1000)}`, { method: 'POST', headers })
     const countRes = await fetch(`${url}/zcard/${key}`,               { method: 'POST', headers })
     const { result } = await countRes.json() as { result: number }
-    return result <= limit
+    return result <= limit ? 'allowed' : 'limited'
   } catch {
-    return true  // fail open on Redis error
+    return 'unknown'
   }
+}
+
+export async function checkRateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
+  return (await rateLimitStatus(key, limit, windowMs)) !== 'limited'  // fail open
 }

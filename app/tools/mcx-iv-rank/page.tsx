@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { redisCommand } from '@/lib/redis'
-import { computeIVRegime, liveAtmIV, ivRankSeries, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
+import { computeIVRegime, liveAtmIV, type IVRegime, type IVHistoryPoint } from '@/lib/ivAnalysis'
 import { MCX_INSTRUMENTS, getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
 import Link from 'next/link'
 import Card from '@/components/ui/Card'
 import VolatilityHub from './VolatilityHub'
-import IVRankHistoryChart from './IVRankHistoryChart'
+import IVRankHistoryGate from './IVRankHistoryGate'
 import { safeJsonLd } from '@/lib/seo'
 
 const SCHEMA = {
@@ -137,12 +138,19 @@ async function getDefaultVolatilityData(instrument: string) {
   }
 }
 
+// Every Redis read (lib/redis.ts) is a no-store fetch, which opts a page out
+// of ISR entirely — this page declared revalidate = 900 but was rendered on
+// every request (1.7–3.3 s on production). Caching the two loaders for the
+// same 900 s window restores the intended behaviour.
+const getIVRanksCached = unstable_cache(getIVRanks, ['mcx-iv-rank:iv-ranks'], { revalidate: 900 })
+const getDefaultVolatilityDataCached = unstable_cache(getDefaultVolatilityData, ['mcx-iv-rank:volatility'], { revalidate: 900 })
+
 export default async function MCXIVRankPage() {
-  const ivRanks = await getIVRanks()
+  const ivRanks = await getIVRanksCached()
   const instrumentList = Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({ key, label: meta.label }))
   const defaultInstrument = instrumentList[0]?.key ?? ''
   const { initialChain, initialOIHistory, initialPreview } = defaultInstrument
-    ? await getDefaultVolatilityData(defaultInstrument)
+    ? await getDefaultVolatilityDataCached(defaultInstrument)
     : { initialChain: null, initialOIHistory: undefined, initialPreview: undefined }
 
   // The comparison window grows daily as the IV-snapshot cron accumulates
@@ -198,11 +206,13 @@ export default async function MCXIVRankPage() {
       </div>
 
       <section style={{ marginTop: '2rem' }}>
-        <IVRankHistoryChart
+        <IVRankHistoryGate
           title={chartTitle}
-          isPro={false}
           instruments={Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => ({
-            key, label: meta.label, series: ivRankSeries(ivRanks[key]?.history ?? []),
+            // Same "enough history" bar the chart used (≥2 points) — below it
+            // computeIVRegime returns a placeholder 50, not a real reading.
+            key, label: meta.label,
+            latest: (ivRanks[key]?.history.length ?? 0) >= 2 ? ivRanks[key]?.regime?.ivRank ?? null : null,
           }))}
         />
       </section>
