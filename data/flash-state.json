@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-09-29T16:09:57.007Z",
-    "lastFlashPrice": 8692,
+    "lastFlashAt": "2026-10-01T10:17:12.096Z",
+    "lastFlashPrice": 8869,
     "lastRoundLevel": 9000,
     "recentFlashIds": [
+      "2026-10-01-15-47-mcx-crude-rallies-1-55-as-rupee-weakness-resurfaces",
       "2026-09-29-21-39-mcx-crude-falls-2-46-as-rupee-strength-reverses-export",
-      "2026-09-29-15-27-mcx-crude-retreats-as-rupee-stabilizes-halting-three-ho",
-      "2026-09-28-15-09-mcx-crude-surges-3-94-on-rupee-depreciation-tailwinds"
+      "2026-09-29-15-27-mcx-crude-retreats-as-rupee-stabilizes-halting-three-ho"
     ]
   },
   "MCX_COPPER": {
@@ -40,23 +40,23 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-09-28T22:48:54.891Z",
-    "lastFlashPrice": 299.5,
+    "lastFlashAt": "2026-09-30T09:36:11.183Z",
+    "lastFlashPrice": 291.2,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-09-30-15-06-mcx-natural-gas-slides-0-85-as-volatility-persists",
       "2026-09-29-04-18-mcx-natural-gas-falls-3-57-as-rupee-strength-weighs",
-      "2026-09-24-23-30-mcx-natural-gas-falls-1-07-as-crude-consolidation-fades",
-      "2026-09-23-14-00-mcx-natural-gas-rallies-2-09-on-crude-oil-recovery"
+      "2026-09-24-23-30-mcx-natural-gas-falls-1-07-as-crude-consolidation-fades"
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-09-28T09:57:25.549Z",
-    "lastFlashPrice": 96.39,
-    "lastRoundLevel": 96,
+    "lastFlashAt": "2026-10-01T10:02:09.970Z",
+    "lastFlashPrice": 96.57,
+    "lastRoundLevel": 96.5,
     "recentFlashIds": [
-      "2026-09-28-15-27-usd-inr-strengthens-0-28-on-rupee-consolidation-reversa",
-      "2026-09-22-14-54-usd-inr-weakens-0-12-as-rupee-consolidates-inflow-gains",
-      "2026-09-15-14-06-usd-inr-strengthens-0-38-on-portfolio-inflows"
+      "2026-10-01-15-32-usd-inr-rebounds-0-46-rupee-reversal-amid-portfolio-flo",
+      "2026-09-30-15-06-usd-inr-weakens-0-23-on-sustained-fpi-inflows",
+      "2026-09-28-15-27-usd-inr-strengthens-0-28-on-rupee-consolidation-reversa"
     ]
   }
 }

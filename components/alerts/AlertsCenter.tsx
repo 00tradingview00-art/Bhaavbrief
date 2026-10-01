@@ -32,7 +32,8 @@ export default function AlertsCenter({ events }: { events: EventAlert[] }) {
       <header className="bb-alerts-header">
         <div className="bb-eyebrow">Event radar</div>
         <h1>Stay ahead of what moves the market.</h1>
-        <p>Save the events you want to watch. Your selections stay on this device; notifications will be available when you connect an account.</p>
+        {/* No notification system exists — don't promise one. */}
+        <p>Save the events you want to keep an eye on. Your list stays on this device; check back here or on the calendar before each release.</p>
       </header>
 
       <section className="bb-alerts-note" aria-label="Alert status">
@@ -45,6 +46,11 @@ export default function AlertsCenter({ events }: { events: EventAlert[] }) {
           <div><div className="bb-section-label">Upcoming</div><h2 id="upcoming-alert-events">Events to watch</h2></div>
           <Link href="/calendar">Full calendar <span aria-hidden="true">→</span></Link>
         </div>
+        {events.length === 0 && (
+          <p style={{ fontSize: 14, color: 'var(--ink-3)', padding: '16px 0' }}>
+            No upcoming scheduled events right now — the <Link href="/calendar">calendar</Link> lists the next releases as they are confirmed.
+          </p>
+        )}
         <div className="bb-alert-list">
           {events.map(event => {
             const active = saved.includes(event.id)

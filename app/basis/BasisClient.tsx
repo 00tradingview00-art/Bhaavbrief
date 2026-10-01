@@ -98,6 +98,36 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
     ? windowed.map(p => ({ date: p.date, spread: p[c.key] as number | null, ...(p[constituentKey] as BasisConstituents) }))
     : []
 
+  const spreadChart = (
+    <ResponsiveContainer width="100%" height={130}>
+      <AreaChart data={chartData} margin={{ top: 2, right: 4, bottom: 0, left: -16 }}>
+        <defs>
+          <linearGradient id={`grad-${c.id}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"   stopColor={color} stopOpacity={0.25} />
+            <stop offset="95%"  stopColor={color} stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="date" tick={{ fontSize: 9 }} />
+        <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
+        <Tooltip formatter={(v) => [typeof v === 'number' ? `${v.toFixed(2)}%` : String(v)]} labelFormatter={d => `Date: ${d}`} />
+        {windowStats && <ReferenceLine y={windowStats.mean}                    stroke="#888" strokeDasharray="3 3" />}
+        {windowStats && <ReferenceLine y={windowStats.mean + windowStats.std}  stroke="#f97316" strokeDasharray="2 4" />}
+        {windowStats && <ReferenceLine y={windowStats.mean - windowStats.std}  stroke="#f97316" strokeDasharray="2 4" />}
+        {windowStats && <ReferenceLine y={windowStats.mean + 2*windowStats.std} stroke="#ef4444" strokeDasharray="2 4" />}
+        {windowStats && <ReferenceLine y={windowStats.mean - 2*windowStats.std} stroke="#ef4444" strokeDasharray="2 4" />}
+        <Area
+          type="monotone"
+          dataKey="spread"
+          stroke={color}
+          fill={`url(#grad-${c.id})`}
+          strokeWidth={1.5}
+          dot={false}
+          connectNulls
+        />
+      </AreaChart>
+    </ResponsiveContainer>
+  )
+
   return (
     <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, padding: '1rem 1.25rem' }}>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.5rem' }}>
@@ -176,34 +206,16 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
             )}
           </div>
 
-          <ProBlurGate isPro={isPro} label={`${c.label} spread chart — ±1σ / ±2σ reference bands`} timestamp="Live">
-            <ResponsiveContainer width="100%" height={130}>
-              <AreaChart data={chartData} margin={{ top: 2, right: 4, bottom: 0, left: -16 }}>
-                <defs>
-                  <linearGradient id={`grad-${c.id}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"   stopColor={color} stopOpacity={0.25} />
-                    <stop offset="95%"  stopColor={color} stopOpacity={0.02} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="date" tick={{ fontSize: 9 }} />
-                <YAxis tick={{ fontSize: 9 }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
-                <Tooltip formatter={(v) => [typeof v === 'number' ? `${v.toFixed(2)}%` : String(v)]} labelFormatter={d => `Date: ${d}`} />
-                {windowStats && <ReferenceLine y={windowStats.mean}                    stroke="#888" strokeDasharray="3 3" />}
-                {windowStats && <ReferenceLine y={windowStats.mean + windowStats.std}  stroke="#f97316" strokeDasharray="2 4" />}
-                {windowStats && <ReferenceLine y={windowStats.mean - windowStats.std}  stroke="#f97316" strokeDasharray="2 4" />}
-                {windowStats && <ReferenceLine y={windowStats.mean + 2*windowStats.std} stroke="#ef4444" strokeDasharray="2 4" />}
-                {windowStats && <ReferenceLine y={windowStats.mean - 2*windowStats.std} stroke="#ef4444" strokeDasharray="2 4" />}
-                <Area
-                  type="monotone"
-                  dataKey="spread"
-                  stroke={color}
-                  fill={`url(#grad-${c.id})`}
-                  strokeWidth={1.5}
-                  dot={false}
-                  connectNulls
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+          {/* Non-Pro visitors receive a synthetic series from the server (the
+              real history is Pro-only), so this gate must not upgrade itself
+              client-side — preview mode shows it blurred, never as real. */}
+          <ProBlurGate
+            isPro={isPro}
+            label={`${c.label} spread chart — ±1σ / ±2σ reference bands`}
+            timestamp="Live"
+            preview={isPro ? undefined : spreadChart}
+          >
+            {spreadChart}
           </ProBlurGate>
 
           {isPro && showPrices && constituents.length > 0 && (

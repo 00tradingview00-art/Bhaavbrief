@@ -24,7 +24,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { PriceData } from './prices'
-import { isTradingDay, todayIST } from './tradingCalendar'
+import { isMcxOpen } from './tradingCalendar'
 
 export interface SnapshotInstrument {
   price:     number
@@ -73,13 +73,10 @@ export function snapshotAgeMinutes(snap: Snapshot): number {
   return (Date.now() - new Date(snap.generatedAt).getTime()) / 60000
 }
 
+// Delegates to the single DST-aware, holiday-aware market clock
+// (scripts/lib/mcxSession.js) — this used to hard-code a 23:30 close.
 export function isMCXOpenNow(): boolean {
-  if (!isTradingDay(todayIST())) return false
-  const ist = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }))
-  const day = ist.getDay()
-  if (day === 0 || day === 6) return false
-  const mins = ist.getHours() * 60 + ist.getMinutes()
-  return mins >= 540 && mins <= 1410 // 9:00–23:30 IST
+  return isMcxOpen()
 }
 
 // Maps snapshot to the PriceData shape that existing components expect.

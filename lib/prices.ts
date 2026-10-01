@@ -11,7 +11,9 @@
  */
 
 import { unstable_cache } from 'next/cache'
+import { resolveUsdinr } from '../scripts/lib/resolveUsdinr.mjs'
 import { KiteClient, type KiteQuote, type InstrumentInfo } from './kite'
+import { isMcxOpen } from './tradingCalendar'
 import fs from 'fs'
 import path from 'path'
 
@@ -312,14 +314,34 @@ function loadMCXCache(): MCXCache | null {
 
 const USDINR_MIN = 82, USDINR_MAX = 110
 
-export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallback = 0) {
-  const yahooUsd = yahoo['USDINR=X']?.regularMarketPrice ?? 0
-  // Prefer Frankfurter (daily ECB rate, reliable) over Yahoo FX which can be stale.
-  // Reject either value if outside the plausible ₹82–₹110 range.
-  const usdinr =
-    (usdinrFallback >= USDINR_MIN && usdinrFallback <= USDINR_MAX) ? usdinrFallback :
-    (yahooUsd      >= USDINR_MIN && yahooUsd      <= USDINR_MAX) ? yahooUsd      :
-    0
+const inUsdinrRange = (v: number | undefined | null): v is number =>
+  typeof v === 'number' && v >= USDINR_MIN && v <= USDINR_MAX
+
+// USD/INR for the live price feed: the same precedence as the snapshot
+// (scripts/lib/resolveUsdinr.mjs — Kite CDS future, then Yahoo spot, then
+// the ECB reference rate), with price and % change always taken from the
+// same source. This used to prefer Frankfurter's ECB rate — a once-a-day
+// fixing, i.e. usually yesterday's — over live data, while taking the % change
+// from Yahoo: the ticker showed 95.98 while the snapshot/brief said 96.24 on
+// 30 Sep. Each source must sit in the plausible ₹82–₹110 range.
+export function resolveTickerUsdinr(
+  kite: ForexData | null,
+  yahoo: QuoteShape | undefined,
+  frankfurter: number,
+): { usdinr: number; usdinrChangePct: number } {
+  const kiteQuote = kite && inUsdinrRange(kite.ltp)
+    ? { price: kite.ltp, prevClose: kite.prevClose, changePct: kite.changePct }
+    : null
+  const yahooPrice = yahoo?.regularMarketPrice
+  const yahooPct = yahoo?.regularMarketChangePercent ?? 0
+  const yahooQuote = inUsdinrRange(yahooPrice)
+    ? { price: yahooPrice, prevClose: yahooPrice / (1 + yahooPct / 100), changePct: yahooPct }
+    : null
+  const resolved = resolveUsdinr(kiteQuote, yahooQuote, inUsdinrRange(frankfurter) ? frankfurter : null, null)
+  return { usdinr: resolved?.price ?? 0, usdinrChangePct: resolved?.changePct ?? 0 }
+}
+
+export function deriveFromYahoo(yahoo: Record<string, QuoteShape>) {
   const comexGold = yahoo['GC=F']?.regularMarketPrice     ?? 0
   const comexSilv = yahoo['SI=F']?.regularMarketPrice     ?? 0
   const wti       = yahoo['CL=F']?.regularMarketPrice     ?? 0
@@ -327,7 +349,7 @@ export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallbac
   const comexCu   = yahoo['HG=F']?.regularMarketPrice     ?? 0
   const henryHub  = yahoo['NG=F']?.regularMarketPrice     ?? 0
   return {
-    usdinr, brent, comexGold, comexSilver: comexSilv,
+    brent, comexGold, comexSilver: comexSilv,
     wti, comexCopper: comexCu, henryHub,
     goldPct:   yahoo['GC=F']?.regularMarketChangePercent    ?? 0,
     silverPct: yahoo['SI=F']?.regularMarketChangePercent    ?? 0,
@@ -335,7 +357,6 @@ export function deriveFromYahoo(yahoo: Record<string, QuoteShape>, usdinrFallbac
     brentPct:  yahoo['BZ=F']?.regularMarketChangePercent    ?? 0,
     copperPct: yahoo['HG=F']?.regularMarketChangePercent    ?? 0,
     gasPct:    yahoo['NG=F']?.regularMarketChangePercent    ?? 0,
-    usdinrPct: yahoo['USDINR=X']?.regularMarketChangePercent ?? 0,
   }
 }
 
@@ -379,10 +400,9 @@ export interface MCXData {
   mcxSymbol:    string   // e.g. "GOLDJUN26FUT" or "GOLD"
   mcxExpiry:    string   // ISO date e.g. "2026-06-05" or ""
   // true when this instrument's price/changePct is a carried-forward last-known
-  // value (scripts/fetch-snapshot.mjs's SnapshotInstrument.stale), not a fresh
-  // live read — only ever set by lib/snapshot.ts's snapshotToPriceData(), so it's
-  // undefined (not false) for data sourced from the live lib/prices.ts fetch path.
-  // Consumers that narrate a %-change as if it's today's move should check this
+  // value, not a fresh live read — set by lib/snapshot.ts's
+  // snapshotToPriceData() (SnapshotInstrument.stale) and by buildMCXData()
+  // whenever an instrument has no live Kite quote. Consumers that narrate a %-change as if it's today's move should check this
   // before presenting it with the same confidence as fresh data.
   mcxStale?:    boolean
 }
@@ -449,7 +469,9 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
   return {
     mcx:          hasLive ? q!.last_price            : (prevClose > 0 ? prevClose : fallbackPrice),
     mcxChangePct: hasLive ? KiteClient.changePct(q!) : fallbackPct,
-    mcxChange:    hasLive ? q!.net_change            : 0,
+    // Kite's net_change comes back 0 for MCX futures (seen live 2026-09-28), so
+    // derive it from the same prev close changePct uses. 0 = hidden by the UI.
+    mcxChange:    hasLive && prevClose > 0 ? parseFloat((q!.last_price - prevClose).toFixed(2)) : 0,
     mcxOpen:      hasLive ? (q!.ohlc?.open   ?? 0)  : 0,
     mcxHigh:      hasLive ? (q!.ohlc?.high   ?? 0)  : 0,
     mcxLow:       hasLive ? (q!.ohlc?.low    ?? 0)  : 0,
@@ -458,6 +480,9 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
     mcxOI:        hasLive ? (q!.oi            ?? 0)  : 0,
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
+    // No live quote → the price is a carried-forward last-known value; the
+    // UI (MoversPanel, gateway cards, commodity pages) marks it "last known".
+    mcxStale:     !hasLive,
   }
 }
 
@@ -485,10 +510,11 @@ export async function getPrices(): Promise<PriceData | null> {
       fetchUsdInr(),
     ])
 
-    const y = deriveFromYahoo(comex, usdinrFallback)
+    const y = deriveFromYahoo(comex)
 
-    const utcMins = new Date().getUTCHours() * 60 + new Date().getUTCMinutes()
-    const marketOpen = utcMins >= 210 && utcMins <= 1080  // 9 AM–11:30 PM IST
+    // Shared DST- and holiday-aware clock — this was a bare UTC window with no
+    // weekend/holiday check (Saturday afternoon read as open) and a 23:30 close.
+    const marketOpen = isMcxOpen()
 
     const instruments = loadInstrumentTokens()
 
@@ -511,8 +537,10 @@ export async function getPrices(): Promise<PriceData | null> {
     const usingKite   = !!(kiteQuotes && goldQ)
     const usingTwelve = !!process.env.TWELVE_DATA_API_KEY
 
-    // When Kite is down, use last cached prev-close prices so ticker shows real data
-    const cache = usingKite ? null : loadMCXCache()
+    // Last cached prices, for any instrument without a live quote — not only
+    // when Kite is down entirely: a single missing/expired contract token used
+    // to fall through to a fallback of 0 and show ₹0 on the ticker.
+    const cache = loadMCXCache()
 
     return {
       source: usingKite
@@ -521,8 +549,13 @@ export async function getPrices(): Promise<PriceData | null> {
       updatedAt:  new Date().toISOString(),
       marketOpen,
 
-      usdinr:         y.usdinr,
-      usdinrChangePct:y.usdinrPct,
+      ...resolveTickerUsdinr(
+        instruments.currencies
+          ? buildForexData(kiteByToken(instruments.currencies.usdinr.token), instruments.currencies.usdinr)
+          : null,
+        comex['USDINR=X'],
+        usdinrFallback,
+      ),
 
       comexGold:      y.comexGold,
       comexSilver:    y.comexSilver,
@@ -575,88 +608,3 @@ export async function getPrices(): Promise<PriceData | null> {
     return null
   }
 }
-
-// ── Snapshot reader — try the committed snapshot before live fetching ─────────
-// If data/market-snapshot.json is fresh (≤90 min), serve it directly.
-// This makes the API consistent with what the brief was generated from.
-
-function loadFromSnapshot(): PriceData | null {
-  try {
-    const file = path.join(process.cwd(), 'data/market-snapshot.json')
-    if (!fs.existsSync(file)) return null
-    const snap = JSON.parse(fs.readFileSync(file, 'utf8'))
-    const ageMs = Date.now() - new Date(snap.generatedAt).getTime()
-    if (ageMs > 90 * 60 * 1000) return null  // stale — fall back to live fetch
-    const inst = snap.instruments
-    if (!inst) return null
-
-    const mcxUnits = loadInstrumentTokens()
-
-    function mcxData(key: MetalKey, instKey: string): MCXData & { comex?: number; comexChangePct?: number } {
-      const d = inst[instKey]
-      const info = mcxUnits[key] ?? { token: 0, symbol: '', expiry: '' }
-      return {
-        mcx:          d?.price         ?? 0,
-        mcxChangePct: d?.changePct     ?? 0,
-        mcxChange:    0,
-        mcxOpen:      0,
-        mcxHigh:      0,
-        mcxLow:       0,
-        mcxPrevClose: d?.prevClose     ?? 0,
-        mcxVolume:    0,
-        mcxOI:        0,
-        mcxSymbol:    info.symbol,
-        mcxExpiry:    info.expiry,
-      }
-    }
-
-    return {
-      source:         (snap.source?.includes('kite') ? 'kite+stooq' : 'stooq') as PriceData['source'],
-      updatedAt:      snap.generatedAt,
-      marketOpen:     true,
-
-      usdinr:         inst.USDINR?.price         ?? 0,
-      usdinrChangePct:inst.USDINR?.changePct      ?? 0,
-
-      comexGold:      inst.COMEX_GOLD?.price      ?? 0,
-      comexSilver:    inst.COMEX_SILVER?.price    ?? 0,
-      wti:            inst.WTI?.price             ?? 0,
-      brent:          inst.BRENT?.price           ?? 0,
-      comexCopper:    0,
-      henryHub:       inst.HENRY_HUB?.price       ?? 0,
-      goldComexPct:   inst.COMEX_GOLD?.changePct  ?? 0,
-      silverComexPct: inst.COMEX_SILVER?.changePct ?? 0,
-      crudePct:       inst.WTI?.changePct         ?? 0,
-      brentPct:       inst.BRENT?.changePct       ?? 0,
-      copperComexPct: 0,
-      gasPct:         inst.HENRY_HUB?.changePct   ?? 0,
-
-      gold: {
-        ...mcxData('gold', 'MCX_GOLD'),
-        comex:          inst.COMEX_GOLD?.price     ?? 0,
-        comexChangePct: inst.COMEX_GOLD?.changePct ?? 0,
-      },
-      silver: {
-        ...mcxData('silver', 'MCX_SILVER'),
-        comex:          inst.COMEX_SILVER?.price     ?? 0,
-        comexChangePct: inst.COMEX_SILVER?.changePct ?? 0,
-      },
-      crude: {
-        ...mcxData('crude', 'MCX_CRUDE'),
-        wti:            inst.WTI?.price     ?? 0,
-        wtiChangePct:   inst.WTI?.changePct ?? 0,
-        brent:          inst.BRENT?.price   ?? 0,
-        brentChangePct: inst.BRENT?.changePct ?? 0,
-      },
-      copper:    mcxData('copper', 'MCX_COPPER'),
-      natgas:    mcxData('natgas', 'MCX_NATGAS'),
-      ...(inst.MCX_ZINC      ? { zinc:      mcxData('zinc',      'MCX_ZINC')      } : {}),
-      ...(inst.MCX_LEAD      ? { lead:      mcxData('lead',      'MCX_LEAD')      } : {}),
-      ...(inst.MCX_ALUMINIUM ? { aluminium: mcxData('aluminium', 'MCX_ALUMINIUM') } : {}),
-      ...(inst.MCX_NICKEL    ? { nickel:    mcxData('nickel',    'MCX_NICKEL')    } : {}),
-      ...(inst.MCX_ELECTRICITY ? { electricity: mcxData('electricity', 'MCX_ELECTRICITY') } : {}),
-    }
-  } catch { return null }
-}
-
-export { loadFromSnapshot }

@@ -127,6 +127,15 @@ describe("expectedSitemapCount", () => {
     expect(expectedSitemapCount({ root: tmp })).toBe(3 + 5 + 4 + 1);
   });
 
+  test("counts only research pages with published: true (as the sitemap route does)", () => {
+    writeFixture({ briefs: 2, statics: 3 });
+    fs.mkdirSync(path.join(tmp, "content/research"), { recursive: true });
+    fs.writeFileSync(path.join(tmp, "content/research/a.mdx"), `---\ntitle: A\npublished: true\n---\nbody`);
+    fs.writeFileSync(path.join(tmp, "content/research/b.mdx"), `---\ntitle: B\npublished: false\n---\nbody`);
+    fs.writeFileSync(path.join(tmp, "content/research/c.mdx"), `---\ntitle: C\n---\nbody`);
+    expect(expectedSitemapCount({ root: tmp })).toBe(3 + 2 + 1);
+  });
+
   test("missing arcs file contributes 0 instead of throwing", () => {
     writeFixture({ briefs: 2, statics: 3 });
     fs.rmSync(path.join(tmp, "data/story-arcs.json"));

@@ -46,7 +46,8 @@ export default function MCXBasisPage() {
     { label: 'Gold',       key: 'goldSpreadPct',   dutyKey: 'goldDutySpreadPct',   unit: 'vs COMEX, FX-converted (INR/10g)' },
     { label: 'Silver',     key: 'silverSpreadPct', dutyKey: 'silverDutySpreadPct', unit: 'vs COMEX, FX-converted (INR/kg)' },
     { label: 'Crude Oil',  key: 'crudeSpreadPct',  dutyKey: 'crudeDutySpreadPct',  unit: 'vs WTI, FX-converted (INR/bbl)' },
-    { label: 'Copper',     key: 'copperSpreadPct', dutyKey: null,                  unit: 'vs COMEX HG (coming soon)' },
+    // Copper is left out, as on /basis: lib/basis.ts has no COMEX HG feed, so
+    // copperSpreadPct is always null and the tile only ever said "coming soon".
   ] as const
 
   return (

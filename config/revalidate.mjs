@@ -28,7 +28,7 @@ export const REVALIDATE = {
   HOURLY:    3600,  // individual briefs/arcs/articles/events detail pages — content-item
                      // pages are immutable once published (corrections are an explicit
                      // editorial event, not a staleness problem) and AI-thesis cache
-  HALF_DAY:  1800,  // news sitemap
+  THIRTY_MIN: 1800, // news sitemap (was misnamed HALF_DAY — 1800 s is 30 minutes)
 }
 
 // Routes that read live/intra-day data (see the import list above) and MUST

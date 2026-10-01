@@ -16,11 +16,11 @@ export async function POST(req: NextRequest) {
   try {
     const { email, name } = await req.json()
 
-    if (!email || !email.includes('@')) {
+    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
       return NextResponse.json({ error: 'Valid email required' }, { status: 400 })
     }
 
-    await addSubscriber(email, name)
+    await addSubscriber(email, typeof name === 'string' ? name.slice(0, 100) : undefined)
 
     // Send welcome email — awaited so it completes before serverless fn exits
     try {
@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
     if (msg.includes('Contact already exist')) {
       return NextResponse.json({ success: true, message: 'You\'re already subscribed!' })
     }
-    return NextResponse.json({ error: msg }, { status: 500 })
+    // Log the provider's error; never echo it (or a JS error) to the caller.
+    console.error('[subscribe] failed:', msg)
+    return NextResponse.json({ error: 'Subscription failed — please try again later.' }, { status: 500 })
   }
 }

@@ -39,3 +39,15 @@ describe("getExpiredCoreInstruments", () => {
     expect(getExpiredCoreInstruments({ gold: {} }, "2026-08-05")).toEqual([]);
   });
 });
+
+describe("with the trading-session date (how fetch-snapshot calls it)", () => {
+  test("a post-midnight evening run does not flag the contract that expires on the next calendar day", async () => {
+    // 29 Sep 2026 close brief running at 01:42 IST on 30 Sep — the real
+    // failure: COPPER26SEPFUT (expiry 30 Sep) was still live for 29 Sep.
+    const { tradingSessionDate } = await import("./mcxSession.js");
+    const session = tradingSessionDate(new Date("2026-09-29T20:12:00Z"));
+    expect(session).toBe("2026-09-29");
+    const instruments = { copper: { symbol: "COPPER26SEPFUT", expiry: "2026-09-30" } };
+    expect(getExpiredCoreInstruments(instruments, session)).toEqual([]);
+  });
+});

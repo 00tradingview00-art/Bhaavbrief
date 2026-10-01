@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : 'Submission failed'
-    return NextResponse.json({ error: msg }, { status: 500 })
+    // Log the cause; don't echo internal error text to the caller.
+    console.error('[feedback]', err)
+    return NextResponse.json({ error: 'Submission failed — please try again later.' }, { status: 500 })
   }
 }

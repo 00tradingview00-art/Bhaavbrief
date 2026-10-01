@@ -85,7 +85,8 @@ function runGate(briefType) {
     const stdout = execFileSync("node", args, {
       cwd: ROOT,
       encoding: "utf8",
-      env: { ...process.env, ANTHROPIC_API_KEY: "" },
+      // Never append fixture runs to the real data/gate-log.jsonl.
+      env: { ...process.env, ANTHROPIC_API_KEY: "", GATE_LOG_PATH: path.join(tmpDir, "gate-log.jsonl") },
     });
     return stdout;
   } catch (e) {

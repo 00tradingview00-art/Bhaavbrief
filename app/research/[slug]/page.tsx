@@ -66,6 +66,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // markdown to a single <p> before the word-count cut, which is why the
 // free view looked structurally different from the Pro view of the same
 // article — same content, but one properly formatted and one not.
+// Deliberately generic — shape of an article section, none of its content.
+function LockedArticlePreview() {
+  const line = (w: string) => (
+    <div style={{ height: 10, width: w, background: 'var(--ink-4)', borderRadius: 4, marginBottom: 10 }} />
+  )
+  return (
+    <div style={{ minHeight: 260, paddingTop: 8 }}>
+      <div style={{ height: 14, width: '45%', background: 'var(--ink-3)', borderRadius: 4, marginBottom: 16 }} />
+      {line('96%')}{line('92%')}{line('98%')}{line('71%')}
+      <div style={{ height: 14, width: '38%', background: 'var(--ink-3)', borderRadius: 4, margin: '22px 0 16px' }} />
+      {line('94%')}{line('97%')}{line('88%')}{line('64%')}
+    </div>
+  )
+}
+
 function splitMDXTeaser(content: string, wordLimit = 300): { teaser: string; rest: string } {
   const blocks = content.trim().split(/\n{2,}/)
   let wordCount = 0
@@ -187,14 +202,14 @@ export default async function ResearchSlugPage({ params }: Props) {
                   <MDXRemote source={teaser} />
                 </div>
 
-                {/* Paywall gate — the real remaining article, blurred, not a
-                    fake/flattened placeholder. */}
+                {/* Paywall gate. The rest of the article is never sent to a
+                    non-Pro visitor — a blurred copy of it was still readable
+                    in the page source. Visitors see a generic stand-in. */}
                 {rest.trim().length > 0 && (
-                  <ProBlurGate isPro={isPro} label="Full analysis — strategy, levels, options positioning">
-                    <div style={{ fontSize: '0.92rem', color: 'var(--ink-2)', lineHeight: 1.75, maxHeight: 260, overflow: 'hidden' }}>
-                      <MDXRemote source={rest} />
-                    </div>
-                  </ProBlurGate>
+                  <ProBlurGate
+                    label="Full analysis — strategy, levels, options positioning"
+                    preview={<LockedArticlePreview />}
+                  />
                 )}
               </>
             )

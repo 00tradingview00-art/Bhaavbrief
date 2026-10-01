@@ -36,8 +36,10 @@ export default function EdgeOfDayCallout({ text, tomorrow }: { text: string; tom
         </div>
       )}
       <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(181,134,42,0.15)', textAlign: 'right' }}>
-        <Link href="/track-record" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--gold)', textDecoration: 'none' }}>
-          See past edges →
+        {/* There is no /track-record page (it 404'd); each past Edge lives in
+            its edition, listed in the briefs archive. */}
+        <Link href="/briefs" style={{ fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.08em', color: 'var(--gold)', textDecoration: 'none' }}>
+          See past briefs →
         </Link>
       </div>
     </div>

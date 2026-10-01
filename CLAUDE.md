@@ -10,8 +10,9 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 - **Content pipeline:** GitHub Actions workflows (`.github/workflows/*.yml`) run Node scripts
   (`scripts/*.mjs`/`.js`) on a cron, commit generated content straight to `main` — see Part 8.5
   below on why direct-to-main is deliberate here, not an oversight.
-- **AI:** Anthropic Claude for brief generation + semantic validation; ElevenLabs for reel
-  voiceover.
+- **AI:** Anthropic Claude for brief generation + semantic validation. Reel voiceover (V3) is
+  the Microsoft Edge TTS female voice `en-IN-NeerjaNeural`; ElevenLabs only in retired V1/V2
+  reel scripts.
 - **Data:** Kite Connect (MCX/NSE), Yahoo Finance (COMEX/FX fallback), Redis (options IV
   history), flat JSON files under `data/` (no database).
 - **Tests:** Vitest (`npm test`) — introduced 2026-07 alongside the observability/gate work;
@@ -24,6 +25,7 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 | Prices/FX | `lib/snapshot.ts` (brief generators, gate, email) | `lib/prices.ts` is a second, independent live-fetch path still used by the ticker/`\/api\/prices` — a known, documented C-01 gap, not yet consolidated. See the header comment in `lib/snapshot.ts`. |
 | Import parity (raw FX conversion, no duty) | `lib/parity.mjs` | `.mjs`, not `.ts` — called from a plain Node script (`scripts/fetch-snapshot.mjs`) that can't import TypeScript directly. Despite the name, this module does *not* apply import duty — it's a pure benchmark-price × USDINR conversion. Duty factors live in `data/commodity-constants.json` and are applied separately by `app/commodities/[commodity]/page.tsx` ("Duty-inclusive import parity") and `lib/basis.ts` (`*DutySpreadPct` fields) — each computes its own duty-inclusive figure from `lib/parity.mjs`'s raw output rather than `lib/parity.mjs` doing it once. If a third consumer needs duty-inclusive parity, prefer factoring this into a shared helper over a third inline computation. |
 | Holidays / trading calendar | `lib/tradingCalendar.ts` → `scripts/lib/holidays.js` | The IST-anchor date logic lives once in `holidays.js`; don't reimplement `isWeekend`/`todayIST` elsewhere — a duplicate copy in `app/api/health/route.ts` caused a real Monday-detection bug (fixed 2026-07). |
+| Market hours / trading session | `scripts/lib/mcxHours.js` (pure, browser-safe: DST-aware 23:30/23:55 close) → `scripts/lib/mcxSession.js` (`isMcxOpen`, `tradingSessionDate`, adds holidays) | MCX closes 23:30 IST while US DST is on, 23:55 otherwise. Don't hard-code a close time or date runs by `todayIST()` — seven copies did (fixed 2026-10). Late/after-midnight jobs file under `tradingSessionDate()`. |
 | Risk-free rate | `lib/options.ts` (`RISK_FREE_RATE`) | Single hardcoded monthly constant today, no live MIBOR feed yet. |
 | Event calendar | `data/event-map.json` via `lib/eventMap.ts` | |
 | Claims ledger | `scripts/lib/buildClaimsLedger.mjs` → `data/claims.json` | Brief generator may only cite claims from here — never invented statistics. Backstopped by `scripts/lib/claimsCheck.mjs` (G-07) in both publish gates — see Part 9. |

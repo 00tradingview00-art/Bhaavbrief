@@ -95,7 +95,7 @@ export default async function BriefsPage() {
         </div>
 
         {briefs.length === 0 ? (
-          <p style={{ fontSize: 14, color: 'var(--ink-4)', padding: '32px 0' }}>No briefs found. Check your content/briefs directory.</p>
+          <p style={{ fontSize: 14, color: 'var(--ink-4)', padding: '32px 0' }}>No briefs published yet — check back after the next market session.</p>
         ) : (
           briefs.map((brief) => (
             <Link

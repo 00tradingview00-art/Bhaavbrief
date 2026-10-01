@@ -24,4 +24,8 @@ describe('fileToRoute', () => {
   it('handles deeply nested dynamic segments', () => {
     expect(fileToRoute(APP_DIR, path.join(APP_DIR, 'api', 'chart', '[commodity]', 'route.ts'))).toBe('/api/chart/[commodity]')
   })
+
+  it('maps an image route.tsx to its URL (previously skipped by the walker)', () => {
+    expect(fileToRoute(APP_DIR, path.join(APP_DIR, 'api', 'og', 'route.tsx'))).toBe('/api/og')
+  })
 })

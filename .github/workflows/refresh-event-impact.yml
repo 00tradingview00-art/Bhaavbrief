@@ -50,6 +50,13 @@ jobs:
           KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
         run: node scripts/compute-event-impact.mjs
 
+      # data/claims.json is the only source the brief generator may cite
+      # historical statistics from (G-07). It is derived from the stats just
+      # computed, but nothing rebuilt it — it was frozen at 2026-07-17 while
+      # the stats kept updating weekly.
+      - name: Rebuild claims ledger
+        run: node scripts/lib/buildClaimsLedger.mjs
+
       - name: Validate event-map.json schema
         run: node scripts/validate-event-map.mjs
 
@@ -57,7 +64,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/event-map.json data/event-impact-stats.json
+          git add data/event-map.json data/event-impact-stats.json data/claims.json
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "chore: refresh event impact stats [skip ci]"
           # Other workflows commit to main constantly — rebase and retry.
@@ -83,16 +90,18 @@ jobs:
           # the trigger source for Pro Research auto-generation (see
           # scripts/monitor-macro-economy.js), so a stale date here means a
           # real FOMC/RBI-MPC/OPEC+ meeting could pass with nothing detecting
-          # it. Alert-only (not blocking) — 6 weeks matches the threshold
-          # event-map.json's own _note field already recommends.
+          # it. Alert-only (not blocking). lib/eventMap.ts hides any event whose
+          # date has passed, so a lapsed manual date removes that event from
+          # /calendar, /alerts and the next-event cards the moment it fires —
+          # the old 6-week, high-impact-only threshold let 11 events vanish
+          # unnoticed (30 Sep review). Any manual event >3 days past is flagged.
           STALE=$(node -e '
             const fs = require("fs");
             const data = JSON.parse(fs.readFileSync("data/event-map.json", "utf8"));
-            const sixWeeksAgo = Date.now() - 6 * 7 * 24 * 3600 * 1000;
+            const threeDaysAgo = Date.now() - 3 * 24 * 3600 * 1000;
             const stale = data.events.filter(e =>
               e.cadence_type === "manual" &&
-              e.impact_tier === "high" &&
-              new Date(e.next_release_utc).getTime() < sixWeeksAgo
+              new Date(e.next_release_utc).getTime() < threeDaysAgo
             );
             console.log(stale.map(e => `${e.id} (next_release_utc: ${e.next_release_utc})`).join("|"));
           ')
@@ -116,7 +125,7 @@ jobs:
               \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
               \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
               \"subject\": \"⚠️ Stale event date(s) in event-map.json\",
-              \"htmlContent\": \"<p>These manual-cadence, high-impact events have a next_release_utc more than 6 weeks in the past — nobody has updated them against the source calendar:</p><ul>${ITEMS}</ul><p>These dates drive Pro Research auto-generation (scripts/monitor-macro-economy.js) — a stale date means a real event could pass with nothing detecting it. Update data/event-map.json.</p>\"
+              \"htmlContent\": \"<p>These manual-cadence events have a next_release_utc that has passed — they no longer appear on the site's calendar until updated against the official schedule:</p><ul>${ITEMS}</ul><p>These dates drive Pro Research auto-generation (scripts/monitor-macro-economy.js) — a stale date means a real event could pass with nothing detecting it. Update data/event-map.json.</p>\"
             }" || true
 
       # Only the EIA fetch and stale-event cases alerted before; a failure

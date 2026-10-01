@@ -195,7 +195,9 @@ export default function DailyBriefHome({
         </section>
       )}
 
-      <section className="bb-subscribe-card" aria-labelledby="subscribe-heading">
+      {/* id="subscribe": the nav/menu "Subscribe" links target /#subscribe,
+          and phones are served this page at / (middleware rewrite). */}
+      <section id="subscribe" className="bb-subscribe-card" aria-labelledby="subscribe-heading">
         <div>
           <div className="bb-section-label">Daily market brief</div>
           <h2 id="subscribe-heading">A clearer market read, before the day gets noisy.</h2>

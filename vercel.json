@@ -6,11 +6,11 @@
     },
     {
       "path": "/api/cron/iv-snapshot",
-      "schedule": "5 18 * * 1-5"
+      "schedule": "5 19 * * 1-5"
     },
     {
       "path": "/api/cron/oi-snapshot",
-      "schedule": "10 18 * * 1-5"
+      "schedule": "10 19 * * 1-5"
     }
   ]
 }

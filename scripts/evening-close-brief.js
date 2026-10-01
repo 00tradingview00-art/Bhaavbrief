@@ -16,7 +16,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels } from './lib/technicals.js'
-import { isTradingHoliday, getHolidayName } from './lib/holidays.js'
+import { tradingSessionDate } from './lib/mcxSession.js'
+import { closeBriefSlug, sessionDisplayDate, sessionAnchorISO, isInEveningWindow } from './lib/closeBriefDates.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -25,10 +26,6 @@ const client       = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 const ARTICLES_DIR    = path.join(ROOT, 'content/articles')
 const STATE_FILE      = path.join(ROOT, 'data/evening-brief-state.json')
 const TECHNICALS_FILE = path.join(ROOT, 'data/brief-technicals.json')
-
-function todayIST() {
-  return new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString().slice(0, 10)
-}
 
 function loadState() {
   try { return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')) }
@@ -56,8 +53,8 @@ function loadSnapshot() {
 }
 
 // ── Load today's published articles (to understand the day's narrative) ────────
-function loadTodayArticles() {
-  const today = todayIST()
+function loadTodayArticles(session) {
+  const today = session
   try {
     if (!fs.existsSync(ARTICLES_DIR)) return []
     return fs.readdirSync(ARTICLES_DIR)
@@ -217,14 +214,16 @@ function buildDayNarrative(kitePrices, comex) {
 }
 
 // ── Generate close brief via Claude ───────────────────────────────────────────
-async function generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary }) {
+async function generateCloseBrief({ session, kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary }) {
   const now     = new Date()
-  const dateStr = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })
+  // The session reported on — not the wall clock, which is past midnight on
+  // late runs and made Claude date the brief a day ahead.
+  const dateStr = sessionDisplayDate(session)
   const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' })
   // Anchor to midnight IST on the session date (= 18:30 UTC previous UTC day).
   // This groups the article under the correct IST date AND sorts it below all
   // intraday flash articles (midnight < 9 AM in descending time sort).
-  const sessionDate = new Date(todayIST() + 'T00:00:00+05:30').toISOString()
+  const sessionDate = sessionAnchorISO(session)
 
   const mcxBlock   = buildDayMoverSummary(kitePrices)
   const comexBlock = Object.values(comex).filter(c => c.price > 0)
@@ -327,15 +326,14 @@ function applyBodyBold(mdx) {
   return frontmatter + boldedBody
 }
 
-function saveArticle(mdx, sessionDate) {
+function saveArticle(mdx, sessionDate, session) {
   if (!fs.existsSync(ARTICLES_DIR)) fs.mkdirSync(ARTICLES_DIR, { recursive: true })
 
   const slugMatch  = mdx.match(/^slug:\s*"?([^"\n]+)"?/m)
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
 
-  const today   = new Date().toISOString().split('T')[0]
-  const rawSlug = slugMatch?.[1]?.trim() ?? `mcx-close-${today}`
-  const slug    = `${today}-${rawSlug}`.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').slice(0, 80)
+  // Session-dated prefix and date token (the prefix used to be the UTC date).
+  const slug    = closeBriefSlug(slugMatch?.[1]?.trim(), session)
   const filepath = path.join(ARTICLES_DIR, `${slug}.mdx`)
 
   if (fs.existsSync(filepath)) {
@@ -361,12 +359,17 @@ function saveArticle(mdx, sessionDate) {
 async function main() {
   console.log(`\nBhaavBrief Evening Close Brief — ${new Date().toISOString()}\n`)
 
-  const today = todayIST()
+  // Guard: evening/close window, 21:00–06:00 IST (late GitHub runs included)
+  if (!isInEveningWindow()) {
+    console.log('Outside evening brief window (21:00–06:00 IST) — skipping')
+    return
+  }
 
-  // Guard: only run between 9 PM and 2 AM IST (evening/close window)
-  const istHour = new Date(Date.now() + 5.5 * 3600 * 1000).getUTCHours()
-  if (istHour < 21 && istHour >= 2) {
-    console.log(`Outside evening brief window (${istHour}:xx IST, expected 21–02) — skipping`)
+  // The session this brief reports on: a run at 01:30 IST on Saturday is
+  // Friday's close. null = no session (weekend/exchange holiday).
+  const today = tradingSessionDate()
+  if (!today) {
+    console.log('No MCX trading session to report on (weekend/holiday) — skipping evening brief')
     return
   }
 
@@ -382,12 +385,6 @@ async function main() {
       console.log(`Evening brief already published for ${today} — skipping`)
       return
     }
-  }
-
-  if (isTradingHoliday(today)) {
-    const name = getHolidayName(today)
-    console.log(`MCX holiday today (${today}${name ? ': ' + name : ''}) — skipping evening brief`)
-    return
   }
 
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY not set')
@@ -410,7 +407,7 @@ async function main() {
   console.log(`  USD/INR: ${usdinr.toFixed(2)}`)
 
   // Load today's published articles for narrative context
-  const todayArticles = loadTodayArticles()
+  const todayArticles = loadTodayArticles(today)
   console.log(`  Today's articles: ${todayArticles.length}`)
 
   // Build narrative + optional technical summary for top mover
@@ -460,11 +457,11 @@ async function main() {
   try { fs.writeFileSync(TECHNICALS_FILE, JSON.stringify(briefTechnicals, null, 2), 'utf8') } catch {}
 
   console.log('\nGenerating evening close brief...')
-  const { mdx, sessionDate } = await generateCloseBrief({ kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary })
+  const { mdx, sessionDate } = await generateCloseBrief({ session: today, kitePrices, comex, usdinr, narrative, todayArticles, technicalSummary })
 
   if (!mdx) throw new Error('Claude returned empty response')
 
-  const result = saveArticle(mdx, sessionDate)
+  const result = saveArticle(mdx, sessionDate, today)
   if (!result) {
     console.log('Evening brief already saved — nothing to do')
     return

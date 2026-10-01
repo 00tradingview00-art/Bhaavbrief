@@ -1,5 +1,24 @@
 import { describe, test, expect } from 'vitest'
-import { classifyQuote, pickDefaultExpiry, underlyingChange } from './options'
+import { classifyQuote, pickDefaultExpiry, timeToExpiryYears, underlyingChange } from './options'
+
+describe('timeToExpiryYears', () => {
+  const YEAR_MS = 365 * 24 * 3600 * 1000
+
+  test('measures to the 23:30 IST close of expiry day, not 05:30 IST', () => {
+    const now = Date.parse('2026-10-23T18:00:00Z') // 3 days before, at close
+    expect(timeToExpiryYears('2026-10-26', now) * YEAR_MS / 86400000).toBeCloseTo(3, 5)
+  })
+
+  test('measures to the 23:55 IST close in winter', () => {
+    const now = Date.parse('2026-11-23T18:25:00Z') // 3 days before, at 23:55 IST
+    expect(timeToExpiryYears('2026-11-26', now) * YEAR_MS / 86400000).toBeCloseTo(3, 5)
+  })
+
+  test('floors at one day on expiry day itself', () => {
+    const now = Date.parse('2026-10-26T12:00:00Z')
+    expect(timeToExpiryYears('2026-10-26', now)).toBeCloseTo(1 / 365, 8)
+  })
+})
 
 describe('pickDefaultExpiry', () => {
   test('picks the nearest expiry that is today or later, skipping already-passed ones', () => {

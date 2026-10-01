@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import CopyLinkButton from '@/components/CopyLinkButton'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const dynamicParams = true
 // P-03: without this, a slug rendered on-demand (dynamicParams path) caches
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const canonical = `https://bhaavbrief.in/events/${slug}`
   const ogParams = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
-  const ogImage = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage = ogImageUrl(Object.fromEntries(ogParams))
   const commodityLabel = event.commodity !== 'macro' ? `MCX ${event.commodity} India` : 'MCX India'
   return {
     title:       event.title,
@@ -75,7 +76,7 @@ export default async function EventResultPage({ params }: Props) {
   const up           = event.mcxChangePct >= 0
   const eventUrl     = `https://bhaavbrief.in/events/${slug}`
   const ogParams     = new URLSearchParams({ title: event.title, tags: event.commodity ?? '', type: 'flash' })
-  const ogImage      = `https://bhaavbrief.in/api/og?${ogParams}`
+  const ogImage      = ogImageUrl(Object.fromEntries(ogParams))
 
   const schema = {
     '@context': 'https://schema.org',
@@ -101,7 +102,7 @@ export default async function EventResultPage({ params }: Props) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home',   item: 'https://bhaavbrief.in' },
-          { '@type': 'ListItem', position: 2, name: 'Events', item: 'https://bhaavbrief.in/events' },
+          { '@type': 'ListItem', position: 2, name: 'Calendar', item: 'https://bhaavbrief.in/calendar' },
           { '@type': 'ListItem', position: 3, name: event.title, item: eventUrl },
         ],
       },
@@ -117,7 +118,7 @@ export default async function EventResultPage({ params }: Props) {
         <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link href="/" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Home</Link>
           <span>›</span>
-          <Link href="/events" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Events</Link>
+          <Link href="/calendar" style={{ color: 'var(--ink-4)', textDecoration: 'none' }}>Calendar</Link>
           <span>›</span>
           <span style={{ color: 'var(--ink-3)' }}>{commodityLabel}</span>
         </div>
@@ -261,11 +262,11 @@ export default async function EventResultPage({ params }: Props) {
         )}
 
         <div style={{ marginTop: 32 }}>
-          <Link href="/events" style={{
+          <Link href="/calendar" style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: 15, color: 'var(--gold)', textDecoration: 'none', fontWeight: 500,
           }}>
-            ← All Event Results
+            ← Event calendar
           </Link>
         </div>
       </article>

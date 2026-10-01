@@ -327,11 +327,6 @@ export class KiteClient {
   }
 }
 
-// ── Kite login URL helper ─────────────────────────────────────────────────────
-export function getLoginUrl(apiKey: string): string {
-  return `https://kite.trade/connect/login?api_key=${apiKey}&v=3`
-}
-
 // ── Cached instrument discovery ────────────────────────────────────────────────
 // getFullMCXInstruments() re-fetches and re-parses the entire MCX instruments CSV
 // (every commodity, every FUT+CE+PE contract) on every call. Which strikes/expiries/

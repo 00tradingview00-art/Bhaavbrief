@@ -24,8 +24,15 @@ const OPTIONS_SANITY_BASE_URL = process.env.MONITOR_BASE_URL ?? 'https://bhaavbr
 const WINDOW_DAYS = 7
 const windowStart = Date.now() - WINDOW_DAYS * 24 * 3600 * 1000
 
-export function readGateLog() {
-  const file = path.join(process.cwd(), 'data/gate-log.jsonl')
+// Real gate runs log a repo-relative briefPath ("content/…"). Rows with an
+// absolute temp path were written by the test suite into the real log before
+// GATE_LOG_PATH existed (48 of 114 gate_run rows at the 30 Sep review, some
+// flagged as internal errors) — they are not gate runs.
+export function isTestFixtureRun(entry) {
+  return typeof entry.briefPath === 'string' && path.isAbsolute(entry.briefPath)
+}
+
+export function readGateLog(file = path.join(process.cwd(), 'data/gate-log.jsonl')) {
   if (!fs.existsSync(file)) return []
   return fs.readFileSync(file, 'utf8')
     .split('\n')
@@ -37,6 +44,7 @@ export function readGateLog() {
     // The `type` field check falls back to "has checkedAt" for any entry
     // written before this field existed.
     .filter((entry) => (entry.type ?? (entry.checkedAt ? 'gate_run' : null)) === 'gate_run')
+    .filter((entry) => !isTestFixtureRun(entry))
     .filter((entry) => new Date(entry.checkedAt).getTime() >= windowStart)
 }
 

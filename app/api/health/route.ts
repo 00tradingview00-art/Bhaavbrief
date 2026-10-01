@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { loadSnapshot, snapshotAgeMinutes, isMCXOpenNow } from '@/lib/snapshot'
-import { todayIST, isTradingDay, toISTDate, istMinutesSinceMidnight, BRIEF_DEADLINE_IST_MINUTES } from '@/lib/tradingCalendar'
+import { todayIST, isTradingDay, toISTDate, istMinutesSinceMidnight, BRIEF_DEADLINE_IST_MINUTES, holidayCalendarStatus } from '@/lib/tradingCalendar'
 
 export const runtime    = 'nodejs'
 export const dynamic    = 'force-dynamic'
@@ -101,14 +101,35 @@ function checkEngine() {
   }
 }
 
+// The holiday calendar feeds every "is the market open / is today a trading
+// day" answer. It used to fail silently (an unreadable file just meant "no
+// holidays"), and it is a yearly list — from 1 December, next year's dates
+// must be present or January's holidays would all read as trading days.
+function checkCalendar() {
+  try {
+    const { loaded, latestYear } = holidayCalendarStatus()
+    if (!loaded) return { ok: false, reason: 'market-holidays.json not loaded' }
+    const today = todayIST()
+    const year = Number(today.slice(0, 4))
+    const needsNextYear = today.slice(5, 7) === '12'
+    if (needsNextYear && (latestYear ?? 0) <= year) {
+      return { ok: false, reason: `no ${year + 1} holidays in market-holidays.json`, latestYear }
+    }
+    return { ok: true, latestYear }
+  } catch (e) {
+    return { ok: false, reason: e instanceof Error ? e.message : 'unknown error' }
+  }
+}
+
 export async function GET() {
   const checks = {
     snapshot: checkSnapshot(),
     brief:    checkBrief(),
     engine:   checkEngine(),
+    calendar: checkCalendar(),
   }
 
-  const ok = checks.snapshot.ok && checks.brief.ok && checks.engine.ok
+  const ok = checks.snapshot.ok && checks.brief.ok && checks.engine.ok && checks.calendar.ok
 
   return NextResponse.json(
     { ok, checks, timestamp: new Date().toISOString() },

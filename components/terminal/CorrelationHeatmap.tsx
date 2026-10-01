@@ -1,9 +1,16 @@
+'use client'
+
 import ProBlurGate from '@/components/ProBlurGate'
 import type { CorrelationMatrix } from '@/lib/correlation'
+import { previewCorrelationMatrix } from '@/lib/proPreview'
+import { useProData } from '@/lib/useProData'
 
 interface Props {
-  correlation: CorrelationMatrix
-  isPro:       boolean
+  // Only the matrix's shape is rendered into the shared (ISR) homepage — the
+  // real values are Pro data, fetched client-side from /api/pro/data once
+  // the visitor is confirmed Pro. Non-Pro visitors see a synthetic matrix.
+  labels:     string[]
+  sampleSize: number
 }
 
 // Diverging scale: negative → down token, positive → up token, both scaled
@@ -26,12 +33,10 @@ function trendTitle(v: number | null, prior: number | null): string | undefined 
   return `Now: ${v.toFixed(2)} — ${trend} the prior 20D window (${prior.toFixed(2)}, Δ${delta >= 0 ? '+' : ''}${delta.toFixed(2)})`
 }
 
-export default function CorrelationHeatmap({ correlation, isPro }: Props) {
+function CorrelationTable({ correlation }: { correlation: CorrelationMatrix }) {
   const { labels, matrix, sampleSize, priorMatrix } = correlation
-  if (sampleSize === 0) return null
-
   return (
-    <ProBlurGate isPro={isPro} label={`Cross-Asset Correlation — ${sampleSize}-day window`} timestamp="Live">
+    <>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
           <thead>
@@ -74,6 +79,33 @@ export default function CorrelationHeatmap({ correlation, isPro }: Props) {
           {priorMatrix ? ' — hover a cell to see how it compares to the prior window' : ''}
         </span>
       </div>
-    </ProBlurGate>
+    </>
+  )
+}
+
+export default function CorrelationHeatmap({ labels, sampleSize }: Props) {
+  const { isPro, data, failed } = useProData<CorrelationMatrix>('kind=correlation')
+  if (sampleSize === 0) return null
+
+  if (isPro) {
+    if (data) return <CorrelationTable correlation={data} />
+    return failed
+      ? <p style={{ fontSize: 11, color: 'var(--ink-3)' }}>Correlation data is unavailable right now — try again shortly.</p>
+      : <div style={{ height: 200, borderRadius: 'var(--radius-md)' }} className="bb-skeleton-bar" />
+  }
+
+  const preview: CorrelationMatrix = {
+    labels,
+    matrix: previewCorrelationMatrix(labels.length),
+    sampleSize,
+    priorMatrix: null,
+    priorSampleSize: 0,
+  }
+  return (
+    <ProBlurGate
+      label={`Cross-Asset Correlation — ${sampleSize}-day window`}
+      timestamp="Live"
+      preview={<CorrelationTable correlation={preview} />}
+    />
   )
 }

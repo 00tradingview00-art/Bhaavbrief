@@ -6,6 +6,7 @@ import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
 import { safeJsonLd } from '@/lib/seo'
 import { notFound } from 'next/navigation'
+import { formatAsOfIST } from '@/lib/formatTime'
 
 type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
@@ -203,7 +204,7 @@ export default async function OptionsCommodityPage({ params }: Props) {
         const move = initialData.ivix != null ? expectedMoveToExpiry(initialData.futurePrice, initialData.ivix, dte) : null
         return (
           <p className="bb-options-context" style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
-            As of {new Date(initialData.lastUpdated).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST, MCX {meta.label} Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
+            As of {formatAsOfIST(initialData.lastUpdated)}, MCX {meta.label} Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
             {initialData.ivix != null ? ` and implied volatility (iVIX) of ${initialData.ivix.toFixed(1)}%` : ''}
             {move != null ? ` — the market is pricing roughly a ±₹${Math.round(move).toLocaleString('en-IN')} move by expiry (1 standard deviation, ${dte}d away)` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: 'var(--gold)' }}>rollover mechanics</Link> for the underlying futures contract.
           </p>

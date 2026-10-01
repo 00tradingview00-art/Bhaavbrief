@@ -1,8 +1,40 @@
+// Content-Security-Policy, shipped as Report-Only first: browsers log what
+// it WOULD block (DevTools console) without blocking anything, so it can be
+// checked against real traffic before being enforced. The site had no CSP.
+// Sources: Next.js inline bootstrap/JSON-LD ('unsafe-inline'), Google
+// Analytics, PostHog, Clerk (clerk.bhaavbrief.in; *.clerk.accounts.dev for
+// dev keys; Cloudflare Turnstile for bot checks), Cashfree checkout, Vercel
+// Analytics, Google Fonts, remote images (Pexels covers etc.). Checked
+// against the origins the home, Pro and sign-in pages actually load.
+const CSP_REPORT_ONLY = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.posthog.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev https://challenges.cloudflare.com https://sdk.cashfree.com https://va.vercel-scripts.com",
+  "connect-src 'self' https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://*.posthog.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev https://clerk-telemetry.com https://*.cashfree.com https://vitals.vercel-insights.com",
+  "img-src 'self' data: blob: https:",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://clerk.bhaavbrief.in https://*.clerk.accounts.dev",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "frame-src https://*.cashfree.com https://challenges.cloudflare.com https://clerk.bhaavbrief.in",
+  "worker-src 'self' blob:",
+  "form-action 'self' https://*.cashfree.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "object-src 'none'",
+].join('; ')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   experimental: {
     mdxRs: false,
+  },
+  // Files read from disk at request time — listed explicitly so the
+  // serverless bundles always ship them, rather than relying on tracing:
+  // - the holiday calendar, for every route that asks "is today a trading
+  //   day" (scripts/lib/holidays.js);
+  // - the daily history files, for /api/pro/data (lib/correlation.ts).
+  outputFileTracingIncludes: {
+    '/**': ['./data/market-holidays.json'],
+    '/api/pro/data': ['./data/history/**'],
   },
   images: {
     remotePatterns: [
@@ -24,6 +56,7 @@ const nextConfig = {
           { key: 'Referrer-Policy',            value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy',         value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'Strict-Transport-Security',  value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
         ],
       },
       // Raw /public image files (logos etc.) serve max-age=0 by default —
@@ -61,11 +94,20 @@ const nextConfig = {
         permanent: true,
       },
       { source: '/articles', destination: '/news', permanent: true },
+      // /events listed a single July write-up and nothing linked to it; the
+      // calendar is where events live. Individual /events/[slug] pages stay.
+      { source: '/events', destination: '/calendar', permanent: true },
       // Instagram bio link — sends visitors to markets
       { source: '/ig', destination: '/markets', permanent: false },
       // Broken "ay2026" slugs (slug-generator bug, capital M stripped from "May")
       { source: '/articles/:slug(.*ay2026.*)', destination: '/briefs', permanent: true },
       { source: '/briefs/:slug(.*ay2026.*)',   destination: '/briefs', permanent: true },
+      // Duplicate evening close briefs published for the same session (two
+      // workflow runs minutes apart, 21 & 22 Sep 2026 — see
+      // evening-close-brief.yml's checkout note). The first-published brief
+      // of each pair is kept; the later copy points to it.
+      { source: '/articles/2026-09-21-mcx-close-22sep2026-natgas-leads-selloff', destination: '/articles/2026-09-21-mcx-close-22sep2026-natgas-selloff', permanent: true },
+      { source: '/articles/2026-09-22-mcx-close-23sep2026-natgas-surge', destination: '/articles/2026-09-22-mcx-close-23sep2026-silver-surge-crude-plunge', permanent: true },
     ]
   },
 }

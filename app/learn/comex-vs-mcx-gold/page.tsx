@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import { ogImageUrl } from '@/lib/ogUrl'
 
 export const metadata = {
   title: 'COMEX vs MCX Gold Price — Why They Differ & How to Convert (2026)',
@@ -24,7 +25,7 @@ export const metadata = {
     siteName: 'BhaavBrief',
     type: 'article' as const,
     locale: 'en_IN',
-    images: [{ url: 'https://bhaavbrief.in/api/og?title=COMEX+vs+MCX+Gold+Price&tags=Import+Parity,Gold,USD+INR,Duties', width: 1200, height: 630 }],
+    images: [{ url: ogImageUrl({ title: "COMEX vs MCX Gold Price", tags: "Import Parity,Gold,USD INR,Duties" }), width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' as const, title: 'COMEX vs MCX Gold: Why They Differ | BhaavBrief', description: 'Import parity formula, duty structure, and why MCX gold trades at a premium to COMEX. Complete guide for Indian traders.', site: '@bhaavbrief' },
 }

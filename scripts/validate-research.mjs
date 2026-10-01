@@ -29,6 +29,22 @@ import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { checkClaims } from './lib/claimsCheck.mjs'
 import { appendGateLogEntry } from './lib/gateLog.mjs'
+import { priceSanityIssues } from './lib/researchPriceCheck.mjs'
+
+// Exit-code contract: 0 = publish, 1 = legitimate rejection, 2 = the gate
+// itself couldn't run. Without these handlers any uncaught error (a network
+// failure in the semantic check, a malformed claim, bad JSON) crashed Node
+// with exit 1 — read by callers as a silent content rejection instead of an
+// alert. (A failure while importing modules still exits 1: it happens before
+// this module body runs.)
+process.on('uncaughtException', (err) => {
+  console.error('GATE-INTERNAL-ERROR:', err?.stack ?? err)
+  process.exit(2)
+})
+process.on('unhandledRejection', (err) => {
+  console.error('GATE-INTERNAL-ERROR:', err?.stack ?? err)
+  process.exit(2)
+})
 
 const gateStartedAt = Date.now()
 const [, , researchPath] = process.argv
@@ -87,42 +103,14 @@ try {
 }
 issues.push(...checkClaims(body, claims))
 
-// 3. Loose price sanity — catches a gross hallucination (wrong order of
-// magnitude, wrong commodity's price) without trying to exactly match every
-// number the way validate-brief.mjs does. Research prices come from a live
-// options-chain fetch at generation time, not the persisted snapshot file,
-// so the two won't line up to the rupee even when both are correct — a
-// generous 25% band is deliberate, this is a coarse sanity check, not a
-// precision one.
-const PRICE_TOLERANCE = 0.25
+// 3. Loose price sanity (scripts/lib/researchPriceCheck.mjs) — catches the
+// wrong commodity's price or a wrong order of magnitude, not rupee-level
+// drift: research prices come from a live chain at generation time, not the
+// snapshot. It read a non-existent `snapshot.prices` key until 2026-10, so it
+// never ran.
 try {
   const snapshot = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/market-snapshot.json'), 'utf8'))
-  const COMMODITY_PRICE = {
-    gold:   snapshot?.prices?.gold?.mcx,
-    silver: snapshot?.prices?.silver?.mcx,
-    crude:  snapshot?.prices?.crudeoil?.mcx ?? snapshot?.prices?.crude?.mcx,
-    copper: snapshot?.prices?.copper?.mcx,
-    natgas: snapshot?.prices?.natgas?.mcx,
-  }
-  const COMMODITY_RE = {
-    gold: /\bgold\b/i, silver: /\bsilver\b/i, crude: /\bcrude\b|\boil\b/i,
-    copper: /\bcopper\b/i, natgas: /\bnat(?:ural)?\s*gas\b/i,
-  }
-  const PRICE_NEAR_COMMODITY = /₹\s?([\d,]+(?:\.\d+)?)/g
-  for (const [commodity, refPrice] of Object.entries(COMMODITY_PRICE)) {
-    if (!refPrice) continue
-    const re = COMMODITY_RE[commodity]
-    for (const m of body.matchAll(PRICE_NEAR_COMMODITY)) {
-      const context = body.slice(Math.max(0, m.index - 60), m.index + m[0].length + 10)
-      if (!re.test(context)) continue
-      const stated = parseFloat(m[1].replace(/,/g, ''))
-      if (!Number.isFinite(stated) || stated <= 0) continue
-      const deviation = Math.abs(stated - refPrice) / refPrice
-      if (deviation > PRICE_TOLERANCE) {
-        issues.push(`PRICE-SANITY: "₹${m[1]}" near "${commodity}" is ${(deviation * 100).toFixed(0)}% off the snapshot MCX price (₹${refPrice}) — possible wrong commodity or hallucinated figure`)
-      }
-    }
-  }
+  issues.push(...priceSanityIssues(body, snapshot?.instruments))
 } catch (e) {
   // Non-fatal by design — a missing/unreadable snapshot shouldn't block
   // research from publishing on its own; the claims + semantic checks still run.
