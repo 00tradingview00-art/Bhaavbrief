@@ -20,8 +20,16 @@ function Change({ reading }: { reading: DriverReading }) {
   return <><span aria-hidden="true">{arrow}</span> {sign}{Math.abs(reading.changePct).toFixed(2)}%</>
 }
 
-export default function DriverMaps({ prices }: { prices: PriceData | null }) {
-  const view = getDriverMaps(prices)
+type Props = {
+  prices: PriceData | null
+  // Commodity pages show just their own map; Markets shows all four.
+  only?: DriverMap['key']
+  page?: string
+}
+
+export default function DriverMaps({ prices, only, page = 'markets' }: Props) {
+  const full = getDriverMaps(prices)
+  const view = only ? { ...full, maps: full.maps.filter(map => map.key === only) } : full
   const isPro = useIsPro()
   const viewTracked = useRef(false)
   const time = formatPulseTime(view.timestamp)
@@ -31,17 +39,18 @@ export default function DriverMaps({ prices }: { prices: PriceData | null }) {
     if (!view.timestamp || viewTracked.current) return
     viewTracked.current = true
     trackEvent('visual_insight_viewed', {
-      page: 'markets',
+      page,
       component: 'driver_maps',
+      commodity: only,
       source_data_timestamp: view.timestamp,
       stale_data: Boolean(prices?.snapshotStale),
     })
-  }, [prices?.snapshotStale, view.timestamp])
+  }, [only, page, prices?.snapshotStale, view.timestamp])
 
   if (!view.maps.length) return null
 
   const open = (map: DriverMap) => trackEvent('driver_map_source_opened', {
-    page: 'markets',
+    page,
     component: 'driver_maps',
     commodity: map.key,
     source_data_timestamp: view.timestamp ?? undefined,
@@ -49,16 +58,16 @@ export default function DriverMaps({ prices }: { prices: PriceData | null }) {
     stale_data: map.mcxStale,
   })
 
-  return <section aria-labelledby="driver-maps" style={{ marginBottom: 32 }}>
+  return <section aria-labelledby={`driver-maps-${only ?? 'all'}`} style={{ marginBottom: 32 }}>
     <div style={{ marginBottom: 14 }}>
       <span style={{ color: 'var(--gold)', fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase' }}>{DRIVER_MAPS_COPY.eyebrow}</span>
-      <h2 id="driver-maps" style={{ color: 'var(--ink)', fontFamily: 'var(--font-serif)', fontSize: 21, fontWeight: 500, margin: '4px 0' }}>{DRIVER_MAPS_COPY.title}</h2>
+      <h2 id={`driver-maps-${only ?? 'all'}`} style={{ color: 'var(--ink)', fontFamily: 'var(--font-serif)', fontSize: 21, fontWeight: 500, margin: '4px 0' }}>{DRIVER_MAPS_COPY.title}</h2>
       <p style={{ color: 'var(--ink-3)', fontSize: 13, margin: 0 }}>
         {view.sessionOpen ? DRIVER_MAPS_COPY.subtitleOpen : DRIVER_MAPS_COPY.subtitleClosed}
         {time && <span style={{ color: prices?.snapshotStale ? '#C87000' : 'var(--ink-4)', marginLeft: 6 }}>{prices?.snapshotStale && <strong>{DRIVER_MAPS_COPY.delayed} · </strong>}Updated {time}</span>}
       </p>
     </div>
-    <div className="terminal-commodity-grid" style={{ display: 'grid', gap: 12 }}>
+    <div className={only ? undefined : 'terminal-commodity-grid'} style={{ display: 'grid', gap: 12 }}>
       {view.maps.map(map => <Link key={map.key} href={map.href} onClick={() => open(map)} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, color: 'inherit', padding: 16, textDecoration: 'none' }}>
         <strong style={{ color: 'var(--ink)', display: 'block', fontSize: 14 }}>
           {map.label} <span style={{ color: toneColour(map.mcx, map.mcxStale), float: 'right' }}><Change reading={map.mcx} /></span>

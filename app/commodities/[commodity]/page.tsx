@@ -16,6 +16,7 @@ import CommodityVisitTracker from '@/components/CommodityVisitTracker'
 import SinceLastVisit from '@/components/SinceLastVisit'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import { safeJsonLd } from '@/lib/seo'
+import DriverMaps from '@/components/visuals/DriverMaps'
 import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
 
 // Revalidate every 5 minutes — live prices + new articles
@@ -629,6 +630,10 @@ export default async function CommodityPage({ params }: Props) {
             {liveParity.formula} · {liveParity.dutyNote} · For education only, not a trading signal
           </div>
         </div>
+      )}
+
+      {(entry.key === 'gold' || entry.key === 'silver' || entry.key === 'crude' || entry.key === 'natgas') && (
+        <DriverMaps prices={prices} only={entry.key} page="commodity" />
       )}
 
       {/* Historical chart */}
