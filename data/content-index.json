@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-10-01-mcx-market-depth-order-book-india",
+    "href": "/articles/2026-10-01-mcx-market-depth-order-book-india",
+    "title": "How to Read MCX Market Depth and Order Book for Better Trading Entries in India",
+    "description": "Learn how to read MCX market depth order book India with this clear, mechanism-first guide for commodity traders, jewellers, and importers.",
+    "excerpt": "Understanding how to read MCX market depth order book India is a core skill for any trader who wants precise entries rather than guesswork. The order book reveals the real-time balance of pending bids",
+    "date": "2026-10-01",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-117",
     "href": "/briefs/edition-117",
