@@ -1,34 +1,74 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import type { PriceData } from '@/lib/prices'
+import { DRIVER_MAPS_COPY, getDriverMaps, type DriverMap, type DriverReading } from '@/lib/driverMaps'
+import { formatPulseTime } from '@/lib/marketPulse'
+import { trackEvent } from '@/lib/analytics'
+import { useIsPro } from '@/lib/useIsPro'
 
-type Map = { key: string; label: string; mcx: number; benchmark: string; benchmarkChange: number; href: string }
+function toneColour(reading: DriverReading, stale = false) {
+  if (stale || reading.changePct === null) return 'var(--ink-4)'
+  return reading.tone === 'up' ? 'var(--up)' : reading.tone === 'down' ? 'var(--down)' : 'var(--ink-3)'
+}
 
-function pct(value: number) { return `${value >= 0 ? '▲ +' : '▼ '}${Math.abs(value).toFixed(2)}%` }
-function relationship(mcx: number, driver: number) {
-  if (!mcx || !driver) return 'No clear comparison'
-  return Math.sign(mcx) === Math.sign(driver) ? 'same direction' : 'working against'
+function Change({ reading }: { reading: DriverReading }) {
+  if (reading.changePct === null) return <>{DRIVER_MAPS_COPY.unavailable}</>
+  const arrow = reading.tone === 'up' ? '▲' : reading.tone === 'down' ? '▼' : '•'
+  const sign = reading.changePct > 0 ? '+' : reading.changePct < 0 ? '−' : ''
+  return <><span aria-hidden="true">{arrow}</span> {sign}{Math.abs(reading.changePct).toFixed(2)}%</>
 }
 
 export default function DriverMaps({ prices }: { prices: PriceData | null }) {
-  if (!prices) return null
-  const maps: Map[] = [
-    { key: 'gold', label: 'MCX Gold', mcx: prices.gold.mcxChangePct, benchmark: 'Global gold', benchmarkChange: prices.goldComexPct, href: '/commodities/gold' },
-    { key: 'silver', label: 'MCX Silver', mcx: prices.silver.mcxChangePct, benchmark: 'Global silver', benchmarkChange: prices.silverComexPct, href: '/commodities/silver' },
-    { key: 'crude', label: 'MCX Crude Oil', mcx: prices.crude.mcxChangePct, benchmark: 'WTI crude', benchmarkChange: prices.crudePct, href: '/commodities/crude-oil' },
-    { key: 'natgas', label: 'MCX Natural Gas', mcx: prices.natgas.mcxChangePct, benchmark: 'Henry Hub', benchmarkChange: prices.gasPct, href: '/commodities/natural-gas' },
-  ]
+  const view = getDriverMaps(prices)
+  const isPro = useIsPro()
+  const viewTracked = useRef(false)
+  const time = formatPulseTime(view.timestamp)
+
+  // Once per page view; is_pro rides on click events (useIsPro resolves after mount).
+  useEffect(() => {
+    if (!view.timestamp || viewTracked.current) return
+    viewTracked.current = true
+    trackEvent('visual_insight_viewed', {
+      page: 'markets',
+      component: 'driver_maps',
+      source_data_timestamp: view.timestamp,
+      stale_data: Boolean(prices?.snapshotStale),
+    })
+  }, [prices?.snapshotStale, view.timestamp])
+
+  if (!view.maps.length) return null
+
+  const open = (map: DriverMap) => trackEvent('driver_map_source_opened', {
+    page: 'markets',
+    component: 'driver_maps',
+    commodity: map.key,
+    source_data_timestamp: view.timestamp ?? undefined,
+    is_pro: isPro,
+    stale_data: map.mcxStale,
+  })
+
   return <section aria-labelledby="driver-maps" style={{ marginBottom: 32 }}>
-    <div style={{ marginBottom: 14 }}><span style={{ color: 'var(--gold)', fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase' }}>Market context</span><h2 id="driver-maps" style={{ color: 'var(--ink)', fontFamily: 'var(--font-serif)', fontSize: 21, fontWeight: 500, margin: '4px 0' }}>What’s moving alongside MCX</h2><p style={{ color: 'var(--ink-3)', fontSize: 13, margin: 0 }}>Live market context, not a prediction or a causal model.</p></div>
+    <div style={{ marginBottom: 14 }}>
+      <span style={{ color: 'var(--gold)', fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase' }}>{DRIVER_MAPS_COPY.eyebrow}</span>
+      <h2 id="driver-maps" style={{ color: 'var(--ink)', fontFamily: 'var(--font-serif)', fontSize: 21, fontWeight: 500, margin: '4px 0' }}>{DRIVER_MAPS_COPY.title}</h2>
+      <p style={{ color: 'var(--ink-3)', fontSize: 13, margin: 0 }}>
+        {view.sessionOpen ? DRIVER_MAPS_COPY.subtitleOpen : DRIVER_MAPS_COPY.subtitleClosed}
+        {time && <span style={{ color: prices?.snapshotStale ? '#C87000' : 'var(--ink-4)', marginLeft: 6 }}>{prices?.snapshotStale && <strong>{DRIVER_MAPS_COPY.delayed} · </strong>}Updated {time}</span>}
+      </p>
+    </div>
     <div className="terminal-commodity-grid" style={{ display: 'grid', gap: 12 }}>
-      {maps.map(map => <Link key={map.key} href={map.href} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, color: 'inherit', padding: 16, textDecoration: 'none' }}>
-        <strong style={{ color: 'var(--ink)', display: 'block', fontSize: 14 }}>{map.label} <span style={{ color: map.mcx >= 0 ? 'var(--up)' : 'var(--down)', float: 'right' }}>{pct(map.mcx)}</span></strong>
+      {view.maps.map(map => <Link key={map.key} href={map.href} onClick={() => open(map)} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, color: 'inherit', padding: 16, textDecoration: 'none' }}>
+        <strong style={{ color: 'var(--ink)', display: 'block', fontSize: 14 }}>
+          {map.label} <span style={{ color: toneColour(map.mcx, map.mcxStale), float: 'right' }}><Change reading={map.mcx} /></span>
+        </strong>
+        {map.mcxStale && <span style={{ color: 'var(--ink-4)', display: 'block', fontSize: 10, marginTop: 2, textAlign: 'right' }}>{DRIVER_MAPS_COPY.delayed}</span>}
         <div style={{ borderTop: '1px solid var(--border)', fontSize: 12, marginTop: 12, paddingTop: 10 }}>
-          <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between' }}><span>{map.benchmark}</span><strong>{pct(map.benchmarkChange)}</strong></div>
-          <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between', marginTop: 7 }}><span>USD/INR</span><strong>{pct(prices.usdinrChangePct)}</strong></div>
+          <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between' }}><span>{map.benchmarkLabel}</span><strong style={{ color: map.benchmark.changePct === null ? 'var(--ink-4)' : undefined }}><Change reading={map.benchmark} /></strong></div>
+          <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between', marginTop: 7 }}><span>{DRIVER_MAPS_COPY.usdinrLabel}</span><strong style={{ color: map.usdinr.changePct === null ? 'var(--ink-4)' : undefined }}><Change reading={map.usdinr} /></strong></div>
         </div>
-        <p style={{ color: 'var(--ink-3)', fontSize: 12, lineHeight: 1.45, margin: '12px 0 0' }}>{map.benchmark} is moving {relationship(map.mcx, map.benchmarkChange)} to this MCX contract. USD/INR is additional India-market context.</p>
+        <p style={{ color: 'var(--ink-3)', fontSize: 12, lineHeight: 1.45, margin: '12px 0 0' }}>{map.sentence} {DRIVER_MAPS_COPY.usdinrNote}</p>
       </Link>)}
     </div>
   </section>
