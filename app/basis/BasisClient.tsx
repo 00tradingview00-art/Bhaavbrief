@@ -6,6 +6,8 @@ import {
 } from 'recharts'
 import type { BasisPoint, BasisConstituents } from '@/lib/basis'
 import ProBlurGate from '@/components/ProBlurGate'
+import ImportReferencePosition from '@/components/visuals/ImportReferencePosition'
+import { importReferenceView } from '@/lib/importReference'
 
 interface CommodityMeta {
   id: string
@@ -14,6 +16,8 @@ interface CommodityMeta {
   key: keyof BasisPoint
   stats: { mean: number; std: number; latest: number | null } | null
   dutyLatest: number | null
+  dutyKey?: keyof BasisPoint
+  asOf?: string | null
 }
 
 interface Props {
@@ -93,6 +97,14 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
     minus2: windowStats ? windowStats.mean - 2 * windowStats.std : null,
   }))
 
+  // Non-Pro visitors get preview history with null duty spreads, so the
+  // recent-sessions strip only renders from real (Pro) history.
+  const referenceView = importReferenceView(
+    `MCX ${c.label}`,
+    c.dutyLatest,
+    c.dutyKey ? history.map(p => p[c.dutyKey!] as number | null) : [],
+  )
+
   const constituentKey = c.id === 'gold' || c.id === 'silver' || c.id === 'crude' ? c.id : null
   const constituents = constituentKey
     ? windowed.map(p => ({ date: p.date, spread: p[c.key] as number | null, ...(p[constituentKey] as BasisConstituents) }))
@@ -156,6 +168,8 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
           )}
         </div>
       )}
+
+      {referenceView && <ImportReferencePosition view={referenceView} asOf={c.asOf} />}
 
       {stats && chartData.filter(d => d.spread !== null).length > 1 ? (
         <>

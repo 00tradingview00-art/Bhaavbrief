@@ -86,6 +86,7 @@ export default async function BasisPage() {
       stats:   calcStats(last30, 'goldSpreadPct'),
       dutyKey: 'goldDutySpreadPct' as const,
       dutyLatest: last30[last30.length - 1]?.goldDutySpreadPct ?? null,
+      asOf:    last30[last30.length - 1]?.date ?? null,
     },
     {
       id:      'silver',
@@ -95,6 +96,7 @@ export default async function BasisPage() {
       stats:   calcStats(last30, 'silverSpreadPct'),
       dutyKey: 'silverDutySpreadPct' as const,
       dutyLatest: last30[last30.length - 1]?.silverDutySpreadPct ?? null,
+      asOf:    last30[last30.length - 1]?.date ?? null,
     },
     {
       id:      'crude',
@@ -104,6 +106,7 @@ export default async function BasisPage() {
       stats:   calcStats(last30, 'crudeSpreadPct'),
       dutyKey: 'crudeDutySpreadPct' as const,
       dutyLatest: last30[last30.length - 1]?.crudeDutySpreadPct ?? null,
+      asOf:    last30[last30.length - 1]?.date ?? null,
     },
     // Copper deliberately excluded: lib/basis.ts's copperSpreadPct is a
     // permanent null stub (no COMEX HG price feed wired up yet) — shipping an
