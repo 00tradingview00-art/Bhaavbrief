@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { getMarketPulse, marketPulseSummary } from './marketPulse'
+import { formatPulseTime, getMarketPulse, marketPulseSummary } from './marketPulse'
 import type { PriceData } from './prices'
 
 function row(mcx: number, mcxChangePct: number, mcxStale = false) {
@@ -44,6 +44,35 @@ describe('getMarketPulse', () => {
   })
 
   test('returns an empty pulse when prices are unavailable', () => {
-    expect(getMarketPulse(null)).toEqual({ items: [], lead: null, timestamp: null })
+    expect(getMarketPulse(null)).toEqual({ items: [], lead: null, timestamp: null, sessionOpen: false })
+  })
+
+  test('does not name a lead move when every fresh market is flat', () => {
+    const flat = prices({
+      gold: { ...prices().gold, mcxChangePct: 0 }, silver: { ...prices().silver, mcxChangePct: 0 },
+      crude: { ...prices().crude, mcxChangePct: 0 }, copper: row(100, 0), natgas: row(100, 0),
+    })
+    expect(getMarketPulse(flat).lead).toBeNull()
+  })
+
+  test('describes the last session, not today, when MCX is closed', () => {
+    const result = getMarketPulse(prices({ marketOpen: false }))
+    expect(result.sessionOpen).toBe(false)
+    expect(marketPulseSummary(result.lead, result.sessionOpen)).toBe('Crude Oil was among the largest moves in the last session.')
+  })
+})
+
+describe('formatPulseTime', () => {
+  test('keeps the IST time from the snapshot', () => {
+    expect(formatPulseTime('2026-10-01 09:30 IST')).toBe('09:30 IST')
+  })
+
+  test('converts a UTC ISO fallback to IST instead of showing it raw', () => {
+    expect(formatPulseTime('2026-10-01T04:00:00.000Z')).toBe('09:30 IST')
+  })
+
+  test('returns null for missing or unparseable timestamps', () => {
+    expect(formatPulseTime(null)).toBeNull()
+    expect(formatPulseTime('not a time')).toBeNull()
   })
 })

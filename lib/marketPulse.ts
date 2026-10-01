@@ -16,7 +16,19 @@ export type MarketPulse = {
   items: MarketPulseItem[]
   lead: MarketPulseItem | null
   timestamp: string | null
+  // False outside MCX hours: the moves shown are the last session's, not today's.
+  sessionOpen: boolean
 }
+
+// Fixed component copy, kept here so the visual copy compliance test covers it.
+export const MARKET_PULSE_COPY = {
+  eyebrow: 'Visual market read',
+  title: 'Market Pulse',
+  listLabel: 'MCX commodity moves',
+  delayed: 'Delayed',
+  awaiting: 'Awaiting data',
+  explore: 'Explore its current market context and the data behind it.',
+} as const
 
 const INSTRUMENTS: Array<{ key: MarketPulseKey; label: string; href: string }> = [
   { key: 'gold',        label: 'Gold',        href: '/commodities/gold' },
@@ -47,7 +59,7 @@ function tone(changePct: number): MarketPulseTone {
  * largest moves” is a rank claim, not a directional or predictive signal.
  */
 export function getMarketPulse(prices: PriceData | null): MarketPulse {
-  if (!prices) return { items: [], lead: null, timestamp: null }
+  if (!prices) return { items: [], lead: null, timestamp: null, sessionOpen: false }
 
   const items = INSTRUMENTS
     .flatMap(meta => {
@@ -67,15 +79,34 @@ export function getMarketPulse(prices: PriceData | null): MarketPulse {
     })
 
   const fresh = items.filter(item => !item.stale)
+  const top = fresh[0]
   return {
     items,
-    // A single instrument is not enough market context to call it a lead move.
-    lead: fresh.length >= 3 ? fresh[0] ?? null : null,
+    // A single instrument is not enough market context to call it a lead move,
+    // and a flat market has no largest move to name.
+    lead: fresh.length >= 3 && top && top.changePct !== 0 ? top : null,
     timestamp: prices.generatedAtIST ?? prices.updatedAt ?? null,
+    sessionOpen: prices.marketOpen,
   }
 }
 
-export function marketPulseSummary(lead: MarketPulseItem | null): string | null {
+export function marketPulseSummary(lead: MarketPulseItem | null, sessionOpen = true): string | null {
   if (!lead) return null
-  return `${lead.label} is among today's largest moves.`
+  return sessionOpen
+    ? `${lead.label} is among today's largest moves.`
+    : `${lead.label} was among the largest moves in the last session.`
+}
+
+/**
+ * "HH:MM IST" for the header. generatedAtIST is already IST text; updatedAt is
+ * an ISO UTC string and must be converted, never shown raw.
+ */
+export function formatPulseTime(timestamp: string | null): string | null {
+  if (!timestamp) return null
+  const ist = timestamp.match(/\s(\d{2}:\d{2})(?:\s|$)/)
+  if (ist && /IST/.test(timestamp)) return `${ist[1]} IST`
+  const date = new Date(timestamp)
+  if (Number.isNaN(date.getTime())) return null
+  const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' }).format(date)
+  return `${time} IST`
 }

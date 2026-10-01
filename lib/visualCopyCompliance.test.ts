@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { isVisualCopySafe, visualCopyViolations } from './visualCopyCompliance'
-import { marketPulseSummary } from './marketPulse'
+import { MARKET_PULSE_COPY, marketPulseSummary } from './marketPulse'
 
 describe('visual copy compliance', () => {
   test('allows an observational market-pulse statement', () => {
@@ -20,5 +20,10 @@ describe('visual copy compliance', () => {
     const copy = marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', changePct: -2, tone: 'down', stale: false })
     expect(copy).not.toBeNull()
     expect(isVisualCopySafe(copy!)).toBe(true)
+    expect(isVisualCopySafe(marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', changePct: -2, tone: 'down', stale: false }, false)!)).toBe(true)
+  })
+
+  test('keeps fixed Market Pulse component copy within the allowed language', () => {
+    for (const copy of Object.values(MARKET_PULSE_COPY)) expect(visualCopyViolations(copy)).toEqual([])
   })
 })
