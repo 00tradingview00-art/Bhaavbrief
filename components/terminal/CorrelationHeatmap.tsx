@@ -4,6 +4,7 @@ import ProBlurGate from '@/components/ProBlurGate'
 import type { CorrelationMatrix } from '@/lib/correlation'
 import { previewCorrelationMatrix } from '@/lib/proPreview'
 import { useProData } from '@/lib/useProData'
+import CorrelationExplorer from '@/components/visuals/CorrelationExplorer'
 
 interface Props {
   // Only the matrix's shape is rendered into the shared (ISR) homepage — the
@@ -37,6 +38,7 @@ function CorrelationTable({ correlation }: { correlation: CorrelationMatrix }) {
   const { labels, matrix, sampleSize, priorMatrix } = correlation
   return (
     <>
+      <CorrelationExplorer correlation={correlation} />
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
           <thead>
