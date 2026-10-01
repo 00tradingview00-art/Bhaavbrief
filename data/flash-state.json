@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-09-29T16:09:57.007Z",
-    "lastFlashPrice": 8692,
+    "lastFlashAt": "2026-10-01T10:17:12.096Z",
+    "lastFlashPrice": 8869,
     "lastRoundLevel": 9000,
     "recentFlashIds": [
+      "2026-10-01-15-47-mcx-crude-rallies-1-55-as-rupee-weakness-resurfaces",
       "2026-09-29-21-39-mcx-crude-falls-2-46-as-rupee-strength-reverses-export",
-      "2026-09-29-15-27-mcx-crude-retreats-as-rupee-stabilizes-halting-three-ho",
-      "2026-09-28-15-09-mcx-crude-surges-3-94-on-rupee-depreciation-tailwinds"
+      "2026-09-29-15-27-mcx-crude-retreats-as-rupee-stabilizes-halting-three-ho"
     ]
   },
   "MCX_COPPER": {
