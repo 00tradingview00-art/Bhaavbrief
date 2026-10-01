@@ -12,6 +12,13 @@ describe('applyComputedDates', () => {
     expect(api.next_release_utc).toBe('2026-10-06T20:30:00.000Z') // next Tue
   })
 
+  it('rolls a past daily event to the next day it fires', () => {
+    const e = { id: 'noaa_weather_outlook', cadence_type: 'rule_based', next_release_utc: '2026-07-10T12:00:00Z' }
+    expect(applyComputedDates([e], now, null)[0].next_release_utc).toBe('2026-09-30T20:00:00.000Z') // same day, later
+    expect(applyComputedDates([e], new Date('2026-09-30T21:00:00Z'), null)[0].next_release_utc)
+      .toBe('2026-10-01T20:00:00.000Z') // already out today → tomorrow
+  })
+
   it('leaves an upcoming weekly event alone', () => {
     const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-10-01T14:30:00.000Z' }
     expect(applyComputedDates([e], now, null)[0]).toBe(e)

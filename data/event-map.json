@@ -270,7 +270,7 @@
       "source_url": "https://www.opec.org/opec_web/en/press_room/28.htm",
       "frequency": "irregular",
       "cadence_type": "manual",
-      "next_release_utc": "2026-09-06T13:00:00Z",
+      "next_release_utc": "2026-10-04T13:00:00Z",
       "affected_contracts": [
         "crude"
       ],
@@ -406,7 +406,7 @@
       "source_url": "http://www.stats.gov.cn/english/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-07-31T01:00:00Z",
+      "next_release_utc": "2026-10-31T01:30:00Z",
       "affected_contracts": [
         "copper",
         "aluminium",
@@ -430,7 +430,7 @@
       "source_url": "https://www.caixinglobal.com/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-03T01:45:00Z",
+      "next_release_utc": "2026-11-02T01:45:00Z",
       "affected_contracts": [
         "copper",
         "aluminium",
@@ -500,8 +500,8 @@
       "name": "NOAA Weather Outlook (HDD/CDD)",
       "source_url": "https://www.cpc.ncep.noaa.gov/",
       "frequency": "daily",
-      "cadence_type": "manual",
-      "next_release_utc": "2026-07-10T12:00:00Z",
+      "cadence_type": "rule_based",
+      "next_release_utc": "2026-10-01T20:00:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
@@ -522,7 +522,7 @@
       "source_url": "https://www.mospi.gov.in/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-12T12:00:00Z",
+      "next_release_utc": "2026-10-12T10:30:00Z",
       "affected_contracts": [
         "gold"
       ],
@@ -543,7 +543,7 @@
       "source_url": "https://www.mospi.gov.in/",
       "frequency": "monthly",
       "cadence_type": "manual",
-      "next_release_utc": "2026-08-14T12:00:00Z",
+      "next_release_utc": "2026-10-14T06:30:00Z",
       "affected_contracts": [
         "gold"
       ],

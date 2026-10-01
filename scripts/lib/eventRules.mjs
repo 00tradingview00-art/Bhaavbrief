@@ -4,8 +4,8 @@
  * Plain .mjs so both scripts/refresh-event-calendar.mjs (persists the file)
  * and lib/eventMap.ts (applies the same rules at read time) use one copy.
  *
- * - rule_based events (EIA, API, Baker Hughes, CFTC) recur on a fixed weekday
- *   and UTC time. They were rolled forward only by the weekly Monday refresh,
+ * - rule_based events (EIA, API, Baker Hughes, CFTC, NOAA) recur on a fixed
+ *   weekday (or daily) and UTC time. They were rolled forward only by the weekly Monday refresh,
  *   so each one sat in the past — invisible on /calendar — for most of the
  *   week after it fired. Applied at read time they are always upcoming.
  * - mcx_expiry events take their date from data/kite-instruments.json, which
@@ -15,21 +15,25 @@
  * - manual events are left alone (irregular official schedules).
  */
 
-// Weekday + UTC time per rule_based event id. dow: 0=Sun..6=Sat.
+// Weekday + UTC time per rule_based event id. dow: 0=Sun..6=Sat; omit dow
+// for a release that comes out every day.
 export const RULES = {
   eia_natural_gas_storage:     { dow: 4, hourUtc: 14, minUtc: 30 }, // Thu
   eia_petroleum_status_report: { dow: 3, hourUtc: 14, minUtc: 30 }, // Wed
   api_crude_inventories:       { dow: 2, hourUtc: 20, minUtc: 30 }, // Tue
   baker_hughes_rig_count:      { dow: 5, hourUtc: 17, minUtc: 0 },  // Fri
   cftc_cot_report:             { dow: 5, hourUtc: 19, minUtc: 30 }, // Fri
+  // CPC 6-10/8-14 day outlooks: daily, 3–4pm ET (20:00 UTC is inside that
+  // window in both EDT and EST).
+  noaa_weather_outlook:        { hourUtc: 20, minUtc: 0 },
 }
 
-/** Next instant after `fromUtc` on weekday `dow` at hh:mm UTC. */
+/** Next instant after `fromUtc` on weekday `dow` (any day if undefined) at hh:mm UTC. */
 export function nextOccurrence(fromUtc, dow, hourUtc, minUtc) {
   const d = new Date(fromUtc)
   d.setUTCHours(hourUtc, minUtc, 0, 0)
-  let diff = (dow - d.getUTCDay() + 7) % 7
-  if (diff === 0 && d.getTime() <= fromUtc.getTime()) diff = 7
+  let diff = dow === undefined ? 0 : (dow - d.getUTCDay() + 7) % 7
+  if (diff === 0 && d.getTime() <= fromUtc.getTime()) diff = dow === undefined ? 1 : 7
   d.setUTCDate(d.getUTCDate() + diff)
   return d
 }
