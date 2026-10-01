@@ -4,7 +4,7 @@ import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
 import { isMcxOpen } from '@/lib/tradingCalendar'
 import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
-import { isProUser, hasInternalAccess } from '@/lib/subscription'
+import { isProUserOrFree, hasInternalAccess } from '@/lib/subscription'
 import { chainCacheControl } from '@/lib/optionsCacheControl'
 
 export const runtime  = 'nodejs'
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
   }
 
   const { userId } = await auth()
-  const pro = hasInternalAccess(request.headers) || await isProUser(userId)
+  const pro = hasInternalAccess(request.headers) || await isProUserOrFree(userId)
   const cacheControl = chainCacheControl({
     pro, signedIn: !!userId, hasSessionCookie: request.cookies.has('__session'),
   })

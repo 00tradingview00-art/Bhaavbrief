@@ -86,10 +86,9 @@ export default function ChangePlanButton({ currentPlan }: { currentPlan: Plan })
     return (
       <div style={{ fontSize: '0.85rem' }}>
         <p style={{ margin: '0 0 0.6rem', color: 'var(--ink-2)' }}>
-          Switch to {selected && PLAN_LABEL[selected]} ({selected && PLAN_PRICE[selected]})? This cancels
-          your current plan immediately and takes you to checkout for the new one — there&apos;s a short
-          gap with no active Pro access until you complete it. No refund for time remaining on your
-          current plan.
+          Switch to {selected && PLAN_LABEL[selected]} ({selected && PLAN_PRICE[selected]})? Your current
+          plan stops renewing and you go to checkout for the new one. You keep Pro in the meantime; the new
+          plan starts the day you pay, and unused days on the current plan aren&apos;t refunded.
         </p>
         <div style={{ display: 'flex', gap: '0.6rem' }}>
           <button

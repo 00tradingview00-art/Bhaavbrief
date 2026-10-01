@@ -57,6 +57,8 @@ export default async function AccountPage() {
   const subId = (await redisCommand('GET', `sub:${userId}:provider_sub_id`)) as string | null
   const merchantSubId = (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
   const provider = ((await redisCommand('GET', `sub:${userId}:provider`)) as string | null) ?? 'cashfree'
+  // Renewal stopped but the paid period is still running — Pro until expiry.
+  const cancelling = pro && (await redisCommand('GET', `sub:${userId}:status`)) === 'cancelling'
 
   const expiryLabel = expiresAt
     ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -96,7 +98,7 @@ export default async function AccountPage() {
               background: 'var(--up-bg)', padding: '3px 10px', borderRadius: 'var(--radius-pill)',
             }}>
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--up)', display: 'inline-block' }} />
-              Active
+              {cancelling ? 'Active — not renewing' : 'Active'}
             </span>
           )}
         </div>
@@ -105,12 +107,19 @@ export default async function AccountPage() {
           <>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-6)', marginBottom: 'var(--space-6)' }}>
               <StatTile label="Plan" value={`BhaavBrief Pro — ${PLAN_LABEL[planKey]}`} sub={PLAN_PRICE[planKey]} />
-              <StatTile label="Renews" value={expiryLabel ?? '—'} />
+              <StatTile label={cancelling ? 'Pro until' : 'Renews'} value={expiryLabel ?? '—'} />
             </div>
             <div style={{
               borderTop: '1px solid var(--border)', paddingTop: 'var(--space-4)',
             }}>
-              {merchantSubId ? (
+              {cancelling ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', alignItems: 'flex-start' }}>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--ink-2)' }}>
+                    Your plan won&apos;t renew. You keep full Pro access until {expiryLabel ?? 'the end of your paid period'}.
+                  </p>
+                  <Button href="/pro" variant="primary">Choose a plan →</Button>
+                </div>
+              ) : merchantSubId ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', alignItems: 'flex-start' }}>
                   <ChangePlanButton currentPlan={planKey as 'daily' | 'monthly' | 'yearly'} />
                   <CancelSubscriptionButton />

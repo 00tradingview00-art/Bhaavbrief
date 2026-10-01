@@ -12,7 +12,7 @@ vi.mock('@clerk/nextjs/server', () => ({
 }))
 
 import { redisCommand } from './redis'
-import { isProUser, activateSubscription, deactivateSubscription, hasInternalAccess } from './subscription'
+import { isProUser, isProUserOrFree, activateSubscription, deactivateSubscription, hasInternalAccess } from './subscription'
 
 const mockRedis = vi.mocked(redisCommand)
 
@@ -33,6 +33,22 @@ describe('isProUser', () => {
       .mockResolvedValueOnce('active')  // GET sub:user1:status
       .mockResolvedValueOnce(future)    // GET sub:user1:expires_at
     expect(await isProUser('user1')).toBe(true)
+  })
+
+  it('returns true for a cancelling user until the paid period ends', async () => {
+    const future = new Date(Date.now() + 86400_000).toISOString()
+    mockRedis
+      .mockResolvedValueOnce('cancelling')
+      .mockResolvedValueOnce(future)
+    expect(await isProUser('user1')).toBe(true)
+  })
+
+  it('returns false for a cancelling user once the paid period has passed', async () => {
+    const past = new Date(Date.now() - 1000).toISOString()
+    mockRedis
+      .mockResolvedValueOnce('cancelling')
+      .mockResolvedValueOnce(past)
+    expect(await isProUser('user1')).toBe(false)
   })
 
   it('returns false for cancelled user', async () => {
@@ -120,5 +136,20 @@ describe('deactivateSubscription', () => {
     mockRedis.mockResolvedValueOnce('OK')
     await deactivateSubscription('user1')
     expect(mockRedis).toHaveBeenCalledWith('SET', 'sub:user1:status', 'cancelled')
+  })
+})
+
+describe('isProUserOrFree', () => {
+  it('falls back to the free tier when Redis is unreachable', async () => {
+    mockRedis.mockRejectedValueOnce(new Error('Redis GET failed: 503'))
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    expect(await isProUserOrFree('user1')).toBe(false)
+    spy.mockRestore()
+  })
+
+  it('returns the real answer when Redis works', async () => {
+    const future = new Date(Date.now() + 86400_000).toISOString()
+    mockRedis.mockResolvedValueOnce('active').mockResolvedValueOnce(future)
+    expect(await isProUserOrFree('user1')).toBe(true)
   })
 })

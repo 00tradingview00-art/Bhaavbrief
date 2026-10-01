@@ -2,11 +2,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import {
   activateSubscription,
   deactivateSubscription,
+  isCurrentSubscription,
+  isSubscriptionEnded,
+  markCancelling,
+  markSubscriptionEnded,
   refreshSubscriptionExpiry,
   type Plan,
 } from '@/lib/subscription'
+import { createHash } from 'crypto'
 import {
+  WEBHOOK_MAX_AGE_MS,
   expiryFromPlan,
+  isWebhookTimestampFresh,
   parseCashfreeDate,
   planFromCashfreePlanId,
   verifyCashfreeWebhookSignature,
@@ -44,6 +51,11 @@ const DEACTIVATE_STATUSES = new Set([
   'COMPLETED',
   'CARD_EXPIRED',
 ])
+
+// Of those, the ones where renewal has stopped but the current paid period
+// is still valid — the user keeps Pro until expires_at. EXPIRED/COMPLETED
+// mean the subscription itself has run out, so access ends now.
+const KEEP_UNTIL_PERIOD_END = new Set(['CANCELLED', 'CUSTOMER_CANCELLED', 'CARD_EXPIRED'])
 
 // Durable trail of every webhook outcome for a subscription — not just
 // unresolved-user misses. console.error alone isn't enough to debug this:
@@ -102,6 +114,25 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
+  if (!isWebhookTimestampFresh(timestamp)) {
+    // Logged, not just refused: if Cashfree ever sent a timestamp format this
+    // check doesn't understand, every activation would be dropped — this
+    // makes that visible in the per-subscription log immediately.
+    const subId = body.data?.subscription_details?.subscription_id ?? body.data?.subscription_id
+    await logWebhookEvent(subId, { type: body.type ?? '', action: `rejected: stale or unreadable timestamp (${timestamp})` })
+    return NextResponse.json({ error: 'Stale webhook' }, { status: 401 })
+  }
+
+  // Each signed delivery is processed at most once. Released again if
+  // processing fails, so Cashfree's retry of the same delivery still lands.
+  const dedupeKey = `cf-evt:${createHash('sha256').update(`${timestamp}.${rawBody.toString('utf8')}`).digest('hex')}`
+  const claimed = await redisCommand(
+    'SET', dedupeKey, '1', 'NX', 'EX', String(Math.ceil(WEBHOOK_MAX_AGE_MS / 1000) + 3600),
+  )
+  if (claimed === null) {
+    return NextResponse.json({ ok: true, duplicate: true })
+  }
+
   const type = body.type ?? ''
   const details = body.data?.subscription_details
   const merchantSubId =
@@ -112,11 +143,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     merchantSubId ??
     ''
 
-  const resolved = await resolveUserAndPlan(
-    merchantSubId,
-    details?.subscription_tags ?? undefined,
-    body.data?.plan_details?.plan_id,
-  )
+  let resolved: Awaited<ReturnType<typeof resolveUserAndPlan>>
+  try {
+    resolved = await resolveUserAndPlan(
+      merchantSubId,
+      details?.subscription_tags ?? undefined,
+      body.data?.plan_details?.plan_id,
+    )
+  } catch (err) {
+    console.error('[cashfree/webhook] resolve failed', err)
+    await redisCommand('DEL', dedupeKey).catch(() => {})
+    return NextResponse.json({ error: 'Processing failed' }, { status: 500 })
+  }
 
   if (!resolved) {
     // Not a BhaavBrief checkout (or mapping expired) — ack and ignore, but
@@ -133,6 +171,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     if (type === 'SUBSCRIPTION_STATUS_CHANGED') {
       const status = details?.subscription_status ?? ''
       if (status === 'ACTIVE') {
+        if (await isSubscriptionEnded(merchantSubId)) {
+          await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: subscription already ended' })
+          return NextResponse.json({ ok: true })
+        }
         const existing = await redisCommand('GET', `sub:${userId}:status`)
         const expiresAt =
           parseCashfreeDate(details?.next_schedule_date ?? undefined) ??
@@ -154,8 +196,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           await logWebhookEvent(merchantSubId, { type, status, action: 'activated' })
         }
       } else if (DEACTIVATE_STATUSES.has(status)) {
-        await deactivateSubscription(userId)
-        await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
+        await markSubscriptionEnded(merchantSubId)
+        if (!(await isCurrentSubscription(userId, merchantSubId))) {
+          // e.g. the old plan's CANCELLED event arriving after a change-plan
+          // purchase — must not touch the user's current, paid subscription.
+          await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: not current subscription' })
+          return NextResponse.json({ ok: true })
+        }
+        if (KEEP_UNTIL_PERIOD_END.has(status)) {
+          await markCancelling(userId)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'cancelling: access until period end' })
+        } else {
+          await deactivateSubscription(userId)
+          await logWebhookEvent(merchantSubId, { type, status, action: 'deactivated' })
+        }
       } else {
         // A recognized user/subscription, but a status this route has no
         // branch for — e.g. an intermediate "still processing" state on a
@@ -166,6 +220,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         await logWebhookEvent(merchantSubId, { type, status, action: 'ignored: unhandled status' })
       }
     } else if (type === 'SUBSCRIPTION_PAYMENT_SUCCESS') {
+      if (await isSubscriptionEnded(merchantSubId)) {
+        await logWebhookEvent(merchantSubId, { type, action: 'ignored: subscription already ended' })
+        return NextResponse.json({ ok: true })
+      }
       const expiresAt =
         parseCashfreeDate(details?.next_schedule_date ?? undefined) ??
         parseCashfreeDate(body.data?.payment_schedule_date) ??
@@ -191,6 +249,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
   } catch (err) {
     console.error('[cashfree/webhook]', err)
+    await redisCommand('DEL', dedupeKey).catch(() => {})
     await logWebhookEvent(merchantSubId, { type, action: `error: ${(err as Error).message}` })
     return NextResponse.json({ error: 'Processing failed' }, { status: 500 })
   }

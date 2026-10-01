@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { redisCommand } from '@/lib/redis'
+import { incrementWindow } from '@/lib/userRateLimit'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -13,8 +14,7 @@ export async function GET(): Promise<NextResponse> {
   }
 
   const rlKey = `rl:poll:${userId}`
-  const count = Number(await redisCommand('INCR', rlKey))
-  if (count === 1) await redisCommand('EXPIRE', rlKey, '60')
+  const count = await incrementWindow(rlKey, 60)
   if (count > 30) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }
@@ -29,6 +29,11 @@ export async function GET(): Promise<NextResponse> {
   const merchantSubId = pro
     ? (await redisCommand('GET', `sub:${userId}:merchant_sub_id`)) as string | null
     : null
+  // Pro but renewal stopped — still unlocks content, but the user may buy a
+  // new plan, and a purchase poller must not mistake it for a fresh activation.
+  const cancelling = pro
+    ? (await redisCommand('GET', `sub:${userId}:status`)) === 'cancelling'
+    : false
 
-  return NextResponse.json({ isPro: pro, planExpires: expiresAt, plan, merchantSubId })
+  return NextResponse.json({ isPro: pro, cancelling, planExpires: expiresAt, plan, merchantSubId })
 }
