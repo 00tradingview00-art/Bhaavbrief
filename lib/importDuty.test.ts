@@ -2,7 +2,7 @@ import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import { describe, expect, test } from 'vitest'
-import { dutyInclusiveParity, loadDutyFactors } from './importDuty'
+import { dutyInclusiveParity, importGap, loadDutyFactors } from './importDuty'
 
 function tempConstants(content: string): string {
   const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'duty-')), 'constants.json')
@@ -41,5 +41,19 @@ describe('dutyInclusiveParity', () => {
     expect(dutyInclusiveParity(null, 1.12)).toBeNull()
     expect(dutyInclusiveParity(100_000, undefined)).toBeNull()
     expect(dutyInclusiveParity(100_000, 0)).toBeNull()
+  })
+})
+
+describe('importGap', () => {
+  test('matches the commodity page arithmetic: rounded reference, % of reference', () => {
+    const raw = 100_123.4, factor = 1.12, mcx = 113_000
+    const reference = Math.round(raw * factor)
+    expect(importGap(mcx, raw, factor)).toEqual({ referencePrice: reference, gapPct: ((mcx - reference) / reference) * 100 })
+  })
+
+  test('null when the MCX price or reference is missing', () => {
+    expect(importGap(0, 100_000, 1.12)).toBeNull()
+    expect(importGap(113_000, 0, 1.12)).toBeNull()
+    expect(importGap(113_000, 100_000, undefined)).toBeNull()
   })
 })

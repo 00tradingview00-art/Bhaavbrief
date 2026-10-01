@@ -6,6 +6,7 @@ import type { PriceData } from '@/lib/prices'
 import { DRIVER_MAPS_COPY, getDriverMaps, type DriverMap, type DriverReading } from '@/lib/driverMaps'
 import { formatPulseTime } from '@/lib/marketPulse'
 import { trackEvent } from '@/lib/analytics'
+import type { DriverContext } from '@/lib/driverContext'
 import { useIsPro } from '@/lib/useIsPro'
 
 function toneColour(reading: DriverReading, stale = false) {
@@ -25,10 +26,13 @@ type Props = {
   // Commodity pages show just their own map; Markets shows all four.
   only?: DriverMap['key']
   page?: string
+  // Server-computed extras (import gap, next EIA release). Optional: without
+  // it, only rows the client can derive itself are shown.
+  context?: DriverContext
 }
 
-export default function DriverMaps({ prices, only, page = 'markets' }: Props) {
-  const full = getDriverMaps(prices)
+export default function DriverMaps({ prices, only, page = 'markets', context }: Props) {
+  const full = getDriverMaps(prices, context)
   const view = only ? { ...full, maps: full.maps.filter(map => map.key === only) } : full
   const isPro = useIsPro()
   const viewTracked = useRef(false)
@@ -76,6 +80,7 @@ export default function DriverMaps({ prices, only, page = 'markets' }: Props) {
         <div style={{ borderTop: '1px solid var(--border)', fontSize: 12, marginTop: 12, paddingTop: 10 }}>
           <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between' }}><span>{map.benchmarkLabel}</span><strong style={{ color: map.benchmark.changePct === null ? 'var(--ink-4)' : undefined }}><Change reading={map.benchmark} /></strong></div>
           <div style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between', marginTop: 7 }}><span>{DRIVER_MAPS_COPY.usdinrLabel}</span><strong style={{ color: map.usdinr.changePct === null ? 'var(--ink-4)' : undefined }}><Change reading={map.usdinr} /></strong></div>
+          {map.extras.map(extra => <div key={extra.label} style={{ color: 'var(--ink-2)', display: 'flex', justifyContent: 'space-between', marginTop: 7 }}><span>{extra.label}</span><strong style={{ color: extra.value === null ? 'var(--ink-4)' : undefined }}>{extra.value ?? DRIVER_MAPS_COPY.unavailable}</strong></div>)}
         </div>
         <p style={{ color: 'var(--ink-3)', fontSize: 12, lineHeight: 1.45, margin: '12px 0 0' }}>{map.sentence} {DRIVER_MAPS_COPY.usdinrNote}</p>
       </Link>)}

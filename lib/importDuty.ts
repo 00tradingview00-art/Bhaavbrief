@@ -40,3 +40,19 @@ export function dutyInclusiveParity(rawParityINR: number | null | undefined, dut
   if (!rawParityINR || !(rawParityINR > 0) || !dutyFactor || !(dutyFactor > 0)) return null
   return rawParityINR * dutyFactor
 }
+
+/**
+ * MCX price vs its duty-inclusive import reference, the way the commodity
+ * page has always shown it: reference rounded to whole rupees, gap in % of
+ * that reference. Null when any input is missing.
+ */
+export function importGap(
+  mcxPrice: number | null | undefined,
+  rawParityINR: number | null | undefined,
+  dutyFactor: number | null | undefined,
+): { referencePrice: number; gapPct: number } | null {
+  const reference = dutyInclusiveParity(rawParityINR, dutyFactor)
+  if (reference === null || !mcxPrice || !(mcxPrice > 0)) return null
+  const referencePrice = Math.round(reference)
+  return { referencePrice, gapPct: ((mcxPrice - referencePrice) / referencePrice) * 100 }
+}

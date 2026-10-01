@@ -1,4 +1,5 @@
 import type { MCXData, PriceData } from '@/lib/prices'
+import type { DriverContext } from '@/lib/driverContext'
 
 export type DriverTone = 'up' | 'down' | 'neutral'
 export type DriverRelationship = 'same' | 'opposite' | 'none'
@@ -17,7 +18,11 @@ export type DriverMap = {
   usdinr: DriverReading
   relationship: DriverRelationship
   sentence: string
+  // Commodity-specific context rows; value null = unavailable.
+  extras: DriverExtra[]
 }
+
+export type DriverExtra = { label: string; value: string | null }
 
 export type DriverMapsView = {
   maps: DriverMap[]
@@ -36,6 +41,9 @@ export const DRIVER_MAPS_COPY = {
   usdinrLabel: 'USD/INR',
   usdinrNote: 'USD/INR is additional India-market context.',
   noComparison: 'No clear comparison right now.',
+  importGap: 'Gap to import reference',
+  goldSilverRatio: 'Gold/Silver ratio',
+  nextEia: 'Next EIA release',
 } as const
 
 const MAPS: Array<{
@@ -69,7 +77,42 @@ function sentenceFor(relationship: DriverRelationship, benchmarkLabel: string, l
   return DRIVER_MAPS_COPY.noComparison
 }
 
-export function getDriverMaps(prices: PriceData | null): DriverMapsView {
+function signedPct(value: number): string {
+  return `${value > 0 ? '+' : value < 0 ? '−' : ''}${Math.abs(value).toFixed(2)}%`
+}
+
+/** "Thu 1 Oct · 8:00 PM IST" — fixed to IST so server and client agree. */
+export function formatEventTime(releaseUtc: string): string | null {
+  const date = new Date(releaseUtc)
+  if (Number.isNaN(date.getTime())) return null
+  const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short' }).format(date)
+  const time = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit' }).format(date)
+  return `${parts.replace(',', '')} · ${time} IST`
+}
+
+/** COMEX gold ÷ COMEX silver (both USD/oz) — a standard, public market ratio. */
+export function goldSilverRatio(prices: PriceData): number | null {
+  if (!(prices.comexGold > 0) || !(prices.comexSilver > 0)) return null
+  return prices.comexGold / prices.comexSilver
+}
+
+function extrasFor(key: DriverMap['key'], prices: PriceData, context?: DriverContext): DriverExtra[] {
+  if (key === 'gold') {
+    if (!context) return []
+    const gap = context.goldImportGapPct
+    return [{ label: DRIVER_MAPS_COPY.importGap, value: gap == null || !Number.isFinite(gap) ? null : signedPct(gap) }]
+  }
+  if (key === 'silver') {
+    const ratio = goldSilverRatio(prices)
+    return [{ label: DRIVER_MAPS_COPY.goldSilverRatio, value: ratio === null ? null : ratio.toFixed(1) }]
+  }
+  // crude / natgas: next EIA release, only when the calendar has one.
+  const event = context?.events[key]
+  const when = event ? formatEventTime(event.releaseUtc) : null
+  return when ? [{ label: DRIVER_MAPS_COPY.nextEia, value: when }] : []
+}
+
+export function getDriverMaps(prices: PriceData | null, context?: DriverContext): DriverMapsView {
   if (!prices) return { maps: [], timestamp: null, sessionOpen: false }
   const usdinr = reading(prices.usdinr, prices.usdinrChangePct)
 
@@ -92,6 +135,7 @@ export function getDriverMaps(prices: PriceData | null): DriverMapsView {
       usdinr,
       relationship,
       sentence: sentenceFor(relationship, meta.benchmarkLabel, meta.label),
+      extras: extrasFor(meta.key, prices, context),
     }]
   })
 

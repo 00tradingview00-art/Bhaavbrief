@@ -17,6 +17,7 @@ import SinceLastVisit from '@/components/SinceLastVisit'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import { safeJsonLd } from '@/lib/seo'
 import DriverMaps from '@/components/visuals/DriverMaps'
+import { getDriverContext } from '@/lib/driverContext'
 import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
 
 // Revalidate every 5 minutes — live prices + new articles
@@ -633,7 +634,7 @@ export default async function CommodityPage({ params }: Props) {
       )}
 
       {(entry.key === 'gold' || entry.key === 'silver' || entry.key === 'crude' || entry.key === 'natgas') && (
-        <DriverMaps prices={prices} only={entry.key} page="commodity" />
+        <DriverMaps prices={prices} only={entry.key} page="commodity" context={getDriverContext(snap)} />
       )}
 
       {/* Historical chart */}

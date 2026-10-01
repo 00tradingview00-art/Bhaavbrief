@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { DRIVER_MAPS_COPY, getDriverMaps } from './driverMaps'
+import { DRIVER_MAPS_COPY, formatEventTime, getDriverMaps, goldSilverRatio } from './driverMaps'
 import { visualCopyViolations } from './visualCopyCompliance'
 import type { PriceData } from './prices'
 
@@ -64,5 +64,34 @@ describe('getDriverMaps', () => {
     const p = prices()
     const generated = getDriverMaps(p).maps.map(m => m.sentence)
     for (const text of [...generated, ...Object.values(DRIVER_MAPS_COPY)]) expect(visualCopyViolations(text)).toEqual([])
+  })
+
+  test('silver shows the gold/silver ratio, or unavailable without both prices', () => {
+    expect(goldSilverRatio(prices())).toBeCloseTo(3800 / 46, 6)
+    expect(byKey(prices(), 'silver').extras).toEqual([{ label: DRIVER_MAPS_COPY.goldSilverRatio, value: (3800 / 46).toFixed(1) }])
+    expect(byKey(prices({ comexSilver: 0 }), 'silver').extras[0].value).toBeNull()
+  })
+
+  test('gold shows the import gap only when the server supplied context', () => {
+    expect(byKey(prices(), 'gold').extras).toEqual([])
+    const withGap = getDriverMaps(prices(), { goldImportGapPct: 0.624, events: {} }).maps.find(m => m.key === 'gold')!
+    expect(withGap.extras).toEqual([{ label: DRIVER_MAPS_COPY.importGap, value: '+0.62%' }])
+    const noGap = getDriverMaps(prices(), { goldImportGapPct: null, events: {} }).maps.find(m => m.key === 'gold')!
+    expect(noGap.extras[0].value).toBeNull()
+  })
+
+  test('crude and natural gas show the next EIA release in IST when one is scheduled', () => {
+    const context = { goldImportGapPct: null, events: { crude: { name: 'EIA Weekly Petroleum Status Report', releaseUtc: '2026-10-07T14:30:00.000Z' } } }
+    const maps = getDriverMaps(prices(), context).maps
+    expect(maps.find(m => m.key === 'crude')!.extras).toEqual([{ label: DRIVER_MAPS_COPY.nextEia, value: 'Wed 7 Oct · 8:00 PM IST' }])
+    expect(maps.find(m => m.key === 'natgas')!.extras).toEqual([])
+  })
+
+  test('an unparseable release time shows no row', () => {
+    expect(formatEventTime('not a date')).toBeNull()
+  })
+
+  test('extra row labels stay within the allowed language', () => {
+    for (const text of [DRIVER_MAPS_COPY.importGap, DRIVER_MAPS_COPY.goldSilverRatio, DRIVER_MAPS_COPY.nextEia]) expect(visualCopyViolations(text)).toEqual([])
   })
 })
