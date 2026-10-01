@@ -46,7 +46,8 @@ GitHub Actions cron pipeline to Next.js/Vercel.
 | Fact | Owning module | Notes |
 |---|---|---|
 | Prices/FX | `lib/snapshot.ts` (brief generators, gate, email) | `lib/prices.ts` is a second, independent live-fetch path still used by the ticker/`\/api\/prices` — a known, documented C-01 gap, not yet consolidated. See the header comment in `lib/snapshot.ts`. |
-| Import parity/duty conversion | `lib/parity.mjs` | `.mjs`, not `.ts` — called from a plain Node script (`scripts/fetch-snapshot.mjs`) that can't import TypeScript directly. |
+| Import parity (raw FX conversion, no duty) | `lib/parity.mjs` | `.mjs`, not `.ts` — called from a plain Node script (`scripts/fetch-snapshot.mjs`) that can't import TypeScript directly. Does not apply import duty. |
+| Duty-inclusive import parity | `lib/importDuty.ts` | `loadDutyFactors()` + `dutyInclusiveParity()`. Used by `app/commodities/[commodity]/page.tsx` and `lib/basis.ts`; any new consumer uses this, never an inline duty multiply. |
 | Holidays / trading calendar | `lib/tradingCalendar.ts` → `scripts/lib/holidays.js` | The IST-anchor date logic lives once in `holidays.js`; don't reimplement `isWeekend`/`todayIST` elsewhere — a duplicate copy in `app/api/health/route.ts` caused a real Monday-detection bug (fixed 2026-07). |
 | Market hours / trading session | `scripts/lib/mcxHours.js` (pure, browser-safe: DST-aware 23:30/23:55 close) → `scripts/lib/mcxSession.js` (`isMcxOpen`, `tradingSessionDate`, adds holidays) | MCX closes 23:30 IST while US DST is on, 23:55 otherwise. Don't hard-code a close time or date runs by `todayIST()` — seven copies did (fixed 2026-10). Late/after-midnight jobs file under `tradingSessionDate()`. |
 | Risk-free rate | `lib/options.ts` (`RISK_FREE_RATE`) | Single hardcoded monthly constant today, no live MIBOR feed yet. |

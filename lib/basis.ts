@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { isTradingDay } from './tradingCalendar'
+import { dutyInclusiveParity, loadDutyFactors } from './importDuty'
 import {
   computeImportParityCrudeINR,
   computeSpreadPct,
@@ -37,23 +38,6 @@ export interface BasisPoint {
 
 // MCX COMEX copper (COMEX HG=F) is not in the history feed.
 // When a COMEX_COPPER field is added to history files, add computeImportParityCopperINR here.
-
-// Canonical duty factors — data/commodity-constants.json is this repo's
-// single source of truth for these (its own header comment says so).
-// Loaded once per getBasisHistory() call, not per-file.
-function loadDutyFactors(): { gold?: number; silver?: number; crude?: number } {
-  try {
-    const file = path.join(process.cwd(), 'data', 'commodity-constants.json')
-    const consts = JSON.parse(fs.readFileSync(file, 'utf-8'))
-    return {
-      gold:   consts.gold?.importDutyFactorEffective,
-      silver: consts.silver?.importDutyFactor,
-      crude:  consts.crude?.importDutyFactor,
-    }
-  } catch {
-    return {}
-  }
-}
 
 // `limit`, when passed, reads only the most recent `limit` files instead of
 // every file in data/history/ — the directory grows by one file per trading
@@ -108,15 +92,12 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
       // Same raw parity prices already computed upstream, with the
       // commodity's real import duty applied — see the BasisPoint comment
       // above for why this doesn't touch derived.mcxComex*SpreadPct.
-      const goldDutySpread = (mcxGold && derived.importParityGoldINR && duty.gold)
-        ? computeSpreadPct(mcxGold, derived.importParityGoldINR * duty.gold)
-        : null
-      const silverDutySpread = (mcxSilver && derived.importParitySilverINR && duty.silver)
-        ? computeSpreadPct(mcxSilver, derived.importParitySilverINR * duty.silver)
-        : null
-      const crudeDutySpread = (mcxCrude && crudeParityINR > 0 && duty.crude)
-        ? computeSpreadPct(mcxCrude, crudeParityINR * duty.crude)
-        : null
+      const goldDutyRef   = dutyInclusiveParity(derived.importParityGoldINR, duty.gold)
+      const silverDutyRef = dutyInclusiveParity(derived.importParitySilverINR, duty.silver)
+      const crudeDutyRef  = dutyInclusiveParity(crudeParityINR, duty.crude)
+      const goldDutySpread   = (mcxGold && goldDutyRef)     ? computeSpreadPct(mcxGold, goldDutyRef)     : null
+      const silverDutySpread = (mcxSilver && silverDutyRef) ? computeSpreadPct(mcxSilver, silverDutyRef) : null
+      const crudeDutySpread  = (mcxCrude && crudeDutyRef)   ? computeSpreadPct(mcxCrude, crudeDutyRef)   : null
 
       points.push({
         date:                file.replace('.json', ''),

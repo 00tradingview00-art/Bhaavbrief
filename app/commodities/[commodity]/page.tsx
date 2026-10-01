@@ -16,6 +16,7 @@ import CommodityVisitTracker from '@/components/CommodityVisitTracker'
 import SinceLastVisit from '@/components/SinceLastVisit'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import { safeJsonLd } from '@/lib/seo'
+import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -30,22 +31,6 @@ type CommodityInfo = {
 function loadMarketStructure(): Record<string, CommodityInfo> {
   const file = path.join(process.cwd(), 'data/market-structure.json')
   return JSON.parse(fs.readFileSync(file, 'utf8'))
-}
-
-type CommodityConstants = {
-  importDutyFactorEffective?: number
-  importDutyFactor?: number
-  importDutyBreakdown?: string
-  importDutyNote?: string
-  mcxLotSizeBarrels?: number
-  tickValuePerLotINR?: number
-  litresPerBarrel?: number
-}
-function loadCommodityConstants(): Record<string, CommodityConstants> {
-  try {
-    const file = path.join(process.cwd(), 'data/commodity-constants.json')
-    return JSON.parse(fs.readFileSync(file, 'utf8'))
-  } catch { return {} }
 }
 
 // ── Slug → internal key mapping ───────────────────────────────────────────────
@@ -374,15 +359,13 @@ export default async function CommodityPage({ params }: Props) {
   const isStale   = priceData?.mcxStale     ?? false
 
   // ── Live import parity computation ──────────────────────────────────────────
-  const commodityConsts = loadCommodityConstants()
+  const dutyFactors = loadDutyFactors()
   let liveParity: { dutyInclusivePrice: number; premiumPct: number; formula: string; dutyNote: string } | null = null
 
   if (snap) {
     const usdinr = snap.instruments?.USDINR?.price ?? 0
     if (entry.key === 'gold' && snap.derived?.importParityGoldINR && usdinr > 0) {
-      const dutyFactor = commodityConsts.gold?.importDutyFactorEffective ?? 1.12
-      const base       = snap.derived.importParityGoldINR
-      const dutyInclusive = Math.round(base * dutyFactor)
+      const dutyInclusive = Math.round(dutyInclusiveParity(snap.derived.importParityGoldINR, dutyFactors.gold ?? 1.12)!)
       const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
       liveParity = {
         dutyInclusivePrice: dutyInclusive,
@@ -391,9 +374,7 @@ export default async function CommodityPage({ params }: Props) {
         dutyNote: 'Includes applicable import duty',
       }
     } else if (entry.key === 'silver' && snap.derived?.importParitySilverINR && usdinr > 0) {
-      const dutyFactor = commodityConsts.silver?.importDutyFactor ?? 1.10
-      const base       = snap.derived.importParitySilverINR
-      const dutyInclusive = Math.round(base * dutyFactor)
+      const dutyInclusive = Math.round(dutyInclusiveParity(snap.derived.importParitySilverINR, dutyFactors.silver ?? 1.10)!)
       const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
       liveParity = {
         dutyInclusivePrice: dutyInclusive,
@@ -404,8 +385,7 @@ export default async function CommodityPage({ params }: Props) {
     } else if (entry.key === 'crude') {
       const wti = snap.instruments?.WTI?.price ?? 0
       if (wti > 0 && usdinr > 0) {
-        const dutyFactor = commodityConsts.crude?.importDutyFactor ?? 1.025
-        const dutyInclusive = Math.round(wti * usdinr * dutyFactor)
+        const dutyInclusive = Math.round(dutyInclusiveParity(wti * usdinr, dutyFactors.crude ?? 1.025)!)
         const premiumPct    = ltp > 0 ? ((ltp - dutyInclusive) / dutyInclusive) * 100 : 0
         liveParity = {
           dutyInclusivePrice: dutyInclusive,
