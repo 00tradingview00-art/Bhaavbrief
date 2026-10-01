@@ -11,6 +11,7 @@ import VolatilityHub from './VolatilityHub'
 import IVRankHistoryGate from './IVRankHistoryGate'
 import IVPosition from '@/components/visuals/IVPosition'
 import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { IV_RANK_EXPLAINER, ivPositionView } from '@/lib/ivPosition'
 import { safeJsonLd } from '@/lib/seo'
 
 const SCHEMA = {
@@ -181,6 +182,7 @@ export default async function MCXIVRankPage() {
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
           const { regime, realizedVol20d } = ivRanks[key] ?? { regime: null, history: [], realizedVol20d: null }
           const color = regimeColor(regime?.regime)
+          const positionView = ivPositionView(regime)
           const spread = (regime && realizedVol20d != null) ? regime.currentIV - realizedVol20d : null
           return (
             <div key={key} style={{ border: '1px solid var(--border)', borderRadius: 8, padding: '0.9rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', background: 'var(--surface)' }}>
@@ -192,18 +194,14 @@ export default async function MCXIVRankPage() {
                     IV−RV: {spread >= 0 ? '+' : ''}{spread.toFixed(1)}pp <span style={{ opacity: 0.8 }}>(20d realized {realizedVol20d?.toFixed(1)}%)</span>
                   </div>
                 )}
-                {regime && <IVPosition
-                  value={regime.ivRank}
-                  label="IV position"
-                  description={regime.regime === 'RICH' ? 'Options are priced higher than usual for this market. This reflects expected movement, not direction.' : regime.regime === 'CHEAP' ? 'Options are priced lower than usual for this market. This reflects expected movement, not direction.' : 'Options pricing is in its usual range for this market. This reflects expected movement, not direction.'}
-                />}
-                {regime && <MetricExplainDrawer
-                  metric="IV Rank"
+                {positionView && <IVPosition view={positionView} />}
+                {positionView && regime && <MetricExplainDrawer
+                  metric={IV_RANK_EXPLAINER.metric}
                   current={regime.ivRank.toFixed(0)}
-                  shows="Where current options pricing sits between calmer and more active conditions for this market."
-                  doesNotMean="It does not predict whether the market will move up or down."
+                  shows={IV_RANK_EXPLAINER.shows}
+                  doesNotMean={IV_RANK_EXPLAINER.doesNotMean}
                   href="/options"
-                  linkLabel="Explore the option chain"
+                  linkLabel={IV_RANK_EXPLAINER.linkLabel}
                 />}
               </div>
               {regime ? (

@@ -57,6 +57,9 @@ export interface IVRegime {
   ivRank: number       // 0–100: (current − min) / (max − min) × 100
   regime: 'CHEAP' | 'NORMAL' | 'RICH'
   label: string
+  // False when there is no history or every stored IV is identical — ivRank is
+  // then a placeholder 50, not a real reading.
+  hasRange: boolean
 }
 
 // Thresholds: < 25th pct = CHEAP (favour buying), > 75th = RICH (favour selling)
@@ -76,7 +79,7 @@ function ordinal(n: number): string {
 
 export function computeIVRegime(history: IVHistoryPoint[], currentIV: number): IVRegime {
   if (history.length === 0) {
-    return { currentIV, percentile: 50, ivRank: 50, regime: 'NORMAL', label: 'Insufficient history' }
+    return { currentIV, percentile: 50, ivRank: 50, regime: 'NORMAL', label: 'Insufficient history', hasRange: false }
   }
 
   const ivValues = history.map(h => h.iv)
@@ -103,7 +106,7 @@ export function computeIVRegime(history: IVHistoryPoint[], currentIV: number): I
     RICH:   `Rich — ${pctLabel} percentile of past ${ivValues.length} days`,
   }
 
-  return { currentIV, percentile, ivRank, regime, label: labels[regime] }
+  return { currentIV, percentile, ivRank, regime, label: labels[regime], hasRange: max > min }
 }
 
 // Rolling IV Rank per day, for the history chart. Ranks day i against days
