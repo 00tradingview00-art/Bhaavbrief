@@ -41,6 +41,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-01-mcx-close-01oct2026-crude-surge",
+    "href": "/articles/2026-10-01-mcx-close-01oct2026-crude-surge",
+    "title": "MCX Close 1 Oct: Crude Surges +3.1% on US Demand Signals",
+    "description": "MCX crude led at +3.1% (₹9008/bbl) on COMEX strength. Gold +1.10%, silver +0.82%. NatGas, copper retreated. COMEX confirms overnight bullish tone.",
+    "excerpt": "MCX crude dominated Thursday's session, closing at ₹9008/bbl (+3.14%), extending a 494-rupee intraday range. WTI crude mirrored the strength at 92.98 $/bbl (+2.83% in US session), signalling sustained",
+    "date": "2026-09-30T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Oil",
+      "Gold",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-117",
     "href": "/briefs/edition-117",
