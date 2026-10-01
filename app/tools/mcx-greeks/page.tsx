@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -96,6 +98,7 @@ export default async function MCXGreeksPage() {
         Black-76 model Delta, Gamma, Theta, and Vega for the 11 strikes around the money, free. Refreshed every 60 seconds.
         Every strike and expiry is on <Link href="/pro" style={{ color: 'var(--gold)', fontWeight: 600 }}>BhaavBrief Pro</Link>.
       </p>
+      <MetricExplainDrawer {...METRIC_EXPLAINERS.greeks} style={{ marginTop: '-1rem', marginBottom: '1.25rem' }} />
 
       <div style={{ display: 'grid', gap: '1.5rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {

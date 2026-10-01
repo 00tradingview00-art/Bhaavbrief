@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getBasisHistory } from '@/lib/basis'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -62,6 +64,7 @@ export default function MCXBasisPage() {
         figure on each commodity page for the landed-cost comparison.
         {latest && <> Data as of {latest.date}.</>}
       </p>
+      <MetricExplainDrawer {...METRIC_EXPLAINERS.basis} style={{ marginTop: '-1rem', marginBottom: '1.25rem' }} />
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {items.map(({ label, key, dutyKey, unit }) => {

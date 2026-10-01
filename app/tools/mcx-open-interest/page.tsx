@@ -4,6 +4,8 @@ import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { getOIHistory } from '@/lib/oiHistory'
 import OIBuildupSection from './OIBuildupSection'
 import { safeJsonLd } from '@/lib/seo'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 
 type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
@@ -120,6 +122,7 @@ export default async function MCXOpenInterestPage() {
           Showing the last known data for one or more instruments — live feed temporarily unavailable.
         </p>
       )}
+      <MetricExplainDrawer {...METRIC_EXPLAINERS.openInterest} style={{ marginTop: '-1rem', marginBottom: '1.25rem' }} />
 
       <div style={{ display: 'grid', gap: '1.25rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {

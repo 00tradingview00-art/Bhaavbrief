@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import PCRTrendChart from './PCRTrendChart'
 import { safeJsonLd } from '@/lib/seo'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -80,6 +82,7 @@ export default async function MCXPCRPage() {
       <p style={{ fontSize: '0.85rem', color: 'var(--ink-3)', marginBottom: '1.5rem' }}>
         How options positioning is leaning across puts and calls for each instrument. Live data, updated every 60 seconds.
       </p>
+      <MetricExplainDrawer {...METRIC_EXPLAINERS.pcr} style={{ marginTop: '-1rem', marginBottom: '1.25rem' }} />
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {

@@ -3,6 +3,8 @@ import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { relevanceOf, type MaxPainRelevance } from '@/lib/maxPainRelevance'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
+import MetricExplainDrawer from '@/components/visuals/MetricExplainDrawer'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 
 const SCHEMA = {
   '@context': 'https://schema.org',
@@ -97,6 +99,7 @@ export default async function MCXMaxPainPage() {
         level futures drift toward into expiry. How much that applies right now depends on days
         to expiry, distance, and whether OI is actually concentrated there — see Relevance below.
       </p>
+      <MetricExplainDrawer {...METRIC_EXPLAINERS.maxPain} style={{ marginTop: '-1rem', marginBottom: '1.25rem' }} />
 
       <div style={{ display: 'grid', gap: '0.75rem' }}>
         {Object.entries(MCX_INSTRUMENTS).map(([key, meta]) => {
