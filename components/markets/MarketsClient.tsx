@@ -9,6 +9,7 @@ import Pill from '@/components/ui/Pill'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
+import MarketPulse from '@/components/visuals/MarketPulse'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -325,6 +326,8 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
           </span>
         </div>
       </div>
+
+      <MarketPulse prices={p} location="markets" />
 
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={

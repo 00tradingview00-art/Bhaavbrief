@@ -7,6 +7,7 @@ import type { EventMapEntry } from '@/lib/eventMap'
 import type { PriceData } from '@/lib/prices'
 import type { StoryArc } from '@/lib/arcs'
 import SubscribeForm from '@/components/SubscribeForm'
+import MarketPulse from '@/components/visuals/MarketPulse'
 
 type WatchItem = {
   label: string
@@ -122,6 +123,8 @@ export default function DailyBriefHome({
           <Link href="/markets" className="bb-button bb-button--secondary">View markets</Link>
         </div>
       </section>
+
+      <MarketPulse prices={prices} location="mobile" compact />
 
       <section className="bb-lead-card" aria-labelledby="lead-brief-heading">
         <div className="bb-section-label">Today&apos;s intelligence</div>
