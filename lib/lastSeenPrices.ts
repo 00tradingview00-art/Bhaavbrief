@@ -77,3 +77,25 @@ export function getSinceLastVisit(
 
   return result
 }
+
+/**
+ * Read-only version of getSinceLastVisit for summary surfaces (Market Pulse):
+ * reports the move since the visitor last opened `slug`'s own page, without
+ * touching the stored baseline — so the commodity page itself still shows the
+ * full "since your last visit" delta when they click through.
+ */
+export function peekSinceLastVisit(
+  slug: string,
+  currentPrice: number,
+  now: number = Date.now(),
+): SinceLastVisit | null {
+  if (!(currentPrice > 0)) return null
+  const entry = readStore()[slug]
+  if (!entry || !(entry.price > 0) || now - entry.ts < MIN_GAP_MS) return null
+  return {
+    previousPrice: entry.price,
+    previousTs: entry.ts,
+    delta: currentPrice - entry.price,
+    deltaPct: ((currentPrice - entry.price) / entry.price) * 100,
+  }
+}

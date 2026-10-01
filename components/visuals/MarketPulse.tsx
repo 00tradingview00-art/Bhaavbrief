@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import type { PriceData } from '@/lib/prices'
-import { MARKET_PULSE_COPY, formatPulseTime, getMarketPulse, marketPulseSummary, type MarketPulseItem } from '@/lib/marketPulse'
+import { MARKET_PULSE_COPY, formatPulseTime, getMarketPulse, marketPulseSummary, pulseSlug, type MarketPulseItem } from '@/lib/marketPulse'
+import { peekSinceLastVisit } from '@/lib/lastSeenPrices'
 import { trackEvent } from '@/lib/analytics'
 import { useIsPro } from '@/lib/useIsPro'
 
@@ -38,6 +39,7 @@ export default function MarketPulse({ prices, location, compact = false }: Props
   const pulse = getMarketPulse(prices)
   const isPro = useIsPro()
   const viewTracked = useRef(false)
+  const [sinceVisit, setSinceVisit] = useState<Record<string, number>>({})
   const visibleItems = pulse.items.slice(0, compact ? 3 : 5)
   const max = Math.max(...visibleItems.map(item => Math.abs(item.changePct)), 1)
   const summary = marketPulseSummary(pulse.lead, pulse.sessionOpen)
@@ -57,6 +59,20 @@ export default function MarketPulse({ prices, location, compact = false }: Props
       stale_data: Boolean(prices?.snapshotStale),
     })
   }, [location, prices?.snapshotStale, pulse.timestamp])
+
+  // Move since the visitor last opened each commodity's own page (local only,
+  // read-only — the commodity page keeps its own baseline). Fresh rows only.
+  const priceKey = visibleItems.map(item => `${item.key}:${item.price}:${item.stale}`).join('|')
+  useEffect(() => {
+    const next: Record<string, number> = {}
+    for (const item of visibleItems) {
+      if (item.stale) continue
+      const result = peekSinceLastVisit(pulseSlug(item), item.price)
+      if (result && Math.abs(result.deltaPct) >= 0.005) next[item.key] = result.deltaPct
+    }
+    setSinceVisit(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [priceKey])
 
   if (!visibleItems.length) return null
 
@@ -88,6 +104,9 @@ export default function MarketPulse({ prices, location, compact = false }: Props
                 </span>
                 <span style={{ color: colour, fontSize: 12, fontVariantNumeric: 'tabular-nums', fontWeight: 700, textAlign: 'right', whiteSpace: 'nowrap' }}><span aria-hidden="true">{direction(item)}</span> {percent(item.changePct)}</span>
                 {item.stale && <span style={{ color: 'var(--ink-4)', fontSize: 9, gridColumn: '2 / 4', marginTop: -8 }}>{MARKET_PULSE_COPY.delayed}</span>}
+                {!item.stale && sinceVisit[item.key] !== undefined && <span style={{ color: 'var(--ink-3)', fontSize: 10, gridColumn: '2 / 4', marginTop: -8 }}>
+                  <span aria-hidden="true">{sinceVisit[item.key] > 0 ? '▲' : '▼'}</span> {percent(sinceVisit[item.key])} {MARKET_PULSE_COPY.sinceVisit}
+                </span>}
               </Link>
             </div>
           )

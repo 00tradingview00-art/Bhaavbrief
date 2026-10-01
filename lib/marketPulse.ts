@@ -7,6 +7,7 @@ export type MarketPulseItem = {
   key: MarketPulseKey
   label: string
   href: string
+  price: number
   changePct: number
   tone: MarketPulseTone
   stale: boolean
@@ -28,6 +29,7 @@ export const MARKET_PULSE_COPY = {
   delayed: 'Delayed',
   awaiting: 'Awaiting data',
   explore: 'Explore its current market context and the data behind it.',
+  sinceVisit: 'since you last opened it',
 } as const
 
 const INSTRUMENTS: Array<{ key: MarketPulseKey; label: string; href: string }> = [
@@ -67,6 +69,7 @@ export function getMarketPulse(prices: PriceData | null): MarketPulse {
       if (!isUsable(data)) return []
       return [{
         ...meta,
+        price: data.mcx,
         changePct: data.mcxChangePct,
         tone: tone(data.mcxChangePct),
         stale: Boolean(prices.snapshotStale || data.mcxStale),
@@ -109,4 +112,9 @@ export function formatPulseTime(timestamp: string | null): string | null {
   if (Number.isNaN(date.getTime())) return null
   const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' }).format(date)
   return `${time} IST`
+}
+
+/** URL slug used by the since-last-visit store — the commodity page path segment. */
+export function pulseSlug(item: Pick<MarketPulseItem, 'href'>): string {
+  return item.href.split('/').pop() ?? ''
 }

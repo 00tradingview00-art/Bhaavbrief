@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
-import { getSinceLastVisit, MIN_GAP_MS } from './lastSeenPrices'
+import { getSinceLastVisit, MIN_GAP_MS, peekSinceLastVisit } from './lastSeenPrices'
 
 // vitest's default environment is Node, so `localStorage` isn't a real
 // global here — stub a minimal in-memory implementation, reset between
@@ -78,5 +78,25 @@ describe('getSinceLastVisit', () => {
 
     expect(gold).toEqual({ previousPrice: 100000, previousTs: 0, delta: 1000, deltaPct: 1 })
     expect(silver).toEqual({ previousPrice: 200000, previousTs: 0, delta: -2000, deltaPct: -1 })
+  })
+})
+
+describe('peekSinceLastVisit', () => {
+  test('nothing to show without a stored visit, and never seeds one', () => {
+    expect(peekSinceLastVisit('gold', 100000, 1000)).toBeNull()
+    expect(localStorage.getItem('bb_last_seen_prices')).toBeNull()
+  })
+
+  test('reports the move since the last page visit without moving the baseline', () => {
+    getSinceLastVisit('gold', 100000, 1000)
+    const later = 1000 + MIN_GAP_MS
+    expect(peekSinceLastVisit('gold', 101000, later)).toEqual({ previousPrice: 100000, previousTs: 1000, delta: 1000, deltaPct: 1 })
+    // The commodity page still gets the full delta afterwards.
+    expect(getSinceLastVisit('gold', 101000, later)?.previousPrice).toBe(100000)
+  })
+
+  test('ignores a visit inside the same-visit window', () => {
+    getSinceLastVisit('gold', 100000, 1000)
+    expect(peekSinceLastVisit('gold', 101000, 1000 + MIN_GAP_MS - 1)).toBeNull()
   })
 })

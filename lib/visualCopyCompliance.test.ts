@@ -17,10 +17,10 @@ describe('visual copy compliance', () => {
   })
 
   test('keeps generated Market Pulse copy within the allowed language', () => {
-    const copy = marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', changePct: -2, tone: 'down', stale: false })
+    const copy = marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', price: 5400, changePct: -2, tone: 'down', stale: false })
     expect(copy).not.toBeNull()
     expect(isVisualCopySafe(copy!)).toBe(true)
-    expect(isVisualCopySafe(marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', changePct: -2, tone: 'down', stale: false }, false)!)).toBe(true)
+    expect(isVisualCopySafe(marketPulseSummary({ key: 'crude', label: 'Crude Oil', href: '/commodities/crude-oil', price: 5400, changePct: -2, tone: 'down', stale: false }, false)!)).toBe(true)
   })
 
   test('keeps fixed Market Pulse component copy within the allowed language', () => {
