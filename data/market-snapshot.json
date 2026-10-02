@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T09:05:45.489Z",
-  "generatedAtIST": "2026-10-02 14:35 IST",
+  "generatedAt": "2026-10-02T09:54:35.969Z",
+  "generatedAtIST": "2026-10-02 15:24 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,27 +40,27 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4212.9,
+      "price": 4214.3,
       "prevClose": 4202.3,
-      "changePct": 0.2522,
+      "changePct": 0.2856,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 61.51,
+      "price": 61.56,
       "prevClose": 60.73,
-      "changePct": 1.2927,
+      "changePct": 1.3668,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 89.2,
+      "price": 89.29,
       "prevClose": 92.87,
-      "changePct": -3.9518,
+      "changePct": -3.8549,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 99.2,
+      "price": 99.49,
       "prevClose": 102.31,
-      "changePct": -3.0398,
+      "changePct": -2.7563,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 130761,
-    "mcxComexGoldSpreadPct": 12.97,
-    "importParitySilverINR": 190917,
-    "mcxComexSilverSpreadPct": 18.14,
+    "importParityGoldINR": 130805,
+    "mcxComexGoldSpreadPct": 12.93,
+    "importParitySilverINR": 191072,
+    "mcxComexSilverSpreadPct": 18.04,
     "goldSilverRatio": 68.5
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 12.97% vs silver 18.14% — 5.17pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 12.97,
-      "silverSpreadPct": 18.14,
-      "deltaPts": 5.17
+      "detail": "Gold import-parity spread 12.93% vs silver 18.04% — 5.11pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 12.93,
+      "silverSpreadPct": 18.04,
+      "deltaPts": 5.11
     }
   ]
 }
