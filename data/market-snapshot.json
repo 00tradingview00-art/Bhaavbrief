@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T20:05:14.585Z",
-  "generatedAtIST": "2026-10-03 01:35 IST",
+  "generatedAt": "2026-10-02T20:07:04.089Z",
+  "generatedAtIST": "2026-10-03 01:37 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4171.6,
+      "price": 4172.9,
       "prevClose": 4202.3,
-      "changePct": -0.7306,
+      "changePct": -0.6996,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 60.82,
+      "price": 60.84,
       "prevClose": 60.73,
-      "changePct": 0.1564,
+      "changePct": 0.1894,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 91.45,
+      "price": 91.43,
       "prevClose": 92.87,
-      "changePct": -1.529,
+      "changePct": -1.5506,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 102.8,
+      "price": 102.79,
       "prevClose": 102.31,
-      "changePct": 0.4789,
+      "changePct": 0.4692,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.04,
       "prevClose": 2.97,
-      "changePct": 2.4267,
+      "changePct": 2.4604,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,18 +119,18 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 129479,
-    "mcxComexGoldSpreadPct": 14.09,
-    "importParitySilverINR": 188775,
-    "mcxComexSilverSpreadPct": 19.48,
+    "importParityGoldINR": 129520,
+    "mcxComexGoldSpreadPct": 14.05,
+    "importParitySilverINR": 188837,
+    "mcxComexSilverSpreadPct": 19.44,
     "goldSilverRatio": 68.6
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 14.09% vs silver 19.48% — 5.39pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 14.09,
-      "silverSpreadPct": 19.48,
+      "detail": "Gold import-parity spread 14.05% vs silver 19.44% — 5.39pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 14.05,
+      "silverSpreadPct": 19.44,
       "deltaPts": 5.39
     }
   ]
