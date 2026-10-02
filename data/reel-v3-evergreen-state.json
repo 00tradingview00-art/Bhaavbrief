@@ -1,5 +1,5 @@
 {
-  "next": 3,
+  "next": 4,
   "published": [
     {
       "id": "gold-india-story-001",
@@ -16,6 +16,10 @@
     {
       "id": "crude-petrol-lag-002",
       "generated_at": "2026-09-30T18:56:24.872Z"
+    },
+    {
+      "id": "option-premium-002",
+      "generated_at": "2026-10-02T19:03:26.406Z"
     }
   ],
   "retired_queue_history": [
