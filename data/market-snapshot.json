@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-02T09:54:35.969Z",
+  "generatedAt": "2026-10-02T09:54:55.375Z",
   "generatedAtIST": "2026-10-02 15:24 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -48,19 +48,19 @@
     "COMEX_SILVER": {
       "price": 61.56,
       "prevClose": 60.73,
-      "changePct": 1.3668,
+      "changePct": 1.3751,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 89.29,
+      "price": 89.28,
       "prevClose": 92.87,
-      "changePct": -3.8549,
+      "changePct": -3.8656,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 99.49,
+      "price": 99.5,
       "prevClose": 102.31,
-      "changePct": -2.7563,
+      "changePct": -2.7466,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
