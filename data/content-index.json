@@ -1,5 +1,31 @@
 [
   {
+    "type": "research",
+    "slug": "2026-10-03-weekly-catalyst",
+    "href": "/research/2026-10-03-weekly-catalyst",
+    "title": "RBI's Oct 7 MPC Is the One Catalyst That Touches Every MCX Contract",
+    "description": "With USD/INR at 96.54 and MCX prices rising while COMEX benchmarks fall, next week's RBI decision is the common denominator across all nine contracts.",
+    "excerpt": "The RBI Monetary Policy Committee decision lands 7 October at 04:30 UTC (10:00 IST) — inside the Indian trading session, with MCX open. Of the eight scheduled events in the forward calendar, it is the",
+    "date": "2026-10-03",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver",
+      "crude",
+      "copper"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver",
+      "crude",
+      "copper"
+    ],
+    "premium": true
+  },
+  {
     "type": "article",
     "slug": "2026-10-02-mcx-commodity-exchange-india-history",
     "href": "/articles/2026-10-02-mcx-commodity-exchange-india-history",
