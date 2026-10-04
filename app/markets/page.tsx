@@ -5,7 +5,6 @@ import { loadEIA } from '@/lib/eia'
 import { getSparklineCloses } from '@/lib/history'
 import { getTerminalData } from '@/lib/terminalData'
 import { safeJsonLd } from '@/lib/seo'
-import { getDriverContext } from '@/lib/driverContext'
 
 const SPARKLINE_COMMODITIES = ['gold', 'silver', 'crude', 'copper', 'natgas']
 
@@ -79,7 +78,7 @@ export default async function MarketsPage() {
           { label: 'Basis',   href: '/basis' },
         ]}
       />
-      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} optionsData={optionsData} driverContext={getDriverContext(snap)} />
+      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} optionsData={optionsData} />
     </>
   )
 }

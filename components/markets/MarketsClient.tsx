@@ -9,9 +9,6 @@ import Pill from '@/components/ui/Pill'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
-import MarketPulse from '@/components/visuals/MarketPulse'
-import DriverMaps from '@/components/visuals/DriverMaps'
-import type { DriverContext } from '@/lib/driverContext'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -268,7 +265,7 @@ function OptionsSnapshot({ data }: { data: Record<CoreInstrument, TerminalInstru
 
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
-export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData, driverContext }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null>; driverContext?: DriverContext }) {
+export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null> }) {
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
   const [loading, setLoading]       = useState(false)
@@ -328,10 +325,6 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
           </span>
         </div>
       </div>
-
-      <MarketPulse prices={p} location="markets" />
-
-      <DriverMaps prices={p} context={driverContext} />
 
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={
