@@ -243,7 +243,7 @@ export default async function HomePage() {
           Volatility &amp; Correlation
         </div>
         <div className="terminal-two-col" style={{ display: 'grid', gap: 16 }}>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', padding: 18, display: 'flex', flexDirection: 'column' }}>
             <h3 style={{ margin: '0 0 2px', fontFamily: 'var(--font-sans)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>iVIX Term Structure</h3>
             <p style={{ margin: '0 0 14px', fontSize: 11, color: 'var(--ink-3)' }}>Implied volatility by expiry bucket, across the 5 core MCX chains</p>
             <IVTermStructureChart />

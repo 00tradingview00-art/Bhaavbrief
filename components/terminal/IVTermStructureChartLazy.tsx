@@ -34,12 +34,16 @@ export default function IVTermStructureChartLazy() {
   const { isPro, data, failed } = useProData<TermStructure>('kind=term-structure')
 
   if (!isPro) {
+    // flex: 1 + grid stretch lets the gate fill the card, so it matches the
+    // taller correlation card beside it instead of leaving empty space below.
     return (
-      <ProBlurGate
-        label="iVIX Term Structure — implied volatility by expiry bucket"
-        timestamp="Live"
-        preview={<div style={{ height: 240 }} />}
-      />
+      <div style={{ flex: 1, display: 'grid' }}>
+        <ProBlurGate
+          label="iVIX Term Structure — implied volatility by expiry bucket"
+          timestamp="Live"
+          preview={<div style={{ height: 240 }} />}
+        />
+      </div>
     )
   }
 
