@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 149900,
-    "silver": 227800,
-    "crude": 8725,
-    "copper": 1404,
-    "natgas": 292.9,
+    "gold": 149880,
+    "silver": 227981,
+    "crude": 8761,
+    "copper": 1404.25,
+    "natgas": 293.6,
     "usdinr": 96.32
   },
-  "lastChecked": "2026-10-05T09:41:57.784Z",
+  "lastChecked": "2026-10-05T10:38:28.103Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
