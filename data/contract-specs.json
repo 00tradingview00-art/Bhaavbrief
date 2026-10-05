@@ -1,8 +1,8 @@
 {
   "gold": {
     "name": "GOLD",
-    "tradingsymbol": "GOLD26OCTFUT",
-    "expiry": "2026-10-05",
+    "tradingsymbol": "GOLD26DECFUT",
+    "expiry": "2026-12-04",
     "contractSize": 1000,
     "contractSizeStr": "1 kg",
     "priceQuote": "per 10 grams",
