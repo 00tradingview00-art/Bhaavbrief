@@ -305,4 +305,13 @@ describe('a renewal payment extends access by a full period', () => {
     await webhook(signedRequest(renewalEvent('sub_A', new Date(), new Date(Date.now() + DAY).toISOString())))
     expect(new Date(store.get(`sub:${USER}:expires_at`)!).getTime()).toBeGreaterThanOrEqual(new Date(before).getTime())
   })
+
+  it('a later ACTIVE status event with an older schedule date does not cut the renewed period short', async () => {
+    seedActive('sub_A', 34 * DAY) // already renewed into next month
+    const before = store.get(`sub:${USER}:expires_at`)!
+    await webhook(signedRequest(statusEvent('sub_A', 'ACTIVE', {
+      next_schedule_date: new Date(Date.now() + 3 * DAY).toISOString(),
+    })))
+    expect(new Date(store.get(`sub:${USER}:expires_at`)!).getTime()).toBeGreaterThanOrEqual(new Date(before).getTime())
+  })
 })

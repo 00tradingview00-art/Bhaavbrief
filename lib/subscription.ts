@@ -136,10 +136,15 @@ export async function isSubscriptionEnded(merchantSubId: string | undefined): Pr
   return (await redisCommand('GET', `cfsub:ended:${merchantSubId}`)) !== null
 }
 
+// Never moves expiry earlier: webhooks can arrive late or carry a schedule
+// date older than a renewal already applied, and an active plan's paid days
+// must not be taken back by one.
 export async function refreshSubscriptionExpiry(
   userId: string,
   expiresAt: Date,
 ): Promise<void> {
+  const current = new Date((await redisCommand('GET', `sub:${userId}:expires_at`)) as string ?? 0)
+  if (current.getTime() >= expiresAt.getTime()) return
   const expiresISO = expiresAt.toISOString()
   await redisCommand('SET', `sub:${userId}:expires_at`, expiresISO)
   const clerk = await clerkClient()
