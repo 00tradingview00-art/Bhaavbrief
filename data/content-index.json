@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-119",
+    "href": "/briefs/edition-119",
+    "title": "Gold Breaks ₹150,000 While Silver Surges — Safe-Haven Trade Deepens",
+    "description": "COMEX gold holds above $4,169 and silver jumps 2.28% overnight, signalling a broadening safe-haven bid that crude's pullback is not reversing.",
+    "excerpt": "MCX Gold ₹150390 | Crude ₹8916 | USDINR ₹96.50 Yesterday's Edge — Result: Edition #118 watched whether WTI would close below 89.65. Rejected ✗, now at 90.04. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-10-05T03:07:15.637Z",
+    "edition": "119",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "research",
     "slug": "2026-10-03-weekly-catalyst",
     "href": "/research/2026-10-03-weekly-catalyst",
