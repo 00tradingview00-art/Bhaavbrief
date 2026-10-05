@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
+    "href": "/articles/2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
+    "title": "MCX Nat Gas Rallies 2% on Henry Hub Strength, Gold Holds Steady",
+    "description": "MCX Nat Gas ₹293/mmBtu (+2.02%) tracks Henry Hub recovery. Gold ₹149,900 flat. Crude weakness at ₹8,725 signals demand caution.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has broken out with a ₹292.90/mmBtu surge (+2.02%) while gold and crude show divergent signals, revealing a structural split in the commodity complex. Henry Hub (the glob",
+    "date": "2026-10-05T09:41:58.070Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 293
+  },
+  {
     "type": "brief",
     "slug": "edition-119",
     "href": "/briefs/edition-119",
