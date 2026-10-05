@@ -169,7 +169,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <a href="/privacy" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Privacy Policy</a>{' '}·{' '}
             <a href="/terms" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Terms of Use</a>{' '}·{' '}
             <a href="https://instagram.com/bhaavbrief" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Instagram</a>{' '}·{' '}
-            <a href="/feedback" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Feedback</a>
+            <a href="/feedback" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>Feedback</a>{' '}·{' '}
+            Support: <a href="mailto:support@bhaavbrief.in" style={{ color: 'var(--ink-4)', textDecoration: 'underline', fontWeight: 700 }}>support@bhaavbrief.in</a>
           </p>
           <p style={{
             fontSize: 11,
