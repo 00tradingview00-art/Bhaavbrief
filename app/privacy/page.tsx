@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/privacy' },
 }
 
-const LAST_UPDATED = 'May 21, 2026'
+const LAST_UPDATED = '5 October 2026'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -52,89 +52,121 @@ export default function PrivacyPage() {
 
         <Section title="1. Who We Are">
           <p>
-            BhaavBrief is a daily commodity intelligence newsletter for Indian traders, investors and merchants, published at{' '}
-            <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>.
-            We are not SEBI registered. This policy explains how we handle personal data collected
-            through this website.
+            BhaavBrief (&quot;we&quot;, &quot;us&quot;) publishes MCX commodity market intelligence at 
+            <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>, including a free daily newsletter
+            and a paid Pro subscription. We are not SEBI registered. This policy explains what personal
+            data we collect through this website, why, who processes it for us, and your rights under
+            India&apos;s Digital Personal Data Protection (DPDP) Act, 2023.
           </p>
         </Section>
 
-        <Section title="2. What Data We Collect">
-          <p>We collect only your <strong>email address</strong> when you subscribe to the BhaavBrief newsletter.</p>
-          <p style={{ marginTop: '0.5rem' }}>We do not collect:</p>
-          <ul style={{ paddingLeft: '1.25rem', marginTop: '0.4rem' }}>
-            <li>Names (unless you voluntarily provide one)</li>
-            <li>Phone numbers</li>
-            <li>Payment information</li>
-            <li>Browsing history or tracking cookies</li>
+        <Section title="2. What We Collect">
+          <ul style={{ paddingLeft: '1.25rem' }}>
+            <li><strong>Newsletter:</strong> your email address.</li>
+            <li><strong>Account (sign-in):</strong> your email address and, if you provide it or sign in
+              with a social login, your name and profile photo.</li>
+            <li><strong>Pro subscription:</strong> your name, email and mobile number (required by our
+              payment processor to set up the payment mandate), your plan, and subscription and payment
+              status and history. We never see or store your card, UPI or bank details — those are
+              entered directly with the payment processor.</li>
+            <li><strong>Feedback form:</strong> whatever you choose to send, including an optional name and
+              email for a reply.</li>
+            <li><strong>Search:</strong> the text you type into site search.</li>
+            <li><strong>Usage and device data:</strong> pages visited, clicks, approximate location
+              (from IP address), browser and device type, and referral source — collected through the
+              analytics tools in section 5.</li>
           </ul>
         </Section>
 
-        <Section title="3. Why We Collect It">
-          <p>
-            Your email address is used solely to send you the BhaavBrief newsletter — a weekday
-            digest of MCX commodity market intelligence. We do not use it for advertising, profiling,
-            or any other purpose.
-          </p>
-        </Section>
-
-        <Section title="4. How We Store and Process It">
-          <p>
-            Email addresses are stored and processed by <strong>Brevo</strong> (formerly Sendinblue),
-            a French email marketing platform. Brevo acts as our data processor and is GDPR compliant.
-            Their privacy policy is available at{' '}
-            <a href="https://www.brevo.com/legal/privacypolicy/" style={{ color: '#C8720A' }} target="_blank" rel="noopener noreferrer">
-              brevo.com/legal/privacypolicy
-            </a>.
-          </p>
-          <p style={{ marginTop: '0.5rem' }}>
-            We do not sell, rent, share, or transfer your email address to any third party for marketing purposes.
-          </p>
-        </Section>
-
-        <Section title="5. Your Rights">
-          <p>You have the right to:</p>
-          <ul style={{ paddingLeft: '1.25rem', marginTop: '0.4rem' }}>
-            <li><strong>Unsubscribe</strong> at any time — every email contains an unsubscribe link</li>
-            <li><strong>Request deletion</strong> of your data via our{' '}
-              <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>
-            </li>
-            <li><strong>Request a copy</strong> of the data we hold about you</li>
+        <Section title="3. Why We Use It">
+          <ul style={{ paddingLeft: '1.25rem' }}>
+            <li>To send the newsletter and service emails you signed up for (e.g. welcome and
+              subscription emails).</li>
+            <li>To create and secure your account and provide Pro features you pay for.</li>
+            <li>To take payments, keep payment records, and meet legal and tax obligations.</li>
+            <li>To answer search queries and feedback.</li>
+            <li>To understand how the site is used, fix problems and improve it.</li>
           </ul>
           <p style={{ marginTop: '0.5rem' }}>
-            We will respond to all requests within 30 days, in compliance with India&apos;s Digital Personal
-            Data Protection (DPDP) Act, 2023.
+            We do not sell or rent your personal data, and we do not use it for third-party advertising.
           </p>
         </Section>
 
-        <Section title="6. Analytics">
-          <p>
-            This website may use Vercel Analytics, a privacy-friendly analytics tool that does not
-            use cookies and does not track individuals across sites. No personally identifiable
-            information is collected through analytics.
+        <Section title="4. Who Processes It for Us">
+          <p>We use these service providers, each only for the purpose listed:</p>
+          <ul style={{ paddingLeft: '1.25rem', marginTop: '0.4rem' }}>
+            <li><strong>Clerk</strong> — account sign-in and authentication.</li>
+            <li><strong>Cashfree Payments</strong> — Pro subscription payments and mandates.</li>
+            <li><strong>Brevo</strong> — newsletter and service emails.</li>
+            <li><strong>Upstash</strong> — storage of subscription status and plan details.</li>
+            <li><strong>Vercel</strong> — website hosting and privacy-friendly page analytics.</li>
+            <li><strong>Google Analytics</strong> and <strong>PostHog</strong> — usage analytics (section 5).</li>
+            <li><strong>Anthropic</strong> — processes the text of site-search queries to return results.</li>
+          </ul>
+          <p style={{ marginTop: '0.5rem' }}>
+            Some of these providers store data outside India. They process it on our instructions and
+            under their own security and privacy commitments.
           </p>
         </Section>
 
-        <Section title="7. Links to External Sites">
-          <p>
-            BhaavBrief may link to external websites (MCX, news sources, broker platforms). We are not
-            responsible for the privacy practices of those sites and encourage you to review their
-            policies separately.
+        <Section title="5. Cookies, Analytics and Local Storage">
+          <ul style={{ paddingLeft: '1.25rem' }}>
+            <li><strong>Essential cookies</strong> keep you signed in (Clerk). The site cannot provide
+              accounts without them.</li>
+            <li><strong>Google Analytics</strong> uses cookies to measure visits and traffic sources.</li>
+            <li><strong>PostHog</strong> uses a cookie and browser storage to measure how pages are used and
+              may record session replays of your visit (what is clicked and scrolled on our pages; text
+              typed into form fields is masked) to help us find usability problems.</li>
+            <li><strong>Vercel Analytics</strong> counts page views without cookies.</li>
+            <li><strong>Browser local storage</strong> remembers small preferences on your device (for
+              example, that you dismissed the newsletter pop-up, or commodities you viewed).</li>
+          </ul>
+          <p style={{ marginTop: '0.5rem' }}>
+            You can block or delete cookies and local storage in your browser settings; the site will
+            still work, except that you will be signed out.
           </p>
         </Section>
 
-        <Section title="8. Changes to This Policy">
+        <Section title="6. How Long We Keep It">
           <p>
-            We may update this policy from time to time. The &quot;last updated&quot; date at the top will reflect
-            any changes. Continued use of the newsletter after changes constitutes acceptance of the
-            updated policy.
+            We keep account and newsletter data while your account or subscription is active, and delete
+            it when you ask us to or unsubscribe, unless we must keep it longer by law — for example,
+            payment and invoice records kept for the period required by Indian tax law.
           </p>
         </Section>
 
-        <Section title="9. Contact">
+        <Section title="7. Your Rights">
+          <p>Under the DPDP Act you can:</p>
+          <ul style={{ paddingLeft: '1.25rem', marginTop: '0.4rem' }}>
+            <li><strong>Unsubscribe</strong> from the newsletter at any time using the link in every email.</li>
+            <li><strong>Access</strong> a summary of the personal data we hold about you.</li>
+            <li><strong>Correct</strong> or <strong>erase</strong> your data, and <strong>withdraw consent</strong>.</li>
+            <li><strong>Raise a grievance</strong> with us, and, if unresolved, with the Data Protection Board of India.</li>
+          </ul>
+          <p style={{ marginTop: '0.5rem' }}>
+            Email <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a> to make a request.
+            We respond within 30 days.
+          </p>
+        </Section>
+
+        <Section title="8. Links to External Sites">
           <p>
-            For any privacy-related questions or requests, reach us via our{' '}
-            <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>.
+            BhaavBrief links to external websites (MCX, news sources, broker platforms). We are not
+            responsible for their privacy practices and encourage you to review their policies.
+          </p>
+        </Section>
+
+        <Section title="9. Changes to This Policy">
+          <p>
+            We may update this policy. The &quot;last updated&quot; date above shows the latest version;
+            we will email account holders about material changes.
+          </p>
+        </Section>
+
+        <Section title="10. Contact and Grievances">
+          <p>
+            Privacy questions, requests and grievances: 
+            <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a> (Grievance contact: BhaavBrief Support Team).
           </p>
         </Section>
 

@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
 import ChangePlanButton from '@/components/ChangePlanButton'
+import AccountSignOut from '@/components/AccountSignOut'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -126,7 +127,7 @@ export default async function AccountPage() {
                 </div>
               ) : subId ? (
                 <div style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>
-                  To cancel, contact support with subscription ID
+                  To cancel, email <a href="mailto:support@bhaavbrief.in" style={{ color: 'var(--gold)' }}>support@bhaavbrief.in</a> with subscription ID
                   {provider ? ` (${provider})` : ''}:{' '}
                   <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.78rem', color: 'var(--ink-2)' }}>{subId}</span>
                 </div>
@@ -184,6 +185,12 @@ export default async function AccountPage() {
           </Card>
         </div>
       )}
+      <div style={{
+        marginTop: 'var(--space-8)', paddingTop: 'var(--space-5)', borderTop: '1px solid var(--border)',
+        display: 'flex', justifyContent: 'flex-end',
+      }}>
+        <AccountSignOut />
+      </div>
     </main>
   )
 }

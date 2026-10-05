@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/terms' },
 }
 
-const LAST_UPDATED = 'May 2026'
+const LAST_UPDATED = '5 October 2026'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -55,7 +55,8 @@ export default function TermsPage() {
             BhaavBrief (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is a commodity intelligence platform published at{' '}
             <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>. We publish
             daily MCX commodity market intelligence, intraday flash signals, and educational content
-            covering Gold, Silver, Crude Oil, Copper, and Natural Gas. BhaavBrief is free to access.
+            covering Gold, Silver, Crude Oil, Copper, and Natural Gas. Most of BhaavBrief is free to
+            access; some analytics are available only with a paid Pro subscription (section 6).
           </p>
         </Section>
 
@@ -108,7 +109,33 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="6. External Links">
+        <Section title="6. Pro Subscription and Billing">
+          <p>
+            Pro is a paid subscription offered on daily, monthly and annual plans at the prices shown on the 
+            <Link href="/pro" style={{ color: '#C8720A' }}>Pro page</Link> at the time you subscribe. Payments are processed by
+            Cashfree Payments and renew automatically at the end of each billing period, using the
+            payment mandate you approve at checkout, until you cancel.
+          </p>
+          <p style={{ marginTop: '0.75rem' }}>
+            Pro access is personal to your account. Sharing an account, or redistributing Pro data, is not
+            permitted and may lead to the subscription being ended without refund.
+          </p>
+        </Section>
+
+        <Section title="7. Cancellation and Refunds">
+          <ul style={{ paddingLeft: '1.25rem' }}>
+            <li>You can cancel any time from <Link href="/account" style={{ color: '#C8720A' }}>My Account</Link>. Cancelling stops
+              future renewals; you keep full Pro access until the end of the period you have already paid for.</li>
+            <li>Changing plan stops the current plan renewing; the new plan starts on the day you pay for it.</li>
+            <li>Payments are non-refundable, including for unused time in a billing period, except where
+              required by law.</li>
+            <li>If you are charged twice, charged after cancelling, or charged in error, email 
+              <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a> and we will refund the
+              incorrect charge.</li>
+          </ul>
+        </Section>
+
+        <Section title="8. External Links">
           <p>
             BhaavBrief may link to external websites including MCX, exchanges, broker platforms,
             and news sources. We are not responsible for the content, accuracy, or policies of
@@ -116,7 +143,7 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="7. Limitation of Liability">
+        <Section title="9. Limitation of Liability">
           <p>
             To the fullest extent permitted by applicable law, BhaavBrief and its operators shall
             not be liable for any direct, indirect, incidental, or consequential loss arising from
@@ -125,7 +152,7 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="8. Changes to These Terms">
+        <Section title="10. Changes to These Terms">
           <p>
             We may update these terms from time to time. The &quot;last updated&quot; date at the top will
             reflect any changes. Continued use of BhaavBrief after changes are posted constitutes
@@ -133,17 +160,17 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="9. Governing Law">
+        <Section title="11. Governing Law">
           <p>
             These terms are governed by the laws of India. Any disputes arising from use of
             BhaavBrief shall be subject to the exclusive jurisdiction of courts in India.
           </p>
         </Section>
 
-        <Section title="10. Contact">
+        <Section title="12. Contact">
           <p>
-            For questions about these terms, reach us via our{' '}
-            <Link href="/feedback" style={{ color: '#C8720A' }}>feedback form</Link>.
+            For questions about these terms or your subscription, email{' '}
+            <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a>.
           </p>
         </Section>
 
