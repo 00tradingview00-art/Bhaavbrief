@@ -166,7 +166,7 @@ export default function PrivacyPage() {
         <Section title="10. Contact and Grievances">
           <p>
             Privacy questions, requests and grievances: 
-            <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a> (Grievance contact: Prabal Kapoor).
+            <a href="mailto:support@bhaavbrief.in" style={{ color: '#C8720A' }}>support@bhaavbrief.in</a> (Grievance contact: BhaavBrief Support Team).
           </p>
         </Section>
 
