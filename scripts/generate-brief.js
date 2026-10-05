@@ -9,13 +9,14 @@ import { resolveEdge, formatEdgeResultBlock, appendToLedger } from './lib/edgeLe
 import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.mjs'
 import { appendGateLogEntry, hashPayload } from './lib/gateLog.mjs'
 import { SEO_TITLE_MAX } from './lib/seo-title.js'
+import { upcomingEvents, formatUpcomingEventsBlock } from './lib/upcomingEvents.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // Part 8.2: bump this (and the prompts/brief_vN.md filename) on any material
 // prompt change — logged per generation call in data/gate-log.jsonl (8.4)
 // so any published brief can be traced to its exact prompt version.
-const PROMPT_VERSION = 'brief_v4'
+const PROMPT_VERSION = 'brief_v5'
 const envFile = path.join(__dirname, '../.env.local')
 if (fs.existsSync(envFile)) {
   for (const line of fs.readFileSync(envFile, 'utf8').split('\n')) {
@@ -407,6 +408,20 @@ async function generate(prices, news, recentBriefs, snapshot) {
   const nextTradingDateFull = new Date(nextTradingDateStr + 'T00:00:00Z')
     .toLocaleDateString('en-IN', { day: 'numeric', month: 'long', timeZone: 'UTC' })
 
+  // The real calendar for the "Tomorrow:" line — without it the model
+  // guessed event days (05 Oct 2026: CFTC COT placed on "Tuesday").
+  let upcoming = []
+  try {
+    const eventMap = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/event-map.json'), 'utf8'))
+    let instruments = null
+    try {
+      instruments = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/kite-instruments.json'), 'utf8'))
+    } catch { /* MCX expiry dates just won't be refreshed */ }
+    upcoming = upcomingEvents(eventMap.events ?? [], today, instruments, nextTradingDateStr)
+  } catch (err) {
+    console.warn(`  Event calendar unreadable — brief gets no scheduled events: ${err.message}`)
+  }
+
   const keyNumber   = buildKeyNumber(prices)
   const priceBridge = buildPriceBridge(prices)
 
@@ -471,6 +486,7 @@ Unless ${leadTag} has a genuinely NEW catalyst today (not merely a continuation 
     DATE_STR: dateStr,
     NEXT_TRADING_DAY_NAME: nextTradingDayName,
     NEXT_TRADING_DATE_FULL: nextTradingDateFull,
+    UPCOMING_EVENTS: formatUpcomingEventsBlock(upcoming),
     CLAIMS_BLOCK: claimsBlock,
     SNAPSHOT_BLOCK: snapshotBlock,
     PRICE_BLOCK: priceBlock,
