@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-10-05-mcx-option-strike-selection-strategy",
+    "href": "/articles/2026-10-05-mcx-option-strike-selection-strategy",
+    "title": "How to Select the Right Strike Price When Trading MCX Options",
+    "description": "Master MCX option strike price selection strategy India with this step-by-step guide covering moneyness, volatility, and commodity-specific factors.",
+    "excerpt": "A sound MCX option strike price selection strategy India traders rely on begins with understanding how moneyness, implied volatility, and contract structure interact before a single lot is placed. Str",
+    "date": "2026-10-05",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-10-03-weekly-catalyst",
     "href": "/research/2026-10-03-weekly-catalyst",
