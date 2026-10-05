@@ -145,6 +145,12 @@ export default async function AccountPage() {
         )}
       </Card>
 
+      <p style={{ marginTop: 'var(--space-4)', fontSize: '0.85rem', color: 'var(--ink-3)' }}>
+        Problem with a payment or your plan? Email{' '}
+        <a href="mailto:support@bhaavbrief.in" style={{ color: 'var(--ink)', textDecoration: 'underline', fontWeight: 600, overflowWrap: 'anywhere' }}>support@bhaavbrief.in</a>
+        {' '}with the email you signed in with.
+      </p>
+
       {payments.length > 0 && (
         <div style={{ marginTop: 'var(--space-8)' }}>
           <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)', marginBottom: 'var(--space-4)' }}>
