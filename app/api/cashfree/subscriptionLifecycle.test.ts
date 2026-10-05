@@ -253,3 +253,56 @@ describe('change plan', () => {
     expect(cancelCashfreeSubscription).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('a renewal payment extends access by a full period', () => {
+  // Cashfree charges a renewal a few days before the period ends (pre-debit).
+  // The payment's schedule date is the end of the *current* period, so using
+  // it as the new expiry left a paying user's Pro ending on that date anyway.
+  function renewalEvent(subId: string, chargeFor: Date, nextScheduleDate?: string | null) {
+    return {
+      type: 'SUBSCRIPTION_PAYMENT_SUCCESS',
+      data: {
+        subscription_id: subId,
+        payment_schedule_date: chargeFor.toISOString(),
+        payment_status: 'SUCCESS',
+        subscription_details: {
+          subscription_id: subId,
+          cf_subscription_id: `cf_${subId}`,
+          subscription_tags: { clerk_user_id: USER, plan: 'monthly' },
+          ...(nextScheduleDate === undefined ? {} : { next_schedule_date: nextScheduleDate }),
+        },
+      },
+    }
+  }
+
+  it('with no next_schedule_date, expiry moves a period past the charged date', async () => {
+    seedActive('sub_A', 3 * DAY)
+    const periodEnd = new Date(store.get(`sub:${USER}:expires_at`)!)
+    await webhook(signedRequest(renewalEvent('sub_A', periodEnd)))
+    const expires = new Date(store.get(`sub:${USER}:expires_at`)!)
+    expect(expires.getTime()).toBeGreaterThanOrEqual(periodEnd.getTime() + 28 * DAY)
+  })
+
+  it('when next_schedule_date still points at the charged date, expiry still moves forward', async () => {
+    seedActive('sub_A', 3 * DAY)
+    const periodEnd = new Date(store.get(`sub:${USER}:expires_at`)!)
+    await webhook(signedRequest(renewalEvent('sub_A', periodEnd, periodEnd.toISOString())))
+    const expires = new Date(store.get(`sub:${USER}:expires_at`)!)
+    expect(expires.getTime()).toBeGreaterThanOrEqual(periodEnd.getTime() + 28 * DAY)
+  })
+
+  it('a correct next_schedule_date is used as-is', async () => {
+    seedActive('sub_A', 3 * DAY)
+    const periodEnd = new Date(store.get(`sub:${USER}:expires_at`)!)
+    const next = new Date(periodEnd.getTime() + 30 * DAY).toISOString()
+    await webhook(signedRequest(renewalEvent('sub_A', periodEnd, next)))
+    expect(new Date(store.get(`sub:${USER}:expires_at`)!).getTime()).toBeGreaterThanOrEqual(new Date(next).getTime())
+  })
+
+  it('a payment never shortens existing access', async () => {
+    seedActive('sub_A', 40 * DAY)
+    const before = store.get(`sub:${USER}:expires_at`)!
+    await webhook(signedRequest(renewalEvent('sub_A', new Date(), new Date(Date.now() + DAY).toISOString())))
+    expect(new Date(store.get(`sub:${USER}:expires_at`)!).getTime()).toBeGreaterThanOrEqual(new Date(before).getTime())
+  })
+})
