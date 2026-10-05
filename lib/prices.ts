@@ -481,7 +481,7 @@ export function buildMCXData(q: KiteQuote | null, fallbackPrice: number, fallbac
     mcxSymbol:    info.symbol,
     mcxExpiry:    info.expiry,
     // No live quote → the price is a carried-forward last-known value; the
-    // UI (MoversPanel, gateway cards, commodity pages) marks it "last known".
+    // UI (gateway cards, commodity pages) marks it "last known".
     mcxStale:     !hasLive,
   }
 }
