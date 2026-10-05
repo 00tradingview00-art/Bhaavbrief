@@ -224,10 +224,18 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         await logWebhookEvent(merchantSubId, { type, action: 'ignored: subscription already ended' })
         return NextResponse.json({ ok: true })
       }
-      const expiresAt =
-        parseCashfreeDate(details?.next_schedule_date ?? undefined) ??
-        parseCashfreeDate(body.data?.payment_schedule_date) ??
-        expiryFromPlan(plan)
+      // A renewal is charged a few days before the period ends, and
+      // payment_schedule_date is that period's end — not the new one.
+      // next_schedule_date can still point at the charged date too. So a paid
+      // charge always buys one full period from the date it was charged for,
+      // and never shortens access the user already has.
+      const chargedFor = parseCashfreeDate(body.data?.payment_schedule_date) ?? new Date()
+      const currentExpiry = parseCashfreeDate((await redisCommand('GET', `sub:${userId}:expires_at`)) as string | null)
+      const expiresAt = new Date(Math.max(
+        expiryFromPlan(plan, chargedFor).getTime(),
+        parseCashfreeDate(details?.next_schedule_date ?? undefined)?.getTime() ?? 0,
+        currentExpiry?.getTime() ?? 0,
+      ))
       const existing = await redisCommand('GET', `sub:${userId}:status`)
       if (existing !== 'active') {
         await activateSubscription(userId, providerSubId, plan, expiresAt, merchantSubId)
