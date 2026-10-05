@@ -10,6 +10,7 @@ import { loadPromptTemplate, renderPromptTemplate } from './lib/promptTemplate.m
 import { appendGateLogEntry, hashPayload } from './lib/gateLog.mjs'
 import { SEO_TITLE_MAX } from './lib/seo-title.js'
 import { upcomingEvents, formatUpcomingEventsBlock } from './lib/upcomingEvents.mjs'
+import { mcxNotYetTraded } from './lib/mcxPreOpen.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -425,6 +426,13 @@ async function generate(prices, news, recentBriefs, snapshot) {
   const keyNumber   = buildKeyNumber(prices)
   const priceBridge = buildPriceBridge(prices)
 
+  // Before the 9:00 AM IST open every MCX changePct is 0 — "not traded yet",
+  // not "flat". Say so, or the model reads it as a market signal.
+  const preOpen = mcxNotYetTraded(snapshot)
+  const preOpenNote = preOpen
+    ? `\nMCX HAS NOT TRADED YET TODAY (it opens at 9:00 AM IST): every MCX price above is the previous session's close, so every MCX changePct of 0 means "not traded yet" — NOT "flat", "unchanged" or "steady". Never describe an MCX contract as flat or unmoved today, and never read meaning into its 0% change. Describe today's direction only from the overnight moves in international markets (COMEX, WTI, Brent, Henry Hub) and how MCX may open against them.\n`
+    : ''
+
   // Snapshot block — raw JSON so the validator can cross-check every number.
   const snapshotBlock = snapshot ? `
 AUTHORITATIVE MARKET SNAPSHOT (JSON) — use ONLY these numbers, never recall prices from memory:
@@ -432,7 +440,7 @@ ${JSON.stringify(snapshot.instruments, null, 2)}
 
 Derived: ${JSON.stringify(snapshot.derived)}
 Snapshot as of: ${snapshot.generatedAtIST}
-` : ''
+${preOpenNote}` : ''
 
   const claimsLedger = loadClaimsLedger()
   const claimsBlock = `
@@ -444,14 +452,17 @@ ${claimsLedger.length > 0 ? JSON.stringify(claimsLedger.map(c => ({
 </claims_allowed>`
 
   const sign = (v) => (v == null ? null : `${parseFloat(v) >= 0 ? '+' : ''}${v}`)
+  const mcxMove = (pct, chg) => preOpen
+    ? 'not traded yet today — this is the last close'
+    : `${pct}% today | change ₹${sign(chg) ?? 'N/A'}`
   const priceBlock = prices ? `
 TODAY'S MCX PRICES (formatted from the snapshot above — same numbers, human-readable):
 PRE-CALCULATED CHANGE FROM LAST CLOSE (₹/$, already computed — use these exact figures verbatim, never subtract prices yourself):
-- MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${prices.goldPct}% today | change ₹${sign(prices.mcxGoldChange) ?? 'N/A'} | COMEX change $${sign(prices.comexGoldChange) ?? 'N/A'}
-- MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${prices.silverPct}% today | change ₹${sign(prices.mcxSilverChange) ?? 'N/A'} | COMEX change $${sign(prices.comexSilverChange) ?? 'N/A'}
-- MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${prices.crudePct}% today | change ₹${sign(prices.mcxCrudeChange) ?? 'N/A'} | WTI change $${sign(prices.wtiChange) ?? 'N/A'} | Brent change $${sign(prices.brentChange) ?? 'N/A'}
-- MCX Copper: ₹${prices.mcxCopper ?? 'N/A'}/kg  | COMEX $${prices.comexCopper}/lb | ${prices.copperPct}% today | change ₹${sign(prices.mcxCopperChange) ?? 'N/A'}
-- MCX NatGas: ₹${prices.mcxGas ?? 'N/A'}/mmBtu  | Henry Hub $${prices.henryHub} | ${prices.gasPct}% today | change ₹${sign(prices.mcxGasChange) ?? 'N/A'}
+- MCX Gold:   ₹${prices.mcxGold ?? 'N/A'}/10g   | COMEX $${prices.comexGold}/oz | ${mcxMove(prices.goldPct, prices.mcxGoldChange)} | COMEX change $${sign(prices.comexGoldChange) ?? 'N/A'}
+- MCX Silver: ₹${prices.mcxSilver ?? 'N/A'}/kg  | COMEX $${prices.comexSilver}/oz | ${mcxMove(prices.silverPct, prices.mcxSilverChange)} | COMEX change $${sign(prices.comexSilverChange) ?? 'N/A'}
+- MCX Crude:  ₹${prices.mcxCrude ?? 'N/A'}/bbl  | WTI $${prices.wti} | Brent $${prices.brent ?? 'N/A'} | ${mcxMove(prices.crudePct, prices.mcxCrudeChange)} | WTI change $${sign(prices.wtiChange) ?? 'N/A'} | Brent change $${sign(prices.brentChange) ?? 'N/A'}
+- MCX Copper: ₹${prices.mcxCopper ?? 'N/A'}/kg  | COMEX $${prices.comexCopper}/lb | ${mcxMove(prices.copperPct, prices.mcxCopperChange)}
+- MCX NatGas: ₹${prices.mcxGas ?? 'N/A'}/mmBtu  | Henry Hub $${prices.henryHub} | ${mcxMove(prices.gasPct, prices.mcxGasChange)}
 - USD/INR: ₹${prices.usdinr ?? 'N/A'}` : 'PRICES: Unavailable — state estimates are estimates.'
 
   const newsBlock = news.length > 0
