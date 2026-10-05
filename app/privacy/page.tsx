@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://bhaavbrief.in/privacy' },
 }
 
-const LAST_UPDATED = '30 September 2026'
+const LAST_UPDATED = '5 October 2026'
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (

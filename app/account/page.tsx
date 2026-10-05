@@ -187,12 +187,8 @@ export default async function AccountPage() {
       )}
       <div style={{
         marginTop: 'var(--space-8)', paddingTop: 'var(--space-5)', borderTop: '1px solid var(--border)',
-        display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)', alignItems: 'center', justifyContent: 'space-between',
+        display: 'flex', justifyContent: 'flex-end',
       }}>
-        <span style={{ fontSize: '0.8rem', color: 'var(--ink-3)' }}>
-          Questions about your account or billing?{' '}
-          <a href="mailto:support@bhaavbrief.in" style={{ color: 'var(--gold)', fontWeight: 600 }}>support@bhaavbrief.in</a>
-        </span>
         <AccountSignOut />
       </div>
     </main>
