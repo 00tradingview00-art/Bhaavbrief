@@ -44,6 +44,13 @@ describe('upcomingEvents', () => {
     expect(list.map(e => e.id)).toEqual(['eia_crude_inventory', 'cftc_cot_report'])
   })
 
+  it('writes an event later today as "today", never by today\'s weekday', () => {
+    const tonight = { ...EIA, next_release_utc: '2026-10-05T14:30:00.000Z' } // Mon 8:00 pm IST
+    const [ev] = upcomingEvents([tonight], NOW, null, '2026-10-06')
+    expect(ev.whenIST).toMatch(/^today at 8:00 pm IST$/i)
+    expect(ev.whenIST).not.toMatch(/Monday/)
+  })
+
   it('formats an empty list explicitly', () => {
     expect(formatUpcomingEventsBlock([])).toMatch(/no scheduled events/)
   })

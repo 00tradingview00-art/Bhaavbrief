@@ -13,7 +13,17 @@ import { applyComputedDates } from './eventRules.mjs'
 
 const IST_OFFSET_MS = 330 * 60 * 1000
 
-function formatIST(date) {
+const istDate = (date) => new Date(date.getTime() + IST_OFFSET_MS).toISOString().slice(0, 10)
+
+// An event later today is written as "today", never by its weekday: the
+// publish gate (scripts/lib/weekdayCheck.js) rejects a "Tomorrow:" line
+// that names today's own day.
+function formatIST(date, now) {
+  if (istDate(date) === istDate(now)) {
+    return 'today at ' + new Intl.DateTimeFormat('en-IN', {
+      timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true,
+    }).format(date) + ' IST'
+  }
   return new Intl.DateTimeFormat('en-IN', {
     timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long',
     hour: 'numeric', minute: '2-digit', hour12: true,
@@ -42,7 +52,7 @@ export function upcomingEvents(events, now, instruments, nextTradingDate, minCou
   return chosen.map(({ e, at }) => ({
     id: e.id,
     name: e.name,
-    whenIST: formatIST(at),
+    whenIST: formatIST(at, now),
     contracts: e.affected_contracts ?? [],
   }))
 }
