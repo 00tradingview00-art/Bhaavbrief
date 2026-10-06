@@ -42,6 +42,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-10-06-mcx-close-06oct2026-risk-off-gold",
+    "href": "/articles/2026-10-06-mcx-close-06oct2026-risk-off-gold",
+    "title": "MCX Close 6 Oct: Gold Gains on Risk-Off, Crude Retreats",
+    "description": "6 Oct 2026 MCX close: NatGas +1.93% led; gold +0.55%, crude -0.38%. COMEX gold extending +0.91%. Defensive positioning dominated.",
+    "excerpt": "NatGas led MCX higher with a +1.93% gain to ₹300.8/mmBtu, while gold and silver followed defensive demand with +0.55% and +0.57% gains respectively to ₹150,130/10g and ₹227,365/kg. Crude broke ranks a",
+    "date": "2026-10-05T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
     "href": "/articles/2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
     "title": "MCX Nat Gas Rallies 2% on Henry Hub Strength, Gold Holds Steady",
