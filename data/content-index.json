@@ -21,6 +21,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-10-06-cme-cot-report-positioning-mcx-traders",
+    "href": "/articles/2026-10-06-cme-cot-report-positioning-mcx-traders",
+    "title": "Using CME COT Data to Anticipate MCX Gold, Silver and Crude Moves",
+    "description": "Learn how CME COT report positioning analysis helps MCX traders in India anticipate gold, silver and crude oil price moves before they happen.",
+    "excerpt": "CME COT report positioning analysis is one of the most underused tools available to MCX traders in India tracking gold, silver, and crude oil. When large speculative funds shift their net positions on",
+    "date": "2026-10-06",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "positioning"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
     "href": "/articles/2026-10-05-mcx-nat-gas-rallies-2-on-henry-hub-strength-gold-holds-stead",
     "title": "MCX Nat Gas Rallies 2% on Henry Hub Strength, Gold Holds Steady",
