@@ -430,7 +430,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
             </div>
           </div>
           <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', lineHeight: 1, marginBottom: 2 }}>
-            {REPO_RATE_PCT}
+            {REPO_RATE_PCT.toFixed(2)}
           </div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)' }}>%</div>
           <div style={{ fontSize: 10, color: 'var(--ink-4)', marginTop: 6 }}>Set by RBI MPC · not a live/streaming figure</div>
