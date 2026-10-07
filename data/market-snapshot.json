@@ -1,90 +1,90 @@
 {
-  "generatedAt": "2026-10-07T09:26:53.830Z",
-  "generatedAtIST": "2026-10-07 14:56 IST",
+  "generatedAt": "2026-10-07T10:24:13.015Z",
+  "generatedAtIST": "2026-10-07 15:54 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 149444,
+      "price": 149316,
       "prevClose": 150120,
-      "changePct": -0.4503,
+      "changePct": -0.5356,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 224700,
+      "price": 224687,
       "prevClose": 227242,
-      "changePct": -1.1186,
+      "changePct": -1.1244,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8685,
+      "price": 8728,
       "prevClose": 8628,
-      "changePct": 0.6606,
+      "changePct": 1.159,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1416.3,
+      "price": 1419.85,
       "prevClose": 1413.45,
-      "changePct": 0.2016,
+      "changePct": 0.4528,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 307.1,
+      "price": 307.2,
       "prevClose": 301.2,
-      "changePct": 1.9588,
+      "changePct": 1.992,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
-      "price": 97,
+      "price": 97.04,
       "prevClose": 96.59,
-      "changePct": 0.4271,
+      "changePct": 0.4659,
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4149.2,
+      "price": 4141.7,
       "prevClose": 4187.1,
-      "changePct": -0.9052,
+      "changePct": -1.0843,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 60.58,
+      "price": 60.36,
       "prevClose": 61.17,
-      "changePct": -0.9613,
+      "changePct": -1.321,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 89.97,
+      "price": 90.02,
       "prevClose": 89.44,
-      "changePct": 0.5926,
+      "changePct": 0.6485,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 101.95,
+      "price": 101.9,
       "prevClose": 100.58,
-      "changePct": 1.3621,
+      "changePct": 1.3124,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
-      "price": 3.17,
+      "price": 3.16,
       "prevClose": 3.11,
-      "changePct": 1.6378,
+      "changePct": 1.5735,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 419,
+      "price": 419.1,
       "prevClose": 417.6,
-      "changePct": 0.3352,
+      "changePct": 0.3592,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 194.35,
+      "price": 194.4,
       "prevClose": 193.55,
-      "changePct": 0.4133,
+      "changePct": 0.4392,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 340.9,
+      "price": 340.45,
       "prevClose": 341.4,
-      "changePct": -0.1465,
+      "changePct": -0.2783,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
@@ -94,21 +94,21 @@
       "unit": "INR/kg"
     },
     "MCX_ELECTRICITY": {
-      "price": 7166,
+      "price": 7165,
       "prevClose": 7049,
-      "changePct": 1.6598,
+      "changePct": 1.6456,
       "unit": "INR/MWh"
     },
     "EURINR": {
-      "price": 108.8475,
+      "price": 108.74,
       "prevClose": 108.825,
-      "changePct": 0.0207,
+      "changePct": -0.0781,
       "unit": "INR"
     },
     "GBPINR": {
-      "price": 128.45,
+      "price": 128.4675,
       "prevClose": 128.0825,
-      "changePct": 0.2869,
+      "changePct": 0.3006,
       "unit": "INR"
     },
     "JPYINR": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 129398,
-    "mcxComexGoldSpreadPct": 15.49,
-    "importParitySilverINR": 188926,
-    "mcxComexSilverSpreadPct": 18.94,
-    "goldSilverRatio": 68.5
+    "importParityGoldINR": 129217,
+    "mcxComexGoldSpreadPct": 15.55,
+    "importParitySilverINR": 188318,
+    "mcxComexSilverSpreadPct": 19.31,
+    "goldSilverRatio": 68.6
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 15.49% vs silver 18.94% — 3.45pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 15.49,
-      "silverSpreadPct": 18.94,
-      "deltaPts": 3.45
+      "detail": "Gold import-parity spread 15.55% vs silver 19.31% — 3.76pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 15.55,
+      "silverSpreadPct": 19.31,
+      "deltaPts": 3.76
     }
   ]
 }
