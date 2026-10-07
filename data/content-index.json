@@ -41,6 +41,29 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-07-mcx-close-07oct2026-silver-selloff-dollar-strength",
+    "href": "/articles/2026-10-07-mcx-close-07oct2026-silver-selloff-dollar-strength",
+    "title": "MCX Close 7 Oct: Silver Leads Selloff on Dollar, Crude Fades",
+    "description": "7 Oct 2026 MCX close: Silver -1.71%, Crude -0.76%. Dollar strength and demand concerns pressure metals. COMEX Gold -1.18% confirms bearish tone.",
+    "excerpt": "Silver led a broad selloff across MCX, closing -1.71% at ₹223,353/kg after testing ₹226,208 intraday. Crude Oil retreated -0.76% to ₹8,562/bbl despite an intraday high of ₹8,824. Gold declined -0.67% ",
+    "date": "2026-10-06T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Silver",
+      "Crude Oil",
+      "Gold",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-120",
     "href": "/briefs/edition-120",
