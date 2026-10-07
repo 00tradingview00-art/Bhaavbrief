@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-121",
+    "href": "/briefs/edition-121",
+    "title": "Brent at $101 and Gold at $4168 — The War Trade Refuses to Choose",
+    "description": "Crude and gold are rising together overnight, a split signal that reveals two competing fears running simultaneously in global markets.",
+    "excerpt": "MCX Gold ₹150120 | Crude ₹8628 | USDINR ₹96.59 Yesterday's Edge — Result: Edition #120 watched whether WTI would close above 89.79. Confirmed ✓, now at 90.21. | Commodity | Global Price | USD/INR | MC",
+    "date": "2026-10-07T03:13:41.364Z",
+    "edition": "121",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-120",
     "href": "/briefs/edition-120",
     "title": "Brent Crosses $100 as Gold Slips — Two Markets, One Story",
