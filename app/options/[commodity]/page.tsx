@@ -141,10 +141,15 @@ export default async function OptionsCommodityPage({ params }: Props) {
   const meta = COMMODITY_META[commodity]
   if (!instrument || !meta) notFound()
 
-  const initialData = await getOptionsChain(instrument).catch(async () => {
+  const initialData = await getOptionsChain(instrument).catch(async (err) => {
     // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
     // last-known-good chain so the free-tier blurred preview shows real (if stale)
     // strikes instead of degrading to all-dash placeholder rows.
+    //
+    // Logged because this catch was otherwise completely silent: a Kite outage and
+    // a healthy render looked identical in the logs, so there was no way to tell
+    // how often this page was serving stale strikes.
+    console.error('[options] live chain fetch failed for', instrument, err)
     const cached = await getCachedOptionsChain(instrument)
     return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
   })
