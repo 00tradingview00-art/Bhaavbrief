@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-08T20:48:00.562Z",
-  "generatedAtIST": "2026-10-09 02:18 IST",
+  "generatedAt": "2026-10-08T21:36:15.134Z",
+  "generatedAtIST": "2026-10-09 03:06 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4158.9,
+      "price": 4158.3,
       "prevClose": 4140.7,
-      "changePct": 0.4395,
+      "changePct": 0.425,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 59.41,
+      "price": 59.43,
       "prevClose": 59.9,
-      "changePct": -0.8247,
+      "changePct": -0.783,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 90.97,
+      "price": 91.18,
       "prevClose": 88.28,
-      "changePct": 3.0471,
+      "changePct": 3.285,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 103.66,
+      "price": 103.92,
       "prevClose": 100.2,
-      "changePct": 3.4531,
+      "changePct": 3.7126,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.13,
       "prevClose": 3.2,
-      "changePct": -2.3103,
+      "changePct": -2.2167,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 129874,
-    "mcxComexGoldSpreadPct": 15.29,
-    "importParitySilverINR": 185526,
-    "mcxComexSilverSpreadPct": 19.23,
+    "importParityGoldINR": 129855,
+    "mcxComexGoldSpreadPct": 15.31,
+    "importParitySilverINR": 185588,
+    "mcxComexSilverSpreadPct": 19.19,
     "goldSilverRatio": 70
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 15.29% vs silver 19.23% — 3.94pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 15.29,
-      "silverSpreadPct": 19.23,
-      "deltaPts": 3.94
+      "detail": "Gold import-parity spread 15.31% vs silver 19.19% — 3.88pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 15.31,
+      "silverSpreadPct": 19.19,
+      "deltaPts": 3.88
     }
   ]
 }
