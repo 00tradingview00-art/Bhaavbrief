@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-08-hawk-scan-mcx-crude-surges-3-74-to-8-871-bbl-on-eia-draw",
+    "href": "/articles/2026-10-08-hawk-scan-mcx-crude-surges-3-74-to-8-871-bbl-on-eia-draw",
+    "title": "MCX Crude Surges 3.74% to ₹8,871/bbl on EIA Draw",
+    "description": "MCX Crude ₹8,871/bbl · +3.74% · EIA crude inventory draw signals tightening US supply.",
+    "excerpt": "TRIGGER MCX Crude has surged 3.74% to ₹8,871/bbl as the EIA weekly petroleum report showed a crude inventory draw of 0.0M barrels for the week ending October 2, signalling supply tightness despite a f",
+    "date": "2026-10-08T09:36:27.538Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "MCX Silver"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8871
+  },
+  {
     "type": "brief",
     "slug": "edition-122",
     "href": "/briefs/edition-122",
