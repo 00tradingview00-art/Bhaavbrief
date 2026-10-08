@@ -10,23 +10,23 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-09-28T09:57:25.549Z",
-    "lastFlashPrice": 227548,
+    "lastFlashAt": "2026-10-08T11:31:09.378Z",
+    "lastFlashPrice": 220600,
     "lastRoundLevel": 230000,
     "recentFlashIds": [
+      "2026-10-08-17-01-mcx-silver-falls-1-32-as-rupee-firms-crude-rallies",
       "2026-09-28-15-27-mcx-silver-falls-3-05-as-precious-metals-retreat-deepen",
-      "2026-09-22-13-58-mcx-silver-falls-1-22-on-cross-asset-pressure",
-      "2026-09-18-14-36-mcx-silver-rallies-1-99-on-safe-haven-bid"
+      "2026-09-22-13-58-mcx-silver-falls-1-22-on-cross-asset-pressure"
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-10-06T16:51:38.990Z",
-    "lastFlashPrice": 8627,
+    "lastFlashAt": "2026-10-08T11:31:09.378Z",
+    "lastFlashPrice": 8977,
     "lastRoundLevel": 9000,
     "recentFlashIds": [
+      "2026-10-08-17-01-mcx-crude-surges-4-97-on-rupee-depreciation-rebound",
       "2026-10-06-22-21-mcx-crude-slides-0-48-as-rupee-steadies",
-      "2026-10-01-15-47-mcx-crude-rallies-1-55-as-rupee-weakness-resurfaces",
-      "2026-09-29-21-39-mcx-crude-falls-2-46-as-rupee-strength-reverses-export"
+      "2026-10-01-15-47-mcx-crude-rallies-1-55-as-rupee-weakness-resurfaces"
     ]
   },
   "MCX_COPPER": {
