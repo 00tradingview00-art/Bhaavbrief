@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
+    "href": "/articles/2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
+    "title": "MCX Nat Gas Tumbles 2.83% as Henry Hub Weakens",
+    "description": "MCX Natural Gas falls to ₹306/mmBtu on softer Henry Hub demand. Crude rallies 3.13% to ₹8820/bbl, diverging from gas weakness.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas has surrendered 2.83% to ₹306/mmBtu while crude rallies hard—a rare divergence that signals Henry Hub weakness is outpacing global energy demand optimism. The pullback fr",
+    "date": "2026-10-08T16:55:27.682Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "Henry Hub",
+      "Energy"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 306
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-08-hawk-scan-mcx-crude-surges-3-74-to-8-871-bbl-on-eia-draw",
     "href": "/articles/2026-10-08-hawk-scan-mcx-crude-surges-3-74-to-8-871-bbl-on-eia-draw",
