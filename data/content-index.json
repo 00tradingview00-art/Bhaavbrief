@@ -1,6 +1,29 @@
 [
   {
     "type": "brief",
+    "slug": "edition-122",
+    "href": "/briefs/edition-122",
+    "title": "Brent at $102 While Gold Retreats — The War Trade Is Splitting",
+    "description": "Crude surges on Middle East supply fears as gold pulls back, signalling the war premium is concentrating in oil, not safety.",
+    "excerpt": "MCX Gold ₹149103 | Crude ₹8552 | USDINR ₹97.07 Yesterday's Edge — Result: Edition #121 watched whether WTI would close above 90.21. Rejected ✗, now at 89.63. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-10-08T02:42:09.781Z",
+    "edition": "122",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX NatGas",
+      "Geopolitics",
+      "OPEC"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-121",
     "href": "/briefs/edition-121",
     "title": "Brent at $101 and Gold at $4168 — The War Trade Refuses to Choose",
