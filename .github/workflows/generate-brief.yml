@@ -162,24 +162,12 @@ jobs:
         run: node scripts/build-content-index.js
         continue-on-error: true
 
-      - name: Generate Instagram card
-        env:
-          EDITION: ${{ steps.edition.outputs.number }}
-        run: |
-          PADDED=$(printf '%03d' $EDITION)
-          BRIEF="content/briefs/edition-${PADDED}.mdx"
-          if [ ! -f "$BRIEF" ]; then
-            echo "No new brief generated — skipping Instagram card"
-            exit 0
-          fi
-          node scripts/generate-instagram-card.js
-        continue-on-error: true
-
-      - name: Generate P&L impact card
-        env:
-          EDITION: ${{ steps.edition.outputs.number }}
-        run: node scripts/generate-pnl-card.js
-        continue-on-error: true
+      # Instagram feed cards (brief card + P&L card) were retired on
+      # 9 October 2026. Every feed post measured reach 0 across its lifetime
+      # and the account sent one website session in 30 days, so generating
+      # and committing these images bought nothing. Reels are unaffected and
+      # remain the only Instagram format — they carry all measurable reach.
+      # The generator scripts are left in the tree; nothing calls them.
 
       - name: Commit brief to main
         id: commit
@@ -197,7 +185,7 @@ jobs:
           cp /tmp/bb-snapshot.json data/market-snapshot.json 2>/dev/null || true
           # Commit brief + snapshot together — they must be one atomic commit
           # so the site and email can never show prices from different vintages.
-          git add content/briefs/ data/market-snapshot.json data/content-index.json public/instagram/
+          git add content/briefs/ data/market-snapshot.json data/content-index.json
           # Seeded in the repo so these always exist, but `git add` on a
           # missing path is a hard failure (exit 128) that would break this
           # entire step — verified directly before relying on it. Guarded
@@ -240,7 +228,9 @@ jobs:
           # published=true anyway, which fired the newsletter/Instagram/reel
           # steps for an article that was never written (2026-08-19: caught
           # when a redundant trigger left "Brief not found" failures in
-          # Generate Instagram card / Post to Instagram / Generate brief reel).
+          # Generate Instagram card / Post to Instagram / Generate brief reel
+          # — all three retired since, but the guard still protects the
+          # newsletter, which is reason enough to keep it).
           PADDED=$(printf '%03d' $EDITION)
           BRIEF="content/briefs/edition-${PADDED}.mdx"
           if [ -f "$BRIEF" ]; then
@@ -269,14 +259,9 @@ jobs:
           sleep 240
           node scripts/send-newsletter.js
 
-      - name: Post to Instagram
-        if: steps.commit.outputs.published == 'true' && steps.humangate.outputs.staged != 'true'
-        continue-on-error: true
-        env:
-          EDITION:                  ${{ steps.edition.outputs.number }}
-          INSTAGRAM_USER_ID:        ${{ secrets.INSTAGRAM_USER_ID }}
-          INSTAGRAM_ACCESS_TOKEN:   ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-        run: node scripts/post-instagram.js
+      # The daily Instagram feed post was retired here on 9 October 2026 —
+      # see the note above the commit step. Reel publishing is untouched and
+      # still runs from the reel workflows.
 
       # Reels deliberately removed 22 September 2026. The daily brief remains
       # a site, email and image-post pipeline; V3 is the only Reel standard.
