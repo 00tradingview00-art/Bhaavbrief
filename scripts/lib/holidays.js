@@ -52,10 +52,18 @@ export function holidayCalendarStatus() {
 }
 
 /**
- * Returns the current date in IST as YYYY-MM-DD.
+ * Returns the current date in IST as YYYY-MM-DD. `now` is injectable so
+ * callers that need a deterministic IST date in tests don't reimplement the
+ * offset — this module owns that fact (C-01).
  */
-export function todayIST() {
-  return new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+export function todayIST(now = Date.now()) {
+  return new Date(now + 5.5 * 3600000).toISOString().slice(0, 10)
+}
+
+/** Hour of day in IST (0–23) as a float, so 19:30 IST reads 19.5. */
+export function hourIST(now = Date.now()) {
+  const ist = new Date(now + 5.5 * 3600000)
+  return ist.getUTCHours() + ist.getUTCMinutes() / 60
 }
 
 /**

@@ -1,5 +1,14 @@
 # Reels reset — first creative draft
 
+> **Historical — superseded 22 September 2026.** This records the V2 reset pilot
+> as it stood on 14 September 2026. The governing plan is now
+> [`docs/reels-v3-production-standard.md`](../../docs/reels-v3-production-standard.md);
+> V2 is a historical input and its generators are barred from publishing. The
+> status notes below ("not been pushed", "the source repo was not edited", the
+> pre-release checklist, the ElevenLabs voice items) describe that branch at that
+> moment and are no longer true of the repo — V3 narrates with the Edge TTS voice
+> `en-IN-NeerjaNeural`. Kept for the creative reasoning, not as instructions.
+
 [Watch the 12.1-second pilot](gold-rupee-reset-001-draft.mp4)
 
 Hook: **Gold didn't move. Your price did.**
@@ -11,7 +20,7 @@ One currency mechanism, 29 spoken words, three scenes, answer starts at 2.8s.
 The $100 and exchange rates are illustrative. They are not today's prices or the
 price of the pictured bangle. The dollar amount stays constant while rupee cost changes.
 
-- [Active plan and 14-post coverage queue](../../docs/reels-v2-production-blueprint.md)
+- [The plan this draft was made against, now historical](../../docs/reels-v2-production-blueprint.md)
 - [Manifest, script and sources](../../reels/v2/gold-rupee-reset-001.json)
 - [Caption](caption.txt)
 - [Frame 1](frame-1.png), [comparison](frame-3.png), [ending](frame-4.png)

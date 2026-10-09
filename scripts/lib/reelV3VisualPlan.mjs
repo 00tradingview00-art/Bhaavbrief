@@ -1,28 +1,21 @@
 // V3 visual grammar is chosen per mechanism, never by a one-size-fits-all card row.
-const MODE_BY_ID = {
-  'gold-india-story-001': 'comparison',
-  'silver-solar-story-001': 'transmission',
-  'crude-petrol-story-001': 'transmission',
-  'copper-wire-story-001': 'transmission',
-  'aluminium-power-story-001': 'transmission',
-  'options-premium-story-001': 'options',
-  'margin-exposure-story-001': 'contract',
-  'what-is-mcx-001': 'exchange',
-  'mcx-vs-jeweller-gold-001': 'comparison',
-  'gold-mini-lot-001': 'contract',
-  'india-vix-001': 'options',
-  'mcx-hours-001': 'session',
-  'comex-vs-mcx-001': 'comparison',
-  'mcx-tick-value-001': 'contract',
-  'crude-vs-petrol-001': 'transmission',
-  'right-direction-losing-option-001': 'options',
-  'margin-vs-risk-001': 'contract',
-  'mcx-expiry-001': 'contract',
-  'gold-price-labels-001': 'comparison',
-  'india-gold-price-001': 'transmission',
-  'silver-india-price-001': 'comparison',
-}
+//
+// The mode is a required field on the slate entry itself (`visual_mode`), not a
+// lookup keyed by ID. An ID table used to live here and silently fell behind:
+// commit 24cad756 replaced every slate ID, the table kept the old keys, all
+// seven live stories resolved to a default that had no renderer branch, and
+// nothing failed — the visual grammar simply stopped happening for three weeks
+// while CI reported the queue as passing. Keeping the mode in the data means a
+// new story cannot be added without declaring one, and `validateReelV3`
+// rejects an unknown value.
+
+/** Modes with a real branch in the renderer's drawVisual(). */
+export const VISUAL_MODES = ['comparison', 'contract', 'options', 'session', 'transmission', 'flow']
 
 export function visualPlanFor(reel) {
-  return { mode: MODE_BY_ID[reel.id] ?? 'flow', labels: reel.steps }
+  const mode = reel?.visual_mode
+  if (!VISUAL_MODES.includes(mode)) {
+    throw new Error(`Unknown visual_mode "${mode}" for ${reel?.id ?? 'unknown reel'} — expected one of ${VISUAL_MODES.join(', ')}`)
+  }
+  return { mode, labels: reel.steps }
 }

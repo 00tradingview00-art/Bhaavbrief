@@ -49,8 +49,9 @@ price from a consumer bill—not a recommendation to trade.
 ## Required V3 brief
 
 Every queue entry must have a short hook, one-sentence mechanism, three concise
-visual steps, conclusion, voiceover, caption, primary-source label and direct HTTPS
-source URL. `scripts/lib/reelV3Compliance.mjs` blocks missing fields, unsafe copy,
+visual steps, a declared `visual_mode`, conclusion, voiceover, caption,
+primary-source label and direct HTTPS source URL.
+`scripts/lib/reelV3Compliance.mjs` blocks missing fields, unsafe copy,
 oversized hooks/voiceovers and non-primary-looking source references.
 
 - Hook: a concrete misconception, consequence or comparison; never a generic lesson title.
@@ -61,6 +62,13 @@ oversized hooks/voiceovers and non-primary-looking source references.
   rather than a generic engagement CTA.
 - Visual: a distinct movement or comparison for each causal step. A presenter can
   guide the story but cannot substitute for the explanation.
+- `visual_mode`: the mechanism's visual grammar, declared on the entry itself —
+  one of `comparison`, `contract`, `options`, `session`, `transmission`, `flow`,
+  matching the table below. It is a required field, not a default: an entry
+  without a renderable mode fails `check-reel-v3-consistency.mjs`. Earlier the
+  mode was inferred from a lookup table keyed by Reel ID, which silently fell
+  behind a slate rewrite and left every story rendering the same generic cards
+  for three weeks. Keeping it in the data is what prevents that recurring.
 - Boundary: educational explanation only; no prediction, trade call, target or promise.
 - Voice: female Indian English (`en-IN-NeerjaNeural`), clear and conversational.
 - Source: original exchange, regulator, official data publisher, or primary industry body.
@@ -89,9 +97,17 @@ generic "save this" endings and repetitive presenter-only sequences.
 
 ## Release contract
 
-1. `check-reel-v3-consistency.mjs` passes before CI accepts a queue change.
-2. The daily workflow renders one V3 candidate and archives its MP4/TXT as an
-   Action artifact for 90 days.
+1. `check-reel-v3-consistency.mjs` passes before CI accepts a queue change,
+   including that every entry declares a renderable `visual_mode`.
+2. The three-times-weekly workflow renders one V3 candidate and archives its
+   MP4/TXT as an Action artifact for 90 days.
+2a. Release time is decided by `scripts/lib/reelReleaseWindow.mjs`, not by the
+   cron. GitHub fired the old single `0 14` cron four to seven hours late on
+   every run, publishing between 23:49 and 03:06 IST. The workflow now offers
+   several candidate firings per release day and publishes on the first one
+   inside 18:00–21:30 IST, at most once per day. A day with no firing in the
+   window publishes nothing: a missed release beats a 3 AM release, and it
+   keeps publish time from drifting underneath the measurement rule below.
 3. Instagram publishing is allowed only for `public/reels/v3/*`; review/draft
    artifacts and all legacy files are rejected by the shared publisher.
 4. A failed Instagram post fails the Action and prevents queue state persistence;
@@ -107,6 +123,13 @@ the first observation after 24 hours and a later observation after seven days;
 compare watch time, watch-time/duration and measured saves/shares per reach. Keep
 missing metrics null, never zero. Change one creative variable at a time after a
 meaningful set of comparable releases.
+
+`scripts/fetch-reel-insights.mjs` measures the newest reel first and tombstones
+media Instagram no longer has. Both matter: between 11 August and 7 October 2026
+it recorded nothing at all, because a growing head of deleted posts re-qualified
+on every run, failed, and consumed the whole per-run budget while the live reels
+waited at positions 64 to 71. Treat any gap in `data/reel-history.json` as a
+collection fault to investigate, not as an absence of performance.
 
 ## References
 

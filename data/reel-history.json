@@ -19,7 +19,8 @@
     "generated_at": "2026-09-22T04:22:06.280Z",
     "edition": 111,
     "hi_path": "public/reels/brief-edition-111-hi.mp4",
-    "posted_at": "2026-09-22T04:23:55.838Z"
+    "posted_at": "2026-09-22T04:23:55.838Z",
+    "media_missing_at": "2026-10-07T17:05:07.849Z"
   },
   {
     "file": "news-20260920-max-pain-tool",
@@ -68,7 +69,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-22T04:14:59.941Z"
-    }
+    },
+    "media_missing_at": "2026-10-07T17:05:09.367Z"
   },
   {
     "file": "news-20260919-mcx-margin-calculation",
@@ -896,7 +898,8 @@
     "instagram_id": "18120509293715061",
     "permalink": "https://www.instagram.com/reel/DdIx-u0it6D/",
     "generated_at": "2026-09-11T06:36:26.000Z",
-    "posted_at": "2026-09-11T06:36:26.000Z"
+    "posted_at": "2026-09-11T06:36:26.000Z",
+    "media_missing_at": "2026-10-07T17:05:15.038Z"
   },
   {
     "file": "v2/market-myth-rupee-001",
@@ -911,7 +914,8 @@
     "permalink": "https://www.instagram.com/reel/DdIufvoivLD/",
     "replaces_instagram_id": "17908223637539601",
     "generated_at": "2026-09-11T06:05:59.000Z",
-    "posted_at": "2026-09-11T06:05:59.000Z"
+    "posted_at": "2026-09-11T06:05:59.000Z",
+    "media_missing_at": "2026-10-07T17:05:15.813Z"
   },
   {
     "file": "news-20260910-lot-size-guide-crude-mini-8-15k-vs-gold-mini",
@@ -932,7 +936,8 @@
     "instagram_id": "18226967761331826",
     "generated_at": "2026-09-10T17:39:01.488Z",
     "edition": null,
-    "posted_at": "2026-09-10T17:39:47.731Z"
+    "posted_at": "2026-09-10T17:39:47.731Z",
+    "media_missing_at": "2026-10-07T17:05:16.868Z"
   },
   {
     "file": "brief-edition-103",
@@ -966,7 +971,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-10T08:14:30.161Z"
-    }
+    },
+    "media_missing_at": "2026-10-07T17:05:17.619Z"
   },
   {
     "file": "news-20260908-mcx-commodity-trading-tax-in-india",
@@ -999,7 +1005,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-10T03:04:09.489Z"
-    }
+    },
+    "media_missing_at": "2026-10-07T17:05:18.376Z"
   },
   {
     "file": "brief-edition-102",
@@ -1028,7 +1035,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-09T05:00:56.757Z"
-    }
+    },
+    "media_missing_at": "2026-10-07T17:05:19.130Z"
   },
   {
     "file": "news-20260907-mcx-circuit-limits",
@@ -1056,7 +1064,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-09T05:00:58.430Z"
-    }
+    },
+    "media_missing_at": "2026-10-07T17:05:20.914Z"
   },
   {
     "file": "news-20260907-full-free-option-chain-all-5-commodities",
@@ -2712,56 +2721,310 @@
   {
     "file": "brief-edition-106-hi",
     "instagram_id": "18087328265243955",
-    "posted_at": "2026-09-15T04:24:36.221Z"
+    "posted_at": "2026-09-15T04:24:36.221Z",
+    "insight_snapshots": [
+      {
+        "views": 34,
+        "reach": 31,
+        "ig_reels_avg_watch_time": 3314,
+        "ig_reels_video_view_total_time": 109388,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:14.319Z",
+        "age_hours": 540.6772494444444,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 34,
+      "reach": 31,
+      "ig_reels_avg_watch_time": 3314,
+      "ig_reels_video_view_total_time": 109388,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:14.319Z"
+    }
   },
   {
     "file": "brief-edition-107-hi",
     "instagram_id": "17905753548508473",
-    "posted_at": "2026-09-16T04:23:40.561Z"
+    "posted_at": "2026-09-16T04:23:40.561Z",
+    "insight_snapshots": [
+      {
+        "views": 8,
+        "reach": 8,
+        "ig_reels_avg_watch_time": 2850,
+        "ig_reels_video_view_total_time": 22801,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:12.190Z",
+        "age_hours": 516.6921191666667,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 8,
+      "reach": 8,
+      "ig_reels_avg_watch_time": 2850,
+      "ig_reels_video_view_total_time": 22801,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:12.190Z"
+    }
   },
   {
     "file": "brief-edition-108-hi",
     "instagram_id": "17951712876039172",
-    "posted_at": "2026-09-17T08:54:25.145Z"
+    "posted_at": "2026-09-17T08:54:25.145Z",
+    "insight_snapshots": [
+      {
+        "views": 18,
+        "reach": 16,
+        "ig_reels_avg_watch_time": 2132,
+        "ig_reels_video_view_total_time": 34121,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:10.877Z",
+        "age_hours": 488.17937,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 18,
+      "reach": 16,
+      "ig_reels_avg_watch_time": 2132,
+      "ig_reels_video_view_total_time": 34121,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:10.877Z"
+    }
   },
   {
     "file": "v3/what-is-mcx-001",
     "instagram_id": "17949644667050521",
-    "posted_at": "2026-09-21T19:15:31.686Z"
+    "posted_at": "2026-09-21T19:15:31.686Z",
+    "media_missing_at": "2026-10-07T17:05:08.618Z"
   },
   {
     "file": "brief-edition-111-hi",
     "instagram_id": "18095806505428153",
-    "posted_at": "2026-09-22T04:24:52.495Z"
+    "posted_at": "2026-09-22T04:24:52.495Z",
+    "media_missing_at": "2026-10-07T17:05:06.991Z"
   },
   {
     "file": "v3/gold-india-story-001",
     "instagram_id": "18021172649714263",
-    "posted_at": "2026-09-23T18:19:46.963Z"
+    "posted_at": "2026-09-23T18:19:46.963Z",
+    "insight_snapshots": [
+      {
+        "views": 13,
+        "reach": 11,
+        "ig_reels_avg_watch_time": 3846,
+        "ig_reels_video_view_total_time": 53851,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:06.220Z",
+        "age_hours": 334.7553491666667,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 13,
+      "reach": 11,
+      "ig_reels_avg_watch_time": 3846,
+      "ig_reels_video_view_total_time": 53851,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:06.220Z"
+    }
   },
   {
     "file": "v3/gold-labels-002",
     "instagram_id": "17960559357233725",
-    "posted_at": "2026-09-25T18:20:03.706Z"
+    "posted_at": "2026-09-25T18:20:03.706Z",
+    "insight_snapshots": [
+      {
+        "views": 147,
+        "reach": 133,
+        "ig_reels_avg_watch_time": 1365,
+        "ig_reels_video_view_total_time": 185719,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:04.259Z",
+        "age_hours": 286.7501536111111,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 147,
+      "reach": 133,
+      "ig_reels_avg_watch_time": 1365,
+      "ig_reels_video_view_total_time": 185719,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:04.259Z"
+    }
   },
   {
     "file": "v3/rupee-gold-001",
     "instagram_id": "17891914764612197",
-    "posted_at": "2026-09-28T20:27:56.728Z"
+    "posted_at": "2026-09-28T20:27:56.728Z",
+    "insight_snapshots": [
+      {
+        "views": 0,
+        "reach": 0,
+        "ig_reels_avg_watch_time": 14749,
+        "ig_reels_video_view_total_time": 14749,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:02.432Z",
+        "age_hours": 212.6182511111111,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 0,
+      "reach": 0,
+      "ig_reels_avg_watch_time": 14749,
+      "ig_reels_video_view_total_time": 14749,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:02.432Z"
+    }
   },
   {
     "file": "v3/crude-petrol-lag-002",
     "instagram_id": "18350945839266844",
-    "posted_at": "2026-09-30T18:57:19.785Z"
+    "posted_at": "2026-09-30T18:57:19.785Z",
+    "insight_snapshots": [
+      {
+        "views": 0,
+        "reach": 0,
+        "ig_reels_avg_watch_time": 0,
+        "ig_reels_video_view_total_time": 0,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:05:00.658Z",
+        "age_hours": 166.12802027777778,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 0,
+      "reach": 0,
+      "ig_reels_avg_watch_time": 0,
+      "ig_reels_video_view_total_time": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:05:00.658Z"
+    }
   },
   {
     "file": "v3/option-premium-002",
     "instagram_id": "17902441656654609",
-    "posted_at": "2026-10-02T19:04:03.588Z"
+    "posted_at": "2026-10-02T19:04:03.588Z",
+    "insight_snapshots": [
+      {
+        "views": 3,
+        "reach": 3,
+        "ig_reels_avg_watch_time": 1301,
+        "ig_reels_video_view_total_time": 3903,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:04:59.156Z",
+        "age_hours": 118.01543555555556,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 3,
+      "reach": 3,
+      "ig_reels_avg_watch_time": 1301,
+      "ig_reels_video_view_total_time": 3903,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:04:59.156Z"
+    }
   },
   {
     "file": "v3/margin-exposure-003",
     "instagram_id": "18115786213807614",
-    "posted_at": "2026-10-05T21:36:35.610Z"
+    "posted_at": "2026-10-05T21:36:35.610Z",
+    "insight_snapshots": [
+      {
+        "views": 0,
+        "reach": 0,
+        "ig_reels_avg_watch_time": 0,
+        "ig_reels_video_view_total_time": 0,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-07T17:04:57.374Z",
+        "age_hours": 43.47271222222222,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 0,
+      "reach": 0,
+      "ig_reels_avg_watch_time": 0,
+      "ig_reels_video_view_total_time": 0,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-07T17:04:57.374Z"
+    }
   }
 ]

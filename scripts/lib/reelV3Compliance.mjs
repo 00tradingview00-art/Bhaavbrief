@@ -1,4 +1,6 @@
 /** The release contract for every V3 Reel manifest/queue entry. */
+import { VISUAL_MODES } from './reelV3VisualPlan.mjs'
+
 const ACTION = /\b(?:buy|sell|go long|go short|invest|recommend|target price|stop[- ]?loss)\b/i
 const PREDICTION = /\b(?:will|likely to|expected to)\s+(?:rise|fall|rally|crash|surge|plunge)\b/i
 const words = (text = '') => text.trim().split(/\s+/).filter(Boolean)
@@ -12,6 +14,9 @@ export function validateReelV3(reel) {
   if (words(reel?.hook).length > 9) issues.push('Hook exceeds 9 words')
   if (words(reel?.voiceover).length < 24 || words(reel?.voiceover).length > 52) issues.push('Voiceover must be 24–52 words for the 15-second format')
   if (!Array.isArray(reel?.steps) || reel.steps.length !== 3 || reel.steps.some(step => words(step).length > 3)) issues.push('Exactly three concise mechanism steps are required')
+  // The visual grammar is the standard's core requirement, so an undeclared or
+  // unrecognised mode is a release blocker rather than a silent generic render.
+  if (!VISUAL_MODES.includes(reel?.visual_mode)) issues.push(`visual_mode must be one of ${VISUAL_MODES.join(', ')} — got ${reel?.visual_mode ?? 'nothing'}`)
   if (!/^https:\/\//.test(reel?.source_url ?? '')) issues.push('Source must be a direct HTTPS URL to a primary publisher')
   const copy = [reel?.hook, reel?.hook_detail, reel?.mechanism, reel?.stakes, reel?.decision_check, reel?.boundary, reel?.conclusion, reel?.voiceover, reel?.caption].filter(Boolean).join('\n')
   if (ACTION.test(copy)) issues.push('Action/advice language is not permitted')
