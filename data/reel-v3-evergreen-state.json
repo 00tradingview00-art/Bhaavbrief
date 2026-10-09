@@ -1,5 +1,5 @@
 {
-  "next": 5,
+  "next": 6,
   "published": [
     {
       "id": "gold-india-story-001",
@@ -24,6 +24,10 @@
     {
       "id": "margin-exposure-003",
       "generated_at": "2026-10-05T21:35:51.537Z"
+    },
+    {
+      "id": "expiry-clock-001",
+      "generated_at": "2026-10-09T15:09:16.631Z"
     }
   ],
   "retired_queue_history": [
