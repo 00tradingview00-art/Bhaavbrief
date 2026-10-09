@@ -1093,7 +1093,8 @@
       "saved": 0,
       "total_interactions": 0,
       "fetched_at": "2026-09-09T05:00:59.854Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:23.396Z"
   },
   {
     "file": "brief-edition-101",
@@ -1117,7 +1118,8 @@
       "ig_reels_avg_watch_time": 1707,
       "ig_reels_video_view_total_time": 40991,
       "fetched_at": "2026-09-08T02:54:48.895Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:23.726Z"
   },
   {
     "file": "news-20260906-how-much-money-to-start-mcx-trading",
@@ -1155,7 +1157,8 @@
       "ig_reels_avg_watch_time": 1540,
       "ig_reels_video_view_total_time": 81621,
       "fetched_at": "2026-09-08T02:54:50.011Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:23.944Z"
   },
   {
     "file": "news-20260905-mcx-gold-vs-gold-etf",
@@ -1178,7 +1181,8 @@
       "ig_reels_avg_watch_time": 3420,
       "ig_reels_video_view_total_time": 290718,
       "fetched_at": "2026-09-07T00:40:52.641Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:24.358Z"
   },
   {
     "file": "news-20260905-pcr-tool",
@@ -1201,7 +1205,8 @@
       "ig_reels_avg_watch_time": 3753,
       "ig_reels_video_view_total_time": 93829,
       "fetched_at": "2026-09-07T00:40:53.065Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:24.652Z"
   },
   {
     "file": "news-20260904-fast-montage-brief-options-tools-feed-calend",
@@ -1240,7 +1245,8 @@
       "ig_reels_avg_watch_time": 2441,
       "ig_reels_video_view_total_time": 24419,
       "fetched_at": "2026-09-05T06:03:58.620Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:25.193Z"
   },
   {
     "file": "news-20260903-best-time-to-trade-mcx-in-india",
@@ -1263,7 +1269,8 @@
       "ig_reels_avg_watch_time": 2425,
       "ig_reels_video_view_total_time": 164932,
       "fetched_at": "2026-09-05T06:03:59.442Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:25.408Z"
   },
   {
     "file": "brief-edition-099",
@@ -1287,7 +1294,8 @@
       "ig_reels_avg_watch_time": 14406,
       "ig_reels_video_view_total_time": 72030,
       "fetched_at": "2026-09-04T08:04:20.061Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:25.601Z"
   },
   {
     "file": "news-20260902-why-usd-inr-affects-mcx-gold-price",
@@ -1310,7 +1318,8 @@
       "ig_reels_avg_watch_time": 3282,
       "ig_reels_video_view_total_time": 193644,
       "fetched_at": "2026-09-04T02:17:03.998Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:25.809Z"
   },
   {
     "file": "brief-edition-098",
@@ -1334,7 +1343,8 @@
       "ig_reels_avg_watch_time": 9914,
       "ig_reels_video_view_total_time": 99146,
       "fetched_at": "2026-09-03T04:14:56.136Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:26.027Z"
   },
   {
     "file": "news-20260901-which-mcx-commodity-should-i-trade",
@@ -1357,7 +1367,8 @@
       "ig_reels_avg_watch_time": 1058,
       "ig_reels_video_view_total_time": 24354,
       "fetched_at": "2026-09-03T04:14:56.770Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:26.298Z"
   },
   {
     "file": "brief-edition-097",
@@ -1381,7 +1392,8 @@
       "ig_reels_avg_watch_time": 8648,
       "ig_reels_video_view_total_time": 60542,
       "fetched_at": "2026-09-02T04:14:57.728Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:26.515Z"
   },
   {
     "file": "news-20260831-what-is-comex",
@@ -1404,7 +1416,8 @@
       "ig_reels_avg_watch_time": 1988,
       "ig_reels_video_view_total_time": 75545,
       "fetched_at": "2026-09-02T03:04:06.099Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:26.725Z"
   },
   {
     "file": "brief-edition-096",
@@ -1428,7 +1441,8 @@
       "ig_reels_avg_watch_time": 4008,
       "ig_reels_video_view_total_time": 72161,
       "fetched_at": "2026-09-01T04:14:52.172Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:27.132Z"
   },
   {
     "file": "news-20260830-mcx-trading-hours-in-india",
@@ -1451,7 +1465,8 @@
       "ig_reels_avg_watch_time": 2907,
       "ig_reels_video_view_total_time": 334392,
       "fetched_at": "2026-09-01T03:11:55.896Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:27.384Z"
   },
   {
     "file": "news-20260829-mcx-futures-rollover",
@@ -1474,7 +1489,8 @@
       "ig_reels_avg_watch_time": 1503,
       "ig_reels_video_view_total_time": 207545,
       "fetched_at": "2026-08-31T03:19:21.833Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:27.772Z"
   },
   {
     "file": "news-20260828-mcx-order-types-explained",
@@ -1497,7 +1513,8 @@
       "ig_reels_avg_watch_time": 2782,
       "ig_reels_video_view_total_time": 86261,
       "fetched_at": "2026-08-30T05:05:24.352Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:28.009Z"
   },
   {
     "file": "news-20260828-fed-chair-kevin-warsh-s-first-jackson-hole-s",
@@ -1520,7 +1537,8 @@
       "ig_reels_avg_watch_time": 6144,
       "ig_reels_video_view_total_time": 122893,
       "fetched_at": "2026-08-30T05:05:24.887Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:28.292Z"
   },
   {
     "file": "brief-edition-095",
@@ -1543,7 +1561,8 @@
       "ig_reels_avg_watch_time": 4662,
       "ig_reels_video_view_total_time": 135223,
       "fetched_at": "2026-08-29T06:32:03.956Z"
-    }
+    },
+    "media_missing_at": "2026-10-09T10:43:28.691Z"
   },
   {
     "file": "news-20260827-mcx-margin-calculator",
@@ -2946,6 +2965,20 @@
         "fetched_at": "2026-10-07T17:05:00.658Z",
         "age_hours": 166.12802027777778,
         "observation": "late_initial"
+      },
+      {
+        "views": 0,
+        "reach": 0,
+        "ig_reels_avg_watch_time": 0,
+        "ig_reels_video_view_total_time": 0,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-09T10:43:23.178Z",
+        "age_hours": 207.76760916666666,
+        "observation": "late_seven_day"
       }
     ],
     "insights": {
@@ -2958,7 +2991,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-10-07T17:05:00.658Z"
+      "fetched_at": "2026-10-09T10:43:23.178Z"
     }
   },
   {
