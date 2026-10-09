@@ -12,6 +12,12 @@
  * Selection: first eligible observation after 24h, a later observation after
  * seven days, and one engagement backfill for older incomplete observations.
  * Actual ages/timestamps are retained; late fetches are never called 24h data.
+ * Newest reels are measured first, and media Meta reports as deleted is
+ * tombstoned (`media_missing_at`) so it drops out of the queue permanently —
+ * without both, a backlog of deleted posts starves the current ones. That is
+ * not hypothetical: it silently blocked every observation from 11 Aug to
+ * 7 Oct 2026, because ~20 deleted reels re-qualified every run, failed, never
+ * advanced their `fetched_at`, and consumed the whole per-run budget.
  *
  * Observability only — never the publish gate. Any single reel's API failure
  * is logged and skipped; the script always exits 0 (the workflow step is also
@@ -63,6 +69,9 @@ const ENGAGEMENT_METRICS = ['likes', 'comments', 'shares', 'saved', 'total_inter
 /** Pure selection logic. Bounded refresh avoids freezing the first observation. */
 export function insightRefreshReason(entry, now = Date.now()) {
   if (!entry?.instagram_id || !entry.posted_at) return null
+  // Deleted on Instagram — its metrics can never be read again, so it must
+  // leave the queue rather than re-qualify forever and crowd out live reels.
+  if (entry.media_missing_at) return null
   const posted = Date.parse(entry.posted_at)
   if (!Number.isFinite(posted) || now - posted < MIN_AGE_MS) return null
   if (!entry.insights) return 'initial'
@@ -76,6 +85,25 @@ export function insightRefreshReason(entry, now = Date.now()) {
 export function selectReelsForInsights(history, now = Date.now()) {
   if (!Array.isArray(history)) return []
   return history.filter(entry => insightRefreshReason(entry, now))
+}
+
+/** Max reels measured per run — bounds API work on a long history. */
+export const PER_RUN_LIMIT = 20
+
+/**
+ * Selection, priority order and the per-run bound in one pure step.
+ *
+ * New observations come before migration backfills, and within each group the
+ * newest reel goes first. Recency ordering is what makes starvation
+ * structurally impossible: however long the backlog grows, a reel posted
+ * yesterday is always inside the budget.
+ */
+export function orderReelsForInsights(history, now = Date.now(), limit = PER_RUN_LIMIT) {
+  return selectReelsForInsights(history, now)
+    .sort((a, b) =>
+      Number(insightRefreshReason(a, now) === 'engagement_backfill') - Number(insightRefreshReason(b, now) === 'engagement_backfill')
+      || Date.parse(b.posted_at) - Date.parse(a.posted_at))
+    .slice(0, limit)
 }
 
 /** Flatten a Graph API insights response into { metricName: value }. */
@@ -99,9 +127,19 @@ async function fetchInsights(mediaId, token, metrics) {
     // with the fallback list. Anything else is a real per-reel failure.
     const err = new Error(body.error.message ?? 'Graph API error')
     err.code = body.error.code
+    err.subcode = body.error.error_subcode
     throw err
   }
   return parseInsightsResponse(body)
+}
+
+/**
+ * True when Meta is saying the media object itself is gone, not that a metric
+ * name was wrong. Both arrive as code 100, so the subcode (33 = "object does
+ * not exist") and the message text are the only way to tell them apart.
+ */
+export function isMissingMedia(e) {
+  return e?.subcode === 33 || /does not exist/i.test(e?.message ?? '')
 }
 
 /** `followers_count` is a field on the IG user node, not a per-media insight. */
@@ -132,13 +170,11 @@ async function main() {
     return
   }
 
-  // New observations take priority over migration backfills. Bound API work per run.
-  const pending = selectReelsForInsights(history)
-    .sort((a, b) => Number(insightRefreshReason(a) === 'engagement_backfill') - Number(insightRefreshReason(b) === 'engagement_backfill'))
-    .slice(0, 20)
+  const pending = orderReelsForInsights(history)
   console.log(`📊  ${pending.length} posted reel(s) awaiting insights`)
 
   let updated = 0
+  let tombstoned = 0
   for (const entry of pending) {
     const reason = insightRefreshReason(entry)
     let metrics
@@ -151,6 +187,12 @@ async function main() {
         metrics = await fetchInsights(entry.instagram_id, token, FALLBACK_METRICS)
       }
     } catch (e) {
+      if (isMissingMedia(e)) {
+        entry.media_missing_at = new Date().toISOString()
+        tombstoned++
+        console.warn(`  🪦  ${entry.file}: media no longer exists on Instagram — tombstoned, will not be retried`)
+        continue
+      }
       console.warn(`  ⚠️  ${entry.file}: ${e.message} — skipping`)
       continue
     }
@@ -183,9 +225,9 @@ async function main() {
     console.log(`  ✅  ${entry.file}: views=${metrics.views ?? '?'} reach=${metrics.reach ?? '?'}${watch != null ? ` avg_watch=${watch}ms` : ''}${engagement.shares != null ? ` shares=${engagement.shares}` : ''}`)
   }
 
-  if (updated > 0) {
+  if (updated > 0 || tombstoned > 0) {
     writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2), 'utf8')
-    console.log(`💾  Wrote insights for ${updated} reel(s) to data/reel-history.json`)
+    console.log(`💾  data/reel-history.json: insights for ${updated} reel(s), ${tombstoned} tombstoned`)
   }
 
   // One follower-count snapshot per run (dedupe-by-date happens on write —

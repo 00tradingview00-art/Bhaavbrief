@@ -115,9 +115,12 @@ are brought in alongside it:
 
 - **Don't run a concurrent session in the same working tree Claude Code is using.** The cron
   pipeline commits straight to `main` (Part 8.5) — tuned for one agent editing at a time. Work
-  in a separate `git worktree` (this repo already uses `.claude/worktrees/*` for exactly this
-  kind of parallel work) or a cloud task, so your changes land as a diff to review rather than
-  racing another agent's edits.
+  in a separate `git worktree` or a cloud task, so your changes land as a diff to review rather
+  than racing another agent's edits. The convention here is a **sibling directory** of the repo
+  on a `codex/*` branch — `git worktree list` shows the live ones (e.g.
+  `/Users/prabalkapoor/Downloads/bhaavbrief-reel-v2`). Do not use `.claude/worktrees/*`: that
+  path was cited here previously but holds no registered worktree, and the one directory left
+  there is a dead checkout carrying stale copies of this file.
 - **Your best fit here**: independent review of risk-sensitive changes (anything touching
   `lib/snapshot.ts`, `lib/prices.ts`, `lib/options.ts`, `lib/black76.ts`,
   `scripts/validate-brief.mjs`), and self-contained cloud-task work run in parallel with

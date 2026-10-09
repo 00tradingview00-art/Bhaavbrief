@@ -4,9 +4,18 @@ name: Generate V3 Context Reel
 
 on:
   # Three deliberate context releases a week — never a daily filler quota.
-  # 7:30 PM IST, Monday / Wednesday / Friday.
+  # Target is 7:30 PM IST on Monday / Wednesday / Friday.
+  #
+  # These crons are deliberately over-scheduled and NOT the release time.
+  # GitHub fired this workflow 4h18m–7h23m late on every run between 21 Sep
+  # and 5 Oct 2026, so a single `0 14` cron published reels between 23:49 and
+  # 03:06 IST. Actions minutes are free on a public repo, so instead of
+  # guessing the lag we offer several candidate firings and let
+  # scripts/check-reel-release-window.mjs pick the one that actually lands in
+  # the evening — at most one release per day. This is correct whether the lag
+  # is seven hours or zero.
   schedule:
-    - cron: '0 14 * * 1,3,5'
+    - cron: '0 4,6,8,10,12,14,16 * * 1,3,5'
   workflow_dispatch:
 
 concurrency:
@@ -17,7 +26,23 @@ permissions:
   contents: write
 
 jobs:
+  # Cheap gate ahead of the render: no npm ci, no ffmpeg, no TTS. A firing
+  # outside the evening window costs seconds instead of ~13 minutes, and the
+  # queue state is never touched, so the topic stays next in line.
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      release: ${{ steps.window.outputs.release }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Is this firing inside the release window?
+        id: window
+        run: node scripts/check-reel-release-window.mjs
+
   generate:
+    needs: gate
+    # A manual dispatch is a deliberate act and bypasses the window.
+    if: github.event_name == 'workflow_dispatch' || needs.gate.outputs.release == 'true'
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
