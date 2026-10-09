@@ -60,6 +60,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-10-09-mcx-close-09oct2026-metals-rally",
+    "href": "/articles/2026-10-09-mcx-close-09oct2026-metals-rally",
+    "title": "MCX Close 9Oct: Metals Rally on Dollar Weakness",
+    "description": "9 Oct 2026 — MCX NatGas +2.58% to ₹313.7, Silver +2.07% to ₹225820. Broad metals advance; COMEX Gold +1.51% extends overnight bid.",
+    "excerpt": "MCX delivered broad metals strength Friday. NatGas led with +2.58% to ₹313.7/mmBtu, driven by Henry Hub strength at $3.20 (+0.92% live). Silver followed with +2.07% to ₹225820/kg, confirming a reflati",
+    "date": "2026-10-08T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Day Recap",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
     "href": "/articles/2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
     "title": "MCX Nat Gas Tumbles 2.83% as Henry Hub Weakens",
