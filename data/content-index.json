@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-123",
+    "href": "/briefs/edition-123",
+    "title": "Gold Breaks $4,200 as the War Trade Reunites",
+    "description": "COMEX gold surged past $4,200 overnight while crude jumped sharply, signalling the geopolitical risk premium is back in both markets simultaneously.",
+    "excerpt": "MCX Gold ₹149610 | Crude ₹8864 | USDINR ₹97.13 Yesterday's Edge — Result: Edition #122 watched whether WTI would close above 89.63. Confirmed ✓, now at 91. | Commodity | Global Price | USD/INR | MCX P",
+    "date": "2026-10-09T03:03:09.774Z",
+    "edition": "123",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
     "href": "/articles/2026-10-08-mcx-nat-gas-tumbles-2-83-as-henry-hub-weakens",
