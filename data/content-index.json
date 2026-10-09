@@ -1,5 +1,23 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-09-hawk-scan-mcx-nat-gas-313-breaks-week-high-on-henry-hub-stre",
+    "href": "/articles/2026-10-09-hawk-scan-mcx-nat-gas-313-breaks-week-high-on-henry-hub-stre",
+    "title": "MCX Nat Gas: ₹313 breaks week high on Henry Hub strength",
+    "description": "MCX Nat Gas +3.17% to ₹313/mmBtu. Henry Hub $3.22 (+2.32%) signals demand shift.",
+    "excerpt": "TRIGGER MCX Natural Gas has risen 3.17% to ₹313/mmBtu, breaching the week's prior high of ₹319 for the first time in 5 sessions, as Henry Hub posted a 2.32% gain to $3.22/mmBtu. PRICE ₹313/mmBtu · +3.",
+    "date": "2026-10-09T16:35:19.877Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 313
+  },
+  {
     "type": "brief",
     "slug": "edition-123",
     "href": "/briefs/edition-123",
