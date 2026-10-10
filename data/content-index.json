@@ -1,5 +1,27 @@
 [
   {
+    "type": "research",
+    "slug": "2026-10-10-weekly-catalyst",
+    "href": "/research/2026-10-10-weekly-catalyst",
+    "title": "Three Inflation Prints in 48 Hours Set the Tone for MCX Gold and Silver",
+    "description": "India CPI Monday, India WPI and US CPI Wednesday — a rare twin-sided inflation cluster that drives both the dollar leg and the rupee leg of MCX precious metals.",
+    "excerpt": "MCX Gold is quoted in rupees per 10g, which means every print lands twice: once through the dollar price of the metal, and once through the exchange rate that translates it. Next week delivers both le",
+    "date": "2026-10-10",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-09-hawk-scan-mcx-nat-gas-313-breaks-week-high-on-henry-hub-stre",
     "href": "/articles/2026-10-09-hawk-scan-mcx-nat-gas-313-breaks-week-high-on-henry-hub-stre",
