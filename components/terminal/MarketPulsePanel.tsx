@@ -1,15 +1,61 @@
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { CORE_INSTRUMENTS } from '@/lib/terminalData'
 import type { PriceData } from '@/lib/prices'
+import type { CompositePulseHistory, PriorSessionReading } from '@/lib/compositePulseHistory'
 
 interface Props {
   terminalData: Record<CoreInstrument, TerminalInstrumentData | null>
   prices:       PriceData | null
+  // Previous session's stored composite closes, or nulls when the store is
+  // empty/unreachable — see lib/compositePulseHistory.ts.
+  history:      CompositePulseHistory
 }
 
 function avg(values: number[]): number | null {
   if (values.length === 0) return null
   return values.reduce((s, v) => s + v, 0) / values.length
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+// A stored YYYY-MM-DD session key is already an IST trading date — label it
+// directly rather than round-tripping it through a Date, which would shift it
+// a day under the UTC-default serverless runtime.
+function sessionLabel(date: string): string {
+  const [, month, day] = date.split('-')
+  return `${Number(day)} ${MONTHS[Number(month) - 1] ?? ''}`.trim()
+}
+
+// Day-over-day move, written as the previous close itself rather than as a
+// delta. A delta here would have to carry a unit: both these metrics are
+// measured in percent, so "+2.5%" is genuinely ambiguous (2.5% OF 36.2, or
+// 36.2 → 38.7?) and the unit that disambiguates it, "pp"/percentage points,
+// is jargon a reader shouldn't have to already know. Naming the prior level
+// needs no unit at all — the reader sees 38.7% above and 36.2% here — and
+// says strictly more than a delta does while the stored series is still only
+// a couple of weeks long.
+//
+// Deliberately NOT colored up/down: a rising or falling composite iVIX is
+// neither good nor bad, and the green/red used elsewhere on this page carries
+// exactly that meaning. USD/INR below keeps its colors, where direction does
+// have a stated consequence.
+function ChangeLine({ current, prior, unit = '', signed = false }: {
+  current: number | null
+  prior:   PriorSessionReading | null
+  unit?:   string
+  signed?: boolean
+}) {
+  if (current === null || prior === null) return null
+  // Both levels render to 1dp, so "unchanged" means they render identically —
+  // never "Up from 36.2%" above a 36.2% headline.
+  const delta = current - prior.value
+  const direction = Math.abs(delta) < 0.05 ? 'Unchanged from' : delta > 0 ? 'Up from' : 'Down from'
+  const level = `${signed && prior.value > 0 ? '+' : ''}${prior.value.toFixed(1)}${unit}`
+  return (
+    <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 11, color: 'var(--ink-3)' }}>
+      {direction} {level} at the {sessionLabel(prior.date)} close
+    </div>
+  )
 }
 
 // Market Pulse ships numeric facts only — no "why" narrative. A composite
@@ -19,7 +65,7 @@ function avg(values: number[]): number | null {
 // Rank feature (app/tools/mcx-iv-rank), which is itself a paid feature this
 // page shouldn't give away for free. So: today's composite level and vol
 // premium only, not a regime label or a 30-day range claim.
-export default function MarketPulsePanel({ terminalData, prices }: Props) {
+export default function MarketPulsePanel({ terminalData, prices, history }: Props) {
   const ivixValues = CORE_INSTRUMENTS
     .map(i => terminalData[i]?.ivix)
     .filter((v): v is number => v !== null && v !== undefined)
@@ -46,6 +92,7 @@ export default function MarketPulsePanel({ terminalData, prices }: Props) {
         <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>
           {compositeIvix !== null ? compositeIvix.toFixed(1) + '%' : '—'}
         </div>
+        <ChangeLine current={compositeIvix} prior={history.ivix} unit="%" />
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
           BhaavBrief&apos;s composite read on options-market volatility across MCX&apos;s core commodities
         </div>
@@ -61,6 +108,7 @@ export default function MarketPulsePanel({ terminalData, prices }: Props) {
         }}>
           {compositeVolPremium !== null ? `${compositeVolPremium >= 0 ? '+' : ''}${compositeVolPremium.toFixed(1)}pp` : '—'}
         </div>
+        <ChangeLine current={compositeVolPremium} prior={history.volPremium} signed />
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
           Whether options are pricing in more movement than these commodities have actually delivered lately
         </div>

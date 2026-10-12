@@ -17,6 +17,7 @@ import MacroCard from '@/components/terminal/MacroCard'
 import CorrelationHeatmap from '@/components/terminal/CorrelationHeatmap'
 import { getCorrelationMatrix } from '@/lib/correlation'
 import { getTerminalData, CORE_INSTRUMENTS, GATEWAY_META } from '@/lib/terminalData'
+import { getCompositePulseHistory } from '@/lib/compositePulseHistory'
 import { getSparklineCloses } from '@/lib/history'
 import IVTermStructureChart from '@/components/terminal/IVTermStructureChartLazy'
 
@@ -115,6 +116,10 @@ export default async function HomePage() {
   const snap   = loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
   const terminalData = await getTerminalData()
+  // Previous session's stored composite closes, for Market Pulse's
+  // day-over-day change line. Resolves to nulls rather than throwing when
+  // the IV store is unreachable.
+  const compositeHistory = await getCompositePulseHistory()
   const macroMetrics = computeMacro(snap)
   // Only the matrix's labels/sample size go into this shared ISR page. This
   // route never calls auth() (that would force it off ISR), so it can't know
@@ -186,7 +191,7 @@ export default async function HomePage() {
         }}>
           Market Pulse
         </div>
-        <MarketPulsePanel terminalData={terminalData} prices={prices} />
+        <MarketPulsePanel terminalData={terminalData} prices={prices} history={compositeHistory} />
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
