@@ -41,6 +41,28 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-10-12-mcx-close-12oct2026-gold-decline-crude-strength",
+    "href": "/articles/2026-10-12-mcx-close-12oct2026-gold-decline-crude-strength",
+    "title": "MCX Close 12Oct: Gold -1.3%, Crude Rallies on Supply Tightness",
+    "description": "MCX evening close 12 Oct 2026: Gold ₹149540 -1.29%, Silver -1.24%. Crude +1.15% as COMEX extends gains. NatGas breaks lower on US storage surplus.",
+    "excerpt": "MCX bearish across precious metals, bullish in energy. Gold led downside at ₹149540, down 1.29% on near-term profit-taking following last week's rally toward ₹151700. Silver tracked lower at ₹222950, ",
+    "date": "2026-10-11T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Gold",
+      "Crude Oil",
+      "Natural Gas"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-10-10-weekly-catalyst",
     "href": "/research/2026-10-10-weekly-catalyst",
