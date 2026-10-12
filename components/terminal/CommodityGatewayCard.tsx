@@ -92,7 +92,7 @@ export default function CommodityGatewayCard({ meta, priceData, optionsData, spa
         {[
           { k: 'iVIX',       v: optionsData ? fmtNum(optionsData.ivix) + '%' : '—' },
           { k: '20D avg',    v: optionsData ? fmtNum(optionsData.aav['20d']) + '%' : '—' },
-          { k: 'Vol prem.',  v: optionsData?.volPremium != null ? `${optionsData.volPremium > 0 ? '+' : ''}${fmtNum(optionsData.volPremium)}pp` : '—' },
+          { k: 'Vol prem.',  v: optionsData?.volPremium != null ? `${optionsData.volPremium > 0 ? '+' : ''}${fmtNum(optionsData.volPremium)} pts` : '—' },
           { k: 'PCR',        v: optionsData ? fmtNum(optionsData.pcr, 2) : '—' },
           { k: 'Max pain',   v: optionsData?.maxPain ? '₹' + fmtNum(optionsData.maxPain, 0) : '—' },
           { k: 'OI vs low',  v: optionsData?.oiVsDayLow != null ? `${optionsData.oiVsDayLow > 0 ? '+' : ''}${fmtNum(optionsData.oiVsDayLow, 0)}` : '—' },
