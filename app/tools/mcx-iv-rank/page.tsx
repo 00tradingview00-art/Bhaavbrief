@@ -190,15 +190,8 @@ export default async function MCXIVRankPage() {
                 <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--ink)' }}>{meta.label}</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--ink-3)' }}>{key}</div>
                 {spread !== null && (
-                  // "IV-RV: +2.5pp (20d realized ...)" assumed the reader already
-                  // knew three separate notations. Same numbers, said in words —
-                  // "delivered movement" is the phrasing the homepage Market Pulse
-                  // already uses for this exact comparison.
                   <div style={{ fontSize: '0.72rem', color: 'var(--ink-3)', marginTop: 4 }}>
-                    {Math.abs(spread) < 0.05
-                      ? 'Options priced in line with delivered movement'
-                      : `Options priced ${Math.abs(spread).toFixed(1)} points ${spread > 0 ? 'above' : 'below'} delivered movement`}
-                    {' '}<span style={{ opacity: 0.8 }}>({realizedVol20d?.toFixed(1)}% over the last 20 days)</span>
+                    IV−RV: {spread >= 0 ? '+' : ''}{spread.toFixed(1)}pp <span style={{ opacity: 0.8 }}>(20d realized {realizedVol20d?.toFixed(1)}%)</span>
                   </div>
                 )}
                 {positionView && <IVPosition view={positionView} />}
