@@ -31,7 +31,7 @@ export const dynamic  = 'force-dynamic'
  * `getOptionsChain()` already computes (a different metric from the
  * single-strike ATM IV above; this is the number the free Market Pulse panel
  * displays live, now given a real history). Read back by
- * lib/compositePulseHistory.ts for Market Pulse's day-over-day change line —
+ * lib/compositeHistory.ts for Market Pulse's day-over-day change line —
  * the previous session's close only, not a distribution claim; the series is
  * still too short for a regime label or a percentile.
  */

@@ -1,14 +1,14 @@
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { CORE_INSTRUMENTS } from '@/lib/terminalData'
 import type { PriceData } from '@/lib/prices'
-import type { CompositePulseHistory, PriorSessionReading } from '@/lib/compositePulseHistory'
+import type { CompositePriorSession, HistoryPoint } from '@/lib/compositeHistory'
 
 interface Props {
   terminalData: Record<CoreInstrument, TerminalInstrumentData | null>
   prices:       PriceData | null
   // Previous session's stored composite closes, or nulls when the store is
-  // empty/unreachable — see lib/compositePulseHistory.ts.
-  history:      CompositePulseHistory
+  // empty/unreachable — see lib/compositeHistory.ts.
+  history:      CompositePriorSession
 }
 
 function avg(values: number[]): number | null {
@@ -41,7 +41,7 @@ function sessionLabel(date: string): string {
 // have a stated consequence.
 function ChangeLine({ current, prior, unit = '', signed = false }: {
   current: number | null
-  prior:   PriorSessionReading | null
+  prior:   HistoryPoint | null
   unit?:   string
   signed?: boolean
 }) {

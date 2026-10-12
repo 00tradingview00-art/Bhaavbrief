@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { priorSessionReading } from './compositePulseHistory'
+import { priorSessionReading } from './compositeHistory'
 
 // 2026-10-05..09 are Mon–Fri trading sessions; 10 and 11 Oct are the weekend.
 const ENTRIES = [
