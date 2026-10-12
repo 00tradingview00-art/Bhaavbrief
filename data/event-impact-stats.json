@@ -1,14 +1,14 @@
 {
   "eia_natural_gas_storage": {
     "natgas": {
-      "avgAbsMovePct": 2.66,
+      "avgAbsMovePct": 2.55,
       "maxAbsMovePct": 9.67,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": 60.63,
+        "baselineAvg": 59.88,
         "aboveAvg": {
-          "avgAbsMovePct": 2.91,
+          "avgAbsMovePct": 2.69,
           "maxAbsMovePct": 6.53,
           "sampleSize": 13
         },
@@ -22,14 +22,14 @@
   },
   "eia_petroleum_status_report": {
     "crude": {
-      "avgAbsMovePct": 2.96,
+      "avgAbsMovePct": 2.86,
       "maxAbsMovePct": 7.02,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": -6.75,
+        "baselineAvg": -6.82,
         "aboveAvg": {
-          "avgAbsMovePct": 2.21,
+          "avgAbsMovePct": 2,
           "maxAbsMovePct": 5.49,
           "sampleSize": 12
         },
@@ -43,43 +43,43 @@
   },
   "api_crude_inventories": {
     "crude": {
-      "avgAbsMovePct": 3.19,
+      "avgAbsMovePct": 3.16,
       "maxAbsMovePct": 5.82,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     }
   },
   "baker_hughes_rig_count": {
     "crude": {
-      "avgAbsMovePct": 1.95,
+      "avgAbsMovePct": 1.83,
       "maxAbsMovePct": 4.65,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     },
     "natgas": {
-      "avgAbsMovePct": 1.67,
+      "avgAbsMovePct": 1.69,
       "maxAbsMovePct": 4.52,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     }
   },
   "cftc_cot_report": {
     "gold": {
-      "avgAbsMovePct": 0.98,
-      "maxAbsMovePct": 2.48,
+      "avgAbsMovePct": 0.96,
+      "maxAbsMovePct": 2.12,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": 193372.58,
+        "baselineAvg": 195302.96,
         "aboveAvg": {
-          "avgAbsMovePct": 1.15,
-          "maxAbsMovePct": 2.16,
-          "sampleSize": 11
+          "avgAbsMovePct": 1.09,
+          "maxAbsMovePct": 1.99,
+          "sampleSize": 10
         },
         "belowAvg": {
-          "avgAbsMovePct": 0.84,
-          "maxAbsMovePct": 2.48,
-          "sampleSize": 13
+          "avgAbsMovePct": 0.86,
+          "maxAbsMovePct": 2.12,
+          "sampleSize": 14
         }
       }
     },
@@ -87,9 +87,9 @@
       "avgAbsMovePct": 1.72,
       "maxAbsMovePct": 6.6,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": 24408.5,
+        "baselineAvg": 24384.88,
         "aboveAvg": {
           "avgAbsMovePct": 1.58,
           "maxAbsMovePct": 6.6,
@@ -103,85 +103,85 @@
       }
     },
     "crude": {
-      "avgAbsMovePct": 1.95,
+      "avgAbsMovePct": 1.83,
       "maxAbsMovePct": 4.65,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": 131360.29,
+        "baselineAvg": 127475.21,
         "aboveAvg": {
-          "avgAbsMovePct": 2.4,
-          "maxAbsMovePct": 3.9,
-          "sampleSize": 10
+          "avgAbsMovePct": 2.19,
+          "maxAbsMovePct": 3.66,
+          "sampleSize": 11
         },
         "belowAvg": {
-          "avgAbsMovePct": 1.63,
+          "avgAbsMovePct": 1.52,
           "maxAbsMovePct": 4.65,
-          "sampleSize": 14
+          "sampleSize": 13
         }
       }
     },
     "copper": {
-      "avgAbsMovePct": 0.79,
+      "avgAbsMovePct": 0.86,
       "maxAbsMovePct": 3.17,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": 74685.92,
+        "baselineAvg": 75112.17,
         "aboveAvg": {
-          "avgAbsMovePct": 0.85,
+          "avgAbsMovePct": 0.88,
           "maxAbsMovePct": 3.17,
           "sampleSize": 13
         },
         "belowAvg": {
-          "avgAbsMovePct": 0.72,
+          "avgAbsMovePct": 0.84,
           "maxAbsMovePct": 1.62,
           "sampleSize": 11
         }
       }
     },
     "natgas": {
-      "avgAbsMovePct": 1.67,
+      "avgAbsMovePct": 1.69,
       "maxAbsMovePct": 4.52,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z",
+      "computedAt": "2026-10-12T11:20:43.504Z",
       "surpriseSplit": {
-        "baselineAvg": -190572.67,
+        "baselineAvg": -193411.17,
         "aboveAvg": {
-          "avgAbsMovePct": 1.86,
-          "maxAbsMovePct": 4.13,
-          "sampleSize": 11
+          "avgAbsMovePct": 1.94,
+          "maxAbsMovePct": 4.52,
+          "sampleSize": 12
         },
         "belowAvg": {
-          "avgAbsMovePct": 1.51,
-          "maxAbsMovePct": 4.52,
-          "sampleSize": 13
+          "avgAbsMovePct": 1.45,
+          "maxAbsMovePct": 3.16,
+          "sampleSize": 12
         }
       }
     },
     "zinc": {
-      "avgAbsMovePct": 1.05,
+      "avgAbsMovePct": 1.13,
       "maxAbsMovePct": 5.18,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     },
     "aluminium": {
-      "avgAbsMovePct": 0.56,
+      "avgAbsMovePct": 0.57,
       "maxAbsMovePct": 1.73,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     },
     "lead": {
-      "avgAbsMovePct": 0.77,
+      "avgAbsMovePct": 0.79,
       "maxAbsMovePct": 4.35,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     },
     "nickel": {
-      "avgAbsMovePct": 0.91,
+      "avgAbsMovePct": 0.86,
       "maxAbsMovePct": 3.52,
       "sampleSize": 24,
-      "computedAt": "2026-10-05T10:51:57.121Z"
+      "computedAt": "2026-10-12T11:20:43.504Z"
     }
   }
 }
