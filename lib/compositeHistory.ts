@@ -65,15 +65,16 @@ export function priorSessionReading(
   return prior.length ? prior[prior.length - 1] : null
 }
 
+// iVIX only: Market Pulse's other composite tile shows delivered volatility,
+// which intentionally carries no change line (see MarketPulsePanel). The
+// volPremium series is still read by getCompositeHistory() and still written
+// daily by the cron — it is the only record of that history — it just has no
+// prior-session consumer.
 export interface CompositePriorSession {
-  ivix:       HistoryPoint | null
-  volPremium: HistoryPoint | null
+  ivix: HistoryPoint | null
 }
 
 export async function getCompositePriorSession(): Promise<CompositePriorSession> {
   const history = await getCompositeHistory()
-  return {
-    ivix:       priorSessionReading(history.ivix),
-    volPremium: priorSessionReading(history.volPremium),
-  }
+  return { ivix: priorSessionReading(history.ivix) }
 }

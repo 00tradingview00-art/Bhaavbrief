@@ -179,9 +179,10 @@ export default async function HomePage() {
       <TerminalTabbar sections={TERMINAL_SECTIONS} />
 
       {/* ══════════════════════════════════════════════════════════════════════
-          MARKET PULSE — composite iVIX + vol premium + USDINR. Numeric facts
-          only, no narrative "why" text (see MarketPulsePanel's own comment
-          for why a Calm/Elevated/Stress regime read isn't shown here).
+          MARKET PULSE — composite iVIX + delivered volatility + USDINR.
+          Numeric facts only, no narrative "why" text (see MarketPulsePanel's
+          own comment for why a Calm/Elevated/Stress regime read isn't shown
+          here, and why the delivered tile carries no change line).
           ══════════════════════════════════════════════════════════════════ */}
       <section id="pulse" style={{ marginBottom: 48 }}>
         <div style={{
