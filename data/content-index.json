@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
+    "href": "/articles/2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
+    "title": "MCX Nat Gas breaks 3% lower as Henry Hub weakness signals storage surplus",
+    "description": "₹302/mmBtu · -3.52% · Natural gas plunges past support on US storage build above seasonal norms.",
+    "excerpt": "TRIGGER MCX Natural Gas has fallen 3.52% to ₹302/mmBtu, breaching the Hawk-Scan threshold as NYMEX Henry Hub weakness (-3.89% to $3.14) signals US storage builds are running above 5-year seasonal aver",
+    "date": "2026-10-12T09:54:05.336Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "Henry Hub",
+      "Storage"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 302
+  },
+  {
     "type": "brief",
     "slug": "edition-124",
     "href": "/briefs/edition-124",
