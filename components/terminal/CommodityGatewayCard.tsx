@@ -90,8 +90,14 @@ export default function CommodityGatewayCard({ meta, priceData, optionsData, spa
         paddingTop: 8, borderTop: '1px solid var(--border)',
       }}>
         {[
-          { k: 'iVIX',       v: optionsData ? fmtNum(optionsData.ivix) + '%' : '—' },
-          { k: '20D avg',    v: optionsData ? fmtNum(optionsData.aav['20d']) + '%' : '—' },
+          // Null-check the VALUE, not just optionsData: fmtNum() already returns
+          // '—' for a null, so the old `optionsData ? fmtNum(x) + '%'` appended a
+          // percent sign to it and rendered the literal string '—%' whenever the
+          // chain fetched but these two metrics didn't resolve (ivix needs 3+
+          // qualifying strikes; aav['20d'] needs 21 daily closes). Matches the
+          // 'Vol prem.' row below, which has always checked the value itself.
+          { k: 'iVIX',       v: optionsData?.ivix       != null ? fmtNum(optionsData.ivix) + '%'       : '—' },
+          { k: '20D avg',    v: optionsData?.aav['20d'] != null ? fmtNum(optionsData.aav['20d']) + '%' : '—' },
           { k: 'Vol prem.',  v: optionsData?.volPremium != null ? `${optionsData.volPremium > 0 ? '+' : ''}${fmtNum(optionsData.volPremium)} pts` : '—' },
           { k: 'PCR',        v: optionsData ? fmtNum(optionsData.pcr, 2) : '—' },
           { k: 'Max pain',   v: optionsData?.maxPain ? '₹' + fmtNum(optionsData.maxPain, 0) : '—' },
