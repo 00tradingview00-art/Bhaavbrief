@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 149705,
-    "silver": 223850,
-    "crude": 8902,
-    "copper": 1427.5,
-    "natgas": 300.3,
-    "usdinr": 96.73
+    "gold": 149404,
+    "silver": 222790,
+    "crude": 8785,
+    "copper": 1422.25,
+    "natgas": 299.2,
+    "usdinr": 95.78
   },
-  "lastChecked": "2026-10-12T12:17:14.028Z",
+  "lastChecked": "2026-10-13T09:48:41.730Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -22,9 +22,7 @@
     "mideast": "Attacks on tankers in Hormuz hit highest of any week since start of Iran war, so",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
-  "articlesToday": [
-    "2026-10-12/2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto"
-  ],
+  "articlesToday": [],
   "lastArticleAt": "2026-10-12T09:54:13.023Z",
   "lastCoveredAt": {
     "crude": "2026-10-08T09:36:36.676Z",
