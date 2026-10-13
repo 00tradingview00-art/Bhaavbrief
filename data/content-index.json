@@ -41,6 +41,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-13-mcx-close-13oct2026-natgas-surge",
+    "href": "/articles/2026-10-13-mcx-close-13oct2026-natgas-surge",
+    "title": "MCX Close 13Oct: NatGas Surges 3.64%, Precious Metals Fade",
+    "description": "MCX Evening Brief 13 Oct 2026: NatGas +3.64% to ₹313.2/mmBtu leads; Gold and Silver retreat. COMEX Henry Hub +4.74% signals strength overnight.",
+    "excerpt": "Natural Gas dominated MCX today, closing +3.64% at ₹313.2/mmBtu following a weather forecast adjustment or storage data release that moved the complex sharply higher. Silver fell -1.81% to ₹218850/kg ",
+    "date": "2026-10-12T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Natural Gas",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
     "href": "/articles/2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
