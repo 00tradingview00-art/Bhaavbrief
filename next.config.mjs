@@ -59,11 +59,13 @@ const nextConfig = {
           { key: 'Content-Security-Policy-Report-Only', value: CSP_REPORT_ONLY },
         ],
       },
-      // Raw /public image files (logos etc.) serve max-age=0 by default —
-      // long-cache them since they change rarely; rename the file rather than
-      // overwriting in place if one is ever replaced.
+      // Raw /public files (logos, self-hosted web fonts) serve max-age=0 by
+      // default — long-cache them since they change rarely; rename the file
+      // rather than overwriting in place if one is ever replaced. The woff2
+      // files under /fonts/web already carry a content hash in their name for
+      // exactly that reason (see app/fonts.css).
       {
-        source: '/:all*(png|jpg|jpeg|gif|svg|webp|ico)',
+        source: '/:all*(png|jpg|jpeg|gif|svg|webp|ico|woff2)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],

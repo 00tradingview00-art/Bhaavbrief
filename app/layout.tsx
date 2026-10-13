@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import Script from 'next/script'
 import Link from 'next/link'
@@ -11,34 +10,6 @@ import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { safeJsonLd } from '@/lib/seo'
 import { ogImageUrl } from '@/lib/ogUrl'
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '700', '800'],
-  display: 'swap',
-  // Mobile CSS (app/globals.css, max-width:767px) overrides --font-serif to
-  // Georgia and hides the one Nav element that uses it — this font never
-  // renders on mobile, so don't eagerly preload it into the mobile critical path.
-  preload: false,
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-})
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-dm-mono',
-  weight: ['400', '500'],
-  display: 'swap',
-  // Mobile CSS overrides --font-mono to the system stack — this font never
-  // renders on mobile, so don't eagerly preload it into the mobile critical path.
-  preload: false,
-})
 
 const BASE = 'https://bhaavbrief.in'
 
@@ -131,12 +102,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en">
       <head>
         {/* Rendered directly here (not via the Metadata API's `other` field) so it
             can't be silently dropped by a child route's own metadata export —
             Next.js does not deep-merge `other` objects, it replaces them wholesale. */}
         <meta name="bb-build" content={BUILD_SHA} />
+        {/* next/font used to emit this preload for Inter's latin subset; keep it so
+            first paint doesn't wait on CSS parsing to discover the font. Only this
+            one file is preloaded, matching the previous behaviour — latin-ext
+            (which holds the rupee sign) and the other two families were not. */}
+        <link
+          rel="preload"
+          href="/fonts/web/inter-latin.c9407645.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>

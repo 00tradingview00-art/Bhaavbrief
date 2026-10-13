@@ -1,3 +1,9 @@
+/* Self-hosted @font-face declarations — see app/fonts.css for why these
+   aren't next/font/google. Imported here because both app/layout.tsx and
+   app/global-error.tsx already import this file, so the fonts are declared
+   once instead of once per entry point. */
+@import './fonts.css';
+
 /* Minimal reset — Tailwind base removed since zero utility classes are used */
 *, *::before, *::after { box-sizing: border-box; }
 body  { margin: 0; padding: 0; }
@@ -293,6 +299,14 @@ body {
   --up-bg: #EBF5EF;
   --down: #B53A2A;
   --down-bg: #FAF0EE;
+
+  /* These three were previously injected by next/font/google as hashed class
+     names on <html>; they now name the families declared in app/fonts.css.
+     The "* Fallback" families carry the metric overrides that keep the swap
+     from shifting layout. */
+  --font-playfair: 'Playfair Display', 'Playfair Display Fallback';
+  --font-dm-sans: 'Inter', 'Inter Fallback';
+  --font-dm-mono: 'JetBrains Mono', 'JetBrains Mono Fallback';
 
   --font-serif: var(--font-playfair), 'Georgia', serif;
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
