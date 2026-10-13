@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-125",
+    "href": "/briefs/edition-125",
+    "title": "Oil Retreats From Its Peak While Gold Holds the Line",
+    "description": "Crude slides more than a dollar overnight as the geopolitical premium shows its first cracks, while gold absorbs the pullback with relative calm.",
+    "excerpt": "MCX Gold ₹149543 | Crude ₹8980 | USDINR ₹95.97 Yesterday's Edge — Result: Edition #124 watched whether COMEX GOLD would close below 4,208.7. Confirmed ✓, now at 4,175.1. | Commodity | Global Price | U",
+    "date": "2026-10-13T02:00:38.632Z",
+    "edition": "125",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
     "href": "/articles/2026-10-12-mcx-nat-gas-breaks-3-lower-as-henry-hub-weakness-signals-sto",
