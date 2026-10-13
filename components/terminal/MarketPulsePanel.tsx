@@ -1,19 +1,14 @@
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
-import { CORE_INSTRUMENTS } from '@/lib/terminalData'
 import type { PriceData } from '@/lib/prices'
-import type { CompositePulseHistory, PriorSessionReading } from '@/lib/compositePulseHistory'
+import type { CompositePriorSession, HistoryPoint } from '@/lib/compositeHistory'
+import { compositePulse, pricingLine } from '@/lib/compositePulse'
 
 interface Props {
   terminalData: Record<CoreInstrument, TerminalInstrumentData | null>
   prices:       PriceData | null
   // Previous session's stored composite closes, or nulls when the store is
-  // empty/unreachable — see lib/compositePulseHistory.ts.
-  history:      CompositePulseHistory
-}
-
-function avg(values: number[]): number | null {
-  if (values.length === 0) return null
-  return values.reduce((s, v) => s + v, 0) / values.length
+  // empty/unreachable — see lib/compositeHistory.ts.
+  history:      CompositePriorSession
 }
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -39,18 +34,16 @@ function sessionLabel(date: string): string {
 // neither good nor bad, and the green/red used elsewhere on this page carries
 // exactly that meaning. USD/INR below keeps its colors, where direction does
 // have a stated consequence.
-function ChangeLine({ current, prior, unit = '', signed = false }: {
+function ChangeLine({ current, prior }: {
   current: number | null
-  prior:   PriorSessionReading | null
-  unit?:   string
-  signed?: boolean
+  prior:   HistoryPoint | null
 }) {
   if (current === null || prior === null) return null
   // Both levels render to 1dp, so "unchanged" means they render identically —
   // never "Up from 36.2%" above a 36.2% headline.
   const delta = current - prior.value
   const direction = Math.abs(delta) < 0.05 ? 'Unchanged from' : delta > 0 ? 'Up from' : 'Down from'
-  const level = `${signed && prior.value > 0 ? '+' : ''}${prior.value.toFixed(1)}${unit}`
+  const level = `${prior.value.toFixed(1)}%`
   return (
     <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 11, color: 'var(--ink-3)' }}>
       {direction} {level} at the {sessionLabel(prior.date)} close
@@ -63,18 +56,18 @@ function ChangeLine({ current, prior, unit = '', signed = false }: {
 // distribution to compare today's reading against; no such series exists
 // here without pulling in the Redis iv-hist store used by the Pro-gated IV
 // Rank feature (app/tools/mcx-iv-rank), which is itself a paid feature this
-// page shouldn't give away for free. So: today's composite level and vol
-// premium only, not a regime label or a 30-day range claim.
+// page shouldn't give away for free. So: today's two composite levels only,
+// not a regime label or a 30-day range claim.
+//
+// Tile 2 shows what the commodities actually moved rather than the premium
+// (the gap between the two tiles) that used to sit there: a reader has no way
+// to check a derived number against anything, and naming it required the unit
+// "pp" — jargon this panel now avoids entirely. The gap is still stated, as a
+// sentence. See lib/compositePulse.ts for why both tiles must average over
+// the same instruments.
 export default function MarketPulsePanel({ terminalData, prices, history }: Props) {
-  const ivixValues = CORE_INSTRUMENTS
-    .map(i => terminalData[i]?.ivix)
-    .filter((v): v is number => v !== null && v !== undefined)
-  const volPremiumValues = CORE_INSTRUMENTS
-    .map(i => terminalData[i]?.volPremium)
-    .filter((v): v is number => v !== null && v !== undefined)
-
-  const compositeIvix = avg(ivixValues)
-  const compositeVolPremium = avg(volPremiumValues)
+  const { ivix: compositeIvix, delivered, premium } = compositePulse(terminalData)
+  const pricing = pricingLine(premium)
 
   const usdinr = prices?.usdinr ?? 0
   const usdinrPct = prices?.usdinrChangePct ?? 0
@@ -92,7 +85,7 @@ export default function MarketPulsePanel({ terminalData, prices, history }: Prop
         <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>
           {compositeIvix !== null ? compositeIvix.toFixed(1) + '%' : '—'}
         </div>
-        <ChangeLine current={compositeIvix} prior={history.ivix} unit="%" />
+        <ChangeLine current={compositeIvix} prior={history.ivix} />
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
           BhaavBrief&apos;s composite read on options-market volatility across MCX&apos;s core commodities
         </div>
@@ -100,17 +93,22 @@ export default function MarketPulsePanel({ terminalData, prices, history }: Prop
 
       <div style={{ background: 'var(--surface)', boxShadow: 'var(--shadow-sm)', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--ink-3)' }}>
-          Composite Vol Premium
+          What markets actually did
         </div>
-        <div style={{
-          fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600,
-          color: compositeVolPremium === null ? 'var(--ink)' : compositeVolPremium >= 0 ? 'var(--up)' : 'var(--down)',
-        }}>
-          {compositeVolPremium !== null ? `${compositeVolPremium >= 0 ? '+' : ''}${compositeVolPremium.toFixed(1)} points` : '—'}
+        {/* Uncolored, like tile 1: a higher or lower delivered volatility is
+            neither good nor bad, and green/red on this page means exactly that. */}
+        <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600, color: 'var(--ink)' }}>
+          {delivered !== null ? delivered.toFixed(1) + '%' : '—'}
         </div>
-        <ChangeLine current={compositeVolPremium} prior={history.volPremium} signed />
+        {/* No change line here, unlike the other two tiles. This figure is built
+            from daily closes ending at the PREVIOUS close (lib/options.ts's
+            candle window stops at yesterday), so it doesn't move during a
+            session — and the stored series is keyed by the session the cron ran
+            for, which is one ahead of the closes the value actually covers. A
+            "vs yesterday" line would therefore carry a date it can't support. */}
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
-          Whether options are pricing in more movement than these commodities have actually delivered lately
+          {pricing && `${pricing} `}Our estimate of how much these commodities have really
+          moved, over the last 20 trading days
         </div>
       </div>
 
