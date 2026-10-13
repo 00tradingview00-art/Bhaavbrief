@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-10-08T11:31:09.378Z",
-    "lastFlashPrice": 8977,
+    "lastFlashAt": "2026-10-13T10:46:54.626Z",
+    "lastFlashPrice": 8762,
     "lastRoundLevel": 9000,
     "recentFlashIds": [
+      "2026-10-13-16-16-mcx-crude-slides-2-43-as-rupee-strengthens",
       "2026-10-08-17-01-mcx-crude-surges-4-97-on-rupee-depreciation-rebound",
-      "2026-10-06-22-21-mcx-crude-slides-0-48-as-rupee-steadies",
-      "2026-10-01-15-47-mcx-crude-rallies-1-55-as-rupee-weakness-resurfaces"
+      "2026-10-06-22-21-mcx-crude-slides-0-48-as-rupee-steadies"
     ]
   },
   "MCX_COPPER": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-10-13T00:34:44.399Z",
-    "lastFlashPrice": 95.76,
-    "lastRoundLevel": 97,
+    "lastFlashAt": "2026-10-13T10:46:54.626Z",
+    "lastFlashPrice": 95.45,
+    "lastRoundLevel": 95.5,
     "recentFlashIds": [
+      "2026-10-13-16-16-usd-inr-weakens-0-54-as-fpi-momentum-fades",
       "2026-10-13-06-04-usd-inr-holds-ground-as-rupee-stabilizes-post-rally",
-      "2026-10-07-15-40-usd-inr-surges-0-50-on-rupee-weakness-extension",
-      "2026-10-01-15-32-usd-inr-rebounds-0-46-rupee-reversal-amid-portfolio-flo"
+      "2026-10-07-15-40-usd-inr-surges-0-50-on-rupee-weakness-extension"
     ]
   }
 }
