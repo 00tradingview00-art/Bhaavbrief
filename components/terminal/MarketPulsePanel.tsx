@@ -106,7 +106,7 @@ export default function MarketPulsePanel({ terminalData, prices, history }: Prop
           fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 22, fontWeight: 600,
           color: compositeVolPremium === null ? 'var(--ink)' : compositeVolPremium >= 0 ? 'var(--up)' : 'var(--down)',
         }}>
-          {compositeVolPremium !== null ? `${compositeVolPremium >= 0 ? '+' : ''}${compositeVolPremium.toFixed(1)}pp` : '—'}
+          {compositeVolPremium !== null ? `${compositeVolPremium >= 0 ? '+' : ''}${compositeVolPremium.toFixed(1)} points` : '—'}
         </div>
         <ChangeLine current={compositeVolPremium} prior={history.volPremium} signed />
         <div style={{ fontSize: 11, color: 'var(--ink-3)' }}>
