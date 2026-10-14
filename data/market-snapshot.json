@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T08:51:21.057Z",
+  "generatedAt": "2026-10-14T08:51:26.775Z",
   "generatedAtIST": "2026-10-14 14:21 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,9 +16,9 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8972,
+      "price": 8973,
       "prevClose": 8953,
-      "changePct": 0.2122,
+      "changePct": 0.2234,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -94,9 +94,9 @@
       "unit": "INR/kg"
     },
     "MCX_ELECTRICITY": {
-      "price": 7195,
+      "price": 7199,
       "prevClose": 7078,
-      "changePct": 1.653,
+      "changePct": 1.7095,
       "unit": "INR/MWh"
     },
     "EURINR": {
