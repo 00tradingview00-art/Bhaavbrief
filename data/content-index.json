@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-10-14-gold-loan-demand-mcx-gold-india",
+    "href": "/articles/2026-10-14-gold-loan-demand-mcx-gold-india",
+    "title": "How Gold Loan Demand Affects MCX Gold Prices in India",
+    "description": "Understand how gold loan demand affects MCX gold price in India, from NBFC borrowing cycles to import parity and rupee conversion mechanics.",
+    "excerpt": "Understanding how gold loan demand affects MCX gold price in India requires tracing a precise chain from household borrowing behaviour to futures contracts on the exchange. When NBFCs and banks ramp u",
+    "date": "2026-10-14",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-125",
     "href": "/briefs/edition-125",
