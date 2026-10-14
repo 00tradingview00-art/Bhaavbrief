@@ -45,14 +45,14 @@ function CorrelationTable({ correlation }: { correlation: CorrelationMatrix }) {
             <tr>
               <th />
               {labels.map(l => (
-                <th key={l} style={{ fontWeight: 500, color: 'var(--ink-3)', padding: '4px 6px', fontSize: 10 }}>{l}</th>
+                <th key={l} style={{ fontWeight: 600, color: 'var(--ink-2)', padding: '4px 6px', fontSize: 10 }}>{l}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {labels.map((rowLabel, ri) => (
               <tr key={rowLabel}>
-                <td style={{ textAlign: 'left', color: 'var(--ink-2)', fontWeight: 500, padding: '4px 6px 4px 2px' }}>{rowLabel}</td>
+                <td style={{ textAlign: 'left', color: 'var(--ink-2)', fontWeight: 600, padding: '4px 6px 4px 2px' }}>{rowLabel}</td>
                 {labels.map((colLabel, ci) => {
                   const v = matrix[ri][ci]
                   const prior = priorMatrix ? priorMatrix[ri][ci] : null
@@ -61,7 +61,7 @@ function CorrelationTable({ correlation }: { correlation: CorrelationMatrix }) {
                     <td key={colLabel} style={{ textAlign: 'center', padding: '4px 6px' }}>
                       <span title={trendTitle(v, prior)} style={{
                         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        width: 38, height: 24, borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 10,
+                        width: 38, height: 24, borderRadius: 'var(--radius-sm)', fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 10, fontWeight: 600,
                         cursor: v !== null ? 'default' : undefined,
                         ...style,
                       }}>
@@ -75,7 +75,7 @@ function CorrelationTable({ correlation }: { correlation: CorrelationMatrix }) {
           </tbody>
         </table>
       </div>
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 10, fontSize: 10, color: 'var(--ink-3)' }}>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginTop: 10, fontSize: 10, color: 'var(--ink-2)', fontWeight: 500 }}>
         <span>
           How closely these markets have been moving together ({sampleSize}-day window)
           {priorMatrix ? ' — hover a cell to see how it compares to the prior window' : ''}

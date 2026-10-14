@@ -32,10 +32,10 @@ export default function IVTermStructureChart({ termStructure }: Props) {
   return (
     <ResponsiveContainer width="100%" height={240}>
       <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: -12 }}>
-        <XAxis dataKey="bucket" tick={{ fontSize: 10 }} />
-        <YAxis tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
+        <XAxis dataKey="bucket" tick={{ fontSize: 11, fontWeight: 600, fill: 'var(--ink-2, #3A3830)' }} />
+        <YAxis tick={{ fontSize: 11, fontWeight: 600, fill: 'var(--ink-2, #3A3830)' }} tickFormatter={v => `${v}%`} domain={['auto', 'auto']} />
         <Tooltip formatter={(v) => [typeof v === 'number' ? `${v.toFixed(1)}%` : '—']} />
-        <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => GATEWAY_META[value as CoreInstrument]?.label ?? value} />
+        <Legend wrapperStyle={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-2, #3A3830)' }} formatter={(value) => GATEWAY_META[value as CoreInstrument]?.label ?? value} />
         {CORE_INSTRUMENTS.map(instrument => (
           <Line
             key={instrument}

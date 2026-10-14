@@ -34,8 +34,9 @@ export default function IVTermStructureChartLazy() {
   const { isPro, data, failed } = useProData<TermStructure>('kind=term-structure')
 
   if (!isPro) {
-    // flex: 1 + grid stretch lets the gate fill the card, so it matches the
-    // taller correlation card beside it instead of leaving empty space below.
+    // Sizes to its own content — cards no longer stretch to match each
+    // other's height (see the alignItems: 'start' override on the
+    // .terminal-two-col call site in app/page.tsx).
     return (
       <div style={{ flex: 1, display: 'grid' }}>
         <ProBlurGate
