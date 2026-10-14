@@ -1,12 +1,12 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-10-12T20:00:52.667Z",
-    "lastFlashPrice": 149540,
+    "lastFlashAt": "2026-10-14T08:36:39.936Z",
+    "lastFlashPrice": 147946,
     "lastRoundLevel": 150000,
     "recentFlashIds": [
+      "2026-10-14-14-06-mcx-gold-retreats-0-34-on-rupee-weakness",
       "2026-10-13-01-30-mcx-gold-slides-1-29-as-rupee-strengthens",
-      "2026-10-09-22-40-mcx-gold-rallies-1-20-on-rupee-weakness",
-      "2026-10-06-00-50-mcx-gold-slides-0-72-on-rupee-weakness"
+      "2026-10-09-22-40-mcx-gold-rallies-1-20-on-rupee-weakness"
     ]
   },
   "MCX_SILVER": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-10-13T10:46:54.626Z",
-    "lastFlashPrice": 95.45,
+    "lastFlashAt": "2026-10-14T08:36:39.936Z",
+    "lastFlashPrice": 95.16,
     "lastRoundLevel": 95.5,
     "recentFlashIds": [
+      "2026-10-14-14-06-usd-inr-weakens-0-30-on-rupee-reversal-momentum",
       "2026-10-13-16-16-usd-inr-weakens-0-54-as-fpi-momentum-fades",
-      "2026-10-13-06-04-usd-inr-holds-ground-as-rupee-stabilizes-post-rally",
-      "2026-10-07-15-40-usd-inr-surges-0-50-on-rupee-weakness-extension"
+      "2026-10-13-06-04-usd-inr-holds-ground-as-rupee-stabilizes-post-rally"
     ]
   }
 }
