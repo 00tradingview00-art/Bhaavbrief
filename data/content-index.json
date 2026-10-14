@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-126",
+    "href": "/briefs/edition-126",
+    "title": "Oil Surges Past $95 While Gold Slips — The War Trade Is Splitting",
+    "description": "WTI jumps to $95 as Middle East tensions persist, but gold's dip signals the safe-haven trade is fragmenting under rate pressure.",
+    "excerpt": "MCX Gold ₹148450 | Crude ₹8953 | USDINR ₹95.44 Yesterday's Edge — Result: Edition #125 watched whether WTI would close below 92.73. Rejected ✗, now at 95.03. | Commodity | Global Price | USD/INR | MCX",
+    "date": "2026-10-14T03:17:30.904Z",
+    "edition": "126",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-125",
     "href": "/briefs/edition-125",
     "title": "Oil Retreats From Its Peak While Gold Holds the Line",
