@@ -1,5 +1,27 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-127",
+    "href": "/briefs/edition-127",
+    "title": "Gold Reclaims ₹147,355 as the War Trade Reunites",
+    "description": "Gold surges back while crude retreats — the split war trade from Edition #126 is snapping back into alignment.",
+    "excerpt": "MCX Gold ₹147355 | Crude ₹8949 | USDINR ₹95.11 — Gold +1.03% | Crude -1.83% | Silver +0.08% Yesterday's Edge — Result: Edition #126 watched whether WTI would close above 95.03. Rejected ✗, now at 94.0",
+    "date": "2026-10-15T04:14:54.995Z",
+    "edition": "127",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-10-14-mcx-nat-gas-falls-2-1-as-henry-hub-weakens-on-storage-surplu",
     "href": "/articles/2026-10-14-mcx-nat-gas-falls-2-1-as-henry-hub-weakens-on-storage-surplu",
