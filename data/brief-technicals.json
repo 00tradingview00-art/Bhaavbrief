@@ -1,45 +1,45 @@
 {
   "MCX_GOLD": {
-    "dayHigh": 151700,
-    "dayLow": 150654,
-    "dayOpen": 150851
+    "dayHigh": 148050,
+    "dayLow": 147100,
+    "dayOpen": 147482
   },
   "MCX_SILVER": {
-    "dayHigh": 226580,
-    "dayLow": 223639,
-    "dayOpen": 224096,
-    "weekHigh": 228697,
-    "weekLow": 219801,
-    "monthHigh": 243047,
-    "monthLow": 219801,
-    "sma20": 230594,
-    "support1": 225800,
-    "support2": 225601,
-    "resistance1": 226208,
-    "resistance2": 226580
+    "dayHigh": 211499,
+    "dayLow": 208259,
+    "dayOpen": 209028,
+    "weekHigh": 226580,
+    "weekLow": 207971,
+    "monthHigh": 241377,
+    "monthLow": 207971,
+    "sma20": 224486,
+    "support1": 208259,
+    "support2": 207971,
+    "resistance1": 211499,
+    "resistance2": 219482
   },
   "MCX_CRUDE": {
-    "dayHigh": 8920,
-    "dayLow": 8712,
-    "dayOpen": 8757
+    "dayHigh": 9327,
+    "dayLow": 8900,
+    "dayOpen": 8923,
+    "weekHigh": 9327,
+    "weekLow": 8617,
+    "monthHigh": 9327,
+    "monthLow": 8388,
+    "sma20": 8875,
+    "support1": 8928,
+    "support2": 8900,
+    "resistance1": 9327,
+    "resistance2": null
   },
   "MCX_COPPER": {
-    "dayHigh": 1428.95,
-    "dayLow": 1412,
-    "dayOpen": 1412
+    "dayHigh": 1405.05,
+    "dayLow": 1392.6,
+    "dayOpen": 1400.6
   },
   "MCX_NATGAS": {
-    "dayHigh": 314.9,
-    "dayLow": 302.3,
-    "dayOpen": 304.6,
-    "weekHigh": 319,
-    "weekLow": 290,
-    "monthHigh": 327,
-    "monthLow": 285,
-    "sma20": 301,
-    "support1": 305,
-    "support2": 303,
-    "resistance1": 315,
-    "resistance2": 316
+    "dayHigh": 315.9,
+    "dayLow": 304,
+    "dayOpen": 310.4
   }
 }

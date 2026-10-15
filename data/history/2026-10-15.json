@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-10-15T19:21:46.934Z",
+=======
+  "generatedAt": "2026-10-15T19:21:43.067Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-10-16 00:51 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -46,9 +50,15 @@
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
+<<<<<<< Updated upstream
       "price": 57.37,
       "prevClose": 55.55,
       "changePct": 3.2763,
+=======
+      "price": 57.36,
+      "prevClose": 55.55,
+      "changePct": 3.2583,
+>>>>>>> Stashed changes
       "unit": "USD/oz"
     },
     "WTI": {
@@ -121,17 +131,29 @@
   "derived": {
     "importParityGoldINR": 127971,
     "mcxComexGoldSpreadPct": 15.3,
+<<<<<<< Updated upstream
     "importParitySilverINR": 175558,
     "mcxComexSilverSpreadPct": 20.14,
+=======
+    "importParitySilverINR": 175528,
+    "mcxComexSilverSpreadPct": 20.16,
+>>>>>>> Stashed changes
     "goldSilverRatio": 72.9
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
+<<<<<<< Updated upstream
       "detail": "Gold import-parity spread 15.3% vs silver 20.14% — 4.84pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
       "goldSpreadPct": 15.3,
       "silverSpreadPct": 20.14,
       "deltaPts": 4.84
+=======
+      "detail": "Gold import-parity spread 15.3% vs silver 20.16% — 4.86pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 15.3,
+      "silverSpreadPct": 20.16,
+      "deltaPts": 4.86
+>>>>>>> Stashed changes
     }
   ]
 }
