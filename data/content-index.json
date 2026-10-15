@@ -44,6 +44,29 @@
   },
   {
     "type": "article",
+    "slug": "2026-10-15-mcx-close-15oct2026-energy-surge",
+    "href": "/articles/2026-10-15-mcx-close-15oct2026-energy-surge",
+    "title": "MCX Close 15Oct: Energy Surge Lifts Crude +1.69%, Precious Metals Follow",
+    "description": "MCX Close 15 Oct 2026: Crude oil surges ₹9270 (+1.69%), silver +1.24%. COMEX extends gains overnight. Energy complex outperforms as supply dynamics support rally.",
+    "excerpt": "Energy dominated MCX today with crude oil and natural gas both posting gains. MCX Crude closed at ₹9270/bbl, up +1.69% on the day — the session's strongest performer — after trading a ₹427 range betwe",
+    "date": "2026-10-14T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Oil",
+      "Silver",
+      "Gold",
+      "Natural Gas"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-10-14-mcx-nat-gas-falls-2-1-as-henry-hub-weakens-on-storage-surplu",
     "href": "/articles/2026-10-14-mcx-nat-gas-falls-2-1-as-henry-hub-weakens-on-storage-surplu",
     "title": "MCX Nat Gas Falls 2.1% as Henry Hub Weakens on Storage Surplus",
