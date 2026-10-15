@@ -10,13 +10,13 @@
     ]
   },
   "MCX_SILVER": {
-    "lastFlashAt": "2026-10-14T18:32:46.525Z",
-    "lastFlashPrice": 207990,
-    "lastRoundLevel": 230000,
+    "lastFlashAt": "2026-10-15T09:16:52.910Z",
+    "lastFlashPrice": 210936,
+    "lastRoundLevel": 210000,
     "recentFlashIds": [
+      "2026-10-15-14-46-mcx-silver-climbs-past-210000-round-number-resistance",
       "2026-10-15-00-02-mcx-silver-slides-on-persistent-rupee-pressure",
-      "2026-10-08-17-01-mcx-silver-falls-1-32-as-rupee-firms-crude-rallies",
-      "2026-09-28-15-27-mcx-silver-falls-3-05-as-precious-metals-retreat-deepen"
+      "2026-10-08-17-01-mcx-silver-falls-1-32-as-rupee-firms-crude-rallies"
     ]
   },
   "MCX_CRUDE": {
