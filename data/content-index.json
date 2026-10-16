@@ -1,5 +1,23 @@
 [
   {
+    "type": "article",
+    "slug": "2026-10-16-mcx-nat-gas-crashes-2-8-as-henry-hub-weakens-on-mild-weather",
+    "href": "/articles/2026-10-16-mcx-nat-gas-crashes-2-8-as-henry-hub-weakens-on-mild-weather",
+    "title": "MCX Nat Gas Crashes 2.8% as Henry Hub Weakens on Mild Weather",
+    "description": "MCX Natural Gas ₹295/mmBtu, down 2.80%. Henry Hub $3.10 signals end of injection-season tightness. Watch ₹290 support into close.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas fell 2.80% to ₹294.90/mmBtu while the broader commodity complex — gold, silver, copper — all advanced on dollar weakness, signaling that natgas is selling off on supply f",
+    "date": "2026-10-16T12:43:10.109Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 295
+  },
+  {
     "type": "brief",
     "slug": "edition-128",
     "href": "/briefs/edition-128",
