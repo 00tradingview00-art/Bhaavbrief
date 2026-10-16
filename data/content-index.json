@@ -79,6 +79,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-16-mcx-close-16oct2026-crude-surge",
+    "href": "/articles/2026-10-16-mcx-close-16oct2026-crude-surge",
+    "title": "MCX Close 16Oct: Crude Surges 3.1% on WTI Rally",
+    "description": "MCX Crude +3.09% to ₹9572/bbl leads Friday close. WTI strength offsets refinery maintenance fade. Silver, Gold flat. NatGas weak on mild weather.",
+    "excerpt": "Crude dominated Friday's MCX close, rallying 3.09% to settle ₹9572/bbl on the back of WTI strength at 99.28 $/bbl (+1.34%). The 410-point intraday range (₹9192–₹9602) reflected sustained buying throug",
+    "date": "2026-10-15T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Oil",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-127",
     "href": "/briefs/edition-127",
