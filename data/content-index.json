@@ -1,6 +1,28 @@
 [
   {
     "type": "brief",
+    "slug": "edition-128",
+    "href": "/briefs/edition-128",
+    "title": "Gold Surges Past $4,194 as the War Trade Fully Reunites",
+    "description": "COMEX gold jumped $86.9 overnight while crude holds near $95, signalling the war-premium trade is back in full force.",
+    "excerpt": "MCX Gold ₹147489 | Crude ₹9285 | USDINR ₹95.16 Yesterday's Edge — Result: Edition #127 watched whether COMEX GOLD would close above 4,165.3. Confirmed ✓, now at 4,194.8. | Commodity | Global Price | U",
+    "date": "2026-10-16T03:13:50.313Z",
+    "edition": "128",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-127",
     "href": "/briefs/edition-127",
     "title": "Gold Reclaims ₹147,355 as the War Trade Reunites",
