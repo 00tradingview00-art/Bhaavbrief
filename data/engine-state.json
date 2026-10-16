@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 147550,
-    "silver": 210920,
-    "crude": 9270,
-    "copper": 1399.4,
-    "natgas": 305.9,
+    "gold": 148696,
+    "silver": 213270,
+    "crude": 9243,
+    "copper": 1408.3,
+    "natgas": 304,
     "usdinr": 95.06
   },
-  "lastChecked": "2026-10-15T18:28:59.201Z",
+  "lastChecked": "2026-10-16T07:35:15.117Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -15,8 +15,8 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-10-02",
-    "value": "223"
+    "period": "2026-10-09",
+    "value": "295"
   },
   "lastGeoNews": {
     "mideast": "Attacks on tankers in Hormuz hit highest of any week since start of Iran war, so",
