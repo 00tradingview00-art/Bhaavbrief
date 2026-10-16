@@ -1,5 +1,23 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-16-hawk-scan-mcx-crude-surges-3-08-to-9566-bbl-on-wti-strength",
+    "href": "/articles/2026-10-16-hawk-scan-mcx-crude-surges-3-08-to-9566-bbl-on-wti-strength",
+    "title": "MCX Crude surges 3.08% to ₹9566/bbl on WTI strength",
+    "description": "MCX Crude ₹9566/bbl +3.08% SURGING. WTI $98.35 rallies amid refinery maintenance fade backdrop.",
+    "excerpt": "TRIGGER MCX Crude has rallied 3.08% to ₹9,566/bbl, with WTI climbing to $98.35/bbl as US refinery maintenance turnarounds in late Q3 have not yet fully cleared their seasonal demand trough. PRICE ₹9,5",
+    "date": "2026-10-16T16:57:39.195Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9566
+  },
+  {
     "type": "article",
     "slug": "2026-10-16-mcx-nat-gas-crashes-2-8-as-henry-hub-weakens-on-mild-weather",
     "href": "/articles/2026-10-16-mcx-nat-gas-crashes-2-8-as-henry-hub-weakens-on-mild-weather",
