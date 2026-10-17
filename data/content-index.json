@@ -1,5 +1,27 @@
 [
   {
+    "type": "research",
+    "slug": "2026-10-17-weekly-catalyst",
+    "href": "/research/2026-10-17-weekly-catalyst",
+    "title": "Brent's $10.65 Premium Over WTI Is the Week's Real Signal — Crude Expiry Monday",
+    "description": "A refinery-strike-driven seaborne supply premium pushed Brent to $109.69 while WTI lagged at $99.04 — and MCX Crude expires Monday into that wedge.",
+    "excerpt": "One number organises the whole week: Brent at $109.69 against WTI at $99.04 — a $10.65 differential, widened on Friday by Brent's +3.56% move versus WTI's +1.09%. That split is the evidence. A demand-",
+    "date": "2026-10-17",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-16-hawk-scan-mcx-crude-surges-3-08-to-9566-bbl-on-wti-strength",
     "href": "/articles/2026-10-16-hawk-scan-mcx-crude-surges-3-08-to-9566-bbl-on-wti-strength",
