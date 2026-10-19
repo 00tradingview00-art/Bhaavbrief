@@ -41,6 +41,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-19-mcx-close-19oct2026-natgas-decline",
+    "href": "/articles/2026-10-19-mcx-close-19oct2026-natgas-decline",
+    "title": "MCX Close 19Oct: NatGas Slides 2.2%, Crude Steadies",
+    "description": "MCX evening close 19 Oct 2026: NatGas led declines at -2.2% to ₹292.1/mmBtu. Crude +0.65%. COMEX fading overnight. Overnight watch: US crude inventory, Henry Hub below 3.04.",
+    "excerpt": "Natural gas led MCX lower, closing at ₹292.1/mmBtu, down 2.18% — the session's heaviest loser. Henry Hub mirrored the weakness in real-time, trading at 3.04 $, also down 2.50%. Crude oil bucked the be",
+    "date": "2026-10-18T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "NatGas",
+      "Crude Oil",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-10-17-weekly-catalyst",
     "href": "/research/2026-10-17-weekly-catalyst",

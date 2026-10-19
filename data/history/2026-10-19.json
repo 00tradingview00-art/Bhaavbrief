@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-19T20:41:47.416Z",
+  "generatedAt": "2026-10-19T20:41:50.053Z",
   "generatedAtIST": "2026-10-20 02:11 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -52,15 +52,15 @@
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 98.4,
+      "price": 98.39,
       "prevClose": 99.02,
-      "changePct": -0.6261,
+      "changePct": -0.6362,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 109.36,
+      "price": 109.35,
       "prevClose": 109.86,
-      "changePct": -0.4551,
+      "changePct": -0.4642,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
