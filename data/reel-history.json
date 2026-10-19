@@ -3216,6 +3216,34 @@
   {
     "file": "v3/silver-industrial-001",
     "instagram_id": "17934432147404520",
-    "posted_at": "2026-10-16T14:43:13.686Z"
+    "posted_at": "2026-10-16T14:43:13.686Z",
+    "insight_snapshots": [
+      {
+        "views": 5,
+        "reach": 5,
+        "ig_reels_avg_watch_time": 1454,
+        "ig_reels_video_view_total_time": 7270,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-19T03:10:15.258Z",
+        "age_hours": 60.45043666666667,
+        "observation": "late_initial"
+      }
+    ],
+    "insights": {
+      "views": 5,
+      "reach": 5,
+      "ig_reels_avg_watch_time": 1454,
+      "ig_reels_video_view_total_time": 7270,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-19T03:10:15.258Z"
+    }
   }
 ]
