@@ -7,7 +7,7 @@
       "source_url": "https://ir.eia.gov/ngs/ngs.html",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-15T14:30:00.000Z",
+      "next_release_utc": "2026-10-22T14:30:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
@@ -128,7 +128,7 @@
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-14T14:30:00.000Z",
+      "next_release_utc": "2026-10-21T14:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
@@ -249,7 +249,7 @@
       "source_url": "https://www.api.org/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-13T20:30:00.000Z",
+      "next_release_utc": "2026-10-20T20:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
@@ -479,7 +479,7 @@
       "source_url": "https://rigcount.bakerhughes.com/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-16T17:00:00.000Z",
+      "next_release_utc": "2026-10-23T17:00:00.000Z",
       "affected_contracts": [
         "crude",
         "natgas"
@@ -501,7 +501,7 @@
       "source_url": "https://www.cpc.ncep.noaa.gov/",
       "frequency": "daily",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-12T20:00:00.000Z",
+      "next_release_utc": "2026-10-19T20:00:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
@@ -682,7 +682,7 @@
       "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-10-16T19:30:00.000Z",
+      "next_release_utc": "2026-10-23T19:30:00.000Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -706,6 +706,10 @@
       "description_educational": "A weekly snapshot of futures positioning by trader category (commercial, managed money, etc.) on the international benchmark contracts — context on how crowded a positioning is, not a signal of future direction.",
       "recent_values": {
         "gold": [
+          {
+            "period": "2026-10-13",
+            "value": 207879
+          },
           {
             "period": "2026-10-06",
             "value": 210335
@@ -797,13 +801,13 @@
           {
             "period": "2026-05-05",
             "value": 163303
-          },
-          {
-            "period": "2026-04-28",
-            "value": 159571
           }
         ],
         "silver": [
+          {
+            "period": "2026-10-13",
+            "value": 22631
+          },
           {
             "period": "2026-10-06",
             "value": 23153
@@ -895,13 +899,13 @@
           {
             "period": "2026-05-05",
             "value": 23892
-          },
-          {
-            "period": "2026-04-28",
-            "value": 24160
           }
         ],
         "copper": [
+          {
+            "period": "2026-10-13",
+            "value": 68520
+          },
           {
             "period": "2026-10-06",
             "value": 69434
@@ -993,13 +997,13 @@
           {
             "period": "2026-05-05",
             "value": 62849
-          },
-          {
-            "period": "2026-04-28",
-            "value": 63281
           }
         ],
         "crude": [
+          {
+            "period": "2026-10-13",
+            "value": 100343
+          },
           {
             "period": "2026-10-06",
             "value": 99060
@@ -1091,13 +1095,13 @@
           {
             "period": "2026-05-05",
             "value": 178786
-          },
-          {
-            "period": "2026-04-28",
-            "value": 191911
           }
         ],
         "natgas": [
+          {
+            "period": "2026-10-13",
+            "value": -233578
+          },
           {
             "period": "2026-10-06",
             "value": -236439
@@ -1189,10 +1193,6 @@
           {
             "period": "2026-05-05",
             "value": -166646
-          },
-          {
-            "period": "2026-04-28",
-            "value": -166273
           }
         ]
       }
@@ -1245,7 +1245,7 @@
       "source_url": "https://www.mcxindia.com/market-data/contract-expiry-calendar",
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
-      "next_release_utc": "2026-10-19T17:55:00Z",
+      "next_release_utc": "2026-11-19T17:55:00Z",
       "affected_contracts": [
         "crude"
       ],
