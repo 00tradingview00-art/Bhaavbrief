@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-21-mcx-nat-gas-plunges-4-15-to-280-mmbtu-breaches-support",
+    "href": "/articles/2026-10-21-mcx-nat-gas-plunges-4-15-to-280-mmbtu-breaches-support",
+    "title": "MCX Nat Gas plunges 4.15% to ₹280/mmBtu — breaches support",
+    "description": "MCX Nat Gas ₹280/mmBtu · -4.15% · PLUNGING. Henry Hub weakness + storage surplus signal.",
+    "excerpt": "TRIGGER MCX Natural Gas has fallen 4.15% to ₹280/mmBtu, breaking through the ₹279 support level for the first time in the current 20-day cycle as Henry Hub weakness extends into Asia during the tail e",
+    "date": "2026-10-21T08:03:18.649Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "Henry Hub",
+      "EIA Storage"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 280
+  },
+  {
     "type": "brief",
     "slug": "edition-130",
     "href": "/briefs/edition-130",
