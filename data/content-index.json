@@ -63,6 +63,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-10-21-mcx-close-21oct2026-crude-leads-weakness",
+    "href": "/articles/2026-10-21-mcx-close-21oct2026-crude-leads-weakness",
+    "title": "MCX Close 21Oct: Crude leads selloff on US weakness",
+    "description": "21 Oct 2026 — MCX Crude -1.19% to ₹9200/bbl; Silver -1.15%. COMEX fading signals weak overnight tone for tomorrow's open.",
+    "excerpt": "Crude led MCX into red territory today, closing -1.19% at ₹9200/bbl on broad US energy weakness. Silver followed, retreating -1.15% to ₹209049/kg, tracking softer COMEX activity and USD strength at ₹9",
+    "date": "2026-10-20T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Selloff",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-10-20-gold-inflation-hedge-india-mcx",
     "href": "/articles/2026-10-20-gold-inflation-hedge-india-mcx",
     "title": "Is Gold Actually an Inflation Hedge in India? What MCX Data Shows",
