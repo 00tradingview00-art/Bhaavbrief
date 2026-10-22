@@ -62,8 +62,8 @@ const SCHEMA = {
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'MCX Bhavcopy — Download Guide & Free Viewer',
-  description: 'Where to find the MCX bhavcopy, what each column means, and a free viewer that reads your downloaded file in your browser to show open interest, PCR and max pain.',
+  title: 'MCX Bhavcopy Viewer — Open Interest, PCR & Max Pain',
+  description: 'Already downloaded the MCX bhavcopy file? See open interest, put-call ratio and max pain by commodity instantly — free, and the file never leaves your browser.',
   alternates: { canonical: 'https://bhaavbrief.in/tools/mcx-bhavcopy' },
   keywords: [
     'MCX bhavcopy download today India', 'what is MCX bhavcopy', 'MCX daily bhavcopy data',
