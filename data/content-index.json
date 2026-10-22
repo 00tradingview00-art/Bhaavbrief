@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-131",
+    "href": "/briefs/edition-131",
+    "title": "WTI Drops $3.52 While Brent Climbs — Crude's Split Signal Deepens",
+    "description": "WTI and Brent are moving in opposite directions, exposing a fracture between US supply concerns and Middle East geopolitical premium.",
+    "excerpt": "MCX Gold ₹146079 | Crude ₹9208 | USDINR ₹94.59 Yesterday's Edge — Result: Edition #130 watched whether WTI would close below 99.21. Confirmed ✓, now at 98.27. | Commodity | Global Price | USD/INR | MC",
+    "date": "2026-10-22T02:59:48.895Z",
+    "edition": "131",
+    "tags": [
+      "MCX Crude",
+      "MCX NatGas",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-21-mcx-nat-gas-plunges-4-15-to-280-mmbtu-breaches-support",
     "href": "/articles/2026-10-21-mcx-nat-gas-plunges-4-15-to-280-mmbtu-breaches-support",
