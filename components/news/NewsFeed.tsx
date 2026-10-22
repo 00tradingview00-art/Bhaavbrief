@@ -1,19 +1,15 @@
-'use client'
-import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import Pill, { type PillTone } from '@/components/ui/Pill'
+import {
+  FILTERS,
+  ITEMS_PER_PAGE,
+  toISTDateKey,
+  newsHref,
+  type NewsItem,
+} from '@/lib/newsFilter'
 
-const FILTERS = ['All', 'Metals', 'Energy', 'Policy', 'Macro', 'Agri', 'Geopolitics']
-
-const FILTER_KEYWORDS: Record<string, string[]> = {
-  Metals:      ['gold', 'silver', 'copper', 'metal', 'aluminium', 'zinc', 'nickel', 'platinum'],
-  Energy:      ['crude', 'oil', 'opec', 'brent', 'natural gas', 'lng', 'lpg', 'refinery'],
-  Policy:      ['import duty', 'export', 'customs', 'tariff', 'excise', 'sebi', 'rbi', 'repo', 'msp', 'budget', 'finance ministry', 'monetary policy', 'regulation'],
-  Macro:       ['macro', 'inflation', 'cpi', 'wpi', 'gdp', 'pmi', 'iip', 'rupee', 'forex', 'usdinr', 'federal reserve', 'rate cut', 'rate hike', 'trade deficit'],
-  Agri:        ['agri', 'wheat', 'soybean', 'cotton', 'ncdex', 'monsoon', 'crop', 'cardamom', 'pepper', 'kharif', 'rabi', 'castor'],
-  Geopolitics: ['iran', 'russia', 'ukraine', 'sanction', 'hormuz', 'suez', 'red sea', 'war', 'geopolit'],
-}
+export type { NewsItem }
 
 const ASSET_DETECTORS: { label: string; re: RegExp; href?: string }[] = [
   { label: 'Gold',      re: /\bgold\b/i,                          href: '/commodities/gold' },
@@ -30,20 +26,6 @@ const ASSET_DETECTORS: { label: string; re: RegExp; href?: string }[] = [
   { label: 'MCX',       re: /\bmcx\b/i,                           href: '/markets' },
 ]
 
-export interface NewsItem {
-  id:          string
-  title:       string
-  summary:     string
-  category:    string
-  tagType:     string
-  pubDate:     string
-  pubDateIST?: string
-  href?:       string
-  itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan' | 'research'
-  coverImage?: string
-  premium?:    boolean
-}
-
 function relativeTime(iso: string): string {
   const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000)
   if (mins <  1)  return 'just now'
@@ -53,32 +35,12 @@ function relativeTime(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`
 }
 
-function toISTDateKey(iso: string): string {
-  return new Date(new Date(iso).getTime() + 5.5 * 60 * 60 * 1000)
-    .toISOString().slice(0, 10)
-}
-
 function dateDividerLabel(dateKey: string): string {
   const todayIST = toISTDateKey(new Date().toISOString())
   const yestIST  = toISTDateKey(new Date(Date.now() - 86400000).toISOString())
   if (dateKey === todayIST) return 'Today'
   if (dateKey === yestIST)  return 'Yesterday'
   return new Date(dateKey).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
-}
-
-function matchesFilter(item: NewsItem, filter: string): boolean {
-  if (filter === 'All') return true
-  const filterKey = filter.toLowerCase()
-
-  // Primary: use pre-computed tagType for the core commodity buckets
-  if (['metals', 'energy', 'macro'].includes(filterKey)) {
-    return item.tagType === filterKey
-  }
-
-  // Secondary filters (Policy, Agri, Geopolitics): keyword search on title only
-  // — never include summary to avoid cross-mentions causing false matches
-  const text = `${item.title} ${item.category}`.toLowerCase()
-  return (FILTER_KEYWORDS[filter] ?? [filterKey]).some(k => text.includes(k))
 }
 
 function getCrossAssets(item: NewsItem): string[] {
@@ -115,57 +77,39 @@ function TypeBadge({ itemType, premium }: { itemType?: NewsItem['itemType']; pre
   return null
 }
 
-const ITEMS_PER_PAGE = 20
-
-interface Props {
-  serverItems?: NewsItem[]
+function PageLink({ page, filter, disabled, children }: { page: number; filter: string; disabled: boolean; children: React.ReactNode }) {
+  const baseStyle = {
+    fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
+    padding: '8px 16px', border: '0.5px solid #DDDDD0',
+    textDecoration: 'none', display: 'inline-block',
+  } as const
+  if (disabled) {
+    return <span style={{ ...baseStyle, background: 'transparent', color: '#C8C8B8' }}>{children}</span>
+  }
+  return (
+    <Link href={newsHref(filter, page)} style={{ ...baseStyle, background: '#18180F', color: '#FAFAF6' }}>
+      {children}
+    </Link>
+  )
 }
 
-export default function NewsFeed({ serverItems = [] }: Props) {
-  const [activeFilter, setActiveFilter] = useState('All')
-  const [page,         setPage]         = useState(1)
+interface Props {
+  items:         NewsItem[]  // already the current page's slice
+  counts:        Record<string, number>
+  activeFilter:  string
+  page:          number
+  totalPages:    number
+  totalFiltered: number
+}
 
-  // Server items (flash + articles), deduped by id and href. This used to be
-  // merged with a 5-minute poll of /api/news, whose source file
-  // (data/ai-news.json) hasn't been written since July — it always returned
-  // [], yet held back pagination/counts until it answered and drove a
-  // misleading "● updated just now" label.
-  // Hawk-scan items always float to the top, then sort newest first within each tier
-  const allItems = useMemo(() => {
-    const seenIds  = new Set<string>()
-    const seenHrefs = new Set<string>()
-    return serverItems
-      .filter(item => {
-        if (seenIds.has(item.id)) return false
-        if (item.href && seenHrefs.has(item.href)) return false
-        seenIds.add(item.id)
-        if (item.href) seenHrefs.add(item.href)
-        return true
-      })
-      .sort((a, b) => {
-        // Use IST dates — same grouping logic as the date dividers
-        const aDate = toISTDateKey(a.pubDate)
-        const bDate = toISTDateKey(b.pubDate)
-        if (bDate !== aDate) return bDate.localeCompare(aDate)  // newest date first
-        // same IST day: hawk-scans float above other items
-        const aHawk = a.itemType === 'hawk-scan' ? 1 : 0
-        const bHawk = b.itemType === 'hawk-scan' ? 1 : 0
-        if (bHawk !== aHawk) return bHawk - aHawk
-        return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
-      })
-  }, [serverItems])
-
-  const filtered   = allItems.filter(item => matchesFilter(item, activeFilter))
-  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
-  const paginated  = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
-
+export default function NewsFeed({ items, counts, activeFilter, page, totalPages, totalFiltered }: Props) {
   return (
     <div>
 
       {/* Filter pills with counts */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
         {FILTERS.map(f => {
-          const count = f === 'All' ? allItems.length : allItems.filter(item => matchesFilter(item, f)).length
+          const count = counts[f] ?? 0
           const active = activeFilter === f
           return (
             <Pill
@@ -173,7 +117,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
               size="md"
               tone="neutral"
               active={active}
-              onClick={() => { setActiveFilter(f); setPage(1) }}
+              href={newsHref(f, 1)}
               style={{ opacity: !active && count === 0 ? 0.5 : 1 }}
             >
               {f}
@@ -192,18 +136,18 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       </div>
 
       {/* Empty state */}
-      {filtered.length === 0 && (
+      {items.length === 0 && (
         <div style={{ padding: '32px 0', borderTop: '0.5px solid #DDDDD0' }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: '#8A8A7A', letterSpacing: '0.04em', margin: '0 0 8px' }}>
             No {activeFilter === 'All' ? '' : activeFilter.toLowerCase() + ' '}intelligence right now.
           </p>
-          {activeFilter !== 'All' && allItems.length > 0 && (
-            <button
-              onClick={() => { setActiveFilter('All'); setPage(1) }}
-              style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+          {activeFilter !== 'All' && (counts.All ?? 0) > 0 && (
+            <Link
+              href={newsHref('All', 1)}
+              style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: '#C8720A', background: 'none', border: 'none', textDecoration: 'underline' }}
             >
-              Show all {allItems.length} items →
-            </button>
+              Show all {counts.All} items →
+            </Link>
           )}
         </div>
       )}
@@ -211,7 +155,7 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       {/* Intelligence items — grouped by IST date */}
       {(() => {
         let lastDateKey = ''
-        return paginated.map((item, idx) => {
+        return items.map((item, idx) => {
           const dateKey     = toISTDateKey(item.pubDate)
           const showDivider = dateKey !== lastDateKey
           lastDateKey = dateKey
@@ -335,58 +279,35 @@ export default function NewsFeed({ serverItems = [] }: Props) {
       {/* Pagination */}
       {totalPages > 1 && (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 24, marginTop: 8 }}>
-          <button
-            onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            disabled={page === 1}
-            style={{
-              fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
-              padding: '8px 16px', border: '0.5px solid #DDDDD0',
-              background: page === 1 ? 'transparent' : '#18180F',
-              color: page === 1 ? '#C8C8B8' : '#FAFAF6',
-              cursor: page === 1 ? 'not-allowed' : 'pointer',
-            }}
-          >
-            ← Prev
-          </button>
+          <PageLink page={Math.max(1, page - 1)} filter={activeFilter} disabled={page === 1}>← Prev</PageLink>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, overflowX: 'auto', minWidth: 0 }}>
             {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => i + 1).map(p => (
-              <button
+              <Link
                 key={p}
-                onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                href={newsHref(activeFilter, p)}
                 style={{
                   fontFamily: 'var(--font-sans)', fontSize: 11,
                   width: 30, height: 30, border: '0.5px solid #DDDDD0',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  textDecoration: 'none',
                   background: page === p ? '#18180F' : 'transparent',
                   color: page === p ? '#FAFAF6' : '#8A8A7A',
-                  cursor: 'pointer',
                 }}
               >
                 {p}
-              </button>
+              </Link>
             ))}
           </div>
 
-          <button
-            onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            disabled={page === totalPages}
-            style={{
-              fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.05em',
-              padding: '8px 16px', border: '0.5px solid #DDDDD0',
-              background: page === totalPages ? 'transparent' : '#18180F',
-              color: page === totalPages ? '#C8C8B8' : '#FAFAF6',
-              cursor: page === totalPages ? 'not-allowed' : 'pointer',
-            }}
-          >
-            Next →
-          </button>
+          <PageLink page={Math.min(totalPages, page + 1)} filter={activeFilter} disabled={page === totalPages}>Next →</PageLink>
         </div>
       )}
 
       {/* Item count */}
-      {filtered.length > 0 && (
+      {totalFiltered > 0 && (
         <div style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em', textAlign: 'center', marginTop: 16 }}>
-          {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, filtered.length)} of ${filtered.length} intelligence items`}
+          {`${(page - 1) * ITEMS_PER_PAGE + 1}–${Math.min(page * ITEMS_PER_PAGE, totalFiltered)} of ${totalFiltered} intelligence items`}
         </div>
       )}
     </div>

@@ -1,40 +1,82 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import NewsFeed, { type NewsItem } from '@/components/news/NewsFeed'
+import NewsFeed from '@/components/news/NewsFeed'
 import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 import { getAllResearch } from '@/lib/research'
+import {
+  FILTERS,
+  ITEMS_PER_PAGE,
+  matchesFilter,
+  dedupeAndSort,
+  parseCategoryParam,
+  parsePageParam,
+  newsHref,
+  type NewsItem,
+} from '@/lib/newsFilter'
 import SectionTabs from '@/components/SectionTabs'
 import Pill from '@/components/ui/Pill'
 import { safeJsonLd } from '@/lib/seo'
 
-export const metadata = {
-  title: 'MCX Commodity Intelligence Feed — Why Prices Are Moving Today',
-  description: 'Real-time MCX commodity intelligence — explains why gold, crude oil, silver and copper are moving. OPEC decisions, Fed policy, rupee-dollar shifts, geopolitical events — connected to your MCX position. Updated every 15 minutes.',
-  keywords: [
-    'why is MCX gold moving today',
-    'why crude oil price falling India',
-    'OPEC decision MCX crude oil impact',
-    'US Fed rate MCX gold India',
-    'rupee fall impact commodity prices',
-    'MCX commodity market news today',
-    'geopolitics MCX commodity India',
-    'commodity market intelligence India today',
-    'MCX silver why moving',
-    'Iran tensions crude oil MCX',
-  ],
-  alternates: { canonical: 'https://bhaavbrief.in/news' },
-  openGraph: {
-    title: 'MCX Commodity Intelligence — Why Prices Are Moving | BhaavBrief',
-    description: 'Real-time MCX intelligence: why gold, crude, silver are moving — OPEC, Fed, rupee-dollar, geopolitics. Updated every 15 minutes.',
-    url: 'https://bhaavbrief.in/news',
-    siteName: 'BhaavBrief',
-    type: 'website' as const,
-    locale: 'en_IN',
-  },
-  twitter: { card: 'summary' as const, title: 'MCX Intelligence Feed | BhaavBrief', description: 'Why MCX gold, crude oil and silver are moving today — AI-powered commodity intelligence updated every 15 minutes.', site: '@bhaavbrief' },
+export const revalidate = 60
+
+type SearchParams = Promise<{ category?: string; page?: string }>
+
+const BASE_URL = 'https://bhaavbrief.in'
+
+function buildTitle(category: string, page: number): string {
+  if (category === 'All') {
+    return page > 1
+      ? `MCX Commodity Intelligence Feed — Page ${page}`
+      : 'MCX Commodity Intelligence Feed — Why Prices Are Moving Today'
+  }
+  return page > 1
+    ? `${category} — MCX Commodity Intelligence Feed — Page ${page}`
+    : `${category} — MCX Commodity Intelligence Feed`
 }
 
-export const revalidate = 60
+const BASE_DESCRIPTION = 'Real-time MCX commodity intelligence — explains why gold, crude oil, silver and copper are moving. OPEC decisions, Fed policy, rupee-dollar shifts, geopolitical events — connected to your MCX position. Updated every 15 minutes.'
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const { category: rawCategory, page: rawPage } = await searchParams
+  const category = parseCategoryParam(rawCategory)
+  // totalPages isn't known without reading content — reuse the same data
+  // reads as the page body would be wasteful here, so clamp loosely; an
+  // out-of-range page number still renders page 1's worth of metadata,
+  // which only affects the <title>/canonical of a URL nobody links to.
+  const page = Math.max(1, Number.parseInt(rawPage ?? '1', 10) || 1)
+
+  const title = buildTitle(category, page)
+  const ogTitle = `${title} | BhaavBrief`
+  const canonical = `${BASE_URL}${newsHref(category, page)}`
+
+  return {
+    title,
+    description: BASE_DESCRIPTION,
+    keywords: [
+      'why is MCX gold moving today',
+      'why crude oil price falling India',
+      'OPEC decision MCX crude oil impact',
+      'US Fed rate MCX gold India',
+      'rupee fall impact commodity prices',
+      'MCX commodity market news today',
+      'geopolitics MCX commodity India',
+      'commodity market intelligence India today',
+      'MCX silver why moving',
+      'Iran tensions crude oil MCX',
+    ],
+    alternates: { canonical },
+    openGraph: {
+      title: ogTitle,
+      description: BASE_DESCRIPTION,
+      url: canonical,
+      siteName: 'BhaavBrief',
+      type: 'website' as const,
+      locale: 'en_IN',
+    },
+    twitter: { card: 'summary' as const, title: ogTitle, description: BASE_DESCRIPTION, site: '@bhaavbrief' },
+  }
+}
 
 function commodityTagType(commodity: string): string {
   const c = commodity.toLowerCase()
@@ -48,7 +90,7 @@ function commodityCategory(commodity: string): string {
   return commodity.replace(/^MCX\s+/i, '')
 }
 
-export default async function NewsPage() {
+export default async function NewsPage({ searchParams }: { searchParams: SearchParams }) {
   // D-01 (17-Jul audit): this route was found serving a frozen ~7-week-old
   // render in production, with source/content confirmed healthy — pointing at
   // a silent ISR revalidation failure rather than a code bug. If getAllFlash()
@@ -70,13 +112,13 @@ export default async function NewsPage() {
     throw e
   }
 
+  const { category: rawCategory, page: rawPage } = await searchParams
+  const category = parseCategoryParam(rawCategory)
+
   const generatedAtIST = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 16).replace('T', ' ') + ' IST'
 
-  const sevenDaysAgo = new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10)
-
-  const serverItems: NewsItem[] = [
+  const rawItems: NewsItem[] = [
     ...flashItems
-      .filter(f => f.date >= sevenDaysAgo)
       .map(f => ({
         id:       f.slug,
         title:    f.title,
@@ -115,22 +157,35 @@ export default async function NewsPage() {
       })),
   ]
 
+  const allItems = dedupeAndSort(rawItems)
+
+  const counts: Record<string, number> = {}
+  for (const f of FILTERS) {
+    counts[f] = f === 'All' ? allItems.length : allItems.filter(item => matchesFilter(item, f)).length
+  }
+
+  const filtered = category === 'All' ? allItems : allItems.filter(item => matchesFilter(item, category))
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
+  const page = parsePageParam(rawPage, totalPages)
+  const start = (page - 1) * ITEMS_PER_PAGE
+  const pageItems = filtered.slice(start, start + ITEMS_PER_PAGE)
+
   const schema = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type':     'CollectionPage',
-        '@id':       'https://bhaavbrief.in/news',
+        '@id':       `${BASE_URL}${newsHref(category, page)}`,
         name:        'MCX Commodity Intelligence Feed',
-        description: 'Real-time MCX commodity intelligence — why gold, crude oil, silver and copper are moving.',
-        url:         'https://bhaavbrief.in/news',
+        description: BASE_DESCRIPTION,
+        url:         `${BASE_URL}${newsHref(category, page)}`,
       },
       {
         '@type': 'ItemList',
-        itemListElement: serverItems.slice(0, 20).map((item, i) => ({
+        itemListElement: pageItems.map((item, i) => ({
           '@type':  'ListItem',
-          position: i + 1,
-          url:      `https://bhaavbrief.in${item.href}`,
+          position: start + i + 1,
+          url:      item.href ? `${BASE_URL}${item.href}` : undefined,
           name:     item.title,
         })),
       },
@@ -187,7 +242,14 @@ export default async function NewsPage() {
         </Link>
       </div>
 
-      <NewsFeed serverItems={serverItems} />
+      <NewsFeed
+        items={pageItems}
+        counts={counts}
+        activeFilter={category}
+        page={page}
+        totalPages={totalPages}
+        totalFiltered={filtered.length}
+      />
     </div>
   )
 }
