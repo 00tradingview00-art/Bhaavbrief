@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 144800,
-    "silver": 203640,
-    "crude": 9465,
-    "copper": 1364,
-    "natgas": 263.1,
+    "gold": 144058,
+    "silver": 201225,
+    "crude": 9457,
+    "copper": 1363.4,
+    "natgas": 266.2,
     "usdinr": 94.47
   },
-  "lastChecked": "2026-10-22T09:32:08.990Z",
+  "lastChecked": "2026-10-22T13:44:15.471Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -19,7 +19,7 @@
     "value": "176"
   },
   "lastGeoNews": {
-    "mideast": "India's Mideast oil imports return to pre-war levels in September - Reuters",
+    "mideast": "More Oil Is Now Coming Out of the Persian Gulf Than Before the Iran War - WSJ",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
   },
   "articlesToday": [
