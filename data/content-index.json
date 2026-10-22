@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
+    "href": "/articles/2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
+    "title": "MCX Crude +3.12% to ₹9487/bbl — WTI breakout stalls at resistance",
+    "description": "MCX Crude surged 3.12% to ₹9487/bbl as WTI tested $100. Silver down 2.53%. Refinery demand signal unclear.",
+    "excerpt": "TRIGGER MCX Crude has spiked 3.12% to ₹9487/bbl as WTI ($99.87) approaches the psychological $100 level; Brent at $112.24 holds a $12.37 premium, typical of North Sea seasonal maintenance and no activ",
+    "date": "2026-10-22T08:01:40.126Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX Copper"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9487
+  },
+  {
     "type": "brief",
     "slug": "edition-131",
     "href": "/briefs/edition-131",
