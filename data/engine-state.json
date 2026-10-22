@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 144058,
-    "silver": 201225,
-    "crude": 9457,
-    "copper": 1363.4,
-    "natgas": 266.2,
-    "usdinr": 94.47
+    "gold": 143836,
+    "silver": 201214,
+    "crude": 9318,
+    "copper": 1362.5,
+    "natgas": 266.5,
+    "usdinr": 94.82
   },
-  "lastChecked": "2026-10-22T13:44:15.471Z",
+  "lastChecked": "2026-10-22T15:27:10.875Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -20,7 +20,8 @@
   },
   "lastGeoNews": {
     "mideast": "More Oil Is Now Coming Out of the Persian Gulf Than Before the Iran War - WSJ",
-    "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70"
+    "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70",
+    "russia": "Putin’s War On Ukraine Puts Oil Giant Rosneft Under Mounting Pressure - Bloomber"
   },
   "articlesToday": [
     "2026-10-22/2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance"
