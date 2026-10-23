@@ -64,6 +64,30 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-23-mcx-close-23oct2026-crude-surge-china-demand",
+    "href": "/articles/2026-10-23-mcx-close-23oct2026-crude-surge-china-demand",
+    "title": "MCX Close 23Oct: Crude surges +3.16%, copper rallies on China demand",
+    "description": "MCX evening close 23 Oct 2026: Crude ₹9784 +3.16%, Silver -1.75%. COMEX Gold fading -1.25%. Overnight: WTI +4.09%, Henry Hub +9.19%. Watch ₹9828 resistance.",
+    "excerpt": "MCX crude dominated Friday's session, closing ₹9784/bbl — a +3.16% rally on geopolitical supply tightness and China demand optimism signalling industrial recovery. MCX Copper followed with a +1.15% cl",
+    "date": "2026-10-22T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Oil",
+      "Copper",
+      "Silver",
+      "Gold",
+      "Natural Gas"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
     "href": "/articles/2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
