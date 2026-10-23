@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-23T18:34:48.763Z",
-  "generatedAtIST": "2026-10-24 00:04 IST",
+  "generatedAt": "2026-10-23T19:27:49.225Z",
+  "generatedAtIST": "2026-10-24 00:57 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4013.1,
+      "price": 4009.8,
       "prevClose": 4060.4,
-      "changePct": -1.1649,
+      "changePct": -1.2462,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 54.09,
+      "price": 54.07,
       "prevClose": 54.76,
-      "changePct": -1.2399,
+      "changePct": -1.2764,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 103.29,
+      "price": 103.54,
       "prevClose": 99.47,
-      "changePct": 3.8404,
+      "changePct": 4.0917,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 111.74,
+      "price": 111.87,
       "prevClose": 113.17,
-      "changePct": -1.2636,
+      "changePct": -1.1487,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 3.05,
       "prevClose": 2.8,
-      "changePct": 9.2275,
+      "changePct": 9.1917,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 122470,
-    "mcxComexGoldSpreadPct": 16.07,
-    "importParitySilverINR": 165069,
-    "mcxComexSilverSpreadPct": 18.8,
+    "importParityGoldINR": 122369,
+    "mcxComexGoldSpreadPct": 16.17,
+    "importParitySilverINR": 165008,
+    "mcxComexSilverSpreadPct": 18.84,
     "goldSilverRatio": 74.2
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 16.07% vs silver 18.8% — 2.73pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 16.07,
-      "silverSpreadPct": 18.8,
-      "deltaPts": 2.73
+      "detail": "Gold import-parity spread 16.17% vs silver 18.84% — 2.67pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 16.17,
+      "silverSpreadPct": 18.84,
+      "deltaPts": 2.67
     }
   ]
 }
