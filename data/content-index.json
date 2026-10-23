@@ -1,5 +1,27 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-132",
+    "href": "/briefs/edition-132",
+    "title": "NatGas Slides 2% as Gold Drops Hard Into a Hot War",
+    "description": "Natural gas falls independently while gold's sharp COMEX drop challenges the safe-haven logic of an active geopolitical crisis.",
+    "excerpt": "MCX Gold ₹142454 | Crude ₹9516 | USDINR ₹94.86 — Gold -0.60% | Crude +0.34% | Silver -1.55% Yesterday's Edge — Result: Edition #131 watched whether WTI would close below 98.27. Rejected ✗, now at 100.",
+    "date": "2026-10-23T03:31:48.112Z",
+    "edition": "132",
+    "tags": [
+      "MCX NatGas",
+      "MCX Gold",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX NatGas",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
     "href": "/articles/2026-10-22-mcx-crude-3-12-to-9487-bbl-wti-breakout-stalls-at-resistance",
