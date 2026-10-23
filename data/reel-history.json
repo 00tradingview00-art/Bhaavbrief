@@ -3263,6 +3263,34 @@
   {
     "file": "v3/aluminium-power-001",
     "instagram_id": "18336417799276843",
-    "posted_at": "2026-10-21T15:00:13.555Z"
+    "posted_at": "2026-10-21T15:00:13.555Z",
+    "insight_snapshots": [
+      {
+        "views": 4,
+        "reach": 1,
+        "ig_reels_avg_watch_time": 8520,
+        "ig_reels_video_view_total_time": 25562,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-23T03:31:45.115Z",
+        "age_hours": 36.52543333333333,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 4,
+      "reach": 1,
+      "ig_reels_avg_watch_time": 8520,
+      "ig_reels_video_view_total_time": 25562,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-23T03:31:45.115Z"
+    }
   }
 ]
