@@ -1,5 +1,5 @@
 {
-  "next": 9,
+  "next": 10,
   "published": [
     {
       "id": "gold-india-story-001",
@@ -40,6 +40,10 @@
     {
       "id": "aluminium-power-001",
       "generated_at": "2026-10-21T14:59:27.397Z"
+    },
+    {
+      "id": "mcx-session-clock-001",
+      "generated_at": "2026-10-23T14:48:59.908Z"
     }
   ],
   "retired_queue_history": [
