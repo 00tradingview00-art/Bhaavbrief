@@ -1,12 +1,12 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-10-20T19:27:20.078Z",
-    "lastFlashPrice": 146482,
+    "lastFlashAt": "2026-10-23T13:47:27.737Z",
+    "lastFlashPrice": 142502,
     "lastRoundLevel": 150000,
     "recentFlashIds": [
+      "2026-10-23-19-17-mcx-gold-falls-0-56-as-rupee-steadies",
       "2026-10-21-00-57-mcx-gold-slides-0-53-as-rupee-holds-firm",
-      "2026-10-16-19-36-mcx-gold-rebounds-0-59-rupee-weakness-support",
-      "2026-10-14-19-32-mcx-gold-falls-1-37-usd-strength-weighs"
+      "2026-10-16-19-36-mcx-gold-rebounds-0-59-rupee-weakness-support"
     ]
   },
   "MCX_SILVER": {
@@ -40,13 +40,13 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-10-21T21:36:08.826Z",
-    "lastFlashPrice": 264.5,
+    "lastFlashAt": "2026-10-23T13:47:27.737Z",
+    "lastFlashPrice": 255.7,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-10-23-19-17-mcx-natural-gas-slumps-4-63-on-energy-complex-weakness",
       "2026-10-22-03-06-mcx-natural-gas-weakens-on-energy-complex-pullback",
-      "2026-10-21-03-03-mcx-natural-gas-falls-2-95-on-demand-weakness",
-      "2026-10-14-20-48-mcx-natural-gas-falls-2-65-on-broad-commodity-weakness"
+      "2026-10-21-03-03-mcx-natural-gas-falls-2-95-on-demand-weakness"
     ]
   },
   "USDINR": {
