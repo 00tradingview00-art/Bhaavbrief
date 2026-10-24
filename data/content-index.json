@@ -1,5 +1,27 @@
 [
   {
+    "type": "research",
+    "slug": "2026-10-24-weekly-catalyst",
+    "href": "/research/2026-10-24-weekly-catalyst",
+    "title": "Crude's Hormuz Risk Premium Meets a 94.92 Rupee — FOMC Week Is the Stress Test",
+    "description": "MCX Crude at ₹9784 is pricing war risk that Gulf export data does not yet confirm, and with the rupee at 94.92 and FOMC on Oct 28, that premium faces its first real test.",
+    "excerpt": "The dominant catalyst into next week is not a data release — it is the gap between crude's war-risk premium and the physical flow evidence. MCX Crude closed the week at ₹9784/bbl, +3.16%, with WTI at ",
+    "date": "2026-10-24",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-23-mcx-nat-gas-breaks-below-260-on-henry-hub-weakness-3-31-plun",
     "href": "/articles/2026-10-23-mcx-nat-gas-breaks-below-260-on-henry-hub-weakness-3-31-plun",
