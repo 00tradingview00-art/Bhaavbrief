@@ -3245,6 +3245,20 @@
         "fetched_at": "2026-10-19T03:10:15.258Z",
         "age_hours": 60.45043666666667,
         "observation": "late_initial"
+      },
+      {
+        "views": 5,
+        "reach": 5,
+        "ig_reels_avg_watch_time": 1454,
+        "ig_reels_video_view_total_time": 7270,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-25T00:34:54.926Z",
+        "age_hours": 201.86145555555555,
+        "observation": "late_seven_day"
       }
     ],
     "insights": {
@@ -3257,7 +3271,7 @@
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-10-19T03:10:15.258Z"
+      "fetched_at": "2026-10-25T00:34:54.926Z"
     }
   },
   {
@@ -3296,6 +3310,34 @@
   {
     "file": "v3/mcx-session-clock-001",
     "instagram_id": "17867213049676127",
-    "posted_at": "2026-10-23T14:49:48.258Z"
+    "posted_at": "2026-10-23T14:49:48.258Z",
+    "insight_snapshots": [
+      {
+        "views": 35,
+        "reach": 32,
+        "ig_reels_avg_watch_time": 2705,
+        "ig_reels_video_view_total_time": 89293,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-10-25T00:34:54.059Z",
+        "age_hours": 33.75161138888889,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 35,
+      "reach": 32,
+      "ig_reels_avg_watch_time": 2705,
+      "ig_reels_video_view_total_time": 89293,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-10-25T00:34:54.059Z"
+    }
   }
 ]
