@@ -54,6 +54,9 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
           persistence:               'localStorage+cookie',
           autocapture:               false,
           disable_session_recording: false,
+          // The privacy policy promises typed text is masked in replays —
+          // enforce it here rather than rely on the library/project default.
+          session_recording:         { maskAllInputs: true },
           // No survey is defined anywhere in this repo — skip fetching the
           // surveys extension bundle (33 KiB incl. a bundled Preact copy),
           // flagged as pure waste in PageSpeed Insights' unused-JS audit.
