@@ -40,13 +40,13 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-10-26T10:22:04.429Z",
-    "lastFlashPrice": 238.8,
+    "lastFlashAt": "2026-10-26T20:44:10.836Z",
+    "lastFlashPrice": 248.8,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-10-27-02-14-mcx-natural-gas-edges-higher-on-overnight-consolidation",
       "2026-10-26-15-52-mcx-natural-gas-slides-5-39-on-demand-softness",
-      "2026-10-23-19-17-mcx-natural-gas-slumps-4-63-on-energy-complex-weakness",
-      "2026-10-22-03-06-mcx-natural-gas-weakens-on-energy-complex-pullback"
+      "2026-10-23-19-17-mcx-natural-gas-slumps-4-63-on-energy-complex-weakness"
     ]
   },
   "USDINR": {
