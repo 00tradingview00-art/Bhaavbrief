@@ -1,6 +1,24 @@
 [
   {
     "type": "hawk-scan",
+    "slug": "2026-10-26-mcx-nat-gas-breaks-above-20-day-sma-at-246-end-of-injection-",
+    "href": "/articles/2026-10-26-mcx-nat-gas-breaks-above-20-day-sma-at-246-end-of-injection-",
+    "title": "MCX Nat Gas breaks above 20-day SMA at ₹246 — end-of-injection season tightness",
+    "description": "MCX Nat Gas +3.01% to ₹246/mmBtu. Hawked on 3% threshold breach amid Henry Hub strength.",
+    "excerpt": "TRIGGER MCX Natural Gas surged 3.01% to ₹246.20/mmBtu, breaching the 20-day simple moving average (₹291 is now resistance target) as Henry Hub gas recovered to $3.02/mmBtu amid tightening US storage a",
+    "date": "2026-10-26T20:39:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 246
+  },
+  {
+    "type": "hawk-scan",
     "slug": "2026-10-26-mcx-nat-gas-breaks-below-20-sma-as-henry-hub-dips-4-1",
     "href": "/articles/2026-10-26-mcx-nat-gas-breaks-below-20-sma-as-henry-hub-dips-4-1",
     "title": "MCX Nat Gas breaks below 20-SMA as Henry Hub dips 4.1%",
