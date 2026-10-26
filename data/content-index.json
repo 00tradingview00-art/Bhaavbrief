@@ -79,6 +79,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-26-mcx-close-26oct2026-gold-leads-risk-off",
+    "href": "/articles/2026-10-26-mcx-close-26oct2026-gold-leads-risk-off",
+    "title": "MCX Close 26 Oct: Gold Gains in Risk-Off, Crude Retreats",
+    "description": "MCX closes 26 Oct: Gold +0.79% to ₹143150/10g leads; Crude -0.87% to ₹9715/bbl fades. COMEX Gold extends +0.45%. Defensive session ahead of US data.",
+    "excerpt": "MCX closed in a risk-off posture—gold rallied while crude retreated. MCX Gold led with a +0.79% close at ₹143150/10g, extending defensive positioning ahead of US macro data. MCX Crude fell -0.87% to ₹",
+    "date": "2026-10-25T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Gold",
+      "Crude Oil",
+      "Risk-Off"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-10-24-weekly-catalyst",
     "href": "/research/2026-10-24-weekly-catalyst",
