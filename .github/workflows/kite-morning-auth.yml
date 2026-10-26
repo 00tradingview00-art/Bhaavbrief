@@ -48,7 +48,13 @@ jobs:
           git add data/kite-instruments.json data/contract-specs.json
           git diff --staged --quiet && echo "No changes" && exit 0
           git commit -m "chore: update MCX instrument tokens and contract specs $(date +'%d %b %Y')"
-          git push origin main
+          # Other workflows commit to main constantly — rebase and retry.
+          for i in 1 2 3; do
+            git pull --rebase -q origin main && git push origin main && exit 0
+            sleep $((i * 5))
+          done
+          echo "::error::Push failed after 3 attempts"
+          exit 1
 
       - name: Alert on failure
         if: failure()

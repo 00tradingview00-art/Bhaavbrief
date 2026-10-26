@@ -21,6 +21,7 @@ export const ROUTES = [
   '/api/cron/flash',
   '/api/cron/intelligence',
   '/api/cron/iv-snapshot',
+  '/api/cron/monitor',
   '/api/cron/oi-snapshot',
   '/api/eia',
   '/api/events',

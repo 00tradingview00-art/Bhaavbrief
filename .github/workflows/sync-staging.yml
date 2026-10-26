@@ -5,8 +5,9 @@ name: Sync staging branch
 # without anyone having to remember to merge it by hand. staging only ever
 # differs from main in its Vercel-side environment variables (CASHFREE_ENV,
 # CASHFREE_CLIENT_ID/SECRET, IS_STAGING) — never in committed code — so a
-# plain fast-forward is always expected to succeed. If it doesn't (staging
-# has diverged somehow), this job fails loudly rather than force-pushing.
+# plain fast-forward is expected to succeed. If staging only diverged by
+# content-free commits it is reset to main (with a lease); if it carries real
+# file changes, this job fails loudly rather than overwrite them.
 
 on:
   push:
@@ -34,7 +35,20 @@ jobs:
           git checkout -B staging origin/staging
           if git merge --ff-only origin/main; then
             git push origin staging
+            exit 0
+          fi
+          # Not a fast-forward. If staging's own commits change no files (e.g.
+          # the empty "trigger initial staging deployment" commit of 4 Sep,
+          # which blocked every sync since — 29/29 runs failed), resetting
+          # staging to main loses nothing: move it with a lease so a
+          # concurrent push to staging still wins. Real staging-only changes
+          # still fail loudly, never overwritten.
+          BASE=$(git merge-base origin/main origin/staging)
+          if git diff --quiet "$BASE" origin/staging; then
+            echo "staging only has content-free commits beyond main — resetting it to main"
+            git push --force-with-lease=staging:$(git rev-parse origin/staging) origin origin/main:refs/heads/staging
           else
-            echo "::error::staging has diverged from main (not a fast-forward) — needs a manual merge, not auto-synced"
+            echo "::error::staging has its own file changes not on main — needs a manual merge, not auto-synced"
+            git diff --stat "$BASE" origin/staging
             exit 1
           fi
