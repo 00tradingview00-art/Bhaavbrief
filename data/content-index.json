@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-133",
+    "href": "/briefs/edition-133",
+    "title": "Brent Crashes $6.79 While Henry Hub Surges 13% — Two Crises, One Morning",
+    "description": "A sharp Brent selloff and a 13% Henry Hub surge arrive simultaneously, pulling MCX crude and natgas in opposite directions before markets open.",
+    "excerpt": "MCX Gold ₹142024 | Crude ₹9800 | USDINR ₹94.92 Yesterday's Edge — Result: Edition #132 watched whether COMEX GOLD would close below 4,027.7. Confirmed ✓, now at 4,000.9. | Commodity | Global Price | U",
+    "date": "2026-10-26T02:10:15.339Z",
+    "edition": "133",
+    "tags": [
+      "MCX Crude",
+      "MCX NatGas",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "research",
     "slug": "2026-10-24-weekly-catalyst",
     "href": "/research/2026-10-24-weekly-catalyst",
