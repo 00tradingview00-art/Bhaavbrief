@@ -30,13 +30,13 @@
     ]
   },
   "MCX_COPPER": {
-    "lastFlashAt": "2026-10-22T19:26:07.214Z",
-    "lastFlashPrice": 1364,
+    "lastFlashAt": "2026-10-26T09:07:41.575Z",
+    "lastFlashPrice": 1384.75,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-10-26-14-37-mcx-copper-rallies-0-56-amid-base-metal-recovery",
       "2026-10-23-00-56-mcx-copper-falls-1-90-on-base-metal-profit-taking",
-      "2026-10-21-14-59-mcx-copper-slides-0-76-as-rupee-steadies",
-      "2026-09-22-01-37-mcx-copper-rises-0-57-on-base-metals-resilience"
+      "2026-10-21-14-59-mcx-copper-slides-0-76-as-rupee-steadies"
     ]
   },
   "MCX_NATGAS": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-10-21T08:28:45.660Z",
-    "lastFlashPrice": 94.79,
+    "lastFlashAt": "2026-10-26T09:07:41.575Z",
+    "lastFlashPrice": 95.23,
     "lastRoundLevel": 95,
     "recentFlashIds": [
+      "2026-10-26-14-37-usd-inr-strengthens-0-32-as-rupee-retreats-from-profit",
       "2026-10-21-13-58-usd-inr-weakens-0-27-as-rupee-consolidates-post-rally",
-      "2026-10-14-14-06-usd-inr-weakens-0-30-on-rupee-reversal-momentum",
-      "2026-10-13-16-16-usd-inr-weakens-0-54-as-fpi-momentum-fades"
+      "2026-10-14-14-06-usd-inr-weakens-0-30-on-rupee-reversal-momentum"
     ]
   }
 }
