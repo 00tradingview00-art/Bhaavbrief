@@ -28,29 +28,54 @@ const show = (t, start, end) => ease(Math.min((t-start)/.25, (end-t)/.25, 1))
 function box(c,x,y,w,h,fill,stroke='#ffffff2e') { c.beginPath(); c.roundRect(x,y,w,h,28); c.fillStyle=fill; c.fill(); c.strokeStyle=stroke; c.lineWidth=2; c.stroke() }
 function txt(c,s,x,y,size,color='#F8F5EE',weight=700,align='center') { c.font=`${weight} ${size}px Inter, Arial`; c.fillStyle=color; c.textAlign=align; c.fillText(s,x,y) }
 function wrapTxt(c,s,x,y,maxWidth,size,color='#F8F5EE',weight=700,lineHeight=Math.round(size*1.2)) { c.font=`${weight} ${size}px Inter, Arial`; const lines=[]; let line=''; for (const word of s.split(/\s+/)) { const candidate=line?`${line} ${word}`:word; if (c.measureText(candidate).width>maxWidth && line) { lines.push(line); line=word } else line=candidate } if(line) lines.push(line); const first=y-(lines.length-1)*lineHeight/2; lines.forEach((line,index)=>txt(c,line,x,first+index*lineHeight,size,color,weight)); return lines.length }
-function arrow(c,x1,y1,x2,y2) { c.strokeStyle='#EAB64E'; c.lineWidth=7; c.lineCap='round'; c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke(); c.fillStyle='#EAB64E'; c.beginPath(); c.moveTo(x2,y2); c.lineTo(x2-15,y2-23); c.lineTo(x2+15,y2-23); c.closePath(); c.fill() }
+// The head is rotated onto the line's own direction. It used to be a fixed
+// downward triangle, which read correctly only for the vertical arrows in
+// `transmission` — every horizontal arrow drew a head pointing at the floor.
+function arrow(c,x1,y1,x2,y2) { c.strokeStyle='#EAB64E'; c.lineWidth=7; c.lineCap='round'; c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke(); const ang=Math.atan2(y2-y1,x2-x1); c.save(); c.translate(x2,y2); c.rotate(ang-Math.PI/2); c.fillStyle='#EAB64E'; c.beginPath(); c.moveTo(0,0); c.lineTo(-15,-23); c.lineTo(15,-23); c.closePath(); c.fill(); c.restore() }
 function label(c, value, x, y, w=230, active=false) { box(c,x,y,w,72,active?'#EAB64E':'#F8F5EE'); txt(c,value,x+w/2,y+46,20,active?'#29251D':'#29251D',800) }
+// Each element of a mode's graphic gets its own slice of the 7.5s explanation
+// window, so the picture assembles itself instead of appearing whole. Before
+// this, `progress` was computed and then read by `options` alone — the other
+// five modes held one static frame for 7.8 of the reel's 15 seconds, which on
+// a 12-entry slate meant 11 of 12 reels never moved at all.
+const stage = (progress, n, of = 3) => ease(Math.max(0, Math.min(1, progress * of - n + .4)))
+// Rises a few pixels as it fades, so the assembly reads as deliberate motion
+// rather than elements blinking on.
+function rise(c, s, draw) { if (s <= 0) return; c.save(); c.globalAlpha *= s; c.translate(0, (1 - s) * 30); draw(); c.restore() }
 function drawVisual(c, plan, reel, t) {
   const [a,b,d] = plan.labels
   const progress = Math.max(0, Math.min(1, (t-3)/7.5))
-  txt(c, plan.mode.toUpperCase(), 540, 905, 22, '#F0B44C', 800)
+  const st = n => stage(progress, n)
+  txt(c, plan.mode.toUpperCase(), 540, 300, 24, '#F0B44C', 800)
+  // WHO IS EXPOSED rides directly under the mode label now. It used to sit at
+  // y=700 with the graphic starting at y=990, which left the top third of the
+  // frame — the part a phone shows most prominently — completely empty.
+  wrapTxt(c, reel.stakes, 540, 374, 880, 26, '#D7D1C7', 500, 34)
+  // Horizontal layouts stop at x=915. Instagram's like/comment/share column
+  // occupies roughly the right 150px of a Reel, so anything beyond that sits
+  // under the buttons — the three-across modes all used to run to x=975+.
   if (plan.mode === 'comparison') {
-    label(c,a,105,1010,360); label(c,d,615,1010,360); arrow(c,485,1046,595,1046); box(c,240,1165,600,104,'rgba(8,11,15,.92)','#EAB64E88'); txt(c,b,540,1228,27,'#F8F5EE',800)
+    rise(c,st(0),()=>label(c,a,95,520,350)); rise(c,st(1),()=>{ label(c,d,565,520,350); arrow(c,460,556,555,556) })
+    rise(c,st(2),()=>{ box(c,205,690,600,120,'rgba(8,11,15,.92)','#EAB64E88'); txt(c,b,505,762,30,'#F8F5EE',800) })
   } else if (plan.mode === 'contract') {
-    box(c,150,990,780,350,'rgba(8,11,15,.92)','#EAB64E'); txt(c,'CONTRACT CARD',540,1050,22,'#F0B44C',800); [a,b,d].forEach((v,n)=>{ txt(c,`${String(n+1).padStart(2,'0')}  ${v}`,225,1135+n*66,28,'#F8F5EE',700,'left'); if(n<2){ c.strokeStyle='#ffffff35'; c.lineWidth=2; c.beginPath(); c.moveTo(220,1160+n*66); c.lineTo(860,1160+n*66); c.stroke() } })
+    box(c,150,470,780,380,'rgba(8,11,15,.92)','#EAB64E'); txt(c,'CONTRACT CARD',540,538,24,'#F0B44C',800)
+    ;[a,b,d].forEach((v,n)=>rise(c,st(n),()=>{ txt(c,`${String(n+1).padStart(2,'0')}  ${v}`,225,630+n*74,30,'#F8F5EE',700,'left'); if(n<2){ c.strokeStyle='#ffffff35'; c.lineWidth=2; c.beginPath(); c.moveTo(220,658+n*74); c.lineTo(860,658+n*74); c.stroke() } }))
   } else if (plan.mode === 'options') {
-    [a,b,d].forEach((v,n)=>{ const cx=250+n*290, cy=1145, r=94; c.strokeStyle=n===1?'#EAB64E':'#F8F5EE'; c.lineWidth=12; c.beginPath(); c.arc(cx,cy,r,-Math.PI*.75,Math.PI*(.15+.35*progress)); c.stroke(); txt(c,v,cx,1300,19,'#F8F5EE',800) }); txt(c,'ONE PREMIUM • MULTIPLE DRIVERS',540,1420,22,'#D7D1C7',600)
+    [a,b,d].forEach((v,n)=>rise(c,st(n),()=>{ const cx=235+n*265, cy=700, r=98; c.strokeStyle=n===1?'#EAB64E':'#F8F5EE'; c.lineWidth=12; c.beginPath(); c.arc(cx,cy,r,-Math.PI*.75,-Math.PI*.75+Math.PI*1.9*st(n)); c.stroke(); txt(c,v,cx,880,20,'#F8F5EE',800) }))
+    rise(c,st(2),()=>txt(c,'ONE PREMIUM • MULTIPLE DRIVERS',505,990,23,'#D7D1C7',600))
   } else if (plan.mode === 'session') {
-    c.strokeStyle='#F8F5EE'; c.lineWidth=5; c.beginPath(); c.moveTo(130,1160); c.lineTo(950,1160); c.stroke(); [a,b,d].forEach((v,n)=>{ const px=190+n*340; c.fillStyle=n===1?'#EAB64E':'#F8F5EE'; c.beginPath(); c.arc(px,1160,19,0,Math.PI*2); c.fill(); txt(c,v,px,1240,20,'#F8F5EE',800) }); txt(c,'THE MARKET CLOCK CHANGES THE INPUTS',540,1365,21,'#D7D1C7',600)
+    c.strokeStyle='#F8F5EE'; c.lineWidth=5; c.beginPath(); c.moveTo(150,700); c.lineTo(150+720*ease(progress),700); c.stroke()
+    ;[a,b,d].forEach((v,n)=>rise(c,st(n),()=>{ const px=210+n*300; c.fillStyle=n===1?'#EAB64E':'#F8F5EE'; c.beginPath(); c.arc(px,700,20,0,Math.PI*2); c.fill(); txt(c,v,px,790,21,'#F8F5EE',800) }))
+    rise(c,st(2),()=>txt(c,'THE MARKET CLOCK CHANGES THE INPUTS',505,920,22,'#D7D1C7',600))
   } else if (plan.mode === 'transmission') {
-    [a,b,d].forEach((v,n)=>{ const y=990+n*135; label(c,v,310,y,460,n===1); if(n<2) arrow(c,540,y+75,540,y+118) })
+    [a,b,d].forEach((v,n)=>rise(c,st(n),()=>{ const y=470+n*150; label(c,v,310,y,460,n===1); if(n<2) arrow(c,540,y+78,540,y+140) }))
   } else {
-    [[a,195],[b,540],[d,885]].forEach(([v,cx],n)=>{ box(c,cx-120,1060,240,120,n===1?'#EAB64E':'#F8F5EE'); txt(c,v,cx,1133,22,'#29251D',800); if(n<2) arrow(c,cx+130,1120,cx+205,1120) })
+    [[a,195],[b,500],[d,805]].forEach(([v,cx],n)=>rise(c,st(n),()=>{ box(c,cx-118,620,236,130,n===1?'#EAB64E':'#F8F5EE'); txt(c,v,cx,700,22,'#29251D',800); if(n<2) arrow(c,cx+128,685,cx+188,685) }))
   }
   // Mechanism sentences run 14–20 words, so this must wrap — a single-line
   // txt() ran off both edges of the frame. Only visible once drawVisual was
   // reachable again, which is why it survived unnoticed.
-  box(c,90,1468,900,152,'rgba(8,11,15,.92)','#EAB64E88'); wrapTxt(c,reel.mechanism,540,1544,830,22,'#F8F5EE',600,29)
+  box(c,90,1090,900,200,'rgba(8,11,15,.92)','#EAB64E88'); wrapTxt(c,reel.mechanism,540,1178,830,25,'#F8F5EE',600,33)
 }
 try {
   for (let i=0;i<FPS*DURATION;i++) {
@@ -64,19 +89,24 @@ try {
     // THE TENSION — the only stage that gets a text panel, because the hook is
     // a claim rather than a mechanism. Everything after it is explained by the
     // mode-specific motion graphic, not by another card.
-    if (t<3.2) { x.globalAlpha=show(t,0,3.2); box(x,70,920,940,285,'rgba(8,11,15,.92)','#ffffff38'); x.fillStyle='#F0B44C22'; x.fillRect(70,920,10,285); txt(x,'THE TENSION',540,975,18,'#F0B44C',800); wrapTxt(x,reel.hook,540,1065,820,44,'#F8F5EE',800,52); txt(x,reel.hook_detail,540,1160,24,'#D7D1C7',500); x.globalAlpha=1 }
+    if (t<3.2) { x.globalAlpha=show(t,0,3.2); box(x,70,880,940,340,'rgba(8,11,15,.92)','#ffffff38'); x.fillStyle='#F0B44C22'; x.fillRect(70,880,10,340); txt(x,'THE TENSION',540,942,19,'#F0B44C',800); wrapTxt(x,reel.hook,540,1040,840,50,'#F8F5EE',800,60); txt(x,reel.hook_detail,540,1168,25,'#D7D1C7',500); x.globalAlpha=1 }
     // THE MECHANISM — drawVisual picks the grammar from reel.visual_mode, so a
     // comparison, a contract card, an options driver, a session clock and a
     // transmission chain each move differently. Its internal easing is keyed to
     // a start at t=3, so this window must not move without updating it.
     if (t>=3 && t<10.8) { x.globalAlpha=show(t,3,10.8); drawVisual(x,plan,reel,t); x.globalAlpha=1 }
-    // WHO IS EXPOSED — one line riding above the visual, so the stakes arrive
-    // with the explanation instead of interrupting it with a card of their own.
-    if (t>=3.6 && t<10.8) { x.globalAlpha=show(t,3.6,10.8)*.95; wrapTxt(x,reel.stakes,540,700,860,25,'#D7D1C7',500,33); x.globalAlpha=1 }
+    // WHO IS EXPOSED now renders inside drawVisual, directly beneath the mode
+    // label, so the stakes and the graphic occupy one composed block instead of
+    // being separated by 290px of empty frame.
     // CHECK THIS NEXT — conclusion, the decision-check, and the boundary, which
     // the compliance module requires on every entry but nothing used to render.
-    if (t>=10.4) { x.globalAlpha=show(t,10.4,15); box(x,70,1398,940,232,'rgba(8,11,15,.94)','#EAB64E88'); wrapTxt(x,reel.conclusion.toUpperCase(),540,1462,820,29,'#F0B44C',800,37); wrapTxt(x,reel.decision_check,540,1545,820,19,'#F8F5EE',500,25); txt(x,reel.boundary,540,1606,16,'#D7D1C7',500); x.globalAlpha=1 }
-    box(x,72,1710,500,42,'rgba(8,11,15,.82)'); txt(x,`SOURCE: ${reel.source}`,94,1738,16,'#D7D1C7',700,'left'); txt(x,'Educational, not investment advice.',1008,1738,16,'#D7D1C7',500,'right')
+    // Centred rather than parked on the floor: as a bottom strip this left two
+    // thirds of the closing frame empty, and sat under Instagram's own caption
+    // overlay, so the payoff of the reel was the least visible thing in it.
+    if (t>=10.4) { x.globalAlpha=show(t,10.4,15); txt(x,'CHECK THIS NEXT',540,470,22,'#F0B44C',800); box(x,70,530,940,600,'rgba(8,11,15,.94)','#EAB64E88'); wrapTxt(x,reel.conclusion.toUpperCase(),540,690,850,46,'#F0B44C',800,57); wrapTxt(x,reel.decision_check,540,890,830,28,'#F8F5EE',500,37); txt(x,reel.boundary,540,1070,18,'#D7D1C7',500); x.globalAlpha=1 }
+    // Instagram's caption and handle cover roughly the bottom 300px, so this
+    // strip was effectively invisible at y=1710. Raised clear of that overlay.
+    box(x,72,1500,500,44,'rgba(8,11,15,.82)'); txt(x,`SOURCE: ${reel.source}`,94,1529,16,'#D7D1C7',700,'left'); txt(x,'Educational, not investment advice.',1008,1529,16,'#D7D1C7',500,'right')
     writeFileSync(join(frames,`f-${String(i).padStart(4,'0')}.jpg`),c.toBuffer('image/jpeg',88))
   }
   execFileSync('python3',['-m','edge_tts','--voice','en-IN-NeerjaNeural','--text',reel.voiceover,'--write-media',voice])
