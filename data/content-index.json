@@ -1,5 +1,25 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-26-mcx-nat-gas-breaks-below-20-sma-as-henry-hub-dips-4-1",
+    "href": "/articles/2026-10-26-mcx-nat-gas-breaks-below-20-sma-as-henry-hub-dips-4-1",
+    "title": "MCX Nat Gas breaks below 20-SMA as Henry Hub dips 4.1%",
+    "description": "MCX Nat Gas ₹242/mmBtu, down 4.04%. Henry Hub weakness amid mild weather outlook.",
+    "excerpt": "TRIGGER MCX Natural Gas has fallen 4.04% to ₹242/mmBtu, breaching the 20-day simple moving average (₹291) as Henry Hub declined 4.12% to $3.01/mmBtu on mild US weather forecasts reducing heating deman",
+    "date": "2026-10-26T08:11:59.441Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Crude",
+      "Henry Hub"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 242
+  },
+  {
     "type": "brief",
     "slug": "edition-133",
     "href": "/briefs/edition-133",
