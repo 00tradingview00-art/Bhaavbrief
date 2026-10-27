@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
+    "href": "/articles/2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
+    "title": "MCX Nat Gas spikes 17% to ₹293/mmBtu — winter demand signals",
+    "description": "MCX Nat Gas +17.03% to ₹293/mmBtu. HAWK trigger fired. Henry Hub strength amid US heating season onset.",
+    "excerpt": "TRIGGER MCX Natural Gas has surged 17.03% to ₹293/mmBtu, breaking above the prior session close of ₹250/mmBtu — consistent with early-season heating demand forecasts and potential US weather-driven in",
+    "date": "2026-10-27T08:26:26.405Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver",
+      "Henry Hub",
+      "Winter Demand"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 293
+  },
+  {
     "type": "brief",
     "slug": "edition-134",
     "href": "/briefs/edition-134",
