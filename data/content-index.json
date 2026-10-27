@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-134",
+    "href": "/briefs/edition-134",
+    "title": "FOMC Eve Pulls Gold Below $4,020 as Oil Slips at $101",
+    "description": "Rate-committee anxiety is draining safe-haven demand from gold and silver even as crude holds above $100.",
+    "excerpt": "MCX Gold ₹143073 | Crude ₹9723 | USDINR ₹95.19 Yesterday's Edge — Result: Edition #133 watched whether WTI would close below 101.38. Confirmed ✓, now at 101.14. | Commodity | Global Price | USD/INR | ",
+    "date": "2026-10-27T01:34:37.185Z",
+    "edition": "134",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Fed"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-26-mcx-nat-gas-breaks-above-20-day-sma-at-246-end-of-injection-",
     "href": "/articles/2026-10-26-mcx-nat-gas-breaks-above-20-day-sma-at-246-end-of-injection-",
