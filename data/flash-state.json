@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-10-23T17:58:15.940Z",
-    "lastFlashPrice": 9771,
+    "lastFlashAt": "2026-10-27T15:18:31.746Z",
+    "lastFlashPrice": 9525,
     "lastRoundLevel": 9500,
     "recentFlashIds": [
+      "2026-10-27-20-48-mcx-crude-falls-2-04-as-rupee-strengthens",
       "2026-10-23-23-28-mcx-crude-surges-3-03-on-rupee-depreciation-support",
-      "2026-10-23-00-51-mcx-crude-surges-3-10-on-rupee-weakness",
-      "2026-10-21-01-03-mcx-crude-falls-0-24-as-rupee-stability-persists"
+      "2026-10-23-00-51-mcx-crude-surges-3-10-on-rupee-weakness"
     ]
   },
   "MCX_COPPER": {
@@ -40,13 +40,13 @@
     ]
   },
   "MCX_NATGAS": {
-    "lastFlashAt": "2026-10-26T20:44:10.836Z",
-    "lastFlashPrice": 248.8,
+    "lastFlashAt": "2026-10-27T15:18:31.746Z",
+    "lastFlashPrice": 287.6,
     "lastRoundLevel": null,
     "recentFlashIds": [
+      "2026-10-27-20-48-mcx-natural-gas-slides-1-51-amid-energy-complex-retreat",
       "2026-10-27-02-14-mcx-natural-gas-edges-higher-on-overnight-consolidation",
-      "2026-10-26-15-52-mcx-natural-gas-slides-5-39-on-demand-softness",
-      "2026-10-23-19-17-mcx-natural-gas-slumps-4-63-on-energy-complex-weakness"
+      "2026-10-26-15-52-mcx-natural-gas-slides-5-39-on-demand-softness"
     ]
   },
   "USDINR": {
