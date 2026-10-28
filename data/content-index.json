@@ -63,6 +63,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-10-28-mcx-close-28oct2026-energy-surge",
+    "href": "/articles/2026-10-28-mcx-close-28oct2026-energy-surge",
+    "title": "MCX Close 28Oct: Energy Surges, Precious Metals Retreat",
+    "description": "28 Oct 2026 — MCX Crude +3.04% to ₹9787/bbl leads energy rally. Silver -1.15%. COMEX crude extends gains overnight.",
+    "excerpt": "Energy dominated MCX today as crude and natural gas both rallied on what appears to be supply tightness signals. MCX Crude surged +3.04% to close at ₹9787/bbl, the day's top mover, driven by seasonal ",
+    "date": "2026-10-27T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Rally",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
     "href": "/articles/2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
