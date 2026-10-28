@@ -1,5 +1,29 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-135",
+    "href": "/briefs/edition-135",
+    "title": "FOMC Night and Brent's $5 Drop Reshape Every Indian Commodity Price",
+    "description": "Brent crude crashes over $5 while Henry Hub surges 18% and gold climbs — all on the eve of the Fed's rate decision tonight.",
+    "excerpt": "MCX Gold ₹144138 | Crude ₹9498 | USDINR ₹95.02 Yesterday's Edge — Result: Edition #134 watched whether COMEX GOLD would close below 4,018.1. Rejected ✗, now at 4,073.5. | Commodity | Global Price | US",
+    "date": "2026-10-28T01:31:20.574Z",
+    "edition": "135",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX NatGas",
+      "Fed",
+      "Geopolitics",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
     "href": "/articles/2026-10-27-mcx-nat-gas-spikes-17-to-293-mmbtu-winter-demand-signals",
