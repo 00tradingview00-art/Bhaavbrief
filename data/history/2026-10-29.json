@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "generatedAt": "2026-10-29T20:31:24.227Z",
+=======
+  "generatedAt": "2026-10-29T20:31:35.168Z",
+>>>>>>> Stashed changes
   "generatedAtIST": "2026-10-30 02:01 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -40,9 +44,15 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
+<<<<<<< Updated upstream
       "price": 4036.8,
       "prevClose": 4051.6,
       "changePct": -0.3653,
+=======
+      "price": 4037.3,
+      "prevClose": 4051.6,
+      "changePct": -0.3529,
+>>>>>>> Stashed changes
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
@@ -52,15 +62,21 @@
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 102.87,
+      "price": 102.88,
       "prevClose": 102.78,
-      "changePct": 0.0876,
+      "changePct": 0.0973,
       "unit": "USD/bbl"
     },
     "BRENT": {
+<<<<<<< Updated upstream
       "price": 111.62,
       "prevClose": 115.32,
       "changePct": -3.2085,
+=======
+      "price": 111.7,
+      "prevClose": 115.32,
+      "changePct": -3.1391,
+>>>>>>> Stashed changes
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
@@ -119,8 +135,13 @@
     }
   },
   "derived": {
+<<<<<<< Updated upstream
     "importParityGoldINR": 123972,
     "mcxComexGoldSpreadPct": 14.83,
+=======
+    "importParityGoldINR": 123987,
+    "mcxComexGoldSpreadPct": 14.81,
+>>>>>>> Stashed changes
     "importParitySilverINR": 160646,
     "mcxComexSilverSpreadPct": 17.61,
     "goldSilverRatio": 77.2
@@ -128,10 +149,17 @@
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
+<<<<<<< Updated upstream
       "detail": "Gold import-parity spread 14.83% vs silver 17.61% — 2.78pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
       "goldSpreadPct": 14.83,
       "silverSpreadPct": 17.61,
       "deltaPts": 2.78
+=======
+      "detail": "Gold import-parity spread 14.81% vs silver 17.61% — 2.8pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 14.81,
+      "silverSpreadPct": 17.61,
+      "deltaPts": 2.8
+>>>>>>> Stashed changes
     }
   ]
 }
