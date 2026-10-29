@@ -204,6 +204,25 @@
       ],
       "endDate": "2026-09-22",
       "outcome": "The Middle East de-escalation narrative concluded as crude oil declined from ₹9,709 to ₹8,951 while gold maintained support, reflecting mixed market conviction on the durability of diplomatic peace efforts before the story faded after five days without updates."
+    },
+    {
+      "id": "brent-crude-middle-east-supply-shift",
+      "title": "Brent Crude's $5 Plunge: Middle East Supply Signals Reshape Oil Markets",
+      "startDate": "2026-10-29",
+      "status": "active",
+      "editions": [
+        136
+      ],
+      "latestDay": 1,
+      "summary": "Brent crude collapsed $5.17 in a single session as emerging signals suggest Middle East supply dynamics are shifting, prompting Indian commodity markets to reassess crude and precious metals positioning.",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹9,664",
+      "tags": [
+        "MCX Crude",
+        "Geopolitics",
+        "Middle East",
+        "Supply Shock"
+      ]
     }
   ]
 }
