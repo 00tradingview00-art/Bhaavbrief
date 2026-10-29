@@ -1,5 +1,23 @@
 [
   {
+    "type": "article",
+    "slug": "2026-10-29-mcx-nat-gas-crashes-2-55-on-storage-surplus-signal",
+    "href": "/articles/2026-10-29-mcx-nat-gas-crashes-2-55-on-storage-surplus-signal",
+    "title": "MCX Nat Gas Crashes 2.55% on Storage Surplus Signal",
+    "description": "MCX Natural Gas ₹283/mmBtu down 2.55% as Henry Hub weakness signals US storage above seasonal norms, pressuring LNG import economics for India.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas is collapsing harder than every other commodity in the evening session — down 2.55% to ₹283.20/mmBtu — while gold, silver, and crude are flat-to-modest red. This divergen",
+    "date": "2026-10-29T16:02:54.297Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 283
+  },
+  {
     "type": "brief",
     "slug": "edition-136",
     "href": "/briefs/edition-136",
