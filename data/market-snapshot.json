@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-30T20:05:07.255Z",
+  "generatedAt": "2026-10-30T20:05:14.496Z",
   "generatedAtIST": "2026-10-31 01:35 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 3888,
+      "price": 3891.2,
       "prevClose": 4031.4,
-      "changePct": -3.5571,
+      "changePct": -3.4777,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 49.09,
+      "price": 49.37,
       "prevClose": 52.19,
-      "changePct": -5.9512,
+      "changePct": -5.4147,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 104.37,
+      "price": 103.09,
       "prevClose": 102,
-      "changePct": 2.3235,
+      "changePct": 1.0686,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 112.87,
+      "price": 112.53,
       "prevClose": 114.88,
-      "changePct": -1.7497,
+      "changePct": -2.0456,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
       "price": 2.89,
       "prevClose": 2.95,
-      "changePct": -2.0325,
+      "changePct": -2.2696,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 119089,
-    "mcxComexGoldSpreadPct": 16.23,
-    "importParitySilverINR": 150363,
-    "mcxComexSilverSpreadPct": 18.98,
-    "goldSilverRatio": 79.2
+    "importParityGoldINR": 119187,
+    "mcxComexGoldSpreadPct": 16.14,
+    "importParitySilverINR": 151220,
+    "mcxComexSilverSpreadPct": 18.3,
+    "goldSilverRatio": 78.8
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 16.23% vs silver 18.98% — 2.75pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 16.23,
-      "silverSpreadPct": 18.98,
-      "deltaPts": 2.75
+      "detail": "Gold import-parity spread 16.14% vs silver 18.3% — 2.16pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 16.14,
+      "silverSpreadPct": 18.3,
+      "deltaPts": 2.16
     }
   ]
 }
