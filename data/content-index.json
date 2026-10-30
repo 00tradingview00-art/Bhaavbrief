@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-137",
+    "href": "/briefs/edition-137",
+    "title": "WTI at $103 and Gold Below $4,000 Tell Two Different Stories",
+    "description": "Crude surges on Middle East supply fears while gold slips below $4,000, exposing a fracture in the geopolitical premium trade.",
+    "excerpt": "MCX Gold ₹141935 | Crude ₹9836 | USDINR ₹95.48 — Gold -0.46% | Crude +1.31% | Silver -1.55% Yesterday's Edge — Result: Edition #136 watched whether WTI would close below 101.28. Rejected ✗, now at 103",
+    "date": "2026-10-30T04:00:56.630Z",
+    "edition": "137",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-10-29-mcx-nat-gas-crashes-2-55-on-storage-surplus-signal",
     "href": "/articles/2026-10-29-mcx-nat-gas-crashes-2-55-on-storage-surplus-signal",
