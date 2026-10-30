@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 141385,
-    "silver": 183938,
-    "crude": 9905,
-    "copper": 1380.55,
-    "natgas": 277.3,
-    "usdinr": 95.27
+    "gold": 138658,
+    "silver": 179736,
+    "crude": 9882,
+    "copper": 1376.25,
+    "natgas": 275.9,
+    "usdinr": 94.95
   },
-  "lastChecked": "2026-10-30T10:57:55.061Z",
+  "lastChecked": "2026-10-30T15:51:53.723Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -23,11 +23,13 @@
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70",
     "russia": "Putin’s War On Ukraine Puts Oil Giant Rosneft Under Mounting Pressure - Bloomber"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-10-29T16:03:06.263Z",
+  "articlesToday": [
+    "2026-10-30/2026-10-30-mcx-silver-crashes-5-1-industrial-demand-fears-trigger-sello"
+  ],
+  "lastArticleAt": "2026-10-30T15:52:07.272Z",
   "lastCoveredAt": {
     "crude": "2026-10-28T15:59:01.756Z",
-    "silver": "2026-07-28T05:36:23.461Z",
+    "silver": "2026-10-30T15:52:07.272Z",
     "natgas": "2026-10-29T16:03:06.263Z"
   }
 }

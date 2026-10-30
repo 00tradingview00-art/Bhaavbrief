@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-10-30-mcx-silver-crashes-5-1-industrial-demand-fears-trigger-sello",
+    "href": "/articles/2026-10-30-mcx-silver-crashes-5-1-industrial-demand-fears-trigger-sello",
+    "title": "MCX Silver Crashes 5.1% — Industrial Demand Fears Trigger Selloff",
+    "description": "MCX Silver plunges ₹179,736/kg (-5.13%) as gold-silver ratio widens; industrial cycle concerns weigh on solar & semiconductor demand.",
+    "excerpt": "WHAT HAPPENED Silver is selling off twice as hard as gold — MCX Silver down 5.13% to ₹179,736/kg while gold declined 1.93% — which reveals the market is liquidating silver-specific industrial position",
+    "date": "2026-10-30T21:21:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "Industrial Metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 179736
+  },
+  {
     "type": "brief",
     "slug": "edition-137",
     "href": "/briefs/edition-137",
