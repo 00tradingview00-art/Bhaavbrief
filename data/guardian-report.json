@@ -1,12 +1,43 @@
 {
-  "generatedAt": "2026-10-30T04:24:29.920Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-10-31T04:05:01.946Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
   },
   "audit": {
-    "learnIssues": [],
+    "learnIssues": [
+      {
+        "field": "Gold Mini lot size",
+        "currentValue": "100g",
+        "correctValue": "100g lot size is not listed in contract-specs.json; only standard 1kg (GOLD26DECFUT) is present",
+        "location": "FAQ Schema - 'What is the MCX Gold lot size in 2026?' answer"
+      },
+      {
+        "field": "Gold Mini margin estimate",
+        "currentValue": "approximately ₹55,000–₹75,000",
+        "correctValue": "Cannot verify against ground truth; margin estimates are not in contract-specs.json and require live price data",
+        "location": "FAQ Schema - Gold Mini margin claim"
+      },
+      {
+        "field": "Crude Oil roll cost estimate",
+        "currentValue": "typically ₹1,000–₹3,000 per lot",
+        "correctValue": "Cannot verify against ground truth; roll costs are dynamic and depend on market contango/backwardation",
+        "location": "FAQ Schema - rollover answer"
+      },
+      {
+        "field": "NSE Gold launch date",
+        "currentValue": "November 2023",
+        "correctValue": "NSE launched gold futures in October 2023, not November 2023",
+        "location": "FAQ Schema - 'NSE Gold Futures vs MCX Gold' answer"
+      },
+      {
+        "field": "MCX trading hours",
+        "currentValue": "trades until 11:30 PM IST",
+        "correctValue": "Cannot verify from contract-specs.json; trading hours not provided in ground truth",
+        "location": "FAQ Schema - NSE vs MCX comparison"
+      }
+    ],
     "investIssues": [],
     "circularImpact": []
   }
