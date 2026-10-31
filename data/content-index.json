@@ -1,5 +1,29 @@
 [
   {
+    "type": "research",
+    "slug": "2026-10-31-weekly-catalyst",
+    "href": "/research/2026-10-31-weekly-catalyst",
+    "title": "Dhanteras Week Meets a COMEX Breakdown: MCX's Parity Wedge Is the Variable",
+    "description": "India's biggest retail gold-buying window opens Nov 6-8 just as COMEX gold and silver break sharply lower — and MCX's unusually wide import-parity wedge sits in the middle.",
+    "excerpt": "The dominant catalyst for the coming week is not a central bank meeting or a supply disruption. It is calendar-driven and India-specific: Dhanteras falls on 6 November 2026 and Diwali on 8 November 20",
+    "date": "2026-10-31",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver",
+      "crude"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver",
+      "crude"
+    ],
+    "premium": true
+  },
+  {
     "type": "article",
     "slug": "2026-10-30-mcx-silver-crashes-5-1-industrial-demand-fears-trigger-sello",
     "href": "/articles/2026-10-30-mcx-silver-crashes-5-1-industrial-demand-fears-trigger-sello",
