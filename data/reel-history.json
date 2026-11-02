@@ -3339,19 +3339,33 @@
         "fetched_at": "2026-10-25T00:34:54.059Z",
         "age_hours": 33.75161138888889,
         "observation": "first_after_24h"
+      },
+      {
+        "views": 36,
+        "reach": 32,
+        "ig_reels_avg_watch_time": 2795,
+        "ig_reels_video_view_total_time": 95032,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-11-02T04:00:41.584Z",
+        "age_hours": 229.18147944444445,
+        "observation": "late_seven_day"
       }
     ],
     "insights": {
-      "views": 35,
+      "views": 36,
       "reach": 32,
-      "ig_reels_avg_watch_time": 2705,
-      "ig_reels_video_view_total_time": 89293,
+      "ig_reels_avg_watch_time": 2795,
+      "ig_reels_video_view_total_time": 95032,
       "likes": 0,
       "comments": 0,
       "shares": 0,
       "saved": 0,
       "total_interactions": 0,
-      "fetched_at": "2026-10-25T00:34:54.059Z"
+      "fetched_at": "2026-11-02T04:00:41.584Z"
     }
   }
 ]
