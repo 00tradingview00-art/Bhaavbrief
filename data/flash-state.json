@@ -1,12 +1,12 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-10-30T10:12:51.153Z",
-    "lastFlashPrice": 141534,
+    "lastFlashAt": "2026-11-02T11:25:56.639Z",
+    "lastFlashPrice": 138447,
     "lastRoundLevel": 150000,
     "recentFlashIds": [
+      "2026-11-02-16-55-mcx-gold-consolidates-near-138447-as-silver-outperforms",
       "2026-10-30-15-42-mcx-gold-retreats-0-74-on-cross-commodity-pressure",
-      "2026-10-28-01-38-mcx-gold-rallies-0-72-as-rupee-steadies",
-      "2026-10-23-19-17-mcx-gold-falls-0-56-as-rupee-steadies"
+      "2026-10-28-01-38-mcx-gold-rallies-0-72-as-rupee-steadies"
     ]
   },
   "MCX_SILVER": {
