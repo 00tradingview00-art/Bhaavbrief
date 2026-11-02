@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-02-hawk-scan-mcx-crude-falls-4-90-to-9-462-refinery-maintenance",
+    "href": "/articles/2026-11-02-hawk-scan-mcx-crude-falls-4-90-to-9-462-refinery-maintenance",
+    "title": "MCX Crude: Falls 4.90% to ₹9,462 — Refinery maintenance headwind",
+    "description": "MCX Crude plunged 4.90% to ₹9,462/bbl as WTI fell 4.78% on seasonal US refinery turnarounds and demand fade post-summer.",
+    "excerpt": "TRIGGER MCX Crude has fallen 4.90% to ₹9,462/bbl as WTI declined 4.78% to $99.76/bbl, consistent with seasonal US refinery maintenance turnarounds (Sep–Oct) depressing crude demand. PRICE ₹9,462/bbl ·",
+    "date": "2026-11-02T10:10:42.862Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "Energy",
+      "WTI"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9462
+  },
+  {
     "type": "brief",
     "slug": "edition-138",
     "href": "/briefs/edition-138",
