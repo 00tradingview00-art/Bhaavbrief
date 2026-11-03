@@ -209,7 +209,7 @@
       "id": "brent-crude-middle-east-supply-shift",
       "title": "Brent Crude's $5 Plunge: Middle East Supply Signals Reshape Oil Markets",
       "startDate": "2026-10-29",
-      "status": "active",
+      "status": "closed",
       "editions": [
         136
       ],
@@ -222,7 +222,9 @@
         "Geopolitics",
         "Middle East",
         "Supply Shock"
-      ]
+      ],
+      "endDate": "2026-11-03",
+      "outcome": "Brent crude's sharp $5.17 decline triggered by shifting Middle East supply signals drove MCX Crude down from ₹9,664 to ₹9,462 before the narrative lost momentum after five days without updates."
     }
   ]
 }
