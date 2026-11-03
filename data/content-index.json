@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-03-mcx-crude-falls-2-94-on-us-refinery-maintenance-headwind",
+    "href": "/articles/2026-11-03-mcx-crude-falls-2-94-on-us-refinery-maintenance-headwind",
+    "title": "MCX Crude Falls 2.94% on US Refinery Maintenance Headwind",
+    "description": "MCX Crude ₹9088/bbl down 2.94% as COMEX WTI flat; seasonal US refinery turnarounds depress demand. Silver outpaces losses at -2.31%. Expected MCX open gap: ₹85–95/bbl lower.",
+    "excerpt": "WHAT HAPPENED MCX Crude fell 2.94% to ₹9088/bbl while COMEX WTI held flat at $95.92/bbl, revealing a rupee-led selloff rather than a fundamental crude supply shock. The divergence signals that the dec",
+    "date": "2026-11-03T17:48:22.510Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 9088
+  },
+  {
     "type": "brief",
     "slug": "edition-139",
     "href": "/briefs/edition-139",
