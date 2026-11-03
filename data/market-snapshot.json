@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-03T11:01:50.058Z",
+  "generatedAt": "2026-11-03T11:01:44.878Z",
   "generatedAtIST": "2026-11-03 16:31 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -16,9 +16,9 @@
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 9242,
+      "price": 9245,
       "prevClose": 9072,
-      "changePct": 1.8739,
+      "changePct": 1.907,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
