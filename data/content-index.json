@@ -1,6 +1,27 @@
 [
   {
     "type": "hawk-scan",
+    "slug": "2026-11-04-mcx-crude-plunges-7-44-below-8-315-wti-weakness-amid-refiner",
+    "href": "/articles/2026-11-04-mcx-crude-plunges-7-44-below-8-315-wti-weakness-amid-refiner",
+    "title": "MCX Crude plunges 7.44% below ₹8,315 — WTI weakness amid refinery maintenance season",
+    "description": "MCX Crude ₹8,315 · -7.44% · PLUNGING. WTI $87.69 session -8.67%; US refinery turnarounds in November suppress crude demand.",
+    "excerpt": "TRIGGER MCX Crude has collapsed 7.44% to ₹8,315/bbl as WTI fell 8.67% to $87.69/bbl, consistent with seasonal US refinery maintenance turnarounds reducing crude intake in early November. PRICE ₹8,315/",
+    "date": "2026-11-04T23:28:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "WTI",
+      "Refinery Maintenance"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8315
+  },
+  {
+    "type": "hawk-scan",
     "slug": "2026-11-04-mcx-silver-breaks-3-94-above-resistance-186-601-kg",
     "href": "/articles/2026-11-04-mcx-silver-breaks-3-94-above-resistance-186-601-kg",
     "title": "MCX Silver breaks 3.94% above resistance — ₹186,601/kg",
