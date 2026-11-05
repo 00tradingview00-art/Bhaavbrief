@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-141",
+    "href": "/briefs/edition-141",
+    "title": "Gold Breaks ₹1,45,000 as a New Safe-Haven Trade Takes Hold",
+    "description": "COMEX gold surging past $4,140 signals a fresh safe-haven bid displacing the crude-driven narrative that dominated recent weeks.",
+    "excerpt": "MCX Gold ₹145000 | Crude ₹8391 | USDINR ₹94.52 — Gold +1.23% | Crude +0.32% | Silver +0.57% Yesterday's Edge — Result: Edition #140 watched whether WTI would close below 95.65. Confirmed ✓, now at 88.",
+    "date": "2026-11-05T11:10:24.456Z",
+    "edition": "141",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-05-castor-seed-oil-price-drivers-india",
     "href": "/articles/2026-11-05-castor-seed-oil-price-drivers-india",

@@ -225,6 +225,24 @@
       ],
       "endDate": "2026-11-03",
       "outcome": "Brent crude's sharp $5.17 decline triggered by shifting Middle East supply signals drove MCX Crude down from ₹9,664 to ₹9,462 before the narrative lost momentum after five days without updates."
+    },
+    {
+      "id": "gold-safe-haven-surge-nov2026",
+      "title": "Gold Safe-Haven Surge: ₹145,000 Breakout",
+      "startDate": "2026-11-05",
+      "status": "active",
+      "editions": [
+        141
+      ],
+      "latestDay": 1,
+      "summary": "Gold breaks ₹145,000 on a sharp overnight COMEX rally (+$67.6) driven by broad re-risk sentiment shift toward safe havens, signaling potential macro uncertainty ahead.",
+      "primaryCommodity": "MCX Gold",
+      "keyLevel": "₹145,000",
+      "tags": [
+        "MCX Gold",
+        "Macro",
+        "Safe Haven"
+      ]
     }
   ]
 }

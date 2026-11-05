@@ -48,5 +48,15 @@
     "verdict": "rejected",
     "resolvedValue": 101.28,
     "resolvedAt": "2026-10-29T10:10:48.396Z"
+  },
+  {
+    "forEdition": 140,
+    "resolvedByEdition": 141,
+    "edgeMetric": "WTI",
+    "edgeLevel": 95.65,
+    "edgeCondition": "below",
+    "verdict": "confirmed",
+    "resolvedValue": 88.61,
+    "resolvedAt": "2026-11-05T11:10:22.791Z"
   }
 ]
