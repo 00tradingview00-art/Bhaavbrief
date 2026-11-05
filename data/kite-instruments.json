@@ -6,9 +6,9 @@
     "expiry": "2026-12-04"
   },
   "goldMini": {
-    "token": 146289927,
-    "symbol": "GOLDM26NOVFUT",
-    "expiry": "2026-11-05"
+    "token": 147202823,
+    "symbol": "GOLDM26DECFUT",
+    "expiry": "2026-12-04"
   },
   "silver": {
     "token": 126774791,
@@ -55,7 +55,7 @@
     "symbol": "ELECDMBL26NOVFUT",
     "expiry": "2026-11-27"
   },
-  "updatedAt": "2026-11-03T10:54:03.157Z",
+  "updatedAt": "2026-11-05T10:57:23.840Z",
   "currencies": {
     "usdinr": {
       "token": 405507,
