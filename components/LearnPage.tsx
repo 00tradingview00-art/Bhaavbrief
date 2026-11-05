@@ -35,7 +35,7 @@ interface Article {
 function fmtExpiry(spec?: ContractSpec): string {
   if (!spec?.expiry) return '—'
   const d = new Date(spec.expiry + 'T12:00:00Z')
-  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+  return d.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 function fmtTick(spec?: ContractSpec): string {

@@ -21,7 +21,7 @@ function relDate(iso: string): string {
   if (days === 0) return 'Today'
   if (days === 1) return 'Yesterday'
   if (days < 7)  return `${days}d ago`
-  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+  return new Date(iso).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })
 }
 
 function TypePill({ type }: { type: ScoredEntry['type'] }) {

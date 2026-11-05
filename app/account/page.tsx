@@ -61,7 +61,7 @@ export default async function AccountPage() {
   const cancelling = pro && (await redisCommand('GET', `sub:${userId}:status`)) === 'cancelling'
 
   const expiryLabel = expiresAt
-    ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(expiresAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   const planKey = plan && PLAN_LABEL[plan] ? plan : 'monthly'
@@ -169,7 +169,7 @@ export default async function AccountPage() {
                 >
                   <span style={{ color: 'var(--ink-2)' }}>
                     {p.payment_initiated_date
-                      ? new Date(p.payment_initiated_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                      ? new Date(p.payment_initiated_date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })
                       : '—'}
                   </span>
                   <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--ink)', fontWeight: 600 }}>

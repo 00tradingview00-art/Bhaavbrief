@@ -52,7 +52,7 @@ const parseNum = (s: string): number | null => {
 const roundTo2Sig = (n: number) => Number(n.toPrecision(2))
 
 const monthLabel = (expiry: string) =>
-  new Date(`${expiry}T00:00:00Z`).toLocaleDateString('en-IN', { month: 'short', year: '2-digit', timeZone: 'UTC' })
+  new Date(`${expiry}T00:00:00Z`).toLocaleDateString('en-IN', { month: 'short', year: '2-digit', timeZone: 'Asia/Kolkata' })
 
 const cell: React.CSSProperties = { padding: '8px 10px', textAlign: 'right', whiteSpace: 'nowrap' }
 const head: React.CSSProperties = { ...cell, fontSize: 13, fontWeight: 600, color: 'var(--ink-2, #3A3830)' }

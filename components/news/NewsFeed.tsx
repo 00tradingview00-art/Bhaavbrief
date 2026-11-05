@@ -40,7 +40,7 @@ function dateDividerLabel(dateKey: string): string {
   const yestIST  = toISTDateKey(new Date(Date.now() - 86400000).toISOString())
   if (dateKey === todayIST) return 'Today'
   if (dateKey === yestIST)  return 'Yesterday'
-  return new Date(dateKey).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(dateKey).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' })
 }
 
 function getCrossAssets(item: NewsItem): string[] {

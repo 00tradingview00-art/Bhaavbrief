@@ -249,7 +249,7 @@ export default async function EventResultPage({ params }: Props) {
                 <Link key={b.urlSlug} href={`/briefs/${b.urlSlug}`} style={{ textDecoration: 'none' }}>
                   <div style={{ borderLeft: '3px solid var(--gold)', paddingLeft: 14, paddingTop: 8, paddingBottom: 8 }}>
                     <div style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-4)', marginBottom: 4 }}>
-                      {b.date && new Date(b.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {b.date && new Date(b.date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })}
                     </div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 15, color: 'var(--ink)', lineHeight: 1.4 }}>
                       {b.title}

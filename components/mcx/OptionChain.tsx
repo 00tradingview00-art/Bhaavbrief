@@ -743,7 +743,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
               style={{ width: 10, height: 10, borderRadius: '50%', border: `2px solid ${C.bdr}`, borderTopColor: C.gold, display: 'inline-block' }}
             />
           )}
-          {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
+          {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
             {loading ? 'Loading…' : '↻ Refresh'}
           </button>
