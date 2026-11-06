@@ -9,7 +9,7 @@ export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
 
-const RATE_LIMIT = Number(process.env.SPREADS_RATE_LIMIT ?? 120)
+const RATE_LIMIT = Number(process.env.SPREADS_RATE_LIMIT ?? 300)
 
 // Futures curve + adjacent-month calendar spreads for one commodity. Public by
 // design: the spread table is the free tier of the Strategy Builder's Spreads

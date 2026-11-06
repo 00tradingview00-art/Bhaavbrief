@@ -6,7 +6,7 @@ export type { EIAWeek, EIAData, EIAError, EIAResponse } from '@/lib/eia'
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 
-const RATE_LIMIT = Number(process.env.EIA_RATE_LIMIT ?? 120)
+const RATE_LIMIT = Number(process.env.EIA_RATE_LIMIT ?? 300)
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const ip = getClientIp(req)

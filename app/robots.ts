@@ -21,9 +21,10 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: [
-          'GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'anthropic-ai',
-          'Google-Extended', 'PerplexityBot', 'Perplexity-User',
-          'CCBot', 'Applebot-Extended', 'meta-externalagent',
+          'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'anthropic-ai',
+          'Claude-User', 'Claude-SearchBot', 'Google-Extended', 'PerplexityBot',
+          'Perplexity-User', 'CCBot', 'Applebot-Extended', 'meta-externalagent',
+          'Amazonbot', 'Bytespider',
         ],
         allow:     ['/', '/api/og'],
         disallow:  ['/api/'],

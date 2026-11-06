@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 import AuthNavChip from './AuthNavChip'
+import { useModalInert } from './useModalInert'
 
 interface MobileMenuProps {
   open: boolean
@@ -34,6 +35,8 @@ const PRIMARY_LINKS = [
 // bar itself shrink to just the logo + this trigger on mobile instead of
 // cramming a search button and 1-2 auth buttons into the same 52px row.
 export default function MobileMenu({ open, onClose, onOpenSearch }: MobileMenuProps) {
+  useModalInert(open)
+
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
