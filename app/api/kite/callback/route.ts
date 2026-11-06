@@ -28,14 +28,13 @@ export async function GET(req: NextRequest) {
     // Only the site owner's Kite account may replace the production token.
     // This endpoint is public: without the check, anyone able to log into the
     // Kite Connect app would overwrite KITE_ACCESS_TOKEN in GitHub + Vercel
-    // and trigger a redeploy with their session.
+    // and trigger a redeploy with their session. An unset allowlist must fail
+    // closed, not open — a misconfigured env var should never silently widen
+    // who can take over the production market-data session.
     const allowed = allowedKiteUsers()
-    if (allowed && !allowed.includes(session.user_id)) {
-      console.error(`Kite callback rejected: user ${session.user_id} is not in KITE_ALLOWED_USER_IDS`)
+    if (!allowed || !allowed.includes(session.user_id)) {
+      console.error(`Kite callback rejected: user ${session.user_id}${allowed ? ' is not in KITE_ALLOWED_USER_IDS' : ' — KITE_ALLOWED_USER_IDS is not set'}`)
       return html('❌ Not Authorised', 'This Kite account is not allowed to update BhaavBrief\'s market-data session.')
-    }
-    if (!allowed) {
-      console.warn('KITE_ALLOWED_USER_IDS not set — accepting any Kite account. Set it in Vercel to lock this endpoint.')
     }
 
     console.log(`✅ Kite session obtained for user ${session.user_id} at ${session.login_time}`)

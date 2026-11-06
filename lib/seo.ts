@@ -48,7 +48,7 @@ export function buildBriefTitle(title: string): string {
 
 // Generate keyword-rich description
 export function buildBriefDescription(summary: string, commodities: string[], date: string): string {
-  const dateFormatted = new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+  const dateFormatted = new Date(date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' })
   const commodityStr  = commodities?.join(', ') || 'MCX Commodities'
   return `${summary} ${commodityStr} intelligence and analysis for ${dateFormatted}. BhaavBrief — India's daily commodity brief for MCX traders.`
 }

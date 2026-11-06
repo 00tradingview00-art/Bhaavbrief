@@ -1,12 +1,15 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import OptionChain from '@/components/mcx/OptionChain'
+import dynamic from 'next/dynamic'
 import { getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
 import { safeJsonLd } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import { formatAsOfIST } from '@/lib/formatTime'
+
+// Code-split — see app/options/page.tsx for why (same component, same reasoning).
+const OptionChain = dynamic(() => import('@/components/mcx/OptionChain'))
 
 type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 

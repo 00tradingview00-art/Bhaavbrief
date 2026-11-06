@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { KiteClient } from '@/lib/kite'
+import { checkFixedWindowRateLimit, getClientIp } from '@/lib/rateLimit'
 import fs from 'fs'
 import path from 'path'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+
+// Each (commodity, period) pair hits Kite's historical-data API directly on
+// a cache miss — a flood of varied queries bypasses the CDN cache entirely.
+const RATE_LIMIT = Number(process.env.CHART_RATE_LIMIT ?? 60)
 
 const COMMODITY_KEY: Record<string, string> = {
   gold:          'gold',
@@ -33,6 +38,11 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ commodity: string }> },
 ) {
+  const ip = getClientIp(req)
+  if (!(await checkFixedWindowRateLimit(`rl:chart:${ip}`, RATE_LIMIT, 60))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const { commodity } = await params
   const period = req.nextUrl.searchParams.get('period') ?? '1m'
 

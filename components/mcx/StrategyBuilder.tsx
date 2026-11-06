@@ -353,7 +353,7 @@ function persistSaved(strategies: SavedStrategy[]): void {
 // ── IV history chart — trend behind the regime banner ─────────────────────────
 
 function fmtIVDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+  return new Date(iso).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })
 }
 
 interface IVHistoryTooltipProps {
@@ -410,7 +410,7 @@ function EventTimeline({
     <div style={{ marginTop: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--ink-2, #3A3830)', marginBottom: 4 }}>
         <span>Today</span>
-        <span>Expiry {new Date(expiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+        <span>Expiry {new Date(expiry).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })}</span>
       </div>
       <div style={{ position: 'relative', height: 20, background: 'var(--surface-3)', borderRadius: 3 }}>
         {events.map(e => {
@@ -419,7 +419,7 @@ function EventTimeline({
           return (
             <button
               key={e.id + e.next_release_utc}
-              title={`${e.name} — ${new Date(e.next_release_utc).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}`}
+              title={`${e.name} — ${new Date(e.next_release_utc).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}`}
               onClick={() => onSelect(selected ? null : e.next_release_utc)}
               style={{
                 position: 'absolute', left: `${pct}%`, top: 2, transform: 'translateX(-50%)',
@@ -923,7 +923,7 @@ export default function StrategyBuilder({
     [targetDate, ivShocked, legs, fRange, lotSize, targetT, r, scenarioIV, payoff, futurePrice],
   )
   const secondaryLabel = targetDate
-    ? `As of ${new Date(targetDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`
+    ? `As of ${new Date(targetDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })}`
     : `Today (${Math.round(dte)}d left)`
 
   const chartData = useMemo(() => payoff.map((p, i) => ({
@@ -1905,7 +1905,7 @@ export default function StrategyBuilder({
                       </span>
                     </div>
                     <div style={{ fontSize: 14, color: 'var(--ink-2, #3A3830)', marginTop: 2 }}>
-                      Entry {new Date(s.entryDate).toLocaleDateString('en-IN')} · F₀ ₹{fmt(s.entryFutures)}
+                      Entry {new Date(s.entryDate).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' })} · F₀ ₹{fmt(s.entryFutures)}
                     </div>
                     <div style={{ marginTop: 6, fontSize: 14 }}>
                       {s.legs.map((leg, i) => (

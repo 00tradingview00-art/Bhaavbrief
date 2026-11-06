@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { formatRemaining } from '@/lib/formatTime'
 
 export default function CountdownTimer({ targetIso, label }: { targetIso: string; label: string }) {
-  const [remaining, setRemaining] = useState(() => new Date(targetIso).getTime() - Date.now())
+  const [remaining, setRemaining] = useState<number | null>(null)
 
   useEffect(() => {
+    setRemaining(new Date(targetIso).getTime() - Date.now())
     const id = setInterval(() => {
       setRemaining(new Date(targetIso).getTime() - Date.now())
     }, 60_000)
@@ -35,7 +36,7 @@ export default function CountdownTimer({ targetIso, label }: { targetIso: string
         fontFamily: 'var(--font-sans)', fontSize: 14, fontWeight: 700,
         color: 'var(--gold)', letterSpacing: '0.02em',
       }}>
-        {formatRemaining(remaining)}
+        {remaining === null ? ' ' : formatRemaining(remaining)}
       </div>
     </div>
   )

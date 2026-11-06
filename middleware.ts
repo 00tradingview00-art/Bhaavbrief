@@ -1,14 +1,26 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 
-// Only /account requires sign-in via middleware redirect.
-// /options and /pro are intentionally excluded:
+// /account and /alerts require sign-in via middleware redirect — /alerts
+// needs a real account to notify (lib/alertSubscriptions.ts caches the
+// account's email at save-time). /options and /pro are intentionally
+// excluded:
 //   - /options: synthetic monitor checks it unauthenticated every 15 min (M-01, M-05, M-06)
 //   - /pro: unauthenticated visitors must see the pricing page, not a redirect loop
-const isProtectedPage = createRouteMatcher(['/account'])
+const isProtectedPage = createRouteMatcher(['/account', '/alerts'])
 
-export default clerkMiddleware((auth, req) => {
-  if (isProtectedPage(req)) auth.protect()
+export default clerkMiddleware(async (auth, req) => {
+  // auth.protect() returns a Promise — it must be awaited, or its rejection
+  // (which is how it signals "deny this request") becomes an unhandled
+  // rejection instead of actually blocking anything, and the request falls
+  // through to render the page normally. /account only ever appeared
+  // protected because its own page component has a redundant `redirect()`
+  // check; nothing backstopped /alerts, so a signed-out visitor could load
+  // it fully unprotected. Also passing unauthenticatedUrl explicitly: without
+  // it, auth.protect() defaults to a 404 rather than a sign-in redirect.
+  if (isProtectedPage(req)) {
+    await auth.protect({ unauthenticatedUrl: new URL('/sign-in', req.url).toString() })
+  }
 
   // The anonymous (free, 11-strike, no-Greeks) option chain is shared-cached
   // at the edge under its plain URL, and the edge cache can't tell visitors

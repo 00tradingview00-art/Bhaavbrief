@@ -17,8 +17,8 @@ function timeAgo(iso: string): string {
 
 function fmtPeriod(iso: string): string {
   try {
-    return new Date(iso + 'T00:00:00').toLocaleDateString('en-IN', {
-      day: 'numeric', month: 'short',
+    return new Date(iso + 'T00:00:00+05:30').toLocaleDateString('en-IN', {
+      timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short',
     })
   } catch { return iso }
 }
@@ -226,7 +226,7 @@ export default function EIACard({ initialData }: { initialData?: EIAResponse }) 
               alignItems:     'center',
             }}>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
-                Week ending {new Date(data.period + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                Week ending {new Date(data.period + 'T00:00:00+05:30').toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })}
               </span>
               <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)' }}>
                 {timeAgo(data.updatedAt)}

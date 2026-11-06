@@ -38,7 +38,7 @@ function daysToExpiry(expiry: string): string {
 }
 function shortExpiry(expiry: string): string {
   if (!expiry) return ''
-  return new Date(expiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+  return new Date(expiry).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short' })
 }
 function isMCXOpen(): boolean {
   const now = new Date()

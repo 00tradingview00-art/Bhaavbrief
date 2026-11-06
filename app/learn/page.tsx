@@ -1,10 +1,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import Link from 'next/link'
-import LearnPage from '@/components/LearnPage'
+import dynamic from 'next/dynamic'
 import type { ContractSpecs } from '@/components/LearnPage'
 import SectionTabs from '@/components/SectionTabs'
 import { safeJsonLd } from '@/lib/seo'
+
+// Code-split — LearnPage is ~1,130 lines of client JS. Server-rendered
+// (default ssr:true) so this only defers the client bundle out of the main
+// chunk until hydration.
+const LearnPage = dynamic(() => import('@/components/LearnPage'))
 
 export const metadata = {
   title: 'Learn MCX Trading — All Contracts, Lot Sizes, Margins & Taxation',

@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
 import ChangePlanButton from '@/components/ChangePlanButton'
+import SignOutButton from '@/components/SignOutButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -61,7 +62,7 @@ export default async function AccountPage() {
   const cancelling = pro && (await redisCommand('GET', `sub:${userId}:status`)) === 'cancelling'
 
   const expiryLabel = expiresAt
-    ? new Date(expiresAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(expiresAt).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'long', year: 'numeric' })
     : null
 
   const planKey = plan && PLAN_LABEL[plan] ? plan : 'monthly'
@@ -151,6 +152,10 @@ export default async function AccountPage() {
         {' '}with the email you signed in with.
       </p>
 
+      <div style={{ marginTop: 'var(--space-6)' }}>
+        <SignOutButton />
+      </div>
+
       {payments.length > 0 && (
         <div style={{ marginTop: 'var(--space-8)' }}>
           <div style={{ fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ink-3)', marginBottom: 'var(--space-4)' }}>
@@ -169,7 +174,7 @@ export default async function AccountPage() {
                 >
                   <span style={{ color: 'var(--ink-2)' }}>
                     {p.payment_initiated_date
-                      ? new Date(p.payment_initiated_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                      ? new Date(p.payment_initiated_date).toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: 'numeric', month: 'short', year: 'numeric' })
                       : '—'}
                   </span>
                   <span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--ink)', fontWeight: 600 }}>

@@ -61,6 +61,8 @@ interface OptionsData {
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
   riskFreeRate: number; riskFreeRateAsOf: string
   stale?: boolean; nextOpenAt?: string | null
+  // Optional: last-known-good cached payloads from before this field existed won't carry it
+  feedAgeSeconds?: number | null; feedStale?: boolean
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -743,7 +745,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
               style={{ width: 10, height: 10, borderRadius: '50%', border: `2px solid ${C.bdr}`, borderTopColor: C.gold, display: 'inline-block' }}
             />
           )}
-          {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST</span>}
+          {lastRefresh && <span style={{ fontSize: 11, color: C.ink4, ...numStyle }}>{lastRefresh.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })} IST</span>}
           <button onClick={fetchData} disabled={loading} style={{ background: 'none', border: `1px solid ${C.bdr}`, borderRadius: 4, color: C.ink3, fontSize: 11, cursor: 'pointer', padding: isMobile ? '15px 14px' : '3px 8px', fontFamily: C.sans }}>
             {loading ? 'Loading…' : '↻ Refresh'}
           </button>
@@ -792,8 +794,8 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
             info="Whether options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
             <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700 }}>Status</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>
-              ● {data.stale ? 'Stale' : data.marketOpen ? 'Live' : 'Closed'}
+            <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.feedStale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>
+              ● {data.stale ? 'Stale' : data.feedStale ? 'Delayed' : data.marketOpen ? 'Live' : 'Closed'}
             </span>
           </div>
         </div>
@@ -802,6 +804,11 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
           ⚠ Showing the last known chain, as of {formatIST(data.lastUpdated)}.
           {data.nextOpenAt && ` Market reopens in ${formatRemaining(new Date(data.nextOpenAt).getTime() - Date.now())}.`}
+        </div>
+      )}
+      {!data?.stale && data?.feedStale && (
+        <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
+          ⚠ The underlying price feed hasn&apos;t updated in a while — prices shown may lag the real market.
         </div>
       )}
 
@@ -1101,7 +1108,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         </Link>
       ) : (
         <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
-          <span>Black-76 · {data ? (data.riskFreeRate * 100).toFixed(1) : '6.5'}% risk-free rate (as of {data?.riskFreeRateAsOf ?? '—'}) · 30s cache</span>
+          <span>Black-76 · {data ? `${(data.riskFreeRate * 100).toFixed(1)}% risk-free rate (as of ${data.riskFreeRateAsOf})` : 'risk-free rate —'} · 30s cache</span>
           <span>Not investment advice</span>
         </div>
       )}

@@ -1,8 +1,53 @@
 import { describe, it, expect } from 'vitest'
-import { computeAAV } from './vix'
+import { computeAAV, computeIVIX, type ChainRowForVIX } from './vix'
 
 // Synthetic price series only — never real exchange data (this repo is public).
 const round2 = (x: number) => Math.round(x * 100) / 100
+
+// Synthetic 3-strike chain — not real exchange data.
+const baseChain: ChainRowForVIX[] = [
+  { strike: 100, CE: { ltp: 10, oi: 50 }, PE: { ltp: 4, oi: 50 } },
+  { strike: 110, CE: { ltp: 5,  oi: 50 }, PE: { ltp: 0, oi: 0  } },
+  { strike: 120, CE: { ltp: 2,  oi: 50 }, PE: { ltp: 0, oi: 0  } },
+]
+
+describe('computeIVIX', () => {
+  it('matches a hand-computed value for a small synthetic chain', () => {
+    // K0 = 100 (largest strike <= futurePrice 105), selected = {100: 7, 110: 5, 120: 2},
+    // df = e^(0.05*0.1); sigma2 = (2/T)*sum - (1/T)*(F/K0-1)^2 — verified independently in JS.
+    expect(computeIVIX(baseChain, 105, 0.1, 0.05)).toBeCloseTo(47.61, 2)
+  })
+
+  it('returns null for an empty chain, non-positive futures price, or non-positive T', () => {
+    expect(computeIVIX([], 105, 0.1, 0.05)).toBeNull()
+    expect(computeIVIX(baseChain, 0, 0.1, 0.05)).toBeNull()
+    expect(computeIVIX(baseChain, -5, 0.1, 0.05)).toBeNull()
+    expect(computeIVIX(baseChain, 105, 0, 0.05)).toBeNull()
+  })
+
+  it('falls back to the lowest strike as K0 when the futures price sits below every strike, and still produces a finite value', () => {
+    // Same selected-strike set as the baseline case (K0=100 either way), different F
+    // changes the subtracted variance term — confirms the ?? sorted[0] fallback runs
+    // rather than crashing or silently reusing the wrong K0.
+    expect(computeIVIX(baseChain, 99, 0.1, 0.05)).toBeCloseTo(50.07, 2)
+  })
+
+  it('returns null when fewer than 3 strikes survive the two-consecutive-zero-bid cutoff', () => {
+    const thin: ChainRowForVIX[] = [
+      { strike: 100, CE: { ltp: 10, oi: 50 }, PE: { ltp: 4, oi: 50 } },
+      { strike: 110, CE: { ltp: 0,  oi: 0  }, PE: { ltp: 0, oi: 0  } },
+      { strike: 120, CE: { ltp: 0,  oi: 0  }, PE: { ltp: 0, oi: 0  } },
+      { strike: 130, CE: { ltp: 3,  oi: 50 }, PE: { ltp: 0, oi: 0  } }, // beyond the cutoff, never reached
+    ]
+    expect(computeIVIX(thin, 105, 0.1, 0.05)).toBeNull()
+  })
+
+  it('returns null when the futures price is far enough from K0 that the variance term goes negative', () => {
+    // Same chain as the baseline, but F=50 vs K0=100 makes (F/K0-1)^2 dominate the
+    // formula — a real failure mode the sigma2<=0 guard exists to catch.
+    expect(computeIVIX(baseChain, 50, 0.1, 0.05)).toBeNull()
+  })
+})
 
 describe('computeAAV', () => {
   it('returns null for every window when there are too few closes', () => {
