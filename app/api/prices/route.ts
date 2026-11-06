@@ -1,12 +1,23 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getPrices } from '@/lib/prices'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import { checkFixedWindowRateLimit, getClientIp } from '@/lib/rateLimit'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
 
-export async function GET() {
+// Generous enough for many concurrent visitors behind one IP polling every
+// 30s (the frontend's own cadence during market hours) — only a real flood
+// of distinct requests exceeds this.
+const RATE_LIMIT = Number(process.env.PRICES_RATE_LIMIT ?? 300)
+
+export async function GET(req: NextRequest) {
+  const ip = getClientIp(req)
+  if (!(await checkFixedWindowRateLimit(`rl:prices:${ip}`, RATE_LIMIT, 60))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   // Live Kite path — full OHLC + volume + OI, all 9 MCX + 4 CDS pairs
   const live = await getPrices()
   if (live) {

@@ -42,3 +42,30 @@ export async function rateLimitStatus(key: string, limit: number, windowMs: numb
 export async function checkRateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
   return (await rateLimitStatus(key, limit, windowMs)) !== 'limited'  // fail open
 }
+
+/**
+ * Cheaper per-IP throttle for high-frequency public GET routes (prices,
+ * options chain, etc.) — a single INCR+EXPIRE instead of checkRateLimit's
+ * 4-call sliding-window zset, since those routes can be polled every 30s by
+ * many legitimate concurrent visitors and a 4x-the-calls check per request
+ * would multiply Upstash load and latency on the hottest paths in the app.
+ * Fixed window (not sliding), same fail-open posture as checkRateLimit — a
+ * Redis hiccup must never turn into a site-wide 429 on these public routes.
+ */
+export async function checkFixedWindowRateLimit(key: string, limit: number, windowSeconds: number): Promise<boolean> {
+  const url   = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return true
+
+  try {
+    const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    const incrRes = await fetch(`${url}/incr/${key}`, { method: 'POST', headers })
+    const { result: count } = await incrRes.json() as { result: number }
+    if (count === 1) {
+      await fetch(`${url}/expire/${key}/${windowSeconds}`, { method: 'POST', headers })
+    }
+    return count <= limit
+  } catch {
+    return true
+  }
+}

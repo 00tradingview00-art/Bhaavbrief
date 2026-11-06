@@ -3,16 +3,24 @@ import { getFuturesCurve, SPREAD_INSTRUMENTS } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
 import { isMcxOpen } from '@/lib/tradingCalendar'
 import { todayIST } from '@/lib/tradingCalendar'
+import { checkFixedWindowRateLimit, getClientIp } from '@/lib/rateLimit'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
+
+const RATE_LIMIT = Number(process.env.SPREADS_RATE_LIMIT ?? 120)
 
 // Futures curve + adjacent-month calendar spreads for one commodity. Public by
 // design: the spread table is the free tier of the Strategy Builder's Spreads
 // tab (the calculator and margin on top of it are Pro). Live prices only —
 // nothing is stored or replayed from history.
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request)
+  if (!(await checkFixedWindowRateLimit(`rl:spreads:${ip}`, RATE_LIMIT, 60))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const { searchParams } = new URL(request.url)
   const instrument = searchParams.get('instrument')?.toUpperCase()
 

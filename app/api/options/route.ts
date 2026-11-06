@@ -6,10 +6,16 @@ import { isMcxOpen } from '@/lib/tradingCalendar'
 import { cacheOptionsChain, getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { isProUserOrFree, hasInternalAccess } from '@/lib/subscription'
 import { chainCacheControl } from '@/lib/optionsCacheControl'
+import { checkFixedWindowRateLimit, getClientIp } from '@/lib/rateLimit'
 
 export const runtime  = 'nodejs'
 export const dynamic  = 'force-dynamic'
 export const revalidate = 0
+
+// Generous enough for many concurrent viewers polling every 3 min (open
+// market) across all 8 commodities — only a real flood of varied-query
+// requests (the actual Kite-quota-exhaustion risk) exceeds this.
+const RATE_LIMIT = Number(process.env.OPTIONS_RATE_LIMIT ?? 120)
 
 type ChainRow = {
   strike: number
@@ -42,6 +48,11 @@ function limitChainForFree(payload: OptionsPayload): OptionsPayload {
 }
 
 export async function GET(request: NextRequest) {
+  const ip = getClientIp(request)
+  if (!(await checkFixedWindowRateLimit(`rl:options:${ip}`, RATE_LIMIT, 60))) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   const { searchParams } = new URL(request.url)
   const instrument = searchParams.get('instrument')?.toUpperCase()
   const requestedExpiry = searchParams.get('expiry') ?? null
