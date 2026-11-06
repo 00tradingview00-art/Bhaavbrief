@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 
 // Each (commodity, period) pair hits Kite's historical-data API directly on
 // a cache miss — a flood of varied queries bypasses the CDN cache entirely.
-const RATE_LIMIT = Number(process.env.CHART_RATE_LIMIT ?? 60)
+const RATE_LIMIT = Number(process.env.CHART_RATE_LIMIT ?? 150)
 
 const COMMODITY_KEY: Record<string, string> = {
   gold:          'gold',

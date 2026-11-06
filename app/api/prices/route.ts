@@ -10,7 +10,7 @@ export const revalidate = 0
 // Generous enough for many concurrent visitors behind one IP polling every
 // 30s (the frontend's own cadence during market hours) — only a real flood
 // of distinct requests exceeds this.
-const RATE_LIMIT = Number(process.env.PRICES_RATE_LIMIT ?? 300)
+const RATE_LIMIT = Number(process.env.PRICES_RATE_LIMIT ?? 750)
 
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req)

@@ -15,7 +15,7 @@ export const revalidate = 0
 // Generous enough for many concurrent viewers polling every 3 min (open
 // market) across all 8 commodities — only a real flood of varied-query
 // requests (the actual Kite-quota-exhaustion risk) exceeds this.
-const RATE_LIMIT = Number(process.env.OPTIONS_RATE_LIMIT ?? 120)
+const RATE_LIMIT = Number(process.env.OPTIONS_RATE_LIMIT ?? 300)
 
 type ChainRow = {
   strike: number
