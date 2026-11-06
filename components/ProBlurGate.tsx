@@ -32,7 +32,11 @@ export default function ProBlurGate({ children, isPro: serverPro = false, label,
 
   return (
     <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8 }}>
-      <div aria-hidden="true" style={{ filter: 'blur(7px)', opacity: 0.3, pointerEvents: 'none', userSelect: 'none' }}>
+      {/* `inert` (not just aria-hidden) is required here: some callers pass real
+          interactive elements (e.g. CorrelationExplorer's market-selector buttons)
+          as `preview`, which stayed keyboard-focusable under aria-hidden alone —
+          an agent/AT-visible contradiction (Lighthouse's Agentic Browsing audit). */}
+      <div inert aria-hidden="true" style={{ filter: 'blur(7px)', opacity: 0.3, pointerEvents: 'none', userSelect: 'none' }}>
         {preview !== undefined ? preview : children}
       </div>
       <div style={{
