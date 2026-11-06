@@ -63,21 +63,19 @@ describe('checkFixedWindowRateLimit', () => {
     expect(await checkFixedWindowRateLimit('k', 10, 60)).toBe(true)
   })
 
-  it('allows under the limit and sets expiry only on the first hit', async () => {
-    fetchMock.mockResolvedValueOnce(jsonRes(1))
+  it('always issues SET...NX before INCR, so the key can never end up without a TTL', async () => {
+    fetchMock.mockResolvedValueOnce(jsonRes(null)).mockResolvedValueOnce(jsonRes(1))
     expect(await checkFixedWindowRateLimit('k', 10, 60)).toBe(true)
-    expect(fetchMock).toHaveBeenCalledTimes(2) // incr + expire on first hit
-    expect(String(fetchMock.mock.calls[1][0])).toContain('/expire/')
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(String(fetchMock.mock.calls[0][0])).toContain('/set/k/0/EX/60/NX')
+    expect(String(fetchMock.mock.calls[1][0])).toContain('/incr/k')
   })
 
-  it('does not re-set expiry on subsequent hits in the same window', async () => {
-    fetchMock.mockResolvedValueOnce(jsonRes(2))
+  it('allows under the limit, blocks once the count exceeds it', async () => {
+    fetchMock.mockResolvedValueOnce(jsonRes(null)).mockResolvedValueOnce(jsonRes(9))
     expect(await checkFixedWindowRateLimit('k', 10, 60)).toBe(true)
-    expect(fetchMock).toHaveBeenCalledTimes(1) // incr only
-  })
 
-  it('blocks once the count exceeds the limit', async () => {
-    fetchMock.mockResolvedValueOnce(jsonRes(11))
+    fetchMock.mockResolvedValueOnce(jsonRes(null)).mockResolvedValueOnce(jsonRes(11))
     expect(await checkFixedWindowRateLimit('k', 10, 60)).toBe(false)
   })
 })

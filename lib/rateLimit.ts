@@ -59,11 +59,14 @@ export async function checkFixedWindowRateLimit(key: string, limit: number, wind
 
   try {
     const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    // SET ... NX creates the key with its TTL before the first INCR — same
+    // fix as lib/userRateLimit.ts's incrementWindow. The previous
+    // INCR-then-EXPIRE-only-on-count-1 order left a key with no TTL
+    // whenever that EXPIRE call failed, which would rate-limit that key
+    // forever (count only ever grows, never resets) until manually cleared.
+    await fetch(`${url}/set/${key}/0/EX/${windowSeconds}/NX`, { method: 'POST', headers })
     const incrRes = await fetch(`${url}/incr/${key}`, { method: 'POST', headers })
     const { result: count } = await incrRes.json() as { result: number }
-    if (count === 1) {
-      await fetch(`${url}/expire/${key}/${windowSeconds}`, { method: 'POST', headers })
-    }
     return count <= limit
   } catch {
     return true
