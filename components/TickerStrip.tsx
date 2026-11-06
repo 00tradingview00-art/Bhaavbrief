@@ -79,8 +79,26 @@ export default function TickerStrip({ initialPrices }: { initialPrices?: PriceDa
     return () => clearTimeout(intervalRef.current)
   }, [])
 
-  // Don't render the bar at all until we have live data — avoid an empty animated strip
-  if (items.length === 0) return null
+  // Reserve the bar's real height even before live data arrives — returning null here
+  // let this sticky, every-page shell collapse to 0px and then pop in once `load()`
+  // resolves, which was the single biggest real-user layout-shift source site-wide
+  // (PageSpeed field CLS 0.13 vs. lab CLS ~0.003 — a fresh lab run always has
+  // initialPrices from the server, so this never reproduced synthetically). Same
+  // padding/font-size as the live strip, just invisible, so there's nothing to shift.
+  if (items.length === 0) {
+    return (
+      <div style={{ background: 'var(--ink)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="ticker-desktop-wrap" style={{ overflow: 'hidden', padding: '7px 0' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: 12, visibility: 'hidden' }}>
+            &nbsp;
+          </div>
+        </div>
+        <div className="ticker-mobile-wrap" style={{ whiteSpace: 'nowrap', overflowX: 'auto', padding: '7px 12px' }}>
+          <span style={{ fontSize: 12, visibility: 'hidden' }}>&nbsp;</span>
+        </div>
+      </div>
+    )
+  }
 
   const doubled = [...items, ...items]
   // Mobile: the 5 MCX commodities only (drop USD/INR, COMEX Gold, WTI Crude —
