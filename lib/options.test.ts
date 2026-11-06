@@ -1,5 +1,5 @@
-import { describe, test, expect } from 'vitest'
-import { classifyQuote, pickDefaultExpiry, timeToExpiryYears, underlyingChange } from './options'
+import { describe, test, expect, afterEach } from 'vitest'
+import { classifyQuote, pickDefaultExpiry, timeToExpiryYears, underlyingChange, computeFeedFreshness } from './options'
 
 describe('timeToExpiryYears', () => {
   const YEAR_MS = 365 * 24 * 3600 * 1000
@@ -147,5 +147,31 @@ describe('underlyingChange', () => {
   })
   test('missing LTP → null', () => {
     expect(underlyingChange(0, 149265)).toBeNull()
+  })
+})
+
+describe('computeFeedFreshness', () => {
+  afterEach(() => { delete process.env.OPTIONS_MAX_LIVE_QUOTE_AGE_SECONDS })
+
+  const now = Date.parse('2026-10-23T10:00:00Z') // 15:30 IST
+
+  test('a fresh quote during market hours is live, not stale', () => {
+    const ts = '2026-10-23 15:29:30' // 30s old, IST
+    expect(computeFeedFreshness(ts, true, now)).toEqual({ feedAgeSeconds: 30, feedStale: false })
+  })
+
+  test('a quote older than the threshold during market hours is flagged stale', () => {
+    const ts = '2026-10-23 15:27:00' // 180s old, IST — past the 120s default
+    expect(computeFeedFreshness(ts, true, now)).toEqual({ feedAgeSeconds: 180, feedStale: true })
+  })
+
+  test('the same old quote is not flagged stale when the market is closed — a closed exchange legitimately stops updating', () => {
+    const ts = '2026-10-23 15:27:00'
+    expect(computeFeedFreshness(ts, false, now)).toEqual({ feedAgeSeconds: 180, feedStale: false })
+  })
+
+  test('a missing or unparseable timestamp reports null age, never stale', () => {
+    expect(computeFeedFreshness(undefined, true, now)).toEqual({ feedAgeSeconds: null, feedStale: false })
+    expect(computeFeedFreshness('not-a-timestamp', true, now)).toEqual({ feedAgeSeconds: null, feedStale: false })
   })
 })

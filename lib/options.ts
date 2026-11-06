@@ -52,6 +52,35 @@ const SPREAD_LIVE_MAX_RATIO = envNumber('OPTIONS_SPREAD_LIVE_MAX_RATIO', 0.15)  
 const SPREAD_JUNK_MAX_RATIO = envNumber('OPTIONS_SPREAD_JUNK_MAX_RATIO', 0.40)  // spread > 40% of mid is JUNK regardless of liquidity
 const IV_PARITY_TOLERANCE_VOL_PTS = envNumber('OPTIONS_IV_PARITY_TOLERANCE_VOL_PTS', 5)  // CE/PE IV mismatch beyond this at the same strike demotes both
 
+// `marketOpen` is a clock check (isWithinMcxHours) — it says nothing about
+// whether Kite's own feed is actually current. A quote's `timestamp` field
+// is fetched but was never read anywhere, so the chain could report
+// marketOpen:true (and the UI show "Live") over a feed frozen for hours.
+// This threshold is how old the underlying future's own quote timestamp may
+// be, during market hours, before that counts as stale rather than live.
+const MAX_LIVE_QUOTE_AGE_SECONDS = envNumber('OPTIONS_MAX_LIVE_QUOTE_AGE_SECONDS', 120)
+
+// Kite's quote timestamp is "yyyy-MM-dd HH:mm:ss" with no offset, always IST.
+function parseKiteQuoteTimestamp(ts: string | undefined): number | null {
+  if (!ts) return null
+  const ms = Date.parse(`${ts.replace(' ', 'T')}+05:30`)
+  return Number.isFinite(ms) ? ms : null
+}
+
+// Exported for lib/options.test.ts. Outside market hours a quote legitimately
+// stops updating — that's the exchange being closed, not staleness, so this
+// only ever flags a feed as stale while the market is supposed to be live.
+export function computeFeedFreshness(
+  timestamp: string | undefined,
+  marketOpen: boolean,
+  now: number = Date.now(),
+): { feedAgeSeconds: number | null; feedStale: boolean } {
+  const quoteMs = parseKiteQuoteTimestamp(timestamp)
+  const feedAgeSeconds = quoteMs != null ? Math.max(0, Math.round((now - quoteMs) / 1000)) : null
+  const feedStale = marketOpen && feedAgeSeconds != null && feedAgeSeconds > MAX_LIVE_QUOTE_AGE_SECONDS
+  return { feedAgeSeconds, feedStale }
+}
+
 export type Tier = 'LIVE' | 'STALE' | 'JUNK'
 
 // Exported for lib/options.test.ts. Kite's instrument master can still list
@@ -252,6 +281,9 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
   const futurePrice = futQuote?.last_price ?? 0
   const futChange   = underlyingChange(futurePrice, futQuote?.ohlc?.close)
 
+  const marketOpen = isMCXMarketOpen()
+  const { feedAgeSeconds, feedStale } = computeFeedFreshness(futQuote?.timestamp, marketOpen)
+
   const T = timeToExpiryYears(activeExpiry)
 
   // Build chain rows grouped by strike
@@ -391,7 +423,9 @@ async function getOptionsChainUncached(instrument: string, requestedExpiry: stri
     ivix,
     aav,
     volPremium,
-    marketOpen:  isMCXMarketOpen(),
+    marketOpen,
+    feedAgeSeconds,
+    feedStale,
     riskFreeRate:      RISK_FREE_RATE,
     riskFreeRateAsOf:  RISK_FREE_RATE_ASOF,
     chain,

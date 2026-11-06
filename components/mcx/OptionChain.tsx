@@ -61,6 +61,8 @@ interface OptionsData {
   marketOpen: boolean; chain: ChainRow[]; lastUpdated: string
   riskFreeRate: number; riskFreeRateAsOf: string
   stale?: boolean; nextOpenAt?: string | null
+  // Optional: last-known-good cached payloads from before this field existed won't carry it
+  feedAgeSeconds?: number | null; feedStale?: boolean
 }
 
 // ── Formatters ────────────────────────────────────────────────────────────────
@@ -792,8 +794,8 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
             info="Whether options are pricing in more movement than has actually occurred recently." />}
           <div style={{ marginLeft: 'auto', padding: '6px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 1 }}>
             <span style={{ fontSize: 9, letterSpacing: '0.09em', textTransform: 'uppercase', color: C.ink4, fontFamily: C.sans, fontWeight: 700 }}>Status</span>
-            <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>
-              ● {data.stale ? 'Stale' : data.marketOpen ? 'Live' : 'Closed'}
+            <span style={{ fontSize: 12, fontWeight: 600, color: data.stale ? C.gold : data.feedStale ? C.gold : data.marketOpen ? C.up : C.ink4, ...numStyle }}>
+              ● {data.stale ? 'Stale' : data.feedStale ? 'Delayed' : data.marketOpen ? 'Live' : 'Closed'}
             </span>
           </div>
         </div>
@@ -802,6 +804,11 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
           ⚠ Showing the last known chain, as of {formatIST(data.lastUpdated)}.
           {data.nextOpenAt && ` Market reopens in ${formatRemaining(new Date(data.nextOpenAt).getTime() - Date.now())}.`}
+        </div>
+      )}
+      {!data?.stale && data?.feedStale && (
+        <div style={{ padding: '8px 14px', background: 'rgba(181, 134, 42, 0.08)', border: `1px solid ${C.gold}`, borderRadius: 4, marginBottom: 12, fontSize: 12, color: C.gold, fontFamily: C.sans }}>
+          ⚠ The underlying price feed hasn&apos;t updated in a while — prices shown may lag the real market.
         </div>
       )}
 
