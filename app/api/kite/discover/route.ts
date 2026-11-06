@@ -3,11 +3,13 @@ import { KiteClient } from '@/lib/kite'
 
 // GET /api/kite/discover
 // Discovers current MCX front-month instrument tokens from Kite.
-// Manual ops trigger — requires the same bearer secret as /api/cron/*.
+// Manual ops trigger — requires its own bearer secret, deliberately not
+// CRON_SECRET (same separation-of-secrets rule as INTERNAL_ACCESS_SECRET in
+// lib/subscription.ts: a leak of one shouldn't grant the other).
 
 export async function GET(req: NextRequest) {
   const auth = req.headers.get('authorization')
-  if (!process.env.CRON_SECRET || auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!process.env.KITE_DISCOVER_SECRET || auth !== `Bearer ${process.env.KITE_DISCOVER_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
