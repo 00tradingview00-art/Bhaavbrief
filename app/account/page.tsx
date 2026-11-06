@@ -7,6 +7,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import CancelSubscriptionButton from '@/components/CancelSubscriptionButton'
 import ChangePlanButton from '@/components/ChangePlanButton'
+import SignOutButton from '@/components/SignOutButton'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -150,6 +151,10 @@ export default async function AccountPage() {
         <a href="mailto:support@bhaavbrief.in" style={{ color: 'var(--ink)', textDecoration: 'underline', fontWeight: 600, overflowWrap: 'anywhere' }}>support@bhaavbrief.in</a>
         {' '}with the email you signed in with.
       </p>
+
+      <div style={{ marginTop: 'var(--space-6)' }}>
+        <SignOutButton />
+      </div>
 
       {payments.length > 0 && (
         <div style={{ marginTop: 'var(--space-8)' }}>
