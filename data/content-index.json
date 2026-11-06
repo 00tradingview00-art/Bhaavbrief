@@ -20,6 +20,26 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-11-06-straddle-strangle-mcx-options-india",
+    "href": "/articles/2026-11-06-straddle-strangle-mcx-options-india",
+    "title": "Straddle and Strangle Strategies for MCX Crude and Gold Options",
+    "description": "Learn how straddle strangle strategy MCX crude gold options India works, with real examples, rupee mechanics, and key data triggers to track.",
+    "excerpt": "The straddle strangle strategy on MCX crude and gold options India traders use most frequently is built for one purpose: capturing large price swings when direction is uncertain but volatility is near",
+    "date": "2026-11-06",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-141",
     "href": "/briefs/edition-141",

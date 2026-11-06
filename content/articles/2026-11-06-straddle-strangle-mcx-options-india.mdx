@@ -1,0 +1,57 @@
+---
+title: "Straddle and Strangle Strategies for MCX Crude and Gold Options"
+description: "Learn how straddle strangle strategy MCX crude gold options India works, with real examples, rupee mechanics, and key data triggers to track."
+date: "2026-11-06"
+commodity: options
+tags: ["options", "mcx", "india"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["straddle strangle strategy mcx crude gold options india"]
+---
+
+## Introduction
+
+The straddle strangle strategy on MCX crude and gold options India traders use most frequently is built for one purpose: capturing large price swings when direction is uncertain but volatility is near certain. Both strategies involve holding options on both sides of the market simultaneously, making them structurally indifferent to whether prices spike or collapse.
+
+## The Mechanism
+
+A straddle involves holding a call and a put at the same strike price and expiry. A strangle uses different strikes — typically an out-of-the-money call and an out-of-the-money put — reducing upfront premium cost but requiring a larger price move to generate a payoff.
+
+The payoff logic works as follows:
+
+**Step 1 — Premium paid:** Total outflow = Call Premium + Put Premium. This is the maximum loss if prices stay flat.
+
+**Step 2 — Breakeven calculation:**
+- Upper breakeven = Strike + Total Premium Paid
+- Lower breakeven = Strike − Total Premium Paid
+
+**Step 3 — Profit zone:** If MCX Crude Oil (barrel contract, lot size 100 bbl) or MCX Gold (1 kg contract) moves beyond either breakeven before expiry, the position gains value on one leg faster than the other leg decays.
+
+**Step 4 — Volatility trigger:** Implied volatility (IV) expands ahead of events like US Fed decisions, OPEC meetings, or India Union Budget. IV expansion inflates both premiums. Post-event, IV crush compresses them — meaning timing the entry before IV spikes and managing exit before crush is mechanically critical.
+
+For crude, a ₹200/bbl move on MCX translates to ₹20,000 gross movement per lot. For gold, a ₹1,000/10g move equals ₹100,000 per lot.
+
+## India-Specific Context
+
+MCX crude oil contracts are denominated in INR and are priced using NYMEX WTI as the global reference, converted at the RBI reference rate. This creates a dual-variable exposure: global crude price movement and USD/INR movement simultaneously affect MCX settlement prices.
+
+Gold on MCX references COMEX spot, again converted at the RBI rate, with Indian import duty (currently 15% basic customs duty plus applicable GST at 3%) creating a persistent premium over international parity. This duty-adjusted import parity means Indian gold prices do not fall as sharply as COMEX during global corrections — the floor is partly structural.
+
+SEBI regulates MCX options under its commodity derivatives framework. Position limits apply per client and member. Options expiry on MCX follows the last Thursday of the contract month, and physical delivery norms apply to in-the-money options at expiry — a detail straddle-strangle holders must track carefully to avoid unintended delivery obligations.
+
+## Historical Episodes
+
+In 2020, when COVID-19 lockdowns collapsed global oil demand and NYMEX WTI briefly went negative, MCX crude fell approximately 60–65% within weeks. Strangle holders on the put side recorded extreme gains, though MCX had to manage circuit breaker interventions.
+
+In 2022, following Russia's invasion of Ukraine, MCX gold rallied approximately 8–10% within two weeks as COMEX surged past $2,000/oz and the rupee weakened simultaneously, amplifying the INR-denominated move beyond what COMEX alone would suggest.
+
+In 2023, when the US Federal Reserve signalled a prolonged rate pause, MCX gold swung roughly 4–5% intraday across consecutive sessions — well within straddle strangle strategy MCX crude gold options India traders had structured around the FOMC calendar.
+
+## What to Watch
+
+- **EIA Weekly Petroleum Status Report:** Released every Wednesday 8:30 PM IST — primary crude volatility trigger
+- **OPEC+ meeting schedule:** Published quarterly on opec.org; decisions move crude ₹100–300/bbl historically
+- **RBI MPC dates:** Six times annually; rupee moves post-decision directly affect MCX INR conversion
+- **US FOMC statement dates:** Published on federalreserve.gov; gold IV historically spikes 24–48 hours prior
+- **MCX daily circuit limits:** 6% for crude, 6% for gold — breaches trigger trading halts that affect option liquidity
+- **India Union Budget date:** February 1 annually; import duty changes on gold create sharp domestic price gaps
