@@ -1101,7 +1101,7 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
         </Link>
       ) : (
         <div style={{ padding: '7px 14px', borderTop: `1px solid ${C.bdr}`, display: 'flex', justifyContent: 'space-between', fontSize: 10, color: C.ink4, background: C.surf2, fontFamily: C.sans }}>
-          <span>Black-76 · {data ? (data.riskFreeRate * 100).toFixed(1) : '6.5'}% risk-free rate (as of {data?.riskFreeRateAsOf ?? '—'}) · 30s cache</span>
+          <span>Black-76 · {data ? `${(data.riskFreeRate * 100).toFixed(1)}% risk-free rate (as of ${data.riskFreeRateAsOf})` : 'risk-free rate —'} · 30s cache</span>
           <span>Not investment advice</span>
         </div>
       )}
