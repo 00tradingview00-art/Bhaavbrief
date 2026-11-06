@@ -1,16 +1,21 @@
 import type { Metadata } from 'next'
+import { auth } from '@clerk/nextjs/server'
 import AlertsCenter from '@/components/alerts/AlertsCenter'
 import { getUpcomingEvents } from '@/lib/eventMap'
+import { getWatchedEventIds } from '@/lib/alertSubscriptions'
 
 export const metadata: Metadata = {
   title: 'Market Event Alerts',
-  description: 'Save the upcoming macro and commodity-market events you want to watch.',
+  description: 'Get notified before the upcoming macro and commodity-market events you choose to watch.',
   alternates: { canonical: 'https://bhaavbrief.in/alerts' },
 }
 
-export const revalidate = 900
+// Middleware protects this route (redirects to sign-in) — a real account
+// email is required to notify, per lib/alertSubscriptions.ts.
+export const dynamic = 'force-dynamic'
 
-export default function AlertsPage() {
+export default async function AlertsPage() {
+  const { userId } = await auth()
   const events = getUpcomingEvents(24 * 14).slice(0, 8).map(event => ({
     id: event.id,
     name: event.name,
@@ -23,5 +28,7 @@ export default function AlertsPage() {
     commodities: event.affected_contracts,
   }))
 
-  return <AlertsCenter events={events} />
+  const initialWatched = userId ? await getWatchedEventIds(userId) : []
+
+  return <AlertsCenter events={events} initialWatched={initialWatched} />
 }
