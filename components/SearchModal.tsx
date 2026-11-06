@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import type { SearchResult } from '@/app/api/search/route'
 import type { ScoredEntry } from '@/lib/searchIndex'
+import { useModalInert } from './useModalInert'
 
 // ── Suggested starter queries ──────────────────────────────────────────────────
 const SUGGESTIONS = [
@@ -53,6 +54,8 @@ interface Props {
 }
 
 export default function SearchModal({ open, onClose }: Props) {
+  useModalInert(open)
+
   const [query,   setQuery]   = useState('')
   const [result,  setResult]  = useState<SearchResult | null>(null)
   const [loading, setLoading] = useState(false)

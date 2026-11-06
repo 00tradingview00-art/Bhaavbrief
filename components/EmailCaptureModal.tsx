@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import SubscribeForm from './SubscribeForm'
 import { trackSubscribeShown } from '@/lib/analytics'
+import { useModalInert } from './useModalInert'
 
 const STORAGE_KEY = 'bb_capture_last_shown'
 const FREQUENCY_CAP_MS = 7 * 24 * 60 * 60 * 1000 // once per 7 days
@@ -37,6 +38,8 @@ function markShown() {
 export default function EmailCaptureModal({ location = 'brief_page_modal' }: { location?: string }) {
   const [visible, setVisible] = useState(false)
   const shownRef = useRef(false)
+
+  useModalInert(visible)
 
   useEffect(() => {
     if (alreadySubscribed() || recentlyShown()) return
