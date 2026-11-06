@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-142",
+    "href": "/briefs/edition-142",
+    "title": "Brent Crosses $100 While Gold Drops — The Fracture Is the Signal",
+    "description": "A crude supply shock is building as Brent tops $100, but gold's simultaneous fall reveals a more complex market than a simple fear trade.",
+    "excerpt": "MCX Gold ₹142060 | Crude ₹8665 | USDINR ₹94.48 — Gold -1.41% | Crude +1.23% | Silver -1.61% Yesterday's Edge — Result: Edition #141 watched whether COMEX GOLD would close above 4,140.6. Rejected ✗, no",
+    "date": "2026-11-06T04:00:49.500Z",
+    "edition": "142",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-141",
     "href": "/briefs/edition-141",
     "title": "Gold Breaks ₹1,45,000 as a New Safe-Haven Trade Takes Hold",
