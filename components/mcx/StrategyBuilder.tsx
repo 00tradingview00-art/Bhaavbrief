@@ -545,15 +545,17 @@ export default function StrategyBuilder({
   isPro = false,
   defaultTab = 'build',
   spreadInit,
+  initialChainData = null,
 }: {
   defaultInstrument?: string
   marginByInstrument?: Record<string, string | null>
   isPro?: boolean
   defaultTab?: 'build' | 'spreads'
   spreadInit?: SpreadInit
+  initialChainData?: ChainData | null
 }) {
   const [instrument,    setInstrument]    = useState(defaultInstrument)
-  const [chainData,     setChainData]     = useState<ChainData | null>(null)
+  const [chainData,     setChainData]     = useState<ChainData | null>(initialChainData)
   const [ivHistory,     setIvHistory]     = useState<{ date: string; iv: number }[]>([])
   const [ivHistoryRange, setIvHistoryRange] = useState<IVHistoryRange>(10)
   const [legs,          setLegs]          = useState<Leg[]>([])
@@ -1158,7 +1160,11 @@ export default function StrategyBuilder({
         </div>
       )}
 
-      {loading && tab !== 'spreads' && <div style={{ color: 'var(--ink-2, #3A3830)', fontSize: 15, marginBottom: 12 }}>Loading chain…</div>}
+      {/* Only the true first-load (no seeded/fetched chain yet) shows this —
+          matches OptionChain.tsx's `loading && !data` pattern, so the
+          background refresh that always follows a server-seeded chain
+          (see fetchData's effect below) doesn't re-show it over real data. */}
+      {loading && !chainData && tab !== 'spreads' && <div style={{ color: 'var(--ink-2, #3A3830)', fontSize: 15, marginBottom: 12 }}>Loading chain…</div>}
 
       {/* IV Regime Banner */}
       {ivRegime && tab !== 'spreads' && (

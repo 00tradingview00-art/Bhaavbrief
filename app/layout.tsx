@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Script from 'next/script'
 import Link from 'next/link'
 import './globals.css'
@@ -173,6 +174,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </footer>
         <BottomNav />
         <Analytics />
+        <SpeedInsights />
         {/* Google Analytics 4 — lazyOnload so it doesn't block interactivity */}
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-JG993LN554" strategy="lazyOnload" />
         <Script id="ga4" strategy="lazyOnload">{`
