@@ -3,7 +3,7 @@ import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { redisCommand } from '@/lib/redis'
 import { tradingSessionDate } from '@/lib/tradingCalendar'
 import { CORE_INSTRUMENTS, type CoreInstrument } from '@/lib/terminalData'
-import { implausibleIVReason, snapshotExpiry } from '@/lib/ivSnapshotRules'
+import { implausibleIVReason, snapshotExpiry, carryForwardTooOld } from '@/lib/ivSnapshotRules'
 
 // A composite value only gets written once at least this many of the 5 core
 // instruments produced a real ivix/volPremium today — avoids a "composite"
@@ -103,7 +103,11 @@ async function recentIVs(instrument: string, n: number): Promise<number[]> {
 }
 
 // Most recent stored IV for an instrument, or null if none exists yet.
-async function mostRecentIV(instrument: string): Promise<number | null> {
+// `sessionDate` bounds how far a stored value may be carried forward (see
+// carryForwardTooOld) — without it, a feed that stayed broken for months
+// would keep re-stamping one old value onto every new day forever, never
+// re-checked by implausibleIVReason() against a fresh reading.
+async function mostRecentIV(instrument: string, sessionDate: string): Promise<number | null> {
   const raw = await redisCommand('hgetall', `iv-hist:${instrument}`) as string[] | null
   if (!raw) return null
   const entries: { date: string; iv: number }[] = []
@@ -113,7 +117,9 @@ async function mostRecentIV(instrument: string): Promise<number | null> {
   }
   if (!entries.length) return null
   entries.sort((a, b) => b.date.localeCompare(a.date))
-  return entries[0].iv
+  const latest = entries[0]
+  if (carryForwardTooOld(latest.date, sessionDate)) return null
+  return latest.iv
 }
 
 export async function GET(req: Request) {
@@ -174,7 +180,7 @@ export async function GET(req: Request) {
       }
 
       if (!(futurePrice > 0)) {
-        const carried = await mostRecentIV(instrument)
+        const carried = await mostRecentIV(instrument, date)
         if (carried != null) {
           await redisCommand('hset', `iv-hist:${instrument}`, date, String(carried))
           results[instrument] = `carried-forward: ${carried} (no futures price today)`
@@ -189,7 +195,7 @@ export async function GET(req: Request) {
       const atm = nearestTradedATMIV(chain)
 
       if (atm == null) {
-        const carried = await mostRecentIV(instrument)
+        const carried = await mostRecentIV(instrument, date)
         if (carried != null) {
           await redisCommand('hset', `iv-hist:${instrument}`, date, String(carried))
           results[instrument] = `carried-forward: ${carried} (no live/stale-traded ATM IV today)`
@@ -218,7 +224,7 @@ export async function GET(req: Request) {
       // Same silent-gap problem as the skip branches above (e.g. an expired
       // Kite session throws here rather than returning futurePrice = 0) —
       // carry the last known value forward instead of losing the day.
-      const carried = await mostRecentIV(instrument).catch(() => null)
+      const carried = await mostRecentIV(instrument, date).catch(() => null)
       if (carried != null) {
         await redisCommand('hset', `iv-hist:${instrument}`, date, String(carried)).catch(() => {})
         results[instrument] = `carried-forward: ${carried} (error: ${(e as Error).message})`

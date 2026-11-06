@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { snapshotExpiry, implausibleIVReason } from './ivSnapshotRules'
+import { snapshotExpiry, implausibleIVReason, carryForwardTooOld, MAX_CARRY_FORWARD_DAYS } from './ivSnapshotRules'
 
 describe('snapshotExpiry', () => {
   const expiries = ['2026-10-26', '2026-09-25', '2026-11-25']
@@ -48,5 +48,27 @@ describe('implausibleIVReason', () => {
 
   it('rejects non-finite values', () => {
     expect(implausibleIVReason(NaN, normal)).not.toBeNull()
+  })
+})
+
+describe('carryForwardTooOld', () => {
+  it('allows carrying forward a value within the cap', () => {
+    expect(carryForwardTooOld('2026-10-20', '2026-10-30')).toBe(false) // 10 days
+  })
+
+  it('allows carrying forward a value exactly at the cap', () => {
+    expect(carryForwardTooOld('2026-10-16', '2026-10-30')).toBe(false) // 14 days
+  })
+
+  it('refuses a value older than the cap — a feed broken for weeks should leave a gap, not keep re-stamping one old reading', () => {
+    expect(carryForwardTooOld('2026-10-01', '2026-10-30')).toBe(true) // 29 days
+  })
+
+  it('honours a custom cap', () => {
+    expect(carryForwardTooOld('2026-10-25', '2026-10-30', 3)).toBe(true) // 5 days > custom cap of 3
+  })
+
+  it('exposes the default cap used elsewhere', () => {
+    expect(MAX_CARRY_FORWARD_DAYS).toBe(14)
   })
 })

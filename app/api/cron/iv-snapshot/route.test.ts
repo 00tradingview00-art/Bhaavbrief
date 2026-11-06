@@ -70,4 +70,28 @@ describe('iv-snapshot session dating', () => {
     expect(hsetCalls()).toHaveLength(0)
     expect(String(body.results.GOLD)).toMatch(/^rejected: 1.17/)
   })
+
+  it('carries forward a recent stored value when there is no futures price today', async () => {
+    vi.setSystemTime(new Date('2026-09-25T18:05:00Z')) // Fri 23:35 IST
+    getOptionsChain.mockResolvedValue({ ...liveChain(24), futurePrice: 0 })
+    redisCommand.mockImplementation(async (cmd: string, key: string) => {
+      if (cmd === 'hgetall' && key === 'iv-hist:GOLD') return ['2026-09-20', '22'] // 5 days old
+      return null
+    })
+    const body = await (await GET(authed())).json()
+    expect(hsetCalls()[0]).toEqual(['hset', 'iv-hist:GOLD', '2026-09-25', '22'])
+    expect(String(body.results.GOLD)).toMatch(/^carried-forward: 22/)
+  })
+
+  it('refuses to carry forward a value older than the cap — leaves a gap instead', async () => {
+    vi.setSystemTime(new Date('2026-09-25T18:05:00Z')) // Fri 23:35 IST
+    getOptionsChain.mockResolvedValue({ ...liveChain(24), futurePrice: 0 })
+    redisCommand.mockImplementation(async (cmd: string, key: string) => {
+      if (cmd === 'hgetall' && key === 'iv-hist:GOLD') return ['2026-08-01', '22'] // 55 days old
+      return null
+    })
+    const body = await (await GET(authed())).json()
+    expect(hsetCalls()).toHaveLength(0)
+    expect(String(body.results.GOLD)).toBe('skipped (no futures price, no prior history to carry forward)')
+  })
 })
