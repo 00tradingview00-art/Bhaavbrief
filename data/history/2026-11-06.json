@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-11-06T12:20:09.710Z",
-  "generatedAtIST": "2026-11-06 17:50 IST",
+  "generatedAt": "2026-11-06T17:27:03.222Z",
+  "generatedAtIST": "2026-11-06 22:57 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
-      "price": 142218,
+      "price": 142070,
       "prevClose": 144095,
-      "changePct": -1.3026,
+      "changePct": -1.4053,
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 185181,
+      "price": 184784,
       "prevClose": 187140,
-      "changePct": -1.0468,
+      "changePct": -1.259,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 8557,
+      "price": 8494,
       "prevClose": 8560,
-      "changePct": -0.035,
+      "changePct": -0.771,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
-      "price": 1340.6,
+      "price": 1339.95,
       "prevClose": 1351.15,
-      "changePct": -0.7808,
+      "changePct": -0.8289,
       "unit": "INR/kg"
     },
     "MCX_NATGAS": {
-      "price": 283.5,
+      "price": 282.4,
       "prevClose": 282.1,
-      "changePct": 0.4963,
+      "changePct": 0.1063,
       "unit": "INR/mmBtu"
     },
     "USDINR": {
@@ -40,63 +40,63 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4076.4,
+      "price": 4069,
       "prevClose": 4113.5,
-      "changePct": -0.9019,
+      "changePct": -1.0818,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 52.06,
+      "price": 51.92,
       "prevClose": 52.23,
-      "changePct": -0.3408,
+      "changePct": -0.5992,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 90.87,
+      "price": 90.21,
       "prevClose": 90.52,
-      "changePct": 0.3867,
+      "changePct": -0.3425,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 98.49,
+      "price": 97.58,
       "prevClose": 98.29,
-      "changePct": 0.2035,
+      "changePct": -0.7224,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
-      "price": 3,
+      "price": 2.98,
       "prevClose": 2.95,
-      "changePct": 1.8324,
+      "changePct": 1.2216,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
-      "price": 411.05,
+      "price": 411.35,
       "prevClose": 414.35,
-      "changePct": -0.7964,
+      "changePct": -0.724,
       "unit": "INR/kg"
     },
     "MCX_LEAD": {
-      "price": 194.5,
+      "price": 195,
       "prevClose": 195.05,
-      "changePct": -0.282,
+      "changePct": -0.0256,
       "unit": "INR/kg"
     },
     "MCX_ALUMINIUM": {
-      "price": 330,
+      "price": 330.3,
       "prevClose": 329.85,
-      "changePct": 0.0455,
+      "changePct": 0.1364,
       "unit": "INR/kg"
     },
     "MCX_NICKEL": {
-      "price": 1525.5,
+      "price": 1532,
       "prevClose": 1539.2,
-      "changePct": -0.8901,
+      "changePct": -0.4678,
       "unit": "INR/kg"
     },
     "MCX_ELECTRICITY": {
-      "price": 4387,
+      "price": 4396,
       "prevClose": 4411,
-      "changePct": -0.5441,
+      "changePct": -0.3401,
       "unit": "INR/MWh"
     },
     "EURINR": {
@@ -119,19 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 123392,
-    "mcxComexGoldSpreadPct": 15.26,
-    "importParitySilverINR": 157585,
-    "mcxComexSilverSpreadPct": 17.51,
-    "goldSilverRatio": 78.3
+    "importParityGoldINR": 123168,
+    "mcxComexGoldSpreadPct": 15.35,
+    "importParitySilverINR": 157161,
+    "mcxComexSilverSpreadPct": 17.58,
+    "goldSilverRatio": 78.4
   },
   "warnings": [
     {
       "type": "PARITY_WEDGE_DIVERGENCE",
-      "detail": "Gold import-parity spread 15.26% vs silver 17.51% — 2.25pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
-      "goldSpreadPct": 15.26,
-      "silverSpreadPct": 17.51,
-      "deltaPts": 2.25
+      "detail": "Gold import-parity spread 15.35% vs silver 17.58% — 2.23pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 15.35,
+      "silverSpreadPct": 17.58,
+      "deltaPts": 2.23
     }
   ]
 }
