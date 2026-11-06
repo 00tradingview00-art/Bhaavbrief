@@ -1,12 +1,18 @@
 import type { Metadata } from 'next'
 import fs from 'fs'
 import path from 'path'
-import StrategyBuilder from '@/components/mcx/StrategyBuilder'
+import nextDynamic from 'next/dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { safeJsonLd } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
+
+// Code-split — StrategyBuilder is ~1,950 lines of client JS. Server-rendered
+// (default ssr:true) so this only defers the client bundle out of the main
+// chunk until hydration. Imported as `nextDynamic` — this file already
+// exports a route-config constant named `dynamic` (force-dynamic, above).
+const StrategyBuilder = nextDynamic(() => import('@/components/mcx/StrategyBuilder'))
 
 const SCHEMA = {
   '@context': 'https://schema.org',

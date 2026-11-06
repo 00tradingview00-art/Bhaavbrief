@@ -1,9 +1,14 @@
 import Link from 'next/link'
-import OptionChain from '@/components/mcx/OptionChain'
+import dynamic from 'next/dynamic'
 import { getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { safeJsonLd } from '@/lib/seo'
 import { formatAsOfIST } from '@/lib/formatTime'
+
+// Code-split — OptionChain is ~1,100 lines of client JS. Server-rendered
+// (default ssr:true) so SEO/JSON-LD content is unaffected; this only defers
+// the client bundle out of the main chunk until hydration.
+const OptionChain = dynamic(() => import('@/components/mcx/OptionChain'))
 
 type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
