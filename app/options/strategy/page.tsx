@@ -5,6 +5,8 @@ import nextDynamic from 'next/dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { safeJsonLd } from '@/lib/seo'
+import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
+import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,6 +58,8 @@ export const metadata: Metadata = {
     'MCX spread trading',
   ],
 }
+
+type OptionsChainResult = Awaited<ReturnType<typeof getOptionsChain>>
 
 const VALID_INSTRUMENTS = ['GOLD', 'GOLDM', 'SILVER', 'SILVERM', 'CRUDEOIL', 'CRUDEOILM', 'NATURALGAS', 'COPPER', 'ELECTRICITY']
 
@@ -110,6 +114,21 @@ export default async function StrategyPage({
   } as const
   const { userId } = await auth()
   const isPro = await isProUser(userId ?? null)
+  // Seed the first paint with a real chain instead of StrategyBuilder mounting
+  // with chainData=null and fetching it entirely client-side — that pattern
+  // (force-dynamic page, empty HTML, "Loading chain…" until a browser round
+  // trip to /api/options resolves) was the strongest single-page contributor
+  // to this site's real-user LCP/CLS tail. Same fetch-then-cache-fallback
+  // pattern already proven in app/options/page.tsx for OptionChain. Futures-
+  // only instruments (no options chain) skip straight to null, matching
+  // StrategyBuilder's own `!MCX_INSTRUMENTS[inst]` branch in fetchData().
+  const initialChainData = MCX_INSTRUMENTS[defaultInstrument]
+    ? await getOptionsChain(defaultInstrument).catch(async (err) => {
+        console.error('[options/strategy] live chain fetch failed for', defaultInstrument, err)
+        const cached = await getCachedOptionsChain(defaultInstrument)
+        return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
+      })
+    : null
   // Keyed on defaultInstrument: StrategyBuilder seeds its `instrument` state
   // from this prop once (useState's initial-value pattern) and never re-syncs
   // it — a key forces a full remount (fully resetting internal state) if this
@@ -120,7 +139,7 @@ export default async function StrategyPage({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro}
-        defaultTab={tab === 'spreads' ? 'spreads' : 'build'} spreadInit={spreadInit} />
+        defaultTab={tab === 'spreads' ? 'spreads' : 'build'} spreadInit={spreadInit} initialChainData={initialChainData} />
     </>
   )
 }
