@@ -40,6 +40,13 @@ describe('/api/kite/callback', () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
+  it('refuses any account when KITE_ALLOWED_USER_IDS is unset (fails closed)', async () => {
+    exchangeToken.mockResolvedValue({ access_token: 'owner-token', user_id: 'AB0001', login_time: 'now' })
+    const html = await (await GET(req())).text()
+    expect(html).toContain('Not Authorised')
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
   it("accepts the owner's account and updates the secrets", async () => {
     process.env.KITE_ALLOWED_USER_IDS = 'AB0001, CD0002'
     exchangeToken.mockResolvedValue({ access_token: 'owner-token', user_id: 'AB0001', login_time: 'now' })
