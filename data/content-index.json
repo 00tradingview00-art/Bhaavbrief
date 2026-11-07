@@ -1,5 +1,29 @@
 [
   {
+    "type": "research",
+    "slug": "2026-11-07-weekly-catalyst",
+    "href": "/research/2026-11-07-weekly-catalyst",
+    "title": "Diwali Demand Window Opens Into a Rupee-Led Discount in MCX Gold",
+    "description": "Diwali lands Nov 8 just as a broadly firmer rupee compounds a COMEX pullback, cutting MCX gold to ₹142,364 and reshaping the festival stocking arithmetic.",
+    "excerpt": "Diwali falls on 8 November 2026, opening India's heaviest gold and silver gifting window — coins, jewellery, Dhanteras buying, and the wedding-season stocking that jewellers front-load against. It is ",
+    "date": "2026-11-07",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver",
+      "copper"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver",
+      "copper"
+    ],
+    "premium": true
+  },
+  {
     "type": "brief",
     "slug": "edition-142",
     "href": "/briefs/edition-142",
