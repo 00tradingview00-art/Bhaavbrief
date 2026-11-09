@@ -4,131 +4,131 @@
       "claim_id": "eia_natural_gas_storage__natgas",
       "statement_template": "EIA Natural Gas Storage Report releases have historically moved MCX Natural Gas by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 2.49,
+        "avgAbsMovePct": 2.47,
         "maxAbsMovePct": 9.67,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "eia_petroleum_status_report__crude",
       "statement_template": "EIA Weekly Petroleum Status Report releases have historically moved MCX Crude by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 2.53,
-        "maxAbsMovePct": 6.72,
+        "avgAbsMovePct": 2.64,
+        "maxAbsMovePct": 8.13,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "api_crude_inventories__crude",
       "statement_template": "API Crude Inventories (industry estimate) releases have historically moved MCX Crude by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 3.01,
+        "avgAbsMovePct": 2.85,
         "maxAbsMovePct": 5.82,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "baker_hughes_rig_count__crude",
       "statement_template": "Baker Hughes US Rig Count releases have historically moved MCX Crude by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.94,
+        "avgAbsMovePct": 1.91,
         "maxAbsMovePct": 4.65,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "baker_hughes_rig_count__natgas",
       "statement_template": "Baker Hughes US Rig Count releases have historically moved MCX Natural Gas by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.94,
+        "avgAbsMovePct": 1.77,
         "maxAbsMovePct": 5.86,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__gold",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Gold by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.02,
+        "avgAbsMovePct": 1.05,
         "maxAbsMovePct": 2.88,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__silver",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Silver by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.57,
+        "avgAbsMovePct": 1.58,
         "maxAbsMovePct": 6.14,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__crude",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Crude by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.94,
+        "avgAbsMovePct": 1.91,
         "maxAbsMovePct": 4.65,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__copper",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Copper by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 0.73,
+        "avgAbsMovePct": 0.77,
         "maxAbsMovePct": 2.92,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__natgas",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Natural Gas by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 1.94,
+        "avgAbsMovePct": 1.77,
         "maxAbsMovePct": 5.86,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__zinc",
@@ -138,10 +138,10 @@
         "maxAbsMovePct": 5.18,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__aluminium",
@@ -151,23 +151,23 @@
         "maxAbsMovePct": 1.7,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__lead",
       "statement_template": "CFTC Commitment of Traders (COT) Report releases have historically moved MCX Lead by an average of {avgAbsMovePct}% (max {maxAbsMovePct}%) in the following session, based on the last {n} occurrences.",
       "values": {
-        "avgAbsMovePct": 0.76,
+        "avgAbsMovePct": 0.75,
         "maxAbsMovePct": 4.35,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     },
     {
       "claim_id": "cftc_cot_report__nickel",
@@ -177,11 +177,11 @@
         "maxAbsMovePct": 2.7,
         "n": 24
       },
-      "sample_period": "trailing 24 occurrences as of 2026-11-02",
+      "sample_period": "trailing 24 occurrences as of 2026-11-09",
       "n": 24,
       "source": "Computed from MCX Kite historical daily candles — reaction-day close vs. prior trading day close, absolute % move (scripts/compute-event-impact.mjs)",
-      "last_verified": "2026-11-02T11:42:08.037Z"
+      "last_verified": "2026-11-09T12:09:00.184Z"
     }
   ],
-  "generatedAt": "2026-11-02T11:42:13.470Z"
+  "generatedAt": "2026-11-09T12:09:05.120Z"
 }
