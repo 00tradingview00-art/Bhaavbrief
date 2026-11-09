@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-09-mcx-options-margin-calculation-india",
+    "href": "/articles/2026-11-09-mcx-options-margin-calculation-india",
+    "title": "How MCX Options Margin Is Calculated — SPAN and Exposure Explained",
+    "description": "Understand how MCX options margin calculation works in India — SPAN, exposure margin, and volatility inputs that determine your upfront capital requirement.",
+    "excerpt": "MCX options margin calculation — how it works in India — depends on two layered components: SPAN (Standard Portfolio Analysis of Risk) margin and an additional exposure margin mandated by the exchange",
+    "date": "2026-11-09",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-11-07-weekly-catalyst",
     "href": "/research/2026-11-07-weekly-catalyst",

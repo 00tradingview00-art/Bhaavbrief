@@ -1,0 +1,52 @@
+---
+title: "How MCX Options Margin Is Calculated — SPAN and Exposure Explained"
+description: "Understand how MCX options margin calculation works in India — SPAN, exposure margin, and volatility inputs that determine your upfront capital requirement."
+date: "2026-11-09"
+commodity: options
+tags: ["options", "mcx", "india"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["mcx options margin calculation how it works india"]
+---
+
+## Introduction
+
+MCX options margin calculation — how it works in India — depends on two layered components: SPAN (Standard Portfolio Analysis of Risk) margin and an additional exposure margin mandated by the exchange. Together, these two figures determine the total upfront capital a writer or buyer of an MCX options contract must maintain with their broker before a position is opened or carried overnight.
+
+## The Mechanism
+
+SPAN margin on MCX is computed by a risk engine that runs 16 standardised price-and-volatility scenarios — called risk arrays — against each open options position. Each scenario shifts the underlying futures price up or down by a defined magnitude (typically ±1 to ±3 standard deviations) and simultaneously shifts implied volatility up or down (usually ±25 basis points). The worst-case loss across all 16 scenarios becomes the SPAN margin requirement for that position.
+
+The calculation pathway runs as follows:
+
+1. **Implied volatility input** — MCX sources real-time IV from options order book data on the exchange's matching engine.
+2. **Delta and gamma scanning** — The SPAN engine computes the delta-adjusted loss for each scenario per lot.
+3. **Portfolio netting** — If a trader holds offsetting positions (e.g., a short call hedged by a long call at a different strike), SPAN nets the risk, reducing total margin.
+4. **Exposure margin addition** — MCX then adds a flat exposure margin, currently 3% of the notional contract value for most metals and energy contracts, to cover gap-risk and liquidity risk beyond SPAN scenarios.
+5. **Final margin = SPAN margin + Exposure margin**, subject to a minimum floor set by SEBI.
+
+For options buyers, margin is capped at the premium paid. For options writers, full SPAN plus exposure applies because the theoretical loss is open-ended.
+
+## India-Specific Context
+
+Indian MCX options margins carry layers that global benchmarks do not. The underlying MCX futures price is itself a rupee-converted figure — COMEX gold or NYMEX crude is translated into INR using the RBI reference rate published at approximately 1:30 PM IST daily. A sharp rupee depreciation can spike the INR-denominated futures price, widening SPAN scenarios intraday without any change in the dollar price.
+
+SEBI mandates that commodity derivatives exchanges re-run SPAN at least six times per trading day, and during extreme volatility events MCX can run intraday margin calls. Additionally, MCX applies separate margin multipliers during delivery periods — in the last few days before contract expiry, margins can step up 15–25% to reflect physical delivery risk. Import duties embedded in domestic price discovery (e.g., 15% basic customs duty on gold) mean the MCX price structurally diverges from COMEX, which also affects what the SPAN engine treats as a "normal" price range for scenario calibration.
+
+## Historical Episodes
+
+**Gold options, March 2020**: When global markets seized during the early COVID shock, MCX gold witnessed intraday swings exceeding 5% within single sessions. SPAN margins on gold options approximately doubled within a week as the exchange recalibrated volatility inputs, catching several short-option traders with intraday margin shortfalls.
+
+**Crude oil options, April 2020**: MCX crude contracts briefly traded near ₹0 and then into extreme low territory following the WTI negative-price episode. MCX imposed emergency circuit restrictions and revised SPAN scenarios, with effective margin percentages temporarily rising above 50% of contract value.
+
+**Natural gas, October 2022**: Extreme global volatility pushed MCX natural gas SPAN margins up roughly 40–60% over three weeks as implied volatility on the options chain surged, demonstrating how IV-driven SPAN recalibration can materially change capital requirements even without large directional moves in spot prices.
+
+## What to Watch
+
+Track these specific triggers that cause MCX to recalibrate SPAN inputs:
+
+- **MCX daily margin circular** — released on the exchange website each evening, showing revised SPAN parameters
+- **India VIX and options implied volatility** on MCX gold and crude chains — a sharp IV spike precedes margin hikes
+- **RBI reference rate** (published 1:30 PM IST) — rupee gap moves directly reset INR contract values
+- **SEBI peak margin audit dates** — quarterly reviews sometimes prompt exchange-level margin floor revisions
+- **MCX expiry calendar** — delivery-period margin step-ups begin approximately five sessions before contract expiry
