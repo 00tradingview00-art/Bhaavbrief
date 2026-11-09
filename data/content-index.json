@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-143",
+    "href": "/briefs/edition-143",
+    "title": "Gold Reclaims ₹143,000 as Crude Breaks Down From Its Own Narrative",
+    "description": "Safe-haven demand for gold reasserts as crude's geopolitical premium deflates sharply, splitting the commodity complex in two.",
+    "excerpt": "MCX Gold ₹143429 | Crude ₹8441 | USDINR ₹94.11 — Gold +0.62% | Crude -1.32% | Silver +1.07% Yesterday's Edge — Result: Edition #142 watched whether WTI would close above 92.06. Rejected ✗, now at 89.6",
+    "date": "2026-11-09T08:42:57.694Z",
+    "edition": "143",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-09-mcx-options-margin-calculation-india",
     "href": "/articles/2026-11-09-mcx-options-margin-calculation-india",
