@@ -1,5 +1,23 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-09-mcx-crude-crashes-2-16-demand-destruction-fears-grip-energy",
+    "href": "/articles/2026-11-09-mcx-crude-crashes-2-16-demand-destruction-fears-grip-energy",
+    "title": "MCX Crude Crashes 2.16% — Demand Destruction Fears Grip Energy",
+    "description": "MCX Crude ₹8275/bbl, -2.16% on demand concerns amid broader risk-off. WTI weakness signals refinery seasonality + macro slowdown anxiety.",
+    "excerpt": "WHAT HAPPENED MCX Crude has collapsed ₹179/bbl to ₹8275 (a -2.16% session decline), with WTI sliding $1.86 to $88.09 — the sharpest 4-hour move in 11 days. The trigger is not geopolitical: no Hormuz d",
+    "date": "2026-11-09T17:18:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 8275
+  },
+  {
     "type": "brief",
     "slug": "edition-143",
     "href": "/briefs/edition-143",
