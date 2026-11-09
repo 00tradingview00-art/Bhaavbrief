@@ -1,12 +1,12 @@
 {
   "MCX_GOLD": {
-    "lastFlashAt": "2026-11-06T17:43:16.396Z",
-    "lastFlashPrice": 142000,
+    "lastFlashAt": "2026-11-09T11:22:10.576Z",
+    "lastFlashPrice": 143729,
     "lastRoundLevel": 140000,
     "recentFlashIds": [
+      "2026-11-09-16-52-mcx-gold-rallies-0-83-as-rupee-weakens",
       "2026-11-06-23-13-mcx-gold-falls-1-45-amid-broad-precious-metals-pullback",
-      "2026-11-05-23-50-mcx-gold-edges-higher-on-rupee-weakness-crude-strength",
-      "2026-11-04-16-17-mcx-gold-surges-2-26-on-precious-metals-rally"
+      "2026-11-05-23-50-mcx-gold-edges-higher-on-rupee-weakness-crude-strength"
     ]
   },
   "MCX_SILVER": {
@@ -20,13 +20,13 @@
     ]
   },
   "MCX_CRUDE": {
-    "lastFlashAt": "2026-11-05T20:45:03.974Z",
-    "lastFlashPrice": 8570,
+    "lastFlashAt": "2026-11-09T11:22:10.576Z",
+    "lastFlashPrice": 8238,
     "lastRoundLevel": 8500,
     "recentFlashIds": [
+      "2026-11-09-16-52-mcx-crude-slides-3-69-on-demand-concerns",
       "2026-11-06-02-15-mcx-crude-surges-2-46-on-geopolitical-supply-tightness",
-      "2026-11-05-02-58-mcx-crude-edges-up-0-20-as-rupee-steadies-overnight",
-      "2026-11-03-23-36-mcx-crude-edges-higher-on-rupee-stabilisation"
+      "2026-11-05-02-58-mcx-crude-edges-up-0-20-as-rupee-steadies-overnight"
     ]
   },
   "MCX_COPPER": {
@@ -50,13 +50,13 @@
     ]
   },
   "USDINR": {
-    "lastFlashAt": "2026-11-05T23:35:13.081Z",
-    "lastFlashPrice": 94.47,
+    "lastFlashAt": "2026-11-09T11:22:10.576Z",
+    "lastFlashPrice": 94.01,
     "lastRoundLevel": 94.5,
     "recentFlashIds": [
+      "2026-11-09-16-52-usd-inr-weakens-0-14-as-rupee-sustains-strength",
       "2026-11-06-05-05-usd-inr-weakens-0-30-through-94-5-round-number-support",
-      "2026-11-05-05-07-usd-inr-weakens-0-10-as-rupee-strength-persists",
-      "2026-11-03-16-14-usd-inr-breaks-below-95-round-level-rupee-strength"
+      "2026-11-05-05-07-usd-inr-weakens-0-10-as-rupee-strength-persists"
     ]
   }
 }
