@@ -1,0 +1,58 @@
+---
+title: "Weekly vs Monthly MCX Options — Which Should You Trade?"
+description: "Confused about weekly vs monthly MCX options which to trade India? This guide breaks down expiry mechanics, margin costs, and risk profiles clearly."
+date: "2026-11-10"
+commodity: options
+tags: ["options", "mcx", "india"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["weekly vs monthly mcx options which to trade india"]
+---
+
+## Introduction
+
+The question of weekly vs monthly MCX options which to trade India comes down to one core trade-off: time decay speed versus premium cost. Weekly options bleed theta faster and suit short-horizon hedges, while monthly options carry more premium but give price moves room to develop.
+
+## The Mechanism
+
+MCX options are European-style, meaning they can only be exercised at expiry — not before. This single structural fact shapes everything about how weekly and monthly contracts behave differently.
+
+**Weekly options** expire every Friday (for gold and silver, typically the last Friday of the near week). With 5–7 calendar days remaining, theta — the daily erosion of time value — is at its steepest. A ₹1,000 premium on a weekly gold option may lose ₹150–₹200 of value in a single session if the underlying MCX Gold price remains flat.
+
+**Monthly options** expire on the last day of the contract month. With 20–30 days remaining at purchase, the same ₹1,000 premium loses perhaps ₹30–₹50 per day in flat markets early in the cycle, accelerating sharply in the final week.
+
+**The pricing pathway:**
+
+1. COMEX Gold spot moves (denominated in USD/troy oz)
+2. Multiply by 31.1035 (grams per troy oz) → USD/gram
+3. Multiply by prevailing USD/INR rate (RBI reference or spot)
+4. Multiply by 10 (MCX Gold contract is 10 grams) → INR/unit
+5. Add import duty + GST to arrive at domestic parity
+6. MCX futures price converges toward this import parity; options are priced off MCX futures via Black-76 model
+
+The implied volatility (IV) used in Black-76 is typically higher for weekly options because short-dated contracts price in event risk per day more aggressively. A 20% annualised IV on a monthly option translates to a much higher effective daily IV on a weekly option covering the same event window.
+
+## India-Specific Context
+
+India-specific factors create persistent wedges between COMEX/LME benchmarks and MCX prices. The basic customs duty on gold is currently 15%, GST is 3%, and the Agriculture Infrastructure Development Cess (AIDC) adds another 5% — making the landed cost roughly 23–24% above international price. This duty structure means MCX Gold rarely falls below import parity for sustained periods; physical demand acts as a floor.
+
+For MCX options specifically, SEBI mandates physical delivery settlement for in-the-money commodity options at expiry, unlike cash-settled equity index options. This creates genuine delivery risk in the final days of a monthly contract that weekly options generally avoid by rolling before that window. MCX circuit limits (typically ±6% for gold) can also suspend options trading mid-session, trapping positions.
+
+## Historical Episodes
+
+**2020 COVID rally:** Between March and August 2020, MCX Gold futures surged approximately 40%, from around ₹40,000 to ₹56,000 per 10 grams. Weekly call options with 2–3 days to expiry saw premium multiples of 8–10x within single sessions during peak volatility.
+
+**2022 Russia-Ukraine shock:** In the week of February 28, 2022, MCX Gold moved roughly ₹3,500 (about 6%) in three sessions. Weekly options expired massively in-the-money; monthly options had sufficient time cushion to manage positions.
+
+**2023 rupee depreciation episode:** When USD/INR crossed 83.5 in mid-2023, MCX Silver gained approximately 4–5% in a fortnight even as LME Silver was relatively stable — illustrating how currency moves alone can determine MCX options outcomes independently of global commodity direction.
+
+## What to Watch
+
+- **FOMC rate decision dates** (USD/INR sensitivity — check Fed calendar)
+- **RBI MPC meeting dates** (published quarterly; rupee volatility spikes around decisions)
+- **MCX expiry calendar** (available on MCX website; note Friday weekly expiries vs. month-end)
+- **MCX daily circuit limit breaches** (reported in MCX circulars; signals potential options trading halt)
+- **COMEX options expiry dates** (global IV spike transmits to MCX IV within hours)
+- **India import duty revision cycles** (Union Budget and mid-year notifications via CBIC)
+
+Understanding weekly vs monthly MCX options which to trade India ultimately requires matching your time horizon to the contract's theta profile — a mechanical question before it is anything else.

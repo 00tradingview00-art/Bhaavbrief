@@ -1,6 +1,26 @@
 [
   {
     "type": "article",
+    "slug": "2026-11-10-weekly-vs-monthly-mcx-options-india",
+    "href": "/articles/2026-11-10-weekly-vs-monthly-mcx-options-india",
+    "title": "Weekly vs Monthly MCX Options — Which Should You Trade?",
+    "description": "Confused about weekly vs monthly MCX options which to trade India? This guide breaks down expiry mechanics, margin costs, and risk profiles clearly.",
+    "excerpt": "The question of weekly vs monthly MCX options which to trade India comes down to one core trade-off: time decay speed versus premium cost. Weekly options bleed theta faster and suit short-horizon hedg",
+    "date": "2026-11-10",
+    "edition": "keyword-brief",
+    "tags": [
+      "options",
+      "mcx",
+      "india"
+    ],
+    "commodity": "options",
+    "commodities": [
+      "options"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-11-09-mcx-crude-crashes-2-16-demand-destruction-fears-grip-energy",
     "href": "/articles/2026-11-09-mcx-crude-crashes-2-16-demand-destruction-fears-grip-energy",
     "title": "MCX Crude Crashes 2.16% — Demand Destruction Fears Grip Energy",
