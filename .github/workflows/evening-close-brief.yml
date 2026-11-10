@@ -50,8 +50,10 @@ jobs:
       # STALE, 196 min). Failing here reaches the alert step below instead.
       - name: Fetch market snapshot
         env:
-          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
-          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+          KITE_API_KEY:             ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:        ${{ secrets.KITE_ACCESS_TOKEN }}
+          UPSTASH_REDIS_REST_URL:   ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
         run: node scripts/fetch-snapshot.mjs
 
       - name: Generate Evening Close Brief

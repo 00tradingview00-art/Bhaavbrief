@@ -62,8 +62,10 @@ jobs:
       # once here by rolling instruments ourselves on a failure.
       - name: Fetch market snapshot
         env:
-          KITE_API_KEY:      ${{ secrets.KITE_API_KEY }}
-          KITE_ACCESS_TOKEN: ${{ secrets.KITE_ACCESS_TOKEN }}
+          KITE_API_KEY:             ${{ secrets.KITE_API_KEY }}
+          KITE_ACCESS_TOKEN:        ${{ secrets.KITE_ACCESS_TOKEN }}
+          UPSTASH_REDIS_REST_URL:   ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
         run: |
           if ! node scripts/fetch-snapshot.mjs; then
             echo "Snapshot fetch failed — rolling instrument tokens and retrying once..."
