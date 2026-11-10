@@ -1,6 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { NextRequest } from 'next/server'
 
+// after() relies on Next's request-scoped AsyncLocalStorage, which isn't set
+// up when calling the route handler directly in a unit test (it throws
+// "called outside a request scope" otherwise) — run the callback immediately
+// instead, which is equivalent to this route's intent (fire-and-forget).
+vi.mock('next/server', async () => {
+  const actual = await vi.importActual<typeof import('next/server')>('next/server')
+  return { ...actual, after: (cb: () => unknown) => { cb() } }
+})
+
 const checkFixedWindowRateLimit = vi.fn()
 vi.mock('@/lib/rateLimit', () => ({
   checkFixedWindowRateLimit: (...a: unknown[]) => checkFixedWindowRateLimit(...a),

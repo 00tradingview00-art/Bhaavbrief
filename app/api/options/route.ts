@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, after } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { nextMCXSessionOpenISO } from '@/lib/marketSchedule'
@@ -77,8 +77,15 @@ export async function GET(request: NextRequest) {
     // explicit ?expiry= request is a less common case and not worth a cache
     // key per expiry for what's meant to be a last-known-good safety net.
     // Cache the full payload, before free-tier limiting is applied below.
+    // Scheduled via after() rather than a bare un-awaited call: Vercel's
+    // serverless runtime can freeze the function once the response below is
+    // sent, racing and cutting off an in-flight promise — after() keeps it
+    // alive until this write actually finishes. Matches the frequent
+    // "failed to cache chain ... TimeoutError" log noise, worst on the
+    // highest-traffic instruments (GOLD/GOLDM/CRUDEOIL), confirmed live
+    // 2026-11-10.
     if (requestedExpiry === null) {
-      void cacheOptionsChain(instrument, rawPayload)
+      after(() => cacheOptionsChain(instrument, rawPayload))
     }
 
     let payload = rawPayload
