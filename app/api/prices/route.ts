@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Snapshot fallback — when Kite token is expired or API is down
-  const snap = loadSnapshot()
+  const snap = await loadSnapshot()
   if (snap) {
     const prices = snapshotToPriceData(snap)
     return NextResponse.json(prices, {

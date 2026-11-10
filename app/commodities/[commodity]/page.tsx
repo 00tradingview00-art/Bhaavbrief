@@ -346,7 +346,7 @@ export default async function CommodityPage({ params }: Props) {
     getAllArticles().catch(() => []),
     getAllBriefs(),
   ])
-  const snap   = loadSnapshot()
+  const snap   = await loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
 
   const priceData = prices ? prices[entry.priceKey as CommodityPriceKey] : null

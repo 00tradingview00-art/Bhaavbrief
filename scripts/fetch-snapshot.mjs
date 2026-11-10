@@ -36,6 +36,7 @@ import {
 import { resolveUsdinr } from './lib/resolveUsdinr.mjs'
 import { validateSnapshot } from './lib/snapshotSchema.mjs'
 import { appendDailySnapshot } from './lib/historicalStore.mjs'
+import { redisSetJSON } from './lib/redisClient.js'
 import { todayIST } from './lib/holidays.js'
 import { tradingSessionDate } from './lib/mcxSession.js'
 import { getExpiredCoreInstruments } from './lib/instrumentExpiryCheck.mjs'
@@ -45,6 +46,21 @@ const ROOT = path.join(__dirname, '..')
 const SNAPSHOT_FILE = path.join(ROOT, 'data/market-snapshot.json')
 const MCX_CACHE_FILE = path.join(ROOT, 'data/mcx-last-prices.json')
 const INSTRUMENTS_FILE = path.join(ROOT, 'data/kite-instruments.json')
+const REDIS_SNAPSHOT_KEY = 'market-snapshot:latest'
+
+// Additive freshness layer on top of the git-committed file: lets app/ pages
+// (via lib/snapshot.ts) show the latest prices without waiting for a Vercel
+// deploy. Never fails the pipeline — the file remains the source of truth
+// this script's own in-job downstream consumers (generate-brief.js,
+// validate-brief.mjs, etc.) read directly, unaffected by a Redis outage.
+async function writeSnapshotToRedis(snapshot) {
+  try {
+    await redisSetJSON(REDIS_SNAPSHOT_KEY, snapshot)
+    console.log(`  Redis: wrote ${REDIS_SNAPSHOT_KEY}`)
+  } catch (e) {
+    console.warn(`  Redis write failed (non-fatal): ${e.message}`)
+  }
+}
 
 // Load .env.local for local dev runs
 const envFile = path.join(ROOT, '.env.local')
@@ -445,6 +461,8 @@ async function main() {
 
   fs.mkdirSync(path.dirname(SNAPSHOT_FILE), { recursive: true })
   fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshot, null, 2), 'utf8')
+
+  await writeSnapshotToRedis(snapshot)
 
   // C-05: archive today's canonical values — only ever overwrites *today's*
   // file (this script runs several times a day); a prior day's file is

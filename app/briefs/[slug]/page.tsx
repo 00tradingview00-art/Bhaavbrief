@@ -107,7 +107,7 @@ export default async function BriefPage({ params }: { params: Promise<{ slug: st
   // pre-edition-040 format), in which case the legacy full-prose render
   // below is used, unchanged.
   const parsed = parseBriefSections(brief.content)
-  const snap   = loadSnapshot()
+  const snap   = await loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
 
   const ogParams = new URLSearchParams({

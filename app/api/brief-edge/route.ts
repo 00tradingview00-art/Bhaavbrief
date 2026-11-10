@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
   // works unchanged here since it just compares a level against a live
   // snapshot price. Degrades to null (never fabricates) when the edition
   // has no structured edge or no snapshot is available.
-  const snapshot = loadSnapshot()
+  const snapshot = await loadSnapshot()
   const resolution = snapshot && brief.edgeMetric
     ? resolveEdge({
         edgeMetric:    brief.edgeMetric,

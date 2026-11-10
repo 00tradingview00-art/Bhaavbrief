@@ -62,7 +62,7 @@ const SCHEMA = {
 }
 
 export default async function MarketsPage() {
-  const snap = loadSnapshot()
+  const snap = await loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
   const [eiaData, optionsData] = await Promise.all([loadEIA(), getTerminalData()])
   const sparklines = Object.fromEntries(

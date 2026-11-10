@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default async function MobileHomePage() {
   const briefs = await getAllBriefs()
-  const snapshot = loadSnapshot()
+  const snapshot = await loadSnapshot()
   const prices = snapshot ? snapshotToPriceData(snapshot) : null
   const [latest] = briefs
 

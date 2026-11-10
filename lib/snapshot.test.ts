@@ -1,6 +1,7 @@
 import { describe, test, expect, vi, afterEach } from 'vitest'
 import fs from 'fs'
 import { loadSnapshot, snapshotAgeMinutes, isMCXOpenNow, snapshotToPriceData, type Snapshot } from './snapshot'
+import * as redisModule from './redis'
 
 afterEach(() => {
   vi.useRealTimers()
@@ -86,22 +87,42 @@ describe('isMCXOpenNow — winter session', () => {
 })
 
 describe('loadSnapshot', () => {
-  test('returns the parsed snapshot when the file exists and is valid JSON', () => {
+  // No UPSTASH_REDIS_REST_URL/TOKEN set in the test env, so redisCommand()
+  // throws "not configured" and loadSnapshot() falls through to the file
+  // path on every one of these — exercising exactly the fallback behavior
+  // real local/preview environments hit before Redis is ever written to.
+  test('returns the parsed snapshot when the file exists and is valid JSON', async () => {
     const snap = makeSnapshot()
     vi.spyOn(fs, 'existsSync').mockReturnValue(true)
     vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(snap))
-    expect(loadSnapshot()).toEqual(snap)
+    expect(await loadSnapshot()).toEqual(snap)
   })
 
-  test('returns null when the file does not exist', () => {
+  test('returns null when the file does not exist', async () => {
     vi.spyOn(fs, 'existsSync').mockReturnValue(false)
-    expect(loadSnapshot()).toBeNull()
+    expect(await loadSnapshot()).toBeNull()
   })
 
-  test('returns null instead of throwing on malformed JSON', () => {
+  test('returns null instead of throwing on malformed JSON', async () => {
     vi.spyOn(fs, 'existsSync').mockReturnValue(true)
     vi.spyOn(fs, 'readFileSync').mockReturnValue('{not valid json')
-    expect(loadSnapshot()).toBeNull()
+    expect(await loadSnapshot()).toBeNull()
+  })
+
+  test('reads from Redis when available, without touching the file', async () => {
+    const snap = makeSnapshot()
+    const existsSync = vi.spyOn(fs, 'existsSync')
+    vi.spyOn(redisModule, 'redisCommand').mockResolvedValue(JSON.stringify(snap))
+    expect(await loadSnapshot()).toEqual(snap)
+    expect(existsSync).not.toHaveBeenCalled()
+  })
+
+  test('falls back to the file when the Redis read fails', async () => {
+    const snap = makeSnapshot()
+    vi.spyOn(redisModule, 'redisCommand').mockRejectedValue(new Error('Redis not configured'))
+    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
+    vi.spyOn(fs, 'readFileSync').mockReturnValue(JSON.stringify(snap))
+    expect(await loadSnapshot()).toEqual(snap)
   })
 })
 

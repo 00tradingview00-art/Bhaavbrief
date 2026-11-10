@@ -68,7 +68,7 @@ interface MacroMetric {
   note:  string
 }
 
-function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
+function computeMacro(snap: Awaited<ReturnType<typeof loadSnapshot>>): MacroMetric[] {
   if (!snap) return []
   const { BRENT, WTI, COMEX_GOLD, COMEX_SILVER } = snap.instruments
   const metrics: MacroMetric[] = []
@@ -113,7 +113,7 @@ function computeMacro(snap: ReturnType<typeof loadSnapshot>): MacroMetric[] {
 
 export default async function HomePage() {
   const briefs = await getAllBriefs()
-  const snap   = loadSnapshot()
+  const snap   = await loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
   const terminalData = await getTerminalData()
   // Previous session's stored composite closes, for Market Pulse's

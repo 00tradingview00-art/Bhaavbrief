@@ -25,6 +25,9 @@ import fs from 'fs'
 import path from 'path'
 import type { PriceData } from './prices'
 import { isMcxOpen } from './tradingCalendar'
+import { redisCommand } from './redis'
+
+const REDIS_SNAPSHOT_KEY = 'market-snapshot:latest'
 
 export interface SnapshotInstrument {
   price:     number
@@ -61,7 +64,15 @@ export interface Snapshot {
   }
 }
 
-export function loadSnapshot(): Snapshot | null {
+// Redis first — written by scripts/fetch-snapshot.mjs on every successful
+// run, so this reflects the latest prices without needing a Vercel deploy.
+// Falls back to the git-committed file (unconfigured Redis, outage, or
+// nothing written yet) — same never-throws-returns-null contract as before.
+export async function loadSnapshot(): Promise<Snapshot | null> {
+  try {
+    const cached = await redisCommand('GET', REDIS_SNAPSHOT_KEY)
+    if (cached && typeof cached === 'string') return JSON.parse(cached) as Snapshot
+  } catch { /* fall through to file */ }
   try {
     const file = path.join(process.cwd(), 'data/market-snapshot.json')
     if (!fs.existsSync(file)) return null

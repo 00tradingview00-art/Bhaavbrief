@@ -37,9 +37,9 @@ function loadJSON<T>(relPath: string): T | null {
   } catch { return null }
 }
 
-function checkSnapshot() {
+async function checkSnapshot() {
   try {
-    const snap = loadSnapshot()
+    const snap = await loadSnapshot()
     if (!snap) return { ok: false, reason: 'market-snapshot.json missing' }
     const ageMinutes  = snapshotAgeMinutes(snap)
     const marketOpen  = isMCXOpenNow()
@@ -123,7 +123,7 @@ function checkCalendar() {
 
 export async function GET() {
   const checks = {
-    snapshot: checkSnapshot(),
+    snapshot: await checkSnapshot(),
     brief:    checkBrief(),
     engine:   checkEngine(),
     calendar: checkCalendar(),

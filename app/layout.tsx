@@ -74,7 +74,7 @@ export const metadata: Metadata = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const snap          = loadSnapshot()
+  const snap          = await loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
 
   const orgSchema = {
