@@ -230,7 +230,7 @@
       "id": "gold-safe-haven-surge-nov2026",
       "title": "Gold Safe-Haven Surge: ₹145,000 Breakout",
       "startDate": "2026-11-05",
-      "status": "active",
+      "status": "closed",
       "editions": [
         141
       ],
@@ -242,7 +242,9 @@
         "MCX Gold",
         "Macro",
         "Safe Haven"
-      ]
+      ],
+      "endDate": "2026-11-10",
+      "outcome": "Gold's safe-haven surge failed to sustain the ₹145,000 breakout as the narrative lost momentum after five days without updates, leaving prices at ₹1,43,850."
     }
   ]
 }
