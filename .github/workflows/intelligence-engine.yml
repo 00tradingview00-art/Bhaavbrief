@@ -2,10 +2,11 @@ name: BhaavBrief Intelligence Engine
 
 on:
   schedule:
-    # MCX market hours — every 15 min
+    # MCX market hours — every 30 min (halved from every 15 min on 2026-11-10 to
+    # cut Vercel Build CPU Minutes; each run that commits triggers a full production build)
     # 3:30 AM–6:00 PM UTC = 9:00 AM–11:30 PM IST, Mon–Fri
-    - cron: '*/15 3-17 * * 1-5'   # 9 AM – 11 PM IST
-    - cron: '0,15,30 18 * * 1-5'  # 11 PM – 11:30 PM IST final window
+    - cron: '*/30 3-17 * * 1-5'   # 9 AM – 11 PM IST
+    - cron: '0,30 18 * * 1-5'     # 11 PM – 11:30 PM IST final window
     # No runs 12 AM – 8 AM IST — MCX closed, not worth the API spend.
   workflow_dispatch:               # Manual trigger anytime
 
