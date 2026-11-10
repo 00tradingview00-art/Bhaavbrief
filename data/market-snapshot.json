@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-10T04:00:47.362Z",
-  "generatedAtIST": "2026-11-10 09:30 IST",
+  "generatedAt": "2026-11-10T10:32:56.541Z",
+  "generatedAtIST": "2026-11-10 16:02 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -40,33 +40,33 @@
       "unit": "INR"
     },
     "COMEX_GOLD": {
-      "price": 4118.3,
+      "price": 4087.1,
       "prevClose": 4114.5,
-      "changePct": 0.0924,
+      "changePct": -0.6659,
       "unit": "USD/oz"
     },
     "COMEX_SILVER": {
-      "price": 52.94,
-      "prevClose": 52.69,
-      "changePct": 0.4688,
+      "price": 52.48,
+      "prevClose": 52.56,
+      "changePct": -0.1693,
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 85.68,
+      "price": 84.86,
       "prevClose": 86.85,
-      "changePct": -1.3472,
+      "changePct": -2.2913,
       "unit": "USD/bbl"
     },
     "BRENT": {
-      "price": 91.49,
+      "price": 90.12,
       "prevClose": 92.57,
-      "changePct": -1.1667,
+      "changePct": -2.6466,
       "unit": "USD/bbl"
     },
     "HENRY_HUB": {
-      "price": 3.2,
+      "price": 3.24,
       "prevClose": 3.22,
-      "changePct": -0.5283,
+      "changePct": 0.5594,
       "unit": "USD/mmBtu"
     },
     "MCX_ZINC": {
@@ -119,10 +119,19 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 124502,
-    "mcxComexGoldSpreadPct": 14.99,
-    "importParitySilverINR": 160045,
-    "mcxComexSilverSpreadPct": 16.92,
-    "goldSilverRatio": 77.8
-  }
+    "importParityGoldINR": 123558,
+    "mcxComexGoldSpreadPct": 15.87,
+    "importParitySilverINR": 158654,
+    "mcxComexSilverSpreadPct": 17.95,
+    "goldSilverRatio": 77.9
+  },
+  "warnings": [
+    {
+      "type": "PARITY_WEDGE_DIVERGENCE",
+      "detail": "Gold import-parity spread 15.87% vs silver 17.95% — 2.08pt gap exceeds 2pt tolerance. One metal's price feed (MCX or COMEX side) is likely stale or wrong.",
+      "goldSpreadPct": 15.87,
+      "silverSpreadPct": 17.95,
+      "deltaPts": 2.08
+    }
+  ]
 }
