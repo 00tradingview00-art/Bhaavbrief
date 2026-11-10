@@ -6,6 +6,7 @@ import {
   extractGoldPrice,
   extractGeneratedAt,
   priceToNumber,
+  isRiskFreeRateStale,
 } from './synthetic-monitor.mjs'
 
 describe('isMCXOpenIST', () => {
@@ -67,5 +68,34 @@ describe('priceToNumber', () => {
   it('returns null for unparseable input', () => {
     expect(priceToNumber(null)).toBeNull()
     expect(priceToNumber('—')).toBeNull()
+  })
+})
+
+describe('isRiskFreeRateStale', () => {
+  // Regression: the old check required the "as of" date to be the current
+  // calendar month, which failed every month but the one the rate (~6x/year,
+  // RBI MPC-driven) happened to last change in — not an actual staleness
+  // signal. These exercise the real day-based window that replaced it.
+  const now = new Date('2026-11-10T00:00:00Z')
+  const daysAgo = (n) => new Date(now.getTime() - n * 86400000).toISOString().slice(0, 10)
+
+  it('is not stale for a recent date', () => {
+    expect(isRiskFreeRateStale('2026-10-07', now)).toBe(false) // 34 days old
+  })
+
+  it('is not stale right up to the 90-day boundary', () => {
+    expect(isRiskFreeRateStale(daysAgo(90), now)).toBe(false)
+  })
+
+  it('is stale just past the 90-day boundary', () => {
+    expect(isRiskFreeRateStale(daysAgo(91), now)).toBe(true)
+  })
+
+  it('never flags the "—" placeholder', () => {
+    expect(isRiskFreeRateStale('—', now)).toBe(false)
+  })
+
+  it('flags an unparseable date as a real problem', () => {
+    expect(isRiskFreeRateStale('not-a-date', now)).toBe(true)
   })
 })

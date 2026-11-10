@@ -13,7 +13,7 @@
  * Exit:  0 = all checks passed, 1 = one or more checks failed (see issues[])
  */
 
-import { todayIST, isTradingHoliday } from './lib/holidays.js'
+import { isTradingHoliday } from './lib/holidays.js'
 import { isMcxOpen } from './lib/mcxSession.js'
 import { checkSitemapShape, expectedSitemapCount } from './lib/sitemapCheck.mjs'
 
@@ -70,6 +70,20 @@ export function priceToNumber(priceStr) {
   if (!priceStr) return null
   const n = parseFloat(priceStr.replace(/[₹,]/g, ''))
   return Number.isFinite(n) ? n : null
+}
+
+// M-05: is the options page's risk-free-rate "as of" date too old? The rate
+// (lib/rbiRepoRate.js) is manually updated after each RBI MPC decision
+// (~6x/year, ~61 days apart on average), not monthly — a straight "is this
+// the current calendar month" check fails in every month but the one the
+// rate was last set in, regardless of whether it's actually stale. 90 days
+// covers the normal MPC cadence plus a buffer for one delayed meeting.
+export function isRiskFreeRateStale(asOf, now = new Date(), maxAgeDays = 90) {
+  if (asOf === '—') return false
+  const asOfDate = new Date(asOf + 'T00:00:00Z')
+  if (isNaN(asOfDate.getTime())) return true // unparseable — a real problem, not a false positive
+  const ageDays = (now.getTime() - asOfDate.getTime()) / 86400000
+  return ageDays > maxAgeDays
 }
 
 async function run() {
@@ -162,20 +176,18 @@ async function run() {
     issues.push(`M-04: /feed.xml fetch failed: ${e.message}`)
   }
 
-  // M-05: options page risk-free-rate "as of" reflects the current month.
-  // The rate itself is a manually-set monthly constant (lib/options.ts,
-  // no live MIBOR feed yet — see Part 7 deferral), so day-level precision
-  // isn't meaningful; month-level staleness is what this can honestly assert.
+  // M-05: options page risk-free-rate "as of" isn't stale. The rate itself
+  // is a manually-set constant (lib/rbiRepoRate.js) updated after each RBI
+  // MPC decision (~6x/year), not monthly — see isRiskFreeRateStale's header.
   const optionsHtml = pages['/options']?.text ?? ''
   const rfMatch = optionsHtml.match(/risk-free rate \(as of ([^)]+)\)/)
   if (!rfMatch) {
     issues.push('M-05: could not find risk-free rate "as of" text on /options')
   } else {
     const asOf = rfMatch[1].trim()
-    const currentMonth = todayIST().slice(0, 7)
     results.riskFreeAsOf = asOf
-    if (asOf !== '—' && !asOf.startsWith(currentMonth)) {
-      issues.push(`M-05: options risk-free rate "as of ${asOf}" is not the current month (${currentMonth})`)
+    if (isRiskFreeRateStale(asOf)) {
+      issues.push(`M-05: options risk-free rate "as of ${asOf}" is more than 90 days old — check lib/rbiRepoRate.js for a missed RBI MPC update`)
     }
   }
 
