@@ -3371,6 +3371,34 @@
   {
     "file": "v3/silver-gold-units-001",
     "instagram_id": "18142203385625995",
-    "posted_at": "2026-11-09T12:43:12.449Z"
+    "posted_at": "2026-11-09T12:43:12.449Z",
+    "insight_snapshots": [
+      {
+        "views": 32,
+        "reach": 30,
+        "ig_reels_avg_watch_time": 1430,
+        "ig_reels_video_view_total_time": 44350,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0,
+        "saved": 0,
+        "total_interactions": 0,
+        "fetched_at": "2026-11-11T04:00:48.857Z",
+        "age_hours": 39.29344666666667,
+        "observation": "first_after_24h"
+      }
+    ],
+    "insights": {
+      "views": 32,
+      "reach": 30,
+      "ig_reels_avg_watch_time": 1430,
+      "ig_reels_video_view_total_time": 44350,
+      "likes": 0,
+      "comments": 0,
+      "shares": 0,
+      "saved": 0,
+      "total_interactions": 0,
+      "fetched_at": "2026-11-11T04:00:48.857Z"
+    }
   }
 ]
