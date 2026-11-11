@@ -1,5 +1,25 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
+    "href": "/articles/2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
+    "title": "MCX Nat Gas Slides 2.8% as Henry Hub Weakness Signals Winter Demand Softness",
+    "description": "MCX Natural Gas ₹305/mmBtu down 2.8%; Henry Hub -1.17% session. Storage builds, mild US weather pressure pre-MCX open Thursday.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas fell 2.80% to ₹305/mmBtu — the session's worst performer — while NYMEX Henry Hub dropped 1.17% to $3.26/mmBtu, signalling that US storage builds and above-normal mild tem",
+    "date": "2026-11-11T18:00:40.389Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver",
+      "MCX Gold"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 305
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-11-mcx-nat-gas-spikes-6-83-to-311-mmbtu-withdrawal-season-begin",
     "href": "/articles/2026-11-11-mcx-nat-gas-spikes-6-83-to-311-mmbtu-withdrawal-season-begin",
