@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-11-mcx-nat-gas-spikes-6-83-to-311-mmbtu-withdrawal-season-begin",
+    "href": "/articles/2026-11-11-mcx-nat-gas-spikes-6-83-to-311-mmbtu-withdrawal-season-begin",
+    "title": "MCX Nat Gas spikes 6.83% to ₹311/mmBtu — withdrawal season begins",
+    "description": "MCX Nat Gas ₹311 +6.83% as winter demand season kicks off; Henry Hub $3.31 tracking storage draw signals.",
+    "excerpt": "TRIGGER MCX Natural Gas has surged 6.83% to ₹311.10/mmBtu, crossing the 3% Hawk-Scan threshold as the Northern Hemisphere enters the November–March withdrawal season when US storage draws accelerate. ",
+    "date": "2026-11-11T10:26:42.035Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Gold",
+      "Henry Hub",
+      "Storage Draw"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 311
+  },
+  {
     "type": "brief",
     "slug": "edition-144",
     "href": "/briefs/edition-144",
