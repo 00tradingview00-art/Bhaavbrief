@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-144",
+    "href": "/briefs/edition-144",
+    "title": "COMEX Gold Drops $59 While MCX Climbs — The Rupee Gap Widens",
+    "description": "COMEX gold fell sharply overnight while MCX gold rose, as a softening rupee and risk repositioning drive a widening India premium.",
+    "excerpt": "MCX Gold ₹141365 | Crude ₹8131 | USDINR ₹93.99 — Gold +0.60% | Crude +0.43% | Silver +1.93% Yesterday's Edge — Result: Edition #143 watched whether COMEX GOLD would close above 4,102.3. Rejected ✗, no",
+    "date": "2026-11-11T04:00:51.776Z",
+    "edition": "144",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-10-weekly-vs-monthly-mcx-options-india",
     "href": "/articles/2026-11-10-weekly-vs-monthly-mcx-options-india",
