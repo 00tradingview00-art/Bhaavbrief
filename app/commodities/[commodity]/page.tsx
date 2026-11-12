@@ -2,14 +2,13 @@ import { notFound }        from 'next/navigation'
 import Link                 from 'next/link'
 import type { Metadata }    from 'next'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
+import { loadMarketStructure } from '@/lib/marketStructure'
 
 type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel' | 'electricity'
 import { getAllArticles }   from '@/lib/articles'
 import { getAllBriefs }     from '@/lib/briefs'
 import { getActiveArcs }    from '@/lib/arcs'
 import { normalizeCommodityValue, KEY_TO_MCX_LABEL, type CommodityKey } from '@/lib/commodityTags'
-import fs                   from 'fs'
-import path                 from 'path'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
 import UpcomingEventsForCommodity from '@/components/UpcomingEventsForCommodity'
 import CommodityVisitTracker from '@/components/CommodityVisitTracker'
@@ -22,18 +21,6 @@ import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
-
-type CommodityInfo = {
-  name: string; mcxSymbol: string; unit: string; lotSize: string; tickSize: string
-  typicalMargin: string; contractValue: string; importParity: string
-  supplyControl: string; keyBodies: string[]; demandDrivers: string[]
-  priceDrivers: string[]; keyRisk: string; taxNote: string; macroLinks: string[]
-}
-
-function loadMarketStructure(): Record<string, CommodityInfo> {
-  const file = path.join(process.cwd(), 'data/market-structure.json')
-  return JSON.parse(fs.readFileSync(file, 'utf8'))
-}
 
 // ── Slug → internal key mapping ───────────────────────────────────────────────
 
@@ -337,8 +324,9 @@ export default async function CommodityPage({ params }: Props) {
   const entry = SLUG_MAP[commodity]
   if (!entry) notFound()
 
-  const marketStructure = loadMarketStructure()
-  const info   = marketStructure[entry.key]
+  const marketStructure = await loadMarketStructure()
+  const info = marketStructure?.[entry.key]
+  if (!info) notFound()
   const color  = entry.color
   const meta   = COMMODITY_META[entry.key]
 

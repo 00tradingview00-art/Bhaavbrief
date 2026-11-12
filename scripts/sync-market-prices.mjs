@@ -11,6 +11,7 @@
 import fs   from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { redisSetJSON } from './lib/redisClient.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT      = path.join(__dirname, '..')
@@ -18,6 +19,16 @@ const ROOT      = path.join(__dirname, '..')
 const SNAPSHOT_FILE  = path.join(ROOT, 'data/market-snapshot.json')
 const SPECS_FILE     = path.join(ROOT, 'data/contract-specs.json')
 const STRUCTURE_FILE = path.join(ROOT, 'data/market-structure.json')
+const REDIS_STRUCTURE_KEY = 'market-structure:latest'
+
+async function writeStructureToRedis(structure) {
+  try {
+    await redisSetJSON(REDIS_STRUCTURE_KEY, structure)
+    console.log(`  Redis: wrote ${REDIS_STRUCTURE_KEY}`)
+  } catch (e) {
+    console.warn(`  Redis write failed (non-fatal): ${e.message}`)
+  }
+}
 
 // market-structure key → { snapshot instrument key, price unit multiplier, quoted unit }
 // lotMultiplier: how many price-quote units make one lot
@@ -120,6 +131,7 @@ if (updated > 0) {
   fs.writeFileSync(tmpFile, output, 'utf8')
   fs.renameSync(tmpFile, STRUCTURE_FILE) // atomic on same filesystem
   console.log(`Synced ${updated} commodity/ies in market-structure.json`)
+  await writeStructureToRedis(structure)
 } else {
   console.log('Market prices in sync — no update needed')
 }

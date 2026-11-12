@@ -55,16 +55,18 @@ jobs:
         id: engine
         continue-on-error: true
         env:
-          ANTHROPIC_API_KEY:  ${{ secrets.ANTHROPIC_API_KEY }}
-          EIA_API_KEY:        ${{ secrets.EIA_API_KEY }}
-          KITE_API_KEY:       ${{ secrets.KITE_API_KEY }}
-          KITE_API_SECRET:    ${{ secrets.KITE_API_SECRET }}
-          KITE_ACCESS_TOKEN:  ${{ secrets.KITE_ACCESS_TOKEN }}
+          ANTHROPIC_API_KEY:        ${{ secrets.ANTHROPIC_API_KEY }}
+          EIA_API_KEY:              ${{ secrets.EIA_API_KEY }}
+          KITE_API_KEY:             ${{ secrets.KITE_API_KEY }}
+          KITE_API_SECRET:          ${{ secrets.KITE_API_SECRET }}
+          KITE_ACCESS_TOKEN:        ${{ secrets.KITE_ACCESS_TOKEN }}
+          UPSTASH_REDIS_REST_URL:   ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
           # Needed here (not just the "Alert on failure" step below) — the
           # Pro Research queue processed inside this run sends its own alert
           # for a gate-internal-error, not just on the whole workflow failing.
-          BREVO_API_KEY:      ${{ secrets.BREVO_API_KEY }}
-          SENDER_EMAIL:       ${{ secrets.SENDER_EMAIL }}
+          BREVO_API_KEY:            ${{ secrets.BREVO_API_KEY }}
+          SENDER_EMAIL:             ${{ secrets.SENDER_EMAIL }}
         run: node scripts/intelligence-engine.js
 
       - name: Drop any article that won't compile as MDX
@@ -82,12 +84,11 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: node scripts/check-arc-health.mjs
 
-      - name: Update site stats
-        continue-on-error: true
-        run: node scripts/update-site-stats.mjs
-
       - name: Sync market structure prices
         continue-on-error: true
+        env:
+          UPSTASH_REDIS_REST_URL:   ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
         run: node scripts/sync-market-prices.mjs
 
       - name: Commit & push if article published
@@ -112,11 +113,8 @@ jobs:
           [ -d content/research ] && git add content/research/ || true
           git add data/gate-log.jsonl 2>/dev/null || true
           git add data/last-article-title.txt data/mcx-last-prices.json 2>/dev/null || true
-          git add data/market-snapshot.json data/story-arcs.json data/site-stats.json data/market-structure.json 2>/dev/null || true
+          git add data/market-snapshot.json data/story-arcs.json 2>/dev/null || true
           [ -d data/history ] && git add data/history/ || true
-          # Always commit engine state — lastArticleAt + lastPrices must persist between runs
-          # Without this, each run starts from a clean checkout and the cooldown resets
-          git add data/engine-state.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Nothing to commit"
             exit 0

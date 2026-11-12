@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import fs from 'fs'
 import path from 'path'
 import { loadSnapshot, snapshotAgeMinutes, isMCXOpenNow } from '@/lib/snapshot'
+import { redisCommand } from '@/lib/redis'
 import { todayIST, isTradingDay, toISTDate, istMinutesSinceMidnight, BRIEF_DEADLINE_IST_MINUTES, holidayCalendarStatus } from '@/lib/tradingCalendar'
 
 export const runtime    = 'nodejs'
@@ -86,9 +87,17 @@ function checkBrief() {
   }
 }
 
-function checkEngine() {
+const ENGINE_STATE_REDIS_KEY = 'engine-state:latest'
+
+async function checkEngine() {
   try {
-    const state = loadJSON<{ lastChecked?: string }>('data/engine-state.json')
+    let state: { lastChecked?: string } | null = null
+    try {
+      const cached = await redisCommand('GET', ENGINE_STATE_REDIS_KEY)
+      if (cached && typeof cached === 'string') state = JSON.parse(cached)
+    } catch { /* fall through to file */ }
+    if (!state) state = loadJSON<{ lastChecked?: string }>('data/engine-state.json')
+
     if (!state?.lastChecked) return { ok: false, reason: 'engine-state.json missing lastChecked' }
 
     const ageMinutes = (Date.now() - new Date(state.lastChecked).getTime()) / 60000
@@ -125,7 +134,7 @@ export async function GET() {
   const checks = {
     snapshot: await checkSnapshot(),
     brief:    checkBrief(),
-    engine:   checkEngine(),
+    engine:   await checkEngine(),
     calendar: checkCalendar(),
   }
 

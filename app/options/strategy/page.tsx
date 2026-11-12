@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import fs from 'fs'
-import path from 'path'
 import nextDynamic from 'next/dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
 import { safeJsonLd } from '@/lib/seo'
 import { getOptionsChain, MCX_INSTRUMENTS } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
+import { loadMarketStructure } from '@/lib/marketStructure'
 
 export const dynamic = 'force-dynamic'
 
@@ -81,12 +80,11 @@ const MINI_MARGIN_FALLBACK: Record<string, string> = {
   CRUDEOILM: '₹3,000–5,000',
 }
 
-function loadMarginByInstrument(): Record<string, string | null> {
-  const file = path.join(process.cwd(), 'data/market-structure.json')
-  const marketStructure = JSON.parse(fs.readFileSync(file, 'utf8'))
+async function loadMarginByInstrument(): Promise<Record<string, string | null>> {
+  const marketStructure = await loadMarketStructure()
   return {
     ...Object.fromEntries(
-      Object.entries(MARGIN_KEY_MAP).map(([code, key]) => [code, marketStructure[key]?.typicalMargin ?? null]),
+      Object.entries(MARGIN_KEY_MAP).map(([code, key]) => [code, marketStructure?.[key]?.typicalMargin ?? null]),
     ),
     ...MINI_MARGIN_FALLBACK,
   }
@@ -101,7 +99,7 @@ export default async function StrategyPage({
   const defaultInstrument = VALID_INSTRUMENTS.includes(instrument?.toUpperCase() ?? '')
     ? instrument!.toUpperCase()
     : 'GOLD'
-  const marginByInstrument = loadMarginByInstrument()
+  const marginByInstrument = await loadMarginByInstrument()
   // Shared spread links: ?tab=spreads&near=YYYY-MM-DD&far=YYYY-MM-DD&side=BUY|SELL&lots=N.
   // Anything malformed is dropped; the Spreads tab re-validates against live months anyway.
   const isDate = (v?: string) => !!v && /^\d{4}-\d{2}-\d{2}$/.test(v)

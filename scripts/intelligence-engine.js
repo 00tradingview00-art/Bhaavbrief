@@ -27,6 +27,7 @@ import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } fro
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
 import { formatApprovedLinks } from '../lib/learn-link-map.js'
 import { escapeBareLessThan } from './lib/mdxSafe.mjs'
+import { redisCommand, redisSetJSON } from './lib/redisClient.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
@@ -358,24 +359,45 @@ const SESSION_FOCUS = {
 }
 
 // ── 1. State Management ───────────────────────────────────────────────────────
-function loadState() {
+// Redis is the source of truth for cross-run state — the GH Actions runner is
+// stateless between runs, and this file is no longer committed on every run
+// (see intelligence-engine.yml), so a frozen git copy would go stale fast.
+// Fallback order: Redis → local file (this run's own last write, or a stale
+// git-era copy) → hardcoded empty default.
+const ENGINE_STATE_REDIS_KEY = 'engine-state:latest'
+
+const DEFAULT_STATE = {
+  lastPrices: {},
+  lastChecked: null,
+  lastCirculars: { sebi: null, mcx: null, rbi: null, ppac: null },
+  lastEia: { period: null, value: null },
+  lastGeoNews: {},
+  articlesToday: [],
+  lastArticleAt: null,
+}
+
+async function loadState() {
+  try {
+    const cached = await redisCommand('GET', ENGINE_STATE_REDIS_KEY)
+    if (cached && typeof cached === 'string') return JSON.parse(cached)
+  } catch { /* fall through to file */ }
   try {
     return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
   } catch {
-    return {
-      lastPrices: {},
-      lastChecked: null,
-      lastCirculars: { sebi: null, mcx: null, rbi: null, ppac: null },
-      lastEia: { period: null, value: null },
-      lastGeoNews: {},
-      articlesToday: [],
-      lastArticleAt: null,
-    }
+    return { ...DEFAULT_STATE }
   }
 }
 
 function saveState(state) {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8')
+}
+
+async function saveStateToRedis(state) {
+  try {
+    await redisSetJSON(ENGINE_STATE_REDIS_KEY, state)
+  } catch (e) {
+    console.warn(`Redis engine-state write failed (non-fatal): ${e.message}`)
+  }
 }
 
 // ── 2. Price Fetching — Kite (live MCX) + Yahoo Finance COMEX + Frankfurter USD/INR ──
@@ -1525,7 +1547,7 @@ async function main() {
     return
   }
 
-  const state = loadState()
+  const state = await loadState()
 
   if (!state.lastChecked) {
     console.log('First run — seeding prices, no articles triggered')
@@ -1538,6 +1560,7 @@ async function main() {
     }
     state.lastChecked = new Date().toISOString()
     saveState(state)
+    await saveStateToRedis(state)
     console.log('Prices seeded. Engine will trigger articles on next run.')
     return
   }
@@ -1554,6 +1577,7 @@ async function main() {
       state.lastChecked = new Date().toISOString()
     }
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1576,6 +1600,7 @@ async function main() {
   if (!prices) {
     console.warn('No price data — skipping this run')
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1636,6 +1661,7 @@ async function main() {
     else if (!hardMove)      console.log('No qualifying price move (need ≥2%) — holding')
     else                     console.log('No trigger condition met — holding')
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1685,6 +1711,7 @@ async function main() {
   if (!mdx || !mdx.includes('---') || !mdx.includes('title:')) {
     console.error('Invalid MDX generated — aborting')
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1692,6 +1719,7 @@ async function main() {
   if (bannedHits.length > 0) {
     console.error(`Compliance scan failed — article suppressed. Found: [${bannedHits.join(', ')}]`)
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1704,6 +1732,7 @@ async function main() {
   const result = saveArticle(mdx)
   if (!result) {
     saveState(state)
+    await saveStateToRedis(state)
     return
   }
 
@@ -1752,6 +1781,7 @@ async function main() {
   if (triggeringKey) state.lastCoveredAt[triggeringKey] = state.lastArticleAt
 
   saveState(state)
+  await saveStateToRedis(state)
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(1)
   console.log(`\nDone in ${elapsed}s — "${result.title}"`)
