@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T11:29:23.949Z",
+  "generatedAt": "2026-11-12T11:29:22.683Z",
   "generatedAtIST": "2026-11-12 16:59 IST",
   "source": "kite+yahoo",
   "instruments": {
@@ -34,9 +34,9 @@
       "unit": "INR/mmBtu"
     },
     "USDINR": {
-      "price": 94.13,
+      "price": 94.14,
       "prevClose": 93.88,
-      "changePct": 0.269,
+      "changePct": 0.2743,
       "unit": "INR"
     },
     "COMEX_GOLD": {
@@ -119,10 +119,10 @@
     }
   },
   "derived": {
-    "importParityGoldINR": 119677,
-    "mcxComexGoldSpreadPct": 15.47,
-    "importParitySilverINR": 154707,
-    "mcxComexSilverSpreadPct": 17.45,
+    "importParityGoldINR": 119690,
+    "mcxComexGoldSpreadPct": 15.46,
+    "importParitySilverINR": 154723,
+    "mcxComexSilverSpreadPct": 17.44,
     "goldSilverRatio": 77.4
   }
 }
