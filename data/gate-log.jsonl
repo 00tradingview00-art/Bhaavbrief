@@ -660,3 +660,4 @@
 {"type":"generation_call","call":"consistency_check","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":712,"outputTokens":80,"latencyMs":1269,"payloadHash":"db82ba680665e96c","calledAt":"2026-11-12T04:01:38.840Z"}
 {"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":856,"outputTokens":198,"latencyMs":2373,"payloadHash":"f550cfe50a9e751b","calledAt":"2026-11-12T04:01:40.111Z"}
 {"type":"gate_run","edition":145,"briefPath":"content/briefs/edition-145.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":4177,"checkedAt":"2026-11-12T04:01:46.714Z"}
+{"type":"gate_run","edition":null,"briefPath":"content/articles/2026-11-12-mcx-close-12nov2026-energy-outperforms.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":4436,"checkedAt":"2026-11-12T21:53:39.689Z"}
