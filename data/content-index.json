@@ -22,6 +22,27 @@
   },
   {
     "type": "article",
+    "slug": "2026-11-12-mcx-algo-trading-api-access-india",
+    "href": "/articles/2026-11-12-mcx-algo-trading-api-access-india",
+    "title": "MCX Algorithmic Trading and API Access for Retail Traders in India",
+    "description": "Understand how MCX algo trading API access India retail traders can use works, covering broker gateways, SEBI rules, and price transmission mechanics.",
+    "excerpt": "MCX algo trading API access for India retail traders has become genuinely accessible over the last five years, with SEBI-registered brokers now offering direct algorithmic connectivity to the exchange",
+    "date": "2026-11-12",
+    "edition": "keyword-brief",
+    "tags": [
+      "macro",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "macro",
+    "commodities": [
+      "macro"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
     "href": "/articles/2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
     "title": "MCX Nat Gas Slides 2.8% as Henry Hub Weakness Signals Winter Demand Softness",
