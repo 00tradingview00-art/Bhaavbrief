@@ -9,7 +9,7 @@
  * greps every page/route file and fails if:
  *   (a) its literal `revalidate` value isn't one of REVALIDATE below, or
  *   (b) it imports live/intra-day data (lib/snapshot, lib/prices, lib/briefs,
- *       lib/flash, lib/articles, lib/options, lib/tradingCalendar) but
+ *       lib/articles, lib/options, lib/tradingCalendar) but
  *       declares no revalidate/dynamic export at all — i.e. is silently
  *       full-SSG and will only ever refresh on the next deploy. This is
  *       exactly the D-01 failure mode: `/briefs` and `/feed.xml` were both
@@ -40,7 +40,6 @@ export const LIVE_DATA_IMPORT_MARKERS = [
   '@/lib/snapshot',
   '@/lib/prices',
   '@/lib/briefs',
-  '@/lib/flash',
   '@/lib/articles',
   '@/lib/options',
   '@/lib/tradingCalendar',

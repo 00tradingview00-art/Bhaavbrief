@@ -1,5 +1,4 @@
 import { getAllBriefs }   from '@/lib/briefs'
-import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
 export const revalidate = 1800 // news sitemap: rebuild every 30 min
@@ -24,16 +23,12 @@ function newsEntry(loc: string, pubDate: string, title: string): string {
 }
 
 export async function GET() {
-  const [briefs, flash, articles] = await Promise.all([getAllBriefs(), getAllFlash(), getAllArticles()])
+  const [briefs, articles] = await Promise.all([getAllBriefs(), getAllArticles()])
   const cutoff = Date.now() - FORTY_EIGHT_HOURS
 
   const briefEntries = briefs
     .filter(b => { const ts = new Date(b.date).getTime(); return !isNaN(ts) && ts >= cutoff })
     .map(b => newsEntry(`${BASE}/briefs/${b.urlSlug}`, new Date(b.date).toISOString(), escapeXml(b.title)))
-
-  const flashEntries = flash
-    .filter(f => { const ts = new Date(f.date).getTime(); return !isNaN(ts) && ts >= cutoff })
-    .map(f => newsEntry(`${BASE}/flash/${f.slug}`, new Date(f.date).toISOString(), escapeXml(f.title)))
 
   const articleEntries = articles
     .filter(a => { const ts = new Date(a.date).getTime(); return !isNaN(ts) && ts >= cutoff })
@@ -42,7 +37,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-${[...briefEntries, ...articleEntries, ...flashEntries].join('\n')}
+${[...briefEntries, ...articleEntries].join('\n')}
 </urlset>`
 
   return new Response(xml, {

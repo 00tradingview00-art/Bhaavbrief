@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import NewsFeed from '@/components/news/NewsFeed'
-import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 import { getAllResearch } from '@/lib/research'
 import {
@@ -93,22 +92,20 @@ function commodityCategory(commodity: string): string {
 export default async function NewsPage({ searchParams }: { searchParams: SearchParams }) {
   // D-01 (17-Jul audit): this route was found serving a frozen ~7-week-old
   // render in production, with source/content confirmed healthy — pointing at
-  // a silent ISR revalidation failure rather than a code bug. If getAllFlash()
-  // or getAllArticles() ever throws during a future revalidation, log it loudly
+  // a silent ISR revalidation failure rather than a code bug. If
+  // getAllArticles() ever throws during a future revalidation, log it loudly
   // instead of letting Vercel silently keep serving the last good render
   // indefinitely, which is what made the original incident take 51 days to
   // notice.
-  let flashItems: ReturnType<typeof getAllFlash>
   let articles: Awaited<ReturnType<typeof getAllArticles>>
   let research: ReturnType<typeof getAllResearch>
   try {
-    ;[flashItems, articles, research] = await Promise.all([
-      Promise.resolve(getAllFlash()),
+    ;[articles, research] = await Promise.all([
       getAllArticles(),
       Promise.resolve(getAllResearch()),
     ])
   } catch (e) {
-    console.error('[news/page] getAllFlash/getAllArticles/getAllResearch threw during render — D-01 class failure:', e)
+    console.error('[news/page] getAllArticles/getAllResearch threw during render — D-01 class failure:', e)
     throw e
   }
 
@@ -118,18 +115,6 @@ export default async function NewsPage({ searchParams }: { searchParams: SearchP
   const generatedAtIST = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 16).replace('T', ' ') + ' IST'
 
   const rawItems: NewsItem[] = [
-    ...flashItems
-      .map(f => ({
-        id:       f.slug,
-        title:    f.title,
-        summary:  f.excerpt,
-        category: f.category,
-        tagType:  f.category === 'forex' ? 'macro' : f.category,
-        pubDate:  f.date,
-        href:       `/flash/${f.slug}`,
-        itemType:   'flash' as const,
-        coverImage: f.coverImage,
-      })),
     ...articles
       .filter(a => a.title !== 'Market Update' && a.date)
       .map(a => ({

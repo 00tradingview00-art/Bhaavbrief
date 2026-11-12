@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "About BhaavBrief — MCX Commodity Intelligence",
-    description: 'Daily OHLC context, open interest, global benchmarks, flash intelligence and live geo risk — built for MCX traders, commodity businesses, and investors.',
+    description: 'Daily OHLC context, open interest, global benchmarks, and market intelligence — built for MCX traders, commodity businesses, and investors.',
     url: 'https://bhaavbrief.in/about',
     siteName: 'BhaavBrief',
     locale: 'en_IN',
@@ -39,7 +39,7 @@ const COMMODITIES = [
 
 
 const PRINCIPLES = [
-  { title: 'Open access', body: 'Daily briefs, flash alerts, and live price data are free for everyone. Pro analytics — full option chains, Greeks, Strategy Builder, and institutional positioning — are available on a paid plan. Commodity intelligence should be accessible to everyone who needs it.' },
+  { title: 'Open access', body: 'Daily briefs and live price data are free for everyone. Pro analytics — full option chains, Greeks, Strategy Builder, and institutional positioning — are available on a paid plan. Commodity intelligence should be accessible to everyone who needs it.' },
   { title: 'Data, not noise', body: 'Every edition leads with price levels, OHLC context, and open interest — the numbers that matter whether you are trading, hedging a business, or tracking an investment.' },
   { title: 'Plain language', body: 'We write for people who need to act on information, not economists. No jargon for its own sake. If a concept needs explaining, we explain it.' },
   { title: 'Transparent about limits', body: 'We are not SEBI registered. We do not give trading calls or buy/sell recommendations. We provide context; you make the decision.' },
@@ -90,8 +90,8 @@ export default async function AboutPage() {
           </h1>
           <p style={{ fontSize: '1.05rem', color: '#48483A', lineHeight: 1.8, fontWeight: 300, maxWidth: 760 }}>
             BhaavBrief publishes a daily open brief at MCX session start — OHLC levels, open interest,
-            global benchmarks, and what they mean for Indian traders. Flash articles go out through the
-            day as prices move. Built for MCX traders, commodity businesses, and anyone whose P&amp;L
+            global benchmarks, and what they mean for Indian traders. Built for MCX traders,
+            commodity businesses, and anyone whose P&amp;L
             is touched by gold, crude, silver, or copper.
           </p>
         </div>
@@ -135,18 +135,18 @@ export default async function AboutPage() {
                     link: '/briefs', linkText: 'Read latest brief',
                   },
                   {
-                    badge: 'Flash',
+                    badge: 'Intelligence',
                     badgeBg: '#EEF2FF', badgeColor: '#3730A3', badgeBorder: '#818CF8',
-                    title: 'Flash articles',
-                    desc: 'Breaking market intelligence published as it happens. Policy decisions, OPEC+ moves, RBI actions, sharp price dislocations — context within minutes, not hours.',
+                    title: 'Market intelligence feed',
+                    desc: 'Articles and hawk-scan alerts on policy decisions, OPEC+ moves, and macro events that move MCX positions, plus Pro Research on scheduled catalysts like FOMC and RBI MPC.',
                     link: '/news', linkText: 'Intelligence feed',
                   },
                   {
-                    badge: 'Geo Risk',
+                    badge: 'Options',
                     badgeBg: '#FFF7E0', badgeColor: '#996600', badgeBorder: '#D4A830',
-                    title: 'Geo risk monitor',
-                    desc: 'Continuous monitoring of geopolitical chokepoints — Strait of Hormuz, Red Sea, Brent supply routes. ELEVATED or STABLE for each corridor, updated every 15 minutes.',
-                    link: '/news', linkText: 'Live feed',
+                    title: 'Live option chain',
+                    desc: 'Black-76 Greeks, implied volatility (iVIX), Max Pain, and PCR for every MCX contract — updated live during market hours.',
+                    link: '/options', linkText: 'View option chain',
                   },
                 ].map(p => (
                   <div key={p.badge} style={{ background: '#F3F2EC', border: '0.5px solid #DDDDD0', padding: '1rem 1.1rem' }}>
@@ -225,9 +225,9 @@ export default async function AboutPage() {
                   data context before the narrative starts.
                 </p>
                 <p>
-                  Through the day, the Flash Intelligence feed covers breaking signals — policy decisions,
-                  major price moves, or macro events that move MCX positions. The Geo Risk Radar monitors
-                  geopolitical chokepoints that affect crude and energy in real time.
+                  The Market Intelligence feed covers policy decisions, macro events, and geopolitical
+                  developments that move MCX positions, alongside Pro Research on scheduled catalysts
+                  like FOMC and RBI MPC.
                 </p>
               </div>
             </section>
@@ -327,8 +327,6 @@ export default async function AboutPage() {
                 { label: 'Frequency',        value: 'Every weekday' },
                 { label: 'Price',            value: 'Free / ₹333 Pro' },
                 { label: 'Format',           value: 'Email + Web' },
-                { label: 'Flash updates',    value: 'During mkt hours' },
-                { label: 'Geo Risk refresh', value: 'Every 15 min' },
               ].map((s, i, arr) => (
                 <div key={s.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', borderBottom: i < arr.length - 1 ? '0.5px solid #DDDDD0' : 'none' }}>
                   <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: '#8A8A7A', letterSpacing: '0.04em' }}>{s.label}</span>
@@ -345,7 +343,7 @@ export default async function AboutPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
                   { href: '/briefs',  label: 'Daily Briefs' },
-                  { href: '/news',    label: 'Flash Intelligence' },
+                  { href: '/news',    label: 'Market Intelligence' },
                   { href: '/markets', label: 'Live Prices' },
                   { href: '/learn',   label: 'Learn MCX Trading' },
                   { href: '/invest',  label: 'How to Invest' },

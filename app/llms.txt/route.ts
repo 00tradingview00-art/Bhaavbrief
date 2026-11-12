@@ -1,6 +1,5 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { getAllArticles } from '@/lib/articles'
-import { getAllFlash } from '@/lib/flash'
 import { getAllResearch } from '@/lib/research'
 
 export const dynamic = 'force-dynamic'
@@ -15,14 +14,13 @@ export async function GET() {
 
   const recentBriefs  = briefs.slice(0, 10)
   const recentArticles = articles.slice(0, 10)
-  const recentFlash = getAllFlash().slice(0, 10)
   const recentResearch = getAllResearch().filter(r => r.published).slice(0, 10)
 
   const body = `# BhaavBrief
 
-> India's First Commodity Intelligence Platform — daily MCX briefs, intraday flash signals, and deep educational guides for Indian commodity traders, businesses, and investors.
+> India's First Commodity Intelligence Platform — daily MCX briefs, live market intelligence, and deep educational guides for Indian commodity traders, businesses, and investors.
 
-BhaavBrief publishes commodity intelligence every weekday at 9:30 AM IST covering MCX Gold, Silver, Crude Oil, Copper, Natural Gas, Zinc, Aluminium, Lead, and Nickel. Each brief leads with OHLC levels, open interest, percent change, and global benchmark prices (COMEX, LME, WTI/Brent, USD/INR) before narrative analysis. Through the day, the Flash Intelligence feed covers breaking signals — policy decisions, OPEC+ moves, price dislocations. The MCX Option Chain provides live Black-76 Greeks, implied volatility (iVIX), Max Pain, and PCR. The MCX Event Calendar maps scheduled macro/data-release events (EIA storage, FOMC, RBI MPC, Union Budget, China PMI) to the contracts they typically move, with historical impact statistics. The Learn section provides India-specific MCX trading guides with exact ₹ figures, MCX lot sizes, margin requirements, and regulatory detail not available elsewhere.
+BhaavBrief publishes commodity intelligence every weekday at 9:30 AM IST covering MCX Gold, Silver, Crude Oil, Copper, Natural Gas, Zinc, Aluminium, Lead, and Nickel. Each brief leads with OHLC levels, open interest, percent change, and global benchmark prices (COMEX, LME, WTI/Brent, USD/INR) before narrative analysis. The MCX Option Chain provides live Black-76 Greeks, implied volatility (iVIX), Max Pain, and PCR. The MCX Event Calendar maps scheduled macro/data-release events (EIA storage, FOMC, RBI MPC, Union Budget, China PMI) to the contracts they typically move, with historical impact statistics. The Learn section provides India-specific MCX trading guides with exact ₹ figures, MCX lot sizes, margin requirements, and regulatory detail not available elsewhere.
 
 Not SEBI registered. Educational and informational purposes only. No buy/sell calls.
 
@@ -30,7 +28,7 @@ Not SEBI registered. Educational and informational purposes only. No buy/sell ca
 
 - [Home](${BASE}/): Commodity intelligence hub with live prices and latest brief
 - [Daily Briefs](${BASE}/briefs): All MCX morning editions — OHLC, open interest, macro context
-- [Flash Intelligence](${BASE}/news): Intraday market signals and breaking commodity news
+- [Market Intelligence Feed](${BASE}/news): Daily articles, hawk-scan alerts and Pro research on what's moving MCX
 - [Live Prices](${BASE}/markets): Real-time MCX commodity prices with OHLC and change
 - [MCX Option Chain](${BASE}/options): Live Black-76 Greeks, implied volatility (iVIX), Max Pain, PCR, OI concentration map
 - [MCX Event Calendar](${BASE}/calendar): Scheduled macro/data-release events mapped to MCX contracts — EIA, FOMC, RBI MPC, Union Budget, China PMI, with historical impact stats
@@ -81,7 +79,7 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 
 ## Pro Analytics Tools
 
-BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, flash intelligence, live prices, the event calendar, and the option chain around the money (11 strikes, every expiry, Max Pain, PCR, OI Map); Greeks and the full chain are Pro.
+BhaavBrief Pro (${BASE}/pro) unlocks the full MCX options chain, Greeks, Strategy Builder, IV analytics, and institutional positioning data — ₹33/day, ₹333/month, or ₹2,999/year. Free tier includes the daily brief, the market intelligence feed, live prices, the event calendar, and the option chain around the money (11 strikes, every expiry, Max Pain, PCR, OI Map); Greeks and the full chain are Pro.
 
 - [BhaavBrief Pro](${BASE}/pro): Pricing and full feature breakdown for the MCX options analytics subscription
 - [Pro Research](${BASE}/research): Macro event analysis — FOMC, Jackson Hole, EIA, RBI MPC — with MCX-specific implications published within hours
@@ -112,12 +110,6 @@ ${recentBriefs.map(b =>
 
 ${recentArticles.map(a =>
   `- [${a.title}](${BASE}/articles/${a.slug}): ${a.displayDate}${a.description ? ' — ' + a.description.slice(0, 120) : ''}`
-).join('\n')}
-
-## Recent Flash Intelligence
-
-${recentFlash.map(f =>
-  `- [${f.title}](${BASE}/flash/${f.slug}): ${f.date.slice(0, 10)}${f.excerpt ? ' — ' + f.excerpt.slice(0, 120) : ''}`
 ).join('\n')}
 
 ## Data Coverage

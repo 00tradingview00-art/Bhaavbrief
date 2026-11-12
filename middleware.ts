@@ -10,6 +10,15 @@ import { NextResponse } from 'next/server'
 const isProtectedPage = createRouteMatcher(['/account', '/alerts'])
 
 export default clerkMiddleware(async (auth, req) => {
+  // Flash Intelligence (System A) was decommissioned — GA4 showed near-zero,
+  // bot-pattern traffic. 721 /flash/[slug] URLs were already indexed by
+  // Google, so this returns 410 Gone rather than a bare 404 — 410 is the
+  // correct signal for deliberate, permanent removal and deindexes faster.
+  // content/flash/*.mdx is deleted from git; history preserves it if needed.
+  if (req.nextUrl.pathname.startsWith('/flash/')) {
+    return new NextResponse('Gone', { status: 410 })
+  }
+
   // auth.protect() returns a Promise — it must be awaited, or its rejection
   // (which is how it signals "deny this request") becomes an unhandled
   // rejection instead of actually blocking anything, and the request falls

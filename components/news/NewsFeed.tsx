@@ -70,7 +70,6 @@ function TypeBadge({ itemType, premium }: { itemType?: NewsItem['itemType']; pre
   if (itemType === 'hawk-scan') return (
     <Pill tone="down" size="sm">⚡ Hawk-Scan</Pill>
   )
-  if (itemType === 'flash') return null
   if (itemType === 'alert') return (
     <Pill tone="up" size="sm">Analysis</Pill>
   )

@@ -1,5 +1,4 @@
 import { getAllBriefs }   from '@/lib/briefs'
-import { getAllFlash }    from '@/lib/flash'
 import { getAllArticles } from '@/lib/articles'
 
 // P-03: was undeclared (full-SSG, only refreshes on redeploy) despite reading
@@ -35,9 +34,8 @@ function newsBlock(title: string, pubIso: string) {
 }
 
 export async function GET() {
-  const [briefs, flash, articles] = await Promise.all([
+  const [briefs, articles] = await Promise.all([
     getAllBriefs(),
-    Promise.resolve(getAllFlash()),
     getAllArticles(),
   ])
 
@@ -62,25 +60,6 @@ ${newsBlock(b.title, iso)}
     }
   })
 
-  const flashItems: FeedItem[] = flash.slice(0, 20).flatMap(f => {
-    const pub = new Date(f.date)
-    if (isNaN(pub.getTime())) return []
-    const iso = pub.toISOString()
-    return [{
-      date: f.date,
-      xml: `
-    <item>
-      <title><![CDATA[${f.title}]]></title>
-      <link>${BASE_URL}/flash/${f.slug}</link>
-      <guid isPermaLink="true">${BASE_URL}/flash/${f.slug}</guid>
-      <pubDate>${pub.toUTCString()}</pubDate>
-      <description><![CDATA[${f.excerpt ?? ''}]]></description>
-      <category>${f.category}</category>
-${newsBlock(f.title, iso)}
-    </item>`,
-    }]
-  })
-
   const articleItems: FeedItem[] = articles.slice(0, 10).flatMap(a => {
     const pub = new Date(a.date)
     if (isNaN(pub.getTime())) return []
@@ -101,7 +80,7 @@ ${newsBlock(a.title, iso)}
     }]
   })
 
-  const allItems = [...briefItems, ...flashItems, ...articleItems]
+  const allItems = [...briefItems, ...articleItems]
     .filter(i => i.date)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 40)

@@ -54,7 +54,7 @@ export default function TermsPage() {
           <p>
             BhaavBrief (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is a commodity intelligence platform published at{' '}
             <a href="https://bhaavbrief.in" style={{ color: '#C8720A' }}>bhaavbrief.in</a>. We publish
-            daily MCX commodity market intelligence, intraday flash signals, and educational content
+            daily MCX commodity market intelligence and educational content
             covering Gold, Silver, Crude Oil, Copper, and Natural Gas. BhaavBrief is free to access.
           </p>
         </Section>
@@ -63,8 +63,8 @@ export default function TermsPage() {
           <p>
             <strong>BhaavBrief is for educational and informational purposes only.</strong> We are not
             registered with SEBI (Securities and Exchange Board of India) or any other regulatory
-            authority. Nothing on this platform — including daily briefs, flash intelligence, geo risk
-            analysis, or any other content — constitutes investment advice, a trading recommendation,
+            authority. Nothing on this platform — including daily briefs or any other content —
+            constitutes investment advice, a trading recommendation,
             or a solicitation to buy or sell any security, commodity, or derivative instrument.
           </p>
           <p style={{ marginTop: '0.75rem' }}>

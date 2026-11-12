@@ -47,7 +47,6 @@ const SCHEMA = {
 
 const FREE_FEATURES = [
   'Daily MCX brief at 9:30 AM IST',
-  'Flash intelligence during market hours',
   'Live MCX prices (gold, silver, crude, copper, natgas)',
   'MCX event calendar (EIA, FOMC, RBI MPC, OPEC)',
   'MCX option chain — 11 strikes around the money, every expiry, with Max Pain, PCR and OI map',

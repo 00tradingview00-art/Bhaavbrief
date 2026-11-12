@@ -445,7 +445,7 @@ jobs:
               \"sender\": { \"name\": \"BhaavBrief Watchdog\", \"email\": \"${SENDER_EMAIL}\" },
               \"to\": [{ \"email\": \"00tradingview00@gmail.com\" }],
               \"subject\": \"⚠️ Basis snapshot missing for ${DATE_LABEL}\",
-              \"htmlContent\": \"<p>The daily Basis snapshot (scripts/fetch-snapshot.mjs → data/history/${DATE_LABEL}.json) was not committed for <strong>${DATE_LABEL}</strong>.</p><p>Check the generate-brief / evening-close-brief / flash-brief / intelligence-engine / site-guardian workflow runs for that day — any of them can write this file, so check which one(s) failed.</p>\"
+              \"htmlContent\": \"<p>The daily Basis snapshot (scripts/fetch-snapshot.mjs → data/history/${DATE_LABEL}.json) was not committed for <strong>${DATE_LABEL}</strong>.</p><p>Check the generate-brief / evening-close-brief / intelligence-engine / site-guardian workflow runs for that day — any of them can write this file, so check which one(s) failed.</p>\"
             }"
           echo "Alert sent for missing Basis snapshot"
           exit 1

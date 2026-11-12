@@ -25,7 +25,7 @@ export interface NewsItem {
   pubDate:     string
   pubDateIST?: string
   href?:       string
-  itemType?:   'news' | 'flash' | 'alert' | 'hawk-scan' | 'research'
+  itemType?:   'news' | 'alert' | 'hawk-scan' | 'research'
   coverImage?: string
   premium?:    boolean
 }
