@@ -9,6 +9,8 @@ import Pill from '@/components/ui/Pill'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
+import type { BriefMeta } from '@/lib/briefs'
+import RecentBriefsList from '@/components/brief/RecentBriefsList'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -265,7 +267,7 @@ function OptionsSnapshot({ data }: { data: Record<CoreInstrument, TerminalInstru
 
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
-export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null> }) {
+export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData, recentBriefs }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null>; recentBriefs?: BriefMeta[] }) {
   const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
   const [flashing, setFlashing]     = useState(false)
   const [loading, setLoading]       = useState(false)
@@ -479,6 +481,8 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
           Read latest brief →
         </Link>
       </div>
+
+      <RecentBriefsList briefs={recentBriefs ?? []} heading="Recent Briefs" />
 
       {/* ── Global Reference ── */}
       <div style={{ marginBottom: 4 }}>

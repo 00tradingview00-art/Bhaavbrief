@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import nextDynamic from 'next/dynamic'
 import { auth } from '@clerk/nextjs/server'
 import { isProUser } from '@/lib/subscription'
@@ -138,6 +139,11 @@ export default async function StrategyPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
       <StrategyBuilder key={defaultInstrument} defaultInstrument={defaultInstrument} marginByInstrument={marginByInstrument} isPro={isPro}
         defaultTab={tab === 'spreads' ? 'spreads' : 'build'} spreadInit={spreadInit} initialChainData={initialChainData} />
+      <div style={{ marginTop: 24, textAlign: 'center' }}>
+        <Link href="/briefs" style={{ fontSize: 13, color: 'var(--gold)', fontWeight: 600, textDecoration: 'none' }}>
+          Read latest brief →
+        </Link>
+      </div>
     </>
   )
 }

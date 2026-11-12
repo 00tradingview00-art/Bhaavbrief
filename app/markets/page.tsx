@@ -4,6 +4,7 @@ import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { loadEIA } from '@/lib/eia'
 import { getSparklineCloses } from '@/lib/history'
 import { getTerminalData } from '@/lib/terminalData'
+import { getAllBriefs } from '@/lib/briefs'
 import { safeJsonLd } from '@/lib/seo'
 
 const SPARKLINE_COMMODITIES = ['gold', 'silver', 'crude', 'copper', 'natgas']
@@ -64,10 +65,11 @@ const SCHEMA = {
 export default async function MarketsPage() {
   const snap = await loadSnapshot()
   const initialPrices = snap ? snapshotToPriceData(snap) : null
-  const [eiaData, optionsData] = await Promise.all([loadEIA(), getTerminalData()])
+  const [eiaData, optionsData, allBriefs] = await Promise.all([loadEIA(), getTerminalData(), getAllBriefs()])
   const sparklines = Object.fromEntries(
     SPARKLINE_COMMODITIES.map(key => [key, getSparklineCloses(key)])
   )
+  const recentBriefs = allBriefs.slice(0, 5)   // unfiltered — /markets isn't commodity-specific
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(SCHEMA) }} />
@@ -78,7 +80,7 @@ export default async function MarketsPage() {
           { label: 'Basis',   href: '/basis' },
         ]}
       />
-      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} optionsData={optionsData} />
+      <MarketsClient initialPrices={initialPrices} eiaData={eiaData} sparklines={sparklines} optionsData={optionsData} recentBriefs={recentBriefs} />
     </>
   )
 }

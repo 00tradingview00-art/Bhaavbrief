@@ -4,6 +4,8 @@ import { getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { safeJsonLd } from '@/lib/seo'
 import { formatAsOfIST } from '@/lib/formatTime'
+import { getAllBriefs } from '@/lib/briefs'
+import RecentBriefsList from '@/components/brief/RecentBriefsList'
 
 // Code-split — OptionChain is ~1,100 lines of client JS. Server-rendered
 // (default ssr:true) so SEO/JSON-LD content is unaffected; this only defers
@@ -109,18 +111,22 @@ const INSTRUMENT_LABELS: Record<string, string> = {
 // caching. This page always seeds the same default (Gold) chain for everyone.
 export default async function OptionsPage() {
   const instrument = 'GOLD'
-  const initialData = await getOptionsChain(instrument).catch(async (err) => {
-    // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
-    // last-known-good chain so the free-tier blurred preview shows real (if stale)
-    // strikes instead of degrading to all-dash placeholder rows.
-    //
-    // Logged because this catch was otherwise completely silent: a Kite outage and
-    // a healthy render looked identical in the logs, so there was no way to tell
-    // how often this page was serving stale strikes.
-    console.error('[options] live chain fetch failed for', instrument, err)
-    const cached = await getCachedOptionsChain(instrument)
-    return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
-  })
+  const [initialData, allBriefs] = await Promise.all([
+    getOptionsChain(instrument).catch(async (err) => {
+      // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
+      // last-known-good chain so the free-tier blurred preview shows real (if stale)
+      // strikes instead of degrading to all-dash placeholder rows.
+      //
+      // Logged because this catch was otherwise completely silent: a Kite outage and
+      // a healthy render looked identical in the logs, so there was no way to tell
+      // how often this page was serving stale strikes.
+      console.error('[options] live chain fetch failed for', instrument, err)
+      const cached = await getCachedOptionsChain(instrument)
+      return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
+    }),
+    getAllBriefs(),
+  ])
+  const recentBriefs = allBriefs.slice(0, 5)
 
   return (
     <div className="bb-options-page">
@@ -178,6 +184,12 @@ export default async function OptionsPage() {
           </details>
         ))}
       </div>
+
+      {recentBriefs.length > 0 && (
+        <div style={{ marginTop: 32 }}>
+          <RecentBriefsList briefs={recentBriefs} heading="Recent Briefs" />
+        </div>
+      )}
     </div>
   )
 }

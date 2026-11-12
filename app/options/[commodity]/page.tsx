@@ -7,6 +7,9 @@ import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
 import { safeJsonLd } from '@/lib/seo'
 import { notFound } from 'next/navigation'
 import { formatAsOfIST } from '@/lib/formatTime'
+import { getAllBriefs, getRecentBriefsByCommodity } from '@/lib/briefs'
+import { normalizeCommodityValue, KEY_TO_MCX_LABEL } from '@/lib/commodityTags'
+import RecentBriefsList from '@/components/brief/RecentBriefsList'
 
 // Code-split — see app/options/page.tsx for why (same component, same reasoning).
 const OptionChain = dynamic(() => import('@/components/mcx/OptionChain'))
@@ -144,18 +147,25 @@ export default async function OptionsCommodityPage({ params }: Props) {
   const meta = COMMODITY_META[commodity]
   if (!instrument || !meta) notFound()
 
-  const initialData = await getOptionsChain(instrument).catch(async (err) => {
-    // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
-    // last-known-good chain so the free-tier blurred preview shows real (if stale)
-    // strikes instead of degrading to all-dash placeholder rows.
-    //
-    // Logged because this catch was otherwise completely silent: a Kite outage and
-    // a healthy render looked identical in the logs, so there was no way to tell
-    // how often this page was serving stale strikes.
-    console.error('[options] live chain fetch failed for', instrument, err)
-    const cached = await getCachedOptionsChain(instrument)
-    return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
-  })
+  const [initialData, allBriefs] = await Promise.all([
+    getOptionsChain(instrument).catch(async (err) => {
+      // Live fetch failed (stale Kite auth, upstream error, etc.) — fall back to the
+      // last-known-good chain so the free-tier blurred preview shows real (if stale)
+      // strikes instead of degrading to all-dash placeholder rows.
+      //
+      // Logged because this catch was otherwise completely silent: a Kite outage and
+      // a healthy render looked identical in the logs, so there was no way to tell
+      // how often this page was serving stale strikes.
+      console.error('[options] live chain fetch failed for', instrument, err)
+      const cached = await getCachedOptionsChain(instrument)
+      return cached ? ({ ...cached, stale: true } as unknown as OptionsChainResult) : null
+    }),
+    getAllBriefs(),
+  ])
+
+  const strippedLabel = meta.label.replace(/\s*mini$/i, '')
+  const briefKey = normalizeCommodityValue(strippedLabel)
+  const recentBriefs = briefKey ? getRecentBriefsByCommodity(allBriefs, KEY_TO_MCX_LABEL[briefKey], 5) : []
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -253,6 +263,12 @@ export default async function OptionsCommodityPage({ params }: Props) {
           </details>
         ))}
       </div>
+
+      {recentBriefs.length > 0 && (
+        <div style={{ marginTop: 32 }}>
+          <RecentBriefsList briefs={recentBriefs} heading={`Recent ${strippedLabel} Briefs`} />
+        </div>
+      )}
     </div>
   )
 }

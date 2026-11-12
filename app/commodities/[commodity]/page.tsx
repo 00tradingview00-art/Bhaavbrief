@@ -6,7 +6,8 @@ import { loadMarketStructure } from '@/lib/marketStructure'
 
 type CommodityPriceKey = 'gold' | 'silver' | 'crude' | 'copper' | 'natgas' | 'zinc' | 'aluminium' | 'lead' | 'nickel' | 'electricity'
 import { getAllArticles }   from '@/lib/articles'
-import { getAllBriefs }     from '@/lib/briefs'
+import { getAllBriefs, getRecentBriefsByCommodity } from '@/lib/briefs'
+import RecentBriefsList     from '@/components/brief/RecentBriefsList'
 import { getActiveArcs }    from '@/lib/arcs'
 import { normalizeCommodityValue, KEY_TO_MCX_LABEL, type CommodityKey } from '@/lib/commodityTags'
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
@@ -395,9 +396,7 @@ export default async function CommodityPage({ params }: Props) {
   // truth (was a locally duplicated map that disagreed with the arc system's
   // natgas naming convention; see lib/commodityTags.ts).
   const briefCommodityLabel = KEY_TO_MCX_LABEL[entry.key as CommodityKey]
-  const recentBriefs = allBriefs
-    .filter(b => b.commodities.includes(briefCommodityLabel))
-    .slice(0, 5)
+  const recentBriefs = getRecentBriefsByCommodity(allBriefs, briefCommodityLabel, 5)
 
   // Developing Story banner — active arc where this commodity is the lead or a named participant.
   // Prefer an arc where this commodity is actually PRIMARY over one that merely
@@ -735,41 +734,7 @@ export default async function CommodityPage({ params }: Props) {
           )}
 
           {/* Recent briefs covering this commodity */}
-          {recentBriefs.length > 0 && (
-            <>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', margin: '0 0 16px' }}>
-                Recent {info.name} Briefs
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
-                {recentBriefs.map(b => (
-                  <Link key={b.slug} href={`/briefs/${b.slug}`} style={{ textDecoration: 'none' }}>
-                    <div style={{
-                      background: 'var(--surface-1)', border: '1px solid var(--border)',
-                      borderRadius: 4, padding: '14px 20px',
-                    }}>
-                      <div style={{ fontSize: 11, color: 'var(--ink-4)', marginBottom: 5, display: 'flex', gap: 8 }}>
-                        <span style={{ color, fontWeight: 600 }}>Edition #{b.edition}</span>
-                        <span>·</span>
-                        <span>{b.displayDate}</span>
-                      </div>
-                      <div style={{
-                        fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500,
-                        color: 'var(--ink)', lineHeight: 1.3,
-                      }}>
-                        {b.title}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-                <Link href="/briefs" style={{
-                  fontSize: 12, color, fontWeight: 500, textDecoration: 'none',
-                  display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4,
-                }}>
-                  View all briefs →
-                </Link>
-              </div>
-            </>
-          )}
+          <RecentBriefsList briefs={recentBriefs} heading={`Recent ${info.name} Briefs`} accentColor={color} />
 
           {/* What moves the price */}
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: 'var(--ink)', margin: '0 0 16px' }}>

@@ -189,6 +189,21 @@ export async function getPrevNextBriefs(currentUrlSlug: string): Promise<{
   }
 }
 
+/**
+ * Filters an already-fetched briefs array down to the most recent ones tagged
+ * with a given MCX commodity label (e.g. KEY_TO_MCX_LABEL.gold === 'MCX Gold').
+ * Pulled out of app/commodities/[commodity]/page.tsx's inline .filter().slice()
+ * so other pages (e.g. /options/[commodity]) share one implementation instead
+ * of re-deriving it.
+ */
+export function getRecentBriefsByCommodity(
+  allBriefs: BriefMeta[],
+  commodityLabel: string,
+  limit = 5,
+): BriefMeta[] {
+  return allBriefs.filter(b => b.commodities.includes(commodityLabel)).slice(0, limit)
+}
+
 export function formatDate(dateStr: string): string {
   if (!dateStr) return ''
   return new Date(dateStr).toLocaleDateString('en-IN', {
