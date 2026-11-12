@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-145",
+    "href": "/briefs/edition-145",
+    "title": "Gold Drops ₹566 as COMEX Slides — The Premium Tells a Different Story",
+    "description": "COMEX gold fell sharply overnight while MCX gold's rupee buffer cushioned the blow, exposing a widening valuation gap traders must weigh.",
+    "excerpt": "MCX Gold ₹139150 | Crude ₹8033 | USDINR ₹93.86 — Gold -0.41% | Crude -1.85% | Silver -0.76% Yesterday's Edge — Result: Edition #144 watched whether COMEX GOLD would close below 4,055.3. Confirmed ✓, n",
+    "date": "2026-11-12T04:00:54.518Z",
+    "edition": "145",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
     "href": "/articles/2026-11-11-mcx-nat-gas-slides-2-8-as-henry-hub-weakness-signals-winter-",
