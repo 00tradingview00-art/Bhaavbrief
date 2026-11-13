@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-11-13-mcx-gold-import-parity-formula",
+    "href": "/articles/2026-11-13-mcx-gold-import-parity-formula",
+    "title": "MCX Gold Import Parity Formula — How to Calculate the Theoretical MCX Price",
+    "description": "Understand what is MCX gold import parity formula India uses to price gold — covering COMEX conversion, duty layers, and rupee impact in 155 characters.",
+    "excerpt": "Understanding what is MCX gold import parity formula India applies to domestic gold pricing is essential for anyone trading, hedging, or sourcing physical gold through MCX. The formula converts the gl",
+    "date": "2026-11-13",
+    "edition": "keyword-brief",
+    "tags": [
+      "gold",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-145",
     "href": "/briefs/edition-145",

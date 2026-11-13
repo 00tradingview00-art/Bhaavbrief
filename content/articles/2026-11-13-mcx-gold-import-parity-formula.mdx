@@ -1,0 +1,50 @@
+---
+title: "MCX Gold Import Parity Formula — How to Calculate the Theoretical MCX Price"
+description: "Understand what is MCX gold import parity formula India uses to price gold — covering COMEX conversion, duty layers, and rupee impact in 155 characters."
+date: "2026-11-13"
+commodity: gold
+tags: ["gold", "mcx", "india", "metals"]
+edition: keyword-brief
+articleType: keyword-brief
+keywords: ["what is mcx gold import parity formula india"]
+---
+
+## Introduction
+
+Understanding what is MCX gold import parity formula India applies to domestic gold pricing is essential for anyone trading, hedging, or sourcing physical gold through MCX. The formula converts the global COMEX benchmark into an INR-denominated price by layering in currency conversion, customs duty, and GST — making MCX gold a derived price, not an independent one.
+
+## The Mechanism
+
+The transmission from COMEX to MCX follows a precise chain. Start with the COMEX spot or futures price quoted in USD per troy ounce. Divide by 31.1035 to convert from troy ounces to grams, then multiply by 10 to arrive at a per-10g figure — the standard MCX unit.
+
+**MCX Gold (₹/10g) = (COMEX $/troy oz ÷ 31.1035) × 10 × USD/INR × 1.12**
+
+The 1.12 multiplier reflects the post-July 2024 Union Budget duty structure: 6% Basic Customs Duty (BCD) + 3% Agriculture Infrastructure Development Cess (AIDC) + 3% GST, compounding to approximately 12% on the CIF import value.
+
+As a worked example: if COMEX trades at $2,400/oz and USD/INR is 83.50 —
+(2400 ÷ 31.1035) × 10 × 83.50 × 1.12 ≈ **₹72,100/10g**
+
+Each variable has a distinct transmission speed. COMEX moves continuously and reprices MCX in near real-time during market hours. USD/INR shifts intraday and can move MCX by ₹300–500/10g on a 50-paise rupee move alone. Import duty changes are discrete, policy-driven events — each 1% change in effective duty shifts the theoretical MCX price by roughly ₹1,000/10g at current price levels.
+
+## India-Specific Context
+
+India's MCX gold price structurally diverges from COMEX because of regulatory and fiscal layers absent in international markets. The import duty regime — currently BCD + AIDC + GST — was meaningfully cut in the July 2024 budget from a combined ~18.45% to ~12%, compressing the domestic premium sharply and briefly widening the MCX-COMEX basis in the opposite direction as physical demand surged.
+
+The MCX contract is sized at 1 kg (100 units of 10g), and positions are marked to market in INR, meaning a trader's P&L is exposed to both COMEX direction and USD/INR simultaneously — a dual risk that purely COMEX-focused traders do not carry. SEBI regulates position limits and circuit filters on MCX, which can freeze price discovery during extreme volatility even when COMEX continues trading. RBI's management of the rupee through intervention also acts as a partial buffer or amplifier depending on its direction.
+
+## Historical Episodes
+
+**July 2019:** The Union Budget raised import duty on gold from 10% to 12.5%. MCX gold prices jumped approximately 2.5–3% overnight relative to what COMEX movement alone would have implied, illustrating the what is MCX gold import parity formula India effect of duty as a price floor shifter.
+
+**March 2020:** COVID-driven USD strength (DXY surged ~8%) and a rupee that weakened past 76/USD caused MCX gold to outperform COMEX in percentage terms — MCX rose roughly 12–14% in the quarter while COMEX rose around 6–8%, with the INR leg accounting for the gap.
+
+**July 2024:** The budget duty cut from ~18.45% to ~12% caused MCX gold to gap lower by approximately ₹4,000–5,000/10g intraday even as COMEX held steady — a stark reminder that Indian import duty is a discrete, non-COMEX risk factor.
+
+## What to Watch
+
+- **COMEX Gold futures** (CME, continuous front-month) — primary price input
+- **USD/INR spot and RBI fixing** — amplifier or dampener on any COMEX move
+- **US 10-Year TIPS yield** (daily, FRED) — rising real yields historically pressure COMEX
+- **Union Budget date and mid-year customs notifications** — duty change risk
+- **WGC Central Bank Gold Demand report** (quarterly) — structural demand signal
+- **MCX daily circuit limits** — currently ±6%; a hit signals extreme basis dislocation requiring recalculation of theoretical parity
