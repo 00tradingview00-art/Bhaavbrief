@@ -1,6 +1,26 @@
 [
   {
     "type": "brief",
+    "slug": "edition-146",
+    "href": "/briefs/edition-146",
+    "title": "Henry Hub Jumps 4% — Cold Air Is Doing What OPEC Cannot",
+    "description": "A sharp natural gas rally driven by weather demand diverges from crude's geopolitical premium, splitting today's commodity narrative in two.",
+    "excerpt": "MCX Gold ₹137412 | Crude ₹8306 | USDINR ₹94.24 — Gold +0.87% | Crude +0.07% | Silver +0.56% Yesterday's Edge — Result: Edition #145 watched whether COMEX GOLD would close below 3,988.5. Confirmed ✓, n",
+    "date": "2026-11-13T04:00:47.011Z",
+    "edition": "146",
+    "tags": [
+      "MCX NatGas",
+      "MCX Crude",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX NatGas",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
+    "type": "brief",
     "slug": "edition-145",
     "href": "/briefs/edition-145",
     "title": "Gold Drops ₹566 as COMEX Slides — The Premium Tells a Different Story",
