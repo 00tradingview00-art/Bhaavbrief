@@ -61,6 +61,28 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-11-13-mcx-close-13nov2026-natgas-selloff",
+    "href": "/articles/2026-11-13-mcx-close-13nov2026-natgas-selloff",
+    "title": "MCX Close 13Nov: NatGas Leads Selloff on Inventory Glut",
+    "description": "13 Nov 2026: NatGas tumbles -1.66% to ₹307.9/mmBtu; Copper down -1.48%. COMEX fading overnight. Key levels for MCX open inside.",
+    "excerpt": "NatGas dominated MCX downside, closing -1.66% at ₹307.9/mmBtu on inventory surplus concerns and weakening Henry Hub fundamentals. Copper followed, shedding -1.48% to ₹1308.55/kg amid broad-based risk-",
+    "date": "2026-11-12T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "NatGas",
+      "Copper",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "brief",
     "slug": "edition-145",
     "href": "/briefs/edition-145",
