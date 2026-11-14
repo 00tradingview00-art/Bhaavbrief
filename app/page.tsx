@@ -650,7 +650,7 @@ export default async function HomePage() {
               fontSize: 19, fontWeight: 700,
               color: '#fff', margin: '0 0 8px', lineHeight: 1.3,
             }}>
-              Get it before market opens.
+              Get it before the session finds direction.
             </p>
             <p style={{
               fontFamily: 'var(--font-sans)', fontSize: 10, letterSpacing: '0.04em',
