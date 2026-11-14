@@ -11,7 +11,11 @@ export const revalidate = 900
 
 const BASE_URL = 'https://bhaavbrief.in'
 
-const TITLE = 'MCX Events Today — Live Economic Calendar | BhaavBrief'
+// No manual "| BhaavBrief" suffix here — the root layout's metadata.title.template
+// already appends it to the <title> tag once; adding it here too produced the
+// literal "| BhaavBrief | BhaavBrief" both third-party audits flagged. openGraph
+// (not covered by that template) builds its own fully-suffixed string below.
+const TITLE = 'MCX Events Today — Live Economic Calendar'
 const DESCRIPTION = "Today's and upcoming macro events that move MCX contracts — EIA storage, FOMC, CPI, RBI MPC, Union Budget, China PMI — with historical price impact. Educational, not advice."
 
 export const metadata: Metadata = {
@@ -30,7 +34,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${BASE_URL}/calendar` },
   openGraph: {
-    title: TITLE,
+    title: `${TITLE} | BhaavBrief`,
     description: DESCRIPTION,
     url: `${BASE_URL}/calendar`,
     siteName: 'BhaavBrief',
