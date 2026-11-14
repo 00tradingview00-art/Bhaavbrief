@@ -41,6 +41,20 @@ export function mcxCloseMinutesIST(dateStr) {
   return isUsDst(dateStr) ? MCX_CLOSE_MINUTES_IST_US_DST : MCX_CLOSE_MINUTES_IST_WINTER
 }
 
+/** Minutes after IST midnight -> "11:30 PM" / "9:00 AM" style label. */
+export function formatMinutesIST(minutes) {
+  const h24 = Math.floor(minutes / 60)
+  const m = minutes % 60
+  const period = h24 >= 12 ? 'PM' : 'AM'
+  const h12 = h24 % 12 === 0 ? 12 : h24 % 12
+  return `${h12}:${String(m).padStart(2, '0')} ${period}`
+}
+
+/** MCX session close for an IST trading date, as a display label ("11:30 PM" / "11:55 PM"). */
+export function mcxCloseLabelIST(dateStr) {
+  return formatMinutesIST(mcxCloseMinutesIST(dateStr))
+}
+
 /** IST calendar date, minutes after IST midnight and weekday (0 = Sunday) of a moment. */
 export function istParts(now = new Date()) {
   const ist = new Date(now.getTime() + IST_OFFSET_MS)

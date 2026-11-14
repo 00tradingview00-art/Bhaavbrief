@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isUsDst, mcxCloseMinutesIST, isWithinMcxHours } from './mcxHours.js'
+import { isUsDst, mcxCloseMinutesIST, isWithinMcxHours, formatMinutesIST, mcxCloseLabelIST } from './mcxHours.js'
 
 const at = iso => new Date(iso) // UTC instants; IST = UTC + 5:30
 
@@ -23,6 +23,23 @@ describe('mcxCloseMinutesIST', () => {
   it('is 23:30 in summer and 23:55 in winter', () => {
     expect(mcxCloseMinutesIST('2026-10-30')).toBe(23 * 60 + 30)
     expect(mcxCloseMinutesIST('2026-11-02')).toBe(23 * 60 + 55)
+  })
+})
+
+describe('formatMinutesIST', () => {
+  it('formats AM/PM and midnight/noon edge cases', () => {
+    expect(formatMinutesIST(9 * 60)).toBe('9:00 AM')
+    expect(formatMinutesIST(23 * 60 + 30)).toBe('11:30 PM')
+    expect(formatMinutesIST(23 * 60 + 55)).toBe('11:55 PM')
+    expect(formatMinutesIST(0)).toBe('12:00 AM')
+    expect(formatMinutesIST(12 * 60)).toBe('12:00 PM')
+  })
+})
+
+describe('mcxCloseLabelIST', () => {
+  it('is the bug both audits found: 11:30 PM in summer, 11:55 PM once US DST ends — not a fixed label', () => {
+    expect(mcxCloseLabelIST('2026-10-30')).toBe('11:30 PM')
+    expect(mcxCloseLabelIST('2026-11-02')).toBe('11:55 PM')
   })
 })
 
