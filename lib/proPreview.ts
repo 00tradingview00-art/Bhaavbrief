@@ -27,13 +27,29 @@ export function previewDates(n: number, end: Date = new Date()): string[] {
   })
 }
 
-/** Square symmetric matrix with a unit diagonal and values in [-0.9, 0.9]. */
+/**
+ * A plausible correlation matrix — unit diagonal, and (unlike independent
+ * per-cell random numbers) actually positive semidefinite, which every real
+ * correlation matrix must be. Built as the Gram matrix of deterministic
+ * seeded unit vectors rather than per-cell randoms: each pair can still
+ * look like a "normal" correlation reading on its own, but the previous
+ * version's values were mutually inconsistent in a way no real dataset can
+ * produce (negative eigenvalues) — exactly the thing two independent
+ * third-party audits flagged as a live data-integrity bug, when it was
+ * actually this synthetic placeholder. See lib/correlation.ts for the real
+ * (always-valid, because genuinely data-derived) engine.
+ */
 export function previewCorrelationMatrix(size: number): number[][] {
-  return Array.from({ length: size }, (_, r) =>
-    Array.from({ length: size }, (_, c) => {
+  const unitVectors = Array.from({ length: size }, (_, i) => {
+    const v = Array.from({ length: size }, (_, k) => rand(i * 53 + k * 17 + 11) * 2 - 1)
+    const norm = Math.sqrt(v.reduce((s, x) => s + x * x, 0)) || 1
+    return v.map(x => x / norm)
+  })
+  return unitVectors.map((vi, r) =>
+    unitVectors.map((vj, c) => {
       if (r === c) return 1
-      const [a, b] = r < c ? [r, c] : [c, r]
-      return Math.round((rand(a * 31 + b * 7 + 3) * 1.8 - 0.9) * 100) / 100
+      const dot = vi.reduce((s, x, k) => s + x * vj[k], 0)
+      return Math.round(dot * 100) / 100
     }),
   )
 }

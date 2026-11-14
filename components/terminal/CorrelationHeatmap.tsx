@@ -106,7 +106,7 @@ export default function CorrelationHeatmap({ labels, sampleSize }: Props) {
   return (
     <ProBlurGate
       label={`Cross-Asset Correlation — ${sampleSize}-day window`}
-      timestamp="Live"
+      timestamp="Updated today"
       preview={<CorrelationTable correlation={preview} />}
     />
   )
