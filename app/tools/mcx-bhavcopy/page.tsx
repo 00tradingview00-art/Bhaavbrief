@@ -61,9 +61,16 @@ const SCHEMA = {
 // No live data is imported here, so the hourly tier is enough (P-03).
 export const revalidate = 3600
 
+// Highest-impression, worst-CTR URL on the whole site per GSC (2,406
+// impressions / 10 clicks / 0.4% CTR over 90 days) — the old title/
+// description framed this purely as a viewer for a file you'd already
+// downloaded ("Already downloaded..."), which doesn't match what someone
+// searching "mcx bhav copy" / "mcx bhavcopy" is actually looking for: where
+// to get today's file. The FAQ below already answers that; the title/
+// description now lead with it too.
 export const metadata: Metadata = {
-  title: 'MCX Bhavcopy Viewer — Open Interest, PCR & Max Pain',
-  description: 'Already downloaded the MCX bhavcopy file? See open interest, put-call ratio and max pain by commodity instantly — free, and the file never leaves your browser.',
+  title: 'MCX Bhav Copy Download & Viewer — OI, PCR, Max Pain',
+  description: "Where to download today's MCX bhav copy, plus a free viewer for open interest, put-call ratio and max pain by commodity — your file never leaves your browser.",
   alternates: { canonical: 'https://bhaavbrief.in/tools/mcx-bhavcopy' },
   keywords: [
     'MCX bhavcopy download today India', 'what is MCX bhavcopy', 'MCX daily bhavcopy data',
