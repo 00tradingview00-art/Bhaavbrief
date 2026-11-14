@@ -1,5 +1,27 @@
 [
   {
+    "type": "research",
+    "slug": "2026-11-14-weekly-catalyst",
+    "href": "/research/2026-11-14-weekly-catalyst",
+    "title": "The ₹18,887 Wedge: Rupee at 94.33 Makes Parity, Not COMEX, the Week's Driver",
+    "description": "MCX gold sits 16.02% over import parity and silver 18.51% — a flagged 2.49pt divergence that puts the rupee and landed-cost wedge, not COMEX, in charge into expiry week.",
+    "excerpt": "The single most consequential number in this week's snapshot is not a price — it is a spread. MCX gold at ₹136,750/10g sits 16.02% above its calculated import parity of ₹117,863, a gross wedge of ₹18,",
+    "date": "2026-11-14",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver"
+    ],
+    "premium": true
+  },
+  {
     "type": "article",
     "slug": "2026-11-13-mcx-crude-climbs-2-5-on-eia-draw-signal-silver-weakens",
     "href": "/articles/2026-11-13-mcx-crude-climbs-2-5-on-eia-draw-signal-silver-weakens",

@@ -666,3 +666,4 @@
 {"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":852,"outputTokens":161,"latencyMs":1587,"payloadHash":"4f47cd3409fd4df0","calledAt":"2026-11-13T04:01:28.257Z"}
 {"type":"gate_run","edition":146,"briefPath":"content/briefs/edition-146.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":4180,"checkedAt":"2026-11-13T04:01:34.085Z"}
 {"type":"gate_run","edition":null,"briefPath":"content/articles/2026-11-13-mcx-close-13nov2026-natgas-selloff.mdx","clean":false,"issueCount":1,"blockerCount":0,"warningCount":1,"hasInternalError":false,"durationMs":627,"checkedAt":"2026-11-13T21:30:09.914Z"}
+{"type":"research_gate_run","researchPath":"content/research/2026-11-14-weekly-catalyst.mdx","clean":true,"issueCount":0,"blockerCount":0,"warningCount":0,"hasInternalError":false,"durationMs":613,"checkedAt":"2026-11-14T11:23:28.501Z"}
