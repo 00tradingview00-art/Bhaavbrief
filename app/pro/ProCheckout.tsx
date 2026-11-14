@@ -2,10 +2,10 @@
 
 import { useUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useProStatus } from '@/lib/useIsPro'
-import { trackProPurchase } from '@/lib/analytics'
+import { trackProPurchase, trackViewItem, trackAddToCart, trackBeginCheckout } from '@/lib/analytics'
 import { PLAN_PRICES } from '@/lib/proPlans'
 
 declare global {
@@ -32,6 +32,16 @@ export default function ProCheckout({ plan, cta }: Props) {
   // plan (change-plan sends them here) — only a renewing plan blocks checkout.
   const { isPro: hasPro, cancelling } = useProStatus()
   const isPro = hasPro && !cancelling
+  const planValue = PLAN_PRICES[plan]
+
+  // view_item: fires once per plan card actually shown to someone who could
+  // buy it. Guarded on isPro (not just mount) so a visitor who upgrades in
+  // another tab doesn't retroactively get counted as having viewed a plan
+  // they can no longer purchase.
+  useEffect(() => {
+    if (!isPro) trackViewItem(plan, planValue)
+  }, [isPro, plan, planValue])
+
   const [loading, setLoading] = useState(false)
   const [phone, setPhone] = useState('')
   const [needPhone, setNeedPhone] = useState(false)
@@ -51,6 +61,10 @@ export default function ProCheckout({ plan, cta }: Props) {
       return
     }
 
+    // add_to_cart: purchase intent, before the phone gate or the checkout
+    // request — captures clicks that never make it to begin_checkout too.
+    trackAddToCart(plan, planValue)
+
     const digits = phone.replace(/\D/g, '')
     if (digits.length < 10) {
       setNeedPhone(true)
@@ -60,6 +74,7 @@ export default function ProCheckout({ plan, cta }: Props) {
     setLoading(true)
     setStatus('paying')
     try {
+      trackBeginCheckout(plan, planValue)
       const res = await fetch('/api/cashfree/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

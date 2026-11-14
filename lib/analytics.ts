@@ -66,6 +66,36 @@ export function trackSectionSeen(edition: string, section: string) {
   trackEvent("brief_section_seen", { edition, section });
 }
 
+/**
+ * Pro purchase funnel, upstream of the existing trackProPurchase below.
+ * Without these, GA4's standard session_start -> view_item -> add_to_cart
+ * -> begin_checkout -> purchase funnel reads 0% at every step after
+ * session_start: the funnel can see the final purchase event but nothing
+ * about how many people viewed a plan or started checkout before it,
+ * which looked like a broken funnel when it was really a missing one.
+ */
+
+/** Fire once per plan card actually shown to a visitor who could buy it
+ *  (i.e. not already Pro) — pairs with trackAddToCart/trackBeginCheckout to
+ *  show where interested visitors drop off before paying. */
+export function trackViewItem(plan: string, value: number) {
+  trackEvent("view_item", { currency: "INR", value, plan });
+}
+
+/** Fire when someone clicks a plan's buy button, expressing purchase intent
+ *  — before the phone-number gate or the Cashfree session request, so it
+ *  also captures clicks that never make it to begin_checkout. */
+export function trackAddToCart(plan: string, value: number) {
+  trackEvent("add_to_cart", { currency: "INR", value, plan });
+}
+
+/** Fire right before requesting a Cashfree checkout session — the last
+ *  step we control before the visitor leaves for Cashfree's own payment
+ *  page, where we can no longer instrument anything. */
+export function trackBeginCheckout(plan: string, value: number) {
+  trackEvent("begin_checkout", { currency: "INR", value, plan });
+}
+
 /** Fire ONLY once /api/cashfree/poll-status first reports isPro:true for a
  *  merchantSubId — that's the client's proof the Cashfree webhook already
  *  activated the subscription server-side. Never fire on the /pro?paid=1
