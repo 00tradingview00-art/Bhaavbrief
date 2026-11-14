@@ -62,13 +62,22 @@ export default function CalendarPage() {
     if (Object.keys(eventStats).length > 0) impactStatsMap[event.id] = eventStats
   }
 
-  // Load tick values (₹/lot per ₹1 move) for lot-level impact context
+  // Load tick values (₹/lot per ₹1 move) for lot-level impact context.
+  // tickValuePerLotINR is the INR value of one TICK, not of a ₹1 move — for
+  // Gold/Silver/Crude those are the same number because their tick size is
+  // exactly ₹1, but Copper (₹0.05 tick) and Natural Gas (₹0.10 tick) are
+  // not, so CalendarFilterBar's "per ₹1 move" label was off by 10–20x for
+  // those two. Divide by tickSize here so every commodity's value is
+  // genuinely "per ₹1 move," matching what the label actually says.
   const tickValues: Record<string, number> = {}
   try {
     const c = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data/commodity-constants.json'), 'utf8'))
     for (const [key, val] of Object.entries(c) as [string, Record<string, unknown>][]) {
       const tv = val?.tickValuePerLotINR
-      if (typeof tv === 'number') tickValues[key] = tv
+      const tickSize = val?.tickSize
+      if (typeof tv === 'number' && typeof tickSize === 'number' && tickSize > 0) {
+        tickValues[key] = tv / tickSize
+      }
     }
   } catch { /* degrades gracefully */ }
 
