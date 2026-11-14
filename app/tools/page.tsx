@@ -22,7 +22,11 @@ const PRO_TOOLS = [
   {
     href: '/tools/mcx-iv-rank',
     label: 'Volatility Analytics',
-    desc: 'IV Rank, IV Percentile, IV Skew (CE vs PE), and OI buildup by strike — the analytical layer on top of the free option chain.',
+    // IV Rank & Percentile are already free (see FREE_TOOLS below) — this
+    // card used to list them here too, implying they were Pro-exclusive.
+    // Only IV Skew and the 65-day IV Rank / full OI-buildup history are
+    // actually gated.
+    desc: 'IV Skew (CE vs PE) and full OI-buildup-by-strike history, plus the 65-day IV Rank chart — the deeper layer on top of the free current IV Rank.',
   },
   {
     href: '/options/strategy',

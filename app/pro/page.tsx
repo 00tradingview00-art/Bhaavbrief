@@ -67,8 +67,10 @@ const PRO_WORKFLOWS: {
   },
   {
     title: 'Volatility Analytics',
-    description: 'Know when to buy volatility and when to sell it — the analytical layer on top of the free option chain. IV Rank, IV Percentile, IV Skew (CE vs PE), OI buildup by strike.',
-    chips: ['IV Rank & Percentile', 'IV Skew CE vs PE', 'OI Buildup'],
+    // Current IV Rank & Percentile are already free (see /tools) — this
+    // card is specifically the deeper, Pro-only layer on top of that.
+    description: 'Know when to buy volatility and when to sell it — the deeper layer on top of the free current IV Rank. IV Skew (CE vs PE), full OI-buildup history, and the 65-day IV Rank chart.',
+    chips: ['IV Skew CE vs PE', 'OI Buildup History', '65-Day IV Rank'],
     href: '/tools/mcx-iv-rank',
   },
   {
@@ -107,7 +109,7 @@ export default function ProPage() {
             The MCX Options Terminal<br />India Has Been Missing
           </h1>
           <p style={{ fontSize: '1.05rem', color: 'var(--ink-3)', maxWidth: 540, margin: '0 auto', lineHeight: 1.6 }}>
-            No dedicated options-analytics platform exists for MCX commodities. BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
+            BhaavBrief Pro is built specifically for MCX — Black-76 pricing, live Greeks, and volatility analytics for Gold, Silver, Crude, Copper, and Natural Gas.
           </p>
         </div>
 
