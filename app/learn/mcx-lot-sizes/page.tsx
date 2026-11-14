@@ -4,6 +4,7 @@ import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import { safeJsonLd } from '@/lib/seo'
 import { ogImageUrl } from '@/lib/ogUrl'
+import { loadStandardLotSizes } from '@/lib/commodityConstants'
 
 // ── Live data ──────────────────────────────────────────────────────────────
 // Read market-snapshot.json (written by fetch-snapshot.mjs at deploy time).
@@ -154,21 +155,27 @@ const FAQ_SCHEMA = {
 // ── Page ───────────────────────────────────────────────────────────────────
 export default function Page() {
   const p = loadPrices()
+  const lotSizes = loadStandardLotSizes()
 
-  // Contract values at live prices
-  const goldStd  = p.gold * 100         // 1 kg = 100 × 10g units
-  const goldMini = p.gold * 10          // 100g = 10 × 10g units
-  const goldGuinea = p.gold * 0.8       // 8g
-  const goldPetal  = p.gold * 0.1       // 1g
-  const silverStd  = p.silver * 30      // 30 kg
-  const silverMini = p.silver * 5       // 5 kg
-  const silverMicro = p.silver * 1      // 1 kg
-  const crudeStd   = p.crude  * 100     // 100 bbl
-  const crudeMini  = p.crude  * 10      // 10 bbl
-  const copperStd  = p.copper * 2500    // 2500 kg
-  const copperMini = p.copper * 250     // 250 kg
-  const natgasStd  = p.natgas * 1250    // 1250 mmBtu
-  const natgasMini = p.natgas * 250     // 250 mmBtu
+  // Contract values at live prices. Standard-contract multipliers come from
+  // the canonical data/commodity-constants.json (via lotSizes), not a
+  // hand-copied literal — this page's own numbers happened to already
+  // match, but app/learn/mcx-margin-calculator's didn't, which is exactly
+  // the risk of hardcoding the same fact twice. Mini/Micro variants have no
+  // canonical entry yet, so those multipliers stay as editorial constants.
+  const goldStd  = p.gold * lotSizes.gold     // 1 kg = 100 × 10g units
+  const goldMini = p.gold * 10                // 100g = 10 × 10g units
+  const goldGuinea = p.gold * 0.8             // 8g
+  const goldPetal  = p.gold * 0.1             // 1g
+  const silverStd  = p.silver * lotSizes.silver // 30 kg
+  const silverMini = p.silver * 5             // 5 kg
+  const silverMicro = p.silver * 1            // 1 kg
+  const crudeStd   = p.crude  * lotSizes.crude  // 100 bbl
+  const crudeMini  = p.crude  * 10            // 10 bbl
+  const copperStd  = p.copper * lotSizes.copper // 2,500 kg
+  const copperMini = p.copper * 250           // 250 kg
+  const natgasStd  = p.natgas * lotSizes.natgas // 1,250 mmBtu
+  const natgasMini = p.natgas * 250           // 250 mmBtu
 
   const cell: React.CSSProperties = {
     padding: '10px 14px',
@@ -292,7 +299,7 @@ export default function Page() {
               </tr>
               <tr>
                 <td style={cell}><strong>Silver</strong></td>
-                <td style={cell}>30 kg</td>
+                <td style={cell}>{fmt(lotSizes.silver)} kg</td>
                 <td style={cell}>₹1 / kg</td>
                 <td style={cell}>₹30 / lot</td>
                 <td style={{ ...cell, ...accent }}>{fmtValue(silverStd)}</td>
@@ -318,7 +325,7 @@ export default function Page() {
               <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Energy</td></tr>
               <tr>
                 <td style={cell}><strong>Crude Oil</strong></td>
-                <td style={cell}>100 bbl</td>
+                <td style={cell}>{fmt(lotSizes.crude)} bbl</td>
                 <td style={cell}>₹1 / bbl</td>
                 <td style={cell}>₹100 / lot</td>
                 <td style={{ ...cell, ...accent }}>{fmtValue(crudeStd)}</td>
@@ -334,7 +341,7 @@ export default function Page() {
               </tr>
               <tr>
                 <td style={cell}><strong>Natural Gas</strong></td>
-                <td style={cell}>1,250 mmBtu</td>
+                <td style={cell}>{fmt(lotSizes.natgas)} mmBtu</td>
                 <td style={cell}>₹0.10 / mmBtu</td>
                 <td style={cell}>₹125 / lot</td>
                 <td style={{ ...cell, ...accent }}>{fmtValue(natgasStd)}</td>
@@ -352,7 +359,7 @@ export default function Page() {
               <tr><td colSpan={6} style={{ ...cell, background: '#F3F2EC', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#8A8A7A', fontWeight: 600, fontFamily: 'var(--font-sans)', padding: '6px 14px' }}>Base Metals</td></tr>
               <tr>
                 <td style={cell}><strong>Copper</strong></td>
-                <td style={cell}>2,500 kg</td>
+                <td style={cell}>{fmt(lotSizes.copper)} kg</td>
                 <td style={cell}>₹0.05 / kg</td>
                 <td style={cell}>₹125 / lot</td>
                 <td style={{ ...cell, ...accent }}>{fmtValue(copperStd)}</td>

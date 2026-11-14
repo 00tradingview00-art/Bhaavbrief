@@ -4,6 +4,7 @@ import Link from 'next/link'
 import SubscribeForm from '@/components/SubscribeForm'
 import { safeJsonLd } from '@/lib/seo'
 import { ogImageUrl } from '@/lib/ogUrl'
+import { loadTickValuePerLot } from '@/lib/commodityConstants'
 
 interface Prices {
   gold: number
@@ -134,10 +135,13 @@ export default function Page() {
   const goldGuinea = p.gold * 0.8
   const goldPetal  = p.gold * 0.1
 
-  const tickValueStd    = 100
-  const tickValueMini   = 10
-  const tickValueGuinea = 0.8
-  const tickValuePetal  = 0.1
+  // tickValueStd is the canonical gold.tickValuePerLotINR, not a hand-copied
+  // literal; the Mini/Guinea/Petal variants are the same tick (₹1/10g),
+  // scaled by each variant's share of the standard 100-unit lot.
+  const tickValueStd    = loadTickValuePerLot('gold')
+  const tickValueMini   = tickValueStd * 0.1
+  const tickValueGuinea = tickValueStd * 0.008
+  const tickValuePetal  = tickValueStd * 0.001
 
   const cell: React.CSSProperties = { padding: '10px 14px', borderTop: '1px solid #DDDDD0', fontSize: 15, color: '#18180F', verticalAlign: 'top' }
   const hcell: React.CSSProperties = { padding: '10px 14px', textAlign: 'left', fontSize: 10, letterSpacing: '0.5px', textTransform: 'uppercase', fontWeight: 600, color: '#8A8A7A', background: '#F3F2EC', fontFamily: 'var(--font-sans)' }

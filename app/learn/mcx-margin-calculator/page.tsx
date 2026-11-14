@@ -3,6 +3,7 @@ import path from 'node:path'
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/seo'
 import { ogImageUrl } from '@/lib/ogUrl'
+import { loadStandardLotSizes } from '@/lib/commodityConstants'
 
 interface Prices {
   gold: number; silver: number; crude: number; copper: number
@@ -131,6 +132,7 @@ function howtoSchema(gold: number) {
 
 export default function Page() {
   const p = loadPrices()
+  const lotSizes = loadStandardLotSizes()
   const FAQ_SCHEMA = faqSchema(p.gold)
   const HOWTO_SCHEMA = howtoSchema(p.gold)
 
@@ -138,10 +140,10 @@ export default function Page() {
     {
       group: 'Precious Metals',
       rows: [
-        { name: 'Gold',         contract: 'Standard',  lot: '1 kg',    unitPrice: p.gold,      lotSize: 100, marginPct: 0.045, unit: '/10g',  span: [500_000, 700_000] },
+        { name: 'Gold',         contract: 'Standard',  lot: '1 kg',    unitPrice: p.gold,      lotSize: lotSizes.gold, marginPct: 0.045, unit: '/10g',  span: [500_000, 700_000] },
         { name: 'Gold Mini',    contract: 'Mini',      lot: '100g',    unitPrice: p.gold,      lotSize: 10,  marginPct: 0.045, unit: '/10g',  span: [55_000, 75_000] },
         { name: 'Gold Guinea',  contract: 'Guinea',    lot: '8g',      unitPrice: p.gold,      lotSize: 0.8, marginPct: 0.05,  unit: '/10g',  span: [5_000, 8_000] },
-        { name: 'Silver',       contract: 'Standard',  lot: '30 kg',   unitPrice: p.silver,    lotSize: 30,  marginPct: 0.065, unit: '/kg',   span: [160_000, 220_000] },
+        { name: 'Silver',       contract: 'Standard',  lot: `${fmt(lotSizes.silver)} kg`, unitPrice: p.silver,    lotSize: lotSizes.silver, marginPct: 0.065, unit: '/kg',   span: [160_000, 220_000] },
         { name: 'Silver Mini',  contract: 'Mini',      lot: '5 kg',    unitPrice: p.silver,    lotSize: 5,   marginPct: 0.065, unit: '/kg',   span: [25_000, 40_000] },
         { name: 'Silver Micro', contract: 'Micro',     lot: '1 kg',    unitPrice: p.silver,    lotSize: 1,   marginPct: 0.065, unit: '/kg',   span: [5_000, 8_000] },
       ],
@@ -149,16 +151,16 @@ export default function Page() {
     {
       group: 'Energy',
       rows: [
-        { name: 'Crude Oil',      contract: 'Standard', lot: '100 bbl', unitPrice: p.crude,  lotSize: 100, marginPct: 0.055, unit: '/bbl', span: [30_000, 45_000] },
+        { name: 'Crude Oil',      contract: 'Standard', lot: `${fmt(lotSizes.crude)} bbl`, unitPrice: p.crude,  lotSize: lotSizes.crude, marginPct: 0.055, unit: '/bbl', span: [30_000, 45_000] },
         { name: 'Crude Oil Mini', contract: 'Mini',     lot: '10 bbl',  unitPrice: p.crude,  lotSize: 10,  marginPct: 0.055, unit: '/bbl', span: [3_000, 5_000] },
-        { name: 'Natural Gas',    contract: 'Standard', lot: '1250 mmBtu', unitPrice: p.natgas, lotSize: 1250, marginPct: 0.065, unit: '/mmBtu', span: [20_000, 30_000] },
+        { name: 'Natural Gas',    contract: 'Standard', lot: `${fmt(lotSizes.natgas)} mmBtu`, unitPrice: p.natgas, lotSize: lotSizes.natgas, marginPct: 0.065, unit: '/mmBtu', span: [20_000, 30_000] },
         { name: 'Nat Gas Mini',   contract: 'Mini',     lot: '250 mmBtu',  unitPrice: p.natgas, lotSize: 250,  marginPct: 0.065, unit: '/mmBtu', span: [4_000, 6_000] },
       ],
     },
     {
       group: 'Base Metals',
       rows: [
-        { name: 'Copper',     contract: 'Standard', lot: '1,000 kg', unitPrice: p.copper,    lotSize: 1000, marginPct: 0.09, unit: '/kg', span: [80_000, 120_000] },
+        { name: 'Copper',     contract: 'Standard', lot: `${fmt(lotSizes.copper)} kg`, unitPrice: p.copper,    lotSize: lotSizes.copper, marginPct: 0.09, unit: '/kg', span: [80_000, 120_000] },
         { name: 'Copper Mini',contract: 'Mini',     lot: '250 kg',   unitPrice: p.copper,    lotSize: 250,  marginPct: 0.09, unit: '/kg', span: [20_000, 30_000] },
         { name: 'Zinc',       contract: 'Standard', lot: '1,000 kg', unitPrice: p.zinc,      lotSize: 1000, marginPct: 0.055, unit: '/kg', span: [7_000, 14_000] },
         { name: 'Aluminium',  contract: 'Standard', lot: '1,000 kg', unitPrice: p.aluminium, lotSize: 1000, marginPct: 0.055, unit: '/kg', span: [5_000, 9_000] },
