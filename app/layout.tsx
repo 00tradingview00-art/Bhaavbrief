@@ -6,6 +6,7 @@ import Link from 'next/link'
 import './globals.css'
 import Nav from '@/components/Nav'
 import BottomNav from '@/components/BottomNav'
+import FeedbackPill from '@/components/FeedbackPill'
 import TickerStrip from '@/components/TickerStrip'
 import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
@@ -173,6 +174,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           </p>
         </footer>
         <BottomNav />
+        <FeedbackPill />
         <Analytics />
         <SpeedInsights />
         {/* Google Analytics 4 — lazyOnload so it doesn't block interactivity */}

@@ -617,6 +617,12 @@ body {
   .bb-main { padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important; }
   .bb-footer { padding-bottom: calc(102px + env(safe-area-inset-bottom)) !important; }
 }
+.bb-feedback-pill { display: none; }
+@media (min-width: 768px) {
+  /* >=768px only — below that .bb-bottom-nav already owns the bottom of the screen */
+  .bb-feedback-pill { display: inline-flex; align-items: center; position: fixed; right: 24px; bottom: 24px; z-index: 90; padding: 12px 20px; border-radius: 999px; background: var(--ink); color: #fff; font-family: var(--font-sans); font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.18); transition: transform .15s ease, box-shadow .15s ease; }
+  .bb-feedback-pill:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.24); }
+}
 .bb-alerts-page { max-width: 840px; margin: 0 auto; }
 .bb-alerts-header { max-width: 650px; padding: 18px 0 24px; }
 .bb-alerts-header h1 { margin: 12px 0 10px; color: var(--ink); font-size: clamp(2rem, 8vw, 3.6rem); line-height: 1; letter-spacing: -.055em; }
