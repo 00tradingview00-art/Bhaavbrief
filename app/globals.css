@@ -759,7 +759,7 @@ body {
     min-height: 44px;
   }
   /* But not inline/chip buttons — those are fine smaller */
-  button[style*="padding: 2px"], button[style*="padding:2px"] { min-height: unset; }
+  button[style*="padding: 2px"], button[style*="padding:2px"], .bb-icon-tip { min-height: unset; }
 }
 
 /* ── Prevent horizontal overflow ─────────────────────────────────────────── */

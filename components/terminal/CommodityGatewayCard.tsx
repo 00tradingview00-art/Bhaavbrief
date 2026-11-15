@@ -4,6 +4,8 @@ import type { TerminalInstrumentData } from '@/lib/terminalData'
 import Sparkline from '@/components/ui/Sparkline'
 import Pill from '@/components/ui/Pill'
 import type { PillTone } from '@/components/ui/Pill'
+import InfoTip from '@/components/ui/InfoTip'
+import { METRIC_EXPLAINERS } from '@/lib/metricExplainers'
 import WatchlistStar from './WatchlistStar'
 
 export interface GatewayMeta {
@@ -96,15 +98,20 @@ export default function CommodityGatewayCard({ meta, priceData, optionsData, spa
           // chain fetched but these two metrics didn't resolve (ivix needs 3+
           // qualifying strikes; aav['20d'] needs 21 daily closes). Matches the
           // 'Vol prem.' row below, which has always checked the value itself.
-          { k: 'iVIX',       v: optionsData?.ivix       != null ? fmtNum(optionsData.ivix) + '%'       : '—' },
-          { k: '20D avg',    v: optionsData?.aav['20d'] != null ? fmtNum(optionsData.aav['20d']) + '%' : '—' },
-          { k: 'Vol prem.',  v: optionsData?.volPremium != null ? `${optionsData.volPremium > 0 ? '+' : ''}${fmtNum(optionsData.volPremium)} pts` : '—' },
-          { k: 'PCR',        v: optionsData ? fmtNum(optionsData.pcr, 2) : '—' },
-          { k: 'Max pain',   v: optionsData?.maxPain ? '₹' + fmtNum(optionsData.maxPain, 0) : '—' },
-          { k: 'OI vs low',  v: optionsData?.oiVsDayLow != null ? `${optionsData.oiVsDayLow > 0 ? '+' : ''}${fmtNum(optionsData.oiVsDayLow, 0)}` : '—' },
+          // explainer keys into lib/metricExplainers.ts — the same canonical
+          // copy /options and the /tools pages use, not a third rewording.
+          { k: 'iVIX',       v: optionsData?.ivix       != null ? fmtNum(optionsData.ivix) + '%'       : '—', explainer: METRIC_EXPLAINERS.ivix },
+          { k: '20D avg',    v: optionsData?.aav['20d'] != null ? fmtNum(optionsData.aav['20d']) + '%' : '—', explainer: METRIC_EXPLAINERS.aav },
+          { k: 'Vol prem.',  v: optionsData?.volPremium != null ? `${optionsData.volPremium > 0 ? '+' : ''}${fmtNum(optionsData.volPremium)} pts` : '—', explainer: METRIC_EXPLAINERS.volPremium },
+          { k: 'PCR',        v: optionsData ? fmtNum(optionsData.pcr, 2) : '—', explainer: METRIC_EXPLAINERS.pcr },
+          { k: 'Max pain',   v: optionsData?.maxPain ? '₹' + fmtNum(optionsData.maxPain, 0) : '—', explainer: METRIC_EXPLAINERS.maxPain },
+          { k: 'OI vs low',  v: optionsData?.oiVsDayLow != null ? `${optionsData.oiVsDayLow > 0 ? '+' : ''}${fmtNum(optionsData.oiVsDayLow, 0)}` : '—', explainer: METRIC_EXPLAINERS.oiVsLow },
         ].map(row => (
           <div key={row.k} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', color: 'var(--ink-4)' }}>{row.k}</span>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, fontWeight: 500, letterSpacing: '0.3px', textTransform: 'uppercase', color: 'var(--ink-4)', display: 'flex', alignItems: 'center' }}>
+              {row.k}
+              <InfoTip text={`${row.explainer.shows} ${row.explainer.doesNotMean}`} />
+            </span>
             <span style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 12, fontWeight: 600, color: 'var(--ink)' }}>{row.v}</span>
           </div>
         ))}

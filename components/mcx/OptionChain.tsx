@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
-import { createPortal } from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
 import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
@@ -12,6 +11,7 @@ import { useIVHistory } from '@/lib/useIVHistory'
 import { useIsPro } from '@/lib/useIsPro'
 import IVSkewChart from './IVSkewChart'
 import ProBlurGate from '@/components/ProBlurGate'
+import InfoTip from '@/components/ui/InfoTip'
 
 function useIsMobile(breakpoint = 640) {
   const [isMobile, setIsMobile] = useState(false)
@@ -378,53 +378,6 @@ function IVHistoryChart({ chain, instrument }: { chain: ChainRow[]; instrument: 
 }
 
 // ── Info tooltip ──────────────────────────────────────────────────────────────
-
-function InfoTip({ text }: { text: string }) {
-  const [open, setOpen] = useState(false)
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
-  const btnRef = useRef<HTMLButtonElement>(null)
-
-  const place = () => {
-    const r = btnRef.current?.getBoundingClientRect()
-    if (!r) return
-    const width = 200
-    setPos({ top: r.bottom + 6, left: Math.min(r.left, window.innerWidth - width - 8) })
-  }
-
-  return (
-    <span
-      style={{ position: 'relative', display: 'inline-flex', marginLeft: 4, verticalAlign: 'middle' }}
-      onMouseEnter={() => { place(); setOpen(true) }}
-      onMouseLeave={() => setOpen(false)}
-    >
-      <button
-        ref={btnRef}
-        type="button"
-        onClick={e => { e.stopPropagation(); place(); setOpen(o => !o) }}
-        aria-label="What is this?"
-        style={{
-          width: 13, height: 13, borderRadius: '50%', border: `1px solid ${C.ink4}`,
-          background: 'transparent', color: C.ink4, fontSize: 9, fontWeight: 700,
-          lineHeight: '11px', padding: 0, cursor: 'pointer', fontFamily: C.sans,
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          textTransform: 'none', letterSpacing: 'normal', flexShrink: 0,
-        }}
-      >i</button>
-      {open && pos && typeof document !== 'undefined' && createPortal(
-        <div style={{
-          position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999,
-          width: 200, padding: '8px 10px', borderRadius: 6, background: C.ink,
-          color: '#fff', fontSize: 11, fontWeight: 400, lineHeight: 1.4,
-          fontFamily: C.sans, textTransform: 'none', letterSpacing: 'normal',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.18)',
-        }}>
-          {text}
-        </div>,
-        document.body,
-      )}
-    </span>
-  )
-}
 
 // ── Metric pill in analytics bar ──────────────────────────────────────────────
 

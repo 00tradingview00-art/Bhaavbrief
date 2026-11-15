@@ -43,4 +43,28 @@ export const METRIC_EXPLAINERS = {
     href: '/basis',
     linkLabel: 'See the basis history',
   },
+  ivix: {
+    metric: 'iVIX',
+    shows: 'BhaavBrief’s estimate of the market’s expected annualized volatility for this commodity, drawn from at-the-money option prices.',
+    doesNotMean: 'It describes how much movement options are pricing in, not which way the price is likely to move.',
+    ...OPTION_CHAIN,
+  },
+  aav: {
+    metric: '20D Avg',
+    shows: 'BhaavBrief’s estimate of how much this commodity has actually moved over the recent weeks, for comparison against iVIX.',
+    doesNotMean: 'It can differ from the exchange’s own published volatility figure by a few points, and it describes the past, not what happens next.',
+    ...OPTION_CHAIN,
+  },
+  volPremium: {
+    metric: 'Vol Premium',
+    shows: 'Whether options are pricing in more movement (iVIX) than this commodity has actually shown recently (20D Avg).',
+    doesNotMean: 'A positive or negative reading on its own doesn’t reveal which way the price will go.',
+    ...OPTION_CHAIN,
+  },
+  oiVsLow: {
+    metric: 'OI vs Low',
+    shows: 'How much total open interest has been added across this chain since today’s lowest point intraday.',
+    doesNotMean: 'It isn’t a day-over-day change, and a rising number on its own doesn’t reveal whether new positions are bullish or bearish.',
+    ...OPTION_CHAIN,
+  },
 } satisfies Record<string, MetricExplainer>
