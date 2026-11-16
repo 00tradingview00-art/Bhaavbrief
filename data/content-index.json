@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
+    "href": "/articles/2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
+    "title": "MCX Nat Gas breaks 4% — Henry Hub weakness, storage surplus pressure",
+    "description": "₹295/mmBtu · –4.16% · Withdrawal season begins; storage glut signal dominates.",
+    "excerpt": "TRIGGER MCX Natural Gas has plunged 4.16% to ₹295.10/mmBtu — breaching the Hawk-Scan threshold — as Henry Hub weakness ($3.13, –4.19%) signals storage surplus ahead of the November withdrawal season. ",
+    "date": "2026-11-16T10:44:26.514Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Nat Gas",
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 295
+  },
+  {
     "type": "brief",
     "slug": "edition-147",
     "href": "/briefs/edition-147",
