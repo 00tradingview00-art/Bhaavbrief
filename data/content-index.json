@@ -22,6 +22,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-11-16-silver-falls-faster-gold-risk-off",
+    "href": "/articles/2026-11-16-silver-falls-faster-gold-risk-off",
+    "title": "Why MCX Silver Falls Faster Than Gold During Risk-Off Market Episodes",
+    "description": "Understand why MCX silver falls faster than gold in risk-off episodes — the industrial demand link, import parity math, and India-specific amplifiers explained.",
+    "excerpt": "The reason why MCX silver falls faster than gold in risk-off market episodes comes down to one structural fact: silver is simultaneously a monetary metal and an industrial commodity, and in a panic, t",
+    "date": "2026-11-16",
+    "edition": "keyword-brief",
+    "tags": [
+      "silver",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "silver",
+    "commodities": [
+      "silver"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "research",
     "slug": "2026-11-14-weekly-catalyst",
     "href": "/research/2026-11-14-weekly-catalyst",
