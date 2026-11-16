@@ -1,5 +1,27 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-147",
+    "href": "/briefs/edition-147",
+    "title": "Middle East Supply Surplus Pushes WTI to $87.95 — Cold Weather Retreats",
+    "description": "A broad commodity selloff deepens as Middle East supply surplus weighs on crude and silver's industrial component cracks harder than gold.",
+    "excerpt": "MCX Gold ₹135965 | Crude ₹8321 | USDINR ₹94.27 — Gold -0.54% | Crude -0.57% | Silver -2.83% Yesterday's Edge — Result: Edition #146 watched whether MCX NATGAS would close above 315.5. Rejected ✗, now ",
+    "date": "2026-11-16T04:00:52.155Z",
+    "edition": "147",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX NatGas",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Silver",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "research",
     "slug": "2026-11-14-weekly-catalyst",
     "href": "/research/2026-11-14-weekly-catalyst",
