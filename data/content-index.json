@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-148",
+    "href": "/briefs/edition-148",
+    "title": "Rupee Strengthens, Gold Climbs — But Crude Tells a Different Story",
+    "description": "A firmer rupee cushions MCX gold's global rally while crude slides on supply-side pressure, splitting today's commodity complex.",
+    "excerpt": "MCX Gold ₹134811 | Crude ₹7961 | USDINR ₹93.69 — Gold +0.20% | Crude -1.46% | Silver +0.48% Yesterday's Edge — Result: Edition #147 watched whether WTI would close below 87.95. Confirmed ✓, now at 84.",
+    "date": "2026-11-17T04:00:50.464Z",
+    "edition": "148",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "USD/INR"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
     "href": "/articles/2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
