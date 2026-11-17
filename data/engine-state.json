@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 138194,
-    "silver": 181700,
-    "crude": 8087,
-    "copper": 1327.9,
-    "natgas": 308.5,
-    "usdinr": 93.69
+    "gold": 134462,
+    "silver": 170500,
+    "crude": 8057,
+    "copper": 1278.7,
+    "natgas": 294.1,
+    "usdinr": 93.93
   },
-  "lastChecked": "2026-11-12T11:29:29.602Z",
+  "lastChecked": "2026-11-17T12:04:13.790Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -15,19 +15,21 @@
     "ppac": null
   },
   "lastEia": {
-    "period": "2026-10-30",
-    "value": "190"
+    "period": "2026-11-06",
+    "value": "157"
   },
   "lastGeoNews": {
-    "mideast": "Oil Prices Rise as Middle East, Ukraine-Russia Conflict Fuel Supply Worries - WS",
+    "mideast": "Oil Tanker On Fire After Being Hit By \"Unknown Projectile\" In Hormuz Strait - ND",
     "iran": "Crude oil prices rise amid escalating US-Iran war, supply fears; Brent above $70",
     "russia": "Putin’s War On Ukraine Puts Oil Giant Rosneft Under Mounting Pressure - Bloomber"
   },
-  "articlesToday": [],
-  "lastArticleAt": "2026-11-11T18:00:54.974Z",
+  "articlesToday": [
+    "2026-11-17/2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl"
+  ],
+  "lastArticleAt": "2026-11-17T11:33:03.468Z",
   "lastCoveredAt": {
-    "crude": "2026-11-09T11:49:11.204Z",
+    "crude": "2026-11-13T10:39:36.218Z",
     "silver": "2026-11-04T10:02:17.677Z",
-    "natgas": "2026-11-11T18:00:54.974Z"
+    "natgas": "2026-11-17T11:33:03.468Z"
   }
 }
