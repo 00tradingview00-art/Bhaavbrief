@@ -20,6 +20,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-11-17-iran-oil-export-mcx-crude",
+    "href": "/articles/2026-11-17-iran-oil-export-mcx-crude",
+    "title": "How Iranian Oil Export Restrictions Affect MCX Crude Prices in India",
+    "description": "Understand how Iran oil export restrictions affect MCX crude India prices through sanctions, supply gaps, and the WTI-to-INR transmission formula.",
+    "excerpt": "Understanding how Iran oil export restrictions affect MCX crude India prices requires tracing a chain that runs from Persian Gulf tanker routes through NYMEX futures to your MCX terminal screen. When ",
+    "date": "2026-11-17",
+    "edition": "keyword-brief",
+    "tags": [
+      "crude",
+      "mcx",
+      "india",
+      "energy"
+    ],
+    "commodity": "crude",
+    "commodities": [
+      "crude"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
     "href": "/articles/2026-11-16-mcx-nat-gas-breaks-4-henry-hub-weakness-storage-surplus-pres",
