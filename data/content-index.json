@@ -21,6 +21,24 @@
     "priceAtPublish": 1224
   },
   {
+    "type": "article",
+    "slug": "2026-11-18-mcx-nat-gas-rallies-2-amid-winter-demand-dollar-weakness",
+    "href": "/articles/2026-11-18-mcx-nat-gas-rallies-2-amid-winter-demand-dollar-weakness",
+    "title": "MCX Nat Gas Rallies 2% Amid Winter Demand, Dollar Weakness",
+    "description": "MCX Natural Gas ₹307/mmBtu (+2.06%) as Henry Hub strengthens on heating season onset. Watch ₹311 resistance into close.",
+    "excerpt": "WHAT HAPPENED MCX Natural Gas is +2.06% to ₹307/mmBtu, the only green instrument in an otherwise broad commodity selloff (gold -2.58%, silver -4.05%, crude -1.46%, copper -4.42%). The disconnect revea",
+    "date": "2026-11-18T13:17:23.340Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Nat Gas"
+    ],
+    "commodity": "MCX Nat Gas",
+    "commodities": [
+      "MCX Nat Gas"
+    ],
+    "priceAtPublish": 307
+  },
+  {
     "type": "brief",
     "slug": "edition-149",
     "href": "/briefs/edition-149",
