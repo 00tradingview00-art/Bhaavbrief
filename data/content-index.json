@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
+    "href": "/articles/2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
+    "title": "MCX Copper: 4.10% plunge to ₹1,224/kg breaks week support",
+    "description": "MCX Copper ₹1,224/kg, -4.10% — COMEX -4.17%. China PMI weakness probable trigger.",
+    "excerpt": "TRIGGER MCX Copper has collapsed 4.10% to ₹1,224/kg as COMEX falls 4.17% to $5.75/lb — breaching the week's low of ₹1,223 for the first time. PRICE ₹1,224/kg · −4.10% · PLUNGING SIGNAL This magnitude ",
+    "date": "2026-11-18T16:44:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Copper",
+      "MCX Silver",
+      "MCX Nat Gas",
+      "LME Copper"
+    ],
+    "commodity": "MCX Copper",
+    "commodities": [
+      "MCX Copper"
+    ],
+    "priceAtPublish": 1224
+  },
+  {
     "type": "brief",
     "slug": "edition-149",
     "href": "/briefs/edition-149",
