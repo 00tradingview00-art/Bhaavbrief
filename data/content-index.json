@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-149",
+    "href": "/briefs/edition-149",
+    "title": "Gold Drops ₹2,998 as Dollar-Strength Trade Reasserts Itself",
+    "description": "A broad fear-driven selloff hits gold, silver, and crude as dollar strength strips risk premiums built over three sessions.",
+    "excerpt": "MCX Gold ₹131225 | Crude ₹7921 | USDINR ₹93.30 — Gold -2.23% | Crude -2.09% | Silver -3.39% Yesterday's Edge — Result: Edition #148 watched whether WTI would close below 84.94. Confirmed ✓, now at 84.",
+    "date": "2026-11-18T04:00:48.471Z",
+    "edition": "149",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl",
     "href": "/articles/2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl",
