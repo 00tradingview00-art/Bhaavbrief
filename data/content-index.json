@@ -82,6 +82,28 @@
   },
   {
     "type": "article",
+    "slug": "2026-11-18-mcx-close-18nov2026-copper-leads-comex-fades",
+    "href": "/articles/2026-11-18-mcx-close-18nov2026-copper-leads-comex-fades",
+    "title": "MCX Close 18Nov: Copper Leads as COMEX Fades into US Close",
+    "description": "18 Nov 2026 — MCX Copper +0.45% closes near highs as COMEX gold, silver, crude plunge 3–5%. Natural gas remains pinned. Overnight US inventory watch.",
+    "excerpt": "MCX opened mixed as COMEX overnight weakness bled into domestic trade. Copper led the complex, closing +0.45% at ₹1214.9/kg despite broader selloff pressure — a reflection of technical resilience afte",
+    "date": "2026-11-17T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Copper",
+      "Natural Gas",
+      "Overnight Watch"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
+    "type": "article",
     "slug": "2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl",
     "href": "/articles/2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl",
     "title": "MCX Nat Gas Falls 2.25% as Henry Hub Weakens on Storage Surplus",
