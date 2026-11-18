@@ -679,3 +679,4 @@
 {"type":"generation_call","call":"consistency_check","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":718,"outputTokens":9,"latencyMs":765,"payloadHash":"780dde5c2d97f571","calledAt":"2026-11-18T04:01:34.543Z"}
 {"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":836,"outputTokens":175,"latencyMs":1577,"payloadHash":"51f376b1324847e7","calledAt":"2026-11-18T04:01:35.310Z"}
 {"type":"gate_run","edition":149,"briefPath":"content/briefs/edition-149.mdx","clean":false,"issueCount":2,"blockerCount":0,"warningCount":2,"hasInternalError":false,"durationMs":2795,"checkedAt":"2026-11-18T04:01:39.751Z"}
+{"type":"gate_run","edition":null,"briefPath":"content/articles/2026-11-18-mcx-close-18nov2026-copper-leads-comex-fades.mdx","clean":false,"issueCount":3,"blockerCount":0,"warningCount":3,"hasInternalError":false,"durationMs":4198,"checkedAt":"2026-11-18T22:39:54.831Z"}
