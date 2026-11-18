@@ -1,13 +1,13 @@
 {
   "lastPrices": {
-    "gold": 134462,
-    "silver": 170500,
-    "crude": 8057,
-    "copper": 1278.7,
-    "natgas": 294.1,
-    "usdinr": 93.93
+    "gold": 130775,
+    "silver": 163241,
+    "crude": 7964,
+    "copper": 1223.75,
+    "natgas": 300.3,
+    "usdinr": 93.48
   },
-  "lastChecked": "2026-11-17T12:04:13.790Z",
+  "lastChecked": "2026-11-18T11:55:59.184Z",
   "lastCirculars": {
     "sebi": "Sebi eases commodity position limits, caps penalties for breaches - Livemint",
     "mcx": null,
@@ -24,12 +24,13 @@
     "russia": "Putin’s War On Ukraine Puts Oil Giant Rosneft Under Mounting Pressure - Bloomber"
   },
   "articlesToday": [
-    "2026-11-17/2026-11-17-mcx-nat-gas-falls-2-25-as-henry-hub-weakens-on-storage-surpl"
+    "2026-11-18/2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup"
   ],
-  "lastArticleAt": "2026-11-17T11:33:03.468Z",
+  "lastArticleAt": "2026-11-18T11:15:08.095Z",
   "lastCoveredAt": {
     "crude": "2026-11-13T10:39:36.218Z",
     "silver": "2026-11-04T10:02:17.677Z",
-    "natgas": "2026-11-17T11:33:03.468Z"
+    "natgas": "2026-11-17T11:33:03.468Z",
+    "copper": "2026-11-18T11:15:08.095Z"
   }
 }
