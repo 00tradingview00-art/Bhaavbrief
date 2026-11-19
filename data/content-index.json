@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-19-mcx-crude-rallies-3-as-eia-signals-supply-tightness",
+    "href": "/articles/2026-11-19-mcx-crude-rallies-3-as-eia-signals-supply-tightness",
+    "title": "MCX Crude Rallies 3% as EIA Signals Supply Tightness",
+    "description": "MCX Crude surges to ₹7733/bbl on EIA inventory flat print; natural gas gains 2.77% as storage draws accelerate. Key resistance at ₹7771.",
+    "excerpt": "WHAT HAPPENED MCX Crude is up ₹232/bbl (3.00%) to ₹7733/bbl, outperforming all other energy and metals in the evening session, while MCX Natural Gas gained 2.77% to ₹315/mmBtu. The divergence reveals ",
+    "date": "2026-11-19T16:44:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Crude",
+      "MCX Nat Gas",
+      "EIA Data",
+      "Energy"
+    ],
+    "commodity": "MCX Crude",
+    "commodities": [
+      "MCX Crude"
+    ],
+    "priceAtPublish": 7733
+  },
+  {
     "type": "brief",
     "slug": "edition-150",
     "href": "/briefs/edition-150",
