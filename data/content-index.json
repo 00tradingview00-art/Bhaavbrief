@@ -64,6 +64,27 @@
     "priceAtPublish": 0
   },
   {
+    "type": "article",
+    "slug": "2026-11-19-mcx-close-19nov2026-crude-leads",
+    "href": "/articles/2026-11-19-mcx-close-19nov2026-crude-leads",
+    "title": "MCX Close 19Nov: Crude Rallies 2.1% on EIA Supply Tightness",
+    "description": "MCX Crude leads at +2.11% to ₹7808/bbl on EIA inventory flat print. Gold, Silver fade -1.75%, -1.95% as COMEX weakens overnight.",
+    "excerpt": "MCX Crude dominated today's session, closing +2.11% at ₹7808/bbl on the back of EIA inventory data signaling supply tightness. The energy complex showed mixed signals: Natural Gas eased -1.18% to ₹309",
+    "date": "2026-11-18T18:30:00.000Z",
+    "edition": "evening-brief",
+    "tags": [
+      "MCX Close",
+      "Evening Brief",
+      "Crude Rally",
+      "Gold Weakness"
+    ],
+    "commodity": "multi",
+    "commodities": [
+      "multi"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
     "href": "/articles/2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
