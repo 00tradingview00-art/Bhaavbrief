@@ -684,3 +684,4 @@
 {"type":"generation_call","call":"consistency_check","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":765,"outputTokens":185,"latencyMs":2509,"payloadHash":"de54383cb880ac89","calledAt":"2026-11-19T04:01:51.819Z"}
 {"type":"generation_call","call":"arc_detection","promptVersion":null,"model":"claude-haiku-4-5-20251001","inputTokens":859,"outputTokens":173,"latencyMs":1725,"payloadHash":"eff421fb192e6792","calledAt":"2026-11-19T04:01:54.330Z"}
 {"type":"gate_run","edition":150,"briefPath":"content/briefs/edition-150.mdx","clean":false,"issueCount":7,"blockerCount":0,"warningCount":7,"hasInternalError":false,"durationMs":9779,"checkedAt":"2026-11-19T04:02:05.881Z"}
+{"type":"gate_run","edition":null,"briefPath":"content/articles/2026-11-19-mcx-close-19nov2026-crude-leads.mdx","clean":false,"issueCount":2,"blockerCount":0,"warningCount":2,"hasInternalError":false,"durationMs":2710,"checkedAt":"2026-11-19T22:44:17.098Z"}
