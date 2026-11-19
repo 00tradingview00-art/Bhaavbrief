@@ -1,5 +1,27 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-150",
+    "href": "/briefs/edition-150",
+    "title": "COMEX Gold Sheds $147 — The Safe-Haven Trade Fractures",
+    "description": "Gold's sharpest single-session drop in weeks challenges the safe-haven narrative as crude also slides on demand fears.",
+    "excerpt": "MCX Gold ₹129200 | Crude ₹7702 | USDINR ₹93.56 — Gold -0.47% | Crude +0.72% | Silver -0.08% Yesterday's Edge — Result: Edition #149 watched whether COMEX GOLD would close below 3,794. Confirmed ✓, now",
+    "date": "2026-11-19T04:01:05.136Z",
+    "edition": "150",
+    "tags": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Crude",
+      "MCX NatGas"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
     "href": "/articles/2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
