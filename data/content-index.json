@@ -22,6 +22,27 @@
     "commodity": ""
   },
   {
+    "type": "article",
+    "slug": "2026-11-19-what-drives-mcx-copper-price-india",
+    "href": "/articles/2026-11-19-what-drives-mcx-copper-price-india",
+    "title": "What Drives MCX Copper Prices in India — A Complete Guide",
+    "description": "Understand what drives MCX copper price in India — from COMEX transmission and China PMI to rupee rates, import parity, and mine supply shocks.",
+    "excerpt": "What drives MCX copper price in India explained simply: global COMEX/LME prices, converted through an import parity formula, then layered with India-specific duties and rupee movement. Copper is one o",
+    "date": "2026-11-19",
+    "edition": "keyword-brief",
+    "tags": [
+      "copper",
+      "mcx",
+      "india",
+      "metals"
+    ],
+    "commodity": "copper",
+    "commodities": [
+      "copper"
+    ],
+    "priceAtPublish": 0
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
     "href": "/articles/2026-11-18-hawk-scan-mcx-copper-4-10-plunge-to-1-224-kg-breaks-week-sup",
