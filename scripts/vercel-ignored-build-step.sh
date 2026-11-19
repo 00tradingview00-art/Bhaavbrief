@@ -64,9 +64,20 @@ fi
 
 CHANGED="$(git diff --name-only "$PREV_SHA" HEAD)"
 
+# A real new commit always changes at least one file, so an empty diff here
+# means this deployment is for the *same* commit as the last one — i.e. a
+# deploy hook or manual redeploy, not a cron commit. The cron pipeline's
+# volume (the thing this whole script exists to cut build minutes on) is
+# handled entirely by the SAFE_PATHS_REGEX check below, which only runs when
+# CHANGED is non-empty — so skipping here saves nothing from that budget.
+# What it did break: the Kite-auth callback (app/api/kite/callback/route.ts)
+# fires a deploy hook on the same commit purely to pick up a new
+# KITE_ACCESS_TOKEN env var, with no file change at all — this branch was
+# silently canceling that redeploy every time, so the new token never
+# actually went live (fixed 2026-11-19, found via 4 failed morning logins).
 if [ -z "$CHANGED" ]; then
-  echo "No file changes since the last build — skipping."
-  exit 0
+  echo "No file changes since the last build (same-commit redeploy, e.g. a deploy hook or env-var update) — building."
+  exit 1
 fi
 
 # Each path here is a pure runtime-fallback cache or internal bookkeeping
