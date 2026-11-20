@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-20-mcx-silver-crashes-6-89-to-149-369-kg-breaks-below-20-sma",
+    "href": "/articles/2026-11-20-mcx-silver-crashes-6-89-to-149-369-kg-breaks-below-20-sma",
+    "title": "MCX Silver crashes 6.89% to ₹149,369/kg — breaks below 20-SMA",
+    "description": "Silver plunges ₹10,543/kg (6.89%) to ₹149,369/kg, triggering Hawk-Scan. Gold and nat gas also sharply lower.",
+    "excerpt": "TRIGGER MCX Silver has collapsed 6.89% to ₹149,369/kg, falling below the 20-day simple moving average of ₹177,292 for the first time in three weeks — a capitulation move that has fired the Hawk-Scan t",
+    "date": "2026-11-20T07:40:17.626Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Nat Gas",
+      "Risk-Off",
+      "Industrial Metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 149369
+  },
+  {
     "type": "brief",
     "slug": "edition-151",
     "href": "/briefs/edition-151",
