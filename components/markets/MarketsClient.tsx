@@ -152,7 +152,7 @@ function PriceCard({
       <div style={{ fontSize: 10, color: 'var(--ink-4)', marginBottom: hasKite ? 10 : 0 }}>
         {data.mcxChange !== 0 && (
           <span style={{ color, marginRight: 4 }}>
-            {data.mcxChange > 0 ? '+' : ''}{fmtINR(Math.abs(data.mcxChange))}
+            {data.mcxChange > 0 ? '+' : '−'}{fmtINR(Math.abs(data.mcxChange))}
           </span>
         )}
         {cfg.unit}
@@ -166,7 +166,7 @@ function PriceCard({
               { l: 'O', v: data.mcxOpen },
               { l: 'H', v: data.mcxHigh },
               { l: 'L', v: data.mcxLow },
-              { l: 'C', v: data.mcxPrevClose },
+              { l: 'PC', v: data.mcxPrevClose },
             ].map(({ l, v }) => (
               <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
                 <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', letterSpacing: '0.3px', minWidth: 10 }}>{l}</span>
@@ -383,7 +383,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
               </div>
               {fx?.open && fx.open > 0 ? (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 8px', marginTop: 8 }}>
-                  {[{ l: 'O', v: fx.open }, { l: 'H', v: fx.high }, { l: 'L', v: fx.low }, { l: 'C', v: fx.prevClose }].map(({ l, v }) => (
+                  {[{ l: 'O', v: fx.open }, { l: 'H', v: fx.high }, { l: 'L', v: fx.low }, { l: 'PC', v: fx.prevClose }].map(({ l, v }) => (
                     <div key={l} style={{ display: 'flex', gap: 4, alignItems: 'baseline' }}>
                       <span style={{ fontSize: 10, fontWeight: 600, color: 'var(--ink-4)', minWidth: 10 }}>{l}</span>
                       <span style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--ink-2)' }}>₹{v.toFixed(cfg.decimals)}</span>
