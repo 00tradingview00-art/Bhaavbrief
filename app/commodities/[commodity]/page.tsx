@@ -13,8 +13,7 @@ import { normalizeCommodityValue, KEY_TO_MCX_LABEL, type CommodityKey } from '@/
 import CommodityChartWrapper from '@/components/CommodityChartWrapper'
 import UpcomingEventsForCommodity from '@/components/UpcomingEventsForCommodity'
 import CommodityVisitTracker from '@/components/CommodityVisitTracker'
-import SinceLastVisit from '@/components/SinceLastVisit'
-import WatchlistStar from '@/components/terminal/WatchlistStar'
+import CommodityPriceHero from '@/components/CommodityPriceHero'
 import { safeJsonLd } from '@/lib/seo'
 import DriverMaps from '@/components/visuals/DriverMaps'
 import { getDriverContext } from '@/lib/driverContext'
@@ -305,21 +304,6 @@ const BENCHMARK_INSTRUMENT: Partial<Record<string, { key: string; label: string;
   natgas: { key: 'HENRY_HUB', label: 'Henry Hub', prefix: '$' },
 }
 
-function pctBadge(pct: number) {
-  const up    = pct >= 0
-  const color = up ? '#16A34A' : '#DC2626'
-  const bg    = up ? '#F0FDF4' : '#FEF2F2'
-  return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: 3,
-      fontSize: 14, fontWeight: 600, color,
-      background: bg, padding: '2px 8px', borderRadius: 4,
-    }}>
-      {up ? '▲' : '▼'} {Math.abs(pct).toFixed(2)}%
-    </span>
-  )
-}
-
 export default async function CommodityPage({ params }: Props) {
   const { commodity } = await params
   const entry = SLUG_MAP[commodity]
@@ -338,16 +322,11 @@ export default async function CommodityPage({ params }: Props) {
   const snap   = await loadSnapshot()
   const prices = snap ? snapshotToPriceData(snap) : null
 
-  const priceData = prices ? prices[entry.priceKey as CommodityPriceKey] : null
-  const ltp       = priceData?.mcx         ?? 0
-  const pct       = priceData?.mcxChangePct ?? 0
-  const open      = priceData?.mcxOpen      ?? 0
-  const high      = priceData?.mcxHigh      ?? 0
-  const low       = priceData?.mcxLow       ?? 0
-  const prevClose = priceData?.mcxPrevClose  ?? 0
-  // A carried-forward last-known price (see MCXData.mcxStale) shouldn't be
-  // narrated with the same "live/real-time" confidence as a fresh one.
-  const isStale   = priceData?.mcxStale     ?? false
+  const priceData = prices ? (prices[entry.priceKey as CommodityPriceKey] ?? null) : null
+  // SSR value only, for the duty-inclusive parity calc and JSON-LD below —
+  // the rendered hero price itself is live-corrected client-side inside
+  // CommodityPriceHero (see components/CommodityPriceHero.tsx).
+  const ltp       = priceData?.mcx ?? 0
 
   // ── Live import parity computation ──────────────────────────────────────────
   const dutyFactors = loadDutyFactors()
@@ -513,76 +492,16 @@ export default async function CommodityPage({ params }: Props) {
         <span style={{ color: 'var(--ink-2)' }}>{info.name}</span>
       </div>
       {/* Hero — live price */}
-      <div className="commodity-price-summary" style={{
-        background: 'var(--surface-1)', border: '1px solid var(--border)',
-        borderRadius: 12, padding: '28px 32px', marginBottom: 32,
-        borderTop: `3px solid ${color}`,
-      }}>
-        <div className="bb-commodity-hero-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span style={{
-                fontSize: 10, fontWeight: 700, letterSpacing: '0.5px', textTransform: 'uppercase',
-                padding: '3px 8px', borderRadius: 4, background: `${color}15`, color,
-              }}>MCX</span>
-              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>{info.mcxSymbol}</span>
-              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>·</span>
-              <span style={{ fontSize: 15, color: 'var(--ink-4)' }}>{info.unit}</span>
-            </div>
-            <h1 style={{
-              fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500,
-              color: 'var(--ink)', margin: '0 0 4px', lineHeight: 1.2,
-              display: 'flex', alignItems: 'center', gap: 8,
-            }}>
-              MCX {info.name} Price Today
-              <WatchlistStar instrumentKey={commodity} />
-            </h1>
-            <p style={{ fontSize: 15, color: 'var(--ink-4)', margin: 0 }}>
-              {isStale ? 'Last known MCX price · live update unavailable' : 'Live MCX price · Updated in real time'}
-            </p>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 36, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-1px' }}>
-              {ltp > 0 ? `₹${fmt(ltp)}` : '—'}
-            </div>
-            <div style={{ marginTop: 6 }}>
-              {isStale ? (
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', fontSize: 12, fontWeight: 600,
-                  color: 'var(--ink-4)', background: 'var(--surface-2, #F3F2EC)', padding: '2px 8px', borderRadius: 4,
-                }}>last known</span>
-              ) : (pct !== 0 ? pctBadge(pct) : null)}
-            </div>
-          </div>
-        </div>
-
-        <SinceLastVisit slug={commodity} price={ltp} isStale={isStale} />
-
-        {/* OHLC strip */}
-        {(open > 0 || high > 0) && (
-          <div className="bb-commodity-ohlc" style={{
-            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 12, marginTop: 24,
-            padding: '16px 0 0', borderTop: '1px solid var(--border)',
-          }}>
-            {[
-              { label: 'Open',       value: fmt(open) },
-              { label: 'High',       value: fmt(high) },
-              { label: 'Low',        value: fmt(low)  },
-              { label: 'Prev Close', value: fmt(prevClose) },
-            ].map(({ label, value }) => (
-              <div key={label}>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 4 }}>
-                  {label}
-                </div>
-                <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 16, color: 'var(--ink-2)', fontWeight: 500 }}>
-                  ₹{value}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <CommodityPriceHero
+        slug={commodity}
+        priceKey={entry.priceKey}
+        initialPriceData={priceData}
+        initialSnapshotStale={prices?.snapshotStale ?? false}
+        color={color}
+        mcxSymbol={info.mcxSymbol}
+        unit={info.unit}
+        name={info.name}
+      />
 
       {/* Live Import Parity */}
       {liveParity && ltp > 0 && (
