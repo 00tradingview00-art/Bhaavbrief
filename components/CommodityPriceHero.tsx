@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import type { MCXData, PriceData } from '@/lib/prices'
-import { isWithinMcxHours } from '@/scripts/lib/mcxHours.js'
+import type { MCXData } from '@/lib/prices'
+import { useLivePrices } from '@/components/LivePricesProvider'
 import SinceLastVisit from '@/components/SinceLastVisit'
 import WatchlistStar from '@/components/terminal/WatchlistStar'
 
@@ -37,46 +36,22 @@ interface Props {
   name:     string
 }
 
-// Mirrors CommodityTerminalGrid.tsx's pattern: SSR snapshot for instant paint,
-// then a client poll of /api/prices (same endpoint, same 30s/5min cadence as
-// TickerStrip/MarketsClient/DailyBriefHome) corrects it. Only the raw
-// price/OHLC/stale fields are live-corrected here — the duty-inclusive import
-// parity block on the page stays server-computed (lib/importDuty.ts reads a
-// JSON file via fs, not available client-side, and is a slower-moving derived
-// metric, not a tick price — out of scope, see the plan).
+// Reads the shared poll (one fetch for the whole page tree, see
+// LivePricesProvider in app/layout.tsx) rather than running its own — this
+// used to poll independently, which on a commodity page meant THREE
+// near-simultaneous requests to /api/prices per page view (this + TickerStrip
+// + DriverMaps), tripping the route's rate limit in production
+// (2026-11-20). Only the raw price/OHLC/stale fields are live-corrected here
+// — the duty-inclusive import parity block on the page stays
+// server-computed (lib/importDuty.ts reads a JSON file via fs, not available
+// client-side, and is a slower-moving derived metric, not a tick price — out
+// of scope, see the plan).
 export default function CommodityPriceHero({
   slug, priceKey, initialPriceData, initialSnapshotStale, color, mcxSymbol, unit, name,
 }: Props) {
-  const [priceData, setPriceData]         = useState<MCXData | null>(initialPriceData)
-  const [snapshotStale, setSnapshotStale] = useState(initialSnapshotStale)
-  const intervalRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch('/api/prices', { cache: 'no-store' })
-        if (!res.ok) return
-        const d = await res.json() as PriceData
-        const next = (d as unknown as Record<string, MCXData>)[priceKey] ?? null
-        setPriceData(next)
-        setSnapshotStale(d.snapshotStale ?? false)
-      } catch {
-        // Keep current values — don't replace live data with nothing
-      }
-    }
-
-    function scheduleNext() {
-      const delay = isWithinMcxHours() ? 30_000 : 300_000
-      intervalRef.current = setTimeout(async () => {
-        await load()
-        scheduleNext()
-      }, delay)
-    }
-
-    load()
-    scheduleNext()
-    return () => clearTimeout(intervalRef.current)
-  }, [priceKey])
+  const live = useLivePrices()
+  const priceData     = live ? ((live as unknown as Record<string, MCXData>)[priceKey] ?? null) : initialPriceData
+  const snapshotStale = live ? (live.snapshotStale ?? false) : initialSnapshotStale
 
   const ltp       = priceData?.mcx          ?? 0
   const pct       = priceData?.mcxChangePct ?? 0

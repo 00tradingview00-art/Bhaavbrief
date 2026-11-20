@@ -1,7 +1,6 @@
 'use client'
-import { useEffect, useState, useRef } from 'react'
 import type { PriceData } from '@/lib/prices'
-import { isWithinMcxHours } from '@/scripts/lib/mcxHours.js'
+import { useLivePrices } from '@/components/LivePricesProvider'
 
 // Poll faster during MCX hours — shared DST-aware clock (scripts/lib/mcxHours.js).
 
@@ -47,37 +46,15 @@ function mapToItems(d: PriceData): Item[] {
 }
 
 export default function TickerStrip({ initialPrices }: { initialPrices?: PriceData | null }) {
-  const [items, setItems]             = useState<Item[]>(initialPrices ? mapToItems(initialPrices) : [])
-  const [generatedAtIST, setGenAt]    = useState<string>(initialPrices?.generatedAtIST ?? '')
-  const intervalRef                   = useRef<NodeJS.Timeout | undefined>(undefined)
-
-  async function load() {
-    try {
-      const res = await fetch('/api/prices', { cache: 'no-store' })
-      if (!res.ok) return
-      const d: PriceData = await res.json()
-      setItems(mapToItems(d))
-      if (d.generatedAtIST) setGenAt(d.generatedAtIST)
-    } catch {
-      // Keep current values — don't replace live data with nothing
-    }
-  }
-
-  useEffect(() => {
-    load()
-
-    // During market hours refresh every 30 sec, outside every 5 min
-    function scheduleNext() {
-      const delay = isWithinMcxHours() ? 30_000 : 300_000
-      intervalRef.current = setTimeout(async () => {
-        await load()
-        scheduleNext()
-      }, delay)
-    }
-
-    scheduleNext()
-    return () => clearTimeout(intervalRef.current)
-  }, [])
+  // Shared poll (one fetch for the whole page tree, see LivePricesProvider in
+  // app/layout.tsx) rather than this component's own — previously every page
+  // ran this poll AND whatever page-specific component also wanted live
+  // prices, doubling/tripling requests to /api/prices and tripping its rate
+  // limit in production (2026-11-20).
+  const live  = useLivePrices()
+  const d     = live ?? initialPrices ?? null
+  const items = d ? mapToItems(d) : []
+  const generatedAtIST = d?.generatedAtIST ?? ''
 
   // Reserve the bar's real height even before live data arrives — returning null here
   // let this sticky, every-page shell collapse to 0px and then pop in once `load()`
