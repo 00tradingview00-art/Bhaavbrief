@@ -17,10 +17,18 @@ export interface GatewayMeta {
 }
 
 interface Props {
-  meta:        GatewayMeta
-  priceData:   MCXData | null
-  optionsData: TerminalInstrumentData | null
-  sparkCloses: number[]
+  meta:          GatewayMeta
+  priceData:     MCXData | null
+  // Whole-snapshot age flag (lib/snapshot.ts's snapshotToPriceData(), computed
+  // live against wall-clock time on every read) — distinct from priceData's own
+  // mcxStale, which is this ONE instrument's carried-forward flag, baked into
+  // the JSON at cron-write-time and never re-evaluated after that. A card must
+  // treat itself as stale if EITHER is true, or a frozen cron pipeline (the
+  // 2026-11-20 incident) reads as "fresh" forever once mcxStale happens to be
+  // false at the last successful write.
+  snapshotStale: boolean
+  optionsData:   TerminalInstrumentData | null
+  sparkCloses:   number[]
 }
 
 function fmtNum(n: number | null | undefined, dp = 2): string {
@@ -43,10 +51,10 @@ function pcrSignal(pcr: number | null): { label: string; tone: PillTone } {
   return { label: 'Balanced', tone: 'gold' }
 }
 
-export default function CommodityGatewayCard({ meta, priceData, optionsData, sparkCloses }: Props) {
+export default function CommodityGatewayCard({ meta, priceData, snapshotStale, optionsData, sparkCloses }: Props) {
   const price  = priceData?.mcx ?? 0
   const pct    = priceData?.mcxChangePct ?? 0
-  const stale  = priceData?.mcxStale ?? false
+  const stale  = (priceData?.mcxStale ?? false) || snapshotStale
   const up     = pct >= 0
   const signal = pcrSignal(optionsData?.pcr ?? null)
 
