@@ -126,7 +126,7 @@ export default function PLCalculatorClient() {
           border: `1px solid ${pnl >= 0 ? '#A7F3D0' : '#FECACA'}`,
         }}>
           <div style={{ fontFamily: 'var(--font-sans)', fontSize: '2.25rem', fontWeight: 700, color: pnl >= 0 ? 'var(--up)' : 'var(--down)' }}>
-            {pnl >= 0 ? '+' : ''}₹{Math.abs(pnl).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+            {pnl >= 0 ? '+' : '−'}₹{Math.abs(pnl).toLocaleString('en-IN', { maximumFractionDigits: 2 })}
           </div>
           <div style={{ fontSize: '0.78rem', color: 'var(--ink-3)', marginTop: 5, fontFamily: 'var(--font-sans)' }}>
             {lots} lot{lots > 1 ? 's' : ''} × {meta.lotSize} {meta.unit.split('/')[1]} × ₹{Math.abs(side === 'long' ? parseFloat(sellPrice) - parseFloat(buyPrice) : parseFloat(buyPrice) - parseFloat(sellPrice)).toFixed(2)} per unit
