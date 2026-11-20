@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-151",
+    "href": "/briefs/edition-151",
+    "title": "Gold Sheds ₹4,595 — The Safe-Haven Unwind Accelerates",
+    "description": "COMEX gold down nearly 5% as risk appetite returns globally, dragging MCX gold and silver sharply lower while crude holds relatively firm.",
+    "excerpt": "MCX Gold ₹122857 | Crude ₹7779 | USDINR ₹93.16 — Gold -3.61% | Crude -0.36% | Silver -5.08% Yesterday's Edge — Result: Edition #150 watched whether COMEX GOLD would close below 3,717.5. Confirmed ✓, n",
+    "date": "2026-11-20T04:00:46.230Z",
+    "edition": "151",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "Macro"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-19-mcx-crude-rallies-3-as-eia-signals-supply-tightness",
     "href": "/articles/2026-11-19-mcx-crude-rallies-3-as-eia-signals-supply-tightness",
