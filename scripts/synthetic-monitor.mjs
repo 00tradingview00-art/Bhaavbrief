@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * scripts/synthetic-monitor.mjs — Part 4 (M-01..M-07) synthetic monitoring.
+ * scripts/synthetic-monitor.mjs — Part 4 (M-01..M-08) synthetic monitoring.
  *
  * Runs from GitHub Actions, external to the app's own runtime, hitting real
  * production URLs — checks what a user actually sees, not what the pipeline
@@ -212,6 +212,32 @@ async function run() {
     }
   } catch (e) {
     issues.push(`M-07: sitemap check failed: ${e.message}`)
+  }
+
+  // M-08: pipeline heartbeat. app/api/health/route.ts already computes live
+  // staleness for the cron snapshot, the intelligence engine, the morning
+  // brief, and the holiday calendar — this just surfaces that to the alert
+  // pipeline that already pages on issues[]. Added after the 2026-11-20
+  // incident: intelligence-engine.yml silently stopped firing for 7+ hours
+  // (data/market-snapshot.json frozen) and nothing paged a human — the
+  // staleness check already existed in /api/health, it just wasn't wired to
+  // anything that alerts. watchdog.yml's once-a-day article-existence check
+  // is a different, much coarser signal and doesn't cover this gap.
+  try {
+    const { status, text } = await fetchText('/api/health')
+    if (status !== 200 && status !== 503) {
+      issues.push(`M-08: /api/health returned unexpected HTTP ${status}`)
+    } else {
+      const health = JSON.parse(text)
+      results.health = health.checks
+      for (const [name, check] of Object.entries(health.checks ?? {})) {
+        if (check && check.ok === false) {
+          issues.push(`M-08: /api/health check "${name}" failing — ${check.reason ?? JSON.stringify(check)}`)
+        }
+      }
+    }
+  } catch (e) {
+    issues.push(`M-08: /api/health check failed: ${e.message}`)
   }
 
   return { issues, results, checkedAt: new Date().toISOString(), baseUrl: BASE }

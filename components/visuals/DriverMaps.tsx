@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import type { PriceData } from '@/lib/prices'
+import { isWithinMcxHours } from '@/scripts/lib/mcxHours.js'
 import { DRIVER_MAPS_COPY, getDriverMaps, type DriverMap, type DriverReading } from '@/lib/driverMaps'
 import { formatPulseTime } from '@/lib/marketPulse'
 import { trackEvent } from '@/lib/analytics'
@@ -31,7 +32,40 @@ type Props = {
   context?: DriverContext
 }
 
-export default function DriverMaps({ prices, only, page = 'markets', context }: Props) {
+export default function DriverMaps({ prices: initialPrices, only, page = 'markets', context }: Props) {
+  // SSR snapshot for instant paint, then a client poll of /api/prices (same
+  // endpoint/cadence as TickerStrip/MarketsClient/CommodityTerminalGrid) —
+  // this was the one surface left reading the cron snapshot with no live
+  // correction at all (unlike CommodityGatewayCard/CommodityPriceHero, this
+  // component's own prices?.snapshotStale check was already correct; it just
+  // never had fresher data to check).
+  const [prices, setPrices] = useState<PriceData | null>(initialPrices)
+  const pollRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch('/api/prices', { cache: 'no-store' })
+        if (!res.ok) return
+        setPrices(await res.json() as PriceData)
+      } catch {
+        // Keep current values — don't replace live data with nothing
+      }
+    }
+
+    function scheduleNext() {
+      const delay = isWithinMcxHours() ? 30_000 : 300_000
+      pollRef.current = setTimeout(async () => {
+        await load()
+        scheduleNext()
+      }, delay)
+    }
+
+    load()
+    scheduleNext()
+    return () => clearTimeout(pollRef.current)
+  }, [])
+
   const full = getDriverMaps(prices, context)
   const view = only ? { ...full, maps: full.maps.filter(map => map.key === only) } : full
   const isPro = useIsPro()

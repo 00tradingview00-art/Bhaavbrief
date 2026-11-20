@@ -10,7 +10,7 @@ import ContinueReading from '@/components/ContinueReading'
 import { getActiveArcs } from '@/lib/arcs'
 import { getNextHighImpactEvent } from '@/lib/eventMap'
 import TerminalTabbar from '@/components/terminal/TerminalTabbar'
-import CommodityGatewayCard from '@/components/terminal/CommodityGatewayCard'
+import CommodityTerminalGrid from '@/components/terminal/CommodityTerminalGrid'
 import OptionsIntelligencePanel from '@/components/terminal/OptionsIntelligencePanel'
 import MarketPulsePanel from '@/components/terminal/MarketPulsePanel'
 import MacroCard from '@/components/terminal/MacroCard'
@@ -215,20 +215,15 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        <div className="terminal-commodity-grid" style={{ display: 'grid', gap: 12 }}>
-          {CORE_INSTRUMENTS.map(instrument => {
-            const meta = GATEWAY_META[instrument]
-            return (
-              <CommodityGatewayCard
-                key={instrument}
-                meta={meta}
-                priceData={prices ? prices[meta.priceKey] : null}
-                optionsData={terminalData[instrument]}
-                sparkCloses={getSparklineCloses(meta.historyField, 20)}
-              />
-            )
-          })}
-        </div>
+        <CommodityTerminalGrid
+          instruments={CORE_INSTRUMENTS}
+          meta={GATEWAY_META}
+          initialPrices={prices}
+          terminalData={terminalData}
+          sparklines={Object.fromEntries(
+            CORE_INSTRUMENTS.map(instrument => [instrument, getSparklineCloses(GATEWAY_META[instrument].historyField, 20)]),
+          ) as Record<typeof CORE_INSTRUMENTS[number], number[]>}
+        />
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════════
