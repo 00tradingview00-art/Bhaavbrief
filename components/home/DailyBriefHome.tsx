@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { BriefMeta } from '@/lib/briefs'
 import type { EventMapEntry } from '@/lib/eventMap'
 import type { PriceData } from '@/lib/prices'
+import { useLivePrices } from '@/components/LivePricesProvider'
 import type { StoryArc } from '@/lib/arcs'
 import SubscribeForm from '@/components/SubscribeForm'
 import MarketPulse from '@/components/visuals/MarketPulse'
@@ -66,37 +66,15 @@ export default function DailyBriefHome({
   activeArc: StoryArc | undefined
 }) {
   // This component is rendered exclusively by app/mobile/page.tsx. The page
-  // starts with the deploy-time snapshot for a fast first paint, then replaces
-  // it with the live endpoint so a long-lived mobile deployment can never keep
-  // showing an old snapshot as "delayed" after Kite has refreshed.
-  const [livePrices, setLivePrices] = useState(initialPrices)
-
-  useEffect(() => {
-    let cancelled = false
-    let refreshTimer: ReturnType<typeof setTimeout> | undefined
-
-    const refresh = async () => {
-      try {
-        const response = await fetch('/api/prices', { cache: 'no-store' })
-        if (!response.ok || cancelled) return
-        const next = await response.json() as PriceData
-        if (cancelled) return
-        setLivePrices(next)
-        refreshTimer = setTimeout(refresh, next.marketOpen ? 30_000 : 300_000)
-      } catch {
-        // Keep the server snapshot visible if the live request is unavailable.
-        refreshTimer = setTimeout(refresh, 60_000)
-      }
-    }
-
-    void refresh()
-    return () => {
-      cancelled = true
-      if (refreshTimer) clearTimeout(refreshTimer)
-    }
-  }, [])
-
-  const prices = livePrices
+  // starts with the deploy-time snapshot for a fast first paint, then reads
+  // the shared poll (one fetch for the whole page tree, see
+  // LivePricesProvider in app/layout.tsx) so a long-lived mobile deployment
+  // can never keep showing an old snapshot as "delayed" after Kite has
+  // refreshed. This used to run its own independent poll, which duplicated
+  // the global TickerStrip's poll on every /mobile page view, tripping
+  // /api/prices's rate limit in production (2026-11-20).
+  const live   = useLivePrices()
+  const prices = live ?? initialPrices
   const updatedLabel = prices?.generatedAtIST
     ? `Updated ${prices.generatedAtIST}`
     : prices?.updatedAt

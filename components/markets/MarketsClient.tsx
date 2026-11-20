@@ -1,5 +1,6 @@
 'use client'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import { useLivePrices } from '@/components/LivePricesProvider'
 import Link from 'next/link'
 import type { PriceData, MCXData } from '@/lib/prices'
 import type { EIAResponse } from '@/lib/eia'
@@ -268,36 +269,27 @@ function OptionsSnapshot({ data }: { data: Record<CoreInstrument, TerminalInstru
 // ── Main MarketsClient ────────────────────────────────────────────────────────
 
 export default function MarketsClient({ initialPrices, eiaData, sparklines, optionsData, recentBriefs }: { initialPrices: PriceData | null; eiaData?: EIAResponse; sparklines?: Record<string, number[]>; optionsData?: Record<CoreInstrument, TerminalInstrumentData | null>; recentBriefs?: BriefMeta[] }) {
-  const [prices, setPrices]         = useState<PriceData | null>(initialPrices)
-  const [flashing, setFlashing]     = useState(false)
-  const [loading, setLoading]       = useState(false)
-  const [marketOpen, setMarketOpen] = useState(isMCXOpen())
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-
-  const refresh = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/prices', { cache: 'no-store' })
-      if (!res.ok) return
-      const data: PriceData = await res.json()
-      setPrices(data)
-      setMarketOpen(isMCXOpen())
-      setFlashing(true)
-      setTimeout(() => setFlashing(false), 600)
-    } catch { /* keep stale data */ }
-    finally { setLoading(false) }
-  }, [])
+  // Reads the shared poll (one fetch for the whole page tree, see
+  // LivePricesProvider in app/layout.tsx) rather than running its own — this
+  // used to poll independently, which on /markets meant two near-simultaneous
+  // requests to /api/prices per page view (this + the global TickerStrip),
+  // tripping the route's rate limit in production (2026-11-20).
+  const live                    = useLivePrices()
+  const prices                  = live ?? initialPrices
+  const [flashing, setFlashing] = useState(false)
+  const marketOpen              = prices?.marketOpen ?? isMCXOpen()
+  const seenUpdatedAt           = useRef<string | undefined>(initialPrices?.updatedAt)
 
   useEffect(() => {
-    // Fetch immediately on mount so live prices replace the server snapshot right away
-    refresh()
-    function schedule() {
-      const delay = isMCXOpen() ? 30_000 : 300_000
-      timerRef.current = setTimeout(async () => { await refresh(); schedule() }, delay)
-    }
-    schedule()
-    return () => clearTimeout(timerRef.current)
-  }, [refresh])
+    // Flash the price cards whenever the shared poll delivers a genuinely new
+    // reading (not on first mount, when `live` is just catching up to
+    // whatever initialPrices already showed).
+    if (!live?.updatedAt || live.updatedAt === seenUpdatedAt.current) return
+    seenUpdatedAt.current = live.updatedAt
+    setFlashing(true)
+    const t = setTimeout(() => setFlashing(false), 600)
+    return () => clearTimeout(t)
+  }, [live?.updatedAt])
 
   const p = prices
 
@@ -331,14 +323,6 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={
         <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-          {loading && (
-            <span
-              role="status"
-              aria-label="Refreshing"
-              className="bb-spinner"
-              style={{ width: 9, height: 9, borderRadius: '50%', border: '2px solid var(--border)', borderTopColor: 'var(--gold)', display: 'inline-block' }}
-            />
-          )}
           {marketOpen ? 'Live · refreshed every 30s' : 'Market closed'}
         </span>
       } />

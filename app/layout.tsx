@@ -8,6 +8,7 @@ import Nav from '@/components/Nav'
 import BottomNav from '@/components/BottomNav'
 import FeedbackPill from '@/components/FeedbackPill'
 import TickerStrip from '@/components/TickerStrip'
+import { LivePricesProvider } from '@/components/LivePricesProvider'
 import PostHogProvider from '@/components/PostHogProvider'
 import { loadSnapshot, snapshotToPriceData } from '@/lib/snapshot'
 import { safeJsonLd } from '@/lib/seo'
@@ -124,6 +125,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body style={{ fontFamily: 'var(--font-sans)', background: 'var(--surface-2)', color: 'var(--ink)', margin: 0, padding: 0 }}>
         <PostHogProvider>
+        <LivePricesProvider initialPrices={initialPrices}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(orgSchema) }} />
         <Nav />
         {/* Sticky ticker bar — sticks just below the nav (56px) */}
@@ -185,6 +187,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           gtag('js', new Date());
           gtag('config', 'G-JG993LN554');
         `}</Script>
+        </LivePricesProvider>
         </PostHogProvider>
       </body>
     </html>

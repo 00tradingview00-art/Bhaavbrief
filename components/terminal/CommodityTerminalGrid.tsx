@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import type { PriceData } from '@/lib/prices'
-import { isWithinMcxHours } from '@/scripts/lib/mcxHours.js'
+import { useLivePrices } from '@/components/LivePricesProvider'
 import CommodityGatewayCard from './CommodityGatewayCard'
 import type { CoreInstrument, TerminalInstrumentData, GATEWAY_META } from '@/lib/terminalData'
 
@@ -14,43 +13,18 @@ interface Props {
   sparklines:    Record<CoreInstrument, number[]>
 }
 
-// One shared poll for the whole grid rather than each of the 5 cards fetching
-// independently — same /api/prices endpoint and 30s/5min cadence as
-// TickerStrip/MarketsClient/DailyBriefHome (see scripts/lib/mcxHours.js for
-// the shared market-hours clock), just fanned out to 5 cards instead of
-// overwriting one ticker. optionsData (iVIX/PCR/Max Pain/Vol Prem) is left
+// Reads the shared poll (one fetch for the whole page tree, see
+// LivePricesProvider in app/layout.tsx) rather than running its own — this
+// used to poll independently, which on the homepage meant two near-
+// simultaneous requests to /api/prices per page view (this grid +
+// TickerStrip, both in the root layout), tripping the route's rate limit in
+// production (2026-11-20). optionsData (iVIX/PCR/Max Pain/Vol Prem) is left
 // alone — it's already a live per-request Kite fetch via getOptionsChain()
 // (dynamic = 'force-dynamic' on the homepage's getTerminalData() call), so
 // re-fetching it client-side would be new load for no freshness gain.
 export default function CommodityTerminalGrid({ instruments, meta, initialPrices, terminalData, sparklines }: Props) {
-  const [prices, setPrices] = useState<PriceData | null>(initialPrices)
-  const intervalRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const res = await fetch('/api/prices', { cache: 'no-store' })
-        if (!res.ok) return
-        const d: PriceData = await res.json()
-        setPrices(d)
-      } catch {
-        // Keep current values — don't replace live data with nothing
-      }
-    }
-
-    function scheduleNext() {
-      const delay = isWithinMcxHours() ? 30_000 : 300_000
-      intervalRef.current = setTimeout(async () => {
-        await load()
-        scheduleNext()
-      }, delay)
-    }
-
-    load()
-    scheduleNext()
-    return () => clearTimeout(intervalRef.current)
-  }, [])
-
+  const live   = useLivePrices()
+  const prices = live ?? initialPrices
   const snapshotStale = prices?.snapshotStale ?? false
 
   return (
