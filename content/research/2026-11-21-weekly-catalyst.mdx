@@ -1,0 +1,57 @@
+---
+title: "Rupee Strength Meets COMEX Break — The Parity Wedge Is Next Week's Catalyst"
+description: "A firmer rupee has removed the usual FX cushion just as COMEX precious metals broke, leaving MCX gold and silver quoted far above import parity into expiry season."
+date: "2026-11-21"
+commodity: "gold"
+commodities: ["gold","silver","copper"]
+premium: true
+published: true
+edition: "weekly-catalyst"
+tags: ["weekly-catalyst","macro","gold","silver","copper"]
+coverImage: "https://images.pexels.com/photos/8442324/pexels-photo-8442324.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+---
+
+## The catalyst
+
+The single dominant force heading into next week is not a central bank decision or a supply shock — it is the simultaneous removal of both pillars that normally hold up MCX precious-metal prices: the dollar price and the rupee.
+
+COMEX gold is marked at $3,539/oz against a prior close of $3,685.5 (-3.98%), and COMEX silver at $41.08/oz versus $44.32 (-7.31%). In an ordinary Indian risk-off episode, that dollar-side damage arrives softened, because a weaker rupee inflates the INR conversion. This time the opposite happened. USDINR is at 92.66 against a prior 93.47 — a 0.86% appreciation. The rupee is adding to the decline rather than absorbing it.
+
+That matters because of what it exposes. On the snapshot's own derived inputs, gold import parity computes to ₹1,05,430/10g against an MCX quote of ₹1,22,529 — a 16.22% wedge. Silver parity computes to ₹1,22,381/kg against ₹1,49,082 — a 21.82% wedge. Local futures are being quoted materially above the theoretical landed-cost line, and the gap between the two metals' wedges (5.6 percentage points) is itself the story: it exceeds the 2-point tolerance the system flags, which means at least one leg of the calculation — an MCX print or a COMEX print — is stale or mismarked. The snapshot stamps every MCX contract `stale: true` as of 21 Nov 05:14 IST.
+
+So the thesis for the week is a convergence thesis under uncertainty: either the MCX side has not yet marked to the overnight COMEX break and the rupee move, in which case the first liquid sessions carry catch-down risk; or the COMEX side of the feed is the distorted leg, in which case the wedge narrows without a comparable local move. Both paths resolve through the same variable — the import-parity gap — and that is what deserves monitoring before anything else.
+
+## What changed this week
+
+The week built toward this. On 20 November, MCX Silver fell 6.89% (₹10,543/kg) to ₹1,49,369/kg, breaking below its 20-SMA and triggering an internal Hawk-Scan, with gold and natural gas also sharply lower. On 18 November, MCX Copper plunged 4.10% to ₹1,224/kg alongside COMEX copper at -4.17%, with China PMI weakness cited as the probable trigger. The 19 November close showed gold and silver fading 1.75% and 1.95% on overnight COMEX weakness.
+
+Energy ran the other way for most of the week, then split. MCX Crude rallied roughly 2–3% on 19 November to ₹7,733–7,808/bbl on an EIA inventory flat print read as supply tightness. Natural gas whipsawed: down 4.16% on 16 November and 2.25% on 17 November on Henry Hub storage-surplus signals, then up around 2% on 18 November on heating-season onset.
+
+The snapshot now shows a sharper divergence. Henry Hub is marked at $3.79/mmBtu, up 16.00% from $3.27, while MCX Natural Gas sits at ₹299.7/mmBtu, down 2.85% — and stale. WTI is marked +0.49% at $83.62 while Brent is -2.29% at $89.87, another internally inconsistent pair. The gold-silver ratio stands at 86.1.
+
+## MCX transmission
+
+The mechanism is arithmetic, not sentiment. MCX gold and silver are rupee expressions of a dollar benchmark plus landed costs; when the dollar benchmark falls and the rupee simultaneously strengthens, both multiplicands in the conversion move the same way and the INR decline is amplified rather than dampened. The current 16.22% and 21.82% wedges are the measure of how far local quotes sit from that arithmetic.
+
+Silver carries the larger wedge and the larger realised drawdown because it is the hybrid asset — industrial demand links it to the same China-PMI impulse that took copper down 4.10%, while its monetary leg ties it to the COMEX precious complex. Copper transmits through the LME/COMEX-to-INR path directly, and a firmer rupee compresses that conversion too. In natural gas, the stale MCX print against a 16% Henry Hub move is the widest observable dislocation in the snapshot — and it sits four days ahead of expiry.
+
+## Next-week scenario map
+
+| Scenario | Observable trigger | Transmission mechanism | Primary focus |
+|---|---|---|---|
+| Wedge compresses locally | MCX re-prints converge toward parity once liquid sessions resume | Stale local marks catch down to COMEX + firmer INR | gold, silver |
+| Wedge compresses globally | COMEX gold/silver stabilise or retrace the break | Dollar leg rises toward local quotes; INR gap narrows without local stress | gold, silver |
+| Rupee reverses | USDINR moves back above 93.47 | FX cushion is restored; INR landed cost rises mechanically | gold, silver, copper |
+| Industrial leg leads | Further China PMI deterioration | Copper and silver's industrial component dominate the monetary one | copper, silver |
+| Gas gap resolves at expiry | Henry Hub holds near $3.79 into 24 Nov | Stale MCX mark converges; liquidity thins into last trading day | natural gas |
+
+## What would change the view
+
+A clean, non-stale MCX print set that shows the import-parity wedges back inside a few percent of each other would invalidate the convergence thesis entirely — the gap would simply have been a data artefact. A USDINR reversal above 93.47 restores the FX cushion and changes the sign of the rupee contribution. A Henry Hub retracement back toward $3.27 removes the gas dislocation without any MCX adjustment. And reconciliation of the WTI/Brent divergence would clarify whether the EIA-driven tightness narrative from 19 November is still intact.
+
+## Dates that matter
+
+- **24 Nov**, 17:55 UTC — MCX Natural Gas contract expiry (monthly roll, Henry Hub-aligned); this is the dislocation with the shortest clock.
+- **30 Nov**, 17:55 UTC — MCX Copper, Zinc, Lead and Aluminium expiries cluster on one day.
+- **4 Dec**, 17:55 UTC — MCX Gold and Silver expiry; liquidity and spreads can widen in final sessions, which interacts directly with any unresolved parity wedge.
+- **1 Feb 2027** — Union Budget, where gold and silver import duty is set; historically each 1-point duty change has shifted MCX gold by roughly ₹1,000/10g overnight. Distant, but it is the structural lever on the same parity equation discussed above.

@@ -1,5 +1,29 @@
 [
   {
+    "type": "research",
+    "slug": "2026-11-21-weekly-catalyst",
+    "href": "/research/2026-11-21-weekly-catalyst",
+    "title": "Rupee Strength Meets COMEX Break — The Parity Wedge Is Next Week's Catalyst",
+    "description": "A firmer rupee has removed the usual FX cushion just as COMEX precious metals broke, leaving MCX gold and silver quoted far above import parity into expiry season.",
+    "excerpt": "The single dominant force heading into next week is not a central bank decision or a supply shock — it is the simultaneous removal of both pillars that normally hold up MCX precious-metal prices: the ",
+    "date": "2026-11-21",
+    "edition": "weekly-catalyst",
+    "tags": [
+      "weekly-catalyst",
+      "macro",
+      "gold",
+      "silver",
+      "copper"
+    ],
+    "commodity": "gold",
+    "commodities": [
+      "gold",
+      "silver",
+      "copper"
+    ],
+    "premium": true
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-20-mcx-silver-crashes-6-89-to-149-369-kg-breaks-below-20-sma",
     "href": "/articles/2026-11-20-mcx-silver-crashes-6-89-to-149-369-kg-breaks-below-20-sma",
