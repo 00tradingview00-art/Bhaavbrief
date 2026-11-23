@@ -7,22 +7,26 @@
       "source_url": "https://ir.eia.gov/ngs/ngs.html",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-19T15:30:00.000Z",
+      "next_release_utc": "2026-11-25T17:00:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": 61,
+        "value": 20,
         "unit": "Bcf",
-        "as_of_period": "week ending 2026-11-06",
+        "as_of_period": "week ending 2026-11-13",
         "source": "eia_api",
-        "as_of": "2026-11-16"
+        "as_of": "2026-11-23"
       },
       "description_educational": "Weekly change in US natural gas storage — the single largest recurring weekly volatility event for MCX Natural Gas, which tracks Henry Hub via USD/INR.",
       "recent_values": {
         "natgas": [
+          {
+            "period": "2026-11-13",
+            "value": 20
+          },
           {
             "period": "2026-11-06",
             "value": 61
@@ -114,10 +118,6 @@
           {
             "period": "2026-06-05",
             "value": 108
-          },
-          {
-            "period": "2026-05-29",
-            "value": 95
           }
         ]
       }
@@ -128,22 +128,26 @@
       "source_url": "https://www.eia.gov/petroleum/supply/weekly/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-18T15:30:00.000Z",
+      "next_release_utc": "2026-11-25T15:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
       "impact_tier": "high",
       "consensus_field": null,
       "prior_field": {
-        "value": 2,
+        "value": 0.2,
         "unit": "million barrels",
-        "as_of_period": "week ending 2026-11-06",
+        "as_of_period": "week ending 2026-11-13",
         "source": "eia_api",
-        "as_of": "2026-11-16"
+        "as_of": "2026-11-23"
       },
       "description_educational": "Weekly change in US commercial crude oil inventories — the most-watched recurring US supply/demand signal for MCX Crude, alongside API's Tuesday-evening estimate.",
       "recent_values": {
         "crude": [
+          {
+            "period": "2026-11-13",
+            "value": 0.2
+          },
           {
             "period": "2026-11-06",
             "value": 2
@@ -235,10 +239,6 @@
           {
             "period": "2026-06-05",
             "value": -15.2
-          },
-          {
-            "period": "2026-05-29",
-            "value": -16
           }
         ]
       }
@@ -249,7 +249,7 @@
       "source_url": "https://www.api.org/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-17T21:30:00.000Z",
+      "next_release_utc": "2026-11-24T21:30:00.000Z",
       "affected_contracts": [
         "crude"
       ],
@@ -479,7 +479,7 @@
       "source_url": "https://rigcount.bakerhughes.com/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-20T17:00:00.000Z",
+      "next_release_utc": "2026-11-27T17:00:00.000Z",
       "affected_contracts": [
         "crude",
         "natgas"
@@ -501,7 +501,7 @@
       "source_url": "https://www.cpc.ncep.noaa.gov/",
       "frequency": "daily",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-16T20:00:00.000Z",
+      "next_release_utc": "2026-11-23T20:00:00.000Z",
       "affected_contracts": [
         "natgas"
       ],
@@ -682,7 +682,7 @@
       "source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/",
       "frequency": "weekly",
       "cadence_type": "rule_based",
-      "next_release_utc": "2026-11-20T19:30:00.000Z",
+      "next_release_utc": "2026-11-27T19:30:00.000Z",
       "affected_contracts": [
         "gold",
         "silver",
@@ -706,6 +706,14 @@
       "description_educational": "A weekly snapshot of futures positioning by trader category (commercial, managed money, etc.) on the international benchmark contracts — context on how crowded a positioning is, not a signal of future direction.",
       "recent_values": {
         "gold": [
+          {
+            "period": "2026-11-17",
+            "value": 166132
+          },
+          {
+            "period": "2026-11-10",
+            "value": 190107
+          },
           {
             "period": "2026-11-03",
             "value": 179548
@@ -793,17 +801,17 @@
           {
             "period": "2026-06-09",
             "value": 173837
-          },
-          {
-            "period": "2026-06-02",
-            "value": 176020
-          },
-          {
-            "period": "2026-05-26",
-            "value": 154260
           }
         ],
         "silver": [
+          {
+            "period": "2026-11-17",
+            "value": 18291
+          },
+          {
+            "period": "2026-11-10",
+            "value": 19364
+          },
           {
             "period": "2026-11-03",
             "value": 21251
@@ -891,17 +899,17 @@
           {
             "period": "2026-06-09",
             "value": 22214
-          },
-          {
-            "period": "2026-06-02",
-            "value": 23926
-          },
-          {
-            "period": "2026-05-26",
-            "value": 22223
           }
         ],
         "copper": [
+          {
+            "period": "2026-11-17",
+            "value": 17777
+          },
+          {
+            "period": "2026-11-10",
+            "value": 28904
+          },
           {
             "period": "2026-11-03",
             "value": 37710
@@ -989,17 +997,17 @@
           {
             "period": "2026-06-09",
             "value": 74450
-          },
-          {
-            "period": "2026-06-02",
-            "value": 78833
-          },
-          {
-            "period": "2026-05-26",
-            "value": 73040
           }
         ],
         "crude": [
+          {
+            "period": "2026-11-17",
+            "value": 63136
+          },
+          {
+            "period": "2026-11-10",
+            "value": 73982
+          },
           {
             "period": "2026-11-03",
             "value": 80289
@@ -1087,17 +1095,17 @@
           {
             "period": "2026-06-09",
             "value": 130301
-          },
-          {
-            "period": "2026-06-02",
-            "value": 155874
-          },
-          {
-            "period": "2026-05-26",
-            "value": 160998
           }
         ],
         "natgas": [
+          {
+            "period": "2026-11-17",
+            "value": -262984
+          },
+          {
+            "period": "2026-11-10",
+            "value": -269998
+          },
           {
             "period": "2026-11-03",
             "value": -258863
@@ -1185,14 +1193,6 @@
           {
             "period": "2026-06-09",
             "value": -193957
-          },
-          {
-            "period": "2026-06-02",
-            "value": -186115
-          },
-          {
-            "period": "2026-05-26",
-            "value": -203181
           }
         ]
       }
@@ -1245,7 +1245,7 @@
       "source_url": "https://www.mcxindia.com/market-data/contract-expiry-calendar",
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
-      "next_release_utc": "2026-11-19T17:55:00Z",
+      "next_release_utc": "2026-12-18T17:55:00Z",
       "affected_contracts": [
         "crude"
       ],
@@ -1371,7 +1371,7 @@
       "source_url": "https://www.mcxindia.com/market-data/contract-expiry-calendar",
       "frequency": "monthly",
       "cadence_type": "mcx_expiry",
-      "next_release_utc": "2026-11-18T17:55:00Z",
+      "next_release_utc": "2026-12-16T17:55:00Z",
       "affected_contracts": [
         "nickel"
       ],
