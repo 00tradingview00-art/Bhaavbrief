@@ -64,7 +64,7 @@ function previewHistory(): BasisPoint[] {
     date,
     goldSpreadPct: gold[i], silverSpreadPct: silver[i], crudeSpreadPct: crude[i], copperSpreadPct: null,
     goldDutySpreadPct: null, silverDutySpreadPct: null, crudeDutySpreadPct: null,
-    gold: noConstituents, silver: noConstituents, crude: noConstituents,
+    gold: noConstituents, silver: noConstituents, crude: noConstituents, copper: noConstituents,
   }))
 }
 
@@ -108,10 +108,18 @@ export default async function BasisPage() {
       dutyLatest: last30[last30.length - 1]?.crudeDutySpreadPct ?? null,
       asOf:    last30[last30.length - 1]?.date ?? null,
     },
-    // Copper deliberately excluded: lib/basis.ts's copperSpreadPct is a
-    // permanent null stub (no COMEX HG price feed wired up yet) — shipping an
-    // empty "coming soon" tile inside a paid dashboard is worse than not
-    // listing it. Add back once lib/basis.ts computes it for real.
+    {
+      id:      'copper',
+      label:   'Copper',
+      unit:    'INR/kg vs COMEX, FX-converted',
+      key:     'copperSpreadPct' as const,
+      stats:   calcStats(last30, 'copperSpreadPct'),
+      // No dutyKey/dutyLatest: no verified import-duty factor for copper
+      // exists in this codebase (unlike gold/silver/crude) — raw spread
+      // only, no duty-adjusted figure fabricated without a sourced number.
+      dutyLatest: null,
+      asOf:    last30[last30.length - 1]?.date ?? null,
+    },
   ]
 
   return (

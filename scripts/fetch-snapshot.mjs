@@ -175,6 +175,7 @@ const YAHOO_SYMBOLS = [
   { key: 'WTI',          sym: 'CL=F',      unit: 'USD/bbl'  },
   { key: 'BRENT',        sym: 'BZ=F',      unit: 'USD/bbl'  },
   { key: 'HENRY_HUB',   sym: 'NG=F',      unit: 'USD/mmBtu'},
+  { key: 'COMEX_COPPER', sym: 'HG=F',      unit: 'USD/lb'   },
   { key: 'USDINR',       sym: 'USDINR=X',  unit: 'INR'      },
 ]
 
@@ -364,6 +365,7 @@ async function main() {
     WTI:         buildInstrument('WTI',         yahooMap.WTI,      'USD/bbl'),
     BRENT:       buildInstrument('BRENT',       yahooMap.BRENT,    'USD/bbl'),
     HENRY_HUB:   buildInstrument('HENRY_HUB',  yahooMap.HENRY_HUB,'USD/mmBtu'),
+    COMEX_COPPER:buildInstrument('COMEX_COPPER',yahooMap.COMEX_COPPER,'USD/lb'),
   }
   const zincInst      = optionalMCX('zinc',      'MCX_ZINC',      MCX_UNITS.zinc)
   const leadInst      = optionalMCX('lead',      'MCX_LEAD',      MCX_UNITS.lead)

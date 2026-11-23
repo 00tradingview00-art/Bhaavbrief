@@ -44,13 +44,16 @@ export default function MCXBasisPage() {
   const history = getBasisHistory(1) // only the most recent entry is ever displayed below
   const latest  = history[history.length - 1]
 
-  const items = [
+  type SpreadKey = 'goldSpreadPct' | 'silverSpreadPct' | 'crudeSpreadPct' | 'copperSpreadPct'
+  type DutyKey = 'goldDutySpreadPct' | 'silverDutySpreadPct' | 'crudeDutySpreadPct'
+  const items: { label: string; key: SpreadKey; dutyKey?: DutyKey; unit: string }[] = [
     { label: 'Gold',       key: 'goldSpreadPct',   dutyKey: 'goldDutySpreadPct',   unit: 'vs COMEX, FX-converted (INR/10g)' },
     { label: 'Silver',     key: 'silverSpreadPct', dutyKey: 'silverDutySpreadPct', unit: 'vs COMEX, FX-converted (INR/kg)' },
     { label: 'Crude Oil',  key: 'crudeSpreadPct',  dutyKey: 'crudeDutySpreadPct',  unit: 'vs WTI, FX-converted (INR/bbl)' },
-    // Copper is left out, as on /basis: lib/basis.ts has no COMEX HG feed, so
-    // copperSpreadPct is always null and the tile only ever said "coming soon".
-  ] as const
+    // No dutyKey: no verified import-duty factor for copper exists anywhere
+    // in this codebase (unlike gold/silver/crude) — raw spread only.
+    { label: 'Copper',     key: 'copperSpreadPct', unit: 'vs COMEX, FX-converted (INR/kg)' },
+  ]
 
   return (
     <main style={{ maxWidth: 640, margin: '0 auto', padding: '1.5rem 1rem', fontFamily: 'var(--font-sans)' }}>

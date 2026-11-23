@@ -29,6 +29,7 @@ function makeSnapshot(overrides: Partial<Snapshot> = {}): Snapshot {
       WTI:          makeInstrument(78, 77.5, 0.65),
       BRENT:        makeInstrument(82, 81.5, 0.61),
       HENRY_HUB:    makeInstrument(2.8, 2.75, 1.82),
+      COMEX_COPPER: makeInstrument(4.5, 4.47, 0.67),
     },
     derived: {
       importParityGoldINR:   88300,
@@ -157,6 +158,24 @@ describe('snapshotToPriceData', () => {
     const data = snapshotToPriceData(makeSnapshot({ generatedAt: '2026-07-18T04:00:00.000Z' }))
     expect(data.marketOpen).toBe(false)
     expect(data.snapshotStale).toBe(false) // 300 min < 720 min closed-market threshold
+  })
+
+  test('reads comexCopper/copperComexPct from COMEX_COPPER instead of the old hardcoded 0', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-17T04:05:00.000Z'))
+    const data = snapshotToPriceData(makeSnapshot())
+    expect(data.comexCopper).toBe(4.5)
+    expect(data.copperComexPct).toBe(0.67)
+  })
+
+  test('comexCopper/copperComexPct fall back to 0 when COMEX_COPPER is missing, same as the other optional benchmarks', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-07-17T04:05:00.000Z'))
+    const snap = makeSnapshot()
+    delete (snap.instruments as Record<string, unknown>).COMEX_COPPER
+    const data = snapshotToPriceData(snap)
+    expect(data.comexCopper).toBe(0)
+    expect(data.copperComexPct).toBe(0)
   })
 
   test('a missing MCX instrument key falls back to a zeroed row instead of throwing', () => {
