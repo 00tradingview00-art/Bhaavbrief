@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { safeJsonLd } from '@/lib/seo'
 import { ogImageUrl } from '@/lib/ogUrl'
-import { istParts, mcxCloseMinutesIST, mcxCloseLabelIST, formatMinutesIST } from '@/scripts/lib/mcxHours.js'
+import { istParts, mcxCloseMinutesIST, mcxCloseLabelIST, formatMinutesIST, isUsDst } from '@/scripts/lib/mcxHours.js'
 
 // MCX's non-agri close is DST-dependent (23:30 IST while US daylight saving
 // is in effect, 23:55 otherwise, per scripts/lib/mcxHours.js) — this page
@@ -51,7 +51,7 @@ const BREADCRUMB_SCHEMA = {
   ],
 }
 
-function faqSchema(closeLabel: string, finalWindowStart: string) {
+function faqSchema(closeLabel: string, finalWindowStart: string, eiaWindow: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -69,7 +69,7 @@ function faqSchema(closeLabel: string, finalWindowStart: string) {
       {
         '@type': 'Question',
         name: 'What time does MCX crude oil trading start and close?',
-        acceptedAnswer: { '@type': 'Answer', text: `MCX Crude Oil (Mini and Standard) trades from 9:00 AM to ${closeLabel} IST on weekdays. The most critical window for crude traders is 7:30 PM to 9:30 PM IST — NYMEX WTI crude open and peak volume. The single most important MCX crude event is the EIA Crude Oil Inventory report, released every Wednesday at approximately 8:00–8:30 PM IST. This causes sharp, often ₹100–300/bbl moves in 1–2 minutes. Crude traders must always check if it is Wednesday and budget for extra volatility.` },
+        acceptedAnswer: { '@type': 'Answer', text: `MCX Crude Oil (Mini and Standard) trades from 9:00 AM to ${closeLabel} IST on weekdays. The most critical window for crude traders is 7:30 PM to 9:30 PM IST — NYMEX WTI crude open and peak volume. The single most important MCX crude event is the EIA Crude Oil Inventory report, released every Wednesday at approximately ${eiaWindow} IST (EIA's 10:30 AM US Eastern release converts differently depending on US daylight saving — check /calendar for the exact time). This causes sharp, often ₹100–300/bbl moves in 1–2 minutes. Crude traders must always check if it is Wednesday and budget for extra volatility.` },
       },
       {
         '@type': 'Question',
@@ -101,7 +101,11 @@ export default function Page() {
   const closeLabel = mcxCloseLabelIST(today)                        // "11:30 PM" or "11:55 PM"
   const finalWindowStart = formatMinutesIST(closeMinutes - 30)        // 30 min before close
   const lastMinutesStart = formatMinutesIST(closeMinutes - 15)        // 15 min before close
-  const FAQ_SCHEMA = faqSchema(closeLabel, finalWindowStart)
+  // EIA's weekly reports release at a fixed 10:30 AM US Eastern — DST-dependent
+  // in IST, same conversion eventRules.mjs applies for the Calendar's own EIA
+  // event times. A literal "8:00-8:30 PM" here was wrong roughly Nov-March.
+  const eiaWindow = isUsDst(today) ? '8:00–8:30 PM' : '9:00–9:30 PM'
+  const FAQ_SCHEMA = faqSchema(closeLabel, finalWindowStart, eiaWindow)
 
   const h2: React.CSSProperties = { fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#18180F', marginBottom: 12, marginTop: 40 }
   const h3: React.CSSProperties = { fontFamily: 'var(--font-serif)', fontSize: 17, fontWeight: 500, color: '#18180F', marginBottom: 8, marginTop: 24 }
@@ -118,15 +122,15 @@ export default function Page() {
     { time: '11:00 AM–2:00 PM', label: 'Morning Quiet', activity: 'Low volume. European markets not fully active. Wider spreads.', quality: 'Moderate', qColor: '#7A6000' },
     { time: '2:00–6:00 PM', label: 'LME Session', activity: 'Best window for Copper, Zinc, Nickel, Lead. LME afternoon pricing at ~8:30 PM IST.', quality: 'Good (metals)', qColor: '#2E6E3B' },
     { time: '4:30–7:00 PM', label: 'Pre-US Quiet', activity: 'European morning active, US not open. Moderate volume on gold.', quality: 'Moderate', qColor: '#7A6000' },
-    { time: `7:00–${closeLabel}`, label: 'COMEX/NYMEX Session ★', activity: 'PEAK WINDOW. COMEX gold + silver + NYMEX crude all active. EIA data at 8 PM Wed. Best liquidity, tightest spreads.', quality: 'Best', qColor: '#C8720A' },
+    { time: `7:00–${closeLabel}`, label: 'COMEX/NYMEX Session ★', activity: `PEAK WINDOW. COMEX gold + silver + NYMEX crude all active. EIA data ~${eiaWindow} Wed. Best liquidity, tightest spreads.`, quality: 'Best', qColor: '#C8720A' },
     { time: `${finalWindowStart}–${closeLabel}`, label: 'MCX Close', activity: 'Final 30 min. Volume drops. Settlement approaching. Square off open positions.', quality: 'Caution', qColor: '#7A6000' },
   ]
 
   const commodityWindows = [
     { commodity: 'MCX Gold Mini / Standard', best: `7:00–${closeLabel} IST`, driver: 'COMEX New York', note: 'US economic data 6–8:30 PM, Fed decisions' },
     { commodity: 'MCX Silver Micro / Mini', best: `7:00–${closeLabel} IST`, driver: 'COMEX New York', note: 'More volatile than gold — especially 8–10 PM' },
-    { commodity: 'MCX Crude Oil Mini', best: '7:30–9:30 PM IST', driver: 'NYMEX WTI open', note: 'EIA inventory: every Wednesday 8:00–8:30 PM' },
-    { commodity: 'MCX Natural Gas Mini', best: '7:30–9:00 PM IST', driver: 'NYMEX Natural Gas', note: 'EIA storage: every Thursday 8:00–8:30 PM' },
+    { commodity: 'MCX Crude Oil Mini', best: '7:30–9:30 PM IST', driver: 'NYMEX WTI open', note: `EIA inventory: every Wednesday ${eiaWindow}` },
+    { commodity: 'MCX Natural Gas Mini', best: '7:30–9:00 PM IST', driver: 'NYMEX Natural Gas', note: `EIA storage: every Thursday ${eiaWindow}` },
     { commodity: 'MCX Copper Mini', best: '2:00–6:00 PM + 8–9:30 PM IST', driver: 'LME London', note: 'LME official close ~8:30 PM IST' },
     { commodity: 'MCX Zinc / Lead / Nickel', best: '2:00–6:00 PM IST', driver: 'LME London', note: 'European morning session peak' },
     { commodity: 'MCX Aluminium', best: '2:00–5:30 PM IST', driver: 'LME London', note: 'China production data also key driver' },
@@ -247,8 +251,8 @@ export default function Page() {
               {[
                 { day: 'Monday', event: 'Weekend gap fill, China PMI data', commodity: 'Copper, Gold', move: 'Moderate' },
                 { day: 'Tuesday', event: 'US Consumer Confidence (usually 7:30 PM IST)', commodity: 'Gold, Crude', move: 'Low–Moderate' },
-                { day: 'Wednesday ⚠', event: 'EIA Crude Oil Inventory (~8:00–8:30 PM IST)', commodity: 'Crude Oil', move: 'HIGH — ₹100–400/bbl in minutes' },
-                { day: 'Thursday', event: 'EIA Natural Gas Storage (~8:00–8:30 PM IST), US Jobless Claims', commodity: 'Natural Gas, Gold', move: 'High for Nat Gas' },
+                { day: 'Wednesday ⚠', event: `EIA Crude Oil Inventory (~${eiaWindow} IST)`, commodity: 'Crude Oil', move: 'HIGH — ₹100–400/bbl in minutes' },
+                { day: 'Thursday', event: `EIA Natural Gas Storage (~${eiaWindow} IST), US Jobless Claims`, commodity: 'Natural Gas, Gold', move: 'High for Nat Gas' },
                 { day: 'Friday', event: 'Non-Farm Payrolls (first Friday of month, ~6:00 PM IST)', commodity: 'Gold, Silver, Crude', move: 'Very High on NFP Friday' },
               ].map((r, i) => (
                 <tr key={i} style={{ background: r.day.includes('Wednesday') ? '#FFF8F0' : i % 2 === 0 ? 'white' : '#FAFAF7' }}>
