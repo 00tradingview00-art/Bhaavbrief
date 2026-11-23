@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { computeIVRegime, liveAtmIV, type IVRegime } from '@/lib/ivAnalysis'
 import { daysToExpiry, expectedMoveToExpiry } from '@/lib/expectedMove'
-import { formatRemaining, formatIST } from '@/lib/formatTime'
+import { formatRemaining, formatIST, formatAsOfIST } from '@/lib/formatTime'
 import { useIVHistory } from '@/lib/useIVHistory'
 import { useIsPro } from '@/lib/useIsPro'
 import IVSkewChart from './IVSkewChart'
@@ -592,11 +592,30 @@ export default function OptionChain({ isPro: serverIsPro, preview = false, initi
   const ceCols = showGreeks ? 11 : 7
   const peCols = showGreeks ? 11 : 7
 
+  // Summary sentence, read from this component's own live `data` state (not
+  // a server-rendered snapshot) — it used to be rendered by the page above
+  // this component from its own static initialData prop, which meant it
+  // never changed after switching the expiry or instrument below, even
+  // though the chain itself did (confirmed live: switching Gold's expiry
+  // updated the chain/PCR/iVIX but left this sentence on the old expiry).
+  const summaryLabel = INSTRUMENTS.find(i => i.key === instrument)?.label ?? instrument
+  const summaryDte  = data ? daysToExpiry(data.expiry) : null
+  const summaryMove = data?.ivix != null && summaryDte != null
+    ? expectedMoveToExpiry(data.futurePrice, data.ivix, summaryDte) : null
+
   return (
     <div style={{ background: C.surf, borderRadius: 8, border: `1px solid ${C.bdr}`, overflow: 'hidden', fontFamily: C.sans, boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
       <Suspense fallback={null}>
         <CommodityFromQuery instrument={instrument} onCommodity={setInstrument} />
       </Suspense>
+
+      {!preview && data && (
+        <p style={{ fontSize: 13, color: C.ink3, margin: 0, padding: '10px 14px', borderBottom: `1px solid ${C.bdr}`, lineHeight: 1.7 }}>
+          As of {formatAsOfIST(data.lastUpdated)}, MCX {summaryLabel} Max Pain sits at ₹{data.maxPain.toLocaleString('en-IN')} for the {data.expiry} expiry, with a Put-Call Ratio of {data.pcr}
+          {data.ivix != null ? ` and implied volatility (iVIX) of ${data.ivix.toFixed(1)}%` : ''}
+          {summaryMove != null ? ` — the market is pricing roughly a ±₹${Math.round(summaryMove).toLocaleString('en-IN')} move by expiry (1 standard deviation, ${summaryDte}d away)` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: C.gold }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: C.gold }}>rollover mechanics</Link> for the underlying futures contract.
+        </p>
+      )}
 
       {/* ── Controls ── */}
       <div style={{ padding: '10px 14px', borderBottom: `1px solid ${C.bdr}`, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', background: C.surf2 }}>
