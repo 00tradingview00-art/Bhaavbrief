@@ -198,11 +198,11 @@ export default function Page() {
           MCX Margin Calculator 2026: How Much Do You Need to Trade?
         </h1>
         <p style={{ fontSize: 15, color: '#8A8A7A', marginBottom: 32, lineHeight: 1.6 }}>
-          Live SPAN margin estimates for all MCX contracts — Gold, Silver, Crude Oil, Copper, Zinc, Aluminium, Lead, and Nickel. Updated daily with live MCX prices.
+          MCX contract values below use today&apos;s live MCX prices. The SPAN margin ranges are illustrative examples (last reviewed Aug 2026), not a live exchange feed — see the regulatory floor further down for the actual current minimum.
         </p>
 
         <div style={infoBox}>
-          <strong>The short answer:</strong> MCX Gold Mini requires ₹55,000–₹75,000. MCX Crude Mini requires ₹3,000–₹5,000. MCX Silver Mini requires ₹25,000–₹40,000. All values below are computed from today&apos;s live prices and typical SPAN margin rates. Always verify with your broker&apos;s margin calculator before trading.
+          <strong>The short answer:</strong> MCX Gold Mini has historically needed roughly ₹55,000–₹75,000. MCX Crude Mini roughly ₹3,000–₹5,000. MCX Silver Mini roughly ₹25,000–₹40,000. Contract values below are computed from today&apos;s live prices; the SPAN ranges are illustrative examples, not live SPAN. Always verify with your broker&apos;s margin calculator before trading.
         </div>
 
         {contracts.map(group => {
@@ -259,6 +259,16 @@ export default function Page() {
             </div>
           )
         })}
+
+        <div style={warnBox}>
+          <strong>Regulatory floor, effective 1 December 2026:</strong> SEBI&apos;s margin circular
+          (dated 17 November 2026) sets minimum initial margin at <strong>6% (low volatility),
+          8% (medium volatility), or 10% (high volatility)</strong> of contract value, by category —
+          whichever is higher against the exchange&apos;s own SPAN. This is a floor, not the SPAN
+          ranges shown above: those are illustrative examples from a past snapshot. Which volatility
+          category a given contract falls into is set by the exchange and can change; check MCX&apos;s
+          published category for the contract you&apos;re trading, not this page, before sizing a position.
+        </div>
 
         <h2 style={h2}>How to Read This Table</h2>
         <p style={prose}>
