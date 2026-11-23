@@ -19,6 +19,15 @@
  *   front-month contract. They were hand-maintained and had all gone stale
  *   (Jul–Sep dates on 30 Sep, e.g. Gold's 5 Oct expiry was missing).
  * - manual events are left alone (irregular official schedules).
+ * - EIA holiday weeks: RULES above is the *regular* weekday/time and has no
+ *   concept of a US federal holiday — EIA shifts both the day and the time
+ *   on those weeks (direction varies per holiday, e.g. Thanksgiving week's
+ *   natural-gas report moves earlier, Wed instead of Thu; Veterans Day
+ *   week's petroleum report moved later, Thu instead of Wed), so there is no
+ *   formula to derive it from. HOLIDAY_OVERRIDES below is a short, dated
+ *   list sourced each year from EIA's own published exception calendars
+ *   (ir.eia.gov/ngs/schedule.html, eia.gov/petroleum/supply/weekly/schedule.php)
+ *   — a human has to refresh it; nothing here infers it automatically.
  */
 
 import { isUsDst } from './mcxHours.js'
@@ -35,6 +44,23 @@ export const RULES = {
   // CPC 6-10/8-14 day outlooks: daily, 3–4pm ET (20:00 UTC is inside that
   // window in both EDT and EST).
   noaa_weather_outlook:        { hourUtc: 20, minUtc: 0 },
+}
+
+// Dated exceptions for US-federal-holiday weeks, per rule_based event id.
+// `replaces` is the date RULES above would otherwise produce for that week
+// (in the event's own US/Eastern calendar date); when the regularly-computed
+// occurrence lands on that date, this override's date/time is used instead.
+// Entries whose `replaces` date has already passed are harmless dead weight
+// (they can never match a future computed occurrence) — prune periodically.
+export const HOLIDAY_OVERRIDES = {
+  eia_natural_gas_storage: [
+    // Thanksgiving week: usual Thu 10:30 ET → Wed 25 Nov, 12:00 ET.
+    { replaces: '2026-11-26', dateEt: '2026-11-25', hourEt: 12, minEt: 0 },
+  ],
+  eia_petroleum_status_report: [
+    // Veterans Day week (observed Wed 11 Nov 2026): usual Wed 10:30 ET → Thu 12 Nov, 12:00 ET.
+    { replaces: '2026-11-11', dateEt: '2026-11-12', hourEt: 12, minEt: 0 },
+  ],
 }
 
 /** US/Eastern wall-clock hour → UTC hour, for the US-DST status of `dateStr` (YYYY-MM-DD). */
@@ -67,6 +93,21 @@ export function nextOccurrenceEastern(fromUtc, dow, hourEt, minEt) {
   return actualHourUtc === guessHourUtc ? next : nextOccurrence(fromUtc, dow, actualHourUtc, minEt)
 }
 
+/**
+ * Swaps in a HOLIDAY_OVERRIDES entry when `computedNext` (a regular-rule
+ * occurrence) lands on a date that entry says to replace. Otherwise returns
+ * `computedNext` unchanged.
+ */
+function applyHolidayOverride(eventId, computedNext) {
+  const override = HOLIDAY_OVERRIDES[eventId]?.find(
+    (o) => o.replaces === computedNext.toISOString().slice(0, 10)
+  )
+  if (!override) return computedNext
+  const d = new Date(`${override.dateEt}T00:00:00.000Z`)
+  d.setUTCHours(etHourToUtc(override.hourEt, override.dateEt), override.minEt, 0, 0)
+  return d
+}
+
 // mcx_expiry event id → key in data/kite-instruments.json
 const EXPIRY_INSTRUMENT = {
   mcx_expiry_gold: 'gold', mcx_expiry_silver: 'silver', mcx_expiry_crude: 'crude',
@@ -86,7 +127,7 @@ export function applyComputedDates(events, now, instruments) {
       const rule = RULES[event.id]
       if (!rule || new Date(event.next_release_utc).getTime() > now.getTime()) return event
       const next = 'hourEt' in rule
-        ? nextOccurrenceEastern(now, rule.dow, rule.hourEt, rule.minEt)
+        ? applyHolidayOverride(event.id, nextOccurrenceEastern(now, rule.dow, rule.hourEt, rule.minEt))
         : nextOccurrence(now, rule.dow, rule.hourUtc, rule.minUtc)
       return { ...event, next_release_utc: next.toISOString() }
     }
