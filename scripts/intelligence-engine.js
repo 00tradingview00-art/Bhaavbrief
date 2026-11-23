@@ -234,6 +234,16 @@ function isCredibleSource(itemXml) {
   return m ? CREDIBLE_DOMAINS.some(d => m[1].includes(d)) : false
 }
 
+// checkCirculars (below): how many RSS items to look at per query (was a
+// hardcoded 3 — a run that missed a scheduling window and now has several
+// new circulars queued could still only ever surface the first), and how
+// stale a pubDate can be before an item is skipped as not actually new.
+// Revisit this window once Phase 0's external-dispatch fix confirms the job
+// is actually back on a reliable ~30-min cadence — 2 hours was sized for a
+// scheduler that was skipping most runs, not for one firing as intended.
+const CIRCULAR_RSS_ITEMS_PER_QUERY   = 10
+const CIRCULAR_FRESHNESS_WINDOW_MS   = 2 * 3600 * 1000
+
 // ── MCX price cache ───────────────────────────────────────────────────────────
 // Written after every successful Kite fetch; read as prev-close fallback when Kite is down.
 function loadMCXCache() {
@@ -589,26 +599,34 @@ async function checkCirculars(lastCirculars) {
       const xml = await res.text()
       const source = q.includes('SEBI') ? 'SEBI' : 'MCX'
       const stateKey = source.toLowerCase()
-      // Parse first 3 items, only accept credible publishers
-      const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 3)
+      // Only accept credible publishers. Items arrive newest-first; collect
+      // every new one up to (not including) the newest item we already knew
+      // about last run, instead of stopping after the first eligible item —
+      // a run that misses a window can otherwise silently drop everything
+      // but the single most recent circular.
+      const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, CIRCULAR_RSS_ITEMS_PER_QUERY)
+      let newestSeenId = null
       for (const [, itemXml] of items) {
         if (!isCredibleSource(itemXml)) continue
         const titleM = itemXml.match(/<title><!\[CDATA\[(.+?)\]\]><\/title>|<title>([^<]{10,200})<\/title>/)
         const dateM  = itemXml.match(/<pubDate>([^<]+)<\/pubDate>/)
+        const linkM  = itemXml.match(/<link>([^<]+)<\/link>/)
         if (!titleM) continue
         const title = (titleM[1] ?? titleM[2] ?? '').trim()
         if (!title) continue
         if (dateM) {
           const age = Date.now() - new Date(dateM[1]).getTime()
-          if (age > 2 * 3600 * 1000) continue
+          if (age > CIRCULAR_FRESHNESS_WINDOW_MS) continue
         }
         const id = title.slice(0, 80)
-        if (id !== lastCirculars[stateKey]) {
-          newCirculars.push({ source, title, url: source === 'MCX' ? 'https://mcxindia.com' : 'https://sebi.gov.in' })
-          lastCirculars[stateKey] = id
-        }
-        break
+        if (newestSeenId === null) newestSeenId = id
+        if (id === lastCirculars[stateKey]) break // reached last run's newest — everything older was already seen too
+        newCirculars.push({
+          source, title,
+          url: linkM ? linkM[1].trim() : (source === 'MCX' ? 'https://mcxindia.com' : 'https://sebi.gov.in'),
+        })
       }
+      if (newestSeenId !== null) lastCirculars[stateKey] = newestSeenId
     }
   } catch (err) {
     console.warn('Circular RSS failed:', err.message)
