@@ -2,10 +2,21 @@ import { getAllBriefs }   from '@/lib/briefs'
 import { getAllArcs }     from '@/lib/arcs'
 import { getAllEvents }   from '@/lib/events'
 import { getAllResearch } from '@/lib/research'
+import { getAllArticles } from '@/lib/articles'
 
 export const revalidate = 3600 // rebuild sitemap cache every hour
 
 const BASE = 'https://bhaavbrief.in'
+
+// Articles are deliberately excluded from the main sitemap below (crawl-budget
+// reasoning, see the comment near EVERGREEN_ARTICLE_SLUGS' use) — but a small,
+// explicit allowlist of vetted evergreen pieces that keep resurfacing in AI
+// retrieval samples long after the news-sitemap's 48h window has passed are
+// worth the one-time editorial call to include. Add to this list deliberately,
+// one article at a time, not in bulk.
+const EVERGREEN_ARTICLE_SLUGS = [
+  '2026-09-15-mcx-gold-premium-international-price',
+]
 
 const STATIC_PAGES = [
   { url: BASE,                      priority: '1.0', changefreq: 'daily'   },
@@ -87,9 +98,10 @@ function entry(url: string, lastmod: string, changefreq: string, priority: strin
 export async function GET() {
   try {
     const now = new Date().toISOString()
-    const [briefs, events] = await Promise.all([
+    const [briefs, events, articles] = await Promise.all([
       getAllBriefs(),
       getAllEvents(),
+      getAllArticles(),
     ])
     const arcs = getAllArcs()
 
@@ -107,11 +119,20 @@ export async function GET() {
         entry(`${BASE}/research/${r.slug}`, r.date ? new Date(r.date).toISOString() : now, 'never', '0.7')
       )
 
-    // /flash and /articles are deliberately excluded from sitemap.xml —
-    // high volume (~350+ URLs) and covered separately by news-sitemap.xml
-    // for Google News/Discover discovery (48h window). Keeping them out of
-    // the general sitemap prevents crawl budget dilution without blocking
-    // indexation (pages are indexable; news-sitemap handles fresh discovery).
+    // /flash and most of /articles are deliberately excluded from
+    // sitemap.xml — high volume (~350+ URLs) and covered separately by
+    // news-sitemap.xml for Google News/Discover discovery (48h window).
+    // Keeping them out of the general sitemap prevents crawl budget dilution
+    // without blocking indexation (pages are indexable; news-sitemap handles
+    // fresh discovery). EVERGREEN_ARTICLE_SLUGS is the one deliberate,
+    // explicit exception: a small, hand-picked set of articles worth
+    // long-term sitemap presence, not a reopening of the bulk exclusion.
+    const evergreenArticleEntries = articles
+      .filter(a => EVERGREEN_ARTICLE_SLUGS.includes(a.slug))
+      .map(a =>
+        entry(`${BASE}/articles/${a.slug}`, a.date ? new Date(a.date).toISOString() : now, 'monthly', '0.5')
+      )
+
     const arcEntries = arcs.map(a =>
       entry(`${BASE}/arcs/${a.id}`, a.startDate ? new Date(a.startDate).toISOString() : now, a.status === 'active' ? 'daily' : 'never', '0.6')
     )
@@ -122,7 +143,7 @@ export async function GET() {
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${[...staticEntries, ...briefEntries, ...researchEntries, ...arcEntries, ...eventEntries].join('\n')}
+${[...staticEntries, ...briefEntries, ...researchEntries, ...evergreenArticleEntries, ...arcEntries, ...eventEntries].join('\n')}
 </urlset>`
 
     return new Response(xml, {

@@ -8,6 +8,13 @@
  * not indexed" backlog). A later deploy that re-adds them — or any change that
  * silently balloons the URL count — should page, not sit unnoticed until the
  * next GSC review.
+ *
+ * One deliberate, explicit exception to that exclusion exists:
+ * EVERGREEN_ARTICLE_SLUGS in app/sitemap.xml/route.ts, a small hand-picked
+ * allowlist of articles worth long-term sitemap presence (added 2026-11-23).
+ * This check reads that same array out of the route source (C-01: one
+ * module per fact) so a deliberate addition there is never confused with the
+ * bulk regression this file exists to catch.
  */
 
 import fs from "node:fs";
@@ -20,13 +27,33 @@ export function countSitemapUrls(xml) {
 }
 
 /**
+ * Reads EVERGREEN_ARTICLE_SLUGS out of app/sitemap.xml/route.ts — the one
+ * deliberate exception to the /flash|/articles exclusion below.
+ * @param {string} root
+ * @returns {string[]}
+ */
+function readEvergreenArticleSlugs(root) {
+  let routeSrc;
+  try {
+    routeSrc = fs.readFileSync(path.join(root, "app/sitemap.xml/route.ts"), "utf8");
+  } catch {
+    return [];
+  }
+  const block = routeSrc.match(/const EVERGREEN_ARTICLE_SLUGS\s*=\s*\[([\s\S]*?)\]/);
+  if (!block) return [];
+  return [...block[1].matchAll(/['"]([^'"]+)['"]/g)].map((m) => m[1]);
+}
+
+/**
  * @param {string} xml - live sitemap.xml body
  * @param {number} expectedCount - from expectedSitemapCount()
- * @param {{tolerance?: number}} [opts] - ±2 default absorbs ISR cache lag
- *   (route revalidates hourly; the pipeline adds ~1 brief per weekday)
+ * @param {{tolerance?: number, root?: string}} [opts] - tolerance (±2 default)
+ *   absorbs ISR cache lag (route revalidates hourly; the pipeline adds ~1
+ *   brief per weekday); root locates app/sitemap.xml/route.ts to read the
+ *   evergreen-article allowlist from (defaults to cwd).
  * @returns {string[]} issue messages, empty if the sitemap is clean
  */
-export function checkSitemapShape(xml, expectedCount, { tolerance = 2 } = {}) {
+export function checkSitemapShape(xml, expectedCount, { tolerance = 2, root = process.cwd() } = {}) {
   const issues = [];
   const locs = [...String(xml).matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => m[1]);
 
@@ -35,7 +62,12 @@ export function checkSitemapShape(xml, expectedCount, { tolerance = 2 } = {}) {
     return issues;
   }
 
-  const excluded = locs.filter((u) => /\/(flash|articles)\//.test(u));
+  const allowedArticleUrls = new Set(
+    readEvergreenArticleSlugs(root).map((slug) => `/articles/${slug}`)
+  );
+  const excluded = locs.filter(
+    (u) => /\/(flash|articles)\//.test(u) && ![...allowedArticleUrls].some((a) => u.endsWith(a))
+  );
   if (excluded.length > 0) {
     issues.push(
       `M-07: sitemap.xml contains ${excluded.length} /flash|/articles URL(s) — these were deliberately excluded 2026-07-21 (first: ${excluded[0]})`
@@ -114,6 +146,7 @@ export function expectedSitemapCount({ root = process.cwd() } = {}) {
     throw new Error("expectedSitemapCount: STATIC_PAGES array not found in app/sitemap.xml/route.ts");
   }
   const statics = (staticBlock[1].match(/\burl:/g) ?? []).length;
+  const evergreenArticles = readEvergreenArticleSlugs(root).length;
 
-  return statics + briefs + arcs + events + research;
+  return statics + briefs + arcs + events + research + evergreenArticles;
 }

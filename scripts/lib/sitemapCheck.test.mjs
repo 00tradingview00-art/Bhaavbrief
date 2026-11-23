@@ -55,6 +55,26 @@ describe("checkSitemapShape", () => {
     expect(issues.some((i) => i.includes("/articles/some-auto-article"))).toBe(true);
   });
 
+  test("an allowlisted EVERGREEN_ARTICLE_SLUGS URL is not flagged, but any other article URL still is", () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sitemap-check-allowlist-"));
+    try {
+      fs.mkdirSync(path.join(tmp, "app/sitemap.xml"), { recursive: true });
+      fs.writeFileSync(
+        path.join(tmp, "app/sitemap.xml/route.ts"),
+        "const BASE = 'x'\nconst EVERGREEN_ARTICLE_SLUGS = [\n  'gold-premium-2026',\n]\n"
+      );
+      const allowed = [...cleanUrls, `${BASE}/articles/gold-premium-2026`];
+      expect(checkSitemapShape(sitemapXml(allowed), 105, { root: tmp })).toEqual([]);
+
+      const notAllowed = [...cleanUrls, `${BASE}/articles/gold-premium-2026`, `${BASE}/articles/some-other-article`];
+      const issues = checkSitemapShape(sitemapXml(notAllowed), 106, { root: tmp });
+      expect(issues.some((i) => i.includes("1 /flash|/articles URL(s)"))).toBe(true);
+      expect(issues.some((i) => i.includes("/articles/some-other-article"))).toBe(true);
+    } finally {
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
   test("the 467-URL regression (flash/articles re-added) is flagged on both axes", () => {
     const bloated = [
       ...cleanUrls,
@@ -96,7 +116,7 @@ describe("expectedSitemapCount", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "sitemap-check-"));
   afterAll(() => fs.rmSync(tmp, { recursive: true, force: true }));
 
-  function writeFixture({ briefs, unpublishedBriefs = 0, events = 0, arcs = 0, statics = 3 }) {
+  function writeFixture({ briefs, unpublishedBriefs = 0, events = 0, arcs = 0, statics = 3, evergreenSlugs = [] }) {
     for (const entry of fs.readdirSync(tmp)) fs.rmSync(path.join(tmp, entry), { recursive: true, force: true });
     fs.mkdirSync(path.join(tmp, "content/briefs"), { recursive: true });
     fs.mkdirSync(path.join(tmp, "content/events"), { recursive: true });
@@ -116,9 +136,12 @@ describe("expectedSitemapCount", () => {
       { length: statics },
       (_, i) => `  { url: \`\${BASE}/page-${i}\`, priority: '0.5', changefreq: 'daily' },`
     ).join("\n");
+    const evergreenBlock = evergreenSlugs.length
+      ? `\nconst EVERGREEN_ARTICLE_SLUGS = [\n${evergreenSlugs.map((s) => `  '${s}',`).join("\n")}\n]\n`
+      : "";
     fs.writeFileSync(
       path.join(tmp, "app/sitemap.xml/route.ts"),
-      `const BASE = 'x'\nconst STATIC_PAGES = [\n${staticEntries}\n]\n`
+      `const BASE = 'x'\nconst STATIC_PAGES = [\n${staticEntries}\n]\n${evergreenBlock}`
     );
   }
 
@@ -134,6 +157,11 @@ describe("expectedSitemapCount", () => {
     fs.writeFileSync(path.join(tmp, "content/research/b.mdx"), `---\ntitle: B\npublished: false\n---\nbody`);
     fs.writeFileSync(path.join(tmp, "content/research/c.mdx"), `---\ntitle: C\n---\nbody`);
     expect(expectedSitemapCount({ root: tmp })).toBe(3 + 2 + 1);
+  });
+
+  test("adds EVERGREEN_ARTICLE_SLUGS count to the total, same as any other source", () => {
+    writeFixture({ briefs: 2, statics: 3, evergreenSlugs: ["a", "b"] });
+    expect(expectedSitemapCount({ root: tmp })).toBe(3 + 2 + 2);
   });
 
   test("missing arcs file contributes 0 instead of throwing", () => {
