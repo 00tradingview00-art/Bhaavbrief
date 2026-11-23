@@ -25,6 +25,7 @@ import { execFileSync } from 'node:child_process'
 import Anthropic from '@anthropic-ai/sdk'
 import { fetchKiteHistorical, computeTechnicalLevels, formatTechnicalBlock } from './lib/technicals.js'
 import { isTradingHoliday, getHolidayName, todayIST } from './lib/holidays.js'
+import { mcxCloseLabelIST } from './lib/mcxHours.js'
 import { formatApprovedLinks } from '../lib/learn-link-map.js'
 import { escapeBareLessThan } from './lib/mdxSafe.mjs'
 import { redisCommand, redisSetJSON } from './lib/redisClient.js'
@@ -351,10 +352,14 @@ function getMarketSession() {
   return 'global'
 }
 
+// 'afternoon' close time is DST-dependent (23:30 IST roughly Apr-Oct, 23:55
+// otherwise) — a literal "11:30 PM" here was wrong all winter, the same bug
+// class mcxHours.js's own header comment documents fixing "seven copies" of
+// in 2026-10.
 const SESSION_FOCUS = {
   'pre-market':  'MCX opens within 3 hours. Frame article around overnight COMEX/LME moves and the likely MCX open price relative to yesterday\'s close.',
   'morning':     'MCX morning session is live. Focus on intraday price action, whether the morning trend is accelerating or stalling, and implications for open positions.',
-  'afternoon':   'MCX evening session is active. Focus on current levels, what\'s driving them, and key price levels to watch into the 11:30 PM IST close.',
+  'afternoon':   `MCX evening session is active. Focus on current levels, what's driving them, and key price levels to watch into the ${mcxCloseLabelIST(todayIST())} IST close.`,
   'global':      'MCX is closed. Explain what the US/EU session move means for tomorrow\'s MCX open — quantify the expected gap.',
 }
 

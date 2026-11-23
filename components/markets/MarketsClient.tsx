@@ -12,6 +12,7 @@ import type { CoreInstrument, TerminalInstrumentData } from '@/lib/terminalData'
 import { REPO_RATE_PCT } from '@/lib/rbiRepoRate'
 import type { BriefMeta } from '@/lib/briefs'
 import RecentBriefsList from '@/components/brief/RecentBriefsList'
+import { istParts, mcxCloseLabelIST } from '@/scripts/lib/mcxHours.js'
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
 
@@ -509,7 +510,7 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
           })}
         </div>
         <div style={{ fontSize: 10, color: 'var(--ink-4)', lineHeight: 1.7, marginTop: 12 }}>
-          MCX prices: live during market hours, refreshed every 30s · Global: 15-min delayed · MCX hours: 9 AM – 11:30 PM IST
+          MCX prices: live during market hours, refreshed every 30s · Global: 15-min delayed · MCX hours: 9 AM – {mcxCloseLabelIST(istParts().date)} IST
         </div>
       </div>
     </div>
