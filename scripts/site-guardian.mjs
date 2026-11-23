@@ -278,15 +278,23 @@ async function main() {
 
   // Phase 2 — audit
   let audit = { learnIssues: [], investIssues: [], circularImpact: [] }
+  // A missing credential or a failed model call both leave `audit` at its
+  // all-empty default — which, before this field existed, was indistinguishable
+  // from "ran and genuinely found nothing," and both produced the same green
+  // overall status as a healthy infra check. auditStatus makes the difference
+  // visible in the report instead of silently discarding it.
+  let auditStatus = 'skipped-no-credential'
   if (client) {
     try {
       audit = await runAudit(client)
+      auditStatus = 'completed'
       const n = audit.learnIssues.length + audit.investIssues.length + audit.circularImpact.length
       console.log(`Audit: ${n} issue(s) found`)
       if (audit.learnIssues.length)   audit.learnIssues.forEach(i   => console.log(`  Learn: ${i.field} — ${i.currentValue} → ${i.correctValue}`))
       if (audit.investIssues.length)  audit.investIssues.forEach(i  => console.log(`  Invest: ${i.item} — ${i.issue}`))
       if (audit.circularImpact.length) audit.circularImpact.forEach(i => console.log(`  Circular: ${i.affectedPage} — ${i.change}`))
     } catch (e) {
+      auditStatus = 'failed'
       console.error('Audit Claude call failed:', e.message)
     }
   } else {
@@ -296,12 +304,12 @@ async function main() {
   // Phase 3 — report
   const hasAuditIssues = audit.learnIssues.length + audit.investIssues.length + audit.circularImpact.length > 0
   const overallStatus  = health.status === 'red' ? 'red'
-    : (health.status === 'yellow' || hasAuditIssues) ? 'yellow'
+    : (health.status === 'yellow' || hasAuditIssues || auditStatus !== 'completed') ? 'yellow'
     : 'green'
 
-  const report = { generatedAt: new Date().toISOString(), overallStatus, health, audit }
+  const report = { generatedAt: new Date().toISOString(), overallStatus, health, audit, auditStatus }
   fs.writeFileSync(REPORT_FILE, JSON.stringify(report, null, 2), 'utf8')
-  console.log(`Report: ${overallStatus.toUpperCase()} → data/guardian-report.json`)
+  console.log(`Report: ${overallStatus.toUpperCase()} (audit ${auditStatus}) → data/guardian-report.json`)
 
   if (overallStatus === 'red') await sendAlert(report)
 
