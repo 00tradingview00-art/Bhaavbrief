@@ -1,5 +1,27 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-23-market-update",
+    "href": "/articles/2026-11-23-market-update",
+    "title": "MCX Copper breaks ₹1205, +3.72% — structural deficit floor holds",
+    "description": "MCX Copper ₹1205 · +3.72% SURGING. COMEX $5.75/lb +4.48%. Energy-transition demand tailwind offsets macro softness.",
+    "excerpt": "TRIGGER MCX Copper has surged 3.72% to ₹1,204.55/kg as COMEX copper rallied 4.48% to $5.75/lb, breaking above the ₹1,210 resistance for the first time in this session's volatility cycle. PRICE ₹1,205 ",
+    "date": "2026-11-23T20:37:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Copper",
+      "MCX Silver",
+      "MCX Gold",
+      "LME-linked",
+      "Energy Transition"
+    ],
+    "commodity": "MCX Copper",
+    "commodities": [
+      "MCX Copper"
+    ],
+    "priceAtPublish": 1205
+  },
+  {
     "type": "brief",
     "slug": "edition-152",
     "href": "/briefs/edition-152",
