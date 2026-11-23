@@ -97,7 +97,7 @@ const FAQ_SCHEMA = {
     {
       '@type': 'Question',
       name: 'How is commodity trading turnover calculated for tax audit?',
-      acceptedAnswer: { '@type': 'Answer', text: 'For commodity futures, turnover for tax audit purposes = the absolute sum of all profits and losses on all trades during the financial year. Example: you made ₹8 lakh profit on some trades and ₹5 lakh loss on others — your turnover is ₹13 lakh (₹8L + ₹5L), not ₹3L net. If this turnover exceeds ₹10 crore, a tax audit under Section 44AB is mandatory. Below ₹10 crore, an audit is required only if you declare a loss or profit below 6% of turnover.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'For commodity futures, turnover for tax audit purposes = the absolute sum of all profits and losses on all trades during the financial year. Example: you made ₹8 lakh profit on some trades and ₹5 lakh loss on others — your turnover is ₹13 lakh (₹8L + ₹5L), not ₹3L net. Section 44AB\'s ordinary audit threshold is turnover above ₹1 crore. That rises to ₹10 crore only if your cash receipts and cash payments each stay within 5% of their respective totals — true for most MCX trading, which settles electronically. Above ₹10 crore, an audit is mandatory regardless. A separate, lower-turnover rule (Section 44AD\'s presumptive-taxation interaction, capped at ₹2 crore) can also require an audit on a loss or low-margin year — whether it applies to F&O/commodity income is disputed among practitioners, so confirm with a CA rather than assuming either way.' },
     },
     {
       '@type': 'Question',
@@ -277,7 +277,7 @@ export default function Page() {
           Note: turnover is ₹93,000, not ₹21,000 (net) or any sell-side figure.
         </div>
         <p style={prose}>
-          For most retail traders who trade Gold Mini and Crude Mini in moderate quantities, annual turnover will be far below ₹10 crore. A trader making 100 round trips on Gold Mini per year generates turnover of approximately ₹50–₹80 lakh in absolute P&L — still well under the audit threshold.
+          For most retail traders who trade Gold Mini and Crude Mini in moderate quantities, annual turnover will be far below the ₹1 crore ordinary audit threshold. A trader making 100 round trips on Gold Mini per year generates turnover of approximately ₹50–₹80 lakh in absolute P&L — still well under it.
         </p>
 
         {/* Tax audit threshold */}
@@ -286,15 +286,15 @@ export default function Page() {
           <table style={{ width: '100%', borderCollapse: 'collapse', border: '0.5px solid #DDDDD0' }}>
             <thead>
               <tr>
-                {['Turnover', 'Net profit declared', 'Audit required?'].map(h => <th key={h} style={hcell}>{h}</th>)}
+                {['Turnover', 'Condition', 'Audit required?'].map(h => <th key={h} style={hcell}>{h}</th>)}
               </tr>
             </thead>
             <tbody>
               {[
-                ['Below ₹10 crore', '≥ 6% of turnover', 'No audit required'],
-                ['Below ₹10 crore', 'Loss (any amount)', 'Audit required under Section 44AB'],
-                ['Below ₹10 crore', 'Profit but < 6% of turnover', 'Audit required under Section 44AB'],
-                ['₹10 crore or above', 'Any result', 'Audit mandatory — Section 44AB'],
+                ['Up to ₹1 crore', 'Any result', 'No audit required'],
+                ['₹1 crore – ₹10 crore', 'Cash receipts and cash payments each ≤ 5% of totals', 'No audit required — most MCX trading qualifies, since settlement is electronic, not cash'],
+                ['₹1 crore – ₹10 crore', 'Cash receipts or payments > 5% of totals', 'Audit required under Section 44AB'],
+                ['Above ₹10 crore', 'Any result', 'Audit mandatory — Section 44AB'],
               ].map(([turnover, profit, audit], i) => (
                 <tr key={i}>
                   <td style={cell}>{turnover}</td>
@@ -306,12 +306,23 @@ export default function Page() {
           </table>
         </div>
         <p style={prose}>
-          The 6% rule catches many traders off guard. If your turnover is ₹50 lakh and you declare a net profit of ₹2 lakh (4% of turnover), a tax audit is required even though your turnover is modest. The 6% presumptive profit threshold was originally designed for businesses, and its application to commodity traders is a common source of unexpected audit obligations.
+          The ₹10 crore figure is often quoted on its own, but it is relief conditional on the
+          95%-electronic-transactions test above, not the default — the ordinary threshold is
+          ₹1 crore. Separately, Section 44AD&apos;s presumptive-taxation scheme (turnover up to
+          ₹2 crore) can force an audit on a loss year or a profit below its presumptive rate —
+          but only for traders who are eligible for and have engaged with that scheme, and whether
+          F&amp;O/commodity derivatives income is 44AD-eligible at all is disputed among
+          practitioners. Don&apos;t assume either the ₹10cr relief or the 44AD interaction applies
+          to your specific turnover and transaction mix without a CA confirming it.
         </p>
         <div style={infoBox}>
           <div style={{ fontSize: 11, fontFamily: 'var(--font-sans)', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#C8720A', marginBottom: 8 }}>Practical implication</div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.75, color: '#18180F' }}>
-            If you have a loss year, file ITR-3 with the loss declared <em>and</em> arrange a tax audit. The cost of a CA for an audit (typically ₹5,000–₹20,000 for small traders) is worth it to preserve the 8-year loss carry forward — which can offset future profitable years&apos; income.
+            A loss year by itself does not require an audit if your turnover is within the
+            thresholds above — file ITR-3 by the ordinary due date to carry the loss forward.
+            If your turnover does cross a threshold that requires an audit, budget for a CA
+            (typically ₹5,000–₹20,000 for small traders) to preserve the 8-year loss carry
+            forward, which can offset future profitable years&apos; income.
           </p>
         </div>
 
@@ -553,7 +564,7 @@ export default function Page() {
           Income above ₹15L is taxed at 30% (new regime):<br />
           <strong>Marginal tax on MCX income (at 30%):</strong>         ₹{fmt(traderTax30)}<br />
           <br />
-          <strong>Audit required?</strong> Turnover ₹{fmt(traderTurnover)} &lt; ₹10Cr; profit {((traderNet/traderTurnover)*100).toFixed(1)}% of turnover &gt; 6% → <strong>No audit needed.</strong>
+          <strong>Audit required?</strong> Turnover ₹{fmt(traderTurnover)} is well below the ₹1 crore ordinary threshold → <strong>No audit needed</strong>, regardless of profit margin.
         </div>
         </div>
         <p style={{ ...sub, marginBottom: 24 }}>
