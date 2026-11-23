@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import { getOptionsChain } from '@/lib/options'
 import { getCachedOptionsChain } from '@/lib/optionsChainCache'
 import { safeJsonLd } from '@/lib/seo'
-import { formatAsOfIST } from '@/lib/formatTime'
 import { getAllBriefs } from '@/lib/briefs'
 import RecentBriefsList from '@/components/brief/RecentBriefsList'
 
@@ -99,10 +98,6 @@ const WEBAPP_SCHEMA = {
   provider: { '@id': 'https://bhaavbrief.in/#organization' },
 }
 
-const INSTRUMENT_LABELS: Record<string, string> = {
-  GOLD: 'Gold', SILVER: 'Silver', CRUDEOIL: 'Crude Oil', NATURALGAS: 'Natural Gas', COPPER: 'Copper',
-}
-
 // Deliberately not reading `searchParams` here: it's a Next.js dynamic API and
 // using it would force this whole route to render on every request, defeating
 // `revalidate = 60` above. The legacy `?commodity=` deep link (nothing internal
@@ -143,12 +138,10 @@ export default async function OptionsPage() {
         </p>
       </div>
 
-      {initialData && (
-        <p className="bb-options-context" style={{ fontSize: 13, color: 'var(--ink-3)', margin: '-12px 0 20px', lineHeight: 1.7 }}>
-          As of {formatAsOfIST(initialData.lastUpdated)}, MCX {INSTRUMENT_LABELS[instrument] ?? instrument} Max Pain sits at ₹{initialData.maxPain.toLocaleString('en-IN')} for the {initialData.expiry} expiry, with a Put-Call Ratio of {initialData.pcr}
-          {initialData.ivix != null ? ` and implied volatility (iVIX) of ${initialData.ivix.toFixed(1)}%` : ''}. See the <Link href="/learn/mcx-margin-calculator" style={{ color: 'var(--gold)' }}>margin requirements</Link> and <Link href="/learn/mcx-rollover" style={{ color: 'var(--gold)' }}>rollover mechanics</Link> for the underlying futures contract.
-        </p>
-      )}
+      {/* The "As of ... Max Pain sits at..." summary now lives inside
+          OptionChain itself, driven by its own live data state — rendering
+          it here from initialData meant it never updated after switching
+          expiry/instrument below, even though the chain did. */}
 
       <div className="bb-options-actions" style={{ marginBottom: 20 }}>
         <Link href={`/options/strategy?instrument=${instrument}`} style={{
