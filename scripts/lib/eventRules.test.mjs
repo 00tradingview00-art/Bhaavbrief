@@ -50,6 +50,24 @@ describe('applyComputedDates', () => {
       .toBe('2026-11-05T15:30:00.000Z')
   })
 
+  it('applies a HOLIDAY_OVERRIDES entry when the regular rule would land on the date it replaces (Thanksgiving: EIA gas moves earlier, Wed instead of Thu)', () => {
+    const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-11-19T15:30:00.000Z' }
+    const monday = new Date('2026-11-23T06:00:00Z') // regular rule would land on Thu 26 Nov
+    expect(applyComputedDates([e], monday, null)[0].next_release_utc).toBe('2026-11-25T17:00:00.000Z') // Wed 25 Nov, 12:00 ET = 17:00 UTC
+  })
+
+  it('applies a HOLIDAY_OVERRIDES entry that shifts later in the week (Veterans Day: EIA petroleum moves to Thu instead of Wed)', () => {
+    const e = { id: 'eia_petroleum_status_report', cadence_type: 'rule_based', next_release_utc: '2026-11-04T15:30:00.000Z' }
+    const monday = new Date('2026-11-09T06:00:00Z') // regular rule would land on Wed 11 Nov
+    expect(applyComputedDates([e], monday, null)[0].next_release_utc).toBe('2026-11-12T17:00:00.000Z') // Thu 12 Nov, 12:00 ET = 17:00 UTC
+  })
+
+  it('does not apply a HOLIDAY_OVERRIDES entry to a week it was not written for', () => {
+    const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-11-12T15:30:00.000Z' }
+    const monday = new Date('2026-11-16T06:00:00Z') // regular rule lands on Thu 19 Nov — no override for that date
+    expect(applyComputedDates([e], monday, null)[0].next_release_utc).toBe('2026-11-19T15:30:00.000Z')
+  })
+
   it('leaves an upcoming weekly event alone', () => {
     const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-10-01T14:30:00.000Z' }
     expect(applyComputedDates([e], now, null)[0]).toBe(e)
