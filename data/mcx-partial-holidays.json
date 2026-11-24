@@ -1,0 +1,72 @@
+[
+  {
+    "date": "2026-01-01",
+    "closesAtIST": "17:00",
+    "description": "New Year's Day — morning session trades normally; evening session (5 PM onward) closed"
+  },
+  {
+    "date": "2026-01-15",
+    "reopensAtIST": "17:00",
+    "description": "Maharashtra Municipal Corporation Elections — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-03-03",
+    "reopensAtIST": "17:00",
+    "description": "Holi — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-03-26",
+    "reopensAtIST": "17:00",
+    "description": "Shri Ram Navami — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-03-31",
+    "reopensAtIST": "17:00",
+    "description": "Shri Mahavir Jayanti — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-04-14",
+    "reopensAtIST": "17:00",
+    "description": "Dr. Baba Saheb Ambedkar Jayanti — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-05-01",
+    "reopensAtIST": "17:00",
+    "description": "Maharashtra Day — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-05-28",
+    "reopensAtIST": "17:00",
+    "description": "Bakri Id — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-06-26",
+    "reopensAtIST": "17:00",
+    "description": "Muharram — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-09-14",
+    "reopensAtIST": "17:00",
+    "description": "Ganesh Chaturthi — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-10-20",
+    "reopensAtIST": "17:00",
+    "description": "Dussehra — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-11-08",
+    "specialOpenIST": { "start": "14:20", "end": "15:30" },
+    "description": "Diwali Laxmi Pujan Muhurat trading — Sunday special session, 2:20–3:30 PM only"
+  },
+  {
+    "date": "2026-11-10",
+    "reopensAtIST": "17:00",
+    "description": "Diwali-Balipratipada — morning session closed; evening session trades normally from 5 PM"
+  },
+  {
+    "date": "2026-11-24",
+    "reopensAtIST": "17:00",
+    "description": "Prakash Gurpurb Sri Guru Nanak Dev — morning session closed; evening session trades normally from 5 PM"
+  }
+]

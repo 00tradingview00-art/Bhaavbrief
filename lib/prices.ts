@@ -13,7 +13,7 @@
 import { unstable_cache } from 'next/cache'
 import { resolveUsdinr } from '../scripts/lib/resolveUsdinr.mjs'
 import { KiteClient, type KiteQuote, type InstrumentInfo } from './kite'
-import { isMcxOpen } from './tradingCalendar'
+import { isMcxOpen, getSessionNote } from './tradingCalendar'
 import fs from 'fs'
 import path from 'path'
 
@@ -426,6 +426,11 @@ export interface PriceData {
   generatedAtIST?: string   // IST timestamp from snapshot, e.g. "2026-06-10 09:30 IST"
   snapshotStale?:  boolean  // true when snapshot is >2h old during MCX hours
   marketOpen:      boolean
+  // Name of today's holiday / session override when one applies (e.g. "Prakash
+  // Gurpurb Sri Guru Nanak Dev — morning session closed; evening session
+  // trades normally from 5 PM"), so the UI can explain unusual hours instead
+  // of a bare Open/Closed badge. null on an ordinary trading day.
+  holidayNote?:    string | null
 
   usdinr:         number
   usdinrChangePct:number
@@ -514,7 +519,8 @@ export async function getPrices(): Promise<PriceData | null> {
 
     // Shared DST- and holiday-aware clock — this was a bare UTC window with no
     // weekend/holiday check (Saturday afternoon read as open) and a 23:30 close.
-    const marketOpen = isMcxOpen()
+    const marketOpen  = isMcxOpen()
+    const holidayNote = getSessionNote()
 
     const instruments = loadInstrumentTokens()
 
@@ -548,6 +554,7 @@ export async function getPrices(): Promise<PriceData | null> {
         : (usingTwelve ? 'twelvedata'      : 'stooq'),
       updatedAt:  new Date().toISOString(),
       marketOpen,
+      holidayNote,
 
       ...resolveTickerUsdinr(
         instruments.currencies
