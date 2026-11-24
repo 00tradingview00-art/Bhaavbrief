@@ -24,7 +24,7 @@
 import fs from 'fs'
 import path from 'path'
 import type { PriceData } from './prices'
-import { isMcxOpen } from './tradingCalendar'
+import { isMcxOpen, getSessionNote } from './tradingCalendar'
 import { redisCommand } from './redis'
 
 const REDIS_SNAPSHOT_KEY = 'market-snapshot:latest'
@@ -99,8 +99,9 @@ export function isMCXOpenNow(): boolean {
 // changePct is read from snapshot as-is — never recomputed here.
 export function snapshotToPriceData(snap: Snapshot): PriceData {
   const i = snap.instruments
-  const ageMin     = snapshotAgeMinutes(snap)
-  const marketOpen = isMCXOpenNow()
+  const ageMin      = snapshotAgeMinutes(snap)
+  const marketOpen  = isMCXOpenNow()
+  const holidayNote = getSessionNote()
   // delayed = >2h during market hours (amber badge); grey = >12h (stop showing)
   const snapshotStale = marketOpen ? ageMin > 120 : ageMin > 720
 
@@ -134,6 +135,7 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     generatedAtIST:  snap.generatedAtIST,
     snapshotStale,
     marketOpen,
+    holidayNote,
 
     usdinr:          i.USDINR?.price          ?? 0,
     usdinrChangePct: i.USDINR?.changePct       ?? 0,

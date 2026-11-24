@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import fs from 'fs'
+import path from 'path'
 
 let today = '2026-09-30'
 let calendar = { loaded: true, latestYear: 2026 as number | null }
@@ -70,18 +71,34 @@ describe('/api/health engine check', () => {
   })
 
   it('falls back to the file when the Redis read fails', async () => {
+    // Scoped to engine-state.json's own path — a blanket mock of every
+    // fs.existsSync/readFileSync call also intercepts scripts/lib/holidays.js's
+    // unrelated reads of market-holidays.json / mcx-partial-holidays.json
+    // (isMcxOpen's weekend/Muhurat-window check touches those even when the
+    // route's own market-open branch isn't under test here), corrupting them
+    // with engine-state JSON and crashing the request.
+    const engineStatePath = path.join(process.cwd(), 'data/engine-state.json')
+    const realExistsSync  = fs.existsSync
+    const realReadFileSync = fs.readFileSync
     vi.spyOn(redisModule, 'redisCommand').mockRejectedValue(new Error('Redis not configured'))
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true)
-    vi.spyOn(fs, 'readFileSync').mockReturnValue(
-      JSON.stringify({ lastChecked: '2026-10-03T05:00:00.000Z' }),
+    vi.spyOn(fs, 'existsSync').mockImplementation(
+      (p => (p === engineStatePath ? true : realExistsSync(p))) as typeof fs.existsSync,
     )
+    vi.spyOn(fs, 'readFileSync').mockImplementation(((p: fs.PathOrFileDescriptor, opts: unknown) =>
+      p === engineStatePath
+        ? JSON.stringify({ lastChecked: '2026-10-03T05:00:00.000Z' })
+        : realReadFileSync(p, opts as never)) as typeof fs.readFileSync)
     const result = await engineCheck()
     expect(result.ageMinutes).toBe(60)
   })
 
   it('fails when neither Redis nor the file has a lastChecked value', async () => {
+    const engineStatePath = path.join(process.cwd(), 'data/engine-state.json')
+    const realExistsSync  = fs.existsSync
     vi.spyOn(redisModule, 'redisCommand').mockRejectedValue(new Error('Redis not configured'))
-    vi.spyOn(fs, 'existsSync').mockReturnValue(false)
+    vi.spyOn(fs, 'existsSync').mockImplementation(
+      (p => (p === engineStatePath ? false : realExistsSync(p))) as typeof fs.existsSync,
+    )
     expect(await engineCheck()).toMatchObject({
       ok: false,
       reason: 'engine-state.json missing lastChecked',

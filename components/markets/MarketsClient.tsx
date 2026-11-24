@@ -321,6 +321,16 @@ export default function MarketsClient({ initialPrices, eiaData, sparklines, opti
         </div>
       </div>
 
+      {p?.holidayNote && (
+        <div style={{
+          fontSize: 12, color: 'var(--ink-3)', background: 'var(--surface)',
+          border: '1px solid var(--border)', borderRadius: 4, padding: '8px 12px',
+          marginBottom: 20, marginTop: -8,
+        }}>
+          {marketOpen ? '◐ Partial trading holiday — ' : '○ Trading holiday — '}{p.holidayNote}
+        </div>
+      )}
+
       {/* ── MCX Futures ── */}
       <SectionHeader label="MCX Futures" right={
         <span style={{ fontFamily: 'var(--font-sans)', fontSize: 10, color: 'var(--ink-4)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
