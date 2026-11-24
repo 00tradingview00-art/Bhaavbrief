@@ -63,7 +63,7 @@ function previewHistory(): BasisPoint[] {
   return dates.map((date, i) => ({
     date,
     goldSpreadPct: gold[i], silverSpreadPct: silver[i], crudeSpreadPct: crude[i], copperSpreadPct: null,
-    goldDutySpreadPct: null, silverDutySpreadPct: null, crudeDutySpreadPct: null,
+    goldDutySpreadPct: null, silverDutySpreadPct: null, crudeDutySpreadPct: null, goldSilverRatio: null,
     gold: noConstituents, silver: noConstituents, crude: noConstituents, copper: noConstituents,
   }))
 }

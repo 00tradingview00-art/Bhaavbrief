@@ -395,6 +395,27 @@ export default function Page() {
           </p>
         </div>
 
+        {/* ── Copper lot size (direct-linkable section) ── */}
+        <h2 id="copper" style={h2}>MCX Copper lot size</h2>
+        <p style={prose}>
+          MCX Copper (Standard) has a 2,500 kg lot, quoted in ₹ per kilogram, with a ₹0.05/kg
+          tick size — the smallest price movement allowed. Copper Mini is a smaller 250 kg lot,
+          one-tenth the Standard contract, same quote unit and tick size.
+        </p>
+        <div style={infoBox}>
+          <p style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 600, color: '#18180F' }}>
+            At today&apos;s MCX Copper price of ₹{fmt(p.copper)}/kg:
+          </p>
+          <ul style={{ margin: '0 0 10px', paddingLeft: 20, fontSize: 14, lineHeight: 1.8, color: '#18180F' }}>
+            <li>1 Copper Standard lot (2,500 kg) = <strong>{fmtValue(copperStd)}</strong> — margin ≈ {marginRange(copperStd)}</li>
+            <li>1 Copper Mini lot (250 kg) = <strong>{fmtValue(copperMini)}</strong> — margin ≈ {marginRange(copperMini)}</li>
+          </ul>
+          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: '#18180F' }}>
+            Tick value: with a ₹0.05/kg tick, one Standard lot (2,500 kg) moves by ₹125 per
+            tick (₹0.05 × 2,500); one Mini lot (250 kg) moves by ₹12.50 per tick.
+          </p>
+        </div>
+
         {/* ── Worked example ── */}
         <h2 style={h2}>Worked example: Crude Mini margin calculation</h2>
         <p style={prose}>

@@ -19,6 +19,8 @@ import DriverMaps from '@/components/visuals/DriverMaps'
 import { getDriverContext } from '@/lib/driverContext'
 import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
 import { computeImportParityCopperINR } from '@/lib/parity.mjs'
+import { getBasisHistory } from '@/lib/basis'
+import Sparkline from '@/components/ui/Sparkline'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -557,6 +559,38 @@ export default async function CommodityPage({ params }: Props) {
           </div>
         </div>
       )}
+
+      {entry.key === 'silver' && (() => {
+        // goldSilverRatio is already computed by scripts/fetch-snapshot.mjs
+        // and shown as today's point value on Home (app/page.tsx) — this
+        // reuses the exact same field (never recomputed) for a trend view,
+        // using up to 90 days of history already on disk in data/history/.
+        const ratioHistory = getBasisHistory(90)
+          .map(p => p.goldSilverRatio)
+          .filter((r): r is number => typeof r === 'number' && r > 0)
+        const latestRatio = ratioHistory[ratioHistory.length - 1]
+        if (!latestRatio) return null
+        return (
+          <div style={{
+            background: 'var(--surface-2)', border: '1px solid var(--border)',
+            borderRadius: 8, padding: '14px 20px', marginBottom: 20,
+            display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '12px 24px', justifyContent: 'space-between',
+          }}>
+            <div>
+              <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
+                Gold/Silver ratio
+              </div>
+              <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
+                {latestRatio.toFixed(1)}x
+                <span style={{ fontSize: 11, color: 'var(--ink-4)', marginLeft: 8, fontWeight: 400 }}>
+                  how many ounces of silver buy one ounce of gold, on global (COMEX) prices
+                </span>
+              </div>
+            </div>
+            {ratioHistory.length >= 2 && <Sparkline closes={ratioHistory} size="card" />}
+          </div>
+        )
+      })()}
 
       {(entry.key === 'gold' || entry.key === 'silver' || entry.key === 'crude' || entry.key === 'natgas') && (
         <DriverMaps prices={prices} only={entry.key} page="commodity" context={getDriverContext(snap)} />

@@ -36,6 +36,13 @@ export interface BasisPoint {
   silver: BasisConstituents
   crude:  BasisConstituents
   copper: BasisConstituents
+  // Already computed and written by scripts/fetch-snapshot.mjs into every
+  // history file's derived.goldSilverRatio (COMEX gold ÷ COMEX silver, both
+  // USD/oz) — already shown on Home (app/page.tsx) as today's point value.
+  // Passed through here, not recomputed, so a history/trend view (e.g. the
+  // Silver commodity page) reads the same single source of truth. null on
+  // history files from before this field existed (~Jun-Jul 2026).
+  goldSilverRatio: number | null
 }
 
 // Copper has no duty-inclusive line (goldDutySpreadPct etc. above): no
@@ -78,6 +85,7 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
           mcxComexSilverSpreadPct?: number
           importParityGoldINR?:     number
           importParitySilverINR?:   number
+          goldSilverRatio?:         number
         }
       }
 
@@ -130,6 +138,7 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
         silver: { mcx: mcxSilver ?? null, benchmark: inst.COMEX_SILVER?.price ?? null, usdinr: usdinr ?? null },
         crude:  { mcx: mcxCrude  ?? null, benchmark: wti ?? null,                      usdinr: usdinr ?? null },
         copper: { mcx: mcxCopper ?? null, benchmark: comexCopperUsdPerLb ?? null,      usdinr: usdinr ?? null },
+        goldSilverRatio: derived.goldSilverRatio ?? null,
       })
     } catch {
       // skip malformed files

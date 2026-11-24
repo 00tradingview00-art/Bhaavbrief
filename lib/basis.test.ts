@@ -112,6 +112,27 @@ describe('getBasisHistory', () => {
     expect(latest.copper).toEqual({ mcx: null, benchmark: null, usdinr: null })
   })
 
+  it('passes derived.goldSilverRatio through as-is, not recomputed', () => {
+    mockReadFile.mockImplementation((filePath) => {
+      const path = String(filePath)
+      if (path.endsWith('commodity-constants.json')) return constantsFixture
+      if (path.endsWith('2026-09-03.json')) {
+        return JSON.stringify({
+          instruments: { MCX_GOLD: { price: 70000 }, COMEX_GOLD: { price: 2000 } },
+          derived: { mcxComexGoldSpreadPct: 1, importParityGoldINR: 62500, goldSilverRatio: 85.9 },
+        })
+      }
+      return fixture('', 0)
+    })
+    const [latest] = getBasisHistory(1)
+    expect(latest.goldSilverRatio).toBe(85.9)
+  })
+
+  it('leaves goldSilverRatio null on an older history file predating the field', () => {
+    const [latest] = getBasisHistory(1)
+    expect(latest.goldSilverRatio).toBeNull()
+  })
+
   it('a limit larger than the available history returns everything available', () => {
     const history = getBasisHistory(30)
     expect(history).toHaveLength(3)
