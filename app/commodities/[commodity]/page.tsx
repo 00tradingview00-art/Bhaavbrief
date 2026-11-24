@@ -592,6 +592,41 @@ export default async function CommodityPage({ params }: Props) {
         )
       })()}
 
+      {entry.key === 'crude' && (() => {
+        // PPAC publishes this as a periodic report with its own "as on"
+        // date (days behind today), not a live quote — asOfDate (set by
+        // scripts/fetch-snapshot.mjs via lib/indianBasketCrude.mjs) is
+        // shown explicitly so this never reads as a live-updating price.
+        // Distinct from MCX Crude above: MCX's contract is WTI-linked,
+        // while this is India's actual landed-cost basket (Brent Dated +
+        // Oman/Dubai average) — a macro context figure, not a parity check.
+        const basket = snap?.instruments?.INDIAN_BASKET_CRUDE
+        if (!basket || !(basket.price > 0)) return null
+        const asOfLabel = basket.asOfDate
+          ? new Date(`${basket.asOfDate}T00:00:00Z`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+          : null
+        return (
+          <div style={{
+            background: 'var(--surface-2)', border: '1px solid var(--border)',
+            borderRadius: 8, padding: '14px 20px', marginBottom: 20,
+          }}>
+            <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
+              India&apos;s Indian Basket crude price
+            </div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
+              ${basket.price.toFixed(2)}/bbl
+              {basket.changePct !== 0 && (
+                <span style={{ marginLeft: 8 }}>({basket.changePct >= 0 ? '+' : ''}{basket.changePct.toFixed(2)}%)</span>
+              )}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 4 }}>
+              {asOfLabel ? `As on ${asOfLabel}. ` : ''}
+              The average landed cost (Brent Dated + Oman/Dubai average) Indian refiners actually pay — distinct from MCX Crude&apos;s WTI-linked contract above. Source: PPAC, Ministry of Petroleum &amp; Natural Gas.
+            </div>
+          </div>
+        )
+      })()}
+
       {(entry.key === 'gold' || entry.key === 'silver' || entry.key === 'crude' || entry.key === 'natgas') && (
         <DriverMaps prices={prices} only={entry.key} page="commodity" context={getDriverContext(snap)} />
       )}

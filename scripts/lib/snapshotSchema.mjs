@@ -44,6 +44,7 @@ export const PLAUSIBLE_RANGES = {
   COMEX_SILVER:  [10, 150],
   WTI:           [20, 200],
   BRENT:         [20, 200],
+  INDIAN_BASKET_CRUDE: [20, 200],
   HENRY_HUB:     [0.5, 20],
   MCX_ZINC:      [100, 1000],
   MCX_LEAD:      [50, 500],
