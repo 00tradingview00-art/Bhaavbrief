@@ -26,9 +26,9 @@
     "expiry": "2026-11-30"
   },
   "natgas": {
-    "token": 147025671,
-    "symbol": "NATURALGAS26NOVFUT",
-    "expiry": "2026-11-24"
+    "token": 148031751,
+    "symbol": "NATURALGAS26DECFUT",
+    "expiry": "2026-12-28"
   },
   "zinc": {
     "token": 148131335,
@@ -55,7 +55,7 @@
     "symbol": "ELECDMBL26NOVFUT",
     "expiry": "2026-11-27"
   },
-  "updatedAt": "2026-11-23T12:44:03.954Z",
+  "updatedAt": "2026-11-24T04:00:50.758Z",
   "currencies": {
     "usdinr": {
       "token": 405507,

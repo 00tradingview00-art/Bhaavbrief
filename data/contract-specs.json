@@ -49,8 +49,8 @@
   },
   "natgas": {
     "name": "NATURALGAS",
-    "tradingsymbol": "NATURALGAS26NOVFUT",
-    "expiry": "2026-11-24",
+    "tradingsymbol": "NATURALGAS26DECFUT",
+    "expiry": "2026-12-28",
     "contractSize": 1250,
     "contractSizeStr": "1250 mmBtu",
     "priceQuote": "per mmBtu",
