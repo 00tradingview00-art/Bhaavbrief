@@ -31,8 +31,8 @@ const REVIEWED = '30 September 2026'
 const GUIDES: Record<GuideKey, Guide> = {
   'mcx-silver-contracts': {
     title: 'MCX Silver Contracts 2026: Lot Size, Tick Value & Contract Value',
-    description: 'MCX Silver contract guide for Indian traders: standard lot size, quote unit, tick value, live contract value and where to verify the current contract specification.',
-    keywords: ['MCX silver lot size', 'MCX silver contract size', 'MCX silver tick value', 'MCX silver contract value'],
+    description: 'MCX Silver contract guide for Indian traders: standard, Mini and Micro (SILVERMIC) lot size, quote unit, tick value, live contract value and where to verify the current contract specification.',
+    keywords: ['MCX silver lot size', 'MCX silver contract size', 'MCX silver tick value', 'MCX silver contract value', 'silvermic lot size', 'SILVERMIC contract size'],
     eyebrow: 'MCX contract reference',
     answer: 'The standard MCX Silver futures contract represents 30 kg and is quoted in rupees per kilogram. A ₹1 move in the quoted price changes one standard lot by ₹30. Contract specifications, listed expiries and margins can change, so use the exchange contract page and your broker’s margin screen before placing an order.',
     sections: [
@@ -47,12 +47,18 @@ const GUIDES: Record<GuideKey, Guide> = {
       { heading: 'What to check before expiry', body: [
         'Futures are time-bound contracts. Confirm the selected expiry, liquidity and delivery rules before holding a position near expiry. If you intend to maintain exposure beyond the selected month, the relevant comparison is the live spread between the near and next contracts, not a generic historical rollover estimate.',
         'BhaavBrief’s live markets page is useful for price context; the exchange remains the source of record for contract specifications and delivery obligations.'
+      ]},
+      { heading: 'Silver Micro (SILVERMIC): the smallest silver lot', body: [
+        'Silver Micro trades under the symbol SILVERMIC with a 1 kg lot — 30x smaller than the standard 30 kg contract — quoted in the same ₹ per kilogram unit. The tick size is ₹1 per kilogram, so with a 1 kg lot, each tick changes the lot’s value by exactly ₹1 (versus ₹30 per tick for the standard contract and ₹5 for Silver Mini’s 5 kg lot).',
+        'Worked example: at an illustrative ₹1,50,000/kg, one SILVERMIC lot has a notional value of ₹1,50,000 (₹1,50,000 × 1 kg). A ₹1,000/kg move — about 0.67% — changes that lot’s value by ₹1,000. The same percentage move on a standard 30 kg lot would change its value by ₹30,000. Micro’s small lot size is what makes it usable with a much smaller margin than the standard contract, not a different price per kilogram.',
+        'MCX periodically revises its silver contract line-up — a 100-gram "Silver 100" contract launched alongside the existing Standard/Mini/Micro tiers in 2026 — so confirm which contracts are currently listed and their exact specifications on MCX before trading any of them.'
       ]}
     ],
     faqs: [
       { question: 'What is the MCX Silver standard lot size?', answer: 'The standard MCX Silver futures contract represents 30 kg. Confirm the active contract specification on MCX before trading because exchange specifications can change.' },
       { question: 'How much does a ₹1 move in MCX Silver affect one standard lot?', answer: 'Because the standard lot is 30 kg and Silver is quoted per kilogram, a ₹1/kg move changes the standard-lot value by ₹30.' },
-      { question: 'Is contract value the same as margin?', answer: 'No. Contract value is price multiplied by lot size. Margin is collateral required by the exchange and broker and can change with volatility.' }
+      { question: 'Is contract value the same as margin?', answer: 'No. Contract value is price multiplied by lot size. Margin is collateral required by the exchange and broker and can change with volatility.' },
+      { question: 'What is the SILVERMIC (Silver Micro) lot size?', answer: 'Silver Micro (SILVERMIC) has a 1 kg lot size, quoted in ₹ per kilogram — the smallest standard silver futures lot on MCX. The ₹1/kg tick size means each tick changes one lot’s value by ₹1. Confirm the current specification on MCX, since contract line-ups can change.' }
     ],
     links: [
       { href: '/learn/mcx-lot-sizes', label: 'MCX lot sizes', description: 'Compare quote units and lot sizes across major MCX contracts.' },
@@ -202,7 +208,8 @@ const GUIDES: Record<GuideKey, Guide> = {
       ]},
       { heading: 'Rollover arithmetic', body: [
         'For a long position, selling the near-month and buying a higher-priced next month creates a positive price difference—the live roll cost. If the next month is lower, the difference is a roll benefit. The contract-level rupee amount equals the price spread multiplied by the lot size.',
-        'Example: if two otherwise comparable Crude Oil contracts are ₹20/barrel apart, the standard 100-barrel contract has a ₹2,000 spread. This is an arithmetic example, not a typical spread or a recommended trade.'
+        'Worked example, both directions: if the near and next Crude Oil contracts are ₹20/barrel apart in contango (next month higher), rolling a long position on the standard 100-barrel contract costs ₹2,000 (₹20 × 100). If the same two contracts were instead ₹20/barrel apart in backwardation (next month lower), rolling that same long position is a ₹2,000 benefit instead of a cost — same arithmetic, opposite sign, because the curve direction flipped. These are illustrative spreads, not a typical or current one.',
+        'For the actual current near-vs-next spread on a specific commodity, check the live calendar spreads on BhaavBrief’s Strategy Builder rather than estimating from memory — the curve moves daily and the sign can flip between contango and backwardation.'
       ]},
       { heading: 'What the curve cannot tell you', body: [
         'Contango does not automatically mean the commodity will fall, and backwardation does not automatically mean it will rise. The curve reflects prices for different delivery dates, not a simple forecast. Liquidity, contract expiry and event risk remain important.',
@@ -216,6 +223,7 @@ const GUIDES: Record<GuideKey, Guide> = {
     ],
     links: [
       { href: '/learn/mcx-rollover', label: 'MCX futures rollover guide', description: 'Read the operational steps and expiry checks for a rollover.' },
+      { href: '/options/strategy', label: 'Strategy Builder — live calendar spreads', description: 'See the actual current near-vs-far month futures spread, not a hypothetical one.' },
       { href: '/tools/mcx-basis', label: 'MCX basis calculator', description: 'Explore futures-versus-reference price context.' },
       { href: '/markets', label: 'Live MCX markets', description: 'Check current commodity market context before comparing contracts.' }
     ],
