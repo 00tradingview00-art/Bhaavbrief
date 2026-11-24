@@ -1,12 +1,14 @@
 import { getAllBriefs } from '@/lib/briefs'
 import { getAllArticles } from '@/lib/articles'
 import { getAllResearch } from '@/lib/research'
+import { istParts, mcxCloseLabelIST } from '@/scripts/lib/mcxHours.js'
 
 export const dynamic = 'force-dynamic'
 
 const BASE = 'https://bhaavbrief.in'
 
 export async function GET() {
+  const closeLabel = mcxCloseLabelIST(istParts().date) // "11:30 PM" or "11:55 PM", DST-dependent
   const [briefs, articles] = await Promise.all([
     getAllBriefs(),
     getAllArticles(),
@@ -55,13 +57,13 @@ Beginner guides with India-specific ₹ amounts, MCX-specific rules, and operati
 - [How Much Money to Start MCX Trading](${BASE}/learn/how-much-money-to-start-mcx-trading): Exact capital needed by contract — ₹8,000–15,000 for Crude Mini, ₹1,00,000+ for Gold Mini, margin vs recommended capital
 - [MCX Gold vs Physical Gold](${BASE}/learn/mcx-gold-vs-physical-gold): MCX gold is a futures contract not real gold — delivery process, minimum investment, who should use each
 - [Which MCX Commodity to Trade](${BASE}/learn/which-mcx-commodity-to-trade): Decision matrix by capital and risk — Crude Mini for beginners, Gold Mini for ₹75K+ traders
-- [MCX Trading Hours India](${BASE}/learn/mcx-trading-hours): MCX open 9 AM to 11:30 PM IST — session quality guide, EIA timing, commodity-specific best windows
+- [MCX Trading Hours India](${BASE}/learn/mcx-trading-hours): MCX open 9 AM to ${closeLabel} IST (DST-dependent close, see guide) — session quality guide, EIA timing, commodity-specific best windows
 - [MCX Order Types Explained](${BASE}/learn/mcx-order-types): Market, Limit, SL, SL-M orders — why SL-M is the correct stop loss, worked examples
 - [What is COMEX](${BASE}/learn/what-is-comex): COMEX explained for Indian MCX traders — why New York sets MCX gold price, IST trading hours, tracking tools
-- [COMEX vs MCX Gold Price](${BASE}/learn/comex-vs-mcx-gold): Import parity formula, 6% BCD + 3% AIDC + 3% GST duty structure, USD/INR role
+- [COMEX vs MCX Gold Price](${BASE}/learn/comex-vs-mcx-gold): Import parity formula, USD/INR role, and the effective gold/silver import duty (raised ~6%→~15% effective 13 May 2026 — exact BCD/AIDC/GST composition under CA review, see guide for current detail)
 - [MCX Contract Expiry Dates 2026](${BASE}/learn/mcx-contract-expiry): When MCX contracts expire, DVCAL settlement, rollover vs exit timing
 - [MCX Circuit Limits 2026](${BASE}/learn/mcx-circuit-limits): Two-stage circuit system (±3%, ±6%), commodity-specific bands, what to do when frozen
-- [MCX Margin Calculator](${BASE}/learn/mcx-margin-calculator): Live SPAN margin estimates for every MCX contract
+- [MCX Margin Calculator](${BASE}/learn/mcx-margin-calculator): Illustrative SPAN margin examples for every MCX contract plus SEBI's regulatory minimum-margin floor (6%/8%/10% by volatility category, effective 1 Dec 2026)
 - [Best Time to Trade MCX](${BASE}/learn/best-time-to-trade-mcx): Morning vs evening session, COMEX overlap, when NOT to trade
 - [Why USD/INR Moves MCX Gold](${BASE}/learn/why-usdinr-affects-mcx-gold): Rupee-dollar link with import parity formula and live examples
 - [MCX Futures Rollover Guide](${BASE}/learn/mcx-rollover): When to rollover, rollover cost calculation, contango vs backwardation
@@ -115,7 +117,7 @@ ${recentArticles.map(a =>
 ## Data Coverage
 
 Commodities: MCX Gold (₹/10g), MCX Silver (₹/kg), MCX Crude Oil (₹/bbl), MCX Copper (₹/kg), MCX Natural Gas (₹/mmBtu), MCX Zinc (₹/kg), MCX Aluminium (₹/kg), MCX Lead (₹/kg), MCX Nickel (₹/kg)
-Global references: COMEX Gold ($/oz), COMEX Silver ($/oz), LME Copper ($/MT), WTI Crude ($/bbl), Brent Crude ($/bbl), Henry Hub Gas ($/mmBtu)
+Global references: COMEX Gold ($/oz), COMEX Silver ($/oz), COMEX Copper ($/lb), WTI Crude ($/bbl), Brent Crude ($/bbl), Henry Hub Gas ($/mmBtu)
 Currency: USD/INR
 Data points per brief: Open, High, Low, Close, % Change, Open Interest, Volume
 Scheduled events tracked: EIA Natural Gas Storage, EIA Petroleum Status, API Crude Inventories, OPEC+/JMMC, US CPI, FOMC, US Non-Farm Payrolls, China NBS/Caixin PMI, USDA WASDE, MPOB Palm Oil, Baker Hughes Rig Count, India CPI/WPI, RBI MPC, Union Budget of India, CFTC Commitment of Traders, MCX contract expiry — see /calendar
@@ -123,13 +125,13 @@ Scheduled events tracked: EIA Natural Gas Storage, EIA Petroleum Status, API Cru
 ## Frequently Asked
 
 Q: Why does MCX gold price differ from COMEX gold price?
-A: MCX Gold (quoted in ₹ per 10 grams) is the COMEX Gold price (quoted in $ per troy ounce) converted through the USD/INR exchange rate, plus India's import duty structure — 6% Basic Customs Duty, 3% Agriculture Infrastructure and Development Cess, and 3% GST. This duty-and-currency stack is why MCX gold trades at a premium (import parity) over the raw USD-to-INR converted COMEX price. Full formula: ${BASE}/learn/comex-vs-mcx-gold
+A: MCX Gold (quoted in ₹ per 10 grams) is the COMEX Gold price (quoted in $ per troy ounce) converted through the USD/INR exchange rate, plus India's import duty on gold (raised to an effective ~15% — 10% Basic Customs Duty + 5% Agriculture Infrastructure and Development Cess — from 13 May 2026, up from ~6% previously; exact GST/assessable-value treatment under CA review). This duty-and-currency stack is why MCX gold trades at a premium (import parity) over the raw USD-to-INR converted COMEX price. Full formula: ${BASE}/learn/comex-vs-mcx-gold
 
 Q: What are the MCX Gold contract lot sizes?
 A: MCX Gold trades in four contract sizes: Gold (1 kg, the standard contract), Gold Mini (100 g), Gold Guinea (8 g), and Gold Petal (1 g) — each with its own margin and minimum capital requirement. Detail and live contract values: ${BASE}/learn/mcx-gold-contracts
 
 Q: What are MCX trading hours in India?
-A: MCX is open 9:00 AM to 11:30 PM IST on trading days (11:55 PM on days the US observes Daylight Saving Time). Session-by-session quality and best times per commodity: ${BASE}/learn/mcx-trading-hours
+A: MCX is open 9:00 AM to ${closeLabel} IST today on trading days. The close is DST-dependent: 11:30 PM IST while the US observes Daylight Saving Time, 11:55 PM IST the rest of the year. Session-by-session quality and best times per commodity: ${BASE}/learn/mcx-trading-hours
 
 Q: How much money do I need to start MCX trading?
 A: It depends on the contract — roughly ₹8,000–15,000 of margin for Crude Oil Mini, versus ₹1,00,000+ for a standard Gold contract. Exact capital needed by contract: ${BASE}/learn/how-much-money-to-start-mcx-trading
