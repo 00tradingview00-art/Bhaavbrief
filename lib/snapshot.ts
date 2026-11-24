@@ -35,6 +35,10 @@ export interface SnapshotInstrument {
   changePct: number
   unit:      string
   stale?:    boolean
+  // Set only on a periodic (non-live) report, e.g. INDIAN_BASKET_CRUDE —
+  // the date the figure is *for* (PPAC's own reporting lag), not this
+  // snapshot's generatedAt. Absent on every live-quote instrument.
+  asOfDate?: string
 }
 
 export interface Snapshot {

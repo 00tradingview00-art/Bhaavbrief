@@ -33,6 +33,8 @@ import {
   computeGoldSilverRatio,
   checkParityWedge,
 } from '../lib/parity.mjs'
+import { fetchIndianBasketCrude } from '../lib/indianBasketCrude.mjs'
+import { buildIndianBasketInstrument } from './lib/buildIndianBasketInstrument.mjs'
 import { resolveUsdinr } from './lib/resolveUsdinr.mjs'
 import { validateSnapshot } from './lib/snapshotSchema.mjs'
 import { appendDailySnapshot } from './lib/historicalStore.mjs'
@@ -249,9 +251,10 @@ async function main() {
   const mcxCache = loadJSON(MCX_CACHE_FILE)  // intelligence-engine cache (refreshes every 15 min)
 
   // Fetch all external data in parallel
-  const [kiteMCX, kiteCDS, ...yahooResults] = await Promise.all([
+  const [kiteMCX, kiteCDS, indianBasketCrude, ...yahooResults] = await Promise.all([
     fetchKiteMCX(),
     fetchKiteCurrencies(),
+    fetchIndianBasketCrude(),
     ...YAHOO_SYMBOLS.map(fetchYahooSymbol),
     fetchFrankfurterUSDINR(),
   ])
@@ -263,6 +266,7 @@ async function main() {
     }
   }
   console.log(`  Yahoo: ${Object.keys(yahooMap).length}/${YAHOO_SYMBOLS.length} symbols`)
+  console.log(`  PPAC Indian Basket crude: ${indianBasketCrude ? `$${indianBasketCrude.usdPerBbl}/bbl as on ${indianBasketCrude.date}` : 'fetch failed'}`)
 
   // MCX: Kite preferred, cache fallback.
   // Cache age matters: if Kite is down and cache is >2h old, mark stale.
@@ -353,6 +357,15 @@ async function main() {
     return null
   }
 
+  const rawIndianBasket = buildIndianBasketInstrument(indianBasketCrude, existing?.instruments?.INDIAN_BASKET_CRUDE)
+  const indianBasketInstrument = rawIndianBasket && {
+    ...rawIndianBasket,
+    price:     roundTo(rawIndianBasket.price, 2),
+    prevClose: roundTo(rawIndianBasket.prevClose, 2),
+    changePct: roundTo(rawIndianBasket.changePct, 4),
+  }
+  if (rawIndianBasket?.stale) console.warn('  INDIAN_BASKET_CRUDE: fetch failed — carrying last known PPAC report')
+
   const instruments = {
     MCX_GOLD:    buildInstrument('MCX_GOLD',    getMCX('gold'),    MCX_UNITS.gold),
     MCX_SILVER:  buildInstrument('MCX_SILVER',  getMCX('silver'),  MCX_UNITS.silver),
@@ -377,6 +390,7 @@ async function main() {
   if (aluminiumInst) instruments.MCX_ALUMINIUM = aluminiumInst
   if (nickelInst)    instruments.MCX_NICKEL    = nickelInst
   if (electricityInst) instruments.MCX_ELECTRICITY = electricityInst
+  if (indianBasketInstrument) instruments.INDIAN_BASKET_CRUDE = indianBasketInstrument
 
   // Optional CDS currency pairs — carry forward last good value when NSE is closed
   for (const key of ['eurinr', 'gbpinr', 'jpyinr']) {
