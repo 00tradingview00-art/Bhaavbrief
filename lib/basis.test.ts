@@ -80,6 +80,38 @@ describe('getBasisHistory', () => {
     expect(latest.goldDutySpreadPct).toBeCloseTo(-8.93, 2)
   })
 
+  it('computes a raw copper spread from COMEX_COPPER (USD/lb), with no duty-inclusive figure', () => {
+    mockReadFile.mockImplementation((filePath) => {
+      const path = String(filePath)
+      if (path.endsWith('commodity-constants.json')) return constantsFixture
+      if (path.endsWith('2026-09-03.json')) {
+        return JSON.stringify({
+          instruments: {
+            MCX_GOLD: { price: 70000 }, COMEX_GOLD: { price: 2000 },
+            MCX_COPPER: { price: 900 }, COMEX_COPPER: { price: 4.5 }, USDINR: { price: 84 },
+          },
+          derived: { mcxComexGoldSpreadPct: 1, importParityGoldINR: 62500 },
+        })
+      }
+      return fixture('', 0)
+    })
+    const [latest] = getBasisHistory(1)
+    // 4.5 USD/lb = 450 cents/lb -> computeImportParityCopperINR(450, 84) ≈ 833 INR/kg
+    // (same worked example as lib/parity.test.mjs's own test for this function).
+    expect(latest.copper.benchmark).toBe(4.5)
+    expect(latest.copper.mcx).toBe(900)
+    expect(latest.copperSpreadPct).not.toBeNull()
+    expect(latest.copperSpreadPct as number).toBeCloseTo(((900 - 833) / 833) * 100, 0)
+    // No verified duty factor for copper exists — never fabricate one.
+    expect('copperDutySpreadPct' in latest).toBe(false)
+  })
+
+  it('leaves the copper spread null when COMEX_COPPER is absent from an older history file', () => {
+    const [latest] = getBasisHistory(1)
+    expect(latest.copperSpreadPct).toBeNull()
+    expect(latest.copper).toEqual({ mcx: null, benchmark: null, usdinr: null })
+  })
+
   it('a limit larger than the available history returns everything available', () => {
     const history = getBasisHistory(30)
     expect(history).toHaveLength(3)

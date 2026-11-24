@@ -4,6 +4,7 @@ import { isTradingDay } from './tradingCalendar'
 import { dutyInclusiveParity, loadDutyFactors } from './importDuty'
 import {
   computeImportParityCrudeINR,
+  computeImportParityCopperINR,
   computeSpreadPct,
 } from './parity.mjs'
 
@@ -34,10 +35,15 @@ export interface BasisPoint {
   gold:   BasisConstituents
   silver: BasisConstituents
   crude:  BasisConstituents
+  copper: BasisConstituents
 }
 
-// MCX COMEX copper (COMEX HG=F) is not in the history feed.
-// When a COMEX_COPPER field is added to history files, add computeImportParityCopperINR here.
+// Copper has no duty-inclusive line (goldDutySpreadPct etc. above): no
+// verified import-duty factor for copper exists anywhere in this codebase
+// (data/commodity-constants.json's copper entry has none, unlike
+// gold/silver/crude) — copperSpreadPct below is the raw COMEX benchmark
+// spread only, same as what the Basis page already labels "raw" for the
+// others. Don't add a duty-adjusted copper figure without a sourced factor.
 
 // `limit`, when passed, reads only the most recent `limit` files instead of
 // every file in data/history/ — the directory grows by one file per trading
@@ -81,12 +87,24 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
       const mcxGold   = inst.MCX_GOLD?.price
       const mcxSilver = inst.MCX_SILVER?.price
       const mcxCrude  = inst.MCX_CRUDE?.price
+      const mcxCopper = inst.MCX_COPPER?.price
       const wti       = inst.WTI?.price
+      const comexCopperUsdPerLb = inst.COMEX_COPPER?.price
       const usdinr    = inst.USDINR?.price
 
       const crudeParityINR = (wti && usdinr) ? computeImportParityCrudeINR(wti, usdinr) : 0
       const crudeSpread    = (mcxCrude && crudeParityINR > 0)
         ? computeSpreadPct(mcxCrude, crudeParityINR)
+        : null
+
+      // computeImportParityCopperINR takes cents/lb (see its own doc comment
+      // and lib/parity.test.mjs); COMEX_COPPER is stored in USD/lb (verified
+      // against the live Yahoo feed directly — not assumed), so ×100 first.
+      const copperParityINR = (comexCopperUsdPerLb && usdinr)
+        ? computeImportParityCopperINR(comexCopperUsdPerLb * 100, usdinr)
+        : 0
+      const copperSpread = (mcxCopper && copperParityINR > 0)
+        ? computeSpreadPct(mcxCopper, copperParityINR)
         : null
 
       // Same raw parity prices already computed upstream, with the
@@ -104,13 +122,14 @@ export function getBasisHistory(limit?: number): BasisPoint[] {
         goldSpreadPct:       derived.mcxComexGoldSpreadPct   ?? null,
         silverSpreadPct:     derived.mcxComexSilverSpreadPct ?? null,
         crudeSpreadPct:      crudeSpread,
-        copperSpreadPct:     null,
+        copperSpreadPct:     copperSpread,
         goldDutySpreadPct:   goldDutySpread,
         silverDutySpreadPct: silverDutySpread,
         crudeDutySpreadPct:  crudeDutySpread,
         gold:   { mcx: mcxGold   ?? null, benchmark: inst.COMEX_GOLD?.price   ?? null, usdinr: usdinr ?? null },
         silver: { mcx: mcxSilver ?? null, benchmark: inst.COMEX_SILVER?.price ?? null, usdinr: usdinr ?? null },
         crude:  { mcx: mcxCrude  ?? null, benchmark: wti ?? null,                      usdinr: usdinr ?? null },
+        copper: { mcx: mcxCopper ?? null, benchmark: comexCopperUsdPerLb ?? null,      usdinr: usdinr ?? null },
       })
     } catch {
       // skip malformed files

@@ -105,7 +105,7 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
     c.dutyKey ? history.map(p => p[c.dutyKey!] as number | null) : [],
   )
 
-  const constituentKey = c.id === 'gold' || c.id === 'silver' || c.id === 'crude' ? c.id : null
+  const constituentKey = c.id === 'gold' || c.id === 'silver' || c.id === 'crude' || c.id === 'copper' ? c.id : null
   const constituents = constituentKey
     ? windowed.map(p => ({ date: p.date, spread: p[c.key] as number | null, ...(p[constituentKey] as BasisConstituents) }))
     : []

@@ -18,6 +18,7 @@ import { safeJsonLd } from '@/lib/seo'
 import DriverMaps from '@/components/visuals/DriverMaps'
 import { getDriverContext } from '@/lib/driverContext'
 import { dutyInclusiveParity, loadDutyFactors } from '@/lib/importDuty'
+import { computeImportParityCopperINR } from '@/lib/parity.mjs'
 
 // Revalidate every 5 minutes — live prices + new articles
 export const revalidate = 300
@@ -364,6 +365,24 @@ export default async function CommodityPage({ params }: Props) {
           dutyNote: 'Includes applicable import duty',
         }
       }
+    } else if (entry.key === 'copper') {
+      // No duty-inclusive figure here: unlike gold/silver/crude, no verified
+      // import-duty factor for copper exists anywhere in this codebase
+      // (data/commodity-constants.json has none) — this is the raw COMEX
+      // benchmark conversion only, labelled as such, not a guessed duty figure.
+      const comexCopperUsdPerLb = snap.instruments?.COMEX_COPPER?.price ?? 0
+      if (comexCopperUsdPerLb > 0 && usdinr > 0) {
+        const rawParity  = computeImportParityCopperINR(comexCopperUsdPerLb * 100, usdinr)
+        const premiumPct = ltp > 0 && rawParity > 0 ? ((ltp - rawParity) / rawParity) * 100 : 0
+        if (rawParity > 0) {
+          liveParity = {
+            dutyInclusivePrice: rawParity,
+            premiumPct,
+            formula: 'Global (COMEX) copper price, converted to ₹/kg',
+            dutyNote: 'Raw benchmark comparison — import duty not applied (no verified copper duty factor yet)',
+          }
+        }
+      }
     }
   }
 
@@ -512,7 +531,7 @@ export default async function CommodityPage({ params }: Props) {
         }}>
           <div>
             <div style={{ fontSize: 10, color: 'var(--ink-4)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 3 }}>
-              Duty-inclusive import parity
+              {entry.key === 'copper' ? 'Import parity (raw benchmark)' : 'Duty-inclusive import parity'}
             </div>
             <div style={{ fontFamily: 'var(--font-sans)', fontVariantNumeric: 'tabular-nums', fontSize: 18, fontWeight: 600, color: 'var(--ink-2)' }}>
               ₹{fmt(liveParity.dutyInclusivePrice)}

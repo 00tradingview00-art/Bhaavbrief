@@ -53,6 +53,7 @@ export interface Snapshot {
     WTI:         SnapshotInstrument
     BRENT:       SnapshotInstrument
     HENRY_HUB:   SnapshotInstrument
+    COMEX_COPPER:SnapshotInstrument
     [key: string]: SnapshotInstrument
   }
   derived: {
@@ -137,13 +138,13 @@ export function snapshotToPriceData(snap: Snapshot): PriceData {
     comexSilver:     i.COMEX_SILVER?.price     ?? 0,
     wti:             i.WTI?.price              ?? 0,
     brent:           i.BRENT?.price            ?? 0,
-    comexCopper:     0,
+    comexCopper:     i.COMEX_COPPER?.price     ?? 0,
     henryHub:        i.HENRY_HUB?.price        ?? 0,
     goldComexPct:    i.COMEX_GOLD?.changePct   ?? 0,
     silverComexPct:  i.COMEX_SILVER?.changePct ?? 0,
     crudePct:        i.WTI?.changePct          ?? 0,
     brentPct:        i.BRENT?.changePct        ?? 0,
-    copperComexPct:  0,
+    copperComexPct:  i.COMEX_COPPER?.changePct ?? 0,
     gasPct:          i.HENRY_HUB?.changePct    ?? 0,
 
     gold: {
