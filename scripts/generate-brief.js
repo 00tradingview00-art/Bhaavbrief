@@ -11,6 +11,7 @@ import { appendGateLogEntry, hashPayload } from './lib/gateLog.mjs'
 import { SEO_TITLE_MAX } from './lib/seo-title.js'
 import { upcomingEvents, formatUpcomingEventsBlock } from './lib/upcomingEvents.mjs'
 import { mcxNotYetTraded } from './lib/mcxPreOpen.mjs'
+import { pingIndexNow } from './lib/indexNow.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -640,6 +641,7 @@ async function main() {
   // Inject urlSlug derived from date + title for SEO-friendly URLs
   const titleMatch = mdx.match(/^title:\s*"([^"]+)"/m)
   const dateVal    = new Date(Date.now() + 5.5 * 3600000).toISOString().slice(0, 10)
+  let publishedUrlSlug = null // captured below for the IndexNow ping after publish
   if (titleMatch?.[1] && titleMatch[1].length > SEO_TITLE_MAX) {
     // Non-blocking: app/briefs/[slug]/page.tsx already truncates the rendered
     // <title> tag regardless of source length (see lib/seo.ts buildBriefTitle),
@@ -654,6 +656,7 @@ async function main() {
     const titlePart = raw.length > 75 ? raw.slice(0, 76).replace(/-[^-]*$/, '') : raw
     const urlSlug = dateVal + '-' + titlePart
     mdx = mdx.replace(/^(---\n)/, `$1urlSlug: "${urlSlug}"\n`)
+    publishedUrlSlug = urlSlug
   }
 
   // Write `commodities:` at generation time — this is the actual source of
@@ -685,6 +688,20 @@ async function main() {
   if (fs.existsSync(file)) { console.warn('Already exists, skipping'); process.exit(0) }
   fs.writeFileSync(file, mdx.trim(), 'utf8')
   console.log(`Saved: ${file}`)
+
+  // Tell IndexNow (Bing, Yandex) this brief exists the moment it's written,
+  // instead of waiting for a routine recrawl — see scripts/lib/indexNow.mjs
+  // for why. Awaited (not detached) so the ping actually gets a chance to
+  // complete before the process exits, but wrapped so nothing it does can
+  // fail this script — the brief is already saved to disk above regardless.
+  if (publishedUrlSlug) {
+    try {
+      const r = await pingIndexNow([`https://bhaavbrief.in/briefs/${publishedUrlSlug}`])
+      if (!r.ok) console.warn('[indexnow] ping not accepted:', r.status)
+    } catch (e) {
+      console.warn('[indexnow] ping failed (non-fatal):', e.message)
+    }
+  }
 
   // Arc detection — runs after brief is saved (getLeadStreak/rule need the file on disk)
   try {
