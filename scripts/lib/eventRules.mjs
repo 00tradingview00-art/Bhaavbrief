@@ -93,19 +93,46 @@ export function nextOccurrenceEastern(fromUtc, dow, hourEt, minEt) {
   return actualHourUtc === guessHourUtc ? next : nextOccurrence(fromUtc, dow, actualHourUtc, minEt)
 }
 
-/**
- * Swaps in a HOLIDAY_OVERRIDES entry when `computedNext` (a regular-rule
- * occurrence) lands on a date that entry says to replace. Otherwise returns
- * `computedNext` unchanged.
- */
-function applyHolidayOverride(eventId, computedNext) {
-  const override = HOLIDAY_OVERRIDES[eventId]?.find(
-    (o) => o.replaces === computedNext.toISOString().slice(0, 10)
-  )
-  if (!override) return computedNext
+function overrideInstant(override) {
   const d = new Date(`${override.dateEt}T00:00:00.000Z`)
   d.setUTCHours(etHourToUtc(override.hourEt, override.dateEt), override.minEt, 0, 0)
   return d
+}
+
+/**
+ * nextOccurrenceEastern, accounting for HOLIDAY_OVERRIDES. A week listed in
+ * `replaces` never has its regular slot at all — only the override does —
+ * regardless of whether the override falls earlier or later in the week
+ * than the regular slot would have, and regardless of where `fromUtc` lands
+ * relative to either one. Two failure modes this guards against, both seen
+ * in practice for the two different override directions this file has had:
+ *   - override earlier in the week (Thanksgiving): once the override's own
+ *     instant has passed, the regular-rule candidate still lands on that
+ *     same (now-cancelled) week, so naively swapping in the override would
+ *     return an already-past instant — the event would look overdue/vanish
+ *     from "upcoming" listings instead of advancing to next week.
+ *   - override later in the week (Veterans Day): if `fromUtc` falls after
+ *     the regular slot's own notional instant but before the override's,
+ *     nextOccurrenceEastern alone already jumped past this week to next
+ *     week's regular slot, skipping the still-upcoming override entirely.
+ */
+function resolveEasternOccurrence(eventId, fromUtc, dow, hourEt, minEt) {
+  const overrides = HOLIDAY_OVERRIDES[eventId] ?? []
+
+  let nearestOverride = null
+  for (const o of overrides) {
+    const instant = overrideInstant(o)
+    if (instant.getTime() > fromUtc.getTime() && (!nearestOverride || instant.getTime() < nearestOverride.getTime())) {
+      nearestOverride = instant
+    }
+  }
+
+  let candidate = nextOccurrenceEastern(fromUtc, dow, hourEt, minEt)
+  while (overrides.some((o) => o.replaces === candidate.toISOString().slice(0, 10))) {
+    candidate = nextOccurrenceEastern(new Date(candidate.getTime() + 1), dow, hourEt, minEt)
+  }
+
+  return nearestOverride && nearestOverride.getTime() < candidate.getTime() ? nearestOverride : candidate
 }
 
 // mcx_expiry event id → key in data/kite-instruments.json
@@ -127,7 +154,7 @@ export function applyComputedDates(events, now, instruments) {
       const rule = RULES[event.id]
       if (!rule || new Date(event.next_release_utc).getTime() > now.getTime()) return event
       const next = 'hourEt' in rule
-        ? applyHolidayOverride(event.id, nextOccurrenceEastern(now, rule.dow, rule.hourEt, rule.minEt))
+        ? resolveEasternOccurrence(event.id, now, rule.dow, rule.hourEt, rule.minEt)
         : nextOccurrence(now, rule.dow, rule.hourUtc, rule.minUtc)
       return { ...event, next_release_utc: next.toISOString() }
     }

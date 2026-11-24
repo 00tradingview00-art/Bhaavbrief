@@ -62,6 +62,31 @@ describe('applyComputedDates', () => {
     expect(applyComputedDates([e], monday, null)[0].next_release_utc).toBe('2026-11-12T17:00:00.000Z') // Thu 12 Nov, 12:00 ET = 17:00 UTC
   })
 
+  it('advances past an overridden week once the override itself has already fired, instead of returning its now-past instant (caught by Vercel review on PR #2000)', () => {
+    const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-11-19T15:30:00.000Z' }
+    // The override fires Wed 25 Nov 17:00 UTC; the regular (cancelled) Thu
+    // slot it replaces would have been Thu 26 Nov 15:30 UTC. Any `now` in
+    // that whole window must advance to the following week, never echo the
+    // override's own now-past instant.
+    for (const nowStr of ['2026-11-25T18:00:00Z', '2026-11-26T00:00:00Z', '2026-11-26T10:00:00Z']) {
+      const result = applyComputedDates([e], new Date(nowStr), null)[0]
+      expect(result.next_release_utc).toBe('2026-12-03T15:30:00.000Z') // next Thu, not the stale override
+    }
+  })
+
+  it('still surfaces a still-upcoming later-in-week override even after the regular slot it replaced would have fired', () => {
+    const e = { id: 'eia_petroleum_status_report', cadence_type: 'rule_based', next_release_utc: '2026-11-04T15:30:00.000Z' }
+    // The regular (cancelled) Wed slot would have been 11 Nov 15:30 UTC; the
+    // override fires later, Thu 12 Nov 17:00 UTC. `now` values after the
+    // former but before the latter must still find the override, not skip
+    // straight to the following week the way a plain nextOccurrenceEastern
+    // call would.
+    for (const nowStr of ['2026-11-11T16:00:00Z', '2026-11-11T20:00:00Z']) {
+      const result = applyComputedDates([e], new Date(nowStr), null)[0]
+      expect(result.next_release_utc).toBe('2026-11-12T17:00:00.000Z')
+    }
+  })
+
   it('does not apply a HOLIDAY_OVERRIDES entry to a week it was not written for', () => {
     const e = { id: 'eia_natural_gas_storage', cadence_type: 'rule_based', next_release_utc: '2026-11-12T15:30:00.000Z' }
     const monday = new Date('2026-11-16T06:00:00Z') // regular rule lands on Thu 19 Nov — no override for that date
