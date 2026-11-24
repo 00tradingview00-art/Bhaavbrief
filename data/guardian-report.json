@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-23T05:48:00.514Z",
-  "overallStatus": "green",
+  "generatedAt": "2026-11-24T08:26:04.389Z",
+  "overallStatus": "yellow",
   "health": {
     "status": "green",
     "issues": []
@@ -9,5 +9,6 @@
     "learnIssues": [],
     "investIssues": [],
     "circularImpact": []
-  }
+  },
+  "auditStatus": "failed"
 }
