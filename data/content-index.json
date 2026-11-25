@@ -1,5 +1,26 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-153",
+    "href": "/briefs/edition-153",
+    "title": "The Snap-Back Breaks: Gold Sheds $103 as Safe-Haven Bid Retreats",
+    "description": "Yesterday's safe-haven reversal has cracked overnight — COMEX gold dropped sharply while silver fell harder, signalling the unwind may be resuming.",
+    "excerpt": "MCX Gold ₹121702 | Crude ₹7503 | USDINR ₹92.61 — Gold -0.51% | Crude -1.03% | Silver -0.64% Yesterday's Edge — Result: Edition #152 watched whether COMEX GOLD would close above 3,604.5. Rejected ✗, no",
+    "date": "2026-11-25T04:00:41.719Z",
+    "edition": "153",
+    "tags": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodities": [
+      "MCX Gold",
+      "MCX Silver",
+      "MCX Crude"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-24-rupee-appreciation-mcx-gold",
     "href": "/articles/2026-11-24-rupee-appreciation-mcx-gold",
