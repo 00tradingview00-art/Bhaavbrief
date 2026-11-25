@@ -1,5 +1,26 @@
 [
   {
+    "type": "article",
+    "slug": "2026-11-25-mcx-silver-plummets-2-36-as-industrial-demand-stalls",
+    "href": "/articles/2026-11-25-mcx-silver-plummets-2-36-as-industrial-demand-stalls",
+    "title": "MCX Silver Plummets 2.36% as Industrial Demand Stalls",
+    "description": "MCX Silver ₹137590/kg down 2.36%; COMEX silver -5.4% signals weakening chip/solar cycle demand. Gold-silver ratio widens to 90x+.",
+    "excerpt": "WHAT HAPPENED MCX Silver has collapsed 2.36% to ₹137,590/kg — but COMEX silver's steeper 5.4% drop to $39.20/oz reveals the real story: industrial demand is cooling faster than safe-haven gold demand.",
+    "date": "2026-11-25T20:15:00.000Z",
+    "edition": "flash",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Copper",
+      "Industrial Metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 137590
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-25-mcx-nat-gas-15-99-to-339-mmbtu-withdrawal-season-storage-dra",
     "href": "/articles/2026-11-25-mcx-nat-gas-15-99-to-339-mmbtu-withdrawal-season-storage-dra",
