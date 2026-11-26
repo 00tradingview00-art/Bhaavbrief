@@ -58,5 +58,15 @@
     "verdict": "confirmed",
     "resolvedValue": 88.61,
     "resolvedAt": "2026-11-05T11:10:22.791Z"
+  },
+  {
+    "forEdition": 153,
+    "resolvedByEdition": 154,
+    "edgeMetric": "COMEX_GOLD",
+    "edgeLevel": 3548.1,
+    "edgeCondition": "below",
+    "verdict": "rejected",
+    "resolvedValue": 3599.9,
+    "resolvedAt": "2026-11-26T12:51:51.568Z"
   }
 ]

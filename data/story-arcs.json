@@ -245,6 +245,26 @@
       ],
       "endDate": "2026-11-10",
       "outcome": "Gold's safe-haven surge failed to sustain the ₹145,000 breakout as the narrative lost momentum after five days without updates, leaving prices at ₹1,43,850."
+    },
+    {
+      "id": "iran-hormuz-crude-surge",
+      "title": "Iran-Hormuz Escalation: Crude Geopolitical Premium",
+      "startDate": "2026-11-26",
+      "status": "active",
+      "editions": [
+        154
+      ],
+      "latestDay": 1,
+      "summary": "Renewed Iranian attacks on tankers in Strait of Hormuz drive WTI crude $2.60 higher to $84.65, signaling sustained geopolitical risk premium in oil markets.",
+      "primaryCommodity": "MCX Crude",
+      "keyLevel": "₹7862",
+      "tags": [
+        "Iran",
+        "MCX Crude",
+        "Geopolitics",
+        "Strait of Hormuz",
+        "Supply Risk"
+      ]
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-26T12:52:00.206Z",
-  "generatedAtIST": "2026-11-26 18:22 IST",
+  "generatedAt": "2026-11-26T12:51:51.138Z",
+  "generatedAtIST": "2026-11-26 18:21 IST",
   "source": "kite+yahoo",
   "instruments": {
     "MCX_GOLD": {
@@ -10,15 +10,15 @@
       "unit": "INR/10g"
     },
     "MCX_SILVER": {
-      "price": 146709,
+      "price": 146717,
       "prevClose": 142517,
-      "changePct": 2.9414,
+      "changePct": 2.947,
       "unit": "INR/kg"
     },
     "MCX_CRUDE": {
-      "price": 7864,
+      "price": 7862,
       "prevClose": 7759,
-      "changePct": 1.3533,
+      "changePct": 1.3275,
       "unit": "INR/bbl"
     },
     "MCX_COPPER": {
@@ -52,9 +52,9 @@
       "unit": "USD/oz"
     },
     "WTI": {
-      "price": 84.64,
+      "price": 84.65,
       "prevClose": 82.05,
-      "changePct": 3.1566,
+      "changePct": 3.1688,
       "unit": "USD/bbl"
     },
     "BRENT": {

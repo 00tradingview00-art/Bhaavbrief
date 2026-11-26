@@ -21,6 +21,26 @@
     "priceAtPublish": 146862
   },
   {
+    "type": "brief",
+    "slug": "edition-154",
+    "href": "/briefs/edition-154",
+    "title": "WTI Surges to $84.65 as Geopolitical Premium Roars Back",
+    "description": "Iranian tanker attacks reignite crude's geopolitical premium while gold and silver confirm a broad safe-haven revival.",
+    "excerpt": "MCX Gold ₹122060 | Crude ₹7862 | USDINR ₹92.93 — Gold +0.76% | Crude +1.33% | Silver +2.95% Yesterday's Edge — Result: Edition #153 watched whether COMEX GOLD would close below 3,548.1. Rejected ✗, no",
+    "date": "2026-11-26T12:51:53.040Z",
+    "edition": "154",
+    "tags": [
+      "MCX Crude",
+      "MCX Gold",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Gold"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "article",
     "slug": "2026-11-26-mcx-copper-vs-aluminium-india",
     "href": "/articles/2026-11-26-mcx-copper-vs-aluminium-india",
