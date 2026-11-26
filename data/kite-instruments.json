@@ -55,27 +55,27 @@
     "symbol": "ELECDMBL26NOVFUT",
     "expiry": "2026-11-27"
   },
-  "updatedAt": "2026-11-25T12:57:27.728Z",
+  "updatedAt": "2026-11-26T12:36:14.577Z",
   "currencies": {
     "usdinr": {
-      "token": 405507,
-      "symbol": "USDINR26NOVFUT",
-      "expiry": "2026-11-26"
+      "token": 321283,
+      "symbol": "USDINR26DECFUT",
+      "expiry": "2026-12-29"
     },
     "eurinr": {
-      "token": 374275,
-      "symbol": "EURINR26NOVFUT",
-      "expiry": "2026-11-26"
+      "token": 274691,
+      "symbol": "EURINR26DECFUT",
+      "expiry": "2026-12-29"
     },
     "gbpinr": {
-      "token": 395779,
-      "symbol": "GBPINR26NOVFUT",
-      "expiry": "2026-11-26"
+      "token": 283907,
+      "symbol": "GBPINR26DECFUT",
+      "expiry": "2026-12-29"
     },
     "jpyinr": {
-      "token": 403971,
-      "symbol": "JPYINR26NOVFUT",
-      "expiry": "2026-11-26"
+      "token": 321027,
+      "symbol": "JPYINR26DECFUT",
+      "expiry": "2026-12-29"
     }
   }
 }
