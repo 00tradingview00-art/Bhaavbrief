@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-26-mcx-silver-surges-6-74-to-146-862-kg-crosses-intraday-high",
+    "href": "/articles/2026-11-26-mcx-silver-surges-6-74-to-146-862-kg-crosses-intraday-high",
+    "title": "MCX Silver surges 6.74% to ₹146,862/kg—crosses intraday high",
+    "description": "MCX Silver ₹146862/kg +6.74% SURGING. Industrial demand tailwind amid solar cycle structural upside.",
+    "excerpt": "TRIGGER MCX Silver has risen 6.74% to ₹146,862/kg, breaching the intraday resistance of ₹148,801 for the first time in the current session and triggering the Hawk-Scan threshold. PRICE ₹146,862/kg · +",
+    "date": "2026-11-26T17:28:00.000Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Gold",
+      "MCX Copper",
+      "Industrial Metals"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 146862
+  },
+  {
     "type": "article",
     "slug": "2026-11-26-mcx-copper-vs-aluminium-india",
     "href": "/articles/2026-11-26-mcx-copper-vs-aluminium-india",
