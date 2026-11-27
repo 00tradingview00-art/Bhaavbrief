@@ -1,5 +1,25 @@
 [
   {
+    "type": "brief",
+    "slug": "edition-155",
+    "href": "/briefs/edition-155",
+    "title": "WTI Jumps $3.64, Silver Surges 6.2% — Geopolitical Premium Rebuilds",
+    "description": "A sharp overnight surge in crude and silver signals the geopolitical risk premium is rebuilding, with MCX set to open significantly higher.",
+    "excerpt": "MCX Gold ₹122272 | Crude ₹7872 | USDINR ₹92.92 Yesterday's Edge — Result: Edition #154 watched whether WTI would close above 84.65. Confirmed ✓, now at 85.69. | Commodity | Global Price | USD/INR | MC",
+    "date": "2026-11-27T02:37:36.883Z",
+    "edition": "155",
+    "tags": [
+      "MCX Crude",
+      "MCX Silver",
+      "Geopolitics"
+    ],
+    "commodities": [
+      "MCX Crude",
+      "MCX Silver"
+    ],
+    "commodity": ""
+  },
+  {
     "type": "hawk-scan",
     "slug": "2026-11-26-mcx-silver-surges-6-74-to-146-862-kg-crosses-intraday-high",
     "href": "/articles/2026-11-26-mcx-silver-surges-6-74-to-146-862-kg-crosses-intraday-high",
