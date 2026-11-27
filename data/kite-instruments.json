@@ -51,11 +51,11 @@
     "expiry": "2026-12-16"
   },
   "electricity": {
-    "token": 148921095,
-    "symbol": "ELECDMBL26NOVFUT",
-    "expiry": "2026-11-27"
+    "token": 149587207,
+    "symbol": "ELECDMBL26DECFUT",
+    "expiry": "2026-12-30"
   },
-  "updatedAt": "2026-11-26T12:36:14.577Z",
+  "updatedAt": "2026-11-27T12:22:41.874Z",
   "currencies": {
     "usdinr": {
       "token": 321283,
