@@ -1,5 +1,26 @@
 [
   {
+    "type": "hawk-scan",
+    "slug": "2026-11-27-hawk-scan-silver-5-05-spike-to-153-054-kg-industrial-demand-",
+    "href": "/articles/2026-11-27-hawk-scan-silver-5-05-spike-to-153-054-kg-industrial-demand-",
+    "title": "HAWK-SCAN Silver: 5.05% spike to ₹153,054/kg — industrial demand tailwind",
+    "description": "MCX Silver ₹153,054/kg +5.05%. Copper +4.76% signals reflationary momentum; GSR compression watch.",
+    "excerpt": "TRIGGER MCX Silver has spiked 5.05% to ₹153,054/kg — above the 3% Hawk-Scan threshold — as copper rallies 4.76% to ₹1,188/kg, signalling synchronized industrial metals demand. PRICE ₹153,054/kg · +5.0",
+    "date": "2026-11-27T11:50:59.560Z",
+    "edition": "hawk-scan",
+    "tags": [
+      "MCX Silver",
+      "MCX Copper",
+      "MCX Gold",
+      "MCX Crude"
+    ],
+    "commodity": "MCX Silver",
+    "commodities": [
+      "MCX Silver"
+    ],
+    "priceAtPublish": 153054
+  },
+  {
     "type": "brief",
     "slug": "edition-155",
     "href": "/briefs/edition-155",
