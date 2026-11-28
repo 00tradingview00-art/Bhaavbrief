@@ -23,7 +23,7 @@
     "mcxSymbol": "GOLD",
     "importDutyBreakdown": "6% BCD + 3% AIDC + 3% GST",
     "importDutyFactorEffective": 1.12,
-    "importDutyNote": "Post-July 2024 budget. Previously 12.5% BCD + 3% AIDC = ~15.5% (pre-2024). Canonical source: app/learn/comex-vs-mcx-gold and data/analyst-kb.json.",
+    "importDutyNote": "STALE since 13 May 2026: Finance Ministry raised the effective gold/silver duty from ~6% to ~15% (reported as 10% BCD + 5% AIDC; GST treatment and exact assessable-value basis not yet reconciled against this file's own pre-2026 breakdown). 1.12 is the pre-13-May-2026 post-July-2024-budget figure (6% BCD + 3% AIDC + 3% GST) and needs a CA/domain review before being replaced — do not guess a new factor from secondary sources alone. Canonical source: app/learn/comex-vs-mcx-gold and data/analyst-kb.json.",
     "mcxContractSizeGrams": 1000,
     "mcxLotUnits": "100 units of 10 grams",
     "tickSize": 1,
@@ -35,7 +35,7 @@
   "silver": {
     "mcxSymbol": "SILVER",
     "importDutyFactor": 1.10,
-    "importDutyNote": "~10% effective duty on silver imports. Verify if July 2024 budget changed silver duty (gold was cut from 12.5% to 6% BCD; silver duty may differ).",
+    "importDutyNote": "STALE since 13 May 2026: Finance Ministry raised the effective gold/silver duty from ~6% to ~15% (reported as 10% BCD + 5% AIDC; GST treatment and exact assessable-value basis not yet reconciled). 1.10 is the pre-13-May-2026 figure (~10% effective duty) and needs a CA/domain review before being replaced — do not guess a new factor from secondary sources alone.",
     "mcxLotSizeKg": 30,
     "tickSize": 1,
     "tickValuePerLotINR": 30,

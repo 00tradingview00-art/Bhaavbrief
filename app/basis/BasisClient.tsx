@@ -169,6 +169,12 @@ function CommodityCard({ c, history, isPro }: { c: CommodityMeta; history: Basis
         </div>
       )}
 
+      {stats && c.dutyLatest !== null && (c.id === 'gold' || c.id === 'silver') && (
+        <div style={{ fontSize: '0.7rem', opacity: 0.55, marginBottom: '0.75rem' }}>
+          Duty factor predates the 13 May 2026 gold/silver duty change and is pending review.
+        </div>
+      )}
+
       {referenceView && <ImportReferencePosition view={referenceView} asOf={c.asOf} />}
 
       {stats && chartData.filter(d => d.spread !== null).length > 1 ? (

@@ -344,7 +344,7 @@ export default async function CommodityPage({ params }: Props) {
         dutyInclusivePrice: dutyInclusive,
         premiumPct,
         formula: 'Global (COMEX) gold price, converted to ₹ and duty-inclusive',
-        dutyNote: 'Includes applicable import duty',
+        dutyNote: 'Includes applicable import duty — this factor predates the 13 May 2026 duty change and is pending review',
       }
     } else if (entry.key === 'silver' && snap.derived?.importParitySilverINR && usdinr > 0) {
       const dutyInclusive = Math.round(dutyInclusiveParity(snap.derived.importParitySilverINR, dutyFactors.silver ?? 1.10)!)
@@ -353,7 +353,7 @@ export default async function CommodityPage({ params }: Props) {
         dutyInclusivePrice: dutyInclusive,
         premiumPct,
         formula: 'Global (COMEX) silver price, converted to ₹ and duty-inclusive',
-        dutyNote: 'Includes applicable import duty',
+        dutyNote: 'Includes applicable import duty — this factor predates the 13 May 2026 duty change and is pending review',
       }
     } else if (entry.key === 'crude') {
       const wti = snap.instruments?.WTI?.price ?? 0
